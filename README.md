@@ -1,2 +1,2 @@
 # library
-c++ library for competitive programming
+C++ library for competitive programming
