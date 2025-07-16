@@ -1,12 +1,11 @@
-#ifndef ATCODER_MATH_HPP
-#define ATCODER_MATH_HPP 1
+#pragma once
 
 #include <algorithm>
 #include <cassert>
 #include <tuple>
 #include <vector>
 
-#include "atcoder/internal_math"
+#include "internal_math.hpp"
 
 namespace atcoder {
 
@@ -97,5 +96,3 @@ long long floor_sum(long long n, long long m, long long a, long long b) {
 }
 
 }  // namespace atcoder
-
-#endif  // ATCODER_MATH_HPP

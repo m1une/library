@@ -1,5 +1,4 @@
-#ifndef ATCODER_DSU_HPP
-#define ATCODER_DSU_HPP 1
+#pragma once
 
 #include <algorithm>
 #include <cassert>
@@ -72,5 +71,3 @@ struct dsu {
 };
 
 }  // namespace atcoder
-
-#endif  // ATCODER_DSU_HPP

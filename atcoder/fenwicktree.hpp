@@ -1,10 +1,9 @@
-#ifndef ATCODER_FENWICKTREE_HPP
-#define ATCODER_FENWICKTREE_HPP 1
+#pragma once
 
 #include <cassert>
 #include <vector>
 
-#include "atcoder/internal_type_traits"
+#include "internal_type_traits.hpp"
 
 namespace atcoder {
 
@@ -45,5 +44,3 @@ template <class T> struct fenwick_tree {
 };
 
 }  // namespace atcoder
-
-#endif  // ATCODER_FENWICKTREE_HPP

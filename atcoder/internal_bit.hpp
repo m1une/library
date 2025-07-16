@@ -1,5 +1,4 @@
-#ifndef ATCODER_INTERNAL_BITOP_HPP
-#define ATCODER_INTERNAL_BITOP_HPP 1
+#pragma once
 
 #ifdef _MSC_VER
 #include <intrin.h>
@@ -51,5 +50,3 @@ constexpr int countr_zero_constexpr(unsigned int n) {
 }  // namespace internal
 
 }  // namespace atcoder
-
-#endif  // ATCODER_INTERNAL_BITOP_HPP

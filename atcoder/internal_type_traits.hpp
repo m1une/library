@@ -1,5 +1,4 @@
-#ifndef ATCODER_INTERNAL_TYPE_TRAITS_HPP
-#define ATCODER_INTERNAL_TYPE_TRAITS_HPP 1
+#pragma once
 
 #include <cassert>
 #include <numeric>
@@ -95,5 +94,3 @@ template <class T> using to_unsigned_t = typename to_unsigned<T>::type;
 }  // namespace internal
 
 }  // namespace atcoder
-
-#endif  // ATCODER_INTERNAL_TYPE_TRAITS_HPP

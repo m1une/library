@@ -1,12 +1,11 @@
-#ifndef ATCODER_SEGTREE_HPP
-#define ATCODER_SEGTREE_HPP 1
+#pragma once
 
 #include <algorithm>
 #include <cassert>
 #include <functional>
 #include <vector>
 
-#include "atcoder/internal_bit"
+#include "internal_bit.hpp"
 
 namespace atcoder {
 
@@ -128,5 +127,3 @@ template <class S, S (*op)(S, S), S (*e)()> struct segtree {
 };
 
 }  // namespace atcoder
-
-#endif  // ATCODER_SEGTREE_HPP

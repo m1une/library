@@ -1,12 +1,11 @@
-#ifndef ATCODER_LAZYSEGTREE_HPP
-#define ATCODER_LAZYSEGTREE_HPP 1
+#pragma once
 
 #include <algorithm>
 #include <cassert>
 #include <functional>
 #include <vector>
 
-#include "atcoder/internal_bit"
+#include "internal_bit.hpp"
 
 namespace atcoder {
 
@@ -213,5 +212,3 @@ struct lazy_segtree {
 };
 
 }  // namespace atcoder
-
-#endif  // ATCODER_LAZYSEGTREE_HPP

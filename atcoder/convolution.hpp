@@ -1,5 +1,4 @@
-#ifndef ATCODER_CONVOLUTION_HPP
-#define ATCODER_CONVOLUTION_HPP 1
+#pragma once
 
 #include <algorithm>
 #include <array>
@@ -7,8 +6,8 @@
 #include <type_traits>
 #include <vector>
 
-#include "atcoder/internal_bit"
-#include "atcoder/modint"
+#include "internal_bit.hpp"
+#include "modint.hpp"
 
 namespace atcoder {
 
@@ -332,5 +331,3 @@ std::vector<long long> convolution_ll(const std::vector<long long>& a,
 }
 
 }  // namespace atcoder
-
-#endif  // ATCODER_CONVOLUTION_HPP
