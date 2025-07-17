@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_MODINT_HPP
+#define ATCODER_MODINT_HPP 1
 
 #include <cassert>
 #include <numeric>
@@ -270,3 +271,5 @@ using is_dynamic_modint_t = std::enable_if_t<is_dynamic_modint<T>::value>;
 }  // namespace internal
 
 }  // namespace atcoder
+
+#endif  // ATCODER_MODINT_HPP

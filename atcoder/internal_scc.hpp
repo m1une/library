@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_INTERNAL_SCC_HPP
+#define ATCODER_INTERNAL_SCC_HPP 1
 
 #include <algorithm>
 #include <utility>
@@ -84,3 +85,5 @@ struct scc_graph {
 }  // namespace internal
 
 }  // namespace atcoder
+
+#endif  // ATCODER_INTERNAL_SCC_HPP

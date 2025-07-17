@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_MINCOSTFLOW_HPP
+#define ATCODER_MINCOSTFLOW_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -214,3 +215,5 @@ template <class Cap, class Cost> struct mcf_graph {
 };
 
 }  // namespace atcoder
+
+#endif  // ATCODER_MINCOSTFLOW_HPP

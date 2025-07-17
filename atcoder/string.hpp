@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_STRING_HPP
+#define ATCODER_STRING_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -272,3 +273,5 @@ std::vector<int> z_algorithm(const std::string& s) {
 }
 
 }  // namespace atcoder
+
+#endif  // ATCODER_STRING_HPP

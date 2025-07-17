@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_INTERNAL_CSR_HPP
+#define ATCODER_INTERNAL_CSR_HPP 1
 
 #include <algorithm>
 #include <utility>
@@ -28,3 +29,5 @@ template <class E> struct csr {
 }  // namespace internal
 
 }  // namespace atcoder
+
+#endif  // ATCODER_INTERNAL_CSR_HPP

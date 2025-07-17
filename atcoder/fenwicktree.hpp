@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_FENWICK_TREE_HPP
+#define ATCODER_FENWICK_TREE_HPP 1
 
 #include <cassert>
 #include <vector>
@@ -44,3 +45,5 @@ template <class T> struct fenwick_tree {
 };
 
 }  // namespace atcoder
+
+#endif  // ATCODER_FENWICK_TREE_HPP

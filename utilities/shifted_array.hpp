@@ -1,4 +1,5 @@
-#pragma once
+#ifndef M1UNE_SHIFTED_ARRAY_HPP
+#define M1UNE_SHIFTED_ARRAY_HPP 1
 
 #include <stdexcept>
 #include <vector>
@@ -54,3 +55,5 @@ struct shifted_array {
 };
 
 }  // namespace m1une
+
+#endif  // M1UNE_SHIFTED_ARRAY_HPP

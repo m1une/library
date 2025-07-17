@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_LAZYSEGTREE_HPP
+#define ATCODER_LAZYSEGTREE_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -212,3 +213,5 @@ struct lazy_segtree {
 };
 
 }  // namespace atcoder
+
+#endif  // ATCODER_LAZYSEGTREE_HPP

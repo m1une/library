@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_SEGTREE_HPP
+#define ATCODER_SEGTREE_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -127,3 +128,5 @@ template <class S, S (*op)(S, S), S (*e)()> struct segtree {
 };
 
 }  // namespace atcoder
+
+#endif  // ATCODER_SEGTREE_HPP

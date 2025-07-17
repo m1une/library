@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_MAXFLOW_HPP
+#define ATCODER_MAXFLOW_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -146,3 +147,5 @@ template <class Cap> struct mf_graph {
 };
 
 }  // namespace atcoder
+
+#endif  // ATCODER_MAXFLOW_HPP

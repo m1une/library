@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATCODER_MATH_HPP
+#define ATCODER_MATH_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -96,3 +97,5 @@ long long floor_sum(long long n, long long m, long long a, long long b) {
 }
 
 }  // namespace atcoder
+
+#endif  // ATCODER_MATH_HPP
