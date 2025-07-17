@@ -1,0 +1,7 @@
+*.dSYM
+*.out
+
+.vscode
+.venv
+.DS_Store
+bundled.cpp
