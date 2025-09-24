@@ -67,13 +67,13 @@ data:
     \   ++factor_count;\n            }\n        }\n        if (y > 1) {\n        \
     \    ++factor_count;\n        }\n        if (is_prime[factor_count]) {\n     \
     \       ++res;\n        }\n    }\n    return res;\n}\n\nint main() {\n    long\
-    \ long l, r;\n    cin >> l >> r;\n    cout << solve(l, r) << endl;\n}"
+    \ long l, r;\n    cin >> l >> r;\n    cout << solve(l, r) << endl;\n}\n"
   dependsOn:
   - utilities/shifted_array.hpp
   isVerificationFile: true
   path: verify/utilities/shifted_array.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 04:07:16+09:00'
+  timestamp: '2025-09-25 04:43:29+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/utilities/shifted_array.test.cpp
