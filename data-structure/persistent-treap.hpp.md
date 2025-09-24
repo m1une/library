@@ -7,6 +7,7 @@ data:
   _pathExtension: hpp
   _verificationStatusIcon: ':warning:'
   attributes:
+    document_title: Persistent Treap
     links: []
   bundledCode: "#line 1 \"data-structure/persistent-treap.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <iostream>\n#include <memory>\n#include <optional>\n#include <random>\n\
@@ -69,7 +70,7 @@ data:
     \ lower_bound(T key) {\n        return lower_bound_impl(root, key);\n    }\n\n\
     \    std::optional<T> upper_bound(T key) {\n        return upper_bound_impl(root,\
     \ key);\n    }\n\n    int size() {\n        return count(root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n"
+    }  // namespace m1une\n\n\n/**\n * @brief Persistent Treap\n */\n"
   code: "#ifndef M1UNE_PERSISTENT_TREAP_HPP\n#define M1UNE_PERSISTENT_TREAP_HPP 1\n\
     \n#include <algorithm>\n#include <iostream>\n#include <memory>\n#include <optional>\n\
     #include <random>\n\nnamespace m1une {\n\ntemplate <typename T>\nstruct persistent_treap\
@@ -131,12 +132,13 @@ data:
     \ lower_bound(T key) {\n        return lower_bound_impl(root, key);\n    }\n\n\
     \    std::optional<T> upper_bound(T key) {\n        return upper_bound_impl(root,\
     \ key);\n    }\n\n    int size() {\n        return count(root);\n    }\n};\n\n\
-    }  // namespace m1une\n#endif  // M1UNE_PERSISTENT_TREAP_HPP\n"
+    }  // namespace m1une\n#endif  // M1UNE_PERSISTENT_TREAP_HPP\n\n/**\n * @brief\
+    \ Persistent Treap\n */\n"
   dependsOn: []
   isVerificationFile: false
   path: data-structure/persistent-treap.hpp
   requiredBy: []
-  timestamp: '2025-09-25 04:39:18+09:00'
+  timestamp: '2025-09-25 04:49:28+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data-structure/persistent-treap.hpp
@@ -144,5 +146,5 @@ layout: document
 redirect_from:
 - /library/data-structure/persistent-treap.hpp
 - /library/data-structure/persistent-treap.hpp.html
-title: data-structure/persistent-treap.hpp
+title: Persistent Treap
 ---

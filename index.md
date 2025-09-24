@@ -61,10 +61,10 @@ data:
     pages:
     - icon: ':warning:'
       path: data-structure/persistent-treap.hpp
-      title: data-structure/persistent-treap.hpp
+      title: Persistent Treap
     - icon: ':warning:'
       path: data-structure/treap.hpp
-      title: data-structure/treap.hpp
+      title: Treap
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'
