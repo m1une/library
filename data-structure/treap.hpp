@@ -93,6 +93,36 @@ private:
         update_count(t);
     }
 
+    // Find the k-th element
+    T find_by_order_impl(node* t, int k) {
+        if (!t) {
+            // Or throw an exception
+            return T();
+        }
+        int left_count = count(t->l);
+        if (k < left_count) {
+            return find_by_order_impl(t->l, k);
+        }
+        if (k == left_count) {
+            return t->key;
+        }
+        return find_by_order_impl(t->r, k - left_count - 1);
+    }
+
+    // Count elements less than key
+    int order_of_key_impl(node* t, T key) {
+        if (!t) {
+            return 0;
+        }
+        if (key < t->key) {
+            return order_of_key_impl(t->l, key);
+        }
+        if (key == t->key) {
+            return count(t->l);
+        }
+        return count(t->l) + 1 + order_of_key_impl(t->r, key);
+    }
+
 public:
     treap() : root(nullptr) {
         srand(time(NULL));
@@ -104,6 +134,14 @@ public:
 
     void erase(T key) {
         erase(root, key);
+    }
+
+    T find_by_order(int k) {
+        return find_by_order_impl(root, k);
+    }
+
+    int order_of_key(T key) {
+        return order_of_key_impl(root, key);
     }
 
     int size() {
