@@ -64,7 +64,12 @@ data:
       title: Persistent Treap
     - icon: ':warning:'
       path: data-structure/treap.hpp
-      title: Treap
+      title: data-structure/treap.hpp
+  - name: .
+    pages:
+    - icon: ':warning:'
+      path: expander.py
+      title: expander.py
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'
