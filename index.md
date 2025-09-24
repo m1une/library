@@ -8,7 +8,7 @@ data:
       title: atcoder/convolution.hpp
     - icon: ':warning:'
       path: atcoder/dsu.hpp
-      title: Disjoint Set Union
+      title: atcoder/dsu.hpp
     - icon: ':warning:'
       path: atcoder/fenwicktree.hpp
       title: atcoder/fenwicktree.hpp
