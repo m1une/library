@@ -58,3 +58,7 @@ struct shifted_array {
 }  // namespace m1une
 
 #endif  // M1UNE_SHIFTED_ARRAY_HPP
+
+/**
+ * @brief Shifted Array
+ */
