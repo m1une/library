@@ -1,22 +1,23 @@
 #ifndef M1UNE_TREAP_HPP
 #define M1UNE_TREAP_HPP 1
 
+#include <algorithm>
 #include <iostream>
 #include <random>
-#include <algorithm>
 
 namespace m1une {
 
 template <typename T>
 struct treap {
-private:
+   private:
     struct node {
         T key;
         int priority;
         node *l, *r;
         int count;
 
-        node(T key) : key(key), priority(rand()), l(nullptr), r(nullptr), count(1) {}
+        node(T key)
+            : key(key), priority(rand()), l(nullptr), r(nullptr), count(1) {}
     };
 
     node* root;
@@ -123,7 +124,7 @@ private:
         return count(t->l) + 1 + order_of_key_impl(t->r, key);
     }
 
-public:
+   public:
     treap() : root(nullptr) {
         srand(time(NULL));
     }
@@ -149,6 +150,6 @@ public:
     }
 };
 
-} // namespace m1une
+}  // namespace m1une
 
-#endif // M1UNE_TREAP_HPP
+#endif  // M1UNE_TREAP_HPP
