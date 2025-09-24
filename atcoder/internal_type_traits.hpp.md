@@ -110,8 +110,8 @@ data:
   path: atcoder/internal_type_traits.hpp
   requiredBy:
   - atcoder/fenwicktree.hpp
-  - atcoder/modint.hpp
   - atcoder/convolution.hpp
+  - atcoder/modint.hpp
   timestamp: '2025-07-18 03:34:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

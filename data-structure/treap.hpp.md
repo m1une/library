@@ -10,6 +10,7 @@ data:
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
+    document_title: Treap
     links: []
   bundledCode: "#line 1 \"data-structure/treap.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\
@@ -64,7 +65,7 @@ data:
     \ key);\n    }\n\n    T* lower_bound(T key) {\n        return lower_bound_impl(_root,\
     \ key);\n    }\n\n    T* upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n"
+    }  // namespace m1une\n\n\n/**\n * @brief Treap\n */\n"
   code: "#ifndef M1UNE_TREAP_HPP\n#define M1UNE_TREAP_HPP 1\n\n#include <algorithm>\n\
     #include <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\
     \ntemplate <typename T>\nstruct treap {\n   private:\n    struct node {\n    \
@@ -118,12 +119,12 @@ data:
     \ key);\n    }\n\n    T* lower_bound(T key) {\n        return lower_bound_impl(_root,\
     \ key);\n    }\n\n    T* upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n#endif  // M1UNE_TREAP_HPP\n"
+    }  // namespace m1une\n#endif  // M1UNE_TREAP_HPP\n\n/**\n * @brief Treap\n */\n"
   dependsOn: []
   isVerificationFile: false
   path: data-structure/treap.hpp
   requiredBy: []
-  timestamp: '2025-09-25 05:42:18+09:00'
+  timestamp: '2025-09-25 06:13:38+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data-structure/treap.test.cpp
@@ -132,5 +133,5 @@ layout: document
 redirect_from:
 - /library/data-structure/treap.hpp
 - /library/data-structure/treap.hpp.html
-title: data-structure/treap.hpp
+title: Treap
 ---

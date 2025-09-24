@@ -64,7 +64,7 @@ data:
       title: Persistent Treap
     - icon: ':heavy_check_mark:'
       path: data-structure/treap.hpp
-      title: data-structure/treap.hpp
+      title: Treap
   - name: .
     pages:
     - icon: ':warning:'
