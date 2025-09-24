@@ -55,12 +55,12 @@ data:
     \ long i) const {\n        int index = (i - _offset) / _step;\n        if (index\
     \ < 0 || index >= _size) {\n            throw std::out_of_range(\"Index out of\
     \ range\");\n        }\n        return index;\n    }\n};\n\n}  // namespace m1une\n\
-    \n#endif  // M1UNE_SHIFTED_ARRAY_HPP"
+    \n#endif  // M1UNE_SHIFTED_ARRAY_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: utilities/shifted_array.hpp
   requiredBy: []
-  timestamp: '2025-07-18 03:34:39+09:00'
+  timestamp: '2025-09-25 04:02:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/utilities/shifted_array.test.cpp
