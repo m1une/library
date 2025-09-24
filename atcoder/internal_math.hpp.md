@@ -172,9 +172,9 @@ data:
   isVerificationFile: false
   path: atcoder/internal_math.hpp
   requiredBy:
-  - atcoder/modint.hpp
-  - atcoder/convolution.hpp
   - atcoder/math.hpp
+  - atcoder/convolution.hpp
+  - atcoder/modint.hpp
   timestamp: '2025-07-18 03:34:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

@@ -57,6 +57,11 @@ data:
     - icon: ':warning:'
       path: atcoder/twosat.hpp
       title: atcoder/twosat.hpp
+  - name: data-structure
+    pages:
+    - icon: ':warning:'
+      path: data-structure/treap.hpp
+      title: data-structure/treap.hpp
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'
