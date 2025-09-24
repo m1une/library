@@ -5,8 +5,8 @@
 #include <vector>
 
 namespace m1une {
-// bool は禁止
-// bool を使いたい時は char を使おう
+// bool is not allowed
+// if you want to use bool, use char instead
 template <typename T>
 struct shifted_array {
    private:
@@ -16,7 +16,8 @@ struct shifted_array {
     std::vector<T> _data;
 
    public:
-    // [L, R] （閉区間）の範囲の index を持つ配列を生成
+    // make an array with indices from L to R (including both L and R)
+    // [L, R] (closed interval)
     shifted_array(long long L, long long R, T init_value = T(),
                   long long step = 1)
         : _offset(L),
