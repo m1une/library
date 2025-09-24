@@ -60,6 +60,9 @@ data:
   - name: data-structure
     pages:
     - icon: ':warning:'
+      path: data-structure/persistent-treap.hpp
+      title: data-structure/persistent-treap.hpp
+    - icon: ':warning:'
       path: data-structure/treap.hpp
       title: data-structure/treap.hpp
   - name: utilities
