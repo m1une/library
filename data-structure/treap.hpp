@@ -2,6 +2,7 @@
 #define M1UNE_TREAP_HPP 1
 
 #include <algorithm>
+#include <ctime>
 #include <iostream>
 #include <random>
 
@@ -11,161 +12,168 @@ template <typename T>
 struct treap {
    private:
     struct node {
-        T key;
-        int priority;
-        node *l, *r;
-        int count;
+        T _key;
+        int _priority;
+        node *_l, *_r;
+        int _count;
 
         node(T key)
-            : key(key), priority(rand()), l(nullptr), r(nullptr), count(1) {}
+            : _key(key),
+              _priority(rand()),
+              _l(nullptr),
+              _r(nullptr),
+              _count(1) {}
     };
 
-    node* root;
+    node* _root;
 
     int count(node* t) {
-        return t ? t->count : 0;
+        return t ? t->_count : 0;
     }
 
     void update_count(node* t) {
         if (t) {
-            t->count = 1 + count(t->l) + count(t->r);
+            t->_count = 1 + count(t->_l) + count(t->_r);
         }
     }
 
-    // Splitting the treap
     void split(node* t, T key, node*& l, node*& r) {
         if (!t) {
             l = r = nullptr;
             return;
         }
-        if (key < t->key) {
-            split(t->l, key, l, t->l);
+        if (key < t->_key) {
+            split(t->_l, key, l, t->_l);
             r = t;
         } else {
-            split(t->r, key, t->r, r);
+            split(t->_r, key, t->_r, r);
             l = t;
         }
         update_count(t);
     }
 
-    // Merging two treaps
     node* merge(node* l, node* r) {
         if (!l || !r) {
             return l ? l : r;
         }
-        if (l->priority > r->priority) {
-            l->r = merge(l->r, r);
+        if (l->_priority > r->_priority) {
+            l->_r = merge(l->_r, r);
             update_count(l);
             return l;
         } else {
-            r->l = merge(l, r->l);
+            r->_l = merge(l, r->_l);
             update_count(r);
             return r;
         }
     }
 
-    // Inserting a key
-    void insert(node*& t, node* item) {
+    void insert_impl(node*& t, node* item) {
         if (!t) {
             t = item;
             return;
         }
-        if (item->priority > t->priority) {
-            split(t, item->key, item->l, item->r);
+        if (item->_priority > t->_priority) {
+            split(t, item->_key, item->_l, item->_r);
             t = item;
         } else {
-            insert(item->key < t->key ? t->l : t->r, item);
+            insert_impl(item->_key < t->_key ? t->_l : t->_r, item);
         }
         update_count(t);
     }
 
-    // Erasing a key
-    void erase(node*& t, T key) {
+    void erase_impl(node*& t, T key) {
         if (!t) {
             return;
         }
-        if (t->key == key) {
+        if (t->_key == key) {
             node* temp = t;
-            t = merge(t->l, t->r);
+            t = merge(t->_l, t->_r);
             delete temp;
         } else {
-            erase(key < t->key ? t->l : t->r, key);
+            erase_impl(key < t->_key ? t->_l : t->_r, key);
         }
         update_count(t);
     }
 
-    // Find the k-th element
-    T find_by_order_impl(node* t, int k) {
-        if (!t) return T();
-        int left_count = count(t->l);
-        if (k < left_count) return find_by_order_impl(t->l, k);
-        if (k == left_count) return t->key;
-        return find_by_order_impl(t->r, k - left_count - 1);
+    bool contains_impl(node* t, T key) {
+        if (!t) return false;
+        if (t->_key == key) return true;
+        if (key < t->_key) {
+            return contains_impl(t->_l, key);
+        } else {
+            return contains_impl(t->_r, key);
+        }
     }
 
-    // Count elements less than key
+    T find_by_order_impl(node* t, int k) {
+        if (!t) return T();  // Should not happen with valid k
+        int left_count = count(t->_l);
+        if (k < left_count) return find_by_order_impl(t->_l, k);
+        if (k == left_count) return t->_key;
+        return find_by_order_impl(t->_r, k - left_count - 1);
+    }
+
     int order_of_key_impl(node* t, T key) {
         if (!t) return 0;
-        if (key <= t->key) return order_of_key_impl(t->l, key);
-        return count(t->l) + 1 + order_of_key_impl(t->r, key);
+        if (key <= t->_key) return order_of_key_impl(t->_l, key);
+        return count(t->_l) + 1 + order_of_key_impl(t->_r, key);
     }
 
     T* lower_bound_impl(node* t, T key) {
         if (!t) return nullptr;
-        if (key <= t->key) {
-            T* res = lower_bound_impl(t->l, key);
-            return res ? res : &t->key;
+        if (key <= t->_key) {
+            T* res = lower_bound_impl(t->_l, key);
+            return res ? res : &t->_key;
         }
-        return lower_bound_impl(t->r, key);
+        return lower_bound_impl(t->_r, key);
     }
 
     T* upper_bound_impl(node* t, T key) {
         if (!t) return nullptr;
-        if (key < t->key) {
-            T* res = upper_bound_impl(t->l, key);
-            return res ? res : &t->key;
+        if (key < t->_key) {
+            T* res = upper_bound_impl(t->_l, key);
+            return res ? res : &t->_key;
         }
-        return upper_bound_impl(t->r, key);
+        return upper_bound_impl(t->_r, key);
     }
 
    public:
-    treap() : root(nullptr) {
+    treap() : _root(nullptr) {
         srand(time(NULL));
     }
 
     void insert(T key) {
-        insert(root, new node(key));
+        insert_impl(_root, new node(key));
     }
 
     void erase(T key) {
-        erase(root, key);
+        erase_impl(_root, key);
+    }
+
+    bool contains(T key) {
+        return contains_impl(_root, key);
     }
 
     T find_by_order(int k) {
-        return find_by_order_impl(root, k);
+        return find_by_order_impl(_root, k);
     }
 
     int order_of_key(T key) {
-        return order_of_key_impl(root, key);
+        return order_of_key_impl(_root, key);
     }
 
     T* lower_bound(T key) {
-        return lower_bound_impl(root, key);
+        return lower_bound_impl(_root, key);
     }
 
     T* upper_bound(T key) {
-        return upper_bound_impl(root, key);
+        return upper_bound_impl(_root, key);
     }
 
     int size() {
-        return count(root);
+        return count(_root);
     }
 };
 
 }  // namespace m1une
-
 #endif  // M1UNE_TREAP_HPP
-
-/**
- * @brief Treap
- */
