@@ -62,7 +62,7 @@ data:
     - icon: ':warning:'
       path: data-structure/persistent-treap.hpp
       title: Persistent Treap
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: data-structure/treap.hpp
       title: data-structure/treap.hpp
   - name: .
@@ -76,6 +76,11 @@ data:
       path: utilities/shifted_array.hpp
       title: Shifted Array
   verificationCategories:
+  - name: verify/data-structure
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/data-structure/treap.test.cpp
+      title: verify/data-structure/treap.test.cpp
   - name: verify/utilities
     pages:
     - icon: ':heavy_check_mark:'

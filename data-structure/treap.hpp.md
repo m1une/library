@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data-structure/treap.test.cpp
+    title: verify/data-structure/treap.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"data-structure/treap.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -121,8 +124,9 @@ data:
   path: data-structure/treap.hpp
   requiredBy: []
   timestamp: '2025-09-25 05:42:18+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data-structure/treap.test.cpp
 documentation_of: data-structure/treap.hpp
 layout: document
 redirect_from:
