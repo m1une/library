@@ -1,3 +1,8 @@
+---
+title: Disjoint Set Union
+documentation_of: //atcoder/dsu.hpp
+---
+
 # DSU
 
 無向グラフに対して、
