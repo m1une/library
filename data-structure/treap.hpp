@@ -165,3 +165,7 @@ struct treap {
 }  // namespace m1une
 
 #endif  // M1UNE_TREAP_HPP
+
+/**
+ * @brief Treap
+ */
