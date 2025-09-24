@@ -69,7 +69,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
-      title: utilities/shifted_array.hpp
+      title: Shifted Array
   verificationCategories:
   - name: verify/utilities
     pages:

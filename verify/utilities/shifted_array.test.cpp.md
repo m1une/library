@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: utilities/shifted_array.hpp
-    title: utilities/shifted_array.hpp
+    title: Shifted Array
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -37,9 +37,10 @@ data:
     \ _data[index];\n    };\n    long long index(long long i) const {\n        int\
     \ index = (i - _offset) / _step;\n        if (index < 0 || index >= _size) {\n\
     \            throw std::out_of_range(\"Index out of range\");\n        }\n   \
-    \     return index;\n    }\n};\n\n}  // namespace m1une\n\n\n#line 7 \"verify/utilities/shifted_array.test.cpp\"\
-    \n\nconstexpr long long MAX = 100000;\n\nlong long solve(long long l, long long\
-    \ r) {\n    vector<char> is_prime(MAX, 1);\n    is_prime[0] = is_prime[1] = 0;\n\
+    \     return index;\n    }\n};\n\n}  // namespace m1une\n\n\n\n/**\n * @brief\
+    \ Shifted Array\n */\n#line 7 \"verify/utilities/shifted_array.test.cpp\"\n\n\
+    constexpr long long MAX = 100000;\n\nlong long solve(long long l, long long r)\
+    \ {\n    vector<char> is_prime(MAX, 1);\n    is_prime[0] = is_prime[1] = 0;\n\
     \    m1une::shifted_array<vector<long long>> prime_factors(l, r);\n    for (long\
     \ long p = 2; p * p <= r; ++p) {\n        if (!is_prime[p]) continue;\n      \
     \  for (long long x = 2 * p; x < MAX; x += p) {\n            is_prime[x] = 0;\n\
@@ -73,7 +74,7 @@ data:
   isVerificationFile: true
   path: verify/utilities/shifted_array.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 04:43:29+09:00'
+  timestamp: '2025-09-25 04:50:37+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/utilities/shifted_array.test.cpp

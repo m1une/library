@@ -10,6 +10,7 @@ data:
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
+    document_title: Shifted Array
     links: []
   bundledCode: "#line 1 \"utilities/shifted_array.hpp\"\n\n\n\n#include <stdexcept>\n\
     #include <vector>\n\nnamespace m1une {\n// bool is not allowed\n// if you want\
@@ -32,7 +33,7 @@ data:
     \ long index(long long i) const {\n        int index = (i - _offset) / _step;\n\
     \        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
     Index out of range\");\n        }\n        return index;\n    }\n};\n\n}  // namespace\
-    \ m1une\n\n\n"
+    \ m1une\n\n\n\n/**\n * @brief Shifted Array\n */\n"
   code: "#ifndef M1UNE_SHIFTED_ARRAY_HPP\n#define M1UNE_SHIFTED_ARRAY_HPP 1\n\n#include\
     \ <stdexcept>\n#include <vector>\n\nnamespace m1une {\n// bool is not allowed\n\
     // if you want to use bool, use char instead\ntemplate <typename T>\nstruct shifted_array\
@@ -54,12 +55,13 @@ data:
     \ long index(long long i) const {\n        int index = (i - _offset) / _step;\n\
     \        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
     Index out of range\");\n        }\n        return index;\n    }\n};\n\n}  // namespace\
-    \ m1une\n\n#endif  // M1UNE_SHIFTED_ARRAY_HPP\n"
+    \ m1une\n\n#endif  // M1UNE_SHIFTED_ARRAY_HPP\n\n/**\n * @brief Shifted Array\n\
+    \ */\n"
   dependsOn: []
   isVerificationFile: false
   path: utilities/shifted_array.hpp
   requiredBy: []
-  timestamp: '2025-09-25 04:07:16+09:00'
+  timestamp: '2025-09-25 04:50:37+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/utilities/shifted_array.test.cpp
@@ -68,5 +70,5 @@ layout: document
 redirect_from:
 - /library/utilities/shifted_array.hpp
 - /library/utilities/shifted_array.hpp.html
-title: utilities/shifted_array.hpp
+title: Shifted Array
 ---
