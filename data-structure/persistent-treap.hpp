@@ -1,23 +1,24 @@
 #ifndef M1UNE_PERSISTENT_TREAP_HPP
 #define M1UNE_PERSISTENT_TREAP_HPP 1
 
-#include <iostream>
-#include <random>
 #include <algorithm>
+#include <iostream>
 #include <memory>
+#include <random>
 
 namespace m1une {
 
 template <typename T>
 struct persistent_treap {
-private:
+   private:
     struct node {
         T key;
         int priority;
         std::shared_ptr<node> l, r;
         int count;
 
-        node(T key) : key(key), priority(rand()), l(nullptr), r(nullptr), count(1) {}
+        node(T key)
+            : key(key), priority(rand()), l(nullptr), r(nullptr), count(1) {}
     };
 
     std::shared_ptr<node> root;
@@ -33,7 +34,8 @@ private:
     }
 
     // Splitting the treap
-    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>& l, std::shared_ptr<node>& r) {
+    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>& l,
+               std::shared_ptr<node>& r) {
         if (!t) {
             l = r = nullptr;
             return;
@@ -52,7 +54,8 @@ private:
     }
 
     // Merging two treaps
-    std::shared_ptr<node> merge(std::shared_ptr<node> l, std::shared_ptr<node> r) {
+    std::shared_ptr<node> merge(std::shared_ptr<node> l,
+                                std::shared_ptr<node> r) {
         if (!l || !r) {
             return l ? l : r;
         }
@@ -68,9 +71,10 @@ private:
             return new_node;
         }
     }
-    
+
     // Inserting a key
-    std::shared_ptr<node> insert_impl(std::shared_ptr<node> t, std::shared_ptr<node> item) {
+    std::shared_ptr<node> insert_impl(std::shared_ptr<node> t,
+                                      std::shared_ptr<node> item) {
         if (!t) {
             return item;
         }
@@ -79,7 +83,7 @@ private:
             update_count(item);
             return item;
         }
-        
+
         auto new_node = std::make_shared<node>(*t);
         if (item->key < new_node->key) {
             new_node->l = insert_impl(new_node->l, item);
@@ -90,7 +94,6 @@ private:
         return new_node;
     }
 
-
     // Erasing a key
     std::shared_ptr<node> erase_impl(std::shared_ptr<node> t, T key) {
         if (!t) {
@@ -99,7 +102,7 @@ private:
         if (t->key == key) {
             return merge(t->l, t->r);
         }
-        
+
         auto new_node = std::make_shared<node>(*t);
         if (key < new_node->key) {
             new_node->l = erase_impl(new_node->l, key);
@@ -140,14 +143,12 @@ private:
         return count(t->l) + 1 + order_of_key_impl(t->r, key);
     }
 
-
-public:
+   public:
     persistent_treap() : root(nullptr) {
         srand(time(NULL));
     }
-    
-    persistent_treap(std::shared_ptr<node> root) : root(root) {}
 
+    persistent_treap(std::shared_ptr<node> root) : root(root) {}
 
     persistent_treap insert(T key) {
         return persistent_treap(insert_impl(root, std::make_shared<node>(key)));
@@ -156,21 +157,20 @@ public:
     persistent_treap erase(T key) {
         return persistent_treap(erase_impl(root, key));
     }
-    
+
     T find_by_order(int k) {
         return find_by_order_impl(root, k);
     }
-    
+
     int order_of_key(T key) {
         return order_of_key_impl(root, key);
     }
-
 
     int size() {
         return count(root);
     }
 };
 
-} // namespace m1une
+}  // namespace m1une
 
-#endif // M1UNE_PERSISTENT_TREAP_HPP
+#endif  // M1UNE_PERSISTENT_TREAP_HPP
