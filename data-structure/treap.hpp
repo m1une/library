@@ -96,32 +96,36 @@ struct treap {
 
     // Find the k-th element
     T find_by_order_impl(node* t, int k) {
-        if (!t) {
-            // Or throw an exception
-            return T();
-        }
+        if (!t) return T();
         int left_count = count(t->l);
-        if (k < left_count) {
-            return find_by_order_impl(t->l, k);
-        }
-        if (k == left_count) {
-            return t->key;
-        }
+        if (k < left_count) return find_by_order_impl(t->l, k);
+        if (k == left_count) return t->key;
         return find_by_order_impl(t->r, k - left_count - 1);
     }
 
     // Count elements less than key
     int order_of_key_impl(node* t, T key) {
-        if (!t) {
-            return 0;
-        }
-        if (key < t->key) {
-            return order_of_key_impl(t->l, key);
-        }
-        if (key == t->key) {
-            return count(t->l);
-        }
+        if (!t) return 0;
+        if (key <= t->key) return order_of_key_impl(t->l, key);
         return count(t->l) + 1 + order_of_key_impl(t->r, key);
+    }
+
+    T* lower_bound_impl(node* t, T key) {
+        if (!t) return nullptr;
+        if (key <= t->key) {
+            T* res = lower_bound_impl(t->l, key);
+            return res ? res : &t->key;
+        }
+        return lower_bound_impl(t->r, key);
+    }
+
+    T* upper_bound_impl(node* t, T key) {
+        if (!t) return nullptr;
+        if (key < t->key) {
+            T* res = upper_bound_impl(t->l, key);
+            return res ? res : &t->key;
+        }
+        return upper_bound_impl(t->r, key);
     }
 
    public:
@@ -143,6 +147,14 @@ struct treap {
 
     int order_of_key(T key) {
         return order_of_key_impl(root, key);
+    }
+
+    T* lower_bound(T key) {
+        return lower_bound_impl(root, key);
+    }
+
+    T* upper_bound(T key) {
+        return upper_bound_impl(root, key);
     }
 
     int size() {
