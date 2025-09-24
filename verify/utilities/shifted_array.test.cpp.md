@@ -18,13 +18,12 @@ data:
     \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858\"\n\n#include\
     \ <bits/stdc++.h>\nusing namespace std;\n\n#line 1 \"utilities/shifted_array.hpp\"\
     \n\n\n\n#line 6 \"utilities/shifted_array.hpp\"\n\nnamespace m1une {\n// bool\
-    \ \u306F\u7981\u6B62\n// bool \u3092\u4F7F\u3044\u305F\u3044\u6642\u306F char\
-    \ \u3092\u4F7F\u304A\u3046\ntemplate <typename T>\nstruct shifted_array {\n  \
-    \ private:\n    long long _offset;\n    long long _step;\n    int _size;\n   \
-    \ std::vector<T> _data;\n\n   public:\n    // [L, R] \uFF08\u9589\u533A\u9593\uFF09\
-    \u306E\u7BC4\u56F2\u306E index \u3092\u6301\u3064\u914D\u5217\u3092\u751F\u6210\
-    \n    shifted_array(long long L, long long R, T init_value = T(),\n          \
-    \        long long step = 1)\n        : _offset(L),\n          _step(step),\n\
+    \ is not allowed\n// if you want to use bool, use char instead\ntemplate <typename\
+    \ T>\nstruct shifted_array {\n   private:\n    long long _offset;\n    long long\
+    \ _step;\n    int _size;\n    std::vector<T> _data;\n\n   public:\n    // make\
+    \ an array with indices from L to R (including both L and R)\n    // [L, R] (closed\
+    \ interval)\n    shifted_array(long long L, long long R, T init_value = T(),\n\
+    \                  long long step = 1)\n        : _offset(L),\n          _step(step),\n\
     \          _size((R - L) / step + 1),\n          _data(_size, init_value) {\n\
     \        if (step <= 0) {\n            throw std::invalid_argument(\"Step must\
     \ be positive\");\n        }\n        if (L > R) {\n            throw std::invalid_argument(\n\
@@ -74,7 +73,7 @@ data:
   isVerificationFile: true
   path: verify/utilities/shifted_array.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 04:02:48+09:00'
+  timestamp: '2025-09-25 04:07:16+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/utilities/shifted_array.test.cpp
