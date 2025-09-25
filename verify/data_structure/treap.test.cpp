@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include "../../data-structure/treap.hpp"
+#include "../../data_structure/treap.hpp"
 
 void fast_io() {
     std::ios_base::sync_with_stdio(false);

@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "../../utilities/shifted-array.hpp"
+#include "../../utilities/shifted_array.hpp"
 
 constexpr long long MAX = 100000;
 
