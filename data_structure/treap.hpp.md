@@ -133,9 +133,11 @@ layout: document
 title: Treap
 ---
 
+## Overview
+
 A randomized binary search tree that provides the functionality of an ordered set. It maintains the binary search tree property with respect to its keys and the heap property with respect to randomly assigned priorities. This combination ensures that the tree remains balanced with high probability.
 
-### Methods
+## Methods
 
 * `treap()`
 
