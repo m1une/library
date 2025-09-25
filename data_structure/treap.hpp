@@ -17,12 +17,7 @@ struct treap {
         node *_l, *_r;
         int _count;
 
-        node(T key)
-            : _key(key),
-              _priority(rand()),
-              _l(nullptr),
-              _r(nullptr),
-              _count(1) {}
+        node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1) {}
     };
 
     node* _root;
