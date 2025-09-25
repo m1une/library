@@ -11,9 +11,9 @@ data:
       title: Treap
   - name: utilities
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: utilities/shifted_array.hpp
-      title: Shifted Array
+      title: Persistent Treap
   verificationCategories:
   - name: verify/data_structure
     pages:
@@ -22,7 +22,7 @@ data:
       title: verify/data_structure/treap.test.cpp
   - name: verify/utilities
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/utilities/shifted_array.test.cpp
       title: verify/utilities/shifted_array.test.cpp
 layout: toppage
