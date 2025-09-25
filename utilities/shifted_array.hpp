@@ -18,18 +18,13 @@ struct shifted_array {
    public:
     // make an array with indices from L to R (including both L and R)
     // [L, R] (closed interval)
-    shifted_array(long long L, long long R, T init_value = T(),
-                  long long step = 1)
-        : _offset(L),
-          _step(step),
-          _size((R - L) / step + 1),
-          _data(_size, init_value) {
+    shifted_array(long long L, long long R, T init_value = T(), long long step = 1)
+        : _offset(L), _step(step), _size((R - L) / step + 1), _data(_size, init_value) {
         if (step <= 0) {
             throw std::invalid_argument("Step must be positive");
         }
         if (L > R) {
-            throw std::invalid_argument(
-                "Left bound must be less than or equal to right bound");
+            throw std::invalid_argument("Left bound must be less than or equal to right bound");
         }
     }
     T &operator[](long long i) {
