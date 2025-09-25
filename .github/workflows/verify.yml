@@ -1,40 +1,19 @@
 name: verify
 
-on:
-  push:
-    branches:
-    - main
-  pull_request:
+on: push
 
 jobs:
   verify:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v1
 
     - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.11.9
+      uses: actions/setup-python@v1
 
     - name: Install dependencies
       run: pip3 install -U online-judge-verify-helper
-
-    - name: Set up Rust (1.70.0)
-      run: |
-        rustup set profile minimal
-        rustup install 1.70.0
-        rustup override set nightly
-
-    # required by cargo-udeps
-    - name: Set up Rust (nightly)
-      run: |
-        rustup set profile minimal
-        rustup install nightly
-        rustup override set nightly
 
     - name: Run tests
       env:
