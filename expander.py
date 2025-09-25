@@ -2,7 +2,8 @@ import sys
 import os
 import re
 
-INCLUDE_PATHS = ['.', os.path.expanduser('~/Desktop/atcoder/library')]
+INCLUDE_PATHS = ['.']
+# INCLUDE_PATHS = ['.', os.path.expanduser('/path/to/the/library')]
 visited = set()
 
 def resolve_include(header):
