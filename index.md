@@ -3,7 +3,7 @@ data:
   libraryCategories:
   - name: data_structure
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/persistent_treap.hpp
       title: Persistent Treap
     - icon: ':heavy_check_mark:'
@@ -11,18 +11,21 @@ data:
       title: Treap
   - name: utilities
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
-      title: Persistent Treap
+      title: Shifted Array
   verificationCategories:
   - name: verify/data_structure
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_treap.test.cpp
+      title: verify/data_structure/persistent_treap.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/treap.test.cpp
       title: verify/data_structure/treap.test.cpp
   - name: verify/utilities
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/utilities/shifted_array.test.cpp
       title: verify/utilities/shifted_array.test.cpp
 layout: toppage
