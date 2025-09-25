@@ -1,0 +1,3 @@
+exclude: ['atcoder', 'expander.py']
+title: m1une's Library
+theme: jekyll-theme-hacker
