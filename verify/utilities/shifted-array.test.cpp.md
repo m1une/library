@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: utilities/shifted_array.hpp
+    path: utilities/shifted-array.hpp
     title: Shifted Array
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
@@ -14,10 +14,10 @@ data:
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858
-  bundledCode: "#line 1 \"verify/utilities/shifted_array.test.cpp\"\n#define PROBLEM\
+  bundledCode: "#line 1 \"verify/utilities/shifted-array.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858\"\n\n#include\
-    \ <bits/stdc++.h>\nusing namespace std;\n\n#line 1 \"utilities/shifted_array.hpp\"\
-    \n\n\n\n#line 6 \"utilities/shifted_array.hpp\"\n\nnamespace m1une {\n// bool\
+    \ <bits/stdc++.h>\nusing namespace std;\n\n#line 1 \"utilities/shifted-array.hpp\"\
+    \n\n\n\n#line 6 \"utilities/shifted-array.hpp\"\n\nnamespace m1une {\n// bool\
     \ is not allowed\n// if you want to use bool, use char instead\ntemplate <typename\
     \ T>\nstruct shifted_array {\n   private:\n    long long _offset;\n    long long\
     \ _step;\n    int _size;\n    std::vector<T> _data;\n\n   public:\n    // make\
@@ -38,7 +38,7 @@ data:
     \ index = (i - _offset) / _step;\n        if (index < 0 || index >= _size) {\n\
     \            throw std::out_of_range(\"Index out of range\");\n        }\n   \
     \     return index;\n    }\n};\n\n}  // namespace m1une\n\n\n\n/**\n * @brief\
-    \ Shifted Array\n */\n#line 7 \"verify/utilities/shifted_array.test.cpp\"\n\n\
+    \ Shifted Array\n */\n#line 7 \"verify/utilities/shifted-array.test.cpp\"\n\n\
     constexpr long long MAX = 100000;\n\nlong long solve(long long l, long long r)\
     \ {\n    vector<char> is_prime(MAX, 1);\n    is_prime[0] = is_prime[1] = 0;\n\
     \    m1une::shifted_array<vector<long long>> prime_factors(l, r);\n    for (long\
@@ -54,7 +54,7 @@ data:
     \       ++res;\n        }\n    }\n    return res;\n}\n\nint main() {\n    long\
     \ long l, r;\n    cin >> l >> r;\n    cout << solve(l, r) << endl;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858\"\
-    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../utilities/shifted_array.hpp\"\
+    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../utilities/shifted-array.hpp\"\
     \n\nconstexpr long long MAX = 100000;\n\nlong long solve(long long l, long long\
     \ r) {\n    vector<char> is_prime(MAX, 1);\n    is_prime[0] = is_prime[1] = 0;\n\
     \    m1une::shifted_array<vector<long long>> prime_factors(l, r);\n    for (long\
@@ -70,17 +70,17 @@ data:
     \       ++res;\n        }\n    }\n    return res;\n}\n\nint main() {\n    long\
     \ long l, r;\n    cin >> l >> r;\n    cout << solve(l, r) << endl;\n}\n"
   dependsOn:
-  - utilities/shifted_array.hpp
+  - utilities/shifted-array.hpp
   isVerificationFile: true
-  path: verify/utilities/shifted_array.test.cpp
+  path: verify/utilities/shifted-array.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 04:50:37+09:00'
+  timestamp: '2025-09-25 18:51:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/utilities/shifted_array.test.cpp
+documentation_of: verify/utilities/shifted-array.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/utilities/shifted_array.test.cpp
-- /verify/verify/utilities/shifted_array.test.cpp.html
-title: verify/utilities/shifted_array.test.cpp
+- /verify/verify/utilities/shifted-array.test.cpp
+- /verify/verify/utilities/shifted-array.test.cpp.html
+title: verify/utilities/shifted-array.test.cpp
 ---
