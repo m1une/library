@@ -2,6 +2,7 @@
 #define M1UNE_PERSISTENT_TREAP_HPP 1
 
 #include <algorithm>
+#include <ctime>
 #include <iostream>
 #include <memory>
 #include <optional>
@@ -18,12 +19,7 @@ struct persistent_treap {
         std::shared_ptr<node> _l, _r;
         int _count;
 
-        node(T key)
-            : _key(key),
-              _priority(rand()),
-              _l(nullptr),
-              _r(nullptr),
-              _count(1) {}
+        node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1) {}
     };
 
     std::shared_ptr<node> _root;
@@ -38,8 +34,7 @@ struct persistent_treap {
         }
     }
 
-    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>& l,
-               std::shared_ptr<node>& r) {
+    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>& l, std::shared_ptr<node>& r) {
         if (!t) {
             l = r = nullptr;
             return;
@@ -57,8 +52,7 @@ struct persistent_treap {
         }
     }
 
-    std::shared_ptr<node> merge(std::shared_ptr<node> l,
-                                std::shared_ptr<node> r) {
+    std::shared_ptr<node> merge(std::shared_ptr<node> l, std::shared_ptr<node> r) {
         if (!l || !r) return l ? l : r;
         if (l->_priority > r->_priority) {
             auto new_node = std::make_shared<node>(*l);
@@ -73,8 +67,7 @@ struct persistent_treap {
         }
     }
 
-    std::shared_ptr<node> insert_impl(std::shared_ptr<node> t,
-                                      std::shared_ptr<node> item) {
+    std::shared_ptr<node> insert_impl(std::shared_ptr<node> t, std::shared_ptr<node> item) {
         if (!t) return item;
         if (item->_priority > t->_priority) {
             split(t, item->_key, item->_l, item->_r);
@@ -144,8 +137,7 @@ struct persistent_treap {
     persistent_treap(std::shared_ptr<node> root) : _root(root) {}
 
     persistent_treap insert(T key) {
-        return persistent_treap(
-            insert_impl(_root, std::make_shared<node>(key)));
+        return persistent_treap(insert_impl(_root, std::make_shared<node>(key)));
     }
 
     persistent_treap erase(T key) {
