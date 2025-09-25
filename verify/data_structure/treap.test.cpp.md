@@ -20,9 +20,8 @@ data:
     #include <ctime>\n#line 7 \"data_structure/treap.hpp\"\n#include <random>\n\n\
     namespace m1une {\n\ntemplate <typename T>\nstruct treap {\n   private:\n    struct\
     \ node {\n        T _key;\n        int _priority;\n        node *_l, *_r;\n  \
-    \      int _count;\n\n        node(T key)\n            : _key(key),\n        \
-    \      _priority(rand()),\n              _l(nullptr),\n              _r(nullptr),\n\
-    \              _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node*\
+    \      int _count;\n\n        node(T key) : _key(key), _priority(rand()), _l(nullptr),\
+    \ _r(nullptr), _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node*\
     \ t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(node*\
     \ t) {\n        if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n\
     \        }\n    }\n\n    void split(node* t, T key, node*& l, node*& r) {\n  \
@@ -121,7 +120,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 18:53:58+09:00'
+  timestamp: '2025-09-25 23:54:27+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/treap.test.cpp

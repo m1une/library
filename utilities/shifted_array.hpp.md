@@ -18,14 +18,13 @@ data:
     \   private:\n    long long _offset;\n    long long _step;\n    int _size;\n \
     \   std::vector<T> _data;\n\n   public:\n    // make an array with indices from\
     \ L to R (including both L and R)\n    // [L, R] (closed interval)\n    shifted_array(long\
-    \ long L, long long R, T init_value = T(),\n                  long long step =\
-    \ 1)\n        : _offset(L),\n          _step(step),\n          _size((R - L) /\
-    \ step + 1),\n          _data(_size, init_value) {\n        if (step <= 0) {\n\
-    \            throw std::invalid_argument(\"Step must be positive\");\n       \
-    \ }\n        if (L > R) {\n            throw std::invalid_argument(\n        \
-    \        \"Left bound must be less than or equal to right bound\");\n        }\n\
-    \    }\n    T &operator[](long long i) {\n        int index = (i - _offset) /\
-    \ _step;\n        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
+    \ long L, long long R, T init_value = T(), long long step = 1)\n        : _offset(L),\
+    \ _step(step), _size((R - L) / step + 1), _data(_size, init_value) {\n       \
+    \ if (step <= 0) {\n            throw std::invalid_argument(\"Step must be positive\"\
+    );\n        }\n        if (L > R) {\n            throw std::invalid_argument(\"\
+    Left bound must be less than or equal to right bound\");\n        }\n    }\n \
+    \   T &operator[](long long i) {\n        int index = (i - _offset) / _step;\n\
+    \        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
     Index out of range\");\n        }\n        return _data[index];\n    };\n    const\
     \ T &operator[](long long i) const {\n        int index = (i - _offset) / _step;\n\
     \        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
@@ -40,14 +39,13 @@ data:
     \ {\n   private:\n    long long _offset;\n    long long _step;\n    int _size;\n\
     \    std::vector<T> _data;\n\n   public:\n    // make an array with indices from\
     \ L to R (including both L and R)\n    // [L, R] (closed interval)\n    shifted_array(long\
-    \ long L, long long R, T init_value = T(),\n                  long long step =\
-    \ 1)\n        : _offset(L),\n          _step(step),\n          _size((R - L) /\
-    \ step + 1),\n          _data(_size, init_value) {\n        if (step <= 0) {\n\
-    \            throw std::invalid_argument(\"Step must be positive\");\n       \
-    \ }\n        if (L > R) {\n            throw std::invalid_argument(\n        \
-    \        \"Left bound must be less than or equal to right bound\");\n        }\n\
-    \    }\n    T &operator[](long long i) {\n        int index = (i - _offset) /\
-    \ _step;\n        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
+    \ long L, long long R, T init_value = T(), long long step = 1)\n        : _offset(L),\
+    \ _step(step), _size((R - L) / step + 1), _data(_size, init_value) {\n       \
+    \ if (step <= 0) {\n            throw std::invalid_argument(\"Step must be positive\"\
+    );\n        }\n        if (L > R) {\n            throw std::invalid_argument(\"\
+    Left bound must be less than or equal to right bound\");\n        }\n    }\n \
+    \   T &operator[](long long i) {\n        int index = (i - _offset) / _step;\n\
+    \        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
     Index out of range\");\n        }\n        return _data[index];\n    };\n    const\
     \ T &operator[](long long i) const {\n        int index = (i - _offset) / _step;\n\
     \        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
@@ -61,7 +59,7 @@ data:
   isVerificationFile: false
   path: utilities/shifted_array.hpp
   requiredBy: []
-  timestamp: '2025-09-25 19:19:16+09:00'
+  timestamp: '2025-09-25 23:54:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/utilities/shifted_array.test.cpp

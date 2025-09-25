@@ -16,24 +16,23 @@ data:
     #include <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\
     \ntemplate <typename T>\nstruct treap {\n   private:\n    struct node {\n    \
     \    T _key;\n        int _priority;\n        node *_l, *_r;\n        int _count;\n\
-    \n        node(T key)\n            : _key(key),\n              _priority(rand()),\n\
-    \              _l(nullptr),\n              _r(nullptr),\n              _count(1)\
-    \ {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n        return t\
-    \ ? t->_count : 0;\n    }\n\n    void update_count(node* t) {\n        if (t)\
-    \ {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n        }\n   \
-    \ }\n\n    void split(node* t, T key, node*& l, node*& r) {\n        if (!t) {\n\
-    \            l = r = nullptr;\n            return;\n        }\n        if (key\
-    \ < t->_key) {\n            split(t->_l, key, l, t->_l);\n            r = t;\n\
-    \        } else {\n            split(t->_r, key, t->_r, r);\n            l = t;\n\
-    \        }\n        update_count(t);\n    }\n\n    node* merge(node* l, node*\
-    \ r) {\n        if (!l || !r) {\n            return l ? l : r;\n        }\n  \
-    \      if (l->_priority > r->_priority) {\n            l->_r = merge(l->_r, r);\n\
-    \            update_count(l);\n            return l;\n        } else {\n     \
-    \       r->_l = merge(l, r->_l);\n            update_count(r);\n            return\
-    \ r;\n        }\n    }\n\n    void insert_impl(node*& t, node* item) {\n     \
-    \   if (!t) {\n            t = item;\n            return;\n        }\n       \
-    \ if (item->_priority > t->_priority) {\n            split(t, item->_key, item->_l,\
-    \ item->_r);\n            t = item;\n        } else {\n            insert_impl(item->_key\
+    \n        node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr),\
+    \ _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n     \
+    \   return t ? t->_count : 0;\n    }\n\n    void update_count(node* t) {\n   \
+    \     if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n   \
+    \     }\n    }\n\n    void split(node* t, T key, node*& l, node*& r) {\n     \
+    \   if (!t) {\n            l = r = nullptr;\n            return;\n        }\n\
+    \        if (key < t->_key) {\n            split(t->_l, key, l, t->_l);\n    \
+    \        r = t;\n        } else {\n            split(t->_r, key, t->_r, r);\n\
+    \            l = t;\n        }\n        update_count(t);\n    }\n\n    node* merge(node*\
+    \ l, node* r) {\n        if (!l || !r) {\n            return l ? l : r;\n    \
+    \    }\n        if (l->_priority > r->_priority) {\n            l->_r = merge(l->_r,\
+    \ r);\n            update_count(l);\n            return l;\n        } else {\n\
+    \            r->_l = merge(l, r->_l);\n            update_count(r);\n        \
+    \    return r;\n        }\n    }\n\n    void insert_impl(node*& t, node* item)\
+    \ {\n        if (!t) {\n            t = item;\n            return;\n        }\n\
+    \        if (item->_priority > t->_priority) {\n            split(t, item->_key,\
+    \ item->_l, item->_r);\n            t = item;\n        } else {\n            insert_impl(item->_key\
     \ < t->_key ? t->_l : t->_r, item);\n        }\n        update_count(t);\n   \
     \ }\n\n    void erase_impl(node*& t, T key) {\n        if (!t) {\n           \
     \ return;\n        }\n        if (t->_key == key) {\n            node* temp =\
@@ -70,24 +69,23 @@ data:
     #include <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\
     \ntemplate <typename T>\nstruct treap {\n   private:\n    struct node {\n    \
     \    T _key;\n        int _priority;\n        node *_l, *_r;\n        int _count;\n\
-    \n        node(T key)\n            : _key(key),\n              _priority(rand()),\n\
-    \              _l(nullptr),\n              _r(nullptr),\n              _count(1)\
-    \ {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n        return t\
-    \ ? t->_count : 0;\n    }\n\n    void update_count(node* t) {\n        if (t)\
-    \ {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n        }\n   \
-    \ }\n\n    void split(node* t, T key, node*& l, node*& r) {\n        if (!t) {\n\
-    \            l = r = nullptr;\n            return;\n        }\n        if (key\
-    \ < t->_key) {\n            split(t->_l, key, l, t->_l);\n            r = t;\n\
-    \        } else {\n            split(t->_r, key, t->_r, r);\n            l = t;\n\
-    \        }\n        update_count(t);\n    }\n\n    node* merge(node* l, node*\
-    \ r) {\n        if (!l || !r) {\n            return l ? l : r;\n        }\n  \
-    \      if (l->_priority > r->_priority) {\n            l->_r = merge(l->_r, r);\n\
-    \            update_count(l);\n            return l;\n        } else {\n     \
-    \       r->_l = merge(l, r->_l);\n            update_count(r);\n            return\
-    \ r;\n        }\n    }\n\n    void insert_impl(node*& t, node* item) {\n     \
-    \   if (!t) {\n            t = item;\n            return;\n        }\n       \
-    \ if (item->_priority > t->_priority) {\n            split(t, item->_key, item->_l,\
-    \ item->_r);\n            t = item;\n        } else {\n            insert_impl(item->_key\
+    \n        node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr),\
+    \ _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n     \
+    \   return t ? t->_count : 0;\n    }\n\n    void update_count(node* t) {\n   \
+    \     if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n   \
+    \     }\n    }\n\n    void split(node* t, T key, node*& l, node*& r) {\n     \
+    \   if (!t) {\n            l = r = nullptr;\n            return;\n        }\n\
+    \        if (key < t->_key) {\n            split(t->_l, key, l, t->_l);\n    \
+    \        r = t;\n        } else {\n            split(t->_r, key, t->_r, r);\n\
+    \            l = t;\n        }\n        update_count(t);\n    }\n\n    node* merge(node*\
+    \ l, node* r) {\n        if (!l || !r) {\n            return l ? l : r;\n    \
+    \    }\n        if (l->_priority > r->_priority) {\n            l->_r = merge(l->_r,\
+    \ r);\n            update_count(l);\n            return l;\n        } else {\n\
+    \            r->_l = merge(l, r->_l);\n            update_count(r);\n        \
+    \    return r;\n        }\n    }\n\n    void insert_impl(node*& t, node* item)\
+    \ {\n        if (!t) {\n            t = item;\n            return;\n        }\n\
+    \        if (item->_priority > t->_priority) {\n            split(t, item->_key,\
+    \ item->_l, item->_r);\n            t = item;\n        } else {\n            insert_impl(item->_key\
     \ < t->_key ? t->_l : t->_r, item);\n        }\n        update_count(t);\n   \
     \ }\n\n    void erase_impl(node*& t, T key) {\n        if (!t) {\n           \
     \ return;\n        }\n        if (t->_key == key) {\n            node* temp =\
@@ -124,7 +122,7 @@ data:
   isVerificationFile: false
   path: data_structure/treap.hpp
   requiredBy: []
-  timestamp: '2025-09-25 18:53:58+09:00'
+  timestamp: '2025-09-25 23:54:27+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/treap.test.cpp
