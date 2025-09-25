@@ -5,4 +5,3 @@
 .venv
 .DS_Store
 bundled.cpp
-expander.py
