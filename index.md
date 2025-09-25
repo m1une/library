@@ -1,30 +1,30 @@
 ---
 data:
   libraryCategories:
-  - name: data-structure
+  - name: data_structure
     pages:
     - icon: ':warning:'
-      path: data-structure/persistent-treap.hpp
+      path: data_structure/persistent_treap.hpp
       title: Persistent Treap
     - icon: ':heavy_check_mark:'
-      path: data-structure/treap.hpp
+      path: data_structure/treap.hpp
       title: Treap
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'
-      path: utilities/shifted-array.hpp
+      path: utilities/shifted_array.hpp
       title: Shifted Array
   verificationCategories:
-  - name: verify/data-structure
+  - name: verify/data_structure
     pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data-structure/treap.test.cpp
-      title: verify/data-structure/treap.test.cpp
+      path: verify/data_structure/treap.test.cpp
+      title: verify/data_structure/treap.test.cpp
   - name: verify/utilities
     pages:
     - icon: ':heavy_check_mark:'
-      path: verify/utilities/shifted-array.test.cpp
-      title: verify/utilities/shifted-array.test.cpp
+      path: verify/utilities/shifted_array.test.cpp
+      title: verify/utilities/shifted_array.test.cpp
 layout: toppage
 ---
 [![m1une](https://img.shields.io/endpoint?url=https%3A%2F%2Fatcoder-badges.now.sh%2Fapi%2Fatcoder%2Fjson%2Fm1une)](https://atcoder.jp/users/m1une)

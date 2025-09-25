@@ -9,7 +9,7 @@ data:
   attributes:
     document_title: Persistent Treap
     links: []
-  bundledCode: "#line 1 \"data-structure/persistent-treap.hpp\"\n\n\n\n#include <algorithm>\n\
+  bundledCode: "#line 1 \"data_structure/persistent_treap.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <iostream>\n#include <memory>\n#include <optional>\n#include <random>\n\
     \nnamespace m1une {\n\ntemplate <typename T>\nstruct persistent_treap {\n   private:\n\
     \    struct node {\n        T key;\n        int priority;\n        std::shared_ptr<node>\
@@ -136,15 +136,15 @@ data:
     \ Persistent Treap\n */\n"
   dependsOn: []
   isVerificationFile: false
-  path: data-structure/persistent-treap.hpp
+  path: data_structure/persistent_treap.hpp
   requiredBy: []
-  timestamp: '2025-09-25 04:49:28+09:00'
+  timestamp: '2025-09-25 18:53:58+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: data-structure/persistent-treap.hpp
+documentation_of: data_structure/persistent_treap.hpp
 layout: document
 redirect_from:
-- /library/data-structure/persistent-treap.hpp
-- /library/data-structure/persistent-treap.hpp.html
+- /library/data_structure/persistent_treap.hpp
+- /library/data_structure/persistent_treap.hpp.html
 title: Persistent Treap
 ---

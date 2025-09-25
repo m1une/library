@@ -4,15 +4,15 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/utilities/shifted-array.test.cpp
-    title: verify/utilities/shifted-array.test.cpp
+    path: verify/utilities/shifted_array.test.cpp
+    title: verify/utilities/shifted_array.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     document_title: Shifted Array
     links: []
-  bundledCode: "#line 1 \"utilities/shifted-array.hpp\"\n\n\n\n#include <stdexcept>\n\
+  bundledCode: "#line 1 \"utilities/shifted_array.hpp\"\n\n\n\n#include <stdexcept>\n\
     #include <vector>\n\nnamespace m1une {\n// bool is not allowed\n// if you want\
     \ to use bool, use char instead\ntemplate <typename T>\nstruct shifted_array {\n\
     \   private:\n    long long _offset;\n    long long _step;\n    int _size;\n \
@@ -59,16 +59,16 @@ data:
     \ */\n"
   dependsOn: []
   isVerificationFile: false
-  path: utilities/shifted-array.hpp
+  path: utilities/shifted_array.hpp
   requiredBy: []
-  timestamp: '2025-09-25 18:51:48+09:00'
+  timestamp: '2025-09-25 18:53:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/utilities/shifted-array.test.cpp
-documentation_of: utilities/shifted-array.hpp
+  - verify/utilities/shifted_array.test.cpp
+documentation_of: utilities/shifted_array.hpp
 layout: document
 redirect_from:
-- /library/utilities/shifted-array.hpp
-- /library/utilities/shifted-array.hpp.html
+- /library/utilities/shifted_array.hpp
+- /library/utilities/shifted_array.hpp.html
 title: Shifted Array
 ---

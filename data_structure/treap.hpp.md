@@ -4,15 +4,15 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data-structure/treap.test.cpp
-    title: verify/data-structure/treap.test.cpp
+    path: verify/data_structure/treap.test.cpp
+    title: verify/data_structure/treap.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     document_title: Treap
     links: []
-  bundledCode: "#line 1 \"data-structure/treap.hpp\"\n\n\n\n#include <algorithm>\n\
+  bundledCode: "#line 1 \"data_structure/treap.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\
     \ntemplate <typename T>\nstruct treap {\n   private:\n    struct node {\n    \
     \    T _key;\n        int _priority;\n        node *_l, *_r;\n        int _count;\n\
@@ -122,16 +122,16 @@ data:
     }  // namespace m1une\n#endif  // M1UNE_TREAP_HPP\n\n/**\n * @brief Treap\n */\n"
   dependsOn: []
   isVerificationFile: false
-  path: data-structure/treap.hpp
+  path: data_structure/treap.hpp
   requiredBy: []
-  timestamp: '2025-09-25 06:13:38+09:00'
+  timestamp: '2025-09-25 18:53:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data-structure/treap.test.cpp
-documentation_of: data-structure/treap.hpp
+  - verify/data_structure/treap.test.cpp
+documentation_of: data_structure/treap.hpp
 layout: document
 redirect_from:
-- /library/data-structure/treap.hpp
-- /library/data-structure/treap.hpp.html
+- /library/data_structure/treap.hpp
+- /library/data_structure/treap.hpp.html
 title: Treap
 ---

@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: data-structure/treap.hpp
+    path: data_structure/treap.hpp
     title: Treap
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
@@ -14,10 +14,10 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/ordered_set
     links:
     - https://judge.yosupo.jp/problem/ordered_set
-  bundledCode: "#line 1 \"verify/data-structure/treap.test.cpp\"\n#define PROBLEM\
+  bundledCode: "#line 1 \"verify/data_structure/treap.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include <iostream>\n#include\
-    \ <vector>\n\n#line 1 \"data-structure/treap.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <ctime>\n#line 7 \"data-structure/treap.hpp\"\n#include <random>\n\n\
+    \ <vector>\n\n#line 1 \"data_structure/treap.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <ctime>\n#line 7 \"data_structure/treap.hpp\"\n#include <random>\n\n\
     namespace m1une {\n\ntemplate <typename T>\nstruct treap {\n   private:\n    struct\
     \ node {\n        T _key;\n        int _priority;\n        node *_l, *_r;\n  \
     \      int _count;\n\n        node(T key)\n            : _key(key),\n        \
@@ -69,7 +69,7 @@ data:
     \ key);\n    }\n\n    T* lower_bound(T key) {\n        return lower_bound_impl(_root,\
     \ key);\n    }\n\n    T* upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n\n/**\n * @brief Treap\n */\n#line 7 \"verify/data-structure/treap.test.cpp\"\
+    }  // namespace m1une\n\n\n/**\n * @brief Treap\n */\n#line 7 \"verify/data_structure/treap.test.cpp\"\
     \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
     }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
     \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
@@ -93,7 +93,7 @@ data:
     \       } else {\n                std::cout << -1 << \"\\n\";\n            }\n\
     \        }\n    }\n\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include\
-    \ <iostream>\n#include <vector>\n\n#include \"../../data-structure/treap.hpp\"\
+    \ <iostream>\n#include <vector>\n\n#include \"../../data_structure/treap.hpp\"\
     \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
     }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
     \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
@@ -117,17 +117,17 @@ data:
     \       } else {\n                std::cout << -1 << \"\\n\";\n            }\n\
     \        }\n    }\n\n    return 0;\n}\n"
   dependsOn:
-  - data-structure/treap.hpp
+  - data_structure/treap.hpp
   isVerificationFile: true
-  path: verify/data-structure/treap.test.cpp
+  path: verify/data_structure/treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 06:13:38+09:00'
+  timestamp: '2025-09-25 18:53:58+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/data-structure/treap.test.cpp
+documentation_of: verify/data_structure/treap.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/data-structure/treap.test.cpp
-- /verify/verify/data-structure/treap.test.cpp.html
-title: verify/data-structure/treap.test.cpp
+- /verify/verify/data_structure/treap.test.cpp
+- /verify/verify/data_structure/treap.test.cpp.html
+title: verify/data_structure/treap.test.cpp
 ---
