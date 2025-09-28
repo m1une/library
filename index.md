@@ -9,6 +9,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/bst/treap.hpp
       title: Treap
+  - name: data_structure/segtree
+    pages:
+    - icon: ':warning:'
+      path: data_structure/segtree/segtree.hpp
+      title: Segment Tree
   - name: monoid
     pages:
     - icon: ':warning:'
