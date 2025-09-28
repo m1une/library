@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <type_traits>
+#include <concepts>
 
 namespace m1une {
 
@@ -15,6 +16,14 @@ struct monoid {
     static constexpr auto op = operation;
     static constexpr auto id = identity;
     static constexpr bool is_commutative = commutative;
+};
+
+template <typename T>
+concept monoid_concept = requires {
+    typename T::value_type;
+    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename T::value_type, typename T::value_type)>>;
+    { T::id } -> std::convertible_to<std::function<typename T::value_type()>>;
+    { T::is_commutative } -> std::convertible_to<bool>;
 };
 
 }  // namespace m1une
