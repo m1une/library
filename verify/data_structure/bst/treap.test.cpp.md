@@ -15,14 +15,13 @@ data:
     links:
     - https://judge.yosupo.jp/problem/ordered_set
   bundledCode: "#line 1 \"verify/data_structure/bst/treap.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include <iostream>\n#include\
-    \ <vector>\n\n#line 1 \"data_structure/bst/treap.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <ctime>\n#line 7 \"data_structure/bst/treap.hpp\"\n#include <random>\n\
-    \nnamespace m1une {\n\ntemplate <typename T>\nstruct treap {\n   private:\n  \
-    \  struct node {\n        T _key;\n        int _priority;\n        node *_l, *_r;\n\
-    \        int _count;\n\n        node(T key) : _key(key), _priority(rand()), _l(nullptr),\
-    \ _r(nullptr), _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node*\
-    \ t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(node*\
+    \ \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#line 1 \"data_structure/bst/treap.hpp\"\
+    \n\n\n\n#include <algorithm>\n#include <ctime>\n#include <iostream>\n#include\
+    \ <random>\n\nnamespace m1une {\n\ntemplate <typename T>\nstruct treap {\n   private:\n\
+    \    struct node {\n        T _key;\n        int _priority;\n        node *_l,\
+    \ *_r;\n        int _count;\n\n        node(T key) : _key(key), _priority(rand()),\
+    \ _l(nullptr), _r(nullptr), _count(1) {}\n    };\n\n    node* _root;\n\n    int\
+    \ count(node* t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(node*\
     \ t) {\n        if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n\
     \        }\n    }\n\n    void split(node* t, T key, node*& l, node*& r) {\n  \
     \      if (!t) {\n            l = r = nullptr;\n            return;\n        }\n\
@@ -68,8 +67,9 @@ data:
     \ key);\n    }\n\n    T* lower_bound(T key) {\n        return lower_bound_impl(_root,\
     \ key);\n    }\n\n    T* upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n\n/**\n * @brief Treap\n */\n#line 7 \"verify/data_structure/bst/treap.test.cpp\"\
-    \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
+    }  // namespace m1une\n\n\n/**\n * @brief Treap\n */\n#line 4 \"verify/data_structure/bst/treap.test.cpp\"\
+    \n\n#line 6 \"verify/data_structure/bst/treap.test.cpp\"\n#include <vector>\n\n\
+    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
     }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
     \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
     \        std::cin >> a;\n        tr.insert(a);\n    }\n\n    for (int q = 0; q\
@@ -92,8 +92,8 @@ data:
     \       } else {\n                std::cout << -1 << \"\\n\";\n            }\n\
     \        }\n    }\n\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include\
-    \ <iostream>\n#include <vector>\n\n#include \"../../../data_structure/bst/treap.hpp\"\
-    \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
+    \ \"data_structure/bst/treap.hpp\"\n\n#include <iostream>\n#include <vector>\n\
+    \nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
     }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
     \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
     \        std::cin >> a;\n        tr.insert(a);\n    }\n\n    for (int q = 0; q\
@@ -120,7 +120,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/bst/treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-28 21:37:41+09:00'
+  timestamp: '2025-09-28 22:15:04+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/bst/treap.test.cpp

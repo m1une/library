@@ -107,7 +107,7 @@ data:
     \        std::cout << distinct_elements[ok] << \"\\n\";\n    }\n\n    return 0;\n\
     }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n\
-    #include \"../../../data_structure/bst/persistent_treap.hpp\"\n\n#include <algorithm>\n\
+    #include \"data_structure/bst/persistent_treap.hpp\"\n\n#include <algorithm>\n\
     #include <iostream>\n#include <vector>\n\n// Fast I/O\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int N, Q;\n \
     \   std::cin >> N >> Q;\n    std::vector<int> a(N);\n    std::vector<int> distinct_elements;\n\
@@ -141,7 +141,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/bst/persistent_treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-28 21:37:41+09:00'
+  timestamp: '2025-09-28 22:15:04+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/bst/persistent_treap.test.cpp
