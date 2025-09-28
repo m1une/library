@@ -6,8 +6,16 @@ LIBRARY_ROOT = os.path.abspath(os.path.dirname(__file__))
 INCLUDE_PATHS = ['.', LIBRARY_ROOT]
 visited = set()
 
-def resolve_include(header):
-    """Finds the absolute path for a given header file within INCLUDE_PATHS."""
+def resolve_include(header, current_file_dir):
+    """
+    Finds the absolute path for a given header file.
+    It first checks relative to the current file's directory,
+    then checks the global include paths.
+    """
+    relative_path = os.path.join(current_file_dir, header)
+    if os.path.isfile(relative_path):
+        return os.path.abspath(relative_path)
+    
     for path in INCLUDE_PATHS:
         full_path = os.path.join(path, header)
         if os.path.isfile(full_path):
@@ -77,6 +85,7 @@ def expand_file(path, display_name=None):
     # --- Main Processing Loop ---
     first_line_emitted = False
     local_block_state = 0  # 0: normal, 1: skipping #ifdef LOCAL, 2: in #else of LOCAL
+    current_file_dir = os.path.dirname(path)
 
     for i, line in enumerate(lines):
         stripped_line = line.strip()
@@ -105,7 +114,7 @@ def expand_file(path, display_name=None):
         m = re.match(r'#\s*include\s*"([^"]+)"', stripped_line)
         if m:
             header = m.group(1)
-            resolved = resolve_include(header)
+            resolved = resolve_include(header, current_file_dir)
             if resolved:
                 expand_file(resolved, header)
                 print(f'#line {i + 2} "{display_name}"')
@@ -122,4 +131,4 @@ if __name__ == '__main__':
         print("Usage: python3 expander.py <main_file.cpp> > bundled_file.cpp", file=sys.stderr)
         sys.exit(1)
 
-    expand_file(sys.argv[1])
+    expand_file(sys.argv[0])
