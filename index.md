@@ -45,6 +45,9 @@ data:
       title: monoids/monoids/xor_monoid.hpp
   - name: utilities
     pages:
+    - icon: ':warning:'
+      path: utilities/bit_ceil.hpp
+      title: utilities/bit_ceil.hpp
     - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
       title: Shifted Array
