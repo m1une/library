@@ -65,14 +65,14 @@ data:
       path: utilities/shifted_array.hpp
       title: Shifted Array
   verificationCategories:
-  - name: verify/data_structure
+  - name: verify/data_structure/bst
     pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_treap.test.cpp
-      title: verify/data_structure/persistent_treap.test.cpp
+      path: verify/data_structure/bst/persistent_treap.test.cpp
+      title: verify/data_structure/bst/persistent_treap.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/treap.test.cpp
-      title: verify/data_structure/treap.test.cpp
+      path: verify/data_structure/bst/treap.test.cpp
+      title: verify/data_structure/bst/treap.test.cpp
   - name: verify/utilities
     pages:
     - icon: ':heavy_check_mark:'

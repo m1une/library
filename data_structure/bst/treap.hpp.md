@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/treap.test.cpp
-    title: verify/data_structure/treap.test.cpp
+    path: verify/data_structure/bst/treap.test.cpp
+    title: verify/data_structure/bst/treap.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -125,7 +125,7 @@ data:
   timestamp: '2025-09-28 20:25:14+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/treap.test.cpp
+  - verify/data_structure/bst/treap.test.cpp
 documentation_of: data_structure/bst/treap.hpp
 layout: document
 redirect_from:

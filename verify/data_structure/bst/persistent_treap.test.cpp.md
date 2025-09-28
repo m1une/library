@@ -14,11 +14,11 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/range_kth_smallest
     links:
     - https://judge.yosupo.jp/problem/range_kth_smallest
-  bundledCode: "#line 1 \"verify/data_structure/persistent_treap.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n#line 1 \"\
-    data_structure/bst/persistent_treap.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <ctime>\n#include <iostream>\n#include <memory>\n#include <optional>\n#include\
-    \ <random>\n\nnamespace m1une {\n\ntemplate <typename T>\nstruct persistent_treap\
+  bundledCode: "#line 1 \"verify/data_structure/bst/persistent_treap.test.cpp\"\n\
+    #define PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n#line\
+    \ 1 \"data_structure/bst/persistent_treap.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <ctime>\n#include <iostream>\n#include <memory>\n#include <optional>\n\
+    #include <random>\n\nnamespace m1une {\n\ntemplate <typename T>\nstruct persistent_treap\
     \ {\n   private:\n    struct node {\n        T _key;\n        int _priority;\n\
     \        std::shared_ptr<node> _l, _r;\n        int _count;\n\n        node(T\
     \ key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1) {}\n\
@@ -77,7 +77,7 @@ data:
     \    std::optional<T> upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
     }  // namespace m1une\n\n\n\n/**\n * @brief Persistent Treap\n */\n#line 4 \"\
-    verify/data_structure/persistent_treap.test.cpp\"\n\n#line 7 \"verify/data_structure/persistent_treap.test.cpp\"\
+    verify/data_structure/bst/persistent_treap.test.cpp\"\n\n#line 7 \"verify/data_structure/bst/persistent_treap.test.cpp\"\
     \n#include <vector>\n\n// Fast I/O\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int N, Q;\n \
     \   std::cin >> N >> Q;\n    std::vector<int> a(N);\n    std::vector<int> distinct_elements;\n\
@@ -107,7 +107,7 @@ data:
     \        std::cout << distinct_elements[ok] << \"\\n\";\n    }\n\n    return 0;\n\
     }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n\
-    #include \"../../data_structure/bst/persistent_treap.hpp\"\n\n#include <algorithm>\n\
+    #include \"../../../data_structure/bst/persistent_treap.hpp\"\n\n#include <algorithm>\n\
     #include <iostream>\n#include <vector>\n\n// Fast I/O\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int N, Q;\n \
     \   std::cin >> N >> Q;\n    std::vector<int> a(N);\n    std::vector<int> distinct_elements;\n\
@@ -139,15 +139,15 @@ data:
   dependsOn:
   - data_structure/bst/persistent_treap.hpp
   isVerificationFile: true
-  path: verify/data_structure/persistent_treap.test.cpp
+  path: verify/data_structure/bst/persistent_treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-28 20:26:03+09:00'
+  timestamp: '2025-09-28 21:37:41+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/data_structure/persistent_treap.test.cpp
+documentation_of: verify/data_structure/bst/persistent_treap.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/data_structure/persistent_treap.test.cpp
-- /verify/verify/data_structure/persistent_treap.test.cpp.html
-title: verify/data_structure/persistent_treap.test.cpp
+- /verify/verify/data_structure/bst/persistent_treap.test.cpp
+- /verify/verify/data_structure/bst/persistent_treap.test.cpp.html
+title: verify/data_structure/bst/persistent_treap.test.cpp
 ---
