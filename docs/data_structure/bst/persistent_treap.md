@@ -1,6 +1,6 @@
 ---
 title: Persistent Treap
-documentation_of: ../../data_structure/persistent_treap.hpp
+documentation_of: ../../../data_structure/persistent_treap.hpp
 ---
 
 ## Overview
