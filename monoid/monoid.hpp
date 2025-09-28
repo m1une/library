@@ -5,6 +5,7 @@
 #include <type_traits>
 
 namespace m1une {
+
 template <typename T, auto operation, auto identity, bool commutative>
 struct monoid {
     static_assert(std::is_convertible_v<decltype(operation), std::function<T(T, T)>>, "operation must work as T(T, T)");
@@ -15,6 +16,7 @@ struct monoid {
     static constexpr auto id = identity;
     static constexpr bool is_commutative = commutative;
 };
+
 }  // namespace m1une
 
 #endif  // M1UNE_MONOID_HPP

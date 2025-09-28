@@ -1,6 +1,7 @@
 #ifndef M1UNE_PRIM_MONOIDS_HPP
 #define M1UNE_PRIM_MONOIDS_HPP 1
 
+#include "../monoid.hpp"
 #include "add_monoid.hpp"
 #include "mul_monoid.hpp"
 #include "min_monoid.hpp"
