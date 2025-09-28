@@ -9,40 +9,40 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/treap.hpp
       title: Treap
-  - name: monoids
+  - name: monoid
     pages:
     - icon: ':warning:'
-      path: monoids/monoid.hpp
-      title: monoids/monoid.hpp
-  - name: monoids/monoids
+      path: monoid/monoid.hpp
+      title: monoid/monoid.hpp
+  - name: monoid/monoids
     pages:
     - icon: ':warning:'
-      path: monoids/monoids/add_monoid.hpp
-      title: monoids/monoids/add_monoid.hpp
+      path: monoid/monoids/add_monoid.hpp
+      title: monoid/monoids/add_monoid.hpp
     - icon: ':warning:'
-      path: monoids/monoids/affine_monoid.hpp
-      title: monoids/monoids/affine_monoid.hpp
+      path: monoid/monoids/affine_monoid.hpp
+      title: monoid/monoids/affine_monoid.hpp
     - icon: ':warning:'
-      path: monoids/monoids/and_monoid.hpp
-      title: monoids/monoids/and_monoid.hpp
+      path: monoid/monoids/and_monoid.hpp
+      title: monoid/monoids/and_monoid.hpp
     - icon: ':warning:'
-      path: monoids/monoids/max_monoid.hpp
-      title: monoids/monoids/max_monoid.hpp
+      path: monoid/monoids/max_monoid.hpp
+      title: monoid/monoids/max_monoid.hpp
     - icon: ':warning:'
-      path: monoids/monoids/min_monoid.hpp
-      title: monoids/monoids/min_monoid.hpp
+      path: monoid/monoids/min_monoid.hpp
+      title: monoid/monoids/min_monoid.hpp
     - icon: ':warning:'
-      path: monoids/monoids/mul_monoid.hpp
-      title: monoids/monoids/mul_monoid.hpp
+      path: monoid/monoids/mul_monoid.hpp
+      title: monoid/monoids/mul_monoid.hpp
     - icon: ':warning:'
-      path: monoids/monoids/or_monoid.hpp
-      title: monoids/monoids/or_monoid.hpp
+      path: monoid/monoids/or_monoid.hpp
+      title: monoid/monoids/or_monoid.hpp
     - icon: ':warning:'
-      path: monoids/monoids/prim_monoids.hpp
-      title: monoids/monoids/prim_monoids.hpp
+      path: monoid/monoids/prim_monoids.hpp
+      title: monoid/monoids/prim_monoids.hpp
     - icon: ':warning:'
-      path: monoids/monoids/xor_monoid.hpp
-      title: monoids/monoids/xor_monoid.hpp
+      path: monoid/monoids/xor_monoid.hpp
+      title: monoid/monoids/xor_monoid.hpp
   - name: utilities
     pages:
     - icon: ':warning:'
