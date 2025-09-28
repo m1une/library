@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: data_structure/segtree/segtree.hpp
+    title: Segment Tree
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -19,7 +22,8 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: utilities/bit_ceil.hpp
-  requiredBy: []
+  requiredBy:
+  - data_structure/segtree/segtree.hpp
   timestamp: '2025-09-28 19:24:13+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
