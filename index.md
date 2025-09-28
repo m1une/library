@@ -23,7 +23,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: monoid/monoid.hpp
-      title: monoid/monoid.hpp
+      title: Monoid
   - name: monoid/monoids
     pages:
     - icon: ':warning:'

@@ -9,7 +9,7 @@ data:
     title: math/affine.hpp
   - icon: ':heavy_check_mark:'
     path: monoid/monoid.hpp
-    title: monoid/monoid.hpp
+    title: Monoid
   - icon: ':heavy_check_mark:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp

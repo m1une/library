@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: monoid/monoid.hpp
-    title: monoid/monoid.hpp
+    title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/monoids/prim_monoids.hpp
