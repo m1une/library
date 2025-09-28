@@ -62,7 +62,7 @@ data:
     \ @brief Segment Tree\n */\n"
   code: "#ifndef M1UNE_SEGTREE_HPP\n#define M1UNE_SEGTREE_HPP 1\n\n#include <algorithm>\n\
     #include <functional>\n#include <type_traits>\n#include <vector>\n\n#include \"\
-    ../../utilities/bit_ceil.hpp\"\n\nnamespace m1une {\n\ntemplate <typename Monoid>\n\
+    utilities/bit_ceil.hpp\"\n\nnamespace m1une {\n\ntemplate <typename Monoid>\n\
     struct segment_tree {\n    using T = typename Monoid::value_type;\n\n   private:\n\
     \    int _n;\n    int _size;\n    std::vector<T> _data;\n\n    void update(int\
     \ k) {\n        _data[k] = Monoid::op(_data[2 * k], _data[2 * k + 1]);\n    }\n\
@@ -111,7 +111,7 @@ data:
   isVerificationFile: false
   path: data_structure/segtree/segtree.hpp
   requiredBy: []
-  timestamp: '2025-09-28 20:54:36+09:00'
+  timestamp: '2025-09-28 22:22:35+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/segtree/segtree.hpp
