@@ -9,6 +9,9 @@ data:
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
   - icon: ':warning:'
+    path: monoid/monoids/affine_right_monoid.hpp
+    title: monoid/monoids/affine_right_monoid.hpp
+  - icon: ':warning:'
     path: monoid/monoids/and_monoid.hpp
     title: monoid/monoids/and_monoid.hpp
   - icon: ':warning:'
@@ -55,6 +58,7 @@ data:
   isVerificationFile: false
   path: monoid/monoid.hpp
   requiredBy:
+  - monoid/monoids/affine_right_monoid.hpp
   - monoid/monoids/prim_monoids.hpp
   - monoid/monoids/min_monoid.hpp
   - monoid/monoids/and_monoid.hpp

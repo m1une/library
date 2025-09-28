@@ -28,6 +28,9 @@ data:
       path: monoid/monoids/affine_monoid.hpp
       title: monoid/monoids/affine_monoid.hpp
     - icon: ':warning:'
+      path: monoid/monoids/affine_right_monoid.hpp
+      title: monoid/monoids/affine_right_monoid.hpp
+    - icon: ':warning:'
       path: monoid/monoids/and_monoid.hpp
       title: monoid/monoids/and_monoid.hpp
     - icon: ':warning:'
