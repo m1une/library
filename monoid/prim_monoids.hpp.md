@@ -4,12 +4,18 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/monoid.hpp
     title: Monoid
+  - icon: ':heavy_check_mark:'
+    path: monoid/monoid.hpp
+    title: Monoid
   - icon: ':warning:'
     path: monoid/monoids/add_monoid.hpp
     title: monoid/monoids/add_monoid.hpp
   - icon: ':heavy_check_mark:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
+  - icon: ':warning:'
+    path: monoid/monoids/affine_right_monoid.hpp
+    title: monoid/monoids/affine_right_monoid.hpp
   - icon: ':warning:'
     path: monoid/monoids/and_monoid.hpp
     title: monoid/monoids/and_monoid.hpp
@@ -35,7 +41,7 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"monoid/monoids/prim_monoids.hpp\"\n\n\n\n#line 1 \"monoid/monoid.hpp\"\
+  bundledCode: "#line 1 \"monoid/prim_monoids.hpp\"\n\n\n\n#line 1 \"monoid/monoid.hpp\"\
     \n\n\n\n#include <functional>\n#include <type_traits>\n\nnamespace m1une {\n\n\
     template <typename T, auto operation, auto identity, bool commutative>\nstruct\
     \ monoid {\n    static_assert(std::is_convertible_v<decltype(operation), std::function<T(T,\
@@ -74,30 +80,41 @@ data:
     \     [](std::pair<T, T> f, std::pair<T, T> g) {\n                           \
     \      return std::pair<T, T>(f.first * g.first, f.second * g.first + g.second);\n\
     \                             },\n                             []() { return std::pair<T,\
-    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 13 \"monoid/monoids/prim_monoids.hpp\"\
+    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/affine_right_monoid.hpp\"\
+    \n\n\n\n#line 5 \"monoid/monoids/affine_right_monoid.hpp\"\n\n#line 7 \"monoid/monoids/affine_right_monoid.hpp\"\
+    \n\nnamespace m1une {\n\n// right associative version of affine_monoid\n// Affine\
+    \ transformation f(x) = ax + b is represented as (a, b)\n// perform g first, then\
+    \ f\n// op(f, g)(x) = f(g(x))\ntemplate <typename T>\nusing affine_right_monoid\
+    \ = monoid<std::pair<T, T>,\n                                   [](std::pair<T,\
+    \ T> f, std::pair<T, T> g) {\n                                       return std::pair<T,\
+    \ T>(f.first * g.first, f.first * g.second + f.second);\n                    \
+    \               },\n                                   []() { return std::pair<T,\
+    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 14 \"monoid/prim_monoids.hpp\"\
     \n\n\n"
   code: '#ifndef M1UNE_PRIM_MONOIDS_HPP
 
     #define M1UNE_PRIM_MONOIDS_HPP 1
 
 
-    #include "../monoid.hpp"
+    #include "monoid.hpp"
 
-    #include "add_monoid.hpp"
+    #include "monoids/add_monoid.hpp"
 
-    #include "mul_monoid.hpp"
+    #include "monoids/mul_monoid.hpp"
 
-    #include "min_monoid.hpp"
+    #include "monoids/min_monoid.hpp"
 
-    #include "max_monoid.hpp"
+    #include "monoids/max_monoid.hpp"
 
-    #include "and_monoid.hpp"
+    #include "monoids/and_monoid.hpp"
 
-    #include "or_monoid.hpp"
+    #include "monoids/or_monoid.hpp"
 
-    #include "xor_monoid.hpp"
+    #include "monoids/xor_monoid.hpp"
 
-    #include "affine_monoid.hpp"
+    #include "monoids/affine_monoid.hpp"
+
+    #include "monoids/affine_right_monoid.hpp"
 
 
     #endif  // M1UNE_PRIM_MONOIDS_HPP
@@ -106,6 +123,7 @@ data:
   dependsOn:
   - monoid/monoid.hpp
   - monoid/monoids/add_monoid.hpp
+  - monoid/monoid.hpp
   - monoid/monoids/mul_monoid.hpp
   - monoid/monoids/min_monoid.hpp
   - monoid/monoids/max_monoid.hpp
@@ -113,16 +131,17 @@ data:
   - monoid/monoids/or_monoid.hpp
   - monoid/monoids/xor_monoid.hpp
   - monoid/monoids/affine_monoid.hpp
+  - monoid/monoids/affine_right_monoid.hpp
   isVerificationFile: false
-  path: monoid/monoids/prim_monoids.hpp
+  path: monoid/prim_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-29 00:58:38+09:00'
+  timestamp: '2025-09-29 01:06:44+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: monoid/monoids/prim_monoids.hpp
+documentation_of: monoid/prim_monoids.hpp
 layout: document
 redirect_from:
-- /library/monoid/monoids/prim_monoids.hpp
-- /library/monoid/monoids/prim_monoids.hpp.html
-title: monoid/monoids/prim_monoids.hpp
+- /library/monoid/prim_monoids.hpp
+- /library/monoid/prim_monoids.hpp.html
+title: monoid/prim_monoids.hpp
 ---

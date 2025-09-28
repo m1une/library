@@ -24,6 +24,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: monoid/monoid.hpp
       title: Monoid
+    - icon: ':warning:'
+      path: monoid/prim_monoids.hpp
+      title: monoid/prim_monoids.hpp
   - name: monoid/monoids
     pages:
     - icon: ':warning:'
@@ -50,9 +53,6 @@ data:
     - icon: ':warning:'
       path: monoid/monoids/or_monoid.hpp
       title: monoid/monoids/or_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/prim_monoids.hpp
-      title: monoid/monoids/prim_monoids.hpp
     - icon: ':warning:'
       path: monoid/monoids/xor_monoid.hpp
       title: monoid/monoids/xor_monoid.hpp

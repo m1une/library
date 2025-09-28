@@ -4,7 +4,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/monoid.hpp
     title: Monoid
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: monoid/prim_monoids.hpp
+    title: monoid/prim_monoids.hpp
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -42,7 +45,8 @@ data:
   - monoid/monoid.hpp
   isVerificationFile: false
   path: monoid/monoids/affine_right_monoid.hpp
-  requiredBy: []
+  requiredBy:
+  - monoid/prim_monoids.hpp
   timestamp: '2025-09-29 00:58:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

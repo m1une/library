@@ -6,8 +6,8 @@ data:
     title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
-    path: monoid/monoids/prim_monoids.hpp
-    title: monoid/monoids/prim_monoids.hpp
+    path: monoid/prim_monoids.hpp
+    title: monoid/prim_monoids.hpp
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -36,7 +36,7 @@ data:
   isVerificationFile: false
   path: monoid/monoids/max_monoid.hpp
   requiredBy:
-  - monoid/monoids/prim_monoids.hpp
+  - monoid/prim_monoids.hpp
   timestamp: '2025-09-29 00:58:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
