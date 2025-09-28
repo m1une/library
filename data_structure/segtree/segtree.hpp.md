@@ -22,27 +22,27 @@ data:
     \ _size;\n    std::vector<T> _data;\n\n    void update(int k) {\n        _data[k]\
     \ = Monoid::op(_data[2 * k], _data[2 * k + 1]);\n    }\n\n   public:\n    segment_tree()\
     \ : segment_tree(0) {}\n    explicit segment_tree(int n) : segment_tree(std::vector<T>(n,\
-    \ Monoid::e())) {}\n    explicit segment_tree(const std::vector<T>& v) : _n(v.size())\
+    \ Monoid::id())) {}\n    explicit segment_tree(const std::vector<T>& v) : _n(v.size())\
     \ {\n        _size = bit_ceil((unsigned int)_n);\n        _data.assign(2 * _size,\
-    \ Monoid::e());\n        for (int i = 0; i < _n; i++) {\n            _data[_size\
+    \ Monoid::id());\n        for (int i = 0; i < _n; i++) {\n            _data[_size\
     \ + i] = v[i];\n        }\n        for (int i = _size - 1; i >= 1; i--) {\n  \
     \          update(i);\n        }\n    }\n\n    // Set value at position p\n  \
     \  void set(int p, T x) {\n        p += _size;\n        _data[p] = x;\n      \
     \  for (int i = 1; p >> i >= 1; i++) {\n            update(p >> i);\n        }\n\
     \    }\n\n    // Get value at position p\n    T get(int p) const {\n        return\
     \ _data[p + _size];\n    }\n\n    // Product of range [l, r)\n    T prod(int l,\
-    \ int r) const {\n        T sml = Monoid::e(), smr = Monoid::e();\n        l +=\
-    \ _size;\n        r += _size;\n        while (l < r) {\n            if (l & 1)\
-    \ sml = Monoid::op(sml, _data[l++]);\n            if (r & 1) smr = Monoid::op(_data[--r],\
+    \ int r) const {\n        T sml = Monoid::id(), smr = Monoid::id();\n        l\
+    \ += _size;\n        r += _size;\n        while (l < r) {\n            if (l &\
+    \ 1) sml = Monoid::op(sml, _data[l++]);\n            if (r & 1) smr = Monoid::op(_data[--r],\
     \ smr);\n            l >>= 1;\n            r >>= 1;\n        }\n        return\
     \ Monoid::op(sml, smr);\n    }\n\n    // Product of the whole range\n    T all_prod()\
     \ const {\n        return _data[1];\n    }\n\n    // Find max_right r such that\
     \ f(prod([l, r))) is true\n    int max_right(int l, auto f) const {\n        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
     \ T>, bool>,\n                      \"f must be a callable that takes a Monoid::value_type\
     \ and returns a boolean\");\n        if (l == _n) return _n;\n        l += _size;\n\
-    \        T sm = Monoid::e();\n        do {\n            while (l % 2 == 0) l >>=\
-    \ 1;\n            if (!f(Monoid::op(sm, _data[l]))) {\n                while (l\
-    \ < _size) {\n                    l = (2 * l);\n                    if (f(Monoid::op(sm,\
+    \        T sm = Monoid::id();\n        do {\n            while (l % 2 == 0) l\
+    \ >>= 1;\n            if (!f(Monoid::op(sm, _data[l]))) {\n                while\
+    \ (l < _size) {\n                    l = (2 * l);\n                    if (f(Monoid::op(sm,\
     \ _data[l]))) {\n                        sm = Monoid::op(sm, _data[l]);\n    \
     \                    l++;\n                    }\n                }\n        \
     \        return l - _size;\n            }\n            sm = Monoid::op(sm, _data[l]);\n\
@@ -51,7 +51,7 @@ data:
     \ r, auto f) const {\n        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
     \ T>, bool>,\n                      \"f must be a callable that takes a Monoid::value_type\
     \ and returns a boolean\");\n        if (r == 0) return 0;\n        r += _size;\n\
-    \        T sm = Monoid::e();\n        do {\n            r--;\n            while\
+    \        T sm = Monoid::id();\n        do {\n            r--;\n            while\
     \ (r > 1 && (r % 2)) r >>= 1;\n            if (!f(Monoid::op(_data[r], sm))) {\n\
     \                while (r < _size) {\n                    r = (2 * r + 1);\n \
     \                   if (f(Monoid::op(_data[r], sm))) {\n                     \
@@ -67,17 +67,17 @@ data:
     \    int _n;\n    int _size;\n    std::vector<T> _data;\n\n    void update(int\
     \ k) {\n        _data[k] = Monoid::op(_data[2 * k], _data[2 * k + 1]);\n    }\n\
     \n   public:\n    segment_tree() : segment_tree(0) {}\n    explicit segment_tree(int\
-    \ n) : segment_tree(std::vector<T>(n, Monoid::e())) {}\n    explicit segment_tree(const\
+    \ n) : segment_tree(std::vector<T>(n, Monoid::id())) {}\n    explicit segment_tree(const\
     \ std::vector<T>& v) : _n(v.size()) {\n        _size = bit_ceil((unsigned int)_n);\n\
-    \        _data.assign(2 * _size, Monoid::e());\n        for (int i = 0; i < _n;\
+    \        _data.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n;\
     \ i++) {\n            _data[_size + i] = v[i];\n        }\n        for (int i\
     \ = _size - 1; i >= 1; i--) {\n            update(i);\n        }\n    }\n\n  \
     \  // Set value at position p\n    void set(int p, T x) {\n        p += _size;\n\
     \        _data[p] = x;\n        for (int i = 1; p >> i >= 1; i++) {\n        \
     \    update(p >> i);\n        }\n    }\n\n    // Get value at position p\n   \
     \ T get(int p) const {\n        return _data[p + _size];\n    }\n\n    // Product\
-    \ of range [l, r)\n    T prod(int l, int r) const {\n        T sml = Monoid::e(),\
-    \ smr = Monoid::e();\n        l += _size;\n        r += _size;\n        while\
+    \ of range [l, r)\n    T prod(int l, int r) const {\n        T sml = Monoid::id(),\
+    \ smr = Monoid::id();\n        l += _size;\n        r += _size;\n        while\
     \ (l < r) {\n            if (l & 1) sml = Monoid::op(sml, _data[l++]);\n     \
     \       if (r & 1) smr = Monoid::op(_data[--r], smr);\n            l >>= 1;\n\
     \            r >>= 1;\n        }\n        return Monoid::op(sml, smr);\n    }\n\
@@ -86,9 +86,9 @@ data:
     \    int max_right(int l, auto f) const {\n        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
     \ T>, bool>,\n                      \"f must be a callable that takes a Monoid::value_type\
     \ and returns a boolean\");\n        if (l == _n) return _n;\n        l += _size;\n\
-    \        T sm = Monoid::e();\n        do {\n            while (l % 2 == 0) l >>=\
-    \ 1;\n            if (!f(Monoid::op(sm, _data[l]))) {\n                while (l\
-    \ < _size) {\n                    l = (2 * l);\n                    if (f(Monoid::op(sm,\
+    \        T sm = Monoid::id();\n        do {\n            while (l % 2 == 0) l\
+    \ >>= 1;\n            if (!f(Monoid::op(sm, _data[l]))) {\n                while\
+    \ (l < _size) {\n                    l = (2 * l);\n                    if (f(Monoid::op(sm,\
     \ _data[l]))) {\n                        sm = Monoid::op(sm, _data[l]);\n    \
     \                    l++;\n                    }\n                }\n        \
     \        return l - _size;\n            }\n            sm = Monoid::op(sm, _data[l]);\n\
@@ -97,7 +97,7 @@ data:
     \ r, auto f) const {\n        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
     \ T>, bool>,\n                      \"f must be a callable that takes a Monoid::value_type\
     \ and returns a boolean\");\n        if (r == 0) return 0;\n        r += _size;\n\
-    \        T sm = Monoid::e();\n        do {\n            r--;\n            while\
+    \        T sm = Monoid::id();\n        do {\n            r--;\n            while\
     \ (r > 1 && (r % 2)) r >>= 1;\n            if (!f(Monoid::op(_data[r], sm))) {\n\
     \                while (r < _size) {\n                    r = (2 * r + 1);\n \
     \                   if (f(Monoid::op(_data[r], sm))) {\n                     \
@@ -111,7 +111,7 @@ data:
   isVerificationFile: false
   path: data_structure/segtree/segtree.hpp
   requiredBy: []
-  timestamp: '2025-09-28 22:22:35+09:00'
+  timestamp: '2025-09-28 22:27:06+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/segtree/segtree.hpp
