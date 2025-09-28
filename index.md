@@ -60,6 +60,9 @@ data:
       path: monoid/monoids/or_monoid.hpp
       title: monoid/monoids/or_monoid.hpp
     - icon: ':warning:'
+      path: monoid/monoids/update_monoid.hpp
+      title: monoid/monoids/update_monoid.hpp
+    - icon: ':warning:'
       path: monoid/monoids/xor_monoid.hpp
       title: monoid/monoids/xor_monoid.hpp
   - name: utilities

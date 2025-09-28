@@ -33,6 +33,9 @@ data:
     path: monoid/monoids/or_monoid.hpp
     title: monoid/monoids/or_monoid.hpp
   - icon: ':warning:'
+    path: monoid/monoids/update_monoid.hpp
+    title: monoid/monoids/update_monoid.hpp
+  - icon: ':warning:'
     path: monoid/monoids/xor_monoid.hpp
     title: monoid/monoids/xor_monoid.hpp
   - icon: ':warning:'
@@ -82,6 +85,7 @@ data:
   - monoid/prim_monoids.hpp
   - monoid/prim_monoids.hpp
   - monoid/acted_monoid.hpp
+  - monoid/monoids/update_monoid.hpp
   - monoid/monoids/affine_right_monoid.hpp
   - monoid/monoids/min_monoid.hpp
   - monoid/monoids/and_monoid.hpp

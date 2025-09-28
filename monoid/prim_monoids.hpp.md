@@ -32,6 +32,9 @@ data:
     path: monoid/monoids/or_monoid.hpp
     title: monoid/monoids/or_monoid.hpp
   - icon: ':warning:'
+    path: monoid/monoids/update_monoid.hpp
+    title: monoid/monoids/update_monoid.hpp
+  - icon: ':warning:'
     path: monoid/monoids/xor_monoid.hpp
     title: monoid/monoids/xor_monoid.hpp
   _extendedRequiredBy: []
@@ -93,8 +96,14 @@ data:
     \ T> f, std::pair<T, T> g) {\n                                       return std::pair<T,\
     \ T>(f.first * g.first, f.first * g.second + f.second);\n                    \
     \               },\n                                   []() { return std::pair<T,\
-    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 14 \"monoid/prim_monoids.hpp\"\
-    \n\n\n"
+    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/update_monoid.hpp\"\
+    \n\n\n\n#line 5 \"monoid/monoids/update_monoid.hpp\"\n\nnamespace m1une {\n\n\
+    template <typename T, T identity>\nusing update_monoid = monoid<T,\n         \
+    \                    [](T a, T b) {\n                                 if (b ==\
+    \ identity) return a;\n                                 return b;\n          \
+    \                   },\n                             []() { return identity; },\
+    \ false>;\n\n}  // namespace m1une\n\n\n#line 15 \"monoid/prim_monoids.hpp\"\n\
+    \n\n"
   code: '#ifndef M1UNE_PRIM_MONOIDS_HPP
 
     #define M1UNE_PRIM_MONOIDS_HPP 1
@@ -120,6 +129,8 @@ data:
 
     #include "monoids/affine_right_monoid.hpp"
 
+    #include "monoids/update_monoid.hpp"
+
 
     #endif  // M1UNE_PRIM_MONOIDS_HPP
 
@@ -136,10 +147,11 @@ data:
   - monoid/monoids/xor_monoid.hpp
   - monoid/monoids/affine_monoid.hpp
   - monoid/monoids/affine_right_monoid.hpp
+  - monoid/monoids/update_monoid.hpp
   isVerificationFile: false
   path: monoid/prim_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-29 01:30:47+09:00'
+  timestamp: '2025-09-29 03:35:02+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/prim_monoids.hpp
