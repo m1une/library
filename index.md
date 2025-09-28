@@ -14,6 +14,11 @@ data:
     - icon: ':warning:'
       path: data_structure/segtree/segtree.hpp
       title: Segment Tree
+  - name: math
+    pages:
+    - icon: ':warning:'
+      path: math/affine.hpp
+      title: math/affine.hpp
   - name: monoid
     pages:
     - icon: ':warning:'
