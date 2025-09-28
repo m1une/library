@@ -27,7 +27,7 @@ data:
     \ m1une {\n\ntemplate <monoid_concept Data, monoid_concept Act, auto mapping>\n\
     struct acted_monoid {\n    using data_type = typename Data::value_type;\n    using\
     \ act_type = typename Act::value_type;\n\n    static_assert(std::is_convertible_v<decltype(mapping),\
-    \ std::function<data_type(data_type, act_type)>>,\n                  \"mapping\
+    \ std::function<data_type(act_type, data_type)>>,\n                  \"mapping\
     \ must work as data_type(data_type, act_type)\");\n\n    static constexpr auto\
     \ data_op = Data::op;\n    static constexpr auto data_id = Data::id;\n    static\
     \ constexpr bool data_is_commutative = Data::is_commutative;\n    static constexpr\
@@ -39,7 +39,7 @@ data:
     \ m1une {\n\ntemplate <monoid_concept Data, monoid_concept Act, auto mapping>\n\
     struct acted_monoid {\n    using data_type = typename Data::value_type;\n    using\
     \ act_type = typename Act::value_type;\n\n    static_assert(std::is_convertible_v<decltype(mapping),\
-    \ std::function<data_type(data_type, act_type)>>,\n                  \"mapping\
+    \ std::function<data_type(act_type, data_type)>>,\n                  \"mapping\
     \ must work as data_type(data_type, act_type)\");\n\n    static constexpr auto\
     \ data_op = Data::op;\n    static constexpr auto data_id = Data::id;\n    static\
     \ constexpr bool data_is_commutative = Data::is_commutative;\n    static constexpr\
@@ -51,7 +51,7 @@ data:
   isVerificationFile: false
   path: monoid/acted_monoid.hpp
   requiredBy: []
-  timestamp: '2025-09-29 01:39:55+09:00'
+  timestamp: '2025-09-29 03:38:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/acted_monoid.hpp
