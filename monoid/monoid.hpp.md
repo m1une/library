@@ -42,21 +42,21 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <functional>\n#include\
-    \ <type_traits>\n\nnamespace m1une {\ntemplate <typename T, auto operation, auto\
-    \ identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
-    \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
-    \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
-    \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n}\
-    \  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_MONOID_HPP\n#define M1UNE_MONOID_HPP 1\n\n#include <functional>\n\
-    #include <type_traits>\n\nnamespace m1une {\ntemplate <typename T, auto operation,\
+    \ <type_traits>\n\nnamespace m1une {\n\ntemplate <typename T, auto operation,\
     \ auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
     \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
-    \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n}\
-    \  // namespace m1une\n\n#endif  // M1UNE_MONOID_HPP\n"
+    \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
+    }  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_MONOID_HPP\n#define M1UNE_MONOID_HPP 1\n\n#include <functional>\n\
+    #include <type_traits>\n\nnamespace m1une {\n\ntemplate <typename T, auto operation,\
+    \ auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
+    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
+    \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
+    \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
+    \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
+    }  // namespace m1une\n\n#endif  // M1UNE_MONOID_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/monoid.hpp
@@ -71,7 +71,7 @@ data:
   - monoid/monoids/or_monoid.hpp
   - monoid/monoids/affine_monoid.hpp
   - monoid/monoids/add_monoid.hpp
-  timestamp: '2025-09-28 19:25:04+09:00'
+  timestamp: '2025-09-29 00:58:38+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/segtree/segtree.test.cpp

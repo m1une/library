@@ -35,51 +35,53 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"monoid/monoids/prim_monoids.hpp\"\n\n\n\n#line 1 \"monoid/monoids/add_monoid.hpp\"\
-    \n\n\n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <functional>\n#include <type_traits>\n\
-    \nnamespace m1une {\ntemplate <typename T, auto operation, auto identity, bool\
-    \ commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
+  bundledCode: "#line 1 \"monoid/monoids/prim_monoids.hpp\"\n\n\n\n#line 1 \"monoid/monoid.hpp\"\
+    \n\n\n\n#include <functional>\n#include <type_traits>\n\nnamespace m1une {\n\n\
+    template <typename T, auto operation, auto identity, bool commutative>\nstruct\
+    \ monoid {\n    static_assert(std::is_convertible_v<decltype(operation), std::function<T(T,\
+    \ T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
-    \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n}\
-    \  // namespace m1une\n\n\n#line 5 \"monoid/monoids/add_monoid.hpp\"\n\nnamespace\
-    \ m1une {\ntemplate <typename T>\nusing add_monoid = monoid<T, [](T a, T b) {\
-    \ return a + b; }, []() { return T(0); }, true>;\n}  // namespace m1une\n\n\n\
-    #line 1 \"monoid/monoids/mul_monoid.hpp\"\n\n\n\n#line 5 \"monoid/monoids/mul_monoid.hpp\"\
-    \n\nnamespace m1une {\ntemplate <typename T>\nusing mul_monoid = monoid<T, [](T\
-    \ a, T b) { return a * b; }, []() { return T(1); }, true>;\n}  // namespace m1une\n\
-    \n\n#line 1 \"monoid/monoids/min_monoid.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <limits>\n\n#line 8 \"monoid/monoids/min_monoid.hpp\"\n\nnamespace m1une {\n\
-    template <typename T>\nusing min_monoid =\n    monoid<T, [](T a, T b) { return\
-    \ std::min(a, b); }, []() { return std::numeric_limits<T>::max(); }, true>;\n\
-    }  // namespace m1une\n\n\n#line 1 \"monoid/monoids/max_monoid.hpp\"\n\n\n\n#line\
-    \ 6 \"monoid/monoids/max_monoid.hpp\"\n\n#line 8 \"monoid/monoids/max_monoid.hpp\"\
-    \n\nnamespace m1une {\ntemplate <typename T>\nusing max_monoid =\n    monoid<T,\
+    \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
+    }  // namespace m1une\n\n\n#line 1 \"monoid/monoids/add_monoid.hpp\"\n\n\n\n#line\
+    \ 5 \"monoid/monoids/add_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate <typename\
+    \ T>\nusing add_monoid = monoid<T, [](T a, T b) { return a + b; }, []() { return\
+    \ T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/mul_monoid.hpp\"\
+    \n\n\n\n#line 5 \"monoid/monoids/mul_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T>\nusing mul_monoid = monoid<T, [](T a, T b) { return a * b; }, []()\
+    \ { return T(1); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/min_monoid.hpp\"\
+    \n\n\n\n#include <algorithm>\n#include <limits>\n\n#line 8 \"monoid/monoids/min_monoid.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <typename T>\nusing min_monoid =\n    monoid<T,\
+    \ [](T a, T b) { return std::min(a, b); }, []() { return std::numeric_limits<T>::max();\
+    \ }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/max_monoid.hpp\"\
+    \n\n\n\n#line 6 \"monoid/monoids/max_monoid.hpp\"\n\n#line 8 \"monoid/monoids/max_monoid.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <typename T>\nusing max_monoid =\n    monoid<T,\
     \ [](T a, T b) { return std::max(a, b); }, []() { return std::numeric_limits<T>::min();\
-    \ }, true>;\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/and_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/and_monoid.hpp\"\n\nnamespace m1une {\ntemplate\
-    \ <typename T>\nusing and_monoid =\n    monoid<T, [](T a, T b) { return a & b;\
-    \ }, []() { return ~T(0); }, true>;\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/or_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/or_monoid.hpp\"\n\nnamespace m1une {\ntemplate\
-    \ <typename T>\nusing or_monoid =\n    monoid<T, [](T a, T b) { return a | b;\
-    \ }, []() { return T(0); }, true>;\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/xor_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/xor_monoid.hpp\"\n\nnamespace m1une {\ntemplate\
-    \ <typename T>\nusing xor_monoid =\n    monoid<T, [](T a, T b) { return a ^ b;\
-    \ }, []() { return T(0); }, true>;\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/affine_monoid.hpp\"\
+    \ }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/and_monoid.hpp\"\
+    \n\n\n\n#line 5 \"monoid/monoids/and_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T>\nusing and_monoid = monoid<T, [](T a, T b) { return a & b; }, []()\
+    \ { return ~T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/or_monoid.hpp\"\
+    \n\n\n\n#line 5 \"monoid/monoids/or_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T>\nusing or_monoid = monoid<T, [](T a, T b) { return a | b; }, []()\
+    \ { return T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/xor_monoid.hpp\"\
+    \n\n\n\n#line 5 \"monoid/monoids/xor_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T>\nusing xor_monoid = monoid<T, [](T a, T b) { return a ^ b; }, []()\
+    \ { return T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/affine_monoid.hpp\"\
     \n\n\n\n#include <utility>\n\n#line 7 \"monoid/monoids/affine_monoid.hpp\"\n\n\
-    namespace m1une {\n// Affine transformation f(x) = ax + b is represented as (a,\
-    \ b)\n// perform f first, then g\n// op(f, g)(x) = g(f(x))\ntemplate <typename\
+    namespace m1une {\n\n// Affine transformation f(x) = ax + b is represented as\
+    \ (a, b)\n// perform f first, then g\n// op(f, g)(x) = g(f(x))\ntemplate <typename\
     \ T>\nusing affine_monoid = monoid<std::pair<T, T>,\n                        \
     \     [](std::pair<T, T> f, std::pair<T, T> g) {\n                           \
     \      return std::pair<T, T>(f.first * g.first, f.second * g.first + g.second);\n\
     \                             },\n                             []() { return std::pair<T,\
-    \ T>(1, 0); }, false>;\n}  // namespace m1une\n\n\n#line 12 \"monoid/monoids/prim_monoids.hpp\"\
+    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 13 \"monoid/monoids/prim_monoids.hpp\"\
     \n\n\n"
   code: '#ifndef M1UNE_PRIM_MONOIDS_HPP
 
     #define M1UNE_PRIM_MONOIDS_HPP 1
 
+
+    #include "../monoid.hpp"
 
     #include "add_monoid.hpp"
 
@@ -102,8 +104,8 @@ data:
 
     '
   dependsOn:
-  - monoid/monoids/add_monoid.hpp
   - monoid/monoid.hpp
+  - monoid/monoids/add_monoid.hpp
   - monoid/monoids/mul_monoid.hpp
   - monoid/monoids/min_monoid.hpp
   - monoid/monoids/max_monoid.hpp
@@ -114,7 +116,7 @@ data:
   isVerificationFile: false
   path: monoid/monoids/prim_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-28 21:31:05+09:00'
+  timestamp: '2025-09-29 00:58:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/monoids/prim_monoids.hpp
