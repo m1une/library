@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: data_structure/bst/persistent_treap.hpp
-    title: data_structure/bst/persistent_treap.hpp
+    title: Persistent Treap
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

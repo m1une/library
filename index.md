@@ -5,10 +5,10 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: data_structure/bst/persistent_treap.hpp
-      title: data_structure/bst/persistent_treap.hpp
+      title: Persistent Treap
     - icon: ':heavy_check_mark:'
       path: data_structure/bst/treap.hpp
-      title: data_structure/bst/treap.hpp
+      title: Treap
   - name: data_structure/segtree
     pages:
     - icon: ':heavy_check_mark:'
