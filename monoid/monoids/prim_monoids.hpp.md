@@ -68,13 +68,13 @@ data:
     \ <typename T>\nusing xor_monoid =\n    monoid<T, [](T a, T b) { return a ^ b;\
     \ }, []() { return T(0); }, true>;\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/affine_monoid.hpp\"\
     \n\n\n\n#include <utility>\n\n#line 7 \"monoid/monoids/affine_monoid.hpp\"\n\n\
-    namespace m1une {\ntemplate <typename T>\n// Affine transformation f(x) = ax +\
-    \ b is represented as (a, b)\n// perform f first, then g\n// op(f, g)(x) = g(f(x))\n\
-    using affine_monoid = monoid<std::pair<T, T>,\n                             [](std::pair<T,\
-    \ T> f, std::pair<T, T> g) {\n                                 return std::pair<T,\
-    \ T>(f.first * g.first, f.second * g.first + g.second);\n                    \
-    \         },\n                             []() { return std::pair<T, T>(1, 0);\
-    \ }, false>;\n}  // namespace m1une\n\n\n#line 12 \"monoid/monoids/prim_monoids.hpp\"\
+    namespace m1une {\n// Affine transformation f(x) = ax + b is represented as (a,\
+    \ b)\n// perform f first, then g\n// op(f, g)(x) = g(f(x))\ntemplate <typename\
+    \ T>\nusing affine_monoid = monoid<std::pair<T, T>,\n                        \
+    \     [](std::pair<T, T> f, std::pair<T, T> g) {\n                           \
+    \      return std::pair<T, T>(f.first * g.first, f.second * g.first + g.second);\n\
+    \                             },\n                             []() { return std::pair<T,\
+    \ T>(1, 0); }, false>;\n}  // namespace m1une\n\n\n#line 12 \"monoid/monoids/prim_monoids.hpp\"\
     \n\n\n"
   code: '#ifndef M1UNE_PRIM_MONOIDS_HPP
 
@@ -114,7 +114,7 @@ data:
   isVerificationFile: false
   path: monoid/monoids/prim_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-28 20:34:43+09:00'
+  timestamp: '2025-09-28 21:31:05+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/monoids/prim_monoids.hpp
