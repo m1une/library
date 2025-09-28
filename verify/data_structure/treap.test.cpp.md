@@ -1,96 +1,25 @@
 ---
 data:
-  _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
-    path: data_structure/treap.hpp
-    title: Treap
+  _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
-  attributes:
-    '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/ordered_set
-    links:
-    - https://judge.yosupo.jp/problem/ordered_set
-  bundledCode: "#line 1 \"verify/data_structure/treap.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include <iostream>\n#include\
-    \ <vector>\n\n#line 1 \"data_structure/treap.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <ctime>\n#line 7 \"data_structure/treap.hpp\"\n#include <random>\n\n\
-    namespace m1une {\n\ntemplate <typename T>\nstruct treap {\n   private:\n    struct\
-    \ node {\n        T _key;\n        int _priority;\n        node *_l, *_r;\n  \
-    \      int _count;\n\n        node(T key) : _key(key), _priority(rand()), _l(nullptr),\
-    \ _r(nullptr), _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node*\
-    \ t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(node*\
-    \ t) {\n        if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n\
-    \        }\n    }\n\n    void split(node* t, T key, node*& l, node*& r) {\n  \
-    \      if (!t) {\n            l = r = nullptr;\n            return;\n        }\n\
-    \        if (key < t->_key) {\n            split(t->_l, key, l, t->_l);\n    \
-    \        r = t;\n        } else {\n            split(t->_r, key, t->_r, r);\n\
-    \            l = t;\n        }\n        update_count(t);\n    }\n\n    node* merge(node*\
-    \ l, node* r) {\n        if (!l || !r) {\n            return l ? l : r;\n    \
-    \    }\n        if (l->_priority > r->_priority) {\n            l->_r = merge(l->_r,\
-    \ r);\n            update_count(l);\n            return l;\n        } else {\n\
-    \            r->_l = merge(l, r->_l);\n            update_count(r);\n        \
-    \    return r;\n        }\n    }\n\n    void insert_impl(node*& t, node* item)\
-    \ {\n        if (!t) {\n            t = item;\n            return;\n        }\n\
-    \        if (item->_priority > t->_priority) {\n            split(t, item->_key,\
-    \ item->_l, item->_r);\n            t = item;\n        } else {\n            insert_impl(item->_key\
-    \ < t->_key ? t->_l : t->_r, item);\n        }\n        update_count(t);\n   \
-    \ }\n\n    void erase_impl(node*& t, T key) {\n        if (!t) {\n           \
-    \ return;\n        }\n        if (t->_key == key) {\n            node* temp =\
-    \ t;\n            t = merge(t->_l, t->_r);\n            delete temp;\n       \
-    \ } else {\n            erase_impl(key < t->_key ? t->_l : t->_r, key);\n    \
-    \    }\n        update_count(t);\n    }\n\n    bool contains_impl(node* t, T key)\
-    \ {\n        if (!t) return false;\n        if (t->_key == key) return true;\n\
-    \        if (key < t->_key) {\n            return contains_impl(t->_l, key);\n\
-    \        } else {\n            return contains_impl(t->_r, key);\n        }\n\
-    \    }\n\n    T find_by_order_impl(node* t, int k) {\n        if (!t) return T();\
-    \  // Should not happen with valid k\n        int left_count = count(t->_l);\n\
-    \        if (k < left_count) return find_by_order_impl(t->_l, k);\n        if\
-    \ (k == left_count) return t->_key;\n        return find_by_order_impl(t->_r,\
-    \ k - left_count - 1);\n    }\n\n    int order_of_key_impl(node* t, T key) {\n\
-    \        if (!t) return 0;\n        if (key <= t->_key) return order_of_key_impl(t->_l,\
-    \ key);\n        return count(t->_l) + 1 + order_of_key_impl(t->_r, key);\n  \
-    \  }\n\n    T* lower_bound_impl(node* t, T key) {\n        if (!t) return nullptr;\n\
-    \        if (key <= t->_key) {\n            T* res = lower_bound_impl(t->_l, key);\n\
-    \            return res ? res : &t->_key;\n        }\n        return lower_bound_impl(t->_r,\
-    \ key);\n    }\n\n    T* upper_bound_impl(node* t, T key) {\n        if (!t) return\
-    \ nullptr;\n        if (key < t->_key) {\n            T* res = upper_bound_impl(t->_l,\
-    \ key);\n            return res ? res : &t->_key;\n        }\n        return upper_bound_impl(t->_r,\
-    \ key);\n    }\n\n   public:\n    treap() : _root(nullptr) {\n        srand(time(NULL));\n\
-    \    }\n\n    void insert(T key) {\n        insert_impl(_root, new node(key));\n\
-    \    }\n\n    void erase(T key) {\n        erase_impl(_root, key);\n    }\n\n\
-    \    bool contains(T key) {\n        return contains_impl(_root, key);\n    }\n\
-    \n    T find_by_order(int k) {\n        return find_by_order_impl(_root, k);\n\
-    \    }\n\n    int order_of_key(T key) {\n        return order_of_key_impl(_root,\
-    \ key);\n    }\n\n    T* lower_bound(T key) {\n        return lower_bound_impl(_root,\
-    \ key);\n    }\n\n    T* upper_bound(T key) {\n        return upper_bound_impl(_root,\
-    \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n\n/**\n * @brief Treap\n */\n#line 7 \"verify/data_structure/treap.test.cpp\"\
-    \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
-    }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
-    \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
-    \        std::cin >> a;\n        tr.insert(a);\n    }\n\n    for (int q = 0; q\
-    \ < Q; ++q) {\n        int type, k;\n        std::cin >> type >> k;\n        if\
-    \ (type == 0) {\n            if (!tr.contains(k)) {\n                tr.insert(k);\n\
-    \            }\n        } else if (type == 1) {\n            if (tr.contains(k))\
-    \ {\n                tr.erase(k);\n            }\n        } else if (type == 2)\
-    \ {\n            // Find k-th smallest (0-indexed)\n            if (tr.size()\
-    \ < k) {\n                std::cout << -1 << \"\\n\";\n            } else {\n\
-    \                std::cout << tr.find_by_order(k - 1) << \"\\n\";\n          \
-    \  }\n        } else if (type == 3) {\n            // Find number of elements\
-    \ <= k\n            // This is the same as the rank of k+1\n            std::cout\
-    \ << tr.order_of_key(k + 1) << \"\\n\";\n        } else if (type == 4) {\n   \
-    \         // Find largest element <= k (predecessor)\n            int order =\
-    \ tr.order_of_key(k + 1);\n            if (order == 0) {\n                std::cout\
-    \ << -1 << \"\\n\";\n            } else {\n                std::cout << tr.find_by_order(order\
-    \ - 1) << \"\\n\";\n            }\n        } else if (type == 5) {\n         \
-    \   // Find smallest element >= k (successor)\n            auto res = tr.lower_bound(k);\n\
-    \            if (res) {\n                std::cout << *res << \"\\n\";\n     \
-    \       } else {\n                std::cout << -1 << \"\\n\";\n            }\n\
-    \        }\n    }\n\n    return 0;\n}\n"
+  _verificationStatusIcon: ':x:'
+  attributes: {}
+  bundledCode: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/onlinejudge_verify/documentation/build.py\"\
+    , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
+    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
+    \         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/cplusplus.py\"\
+    , line 187, in bundle\n    bundler.update(path)\n    ~~~~~~~~~~~~~~^^^^^^\n  File\
+    \ \"/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/cplusplus_bundle.py\"\
+    , line 401, in update\n    self.update(self._resolve(pathlib.Path(included), included_from=path))\n\
+    \                ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n \
+    \ File \"/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/onlinejudge_verify/languages/cplusplus_bundle.py\"\
+    , line 260, in _resolve\n    raise BundleErrorAt(path, -1, \"no such header\"\
+    )\nonlinejudge_verify.languages.cplusplus_bundle.BundleErrorAt: ../../data_structure/treap.hpp:\
+    \ line -1: no such header\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include\
     \ <iostream>\n#include <vector>\n\n#include \"../../data_structure/treap.hpp\"\
     \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
@@ -115,13 +44,12 @@ data:
     \            if (res) {\n                std::cout << *res << \"\\n\";\n     \
     \       } else {\n                std::cout << -1 << \"\\n\";\n            }\n\
     \        }\n    }\n\n    return 0;\n}\n"
-  dependsOn:
-  - data_structure/treap.hpp
+  dependsOn: []
   isVerificationFile: true
   path: verify/data_structure/treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 23:54:27+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '1970-01-01 00:00:00+00:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/data_structure/treap.test.cpp
 layout: document

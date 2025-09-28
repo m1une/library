@@ -2,23 +2,20 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: verify/data_structure/persistent_treap.test.cpp
-    title: verify/data_structure/persistent_treap.test.cpp
+  _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':warning:'
   attributes:
     document_title: Persistent Treap
     links: []
-  bundledCode: "#line 1 \"data_structure/persistent_treap.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <ctime>\n#include <iostream>\n#include <memory>\n#include <optional>\n\
-    #include <random>\n\nnamespace m1une {\n\ntemplate <typename T>\nstruct persistent_treap\
-    \ {\n   private:\n    struct node {\n        T _key;\n        int _priority;\n\
-    \        std::shared_ptr<node> _l, _r;\n        int _count;\n\n        node(T\
-    \ key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1) {}\n\
-    \    };\n\n    std::shared_ptr<node> _root;\n\n    int count(std::shared_ptr<node>\
+  bundledCode: "#line 1 \"data_structure/bst/persistent_treap.hpp\"\n\n\n\n#include\
+    \ <algorithm>\n#include <ctime>\n#include <iostream>\n#include <memory>\n#include\
+    \ <optional>\n#include <random>\n\nnamespace m1une {\n\ntemplate <typename T>\n\
+    struct persistent_treap {\n   private:\n    struct node {\n        T _key;\n \
+    \       int _priority;\n        std::shared_ptr<node> _l, _r;\n        int _count;\n\
+    \n        node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr),\
+    \ _count(1) {}\n    };\n\n    std::shared_ptr<node> _root;\n\n    int count(std::shared_ptr<node>\
     \ t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(std::shared_ptr<node>\
     \ t) {\n        if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n\
     \        }\n    }\n\n    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>&\
@@ -137,73 +134,15 @@ data:
     \ Persistent Treap\n */\n"
   dependsOn: []
   isVerificationFile: false
-  path: data_structure/persistent_treap.hpp
+  path: data_structure/bst/persistent_treap.hpp
   requiredBy: []
-  timestamp: '2025-09-25 23:11:10+09:00'
-  verificationStatus: LIBRARY_ALL_AC
-  verifiedWith:
-  - verify/data_structure/persistent_treap.test.cpp
-documentation_of: data_structure/persistent_treap.hpp
+  timestamp: '2025-09-28 20:25:14+09:00'
+  verificationStatus: LIBRARY_NO_TESTS
+  verifiedWith: []
+documentation_of: data_structure/bst/persistent_treap.hpp
 layout: document
+redirect_from:
+- /library/data_structure/bst/persistent_treap.hpp
+- /library/data_structure/bst/persistent_treap.hpp.html
 title: Persistent Treap
 ---
-
-## Overview
-
-A persistent version of the Treap data structure. Each modifying operation (e.g., `insert`, `erase`) does not change the original treap but instead returns a new treap representing the state after the modification. This is highly effective for problems involving versioning or querying historical states of a dataset.
-
-## Methods
-
-* `persistent_treap()`
-
-  Constructs an empty persistent treap.
-
-  Time complexity: $O(1)$.
-
-* `persistent_treap insert(T key)`
-
-  Returns a new treap with the element `key` inserted.
-  
-  Time complexity: $O(\log N)$.
-
-* `persistent_treap erase(T key)`
-
-  Returns a new treap with the element `key` removed.
-  
-  Time complexity: $O(\log N)$.
-
-* `bool contains(T key)`
-
-  Returns `true` if `key` is in the treap, `false` otherwise.
-  
-  Time complexity: $O(\log N)$.
-
-* `std::optional<T> lower_bound(T key)`
-
-  Returns the smallest element that is greater than or equal to `key`. Returns `std::nullopt` if no such element exists.
-  
-  Time complexity: $O(\log N)$.
-
-* `std::optional<T> upper_bound(T key)`
-
-  Returns the smallest element that is strictly greater than `key`. Returns `std::nullopt` if no such element exists.
-  
-  Time complexity: $O(\log N)$.
-
-* `T find_by_order(int k)`
-
-  Returns the k-th smallest element (0-indexed). `k` must be in the range `[0, size())`.
-  
-  Time complexity: $O(\log N)$.
-
-* `int order_of_key(T key)`
-
-  Returns the number of elements strictly less than `key`.
-  
-  Time complexity: $O(\log N)$.
-
-* `int size()`
-
-  Returns the number of elements in the treap.
-  
-  Time complexity: $O(1)$.

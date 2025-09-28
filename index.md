@@ -1,13 +1,13 @@
 ---
 data:
   libraryCategories:
-  - name: data_structure
+  - name: data_structure/bst
     pages:
-    - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_treap.hpp
+    - icon: ':warning:'
+      path: data_structure/bst/persistent_treap.hpp
       title: Persistent Treap
-    - icon: ':heavy_check_mark:'
-      path: data_structure/treap.hpp
+    - icon: ':warning:'
+      path: data_structure/bst/treap.hpp
       title: Treap
   - name: monoid
     pages:
@@ -54,10 +54,10 @@ data:
   verificationCategories:
   - name: verify/data_structure
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/data_structure/persistent_treap.test.cpp
       title: verify/data_structure/persistent_treap.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/data_structure/treap.test.cpp
       title: verify/data_structure/treap.test.cpp
   - name: verify/utilities
