@@ -16,14 +16,18 @@ data:
     links: []
   bundledCode: "#line 1 \"monoid/monoids/affine_right_monoid.hpp\"\n\n\n\n#include\
     \ <utility>\n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <functional>\n#include\
-    \ <type_traits>\n\nnamespace m1une {\n\ntemplate <typename T, auto operation,\
-    \ auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
+    \ <type_traits>\n#include <concepts>\n\nnamespace m1une {\n\ntemplate <typename\
+    \ T, auto operation, auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
     \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    }  // namespace m1une\n\n\n#line 7 \"monoid/monoids/affine_right_monoid.hpp\"\n\
-    \nnamespace m1une {\n\n// right associative version of affine_monoid\n// Affine\
+    template <typename T>\nconcept monoid_concept = requires {\n    typename T::value_type;\n\
+    \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
+    \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
+    \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
+    };\n\n}  // namespace m1une\n\n\n#line 7 \"monoid/monoids/affine_right_monoid.hpp\"\
+    \n\nnamespace m1une {\n\n// right associative version of affine_monoid\n// Affine\
     \ transformation f(x) = ax + b is represented as (a, b)\n// perform g first, then\
     \ f\n// op(f, g)(x) = f(g(x))\ntemplate <typename T>\nusing affine_right_monoid\
     \ = monoid<std::pair<T, T>,\n                                   [](std::pair<T,\
@@ -47,7 +51,7 @@ data:
   path: monoid/monoids/affine_right_monoid.hpp
   requiredBy:
   - monoid/prim_monoids.hpp
-  timestamp: '2025-09-29 00:58:38+09:00'
+  timestamp: '2025-09-29 01:30:47+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/monoids/affine_right_monoid.hpp

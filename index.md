@@ -25,6 +25,9 @@ data:
       path: monoid/monoid.hpp
       title: Monoid
     - icon: ':warning:'
+      path: monoid/monoid_addsz.hpp
+      title: monoid/monoid_addsz.hpp
+    - icon: ':warning:'
       path: monoid/prim_monoids.hpp
       title: monoid/prim_monoids.hpp
   - name: monoid/monoids

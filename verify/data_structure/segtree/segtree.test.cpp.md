@@ -286,20 +286,25 @@ data:
     T affine(std::pair<T, T> f, T x) {\n    return f.first * x + f.second;\n}\n} \
     \ // namespace m1une\n\n\n#line 1 \"monoid/monoids/affine_monoid.hpp\"\n\n\n\n\
     #line 5 \"monoid/monoids/affine_monoid.hpp\"\n\n#line 1 \"monoid/monoid.hpp\"\n\
-    \n\n\n#line 6 \"monoid/monoid.hpp\"\n\nnamespace m1une {\n\ntemplate <typename\
-    \ T, auto operation, auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
+    \n\n\n#line 6 \"monoid/monoid.hpp\"\n#include <concepts>\n\nnamespace m1une {\n\
+    \ntemplate <typename T, auto operation, auto identity, bool commutative>\nstruct\
+    \ monoid {\n    static_assert(std::is_convertible_v<decltype(operation), std::function<T(T,\
+    \ T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    }  // namespace m1une\n\n\n#line 7 \"monoid/monoids/affine_monoid.hpp\"\n\nnamespace\
-    \ m1une {\n\n// Affine transformation f(x) = ax + b is represented as (a, b)\n\
-    // perform f first, then g\n// op(f, g)(x) = g(f(x))\ntemplate <typename T>\n\
-    using affine_monoid = monoid<std::pair<T, T>,\n                             [](std::pair<T,\
-    \ T> f, std::pair<T, T> g) {\n                                 return std::pair<T,\
-    \ T>(f.first * g.first, f.second * g.first + g.second);\n                    \
-    \         },\n                             []() { return std::pair<T, T>(1, 0);\
-    \ }, false>;\n\n}  // namespace m1une\n\n\n#line 10 \"verify/data_structure/segtree/segtree.test.cpp\"\
+    template <typename T>\nconcept monoid_concept = requires {\n    typename T::value_type;\n\
+    \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
+    \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
+    \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
+    };\n\n}  // namespace m1une\n\n\n#line 7 \"monoid/monoids/affine_monoid.hpp\"\n\
+    \nnamespace m1une {\n\n// Affine transformation f(x) = ax + b is represented as\
+    \ (a, b)\n// perform f first, then g\n// op(f, g)(x) = g(f(x))\ntemplate <typename\
+    \ T>\nusing affine_monoid = monoid<std::pair<T, T>,\n                        \
+    \     [](std::pair<T, T> f, std::pair<T, T> g) {\n                           \
+    \      return std::pair<T, T>(f.first * g.first, f.second * g.first + g.second);\n\
+    \                             },\n                             []() { return std::pair<T,\
+    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 10 \"verify/data_structure/segtree/segtree.test.cpp\"\
     \n\nusing mint = atcoder::modint998244353;\nusing namespace std;\nusing namespace\
     \ m1une;\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n   \
     \ std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int N, Q;\n    cin\
@@ -332,7 +337,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/segtree/segtree.test.cpp
   requiredBy: []
-  timestamp: '2025-09-29 00:58:38+09:00'
+  timestamp: '2025-09-29 01:30:47+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/segtree/segtree.test.cpp
