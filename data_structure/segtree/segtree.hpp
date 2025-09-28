@@ -124,7 +124,3 @@ struct segment_tree {
 }  // namespace m1une
 
 #endif  // M1UNE_SEGTREE_HPP
-
-/**
- * @brief Segment Tree
- */

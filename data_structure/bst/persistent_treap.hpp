@@ -168,7 +168,3 @@ struct persistent_treap {
 }  // namespace m1une
 
 #endif  // M1UNE_PERSISTENT_TREAP_HPP
-
-/**
- * @brief Persistent Treap
- */
