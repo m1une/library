@@ -1,9 +1,9 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/ordered_set"
 
+#include "data_structure/bst/treap.hpp"
+
 #include <iostream>
 #include <vector>
-
-#include "../../../data_structure/bst/treap.hpp"
 
 void fast_io() {
     std::ios_base::sync_with_stdio(false);
