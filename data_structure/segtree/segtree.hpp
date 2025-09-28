@@ -25,10 +25,10 @@ struct segment_tree {
 
    public:
     segment_tree() : segment_tree(0) {}
-    explicit segment_tree(int n) : segment_tree(std::vector<T>(n, Monoid::e())) {}
+    explicit segment_tree(int n) : segment_tree(std::vector<T>(n, Monoid::id())) {}
     explicit segment_tree(const std::vector<T>& v) : _n(v.size()) {
         _size = bit_ceil((unsigned int)_n);
-        _data.assign(2 * _size, Monoid::e());
+        _data.assign(2 * _size, Monoid::id());
         for (int i = 0; i < _n; i++) {
             _data[_size + i] = v[i];
         }
@@ -53,7 +53,7 @@ struct segment_tree {
 
     // Product of range [l, r)
     T prod(int l, int r) const {
-        T sml = Monoid::e(), smr = Monoid::e();
+        T sml = Monoid::id(), smr = Monoid::id();
         l += _size;
         r += _size;
         while (l < r) {
@@ -76,7 +76,7 @@ struct segment_tree {
                       "f must be a callable that takes a Monoid::value_type and returns a boolean");
         if (l == _n) return _n;
         l += _size;
-        T sm = Monoid::e();
+        T sm = Monoid::id();
         do {
             while (l % 2 == 0) l >>= 1;
             if (!f(Monoid::op(sm, _data[l]))) {
@@ -101,7 +101,7 @@ struct segment_tree {
                       "f must be a callable that takes a Monoid::value_type and returns a boolean");
         if (r == 0) return 0;
         r += _size;
-        T sm = Monoid::e();
+        T sm = Monoid::id();
         do {
             r--;
             while (r > 1 && (r % 2)) r >>= 1;
