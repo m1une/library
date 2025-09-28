@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: utilities/shifted_array.hpp
-    title: Shifted Array
+    title: utilities/shifted_array.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -36,22 +36,21 @@ data:
     \        return _data[index];\n    };\n    long long index(long long i) const\
     \ {\n        int index = (i - _offset) / _step;\n        if (index < 0 || index\
     \ >= _size) {\n            throw std::out_of_range(\"Index out of range\");\n\
-    \        }\n        return index;\n    }\n};\n\n}  // namespace m1une\n\n\n\n\
-    /**\n * @brief Shifted Array\n */\n#line 7 \"verify/utilities/shifted_array.test.cpp\"\
-    \n\nconstexpr long long MAX = 100000;\n\nlong long solve(long long l, long long\
-    \ r) {\n    vector<char> is_prime(MAX, 1);\n    is_prime[0] = is_prime[1] = 0;\n\
-    \    m1une::shifted_array<vector<long long>> prime_factors(l, r);\n    for (long\
-    \ long p = 2; p * p <= r; ++p) {\n        if (!is_prime[p]) continue;\n      \
-    \  for (long long x = 2 * p; x < MAX; x += p) {\n            is_prime[x] = 0;\n\
-    \        }\n        for (long long x = (l + p - 1) / p * p; x <= r; x += p) {\n\
-    \            prime_factors[x].emplace_back(p);\n        }\n    }\n    long long\
-    \ res = 0;\n    for (long long x = l; x <= r; ++x) {\n        long long factor_count\
-    \ = 0;\n        long long y = x;\n        for (long long p : prime_factors[x])\
-    \ {\n            while (y % p == 0) {\n                y /= p;\n             \
-    \   ++factor_count;\n            }\n        }\n        if (y > 1) {\n        \
-    \    ++factor_count;\n        }\n        if (is_prime[factor_count]) {\n     \
-    \       ++res;\n        }\n    }\n    return res;\n}\n\nint main() {\n    long\
-    \ long l, r;\n    cin >> l >> r;\n    cout << solve(l, r) << endl;\n}\n"
+    \        }\n        return index;\n    }\n};\n\n}  // namespace m1une\n\n\n#line\
+    \ 7 \"verify/utilities/shifted_array.test.cpp\"\n\nconstexpr long long MAX = 100000;\n\
+    \nlong long solve(long long l, long long r) {\n    vector<char> is_prime(MAX,\
+    \ 1);\n    is_prime[0] = is_prime[1] = 0;\n    m1une::shifted_array<vector<long\
+    \ long>> prime_factors(l, r);\n    for (long long p = 2; p * p <= r; ++p) {\n\
+    \        if (!is_prime[p]) continue;\n        for (long long x = 2 * p; x < MAX;\
+    \ x += p) {\n            is_prime[x] = 0;\n        }\n        for (long long x\
+    \ = (l + p - 1) / p * p; x <= r; x += p) {\n            prime_factors[x].emplace_back(p);\n\
+    \        }\n    }\n    long long res = 0;\n    for (long long x = l; x <= r; ++x)\
+    \ {\n        long long factor_count = 0;\n        long long y = x;\n        for\
+    \ (long long p : prime_factors[x]) {\n            while (y % p == 0) {\n     \
+    \           y /= p;\n                ++factor_count;\n            }\n        }\n\
+    \        if (y > 1) {\n            ++factor_count;\n        }\n        if (is_prime[factor_count])\
+    \ {\n            ++res;\n        }\n    }\n    return res;\n}\n\nint main() {\n\
+    \    long long l, r;\n    cin >> l >> r;\n    cout << solve(l, r) << endl;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858\"\
     \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../utilities/shifted_array.hpp\"\
     \n\nconstexpr long long MAX = 100000;\n\nlong long solve(long long l, long long\
@@ -73,7 +72,7 @@ data:
   isVerificationFile: true
   path: verify/utilities/shifted_array.test.cpp
   requiredBy: []
-  timestamp: '2025-09-25 23:54:19+09:00'
+  timestamp: '2025-09-29 00:53:15+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/utilities/shifted_array.test.cpp

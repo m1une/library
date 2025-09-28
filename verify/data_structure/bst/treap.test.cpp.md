@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: data_structure/bst/treap.hpp
-    title: Treap
+    title: data_structure/bst/treap.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -67,8 +67,8 @@ data:
     \ key);\n    }\n\n    T* lower_bound(T key) {\n        return lower_bound_impl(_root,\
     \ key);\n    }\n\n    T* upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n\n/**\n * @brief Treap\n */\n#line 4 \"verify/data_structure/bst/treap.test.cpp\"\
-    \n\n#line 6 \"verify/data_structure/bst/treap.test.cpp\"\n#include <vector>\n\n\
+    }  // namespace m1une\n\n#line 4 \"verify/data_structure/bst/treap.test.cpp\"\n\
+    \n#line 6 \"verify/data_structure/bst/treap.test.cpp\"\n#include <vector>\n\n\
     void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
     }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
     \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
@@ -120,7 +120,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/bst/treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-28 22:15:04+09:00'
+  timestamp: '2025-09-29 00:53:15+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/bst/treap.test.cpp

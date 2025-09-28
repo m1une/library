@@ -13,7 +13,6 @@ data:
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    document_title: Segment Tree
     links: []
   bundledCode: "#line 1 \"data_structure/segtree/segtree.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <functional>\n#include <type_traits>\n#include <vector>\n\n#line 1 \"\
@@ -61,8 +60,7 @@ data:
     \   sm = Monoid::op(_data[r], sm);\n                        r--;\n           \
     \         }\n                }\n                return r + 1 - _size;\n      \
     \      }\n            sm = Monoid::op(_data[r], sm);\n        } while ((r & -r)\
-    \ != r);\n        return 0;\n    }\n};\n\n}  // namespace m1une\n\n\n\n/**\n *\
-    \ @brief Segment Tree\n */\n"
+    \ != r);\n        return 0;\n    }\n};\n\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_SEGTREE_HPP\n#define M1UNE_SEGTREE_HPP 1\n\n#include <algorithm>\n\
     #include <functional>\n#include <type_traits>\n#include <vector>\n\n#include \"\
     utilities/bit_ceil.hpp\"\n\nnamespace m1une {\n\ntemplate <typename Monoid>\n\
@@ -108,13 +106,13 @@ data:
     \         }\n                }\n                return r + 1 - _size;\n      \
     \      }\n            sm = Monoid::op(_data[r], sm);\n        } while ((r & -r)\
     \ != r);\n        return 0;\n    }\n};\n\n}  // namespace m1une\n\n#endif  //\
-    \ M1UNE_SEGTREE_HPP\n\n/**\n * @brief Segment Tree\n */\n"
+    \ M1UNE_SEGTREE_HPP\n"
   dependsOn:
   - utilities/bit_ceil.hpp
   isVerificationFile: false
   path: data_structure/segtree/segtree.hpp
   requiredBy: []
-  timestamp: '2025-09-28 22:27:06+09:00'
+  timestamp: '2025-09-29 00:53:15+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/segtree/segtree.test.cpp

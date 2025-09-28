@@ -5,10 +5,10 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: data_structure/bst/persistent_treap.hpp
-      title: Persistent Treap
+      title: data_structure/bst/persistent_treap.hpp
     - icon: ':heavy_check_mark:'
       path: data_structure/bst/treap.hpp
-      title: Treap
+      title: data_structure/bst/treap.hpp
   - name: data_structure/segtree
     pages:
     - icon: ':heavy_check_mark:'
@@ -63,7 +63,7 @@ data:
       title: utilities/bit_ceil.hpp
     - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
-      title: Shifted Array
+      title: utilities/shifted_array.hpp
   verificationCategories:
   - name: verify/data_structure/bst
     pages:
