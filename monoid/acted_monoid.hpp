@@ -13,7 +13,7 @@ struct acted_monoid {
     using data_type = typename Data::value_type;
     using act_type = typename Act::value_type;
 
-    static_assert(std::is_convertible_v<decltype(mapping), std::function<data_type(data_type, act_type)>>,
+    static_assert(std::is_convertible_v<decltype(mapping), std::function<data_type(act_type, data_type)>>,
                   "mapping must work as data_type(data_type, act_type)");
 
     static constexpr auto data_op = Data::op;
