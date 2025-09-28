@@ -2,7 +2,7 @@ import sys
 import os
 import re
 
-LIBRARY_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+LIBRARY_ROOT = os.path.abspath(os.path.dirname(__file__))
 INCLUDE_PATHS = ['.', LIBRARY_ROOT]
 visited = set()
 
