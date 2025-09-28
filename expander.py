@@ -2,8 +2,8 @@ import sys
 import os
 import re
 
-INCLUDE_PATHS = ['.']
-# INCLUDE_PATHS = ['.', os.path.expanduser('/path/to/the/library')]
+LIBRARY_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+INCLUDE_PATHS = ['.', LIBRARY_ROOT]
 visited = set()
 
 def resolve_include(header):
