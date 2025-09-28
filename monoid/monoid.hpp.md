@@ -3,6 +3,9 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':warning:'
+    path: monoid/acted_monoid.hpp
+    title: monoid/acted_monoid.hpp
+  - icon: ':warning:'
     path: monoid/monoid_addsz.hpp
     title: monoid/monoid_addsz.hpp
   - icon: ':warning:'
@@ -78,6 +81,7 @@ data:
   - monoid/monoid_addsz.hpp
   - monoid/prim_monoids.hpp
   - monoid/prim_monoids.hpp
+  - monoid/acted_monoid.hpp
   - monoid/monoids/affine_right_monoid.hpp
   - monoid/monoids/min_monoid.hpp
   - monoid/monoids/and_monoid.hpp

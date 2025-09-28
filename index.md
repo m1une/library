@@ -21,6 +21,9 @@ data:
       title: math/affine.hpp
   - name: monoid
     pages:
+    - icon: ':warning:'
+      path: monoid/acted_monoid.hpp
+      title: monoid/acted_monoid.hpp
     - icon: ':heavy_check_mark:'
       path: monoid/monoid.hpp
       title: Monoid
