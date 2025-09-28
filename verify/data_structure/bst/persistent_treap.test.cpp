@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/range_kth_smallest"
 
-#include "../../data_structure/bst/persistent_treap.hpp"
+#include "../../../data_structure/bst/persistent_treap.hpp"
 
 #include <algorithm>
 #include <iostream>
