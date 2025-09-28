@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "../utilities/bit_ceil.hpp"
+#include "../../utilities/bit_ceil.hpp"
 
 namespace m1une {
 
