@@ -5,7 +5,7 @@ data:
   - icon: ':warning:'
     path: monoid/monoids/add_monoid.hpp
     title: monoid/monoids/add_monoid.hpp
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
   - icon: ':warning:'
@@ -32,10 +32,13 @@ data:
   - icon: ':warning:'
     path: monoid/monoids/xor_monoid.hpp
     title: monoid/monoids/xor_monoid.hpp
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/segtree/segtree.test.cpp
+    title: verify/data_structure/segtree/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <functional>\n#include\
@@ -69,8 +72,9 @@ data:
   - monoid/monoids/affine_monoid.hpp
   - monoid/monoids/add_monoid.hpp
   timestamp: '2025-09-28 19:25:04+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/segtree/segtree.test.cpp
 documentation_of: monoid/monoid.hpp
 layout: document
 redirect_from:

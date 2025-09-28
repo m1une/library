@@ -1,14 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: utilities/bit_ceil.hpp
     title: utilities/bit_ceil.hpp
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/segtree/segtree.test.cpp
+    title: verify/data_structure/segtree/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     document_title: Segment Tree
     links: []
@@ -112,8 +115,9 @@ data:
   path: data_structure/segtree/segtree.hpp
   requiredBy: []
   timestamp: '2025-09-28 22:27:06+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/segtree/segtree.test.cpp
 documentation_of: data_structure/segtree/segtree.hpp
 layout: document
 redirect_from:

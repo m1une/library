@@ -1,17 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: monoid/monoid.hpp
     title: monoid/monoid.hpp
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/monoids/prim_monoids.hpp
     title: monoid/monoids/prim_monoids.hpp
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/segtree/segtree.test.cpp
+    title: verify/data_structure/segtree/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/monoids/affine_monoid.hpp\"\n\n\n\n#include <utility>\n\
@@ -46,8 +49,9 @@ data:
   requiredBy:
   - monoid/monoids/prim_monoids.hpp
   timestamp: '2025-09-28 21:31:05+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/segtree/segtree.test.cpp
 documentation_of: monoid/monoids/affine_monoid.hpp
 layout: document
 redirect_from:

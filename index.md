@@ -11,17 +11,17 @@ data:
       title: Treap
   - name: data_structure/segtree
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/segtree/segtree.hpp
       title: Segment Tree
   - name: math
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: math/affine.hpp
       title: math/affine.hpp
   - name: monoid
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/monoid.hpp
       title: monoid/monoid.hpp
   - name: monoid/monoids
@@ -29,7 +29,7 @@ data:
     - icon: ':warning:'
       path: monoid/monoids/add_monoid.hpp
       title: monoid/monoids/add_monoid.hpp
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/monoids/affine_monoid.hpp
       title: monoid/monoids/affine_monoid.hpp
     - icon: ':warning:'
@@ -58,7 +58,7 @@ data:
       title: monoid/monoids/xor_monoid.hpp
   - name: utilities
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: utilities/bit_ceil.hpp
       title: utilities/bit_ceil.hpp
     - icon: ':heavy_check_mark:'
@@ -73,6 +73,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/bst/treap.test.cpp
       title: verify/data_structure/bst/treap.test.cpp
+  - name: verify/data_structure/segtree
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/segtree/segtree.test.cpp
+      title: verify/data_structure/segtree/segtree.test.cpp
   - name: verify/utilities
     pages:
     - icon: ':heavy_check_mark:'

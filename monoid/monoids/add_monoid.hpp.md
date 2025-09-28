@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: monoid/monoid.hpp
     title: monoid/monoid.hpp
   _extendedRequiredBy:
