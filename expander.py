@@ -131,4 +131,4 @@ if __name__ == '__main__':
         print("Usage: python3 expander.py <main_file.cpp> > bundled_file.cpp", file=sys.stderr)
         sys.exit(1)
 
-    expand_file(sys.argv[0])
+    expand_file(sys.argv[1])
