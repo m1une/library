@@ -66,6 +66,9 @@ data:
     path: monoid/monoids/min_monoid.hpp
     title: monoid/monoids/min_monoid.hpp
   - icon: ':warning:'
+    path: monoid/monoids/minmax_monoid.hpp
+    title: monoid/monoids/minmax_monoid.hpp
+  - icon: ':warning:'
     path: monoid/monoids/mul_monoid.hpp
     title: monoid/monoids/mul_monoid.hpp
   - icon: ':warning:'
@@ -156,6 +159,7 @@ data:
   - monoid/monoids/and_monoid.hpp
   - monoid/monoids/max_monoid.hpp
   - monoid/monoids/mul_monoid.hpp
+  - monoid/monoids/minmax_monoid.hpp
   - monoid/monoids/xor_monoid.hpp
   - monoid/monoids/or_monoid.hpp
   - monoid/monoids/affine_monoid.hpp

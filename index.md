@@ -77,6 +77,9 @@ data:
       path: monoid/monoids/min_monoid.hpp
       title: monoid/monoids/min_monoid.hpp
     - icon: ':warning:'
+      path: monoid/monoids/minmax_monoid.hpp
+      title: monoid/monoids/minmax_monoid.hpp
+    - icon: ':warning:'
       path: monoid/monoids/mul_monoid.hpp
       title: monoid/monoids/mul_monoid.hpp
     - icon: ':warning:'

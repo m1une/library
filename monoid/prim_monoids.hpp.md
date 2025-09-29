@@ -23,6 +23,9 @@ data:
     path: monoid/monoids/min_monoid.hpp
     title: monoid/monoids/min_monoid.hpp
   - icon: ':warning:'
+    path: monoid/monoids/minmax_monoid.hpp
+    title: monoid/monoids/minmax_monoid.hpp
+  - icon: ':warning:'
     path: monoid/monoids/mul_monoid.hpp
     title: monoid/monoids/mul_monoid.hpp
   - icon: ':warning:'
@@ -67,31 +70,39 @@ data:
     \n\n\n\n#line 6 \"monoid/monoids/max_monoid.hpp\"\n\n#line 8 \"monoid/monoids/max_monoid.hpp\"\
     \n\nnamespace m1une {\n\ntemplate <typename T>\nusing max_monoid =\n    monoid<T,\
     \ [](T a, T b) { return std::max(a, b); }, []() { return std::numeric_limits<T>::min();\
-    \ }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/and_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/and_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
-    \ <typename T>\nusing and_monoid = monoid<T, [](T a, T b) { return a & b; }, []()\
-    \ { return ~T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/or_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/or_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
-    \ <typename T>\nusing or_monoid = monoid<T, [](T a, T b) { return a | b; }, []()\
-    \ { return T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/xor_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/xor_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
-    \ <typename T>\nusing xor_monoid = monoid<T, [](T a, T b) { return a ^ b; }, []()\
-    \ { return T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/affine_monoid.hpp\"\
-    \n\n\n\n#include <utility>\n\n#line 7 \"monoid/monoids/affine_monoid.hpp\"\n\n\
-    namespace m1une {\n\n// Affine transformation f(x) = ax + b is represented as\
-    \ (a, b)\n// perform f first, then g\n// op(f, g)(x) = g(f(x))\ntemplate <typename\
-    \ T>\nusing affine_monoid = monoid<std::pair<T, T>,\n                        \
-    \     [](std::pair<T, T> f, std::pair<T, T> g) {\n                           \
-    \      return std::pair<T, T>(f.first * g.first, f.second * g.first + g.second);\n\
-    \                             },\n                             []() { return std::pair<T,\
-    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/update_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/update_monoid.hpp\"\n\nnamespace m1une {\n\n\
-    template <typename T, T identity>\nusing update_monoid = monoid<T,\n         \
-    \                    [](T a, T b) {\n                                 if (b ==\
-    \ identity) return a;\n                                 return b;\n          \
-    \                   },\n                             []() { return identity; },\
-    \ false>;\n\n}  // namespace m1une\n\n\n#line 14 \"monoid/prim_monoids.hpp\"\n\
-    \n\n"
+    \ }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/minmax_monoid.hpp\"\
+    \n\n\n\n#line 6 \"monoid/monoids/minmax_monoid.hpp\"\n#include <utility>\n\n#line\
+    \ 9 \"monoid/monoids/minmax_monoid.hpp\"\n\nnamespace m1une {\n\n// Monoid for\
+    \ storing both a minimum and maximum value.\n// The operation combines two pairs\
+    \ by taking the component-wise min and max.\ntemplate <typename T>\nusing minmax_monoid\
+    \ =\n    monoid<std::pair<T, T>,\n           [](std::pair<T, T> a, std::pair<T,\
+    \ T> b) {\n               return std::pair<T, T>(std::min(a.first, b.first), std::max(a.second,\
+    \ b.second));\n           },\n           []() { return std::pair<T, T>(std::numeric_limits<T>::max(),\
+    \ std::numeric_limits<T>::lowest()); }, true>;\n\n}  // namespace m1une\n\n\n\
+    #line 1 \"monoid/monoids/and_monoid.hpp\"\n\n\n\n#line 5 \"monoid/monoids/and_monoid.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <typename T>\nusing and_monoid = monoid<T, [](T\
+    \ a, T b) { return a & b; }, []() { return ~T(0); }, true>;\n\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"monoid/monoids/or_monoid.hpp\"\n\n\n\n#line 5 \"monoid/monoids/or_monoid.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <typename T>\nusing or_monoid = monoid<T, [](T\
+    \ a, T b) { return a | b; }, []() { return T(0); }, true>;\n\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"monoid/monoids/xor_monoid.hpp\"\n\n\n\n#line 5 \"monoid/monoids/xor_monoid.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <typename T>\nusing xor_monoid = monoid<T, [](T\
+    \ a, T b) { return a ^ b; }, []() { return T(0); }, true>;\n\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"monoid/monoids/affine_monoid.hpp\"\n\n\n\n#line 5 \"monoid/monoids/affine_monoid.hpp\"\
+    \n\n#line 7 \"monoid/monoids/affine_monoid.hpp\"\n\nnamespace m1une {\n\n// Affine\
+    \ transformation f(x) = ax + b is represented as (a, b)\n// perform f first, then\
+    \ g\n// op(f, g)(x) = g(f(x))\ntemplate <typename T>\nusing affine_monoid = monoid<std::pair<T,\
+    \ T>,\n                             [](std::pair<T, T> f, std::pair<T, T> g) {\n\
+    \                                 return std::pair<T, T>(f.first * g.first, f.second\
+    \ * g.first + g.second);\n                             },\n                  \
+    \           []() { return std::pair<T, T>(1, 0); }, false>;\n\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"monoid/monoids/update_monoid.hpp\"\n\n\n\n#line 5 \"monoid/monoids/update_monoid.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <typename T, T identity>\nusing update_monoid\
+    \ = monoid<T,\n                             [](T a, T b) {\n                 \
+    \                if (b == identity) return a;\n                              \
+    \   return b;\n                             },\n                             []()\
+    \ { return identity; }, false>;\n\n}  // namespace m1une\n\n\n#line 15 \"monoid/prim_monoids.hpp\"\
+    \n\n\n"
   code: '#ifndef M1UNE_PRIM_MONOIDS_HPP
 
     #define M1UNE_PRIM_MONOIDS_HPP 1
@@ -106,6 +117,8 @@ data:
     #include "monoids/min_monoid.hpp"
 
     #include "monoids/max_monoid.hpp"
+
+    #include "monoids/minmax_monoid.hpp"
 
     #include "monoids/and_monoid.hpp"
 
@@ -128,6 +141,7 @@ data:
   - monoid/monoids/mul_monoid.hpp
   - monoid/monoids/min_monoid.hpp
   - monoid/monoids/max_monoid.hpp
+  - monoid/monoids/minmax_monoid.hpp
   - monoid/monoids/and_monoid.hpp
   - monoid/monoids/or_monoid.hpp
   - monoid/monoids/xor_monoid.hpp
@@ -136,7 +150,7 @@ data:
   isVerificationFile: false
   path: monoid/prim_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-29 19:13:32+09:00'
+  timestamp: '2025-09-29 19:28:55+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/prim_monoids.hpp
