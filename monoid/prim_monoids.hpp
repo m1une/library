@@ -6,6 +6,7 @@
 #include "monoids/mul_monoid.hpp"
 #include "monoids/min_monoid.hpp"
 #include "monoids/max_monoid.hpp"
+#include "monoids/minmax_monoid.hpp"
 #include "monoids/and_monoid.hpp"
 #include "monoids/or_monoid.hpp"
 #include "monoids/xor_monoid.hpp"
