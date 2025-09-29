@@ -14,9 +14,6 @@ data:
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
   - icon: ':warning:'
-    path: monoid/monoids/affine_right_monoid.hpp
-    title: monoid/monoids/affine_right_monoid.hpp
-  - icon: ':warning:'
     path: monoid/monoids/and_monoid.hpp
     title: monoid/monoids/and_monoid.hpp
   - icon: ':warning:'
@@ -87,22 +84,13 @@ data:
     \     [](std::pair<T, T> f, std::pair<T, T> g) {\n                           \
     \      return std::pair<T, T>(f.first * g.first, f.second * g.first + g.second);\n\
     \                             },\n                             []() { return std::pair<T,\
-    \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/affine_right_monoid.hpp\"\
-    \n\n\n\n#line 5 \"monoid/monoids/affine_right_monoid.hpp\"\n\n#line 7 \"monoid/monoids/affine_right_monoid.hpp\"\
-    \n\nnamespace m1une {\n\n// right associative version of affine_monoid\n// Affine\
-    \ transformation f(x) = ax + b is represented as (a, b)\n// perform g first, then\
-    \ f\n// op(f, g)(x) = f(g(x))\ntemplate <typename T>\nusing affine_right_monoid\
-    \ = monoid<std::pair<T, T>,\n                                   [](std::pair<T,\
-    \ T> f, std::pair<T, T> g) {\n                                       return std::pair<T,\
-    \ T>(f.first * g.first, f.first * g.second + f.second);\n                    \
-    \               },\n                                   []() { return std::pair<T,\
     \ T>(1, 0); }, false>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/update_monoid.hpp\"\
     \n\n\n\n#line 5 \"monoid/monoids/update_monoid.hpp\"\n\nnamespace m1une {\n\n\
     template <typename T, T identity>\nusing update_monoid = monoid<T,\n         \
     \                    [](T a, T b) {\n                                 if (b ==\
     \ identity) return a;\n                                 return b;\n          \
     \                   },\n                             []() { return identity; },\
-    \ false>;\n\n}  // namespace m1une\n\n\n#line 15 \"monoid/prim_monoids.hpp\"\n\
+    \ false>;\n\n}  // namespace m1une\n\n\n#line 14 \"monoid/prim_monoids.hpp\"\n\
     \n\n"
   code: '#ifndef M1UNE_PRIM_MONOIDS_HPP
 
@@ -127,8 +115,6 @@ data:
 
     #include "monoids/affine_monoid.hpp"
 
-    #include "monoids/affine_right_monoid.hpp"
-
     #include "monoids/update_monoid.hpp"
 
 
@@ -146,12 +132,11 @@ data:
   - monoid/monoids/or_monoid.hpp
   - monoid/monoids/xor_monoid.hpp
   - monoid/monoids/affine_monoid.hpp
-  - monoid/monoids/affine_right_monoid.hpp
   - monoid/monoids/update_monoid.hpp
   isVerificationFile: false
   path: monoid/prim_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-29 17:50:58+09:00'
+  timestamp: '2025-09-29 19:13:32+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/prim_monoids.hpp
