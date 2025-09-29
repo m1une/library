@@ -4,7 +4,7 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: data_structure/segtree/lazysegtree.hpp
-    title: data_structure/segtree/lazysegtree.hpp
+    title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/segtree/segtree.hpp
     title: Segment Tree

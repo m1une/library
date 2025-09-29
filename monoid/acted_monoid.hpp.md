@@ -7,7 +7,7 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: data_structure/segtree/lazysegtree.hpp
-    title: data_structure/segtree/lazysegtree.hpp
+    title: Lazy Segment Tree
   - icon: ':warning:'
     path: monoid/acted_monoids/range_add_range_max.hpp
     title: monoid/acted_monoids/range_add_range_max.hpp
