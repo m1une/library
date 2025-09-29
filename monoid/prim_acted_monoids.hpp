@@ -8,5 +8,7 @@
 #include "acted_monoids/range_update_range_min.hpp"
 #include "acted_monoids/range_update_range_max.hpp"
 #include "acted_monoids/range_update_range_sum.hpp"
+#include "acted_monoids/range_affine_range_minmax.hpp"
+#include "acted_monoids/range_affine_range_sum.hpp"
 
 #endif  // M1UNE_PRIM_ACTED_MONOIDS_HPP
