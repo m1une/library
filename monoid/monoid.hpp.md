@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: data_structure/segtree/segtree.hpp
+    title: Segment Tree
   - icon: ':warning:'
     path: monoid/acted_monoid.hpp
     title: monoid/acted_monoid.hpp
@@ -45,6 +48,9 @@ data:
     path: monoid/prim_monoids.hpp
     title: monoid/prim_monoids.hpp
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/segtree/segtree.test.cpp
+    title: verify/data_structure/segtree/segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/segtree/segtree.test.cpp
     title: verify/data_structure/segtree/segtree.test.cpp
@@ -95,9 +101,11 @@ data:
   - monoid/monoids/or_monoid.hpp
   - monoid/monoids/affine_monoid.hpp
   - monoid/monoids/add_monoid.hpp
+  - data_structure/segtree/segtree.hpp
   timestamp: '2025-09-29 01:30:47+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/segtree/segtree.test.cpp
   - verify/data_structure/segtree/segtree.test.cpp
 documentation_of: monoid/monoid.hpp
 layout: document
