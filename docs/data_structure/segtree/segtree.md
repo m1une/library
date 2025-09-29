@@ -7,7 +7,7 @@ documentation_of: ../../../data_structure/segtree/segtree.hpp
 
 A segment tree is a versatile data structure that allows for efficient range queries on an array. It can compute the result of any associative operation (defined by a monoid) over a given range `[l, r)` in logarithmic time. It also supports updating individual elements.
 
-This implementation is generic and designed to be used with the [monoid](../../monoid/monoid.md) structures available in the library.
+This implementation is generic and designed to be used with the [monoid](../../monoid/monoid.hpp) structures available in the library.
 
 ## Methods
 
