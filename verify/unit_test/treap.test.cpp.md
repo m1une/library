@@ -14,28 +14,28 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/ordered_set
     links:
     - https://judge.yosupo.jp/problem/ordered_set
-  bundledCode: "#line 1 \"verify/data_structure/bst/treap.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#line 1 \"data_structure/bst/treap.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <ctime>\n#include <iostream>\n#include\
-    \ <random>\n\nnamespace m1une {\n\ntemplate <typename T>\nstruct treap {\n   private:\n\
-    \    struct node {\n        T _key;\n        int _priority;\n        node *_l,\
-    \ *_r;\n        int _count;\n\n        node(T key) : _key(key), _priority(rand()),\
-    \ _l(nullptr), _r(nullptr), _count(1) {}\n    };\n\n    node* _root;\n\n    int\
-    \ count(node* t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(node*\
-    \ t) {\n        if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n\
-    \        }\n    }\n\n    void split(node* t, T key, node*& l, node*& r) {\n  \
-    \      if (!t) {\n            l = r = nullptr;\n            return;\n        }\n\
-    \        if (key < t->_key) {\n            split(t->_l, key, l, t->_l);\n    \
-    \        r = t;\n        } else {\n            split(t->_r, key, t->_r, r);\n\
-    \            l = t;\n        }\n        update_count(t);\n    }\n\n    node* merge(node*\
-    \ l, node* r) {\n        if (!l || !r) {\n            return l ? l : r;\n    \
-    \    }\n        if (l->_priority > r->_priority) {\n            l->_r = merge(l->_r,\
-    \ r);\n            update_count(l);\n            return l;\n        } else {\n\
-    \            r->_l = merge(l, r->_l);\n            update_count(r);\n        \
-    \    return r;\n        }\n    }\n\n    void insert_impl(node*& t, node* item)\
-    \ {\n        if (!t) {\n            t = item;\n            return;\n        }\n\
-    \        if (item->_priority > t->_priority) {\n            split(t, item->_key,\
-    \ item->_l, item->_r);\n            t = item;\n        } else {\n            insert_impl(item->_key\
+  bundledCode: "#line 1 \"verify/unit_test/treap.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/ordered_set\"\
+    \n\n#line 1 \"data_structure/bst/treap.hpp\"\n\n\n\n#include <algorithm>\n#include\
+    \ <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T>\nstruct treap {\n   private:\n    struct node {\n        T _key;\n\
+    \        int _priority;\n        node *_l, *_r;\n        int _count;\n\n     \
+    \   node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1)\
+    \ {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n        return t\
+    \ ? t->_count : 0;\n    }\n\n    void update_count(node* t) {\n        if (t)\
+    \ {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n        }\n   \
+    \ }\n\n    void split(node* t, T key, node*& l, node*& r) {\n        if (!t) {\n\
+    \            l = r = nullptr;\n            return;\n        }\n        if (key\
+    \ < t->_key) {\n            split(t->_l, key, l, t->_l);\n            r = t;\n\
+    \        } else {\n            split(t->_r, key, t->_r, r);\n            l = t;\n\
+    \        }\n        update_count(t);\n    }\n\n    node* merge(node* l, node*\
+    \ r) {\n        if (!l || !r) {\n            return l ? l : r;\n        }\n  \
+    \      if (l->_priority > r->_priority) {\n            l->_r = merge(l->_r, r);\n\
+    \            update_count(l);\n            return l;\n        } else {\n     \
+    \       r->_l = merge(l, r->_l);\n            update_count(r);\n            return\
+    \ r;\n        }\n    }\n\n    void insert_impl(node*& t, node* item) {\n     \
+    \   if (!t) {\n            t = item;\n            return;\n        }\n       \
+    \ if (item->_priority > t->_priority) {\n            split(t, item->_key, item->_l,\
+    \ item->_r);\n            t = item;\n        } else {\n            insert_impl(item->_key\
     \ < t->_key ? t->_l : t->_r, item);\n        }\n        update_count(t);\n   \
     \ }\n\n    void erase_impl(node*& t, T key) {\n        if (!t) {\n           \
     \ return;\n        }\n        if (t->_key == key) {\n            node* temp =\
@@ -67,25 +67,25 @@ data:
     \ key);\n    }\n\n    T* lower_bound(T key) {\n        return lower_bound_impl(_root,\
     \ key);\n    }\n\n    T* upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n#line 4 \"verify/data_structure/bst/treap.test.cpp\"\n\
-    \n#line 6 \"verify/data_structure/bst/treap.test.cpp\"\n#include <vector>\n\n\
-    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
-    }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
-    \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
-    \        std::cin >> a;\n        tr.insert(a);\n    }\n\n    for (int q = 0; q\
-    \ < Q; ++q) {\n        int type, k;\n        std::cin >> type >> k;\n        if\
-    \ (type == 0) {\n            if (!tr.contains(k)) {\n                tr.insert(k);\n\
-    \            }\n        } else if (type == 1) {\n            if (tr.contains(k))\
-    \ {\n                tr.erase(k);\n            }\n        } else if (type == 2)\
-    \ {\n            // Find k-th smallest (0-indexed)\n            if (tr.size()\
-    \ < k) {\n                std::cout << -1 << \"\\n\";\n            } else {\n\
-    \                std::cout << tr.find_by_order(k - 1) << \"\\n\";\n          \
-    \  }\n        } else if (type == 3) {\n            // Find number of elements\
-    \ <= k\n            // This is the same as the rank of k+1\n            std::cout\
-    \ << tr.order_of_key(k + 1) << \"\\n\";\n        } else if (type == 4) {\n   \
-    \         // Find largest element <= k (predecessor)\n            int order =\
-    \ tr.order_of_key(k + 1);\n            if (order == 0) {\n                std::cout\
-    \ << -1 << \"\\n\";\n            } else {\n                std::cout << tr.find_by_order(order\
+    }  // namespace m1une\n\n#line 4 \"verify/unit_test/treap.test.cpp\"\n\n#line\
+    \ 6 \"verify/unit_test/treap.test.cpp\"\n#include <vector>\n\nvoid fast_io() {\n\
+    \    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n}\n\nint\
+    \ main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n    m1une::treap<int>\
+    \ tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n        std::cin >>\
+    \ a;\n        tr.insert(a);\n    }\n\n    for (int q = 0; q < Q; ++q) {\n    \
+    \    int type, k;\n        std::cin >> type >> k;\n        if (type == 0) {\n\
+    \            if (!tr.contains(k)) {\n                tr.insert(k);\n         \
+    \   }\n        } else if (type == 1) {\n            if (tr.contains(k)) {\n  \
+    \              tr.erase(k);\n            }\n        } else if (type == 2) {\n\
+    \            // Find k-th smallest (0-indexed)\n            if (tr.size() < k)\
+    \ {\n                std::cout << -1 << \"\\n\";\n            } else {\n     \
+    \           std::cout << tr.find_by_order(k - 1) << \"\\n\";\n            }\n\
+    \        } else if (type == 3) {\n            // Find number of elements <= k\n\
+    \            // This is the same as the rank of k+1\n            std::cout <<\
+    \ tr.order_of_key(k + 1) << \"\\n\";\n        } else if (type == 4) {\n      \
+    \      // Find largest element <= k (predecessor)\n            int order = tr.order_of_key(k\
+    \ + 1);\n            if (order == 0) {\n                std::cout << -1 << \"\\\
+    n\";\n            } else {\n                std::cout << tr.find_by_order(order\
     \ - 1) << \"\\n\";\n            }\n        } else if (type == 5) {\n         \
     \   // Find smallest element >= k (successor)\n            auto res = tr.lower_bound(k);\n\
     \            if (res) {\n                std::cout << *res << \"\\n\";\n     \
@@ -118,15 +118,15 @@ data:
   dependsOn:
   - data_structure/bst/treap.hpp
   isVerificationFile: true
-  path: verify/data_structure/bst/treap.test.cpp
+  path: verify/unit_test/treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-29 00:53:15+09:00'
+  timestamp: '2025-09-29 18:40:17+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/data_structure/bst/treap.test.cpp
+documentation_of: verify/unit_test/treap.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/data_structure/bst/treap.test.cpp
-- /verify/verify/data_structure/bst/treap.test.cpp.html
-title: verify/data_structure/bst/treap.test.cpp
+- /verify/verify/unit_test/treap.test.cpp
+- /verify/verify/unit_test/treap.test.cpp.html
+title: verify/unit_test/treap.test.cpp
 ---

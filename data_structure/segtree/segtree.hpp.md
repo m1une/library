@@ -10,8 +10,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/segtree/segtree.test.cpp
-    title: verify/data_structure/segtree/segtree.test.cpp
+    path: verify/unit_test/segtree.test.cpp
+    title: verify/unit_test/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -129,7 +129,7 @@ data:
   timestamp: '2025-09-29 17:50:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/segtree/segtree.test.cpp
+  - verify/unit_test/segtree.test.cpp
 documentation_of: data_structure/segtree/segtree.hpp
 layout: document
 title: Segment Tree
