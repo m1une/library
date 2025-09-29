@@ -7,7 +7,7 @@ documentation_of: ../../../data_structure/segtree/lazysegtree.hpp
 
 A lazy segment tree is an advanced data structure that extends the functionality of a regular segment tree. It supports both range queries and range updates in logarithmic time. This is achieved by "lazily" propagating updates down the tree, applying them only when necessary.
 
-This implementation is generic and designed to be used with the `acted_monoid` structures available in the library, which define the data, the actions, and the mapping between them.
+This implementation is generic and designed to be used with the [acted_monoid](../../monoid/acted_monoid.hpp) structures available in the library, which define the data, the actions, and the mapping between them.
 
 ## Methods
 
