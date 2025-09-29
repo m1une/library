@@ -12,7 +12,7 @@ data:
   - name: data_structure/segtree
     pages:
     - icon: ':warning:'
-      path: data_structure/segtree/lazysegtree.hpp
+      path: data_structure/segtree/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree/segtree.hpp

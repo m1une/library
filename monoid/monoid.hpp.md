@@ -3,7 +3,7 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':warning:'
-    path: data_structure/segtree/lazysegtree.hpp
+    path: data_structure/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/segtree/segtree.hpp
@@ -165,7 +165,7 @@ data:
   - monoid/monoids/affine_monoid.hpp
   - monoid/monoids/add_monoid.hpp
   - data_structure/segtree/segtree.hpp
-  - data_structure/segtree/lazysegtree.hpp
+  - data_structure/segtree/lazy_segtree.hpp
   timestamp: '2025-09-29 17:50:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

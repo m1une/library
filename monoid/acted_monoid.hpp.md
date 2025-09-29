@@ -6,7 +6,7 @@ data:
     title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
-    path: data_structure/segtree/lazysegtree.hpp
+    path: data_structure/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':warning:'
     path: monoid/acted_monoids/range_add_range_max.hpp
@@ -108,7 +108,7 @@ data:
   - monoid/acted_monoids/range_add_range_max.hpp
   - monoid/prim_acted_monoids.hpp
   - monoid/prim_acted_monoids.hpp
-  - data_structure/segtree/lazysegtree.hpp
+  - data_structure/segtree/lazy_segtree.hpp
   timestamp: '2025-09-29 18:09:11+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

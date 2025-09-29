@@ -17,7 +17,7 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/segtree/lazysegtree.hpp\"\n\n\n\n#include\
+  bundledCode: "#line 1 \"data_structure/segtree/lazy_segtree.hpp\"\n\n\n\n#include\
     \ <algorithm>\n#include <functional>\n#include <type_traits>\n#include <vector>\n\
     \n#line 1 \"monoid/acted_monoid.hpp\"\n\n\n\n#include <concepts>\n#line 7 \"monoid/acted_monoid.hpp\"\
     \n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#line 7 \"monoid/monoid.hpp\"\n\nnamespace\
@@ -55,7 +55,7 @@ data:
     \ m1une\n\n\n#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\ntemplate\
     \ <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1) return 1;\n    T\
     \ x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n}  // namespace m1une\n\
-    \n\n#line 11 \"data_structure/segtree/lazysegtree.hpp\"\n\nnamespace m1une {\n\
+    \n\n#line 11 \"data_structure/segtree/lazy_segtree.hpp\"\n\nnamespace m1une {\n\
     \ntemplate <ActedMonoid AM>\nstruct lazy_segment_tree {\n    using S = typename\
     \ AM::data_type;\n    using F = typename AM::act_type;\n\n   private:\n    int\
     \ _n;\n    int _size;\n    int _log;\n    std::vector<S> _data;\n    std::vector<F>\
@@ -187,12 +187,12 @@ data:
   - monoid/monoid.hpp
   - utilities/bit_ceil.hpp
   isVerificationFile: false
-  path: data_structure/segtree/lazysegtree.hpp
+  path: data_structure/segtree/lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2025-09-29 18:09:30+09:00'
+  timestamp: '2025-09-29 18:52:22+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: data_structure/segtree/lazysegtree.hpp
+documentation_of: data_structure/segtree/lazy_segtree.hpp
 layout: document
 title: Lazy Segment Tree
 ---
