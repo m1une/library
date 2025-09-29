@@ -108,6 +108,9 @@ data:
   verificationCategories:
   - name: verify/unit_test
     pages:
+    - icon: ':x:'
+      path: verify/unit_test/lazy_segtree.test.cpp
+      title: verify/unit_test/lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/unit_test/persistent_treap.test.cpp
       title: verify/unit_test/persistent_treap.test.cpp
