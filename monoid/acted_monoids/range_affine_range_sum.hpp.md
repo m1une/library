@@ -19,7 +19,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: monoid/prim_acted_monoids.hpp
+    title: monoid/prim_acted_monoids.hpp
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -115,7 +118,8 @@ data:
   - monoid/monoids/affine_monoid.hpp
   isVerificationFile: false
   path: monoid/acted_monoids/range_affine_range_sum.hpp
-  requiredBy: []
+  requiredBy:
+  - monoid/prim_acted_monoids.hpp
   timestamp: '2025-09-29 19:32:01+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

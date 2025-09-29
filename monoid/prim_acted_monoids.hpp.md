@@ -17,6 +17,12 @@ data:
     path: monoid/acted_monoids/range_add_range_sum.hpp
     title: monoid/acted_monoids/range_add_range_sum.hpp
   - icon: ':warning:'
+    path: monoid/acted_monoids/range_affine_range_minmax.hpp
+    title: monoid/acted_monoids/range_affine_range_minmax.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_affine_range_sum.hpp
+    title: monoid/acted_monoids/range_affine_range_sum.hpp
+  - icon: ':warning:'
     path: monoid/acted_monoids/range_update_range_max.hpp
     title: monoid/acted_monoids/range_update_range_max.hpp
   - icon: ':warning:'
@@ -40,12 +46,18 @@ data:
   - icon: ':warning:'
     path: monoid/monoids/add_monoid.hpp
     title: monoid/monoids/add_monoid.hpp
+  - icon: ':heavy_check_mark:'
+    path: monoid/monoids/affine_monoid.hpp
+    title: monoid/monoids/affine_monoid.hpp
   - icon: ':warning:'
     path: monoid/monoids/max_monoid.hpp
     title: monoid/monoids/max_monoid.hpp
   - icon: ':warning:'
     path: monoid/monoids/min_monoid.hpp
     title: monoid/monoids/min_monoid.hpp
+  - icon: ':warning:'
+    path: monoid/monoids/minmax_monoid.hpp
+    title: monoid/monoids/minmax_monoid.hpp
   - icon: ':warning:'
     path: monoid/monoids/update_monoid.hpp
     title: monoid/monoids/update_monoid.hpp
@@ -145,8 +157,44 @@ data:
     \                 [](T a, typename monoid_addsz<add_monoid<T>>::data_type x) {\n\
     \                     if (a == identity) return x;\n                     return\
     \ typename monoid_addsz<add_monoid<T>>::data_type{a * x.size, x.size};\n     \
-    \            }>;\n\n}  // namespace m1une\n\n\n#line 11 \"monoid/prim_acted_monoids.hpp\"\
-    \n\n\n"
+    \            }>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/acted_monoids/range_affine_range_minmax.hpp\"\
+    \n\n\n\n#line 1 \"monoid/monoids/affine_monoid.hpp\"\n\n\n\n#include <utility>\n\
+    \n#line 7 \"monoid/monoids/affine_monoid.hpp\"\n\nnamespace m1une {\n\n// Affine\
+    \ transformation f(x) = ax + b is represented as (a, b)\n// perform f first, then\
+    \ g\n// op(f, g)(x) = g(f(x))\ntemplate <typename T>\nusing affine_monoid = monoid<std::pair<T,\
+    \ T>,\n                             [](std::pair<T, T> f, std::pair<T, T> g) {\n\
+    \                                 return std::pair<T, T>(f.first * g.first, f.second\
+    \ * g.first + g.second);\n                             },\n                  \
+    \           []() { return std::pair<T, T>(1, 0); }, false>;\n\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"monoid/monoids/minmax_monoid.hpp\"\n\n\n\n#line 7 \"monoid/monoids/minmax_monoid.hpp\"\
+    \n\n#line 9 \"monoid/monoids/minmax_monoid.hpp\"\n\nnamespace m1une {\n\n// Monoid\
+    \ for storing both a minimum and maximum value.\n// The operation combines two\
+    \ pairs by taking the component-wise min and max.\ntemplate <typename T>\nusing\
+    \ minmax_monoid =\n    monoid<std::pair<T, T>,\n           [](std::pair<T, T>\
+    \ a, std::pair<T, T> b) {\n               return std::pair<T, T>(std::min(a.first,\
+    \ b.first), std::max(a.second, b.second));\n           },\n           []() { return\
+    \ std::pair<T, T>(std::numeric_limits<T>::max(), std::numeric_limits<T>::lowest());\
+    \ }, true>;\n\n}  // namespace m1une\n\n\n#line 7 \"monoid/acted_monoids/range_affine_range_minmax.hpp\"\
+    \n\nnamespace m1une {\n\n// Acted monoid for range affine transformations and\
+    \ range min/max queries.\ntemplate <typename T>\nusing range_affine_range_minmax_monoid\
+    \ =\n    acted_monoid<minmax_monoid<T>, affine_monoid<T>,\n                 [](typename\
+    \ affine_monoid<T>::value_type f, typename minmax_monoid<T>::value_type x) {\n\
+    \                     auto v1 = f.first * x.first + f.second;\n              \
+    \       auto v2 = f.first * x.second + f.second;\n                     return\
+    \ std::pair<T, T>(std::min(v1, v2), std::max(v1, v2));\n                 }>;\n\
+    \n}  // namespace m1une\n\n\n#line 1 \"monoid/acted_monoids/range_affine_range_sum.hpp\"\
+    \n\n\n\n#line 8 \"monoid/acted_monoids/range_affine_range_sum.hpp\"\n\nnamespace\
+    \ m1une {\n\ntemplate <typename T>\nusing range_affine_range_sum_monoid =\n  \
+    \  acted_monoid<monoid_addsz<add_monoid<T>>, affine_monoid<T>,\n             \
+    \    [](typename affine_monoid<T>::value_type f, typename monoid_addsz<add_monoid<T>>::value_type\
+    \ x) {\n                     // f = (a, b) is the affine transformation\n    \
+    \                 // x = {value, size} is the data (sum and size of the range)\n\
+    \                     // Applying f to each element xi and summing up:\n     \
+    \                // sum(a*xi + b) = a * sum(xi) + b * size\n                 \
+    \    return typename monoid_addsz<add_monoid<T>>::value_type{f.first * x.value\
+    \ + f.second * x.size,\n                                                     \
+    \                        x.size};\n                 }>;\n\n}  // namespace m1une\n\
+    \n\n#line 13 \"monoid/prim_acted_monoids.hpp\"\n\n\n"
   code: '#ifndef M1UNE_PRIM_ACTED_MONOIDS_HPP
 
     #define M1UNE_PRIM_ACTED_MONOIDS_HPP 1
@@ -165,6 +213,10 @@ data:
     #include "acted_monoids/range_update_range_max.hpp"
 
     #include "acted_monoids/range_update_range_sum.hpp"
+
+    #include "acted_monoids/range_affine_range_minmax.hpp"
+
+    #include "acted_monoids/range_affine_range_sum.hpp"
 
 
     #endif  // M1UNE_PRIM_ACTED_MONOIDS_HPP
@@ -187,10 +239,14 @@ data:
   - monoid/monoids/update_monoid.hpp
   - monoid/acted_monoids/range_update_range_max.hpp
   - monoid/acted_monoids/range_update_range_sum.hpp
+  - monoid/acted_monoids/range_affine_range_minmax.hpp
+  - monoid/monoids/affine_monoid.hpp
+  - monoid/monoids/minmax_monoid.hpp
+  - monoid/acted_monoids/range_affine_range_sum.hpp
   isVerificationFile: false
   path: monoid/prim_acted_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-29 18:09:11+09:00'
+  timestamp: '2025-09-29 19:36:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/prim_acted_monoids.hpp

@@ -9,6 +9,9 @@ data:
     path: monoid/acted_monoids/range_affine_range_minmax.hpp
     title: monoid/acted_monoids/range_affine_range_minmax.hpp
   - icon: ':warning:'
+    path: monoid/prim_acted_monoids.hpp
+    title: monoid/prim_acted_monoids.hpp
+  - icon: ':warning:'
     path: monoid/prim_monoids.hpp
     title: monoid/prim_monoids.hpp
   _extendedVerifiedWith: []
@@ -53,6 +56,7 @@ data:
   path: monoid/monoids/minmax_monoid.hpp
   requiredBy:
   - monoid/acted_monoids/range_affine_range_minmax.hpp
+  - monoid/prim_acted_monoids.hpp
   - monoid/prim_monoids.hpp
   timestamp: '2025-09-29 19:28:55+09:00'
   verificationStatus: LIBRARY_NO_TESTS
