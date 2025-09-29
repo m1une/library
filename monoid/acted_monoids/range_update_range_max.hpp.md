@@ -49,12 +49,13 @@ data:
     \ auto data_id = Data::id;\n    static constexpr bool data_is_commutative = Data::is_commutative;\n\
     \    static constexpr auto act_op = Act::op;\n    static constexpr auto act_id\
     \ = Act::id;\n    static constexpr bool act_is_commutative = Act::is_commutative;\n\
-    \    static constexpr auto apply = mapping;\n};\n\nconcept ActedMonoid = requires\
-    \ {\n    typename T::data_monoid;\n    typename T::act_monoid;\n    typename T::data_type;\n\
-    \    typename T::act_type;\n    {\n        T::data_op\n    } -> std::convertible_to<std::function<typename\
-    \ T::data_type(typename T::data_type, typename T::data_type)>>;\n    { T::data_id\
-    \ } -> std::convertible_to<std::function<typename T::data_type()>>;\n    { T::data_is_commutative\
-    \ } -> std::convertible_to<bool>;\n    {\n        T::act_op\n    } -> std::convertible_to<std::function<typename\
+    \    static constexpr auto apply = mapping;\n};\n\ntemplate <typename T>\nconcept\
+    \ ActedMonoid = requires {\n    typename T::data_monoid;\n    typename T::act_monoid;\n\
+    \    typename T::data_type;\n    typename T::act_type;\n    {\n        T::data_op\n\
+    \    } -> std::convertible_to<std::function<typename T::data_type(typename T::data_type,\
+    \ typename T::data_type)>>;\n    { T::data_id } -> std::convertible_to<std::function<typename\
+    \ T::data_type()>>;\n    { T::data_is_commutative } -> std::convertible_to<bool>;\n\
+    \    {\n        T::act_op\n    } -> std::convertible_to<std::function<typename\
     \ T::act_type(typename T::act_type, typename T::act_type)>>;\n    { T::act_id\
     \ } -> std::convertible_to<std::function<typename T::act_type()>>;\n    { T::act_is_commutative\
     \ } -> std::convertible_to<bool>;\n    {\n        T::apply\n    } -> std::convertible_to<std::function<typename\
@@ -90,7 +91,7 @@ data:
   path: monoid/acted_monoids/range_update_range_max.hpp
   requiredBy:
   - monoid/prim_acted_monoids.hpp
-  timestamp: '2025-09-29 17:53:02+09:00'
+  timestamp: '2025-09-29 18:09:11+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/acted_monoids/range_update_range_max.hpp
