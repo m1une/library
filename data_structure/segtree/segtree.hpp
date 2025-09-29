@@ -11,9 +11,9 @@
 
 namespace m1une {
 
-template <monoid_concept Monoid>
+template <Monoid M>
 struct segment_tree {
-    using T = typename Monoid::value_type;
+    using T = typename M::value_type;
 
    private:
     int _n;
@@ -21,15 +21,15 @@ struct segment_tree {
     std::vector<T> _data;
 
     void update(int k) {
-        _data[k] = Monoid::op(_data[2 * k], _data[2 * k + 1]);
+        _data[k] = M::op(_data[2 * k], _data[2 * k + 1]);
     }
 
    public:
     segment_tree() : segment_tree(0) {}
-    explicit segment_tree(int n) : segment_tree(std::vector<T>(n, Monoid::id())) {}
+    explicit segment_tree(int n) : segment_tree(std::vector<T>(n, M::id())) {}
     explicit segment_tree(const std::vector<T>& v) : _n(v.size()) {
         _size = bit_ceil((unsigned int)_n);
-        _data.assign(2 * _size, Monoid::id());
+        _data.assign(2 * _size, M::id());
         for (int i = 0; i < _n; i++) {
             _data[_size + i] = v[i];
         }
@@ -54,16 +54,16 @@ struct segment_tree {
 
     // Product of range [l, r)
     T prod(int l, int r) const {
-        T sml = Monoid::id(), smr = Monoid::id();
+        T sml = M::id(), smr = M::id();
         l += _size;
         r += _size;
         while (l < r) {
-            if (l & 1) sml = Monoid::op(sml, _data[l++]);
-            if (r & 1) smr = Monoid::op(_data[--r], smr);
+            if (l & 1) sml = M::op(sml, _data[l++]);
+            if (r & 1) smr = M::op(_data[--r], smr);
             l >>= 1;
             r >>= 1;
         }
-        return Monoid::op(sml, smr);
+        return M::op(sml, smr);
     }
 
     // Product of the whole range
@@ -77,20 +77,20 @@ struct segment_tree {
                       "f must be a callable that takes a Monoid::value_type and returns a boolean");
         if (l == _n) return _n;
         l += _size;
-        T sm = Monoid::id();
+        T sm = M::id();
         do {
             while (l % 2 == 0) l >>= 1;
-            if (!f(Monoid::op(sm, _data[l]))) {
+            if (!f(M::op(sm, _data[l]))) {
                 while (l < _size) {
                     l = (2 * l);
-                    if (f(Monoid::op(sm, _data[l]))) {
-                        sm = Monoid::op(sm, _data[l]);
+                    if (f(M::op(sm, _data[l]))) {
+                        sm = M::op(sm, _data[l]);
                         l++;
                     }
                 }
                 return l - _size;
             }
-            sm = Monoid::op(sm, _data[l]);
+            sm = M::op(sm, _data[l]);
             l++;
         } while ((l & -l) != l);
         return _n;
@@ -102,21 +102,21 @@ struct segment_tree {
                       "f must be a callable that takes a Monoid::value_type and returns a boolean");
         if (r == 0) return 0;
         r += _size;
-        T sm = Monoid::id();
+        T sm = M::id();
         do {
             r--;
             while (r > 1 && (r % 2)) r >>= 1;
-            if (!f(Monoid::op(_data[r], sm))) {
+            if (!f(M::op(_data[r], sm))) {
                 while (r < _size) {
                     r = (2 * r + 1);
-                    if (f(Monoid::op(_data[r], sm))) {
-                        sm = Monoid::op(_data[r], sm);
+                    if (f(M::op(_data[r], sm))) {
+                        sm = M::op(_data[r], sm);
                         r--;
                     }
                 }
                 return r + 1 - _size;
             }
-            sm = Monoid::op(_data[r], sm);
+            sm = M::op(_data[r], sm);
         } while ((r & -r) != r);
         return 0;
     }

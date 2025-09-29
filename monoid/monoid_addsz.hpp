@@ -13,7 +13,7 @@ struct value_and_size {
     int size;
 };
 
-template <monoid_concept M>
+template <Monoid M>
 using monoid_addsz = monoid<value_and_size<typename M::value_type>,
                             [](value_and_size<typename M::value_type> a, value_and_size<typename M::value_type> b) {
                                 return value_and_size<typename M::value_type>{M::op(a.value, b.value), a.size + b.size};

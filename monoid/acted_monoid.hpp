@@ -8,7 +8,7 @@
 
 namespace m1une {
 
-template <monoid_concept Data, monoid_concept Act, auto mapping>
+template <Monoid Data, Monoid Act, auto mapping>
 struct acted_monoid {
     using data_monoid = Data;
     using act_monoid = Act;

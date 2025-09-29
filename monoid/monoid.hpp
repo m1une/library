@@ -19,7 +19,7 @@ struct monoid {
 };
 
 template <typename T>
-concept monoid_concept = requires {
+concept Monoid = requires {
     typename T::value_type;
     { T::op } -> std::convertible_to<std::function<typename T::value_type(typename T::value_type, typename T::value_type)>>;
     { T::id } -> std::convertible_to<std::function<typename T::value_type()>>;
