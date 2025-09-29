@@ -1,6 +1,7 @@
 #ifndef M1UNE_ACTED_MONOID_HPP
 #define M1UNE_ACTED_MONOID_HPP 1
 
+#include <concepts>
 #include <functional>
 #include <type_traits>
 
@@ -26,6 +27,26 @@ struct acted_monoid {
     static constexpr auto act_id = Act::id;
     static constexpr bool act_is_commutative = Act::is_commutative;
     static constexpr auto apply = mapping;
+};
+
+concept ActedMonoid = requires {
+    typename T::data_monoid;
+    typename T::act_monoid;
+    typename T::data_type;
+    typename T::act_type;
+    {
+        T::data_op
+    } -> std::convertible_to<std::function<typename T::data_type(typename T::data_type, typename T::data_type)>>;
+    { T::data_id } -> std::convertible_to<std::function<typename T::data_type()>>;
+    { T::data_is_commutative } -> std::convertible_to<bool>;
+    {
+        T::act_op
+    } -> std::convertible_to<std::function<typename T::act_type(typename T::act_type, typename T::act_type)>>;
+    { T::act_id } -> std::convertible_to<std::function<typename T::act_type()>>;
+    { T::act_is_commutative } -> std::convertible_to<bool>;
+    {
+        T::apply
+    } -> std::convertible_to<std::function<typename T::data_type(typename T::act_type, typename T::data_type)>>;
 };
 
 }  // namespace m1une
