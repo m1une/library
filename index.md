@@ -11,6 +11,9 @@ data:
       title: Treap
   - name: data_structure/segtree
     pages:
+    - icon: ':warning:'
+      path: data_structure/segtree/lazysegtree.hpp
+      title: data_structure/segtree/lazysegtree.hpp
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree/segtree.hpp
       title: Segment Tree

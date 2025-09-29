@@ -6,6 +6,9 @@ data:
     title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
+    path: data_structure/segtree/lazysegtree.hpp
+    title: data_structure/segtree/lazysegtree.hpp
+  - icon: ':warning:'
     path: monoid/acted_monoids/range_add_range_max.hpp
     title: monoid/acted_monoids/range_add_range_max.hpp
   - icon: ':warning:'
@@ -105,6 +108,7 @@ data:
   - monoid/acted_monoids/range_add_range_max.hpp
   - monoid/prim_acted_monoids.hpp
   - monoid/prim_acted_monoids.hpp
+  - data_structure/segtree/lazysegtree.hpp
   timestamp: '2025-09-29 18:09:11+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

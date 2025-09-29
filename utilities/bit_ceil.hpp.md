@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
+  - icon: ':warning:'
+    path: data_structure/segtree/lazysegtree.hpp
+    title: data_structure/segtree/lazysegtree.hpp
   - icon: ':heavy_check_mark:'
     path: data_structure/segtree/segtree.hpp
     title: Segment Tree
@@ -27,6 +30,7 @@ data:
   path: utilities/bit_ceil.hpp
   requiredBy:
   - data_structure/segtree/segtree.hpp
+  - data_structure/segtree/lazysegtree.hpp
   timestamp: '2025-09-28 19:24:13+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
