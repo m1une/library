@@ -6,6 +6,21 @@ data:
     title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
+    path: monoid/acted_monoids/range_add_range_max.hpp
+    title: monoid/acted_monoids/range_add_range_max.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_add_range_min.hpp
+    title: monoid/acted_monoids/range_add_range_min.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_add_range_sum.hpp
+    title: monoid/acted_monoids/range_add_range_sum.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_update_range_sum.hpp
+    title: monoid/acted_monoids/range_update_range_sum.hpp
+  - icon: ':warning:'
+    path: monoid/prim_acted_monoids.hpp
+    title: monoid/prim_acted_monoids.hpp
+  - icon: ':warning:'
     path: monoid/prim_monoids.hpp
     title: monoid/prim_monoids.hpp
   _extendedVerifiedWith: []
@@ -58,6 +73,11 @@ data:
   isVerificationFile: false
   path: monoid/monoids/add_monoid.hpp
   requiredBy:
+  - monoid/acted_monoids/range_add_range_sum.hpp
+  - monoid/acted_monoids/range_update_range_sum.hpp
+  - monoid/acted_monoids/range_add_range_min.hpp
+  - monoid/acted_monoids/range_add_range_max.hpp
+  - monoid/prim_acted_monoids.hpp
   - monoid/prim_monoids.hpp
   timestamp: '2025-09-29 01:30:47+09:00'
   verificationStatus: LIBRARY_NO_TESTS

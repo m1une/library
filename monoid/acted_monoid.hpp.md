@@ -4,7 +4,31 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/monoid.hpp
     title: Monoid
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_add_range_max.hpp
+    title: monoid/acted_monoids/range_add_range_max.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_add_range_min.hpp
+    title: monoid/acted_monoids/range_add_range_min.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_add_range_sum.hpp
+    title: monoid/acted_monoids/range_add_range_sum.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_update_range_max.hpp
+    title: monoid/acted_monoids/range_update_range_max.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_update_range_min.hpp
+    title: monoid/acted_monoids/range_update_range_min.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_update_range_sum.hpp
+    title: monoid/acted_monoids/range_update_range_sum.hpp
+  - icon: ':warning:'
+    path: monoid/prim_acted_monoids.hpp
+    title: monoid/prim_acted_monoids.hpp
+  - icon: ':warning:'
+    path: monoid/prim_acted_monoids.hpp
+    title: monoid/prim_acted_monoids.hpp
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -50,7 +74,15 @@ data:
   - monoid/monoid.hpp
   isVerificationFile: false
   path: monoid/acted_monoid.hpp
-  requiredBy: []
+  requiredBy:
+  - monoid/acted_monoids/range_update_range_max.hpp
+  - monoid/acted_monoids/range_add_range_sum.hpp
+  - monoid/acted_monoids/range_update_range_min.hpp
+  - monoid/acted_monoids/range_update_range_sum.hpp
+  - monoid/acted_monoids/range_add_range_min.hpp
+  - monoid/acted_monoids/range_add_range_max.hpp
+  - monoid/prim_acted_monoids.hpp
+  - monoid/prim_acted_monoids.hpp
   timestamp: '2025-09-29 03:38:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

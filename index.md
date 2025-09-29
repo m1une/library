@@ -31,8 +31,31 @@ data:
       path: monoid/monoid_addsz.hpp
       title: monoid/monoid_addsz.hpp
     - icon: ':warning:'
+      path: monoid/prim_acted_monoids.hpp
+      title: monoid/prim_acted_monoids.hpp
+    - icon: ':warning:'
       path: monoid/prim_monoids.hpp
       title: monoid/prim_monoids.hpp
+  - name: monoid/acted_monoids
+    pages:
+    - icon: ':warning:'
+      path: monoid/acted_monoids/range_add_range_max.hpp
+      title: monoid/acted_monoids/range_add_range_max.hpp
+    - icon: ':warning:'
+      path: monoid/acted_monoids/range_add_range_min.hpp
+      title: monoid/acted_monoids/range_add_range_min.hpp
+    - icon: ':warning:'
+      path: monoid/acted_monoids/range_add_range_sum.hpp
+      title: monoid/acted_monoids/range_add_range_sum.hpp
+    - icon: ':warning:'
+      path: monoid/acted_monoids/range_update_range_max.hpp
+      title: monoid/acted_monoids/range_update_range_max.hpp
+    - icon: ':warning:'
+      path: monoid/acted_monoids/range_update_range_min.hpp
+      title: monoid/acted_monoids/range_update_range_min.hpp
+    - icon: ':warning:'
+      path: monoid/acted_monoids/range_update_range_sum.hpp
+      title: monoid/acted_monoids/range_update_range_sum.hpp
   - name: monoid/monoids
     pages:
     - icon: ':warning:'
