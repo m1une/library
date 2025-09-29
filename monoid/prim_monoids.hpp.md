@@ -52,7 +52,7 @@ data:
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept monoid_concept = requires {\n    typename T::value_type;\n\
+    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
     \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
     \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
     \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
@@ -151,7 +151,7 @@ data:
   isVerificationFile: false
   path: monoid/prim_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-29 03:35:02+09:00'
+  timestamp: '2025-09-29 17:50:58+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/prim_monoids.hpp

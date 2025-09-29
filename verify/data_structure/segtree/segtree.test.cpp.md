@@ -40,7 +40,7 @@ data:
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept monoid_concept = requires {\n    typename T::value_type;\n\
+    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
     \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
     \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
     \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
@@ -48,13 +48,13 @@ data:
     \ m1une {\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1)\
     \ return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n}  //\
     \ namespace m1une\n\n\n#line 11 \"data_structure/segtree/segtree.hpp\"\n\nnamespace\
-    \ m1une {\n\ntemplate <monoid_concept Monoid>\nstruct segment_tree {\n    using\
-    \ T = typename Monoid::value_type;\n\n   private:\n    int _n;\n    int _size;\n\
-    \    std::vector<T> _data;\n\n    void update(int k) {\n        _data[k] = Monoid::op(_data[2\
-    \ * k], _data[2 * k + 1]);\n    }\n\n   public:\n    segment_tree() : segment_tree(0)\
-    \ {}\n    explicit segment_tree(int n) : segment_tree(std::vector<T>(n, Monoid::id()))\
-    \ {}\n    explicit segment_tree(const std::vector<T>& v) : _n(v.size()) {\n  \
-    \      _size = bit_ceil((unsigned int)_n);\n        _data.assign(2 * _size, Monoid::id());\n\
+    \ m1une {\n\ntemplate <Monoid M>\nstruct segment_tree {\n    using T = typename\
+    \ M::value_type;\n\n   private:\n    int _n;\n    int _size;\n    std::vector<T>\
+    \ _data;\n\n    void update(int k) {\n        _data[k] = M::op(_data[2 * k], _data[2\
+    \ * k + 1]);\n    }\n\n   public:\n    segment_tree() : segment_tree(0) {}\n \
+    \   explicit segment_tree(int n) : segment_tree(std::vector<T>(n, M::id())) {}\n\
+    \    explicit segment_tree(const std::vector<T>& v) : _n(v.size()) {\n       \
+    \ _size = bit_ceil((unsigned int)_n);\n        _data.assign(2 * _size, M::id());\n\
     \        for (int i = 0; i < _n; i++) {\n            _data[_size + i] = v[i];\n\
     \        }\n        for (int i = _size - 1; i >= 1; i--) {\n            update(i);\n\
     \        }\n    }\n\n    // Set value at position p\n    void set(int p, T x)\
@@ -62,69 +62,69 @@ data:
     \ i >= 1; i++) {\n            update(p >> i);\n        }\n    }\n\n    // Get\
     \ value at position p\n    T get(int p) const {\n        return _data[p + _size];\n\
     \    }\n\n    // Product of range [l, r)\n    T prod(int l, int r) const {\n \
-    \       T sml = Monoid::id(), smr = Monoid::id();\n        l += _size;\n     \
-    \   r += _size;\n        while (l < r) {\n            if (l & 1) sml = Monoid::op(sml,\
-    \ _data[l++]);\n            if (r & 1) smr = Monoid::op(_data[--r], smr);\n  \
-    \          l >>= 1;\n            r >>= 1;\n        }\n        return Monoid::op(sml,\
-    \ smr);\n    }\n\n    // Product of the whole range\n    T all_prod() const {\n\
-    \        return _data[1];\n    }\n\n    // Find max_right r such that f(prod([l,\
-    \ r))) is true\n    int max_right(int l, auto f) const {\n        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
+    \       T sml = M::id(), smr = M::id();\n        l += _size;\n        r += _size;\n\
+    \        while (l < r) {\n            if (l & 1) sml = M::op(sml, _data[l++]);\n\
+    \            if (r & 1) smr = M::op(_data[--r], smr);\n            l >>= 1;\n\
+    \            r >>= 1;\n        }\n        return M::op(sml, smr);\n    }\n\n \
+    \   // Product of the whole range\n    T all_prod() const {\n        return _data[1];\n\
+    \    }\n\n    // Find max_right r such that f(prod([l, r))) is true\n    int max_right(int\
+    \ l, auto f) const {\n        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
     \ T>, bool>,\n                      \"f must be a callable that takes a Monoid::value_type\
     \ and returns a boolean\");\n        if (l == _n) return _n;\n        l += _size;\n\
-    \        T sm = Monoid::id();\n        do {\n            while (l % 2 == 0) l\
-    \ >>= 1;\n            if (!f(Monoid::op(sm, _data[l]))) {\n                while\
-    \ (l < _size) {\n                    l = (2 * l);\n                    if (f(Monoid::op(sm,\
-    \ _data[l]))) {\n                        sm = Monoid::op(sm, _data[l]);\n    \
-    \                    l++;\n                    }\n                }\n        \
-    \        return l - _size;\n            }\n            sm = Monoid::op(sm, _data[l]);\n\
-    \            l++;\n        } while ((l & -l) != l);\n        return _n;\n    }\n\
-    \n    // Find min_left l such that f(prod([l, r))) is true\n    int min_left(int\
-    \ r, auto f) const {\n        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
+    \        T sm = M::id();\n        do {\n            while (l % 2 == 0) l >>= 1;\n\
+    \            if (!f(M::op(sm, _data[l]))) {\n                while (l < _size)\
+    \ {\n                    l = (2 * l);\n                    if (f(M::op(sm, _data[l])))\
+    \ {\n                        sm = M::op(sm, _data[l]);\n                     \
+    \   l++;\n                    }\n                }\n                return l -\
+    \ _size;\n            }\n            sm = M::op(sm, _data[l]);\n            l++;\n\
+    \        } while ((l & -l) != l);\n        return _n;\n    }\n\n    // Find min_left\
+    \ l such that f(prod([l, r))) is true\n    int min_left(int r, auto f) const {\n\
+    \        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(f),\
     \ T>, bool>,\n                      \"f must be a callable that takes a Monoid::value_type\
     \ and returns a boolean\");\n        if (r == 0) return 0;\n        r += _size;\n\
-    \        T sm = Monoid::id();\n        do {\n            r--;\n            while\
-    \ (r > 1 && (r % 2)) r >>= 1;\n            if (!f(Monoid::op(_data[r], sm))) {\n\
-    \                while (r < _size) {\n                    r = (2 * r + 1);\n \
-    \                   if (f(Monoid::op(_data[r], sm))) {\n                     \
-    \   sm = Monoid::op(_data[r], sm);\n                        r--;\n           \
-    \         }\n                }\n                return r + 1 - _size;\n      \
-    \      }\n            sm = Monoid::op(_data[r], sm);\n        } while ((r & -r)\
-    \ != r);\n        return 0;\n    }\n};\n\n}  // namespace m1une\n\n\n#line 4 \"\
-    verify/data_structure/segtree/segtree.test.cpp\"\n\n#include <bits/stdc++.h>\n\
-    \n#line 1 \"atcoder/modint.hpp\"\n\n\n\n#line 7 \"atcoder/modint.hpp\"\n\n#ifdef\
-    \ _MSC_VER\n#include <intrin.h>\n#endif\n\n#line 1 \"atcoder/internal_math.hpp\"\
-    \n\n\n\n#line 5 \"atcoder/internal_math.hpp\"\n\n#ifdef _MSC_VER\n#include <intrin.h>\n\
-    #endif\n\nnamespace atcoder {\n\nnamespace internal {\n\n// @param m `1 <= m`\n\
-    // @return x mod m\nconstexpr long long safe_mod(long long x, long long m) {\n\
-    \    x %= m;\n    if (x < 0) x += m;\n    return x;\n}\n\n// Fast modular multiplication\
-    \ by barrett reduction\n// Reference: https://en.wikipedia.org/wiki/Barrett_reduction\n\
-    // NOTE: reconsider after Ice Lake\nstruct barrett {\n    unsigned int _m;\n \
-    \   unsigned long long im;\n\n    // @param m `1 <= m`\n    explicit barrett(unsigned\
-    \ int m) : _m(m), im((unsigned long long)(-1) / m + 1) {}\n\n    // @return m\n\
-    \    unsigned int umod() const { return _m; }\n\n    // @param a `0 <= a < m`\n\
-    \    // @param b `0 <= b < m`\n    // @return `a * b % m`\n    unsigned int mul(unsigned\
-    \ int a, unsigned int b) const {\n        // [1] m = 1\n        // a = b = im\
-    \ = 0, so okay\n\n        // [2] m >= 2\n        // im = ceil(2^64 / m)\n    \
-    \    // -> im * m = 2^64 + r (0 <= r < m)\n        // let z = a*b = c*m + d (0\
-    \ <= c, d < m)\n        // a*b * im = (c*m + d) * im = c*(im*m) + d*im = c*2^64\
-    \ + c*r + d*im\n        // c*r + d*im < m * m + m * im < m * m + 2^64 + m <= 2^64\
-    \ + m * (m + 1) < 2^64 * 2\n        // ((ab * im) >> 64) == c or c + 1\n     \
-    \   unsigned long long z = a;\n        z *= b;\n#ifdef _MSC_VER\n        unsigned\
-    \ long long x;\n        _umul128(z, im, &x);\n#else\n        unsigned long long\
-    \ x =\n            (unsigned long long)(((unsigned __int128)(z)*im) >> 64);\n\
-    #endif\n        unsigned long long y = x * _m;\n        return (unsigned int)(z\
-    \ - y + (z < y ? _m : 0));\n    }\n};\n\n// @param n `0 <= n`\n// @param m `1\
-    \ <= m`\n// @return `(x ** n) % m`\nconstexpr long long pow_mod_constexpr(long\
-    \ long x, long long n, int m) {\n    if (m == 1) return 0;\n    unsigned int _m\
-    \ = (unsigned int)(m);\n    unsigned long long r = 1;\n    unsigned long long\
-    \ y = safe_mod(x, m);\n    while (n) {\n        if (n & 1) r = (r * y) % _m;\n\
-    \        y = (y * y) % _m;\n        n >>= 1;\n    }\n    return r;\n}\n\n// Reference:\n\
-    // M. Forisek and J. Jancina,\n// Fast Primality Testing for Integers That Fit\
-    \ into a Machine Word\n// @param n `0 <= n`\nconstexpr bool is_prime_constexpr(int\
-    \ n) {\n    if (n <= 1) return false;\n    if (n == 2 || n == 7 || n == 61) return\
-    \ true;\n    if (n % 2 == 0) return false;\n    long long d = n - 1;\n    while\
-    \ (d % 2 == 0) d /= 2;\n    constexpr long long bases[3] = {2, 7, 61};\n    for\
-    \ (long long a : bases) {\n        long long t = d;\n        long long y = pow_mod_constexpr(a,\
+    \        T sm = M::id();\n        do {\n            r--;\n            while (r\
+    \ > 1 && (r % 2)) r >>= 1;\n            if (!f(M::op(_data[r], sm))) {\n     \
+    \           while (r < _size) {\n                    r = (2 * r + 1);\n      \
+    \              if (f(M::op(_data[r], sm))) {\n                        sm = M::op(_data[r],\
+    \ sm);\n                        r--;\n                    }\n                }\n\
+    \                return r + 1 - _size;\n            }\n            sm = M::op(_data[r],\
+    \ sm);\n        } while ((r & -r) != r);\n        return 0;\n    }\n};\n\n}  //\
+    \ namespace m1une\n\n\n#line 4 \"verify/data_structure/segtree/segtree.test.cpp\"\
+    \n\n#include <bits/stdc++.h>\n\n#line 1 \"atcoder/modint.hpp\"\n\n\n\n#line 7\
+    \ \"atcoder/modint.hpp\"\n\n#ifdef _MSC_VER\n#include <intrin.h>\n#endif\n\n#line\
+    \ 1 \"atcoder/internal_math.hpp\"\n\n\n\n#line 5 \"atcoder/internal_math.hpp\"\
+    \n\n#ifdef _MSC_VER\n#include <intrin.h>\n#endif\n\nnamespace atcoder {\n\nnamespace\
+    \ internal {\n\n// @param m `1 <= m`\n// @return x mod m\nconstexpr long long\
+    \ safe_mod(long long x, long long m) {\n    x %= m;\n    if (x < 0) x += m;\n\
+    \    return x;\n}\n\n// Fast modular multiplication by barrett reduction\n// Reference:\
+    \ https://en.wikipedia.org/wiki/Barrett_reduction\n// NOTE: reconsider after Ice\
+    \ Lake\nstruct barrett {\n    unsigned int _m;\n    unsigned long long im;\n\n\
+    \    // @param m `1 <= m`\n    explicit barrett(unsigned int m) : _m(m), im((unsigned\
+    \ long long)(-1) / m + 1) {}\n\n    // @return m\n    unsigned int umod() const\
+    \ { return _m; }\n\n    // @param a `0 <= a < m`\n    // @param b `0 <= b < m`\n\
+    \    // @return `a * b % m`\n    unsigned int mul(unsigned int a, unsigned int\
+    \ b) const {\n        // [1] m = 1\n        // a = b = im = 0, so okay\n\n   \
+    \     // [2] m >= 2\n        // im = ceil(2^64 / m)\n        // -> im * m = 2^64\
+    \ + r (0 <= r < m)\n        // let z = a*b = c*m + d (0 <= c, d < m)\n       \
+    \ // a*b * im = (c*m + d) * im = c*(im*m) + d*im = c*2^64 + c*r + d*im\n     \
+    \   // c*r + d*im < m * m + m * im < m * m + 2^64 + m <= 2^64 + m * (m + 1) <\
+    \ 2^64 * 2\n        // ((ab * im) >> 64) == c or c + 1\n        unsigned long\
+    \ long z = a;\n        z *= b;\n#ifdef _MSC_VER\n        unsigned long long x;\n\
+    \        _umul128(z, im, &x);\n#else\n        unsigned long long x =\n       \
+    \     (unsigned long long)(((unsigned __int128)(z)*im) >> 64);\n#endif\n     \
+    \   unsigned long long y = x * _m;\n        return (unsigned int)(z - y + (z <\
+    \ y ? _m : 0));\n    }\n};\n\n// @param n `0 <= n`\n// @param m `1 <= m`\n// @return\
+    \ `(x ** n) % m`\nconstexpr long long pow_mod_constexpr(long long x, long long\
+    \ n, int m) {\n    if (m == 1) return 0;\n    unsigned int _m = (unsigned int)(m);\n\
+    \    unsigned long long r = 1;\n    unsigned long long y = safe_mod(x, m);\n \
+    \   while (n) {\n        if (n & 1) r = (r * y) % _m;\n        y = (y * y) % _m;\n\
+    \        n >>= 1;\n    }\n    return r;\n}\n\n// Reference:\n// M. Forisek and\
+    \ J. Jancina,\n// Fast Primality Testing for Integers That Fit into a Machine\
+    \ Word\n// @param n `0 <= n`\nconstexpr bool is_prime_constexpr(int n) {\n   \
+    \ if (n <= 1) return false;\n    if (n == 2 || n == 7 || n == 61) return true;\n\
+    \    if (n % 2 == 0) return false;\n    long long d = n - 1;\n    while (d % 2\
+    \ == 0) d /= 2;\n    constexpr long long bases[3] = {2, 7, 61};\n    for (long\
+    \ long a : bases) {\n        long long t = d;\n        long long y = pow_mod_constexpr(a,\
     \ t, n);\n        while (t != n - 1 && y != 1 && y != n - 1) {\n            y\
     \ = y * y % n;\n            t <<= 1;\n        }\n        if (y != n - 1 && t %\
     \ 2 == 0) {\n            return false;\n        }\n    }\n    return true;\n}\n\
@@ -341,7 +341,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/segtree/segtree.test.cpp
   requiredBy: []
-  timestamp: '2025-09-29 17:40:21+09:00'
+  timestamp: '2025-09-29 17:50:58+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/segtree/segtree.test.cpp

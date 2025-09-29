@@ -65,30 +65,29 @@ data:
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept monoid_concept = requires {\n    typename T::value_type;\n\
+    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
     \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
     \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
     \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
     };\n\n}  // namespace m1une\n\n\n#line 8 \"monoid/acted_monoid.hpp\"\n\nnamespace\
-    \ m1une {\n\ntemplate <monoid_concept Data, monoid_concept Act, auto mapping>\n\
-    struct acted_monoid {\n    using data_monoid = Data;\n    using act_monoid = Act;\n\
-    \n    using data_type = typename Data::value_type;\n    using act_type = typename\
-    \ Act::value_type;\n\n    static_assert(std::is_convertible_v<decltype(mapping),\
-    \ std::function<data_type(act_type, data_type)>>,\n                  \"mapping\
-    \ must work as data_type(data_type, act_type)\");\n\n    static constexpr auto\
-    \ data_op = Data::op;\n    static constexpr auto data_id = Data::id;\n    static\
-    \ constexpr bool data_is_commutative = Data::is_commutative;\n    static constexpr\
-    \ auto act_op = Act::op;\n    static constexpr auto act_id = Act::id;\n    static\
-    \ constexpr bool act_is_commutative = Act::is_commutative;\n    static constexpr\
-    \ auto apply = mapping;\n};\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/acted_monoids/range_add_range_min.hpp\"\
-    \n\n\n\n#line 1 \"monoid/monoids/add_monoid.hpp\"\n\n\n\n#line 5 \"monoid/monoids/add_monoid.hpp\"\
-    \n\nnamespace m1une {\n\ntemplate <typename T>\nusing add_monoid = monoid<T, [](T\
-    \ a, T b) { return a + b; }, []() { return T(0); }, true>;\n\n}  // namespace\
-    \ m1une\n\n\n#line 1 \"monoid/monoids/min_monoid.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <limits>\n\n#line 8 \"monoid/monoids/min_monoid.hpp\"\n\nnamespace m1une\
-    \ {\n\ntemplate <typename T>\nusing min_monoid =\n    monoid<T, [](T a, T b) {\
-    \ return std::min(a, b); }, []() { return std::numeric_limits<T>::max(); }, true>;\n\
-    \n}  // namespace m1une\n\n\n#line 7 \"monoid/acted_monoids/range_add_range_min.hpp\"\
+    \ m1une {\n\ntemplate <Monoid Data, Monoid Act, auto mapping>\nstruct acted_monoid\
+    \ {\n    using data_monoid = Data;\n    using act_monoid = Act;\n\n    using data_type\
+    \ = typename Data::value_type;\n    using act_type = typename Act::value_type;\n\
+    \n    static_assert(std::is_convertible_v<decltype(mapping), std::function<data_type(act_type,\
+    \ data_type)>>,\n                  \"mapping must work as data_type(data_type,\
+    \ act_type)\");\n\n    static constexpr auto data_op = Data::op;\n    static constexpr\
+    \ auto data_id = Data::id;\n    static constexpr bool data_is_commutative = Data::is_commutative;\n\
+    \    static constexpr auto act_op = Act::op;\n    static constexpr auto act_id\
+    \ = Act::id;\n    static constexpr bool act_is_commutative = Act::is_commutative;\n\
+    \    static constexpr auto apply = mapping;\n};\n\n}  // namespace m1une\n\n\n\
+    #line 1 \"monoid/acted_monoids/range_add_range_min.hpp\"\n\n\n\n#line 1 \"monoid/monoids/add_monoid.hpp\"\
+    \n\n\n\n#line 5 \"monoid/monoids/add_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T>\nusing add_monoid = monoid<T, [](T a, T b) { return a + b; }, []()\
+    \ { return T(0); }, true>;\n\n}  // namespace m1une\n\n\n#line 1 \"monoid/monoids/min_monoid.hpp\"\
+    \n\n\n\n#include <algorithm>\n#include <limits>\n\n#line 8 \"monoid/monoids/min_monoid.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <typename T>\nusing min_monoid =\n    monoid<T,\
+    \ [](T a, T b) { return std::min(a, b); }, []() { return std::numeric_limits<T>::max();\
+    \ }, true>;\n\n}  // namespace m1une\n\n\n#line 7 \"monoid/acted_monoids/range_add_range_min.hpp\"\
     \n\nnamespace m1une {\n\ntemplate <typename T>\nusing range_add_range_min_monoid\
     \ = acted_monoid<min_monoid<T>, add_monoid<T>, [](T a, T x) { return a + x; }>;\n\
     \n}  // namespace m1une\n\n\n#line 1 \"monoid/acted_monoids/range_add_range_max.hpp\"\
@@ -102,13 +101,13 @@ data:
     \n#line 1 \"monoid/acted_monoids/range_add_range_sum.hpp\"\n\n\n\n#line 1 \"monoid/monoid_addsz.hpp\"\
     \n\n\n\n#line 5 \"monoid/monoid_addsz.hpp\"\n\n#line 7 \"monoid/monoid_addsz.hpp\"\
     \n\nnamespace m1une {\n\ntemplate <typename T>\nstruct value_and_size {\n    T\
-    \ value;\n    int size;\n};\n\ntemplate <monoid_concept M>\nusing monoid_addsz\
-    \ = monoid<value_and_size<typename M::value_type>,\n                         \
-    \   [](value_and_size<typename M::value_type> a, value_and_size<typename M::value_type>\
-    \ b) {\n                                return value_and_size<typename M::value_type>{M::op(a.value,\
-    \ b.value), a.size + b.size};\n                            },\n              \
-    \              []() { return value_and_size<typename M::value_type>{M::id(), 0};\
-    \ }, M::is_commutative>;\n\n}  // namespace m1une\n\n\n#line 7 \"monoid/acted_monoids/range_add_range_sum.hpp\"\
+    \ value;\n    int size;\n};\n\ntemplate <Monoid M>\nusing monoid_addsz = monoid<value_and_size<typename\
+    \ M::value_type>,\n                            [](value_and_size<typename M::value_type>\
+    \ a, value_and_size<typename M::value_type> b) {\n                           \
+    \     return value_and_size<typename M::value_type>{M::op(a.value, b.value), a.size\
+    \ + b.size};\n                            },\n                            []()\
+    \ { return value_and_size<typename M::value_type>{M::id(), 0}; }, M::is_commutative>;\n\
+    \n}  // namespace m1une\n\n\n#line 7 \"monoid/acted_monoids/range_add_range_sum.hpp\"\
     \n\nnamespace m1une {\n\ntemplate <typename T>\nusing range_add_range_sum_monoid\
     \ =\n    acted_monoid<monoid_addsz<add_monoid<T>>, add_monoid<T>,\n          \
     \       [](T a, typename monoid_addsz<add_monoid<T>>::data_type x) {\n       \
@@ -180,7 +179,7 @@ data:
   isVerificationFile: false
   path: monoid/prim_acted_monoids.hpp
   requiredBy: []
-  timestamp: '2025-09-29 17:45:44+09:00'
+  timestamp: '2025-09-29 17:50:58+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/prim_acted_monoids.hpp

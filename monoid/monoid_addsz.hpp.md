@@ -28,13 +28,13 @@ data:
     \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept monoid_concept = requires {\n    typename T::value_type;\n\
+    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
     \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
     \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
     \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
     };\n\n}  // namespace m1une\n\n\n#line 7 \"monoid/monoid_addsz.hpp\"\n\nnamespace\
     \ m1une {\n\ntemplate <typename T>\nstruct value_and_size {\n    T value;\n  \
-    \  int size;\n};\n\ntemplate <monoid_concept M>\nusing monoid_addsz = monoid<value_and_size<typename\
+    \  int size;\n};\n\ntemplate <Monoid M>\nusing monoid_addsz = monoid<value_and_size<typename\
     \ M::value_type>,\n                            [](value_and_size<typename M::value_type>\
     \ a, value_and_size<typename M::value_type> b) {\n                           \
     \     return value_and_size<typename M::value_type>{M::op(a.value, b.value), a.size\
@@ -43,7 +43,7 @@ data:
     \n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_ADDSZ_HPP\n#define M1UNE_MONOID_ADDSZ_HPP 1\n\n#include\
     \ <concepts>\n\n#include \"monoid.hpp\"\n\nnamespace m1une {\n\ntemplate <typename\
-    \ T>\nstruct value_and_size {\n    T value;\n    int size;\n};\n\ntemplate <monoid_concept\
+    \ T>\nstruct value_and_size {\n    T value;\n    int size;\n};\n\ntemplate <Monoid\
     \ M>\nusing monoid_addsz = monoid<value_and_size<typename M::value_type>,\n  \
     \                          [](value_and_size<typename M::value_type> a, value_and_size<typename\
     \ M::value_type> b) {\n                                return value_and_size<typename\
@@ -59,7 +59,7 @@ data:
   - monoid/acted_monoids/range_add_range_sum.hpp
   - monoid/acted_monoids/range_update_range_sum.hpp
   - monoid/prim_acted_monoids.hpp
-  timestamp: '2025-09-29 01:30:55+09:00'
+  timestamp: '2025-09-29 17:50:58+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/monoid_addsz.hpp
