@@ -10,7 +10,6 @@
 #include "monoids/or_monoid.hpp"
 #include "monoids/xor_monoid.hpp"
 #include "monoids/affine_monoid.hpp"
-#include "monoids/affine_right_monoid.hpp"
 #include "monoids/update_monoid.hpp"
 
 #endif  // M1UNE_PRIM_MONOIDS_HPP
