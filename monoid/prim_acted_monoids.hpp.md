@@ -3,10 +3,10 @@ data:
   _extendedDependsOn:
   - icon: ':warning:'
     path: monoid/acted_monoid.hpp
-    title: monoid/acted_monoid.hpp
+    title: Acted Monoid
   - icon: ':warning:'
     path: monoid/acted_monoid.hpp
-    title: monoid/acted_monoid.hpp
+    title: Acted Monoid
   - icon: ':warning:'
     path: monoid/acted_monoids/range_add_range_max.hpp
     title: monoid/acted_monoids/range_add_range_max.hpp

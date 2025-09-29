@@ -26,7 +26,7 @@ data:
     pages:
     - icon: ':warning:'
       path: monoid/acted_monoid.hpp
-      title: monoid/acted_monoid.hpp
+      title: Acted Monoid
     - icon: ':heavy_check_mark:'
       path: monoid/monoid.hpp
       title: Monoid
