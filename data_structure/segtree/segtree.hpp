@@ -6,11 +6,12 @@
 #include <type_traits>
 #include <vector>
 
+#include "monoid/monoid.hpp"
 #include "utilities/bit_ceil.hpp"
 
 namespace m1une {
 
-template <typename Monoid>
+template <monoid_concept Monoid>
 struct segment_tree {
     using T = typename Monoid::value_type;
 
