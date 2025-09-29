@@ -62,7 +62,7 @@ data:
     \ _lazy;\n\n    void update(int k) {\n        _data[k] = AM::data_op(_data[2 *\
     \ k], _data[2 * k + 1]);\n    }\n\n    void all_apply(int k, F f) {\n        _data[k]\
     \ = AM::apply(f, _data[k]);\n        if (k < _size) {\n            _lazy[k] =\
-    \ AM::act_op(f, _lazy[k]);\n        }\n    }\n\n    void push(int k) {\n     \
+    \ AM::act_op(_lazy[k], f);\n        }\n    }\n\n    void push(int k) {\n     \
     \   all_apply(2 * k, _lazy[k]);\n        all_apply(2 * k + 1, _lazy[k]);\n   \
     \     _lazy[k] = AM::act_id();\n    }\n\n   public:\n    lazy_segment_tree() :\
     \ lazy_segment_tree(0) {}\n    explicit lazy_segment_tree(int n) : lazy_segment_tree(std::vector<S>(n,\
@@ -126,7 +126,7 @@ data:
     \    std::vector<F> _lazy;\n\n    void update(int k) {\n        _data[k] = AM::data_op(_data[2\
     \ * k], _data[2 * k + 1]);\n    }\n\n    void all_apply(int k, F f) {\n      \
     \  _data[k] = AM::apply(f, _data[k]);\n        if (k < _size) {\n            _lazy[k]\
-    \ = AM::act_op(f, _lazy[k]);\n        }\n    }\n\n    void push(int k) {\n   \
+    \ = AM::act_op(_lazy[k], f);\n        }\n    }\n\n    void push(int k) {\n   \
     \     all_apply(2 * k, _lazy[k]);\n        all_apply(2 * k + 1, _lazy[k]);\n \
     \       _lazy[k] = AM::act_id();\n    }\n\n   public:\n    lazy_segment_tree()\
     \ : lazy_segment_tree(0) {}\n    explicit lazy_segment_tree(int n) : lazy_segment_tree(std::vector<S>(n,\
@@ -189,7 +189,7 @@ data:
   isVerificationFile: false
   path: data_structure/segtree/lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2025-09-29 18:52:22+09:00'
+  timestamp: '2025-09-29 19:02:02+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/segtree/lazy_segtree.hpp
