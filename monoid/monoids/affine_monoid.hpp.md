@@ -6,6 +6,12 @@ data:
     title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
+    path: monoid/acted_monoids/range_affine_range_minmax.hpp
+    title: monoid/acted_monoids/range_affine_range_minmax.hpp
+  - icon: ':warning:'
+    path: monoid/acted_monoids/range_affine_range_sum.hpp
+    title: monoid/acted_monoids/range_affine_range_sum.hpp
+  - icon: ':warning:'
     path: monoid/prim_monoids.hpp
     title: monoid/prim_monoids.hpp
   _extendedVerifiedWith:
@@ -51,6 +57,8 @@ data:
   isVerificationFile: false
   path: monoid/monoids/affine_monoid.hpp
   requiredBy:
+  - monoid/acted_monoids/range_affine_range_sum.hpp
+  - monoid/acted_monoids/range_affine_range_minmax.hpp
   - monoid/prim_monoids.hpp
   timestamp: '2025-09-29 17:50:58+09:00'
   verificationStatus: LIBRARY_ALL_AC

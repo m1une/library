@@ -9,6 +9,9 @@ data:
     path: monoid/acted_monoids/range_add_range_sum.hpp
     title: monoid/acted_monoids/range_add_range_sum.hpp
   - icon: ':warning:'
+    path: monoid/acted_monoids/range_affine_range_sum.hpp
+    title: monoid/acted_monoids/range_affine_range_sum.hpp
+  - icon: ':warning:'
     path: monoid/acted_monoids/range_update_range_sum.hpp
     title: monoid/acted_monoids/range_update_range_sum.hpp
   - icon: ':warning:'
@@ -57,6 +60,7 @@ data:
   path: monoid/monoid_addsz.hpp
   requiredBy:
   - monoid/acted_monoids/range_add_range_sum.hpp
+  - monoid/acted_monoids/range_affine_range_sum.hpp
   - monoid/acted_monoids/range_update_range_sum.hpp
   - monoid/prim_acted_monoids.hpp
   timestamp: '2025-09-29 17:50:58+09:00'
