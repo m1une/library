@@ -29,6 +29,7 @@ struct acted_monoid {
     static constexpr auto apply = mapping;
 };
 
+template <typename T>
 concept ActedMonoid = requires {
     typename T::data_monoid;
     typename T::act_monoid;
