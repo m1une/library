@@ -30,7 +30,7 @@ struct lazy_segment_tree {
     void all_apply(int k, F f) {
         _data[k] = AM::apply(f, _data[k]);
         if (k < _size) {
-            _lazy[k] = AM::act_op(f, _lazy[k]);
+            _lazy[k] = AM::act_op(_lazy[k], f);
         }
     }
 
