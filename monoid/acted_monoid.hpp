@@ -10,6 +10,9 @@ namespace m1une {
 
 template <monoid_concept Data, monoid_concept Act, auto mapping>
 struct acted_monoid {
+    using data_monoid = Data;
+    using act_monoid = Act;
+
     using data_type = typename Data::value_type;
     using act_type = typename Act::value_type;
 
