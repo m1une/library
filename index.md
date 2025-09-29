@@ -11,7 +11,7 @@ data:
       title: Treap
   - name: data_structure/segtree
     pages:
-    - icon: ':warning:'
+    - icon: ':x:'
       path: data_structure/segtree/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
@@ -24,13 +24,13 @@ data:
       title: math/affine.hpp
   - name: monoid
     pages:
-    - icon: ':warning:'
+    - icon: ':x:'
       path: monoid/acted_monoid.hpp
       title: Acted Monoid
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: monoid/monoid.hpp
       title: Monoid
-    - icon: ':warning:'
+    - icon: ':x:'
       path: monoid/monoid_addsz.hpp
       title: monoid/monoid_addsz.hpp
     - icon: ':warning:'
@@ -53,7 +53,7 @@ data:
     - icon: ':warning:'
       path: monoid/acted_monoids/range_affine_range_minmax.hpp
       title: monoid/acted_monoids/range_affine_range_minmax.hpp
-    - icon: ':warning:'
+    - icon: ':x:'
       path: monoid/acted_monoids/range_affine_range_sum.hpp
       title: monoid/acted_monoids/range_affine_range_sum.hpp
     - icon: ':warning:'
@@ -67,10 +67,10 @@ data:
       title: monoid/acted_monoids/range_update_range_sum.hpp
   - name: monoid/monoids
     pages:
-    - icon: ':warning:'
+    - icon: ':x:'
       path: monoid/monoids/add_monoid.hpp
       title: monoid/monoids/add_monoid.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: monoid/monoids/affine_monoid.hpp
       title: monoid/monoids/affine_monoid.hpp
     - icon: ':warning:'
@@ -99,7 +99,7 @@ data:
       title: monoid/monoids/xor_monoid.hpp
   - name: utilities
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: utilities/bit_ceil.hpp
       title: utilities/bit_ceil.hpp
     - icon: ':heavy_check_mark:'

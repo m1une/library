@@ -1,13 +1,13 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoid.hpp
     title: Acted Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
   - icon: ':warning:'

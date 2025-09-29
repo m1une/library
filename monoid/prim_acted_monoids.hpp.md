@@ -1,10 +1,10 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoid.hpp
     title: Acted Monoid
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoid.hpp
     title: Acted Monoid
   - icon: ':warning:'
@@ -19,7 +19,7 @@ data:
   - icon: ':warning:'
     path: monoid/acted_monoids/range_affine_range_minmax.hpp
     title: monoid/acted_monoids/range_affine_range_minmax.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoids/range_affine_range_sum.hpp
     title: monoid/acted_monoids/range_affine_range_sum.hpp
   - icon: ':warning:'
@@ -31,22 +31,22 @@ data:
   - icon: ':warning:'
     path: monoid/acted_monoids/range_update_range_sum.hpp
     title: monoid/acted_monoids/range_update_range_sum.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/monoid_addsz.hpp
     title: monoid/monoid_addsz.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/monoids/add_monoid.hpp
     title: monoid/monoids/add_monoid.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
   - icon: ':warning:'

@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/acted_monoids/range_add_range_sum.hpp
     title: monoid/acted_monoids/range_add_range_sum.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoids/range_affine_range_sum.hpp
     title: monoid/acted_monoids/range_affine_range_sum.hpp
   - icon: ':warning:'
@@ -17,10 +17,13 @@ data:
   - icon: ':warning:'
     path: monoid/prim_acted_monoids.hpp
     title: monoid/prim_acted_monoids.hpp
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/monoid_addsz.hpp\"\n\n\n\n#include <concepts>\n\n\
@@ -64,8 +67,9 @@ data:
   - monoid/acted_monoids/range_update_range_sum.hpp
   - monoid/prim_acted_monoids.hpp
   timestamp: '2025-09-29 17:50:58+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - verify/unit_test/lazy_segtree.test.cpp
 documentation_of: monoid/monoid_addsz.hpp
 layout: document
 redirect_from:

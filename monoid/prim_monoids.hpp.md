@@ -1,16 +1,16 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/monoids/add_monoid.hpp
     title: monoid/monoids/add_monoid.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
   - icon: ':warning:'

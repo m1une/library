@@ -1,32 +1,35 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoid.hpp
     title: Acted Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/monoid_addsz.hpp
     title: monoid/monoid_addsz.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/monoids/add_monoid.hpp
     title: monoid/monoids/add_monoid.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/prim_acted_monoids.hpp
     title: monoid/prim_acted_monoids.hpp
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/acted_monoids/range_affine_range_sum.hpp\"\n\n\n\n\
@@ -121,8 +124,9 @@ data:
   requiredBy:
   - monoid/prim_acted_monoids.hpp
   timestamp: '2025-09-29 19:32:01+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - verify/unit_test/lazy_segtree.test.cpp
 documentation_of: monoid/acted_monoids/range_affine_range_sum.hpp
 layout: document
 redirect_from:

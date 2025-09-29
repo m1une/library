@@ -7,16 +7,16 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/affine.hpp
     title: math/affine.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: utilities/bit_ceil.hpp
     title: utilities/bit_ceil.hpp
   _extendedRequiredBy: []

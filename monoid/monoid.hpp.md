@@ -2,13 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: data_structure/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/segtree/segtree.hpp
     title: Segment Tree
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoid.hpp
     title: Acted Monoid
   - icon: ':warning:'
@@ -35,10 +35,10 @@ data:
   - icon: ':warning:'
     path: monoid/acted_monoids/range_affine_range_minmax.hpp
     title: monoid/acted_monoids/range_affine_range_minmax.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoids/range_affine_range_sum.hpp
     title: monoid/acted_monoids/range_affine_range_sum.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoids/range_affine_range_sum.hpp
     title: monoid/acted_monoids/range_affine_range_sum.hpp
   - icon: ':warning:'
@@ -59,13 +59,13 @@ data:
   - icon: ':warning:'
     path: monoid/acted_monoids/range_update_range_sum.hpp
     title: monoid/acted_monoids/range_update_range_sum.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/monoid_addsz.hpp
     title: monoid/monoid_addsz.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/monoids/add_monoid.hpp
     title: monoid/monoids/add_monoid.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoids/affine_monoid.hpp
     title: monoid/monoids/affine_monoid.hpp
   - icon: ':warning:'
@@ -108,15 +108,24 @@ data:
     path: monoid/prim_monoids.hpp
     title: monoid/prim_monoids.hpp
   _extendedVerifiedWith:
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/unit_test/segtree.test.cpp
     title: verify/unit_test/segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/unit_test/segtree.test.cpp
     title: verify/unit_test/segtree.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <functional>\n#include\
@@ -183,10 +192,13 @@ data:
   - data_structure/segtree/segtree.hpp
   - data_structure/segtree/lazy_segtree.hpp
   timestamp: '2025-09-29 17:50:58+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/unit_test/segtree.test.cpp
   - verify/unit_test/segtree.test.cpp
+  - verify/unit_test/lazy_segtree.test.cpp
+  - verify/unit_test/lazy_segtree.test.cpp
+  - verify/unit_test/lazy_segtree.test.cpp
 documentation_of: monoid/monoid.hpp
 layout: document
 title: Monoid

@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/acted_monoids/range_affine_range_minmax.hpp
     title: monoid/acted_monoids/range_affine_range_minmax.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoids/range_affine_range_sum.hpp
     title: monoid/acted_monoids/range_affine_range_sum.hpp
   - icon: ':warning:'
@@ -18,12 +18,15 @@ data:
     path: monoid/prim_monoids.hpp
     title: monoid/prim_monoids.hpp
   _extendedVerifiedWith:
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/unit_test/segtree.test.cpp
     title: verify/unit_test/segtree.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/monoids/affine_monoid.hpp\"\n\n\n\n#include <utility>\n\
@@ -65,9 +68,10 @@ data:
   - monoid/prim_acted_monoids.hpp
   - monoid/prim_monoids.hpp
   timestamp: '2025-09-29 17:50:58+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/unit_test/segtree.test.cpp
+  - verify/unit_test/lazy_segtree.test.cpp
 documentation_of: monoid/monoids/affine_monoid.hpp
 layout: document
 redirect_from:

@@ -1,11 +1,11 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/monoid.hpp
     title: Monoid
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: data_structure/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':warning:'
@@ -20,7 +20,7 @@ data:
   - icon: ':warning:'
     path: monoid/acted_monoids/range_affine_range_minmax.hpp
     title: monoid/acted_monoids/range_affine_range_minmax.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: monoid/acted_monoids/range_affine_range_sum.hpp
     title: monoid/acted_monoids/range_affine_range_sum.hpp
   - icon: ':warning:'
@@ -38,10 +38,16 @@ data:
   - icon: ':warning:'
     path: monoid/prim_acted_monoids.hpp
     title: monoid/prim_acted_monoids.hpp
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
+  - icon: ':x:'
+    path: verify/unit_test/lazy_segtree.test.cpp
+    title: verify/unit_test/lazy_segtree.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/acted_monoid.hpp\"\n\n\n\n#include <concepts>\n#include\
@@ -118,8 +124,10 @@ data:
   - monoid/prim_acted_monoids.hpp
   - data_structure/segtree/lazy_segtree.hpp
   timestamp: '2025-09-29 18:09:11+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - verify/unit_test/lazy_segtree.test.cpp
+  - verify/unit_test/lazy_segtree.test.cpp
 documentation_of: monoid/acted_monoid.hpp
 layout: document
 title: Acted Monoid
