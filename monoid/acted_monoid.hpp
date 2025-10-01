@@ -17,8 +17,8 @@ struct acted_monoid {
     using data_type = typename Data::value_type;
     using act_type = typename Act::value_type;
 
-    static_assert(std::is_convertible_v<decltype(mapping), std::function<data_type(act_type, data_type)>>,
-                  "mapping must work as data_type(data_type, act_type)");
+    static_assert(std::is_invocable_r_v<data_type, decltype(mapping), act_type, data_type>,
+                  "mapping must work as data_type(act_type, data_type)");
 
     static constexpr auto data_op = Data::op;
     static constexpr auto data_id = Data::id;
@@ -30,24 +30,14 @@ struct acted_monoid {
 };
 
 template <typename T>
-concept ActedMonoid = requires {
+concept ActedMonoid = requires(typename T::data_type d, typename T::act_type a) {
     typename T::data_monoid;
     typename T::act_monoid;
     typename T::data_type;
     typename T::act_type;
-    {
-        T::data_op
-    } -> std::convertible_to<std::function<typename T::data_type(typename T::data_type, typename T::data_type)>>;
-    { T::data_id } -> std::convertible_to<std::function<typename T::data_type()>>;
-    { T::data_is_commutative } -> std::convertible_to<bool>;
-    {
-        T::act_op
-    } -> std::convertible_to<std::function<typename T::act_type(typename T::act_type, typename T::act_type)>>;
-    { T::act_id } -> std::convertible_to<std::function<typename T::act_type()>>;
-    { T::act_is_commutative } -> std::convertible_to<bool>;
-    {
-        T::apply
-    } -> std::convertible_to<std::function<typename T::data_type(typename T::act_type, typename T::data_type)>>;
+    requires Monoid<typename T::data_monoid>;
+    requires Monoid<typename T::act_monoid>;
+    { T::apply(a, d) } -> std::same_as<typename T::data_type>;
 };
 
 }  // namespace m1une
