@@ -32,28 +32,27 @@ data:
   bundledCode: "#line 1 \"verify/unit_test/segtree.test.cpp\"\n#define PROBLEM \"\
     https://judge.yosupo.jp/problem/point_set_range_composite\"\n\n#line 1 \"data_structure/segtree/segtree.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <functional>\n#include <type_traits>\n\
-    #include <vector>\n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#line 6 \"monoid/monoid.hpp\"\
-    \n#include <concepts>\n\nnamespace m1une {\n\ntemplate <typename T, auto operation,\
-    \ auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
-    \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
+    #include <vector>\n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <concepts>\n\
+    #line 7 \"monoid/monoid.hpp\"\n\nnamespace m1une {\n\ntemplate <typename T, auto\
+    \ operation, auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(operation), T, T>, \"operation must work as T(T, T)\");\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(identity)>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
-    \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
-    \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
-    \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
-    };\n\n}  // namespace m1une\n\n\n#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace\
-    \ m1une {\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1)\
-    \ return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n}  //\
-    \ namespace m1une\n\n\n#line 11 \"data_structure/segtree/segtree.hpp\"\n\nnamespace\
-    \ m1une {\n\ntemplate <Monoid M>\nstruct segment_tree {\n    using T = typename\
-    \ M::value_type;\n\n   private:\n    int _n;\n    int _size;\n    std::vector<T>\
-    \ _data;\n\n    void update(int k) {\n        _data[k] = M::op(_data[2 * k], _data[2\
-    \ * k + 1]);\n    }\n\n   public:\n    segment_tree() : segment_tree(0) {}\n \
-    \   explicit segment_tree(int n) : segment_tree(std::vector<T>(n, M::id())) {}\n\
-    \    explicit segment_tree(const std::vector<T>& v) : _n(v.size()) {\n       \
-    \ _size = bit_ceil((unsigned int)_n);\n        _data.assign(2 * _size, M::id());\n\
+    template <typename T>\nconcept Monoid = requires(typename T::value_type v) {\n\
+    \    typename T::value_type;\n    { T::op(v, v) } -> std::same_as<typename T::value_type>;\n\
+    \    { T::id() } -> std::same_as<typename T::value_type>;\n    { T::is_commutative\
+    \ } -> std::convertible_to<bool>;\n};\n\n}  // namespace m1une\n\n\n#line 1 \"\
+    utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\ntemplate <typename T>\nconstexpr\
+    \ T bit_ceil(T n) {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n)\
+    \ x <<= 1;\n    return x;\n}\n}  // namespace m1une\n\n\n#line 11 \"data_structure/segtree/segtree.hpp\"\
+    \n\nnamespace m1une {\n\ntemplate <Monoid M>\nstruct segment_tree {\n    using\
+    \ T = typename M::value_type;\n\n   private:\n    int _n;\n    int _size;\n  \
+    \  std::vector<T> _data;\n\n    void update(int k) {\n        _data[k] = M::op(_data[2\
+    \ * k], _data[2 * k + 1]);\n    }\n\n   public:\n    segment_tree() : segment_tree(0)\
+    \ {}\n    explicit segment_tree(int n) : segment_tree(std::vector<T>(n, M::id()))\
+    \ {}\n    explicit segment_tree(const std::vector<T>& v) : _n(v.size()) {\n  \
+    \      _size = bit_ceil((unsigned int)_n);\n        _data.assign(2 * _size, M::id());\n\
     \        for (int i = 0; i < _n; i++) {\n            _data[_size + i] = v[i];\n\
     \        }\n        for (int i = _size - 1; i >= 1; i--) {\n            update(i);\n\
     \        }\n    }\n\n    // Set value at position p\n    void set(int p, T x)\
@@ -339,7 +338,7 @@ data:
   isVerificationFile: true
   path: verify/unit_test/segtree.test.cpp
   requiredBy: []
-  timestamp: '2025-09-29 18:40:17+09:00'
+  timestamp: '2025-10-01 15:41:05+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/unit_test/segtree.test.cpp

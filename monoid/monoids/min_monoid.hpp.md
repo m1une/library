@@ -24,21 +24,22 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/monoids/min_monoid.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <limits>\n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <functional>\n\
-    #include <type_traits>\n#include <concepts>\n\nnamespace m1une {\n\ntemplate <typename\
-    \ T, auto operation, auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
-    \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
+    #include <limits>\n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <concepts>\n\
+    #include <functional>\n#include <type_traits>\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T, auto operation, auto identity, bool commutative>\nstruct monoid\
+    \ {\n    static_assert(std::is_invocable_r_v<T, decltype(operation), T, T>, \"\
+    operation must work as T(T, T)\");\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(identity)>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
-    \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
-    \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
-    \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
-    };\n\n}  // namespace m1une\n\n\n#line 8 \"monoid/monoids/min_monoid.hpp\"\n\n\
-    namespace m1une {\n\ntemplate <typename T>\nusing min_monoid =\n    monoid<T,\
-    \ [](T a, T b) { return std::min(a, b); }, []() { return std::numeric_limits<T>::max();\
-    \ }, true>;\n\n}  // namespace m1une\n\n\n"
+    template <typename T>\nconcept Monoid = requires(typename T::value_type v) {\n\
+    \    typename T::value_type;\n    { T::op(v, v) } -> std::same_as<typename T::value_type>;\n\
+    \    { T::id() } -> std::same_as<typename T::value_type>;\n    { T::is_commutative\
+    \ } -> std::convertible_to<bool>;\n};\n\n}  // namespace m1une\n\n\n#line 8 \"\
+    monoid/monoids/min_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate <typename T>\n\
+    using min_monoid =\n    monoid<T, [](T a, T b) { return std::min(a, b); }, []()\
+    \ { return std::numeric_limits<T>::max(); }, true>;\n\n}  // namespace m1une\n\
+    \n\n"
   code: "#ifndef M1UNE_MIN_MONOID_HPP\n#define M1UNE_MIN_MONOID_HPP 1\n\n#include\
     \ <algorithm>\n#include <limits>\n\n#include \"../monoid.hpp\"\n\nnamespace m1une\
     \ {\n\ntemplate <typename T>\nusing min_monoid =\n    monoid<T, [](T a, T b) {\
@@ -53,7 +54,7 @@ data:
   - monoid/acted_monoids/range_add_range_min.hpp
   - monoid/prim_acted_monoids.hpp
   - monoid/prim_monoids.hpp
-  timestamp: '2025-09-29 17:50:58+09:00'
+  timestamp: '2025-10-01 15:41:05+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/monoids/min_monoid.hpp

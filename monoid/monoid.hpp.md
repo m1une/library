@@ -128,30 +128,29 @@ data:
   _verificationStatusIcon: ':question:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <functional>\n#include\
-    \ <type_traits>\n#include <concepts>\n\nnamespace m1une {\n\ntemplate <typename\
-    \ T, auto operation, auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
-    \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
+  bundledCode: "#line 1 \"monoid/monoid.hpp\"\n\n\n\n#include <concepts>\n#include\
+    \ <functional>\n#include <type_traits>\n\nnamespace m1une {\n\ntemplate <typename\
+    \ T, auto operation, auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(operation), T, T>, \"operation must work as T(T, T)\");\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(identity)>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
-    \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
-    \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
-    \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
-    };\n\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_MONOID_HPP\n#define M1UNE_MONOID_HPP 1\n\n#include <functional>\n\
-    #include <type_traits>\n#include <concepts>\n\nnamespace m1une {\n\ntemplate <typename\
-    \ T, auto operation, auto identity, bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
-    \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
+    template <typename T>\nconcept Monoid = requires(typename T::value_type v) {\n\
+    \    typename T::value_type;\n    { T::op(v, v) } -> std::same_as<typename T::value_type>;\n\
+    \    { T::id() } -> std::same_as<typename T::value_type>;\n    { T::is_commutative\
+    \ } -> std::convertible_to<bool>;\n};\n\n}  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_MONOID_HPP\n#define M1UNE_MONOID_HPP 1\n\n#include <concepts>\n\
+    #include <functional>\n#include <type_traits>\n\nnamespace m1une {\n\ntemplate\
+    \ <typename T, auto operation, auto identity, bool commutative>\nstruct monoid\
+    \ {\n    static_assert(std::is_invocable_r_v<T, decltype(operation), T, T>, \"\
+    operation must work as T(T, T)\");\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(identity)>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
-    \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
-    \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
-    \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
-    };\n\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_HPP\n"
+    template <typename T>\nconcept Monoid = requires(typename T::value_type v) {\n\
+    \    typename T::value_type;\n    { T::op(v, v) } -> std::same_as<typename T::value_type>;\n\
+    \    { T::id() } -> std::same_as<typename T::value_type>;\n    { T::is_commutative\
+    \ } -> std::convertible_to<bool>;\n};\n\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/monoid.hpp
@@ -191,7 +190,7 @@ data:
   - monoid/monoids/add_monoid.hpp
   - data_structure/segtree/segtree.hpp
   - data_structure/segtree/lazy_segtree.hpp
-  timestamp: '2025-09-29 17:50:58+09:00'
+  timestamp: '2025-10-01 15:41:05+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/unit_test/segtree.test.cpp

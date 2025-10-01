@@ -33,36 +33,30 @@ data:
     #line 1 \"monoid/acted_monoid.hpp\"\n\n\n\n#include <concepts>\n#include <functional>\n\
     #include <type_traits>\n\n#line 1 \"monoid/monoid.hpp\"\n\n\n\n#line 7 \"monoid/monoid.hpp\"\
     \n\nnamespace m1une {\n\ntemplate <typename T, auto operation, auto identity,\
-    \ bool commutative>\nstruct monoid {\n    static_assert(std::is_convertible_v<decltype(operation),\
-    \ std::function<T(T, T)>>, \"operation must work as T(T, T)\");\n    static_assert(std::is_convertible_v<decltype(identity),\
-    \ std::function<T()>>, \"identity must work as T()\");\n\n    using value_type\
+    \ bool commutative>\nstruct monoid {\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(operation), T, T>, \"operation must work as T(T, T)\");\n    static_assert(std::is_invocable_r_v<T,\
+    \ decltype(identity)>, \"identity must work as T()\");\n\n    using value_type\
     \ = T;\n    static constexpr auto op = operation;\n    static constexpr auto id\
     \ = identity;\n    static constexpr bool is_commutative = commutative;\n};\n\n\
-    template <typename T>\nconcept Monoid = requires {\n    typename T::value_type;\n\
-    \    { T::op } -> std::convertible_to<std::function<typename T::value_type(typename\
-    \ T::value_type, typename T::value_type)>>;\n    { T::id } -> std::convertible_to<std::function<typename\
-    \ T::value_type()>>;\n    { T::is_commutative } -> std::convertible_to<bool>;\n\
-    };\n\n}  // namespace m1une\n\n\n#line 9 \"monoid/acted_monoid.hpp\"\n\nnamespace\
-    \ m1une {\n\ntemplate <Monoid Data, Monoid Act, auto mapping>\nstruct acted_monoid\
-    \ {\n    using data_monoid = Data;\n    using act_monoid = Act;\n\n    using data_type\
-    \ = typename Data::value_type;\n    using act_type = typename Act::value_type;\n\
-    \n    static_assert(std::is_convertible_v<decltype(mapping), std::function<data_type(act_type,\
-    \ data_type)>>,\n                  \"mapping must work as data_type(data_type,\
-    \ act_type)\");\n\n    static constexpr auto data_op = Data::op;\n    static constexpr\
-    \ auto data_id = Data::id;\n    static constexpr bool data_is_commutative = Data::is_commutative;\n\
-    \    static constexpr auto act_op = Act::op;\n    static constexpr auto act_id\
-    \ = Act::id;\n    static constexpr bool act_is_commutative = Act::is_commutative;\n\
-    \    static constexpr auto apply = mapping;\n};\n\ntemplate <typename T>\nconcept\
-    \ ActedMonoid = requires {\n    typename T::data_monoid;\n    typename T::act_monoid;\n\
-    \    typename T::data_type;\n    typename T::act_type;\n    {\n        T::data_op\n\
-    \    } -> std::convertible_to<std::function<typename T::data_type(typename T::data_type,\
-    \ typename T::data_type)>>;\n    { T::data_id } -> std::convertible_to<std::function<typename\
-    \ T::data_type()>>;\n    { T::data_is_commutative } -> std::convertible_to<bool>;\n\
-    \    {\n        T::act_op\n    } -> std::convertible_to<std::function<typename\
-    \ T::act_type(typename T::act_type, typename T::act_type)>>;\n    { T::act_id\
-    \ } -> std::convertible_to<std::function<typename T::act_type()>>;\n    { T::act_is_commutative\
-    \ } -> std::convertible_to<bool>;\n    {\n        T::apply\n    } -> std::convertible_to<std::function<typename\
-    \ T::data_type(typename T::act_type, typename T::data_type)>>;\n};\n\n}  // namespace\
+    template <typename T>\nconcept Monoid = requires(typename T::value_type v) {\n\
+    \    typename T::value_type;\n    { T::op(v, v) } -> std::same_as<typename T::value_type>;\n\
+    \    { T::id() } -> std::same_as<typename T::value_type>;\n    { T::is_commutative\
+    \ } -> std::convertible_to<bool>;\n};\n\n}  // namespace m1une\n\n\n#line 9 \"\
+    monoid/acted_monoid.hpp\"\n\nnamespace m1une {\n\ntemplate <Monoid Data, Monoid\
+    \ Act, auto mapping>\nstruct acted_monoid {\n    using data_monoid = Data;\n \
+    \   using act_monoid = Act;\n\n    using data_type = typename Data::value_type;\n\
+    \    using act_type = typename Act::value_type;\n\n    static_assert(std::is_invocable_r_v<data_type,\
+    \ decltype(mapping), act_type, data_type>,\n                  \"mapping must work\
+    \ as data_type(act_type, data_type)\");\n\n    static constexpr auto data_op =\
+    \ Data::op;\n    static constexpr auto data_id = Data::id;\n    static constexpr\
+    \ bool data_is_commutative = Data::is_commutative;\n    static constexpr auto\
+    \ act_op = Act::op;\n    static constexpr auto act_id = Act::id;\n    static constexpr\
+    \ bool act_is_commutative = Act::is_commutative;\n    static constexpr auto apply\
+    \ = mapping;\n};\n\ntemplate <typename T>\nconcept ActedMonoid = requires(typename\
+    \ T::data_type d, typename T::act_type a) {\n    typename T::data_monoid;\n  \
+    \  typename T::act_monoid;\n    typename T::data_type;\n    typename T::act_type;\n\
+    \    requires Monoid<typename T::data_monoid>;\n    requires Monoid<typename T::act_monoid>;\n\
+    \    { T::apply(a, d) } -> std::same_as<typename T::data_type>;\n};\n\n}  // namespace\
     \ m1une\n\n\n#line 1 \"monoid/monoid_addsz.hpp\"\n\n\n\n#line 5 \"monoid/monoid_addsz.hpp\"\
     \n\n#line 7 \"monoid/monoid_addsz.hpp\"\n\nnamespace m1une {\n\ntemplate <typename\
     \ T>\nstruct value_and_size {\n    T value;\n    int size;\n};\n\ntemplate <Monoid\
@@ -107,7 +101,7 @@ data:
   path: monoid/acted_monoids/range_update_range_sum.hpp
   requiredBy:
   - monoid/prim_acted_monoids.hpp
-  timestamp: '2025-09-29 18:09:11+09:00'
+  timestamp: '2025-10-01 15:41:05+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/acted_monoids/range_update_range_sum.hpp
