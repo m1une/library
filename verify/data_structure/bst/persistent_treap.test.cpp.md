@@ -14,18 +14,19 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/range_kth_smallest
     links:
     - https://judge.yosupo.jp/problem/range_kth_smallest
-  bundledCode: "#line 1 \"verify/unit_test/persistent_treap.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n#line 1 \"data_structure/bst/persistent_treap.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <ctime>\n#include <iostream>\n#include\
-    \ <memory>\n#include <optional>\n#include <random>\n\nnamespace m1une {\nnamespace\
-    \ data_structure {\nnamespace bst {\n\ntemplate <typename T>\nstruct PersistentTreap\
-    \ {\n   private:\n    struct node {\n        T _key;\n        int _priority;\n\
-    \        std::shared_ptr<node> _l, _r;\n        int _count;\n\n        node(T\
-    \ key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1) {}\n\
-    \    };\n\n    std::shared_ptr<node> _root;\n\n    int count(std::shared_ptr<node>\
-    \ t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(std::shared_ptr<node>\
-    \ t) {\n        if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n\
-    \        }\n    }\n\n    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>&\
+  bundledCode: "#line 1 \"verify/data_structure/bst/persistent_treap.test.cpp\"\n\
+    #define PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n#line\
+    \ 1 \"data_structure/bst/persistent_treap.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <ctime>\n#include <iostream>\n#include <memory>\n#include <optional>\n\
+    #include <random>\n\nnamespace m1une {\nnamespace data_structure {\nnamespace\
+    \ bst {\n\ntemplate <typename T>\nstruct PersistentTreap {\n   private:\n    struct\
+    \ node {\n        T _key;\n        int _priority;\n        std::shared_ptr<node>\
+    \ _l, _r;\n        int _count;\n\n        node(T key) : _key(key), _priority(rand()),\
+    \ _l(nullptr), _r(nullptr), _count(1) {}\n    };\n\n    std::shared_ptr<node>\
+    \ _root;\n\n    int count(std::shared_ptr<node> t) {\n        return t ? t->_count\
+    \ : 0;\n    }\n\n    void update_count(std::shared_ptr<node> t) {\n        if\
+    \ (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n        }\n\
+    \    }\n\n    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>&\
     \ l, std::shared_ptr<node>& r) {\n        if (!t) {\n            l = r = nullptr;\n\
     \            return;\n        }\n        if (key < t->_key) {\n            auto\
     \ new_node = std::make_shared<node>(*t);\n            split(new_node->_l, key,\
@@ -77,10 +78,11 @@ data:
     \    std::optional<T> upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
     }  // namespace bst\n}  // namespace data_structure\n}  // namespace m1une\n\n\
-    \n#line 4 \"verify/unit_test/persistent_treap.test.cpp\"\n\n#line 7 \"verify/unit_test/persistent_treap.test.cpp\"\
-    \n#include <vector>\n\n// Fast I/O\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int N, Q;\n \
-    \   std::cin >> N >> Q;\n    std::vector<int> a(N);\n    std::vector<int> distinct_elements;\n\
+    \n#line 4 \"verify/data_structure/bst/persistent_treap.test.cpp\"\n\n#line 7 \"\
+    verify/data_structure/bst/persistent_treap.test.cpp\"\n#include <vector>\n\n//\
+    \ Fast I/O\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n   \
+    \ std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin\
+    \ >> N >> Q;\n    std::vector<int> a(N);\n    std::vector<int> distinct_elements;\n\
     \n    for (int i = 0; i < N; ++i) {\n        std::cin >> a[i];\n        distinct_elements.push_back(a[i]);\n\
     \    }\n\n    // Coordinate Compression\n    std::sort(distinct_elements.begin(),\
     \ distinct_elements.end());\n    distinct_elements.erase(std::unique(distinct_elements.begin(),\
@@ -139,15 +141,15 @@ data:
   dependsOn:
   - data_structure/bst/persistent_treap.hpp
   isVerificationFile: true
-  path: verify/unit_test/persistent_treap.test.cpp
+  path: verify/data_structure/bst/persistent_treap.test.cpp
   requiredBy: []
-  timestamp: '2026-05-29 01:53:25+09:00'
+  timestamp: '2026-05-29 02:06:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/unit_test/persistent_treap.test.cpp
+documentation_of: verify/data_structure/bst/persistent_treap.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/unit_test/persistent_treap.test.cpp
-- /verify/verify/unit_test/persistent_treap.test.cpp.html
-title: verify/unit_test/persistent_treap.test.cpp
+- /verify/verify/data_structure/bst/persistent_treap.test.cpp
+- /verify/verify/data_structure/bst/persistent_treap.test.cpp.html
+title: verify/data_structure/bst/persistent_treap.test.cpp
 ---

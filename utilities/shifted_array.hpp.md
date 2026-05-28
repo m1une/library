@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/unit_test/shifted_array.test.cpp
-    title: verify/unit_test/shifted_array.test.cpp
+    path: verify/utilities/shifted_array.test.cpp
+    title: verify/utilities/shifted_array.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -62,7 +62,7 @@ data:
   timestamp: '2026-05-29 01:41:12+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/unit_test/shifted_array.test.cpp
+  - verify/utilities/shifted_array.test.cpp
 documentation_of: utilities/shifted_array.hpp
 layout: document
 redirect_from:

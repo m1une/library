@@ -14,7 +14,7 @@ data:
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858
-  bundledCode: "#line 1 \"verify/unit_test/shifted_array.test.cpp\"\n#define PROBLEM\
+  bundledCode: "#line 1 \"verify/utilities/shifted_array.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858\"\n\n#include\
     \ <bits/stdc++.h>\nusing namespace std;\n\n#line 1 \"utilities/shifted_array.hpp\"\
     \n\n\n\n#line 6 \"utilities/shifted_array.hpp\"\n\nnamespace m1une {\nnamespace\
@@ -37,7 +37,7 @@ data:
     \ long index(long long i) const {\n        int index = (i - _offset) / _step;\n\
     \        if (index < 0 || index >= _size) {\n            throw std::out_of_range(\"\
     Index out of range\");\n        }\n        return index;\n    }\n};\n\n}  // namespace\
-    \ utilities\n}  // namespace m1une\n\n\n#line 7 \"verify/unit_test/shifted_array.test.cpp\"\
+    \ utilities\n}  // namespace m1une\n\n\n#line 7 \"verify/utilities/shifted_array.test.cpp\"\
     \n\nconstexpr long long MAX = 100000;\n\nlong long solve(long long l, long long\
     \ r) {\n    vector<char> is_prime(MAX, 1);\n    is_prime[0] = is_prime[1] = 0;\n\
     \    m1une::utilities::ShiftedArray<vector<long long>> prime_factors(l, r);\n\
@@ -71,15 +71,15 @@ data:
   dependsOn:
   - utilities/shifted_array.hpp
   isVerificationFile: true
-  path: verify/unit_test/shifted_array.test.cpp
+  path: verify/utilities/shifted_array.test.cpp
   requiredBy: []
-  timestamp: '2026-05-29 01:50:39+09:00'
+  timestamp: '2026-05-29 02:06:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/unit_test/shifted_array.test.cpp
+documentation_of: verify/utilities/shifted_array.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/unit_test/shifted_array.test.cpp
-- /verify/verify/unit_test/shifted_array.test.cpp.html
-title: verify/unit_test/shifted_array.test.cpp
+- /verify/verify/utilities/shifted_array.test.cpp
+- /verify/verify/utilities/shifted_array.test.cpp.html
+title: verify/utilities/shifted_array.test.cpp
 ---

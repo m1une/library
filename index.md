@@ -93,17 +93,19 @@ data:
       path: utilities/shifted_array.hpp
       title: utilities/shifted_array.hpp
   verificationCategories:
-  - name: verify/unit_test
+  - name: verify/data_structure/bst
     pages:
     - icon: ':heavy_check_mark:'
-      path: verify/unit_test/persistent_treap.test.cpp
-      title: verify/unit_test/persistent_treap.test.cpp
+      path: verify/data_structure/bst/persistent_treap.test.cpp
+      title: verify/data_structure/bst/persistent_treap.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/unit_test/shifted_array.test.cpp
-      title: verify/unit_test/shifted_array.test.cpp
+      path: verify/data_structure/bst/treap.test.cpp
+      title: verify/data_structure/bst/treap.test.cpp
+  - name: verify/utilities
+    pages:
     - icon: ':heavy_check_mark:'
-      path: verify/unit_test/treap.test.cpp
-      title: verify/unit_test/treap.test.cpp
+      path: verify/utilities/shifted_array.test.cpp
+      title: verify/utilities/shifted_array.test.cpp
 layout: toppage
 ---
 [![m1une](https://img.shields.io/endpoint?url=https%3A%2F%2Fatcoder-badges.now.sh%2Fapi%2Fatcoder%2Fjson%2Fm1une)](https://atcoder.jp/users/m1une)
