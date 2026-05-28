@@ -6,9 +6,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/persistent_treap.hpp
       title: data_structure/persistent_treap.hpp
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
-      title: data_structure/segtree.hpp
+      title: Segment Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/treap.hpp
       title: data_structure/treap.hpp
@@ -19,7 +19,7 @@ data:
       title: math/affine.hpp
   - name: monoid
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/add.hpp
       title: monoid/add.hpp
     - icon: ':warning:'
@@ -31,7 +31,7 @@ data:
     - icon: ':warning:'
       path: monoid/bottom_k.hpp
       title: monoid/bottom_k.hpp
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/concept.hpp
       title: Monoid Concept
     - icon: ':warning:'
@@ -89,7 +89,7 @@ data:
       title: Static Rolling Hash
   - name: utilities
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: utilities/bit_ceil.hpp
       title: utilities/bit_ceil.hpp
     - icon: ':heavy_check_mark:'
@@ -101,6 +101,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_treap.test.cpp
       title: verify/data_structure/persistent_treap.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/segtree.test.cpp
+      title: verify/data_structure/segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/treap.test.cpp
       title: verify/data_structure/treap.test.cpp

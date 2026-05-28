@@ -2,13 +2,16 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/segtree.hpp
-    title: data_structure/segtree.hpp
-  _extendedVerifiedWith: []
+    title: Segment Tree
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/segtree.test.cpp
+    title: verify/data_structure/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace\
@@ -26,8 +29,9 @@ data:
   requiredBy:
   - data_structure/segtree.hpp
   timestamp: '2026-05-29 01:41:12+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/segtree.test.cpp
 documentation_of: utilities/bit_ceil.hpp
 layout: document
 redirect_from:

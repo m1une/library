@@ -2,16 +2,19 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/segtree.hpp
-    title: data_structure/segtree.hpp
+    title: Segment Tree
   - icon: ':warning:'
     path: monoid/power.hpp
     title: monoid/power.hpp
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/segtree.test.cpp
+    title: verify/data_structure/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/concept.hpp\"\n\n\n\n#include <concepts>\n\nnamespace\
@@ -42,8 +45,9 @@ data:
   - data_structure/segtree.hpp
   - monoid/power.hpp
   timestamp: '2026-05-28 17:20:28+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/segtree.test.cpp
 documentation_of: monoid/concept.hpp
 layout: document
 title: Monoid Concept
