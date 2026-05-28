@@ -6,6 +6,9 @@ data:
     path: data_structure/segtree.hpp
     title: Segment Tree
   - icon: ':warning:'
+    path: data_structure/sparce_table.hpp
+    title: data_structure/sparce_table.hpp
+  - icon: ':warning:'
     path: monoid/power.hpp
     title: monoid/power.hpp
   _extendedVerifiedWith:
@@ -42,6 +45,7 @@ data:
   isVerificationFile: false
   path: monoid/concept.hpp
   requiredBy:
+  - data_structure/sparce_table.hpp
   - data_structure/segtree.hpp
   - monoid/power.hpp
   timestamp: '2026-05-28 17:20:28+09:00'

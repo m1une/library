@@ -9,6 +9,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree
+    - icon: ':warning:'
+      path: data_structure/sparce_table.hpp
+      title: data_structure/sparce_table.hpp
     - icon: ':heavy_check_mark:'
       path: data_structure/treap.hpp
       title: data_structure/treap.hpp
@@ -143,6 +146,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/segtree.test.cpp
       title: verify/data_structure/segtree.test.cpp
+    - icon: ':x:'
+      path: verify/data_structure/sparce_table.test.cpp
+      title: verify/data_structure/sparce_table.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/treap.test.cpp
       title: verify/data_structure/treap.test.cpp
