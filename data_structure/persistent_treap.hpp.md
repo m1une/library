@@ -4,30 +4,29 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/bst/persistent_treap.test.cpp
-    title: verify/data_structure/bst/persistent_treap.test.cpp
+    path: verify/data_structure/persistent_treap.test.cpp
+    title: verify/data_structure/persistent_treap.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/bst/persistent_treap.hpp\"\n\n\n\n#include\
-    \ <algorithm>\n#include <ctime>\n#include <iostream>\n#include <memory>\n#include\
-    \ <optional>\n#include <random>\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\nnamespace bst {\n\ntemplate <typename T>\nstruct PersistentTreap {\n   private:\n\
-    \    struct node {\n        T _key;\n        int _priority;\n        std::shared_ptr<node>\
-    \ _l, _r;\n        int _count;\n\n        node(T key) : _key(key), _priority(rand()),\
-    \ _l(nullptr), _r(nullptr), _count(1) {}\n    };\n\n    std::shared_ptr<node>\
-    \ _root;\n\n    int count(std::shared_ptr<node> t) {\n        return t ? t->_count\
-    \ : 0;\n    }\n\n    void update_count(std::shared_ptr<node> t) {\n        if\
-    \ (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n        }\n\
-    \    }\n\n    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>&\
-    \ l, std::shared_ptr<node>& r) {\n        if (!t) {\n            l = r = nullptr;\n\
-    \            return;\n        }\n        if (key < t->_key) {\n            auto\
-    \ new_node = std::make_shared<node>(*t);\n            split(new_node->_l, key,\
-    \ l, new_node->_l);\n            r = new_node;\n            update_count(r);\n\
-    \        } else {\n            auto new_node = std::make_shared<node>(*t);\n \
-    \           split(new_node->_r, key, new_node->_r, r);\n            l = new_node;\n\
+  bundledCode: "#line 1 \"data_structure/persistent_treap.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <ctime>\n#include <iostream>\n#include <memory>\n#include <optional>\n\
+    #include <random>\n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate\
+    \ <typename T>\nstruct PersistentTreap {\n   private:\n    struct node {\n   \
+    \     T _key;\n        int _priority;\n        std::shared_ptr<node> _l, _r;\n\
+    \        int _count;\n\n        node(T key) : _key(key), _priority(rand()), _l(nullptr),\
+    \ _r(nullptr), _count(1) {}\n    };\n\n    std::shared_ptr<node> _root;\n\n  \
+    \  int count(std::shared_ptr<node> t) {\n        return t ? t->_count : 0;\n \
+    \   }\n\n    void update_count(std::shared_ptr<node> t) {\n        if (t) {\n\
+    \            t->_count = 1 + count(t->_l) + count(t->_r);\n        }\n    }\n\n\
+    \    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>& l, std::shared_ptr<node>&\
+    \ r) {\n        if (!t) {\n            l = r = nullptr;\n            return;\n\
+    \        }\n        if (key < t->_key) {\n            auto new_node = std::make_shared<node>(*t);\n\
+    \            split(new_node->_l, key, l, new_node->_l);\n            r = new_node;\n\
+    \            update_count(r);\n        } else {\n            auto new_node = std::make_shared<node>(*t);\n\
+    \            split(new_node->_r, key, new_node->_r, r);\n            l = new_node;\n\
     \            update_count(l);\n        }\n    }\n\n    std::shared_ptr<node> merge(std::shared_ptr<node>\
     \ l, std::shared_ptr<node> r) {\n        if (!l || !r) return l ? l : r;\n   \
     \     if (l->_priority > r->_priority) {\n            auto new_node = std::make_shared<node>(*l);\n\
@@ -72,13 +71,12 @@ data:
     \ lower_bound(T key) {\n        return lower_bound_impl(_root, key);\n    }\n\n\
     \    std::optional<T> upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace bst\n}  // namespace data_structure\n}  // namespace m1une\n\n\
-    \n"
+    }  // namespace data_structure\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_PERSISTENT_TREAP_HPP\n#define M1UNE_PERSISTENT_TREAP_HPP 1\n\
     \n#include <algorithm>\n#include <ctime>\n#include <iostream>\n#include <memory>\n\
     #include <optional>\n#include <random>\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\nnamespace bst {\n\ntemplate <typename T>\nstruct PersistentTreap {\n   private:\n\
-    \    struct node {\n        T _key;\n        int _priority;\n        std::shared_ptr<node>\
+    \ {\n\ntemplate <typename T>\nstruct PersistentTreap {\n   private:\n    struct\
+    \ node {\n        T _key;\n        int _priority;\n        std::shared_ptr<node>\
     \ _l, _r;\n        int _count;\n\n        node(T key) : _key(key), _priority(rand()),\
     \ _l(nullptr), _r(nullptr), _count(1) {}\n    };\n\n    std::shared_ptr<node>\
     \ _root;\n\n    int count(std::shared_ptr<node> t) {\n        return t ? t->_count\
@@ -135,77 +133,19 @@ data:
     \ lower_bound(T key) {\n        return lower_bound_impl(_root, key);\n    }\n\n\
     \    std::optional<T> upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace bst\n}  // namespace data_structure\n}  // namespace m1une\n\n\
-    #endif  // M1UNE_PERSISTENT_TREAP_HPP\n"
+    }  // namespace data_structure\n}  // namespace m1une\n\n#endif  // M1UNE_PERSISTENT_TREAP_HPP\n"
   dependsOn: []
   isVerificationFile: false
-  path: data_structure/bst/persistent_treap.hpp
+  path: data_structure/persistent_treap.hpp
   requiredBy: []
-  timestamp: '2026-05-29 01:41:12+09:00'
+  timestamp: '2026-05-29 02:16:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/bst/persistent_treap.test.cpp
-documentation_of: data_structure/bst/persistent_treap.hpp
+  - verify/data_structure/persistent_treap.test.cpp
+documentation_of: data_structure/persistent_treap.hpp
 layout: document
-title: Persistent Treap
+redirect_from:
+- /library/data_structure/persistent_treap.hpp
+- /library/data_structure/persistent_treap.hpp.html
+title: data_structure/persistent_treap.hpp
 ---
-
-## Overview
-
-A persistent version of the Treap data structure. Each modifying operation (e.g., `insert`, `erase`) does not change the original treap but instead returns a new treap representing the state after the modification. This is highly effective for problems involving versioning or querying historical states of a dataset.
-
-## Methods
-
-* `persistent_treap()`
-
-  Constructs an empty persistent treap.
-
-  Time complexity: $O(1)$.
-
-* `persistent_treap insert(T key)`
-
-  Returns a new treap with the element `key` inserted.
-  
-  Time complexity: $O(\log N)$.
-
-* `persistent_treap erase(T key)`
-
-  Returns a new treap with the element `key` removed.
-  
-  Time complexity: $O(\log N)$.
-
-* `bool contains(T key)`
-
-  Returns `true` if `key` is in the treap, `false` otherwise.
-  
-  Time complexity: $O(\log N)$.
-
-* `std::optional<T> lower_bound(T key)`
-
-  Returns the smallest element that is greater than or equal to `key`. Returns `std::nullopt` if no such element exists.
-  
-  Time complexity: $O(\log N)$.
-
-* `std::optional<T> upper_bound(T key)`
-
-  Returns the smallest element that is strictly greater than `key`. Returns `std::nullopt` if no such element exists.
-  
-  Time complexity: $O(\log N)$.
-
-* `T find_by_order(int k)`
-
-  Returns the k-th smallest element (0-indexed). `k` must be in the range `[0, size())`.
-  
-  Time complexity: $O(\log N)$.
-
-* `int order_of_key(T key)`
-
-  Returns the number of elements strictly less than `key`.
-  
-  Time complexity: $O(\log N)$.
-
-* `int size()`
-
-  Returns the number of elements in the treap.
-  
-  Time complexity: $O(1)$.

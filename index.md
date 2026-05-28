@@ -1,14 +1,17 @@
 ---
 data:
   libraryCategories:
-  - name: data_structure/bst
+  - name: data_structure
     pages:
     - icon: ':heavy_check_mark:'
-      path: data_structure/bst/persistent_treap.hpp
-      title: Persistent Treap
+      path: data_structure/persistent_treap.hpp
+      title: data_structure/persistent_treap.hpp
+    - icon: ':warning:'
+      path: data_structure/segtree.hpp
+      title: data_structure/segtree.hpp
     - icon: ':heavy_check_mark:'
-      path: data_structure/bst/treap.hpp
-      title: Treap
+      path: data_structure/treap.hpp
+      title: data_structure/treap.hpp
   - name: math
     pages:
     - icon: ':warning:'
@@ -93,14 +96,14 @@ data:
       path: utilities/shifted_array.hpp
       title: utilities/shifted_array.hpp
   verificationCategories:
-  - name: verify/data_structure/bst
+  - name: verify/data_structure
     pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/bst/persistent_treap.test.cpp
-      title: verify/data_structure/bst/persistent_treap.test.cpp
+      path: verify/data_structure/persistent_treap.test.cpp
+      title: verify/data_structure/persistent_treap.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/bst/treap.test.cpp
-      title: verify/data_structure/bst/treap.test.cpp
+      path: verify/data_structure/treap.test.cpp
+      title: verify/data_structure/treap.test.cpp
   - name: verify/string
     pages:
     - icon: ':heavy_check_mark:'
