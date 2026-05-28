@@ -50,6 +50,9 @@ data:
       path: monoid/min_count.hpp
       title: monoid/min_count.hpp
     - icon: ':warning:'
+      path: monoid/min_subarray.hpp
+      title: monoid/min_subarray.hpp
+    - icon: ':warning:'
       path: monoid/mul.hpp
       title: monoid/mul.hpp
     - icon: ':warning:'
