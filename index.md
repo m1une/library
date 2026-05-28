@@ -66,7 +66,7 @@ data:
       title: monoid/power.hpp
     - icon: ':warning:'
       path: monoid/rolling_hash.hpp
-      title: Rolling Hash Monoid
+      title: monoid/rolling_hash.hpp
     - icon: ':warning:'
       path: monoid/top_k.hpp
       title: monoid/top_k.hpp
@@ -79,6 +79,11 @@ data:
     - icon: ':warning:'
       path: monoid/xor.hpp
       title: monoid/xor.hpp
+  - name: string
+    pages:
+    - icon: ':warning:'
+      path: string/rolling_hash.hpp
+      title: Static Rolling Hash
   - name: utilities
     pages:
     - icon: ':warning:'
