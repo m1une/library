@@ -59,6 +59,15 @@ data:
       path: monoid/or.hpp
       title: monoid/or.hpp
     - icon: ':warning:'
+      path: monoid/permutation.hpp
+      title: monoid/permutation.hpp
+    - icon: ':warning:'
+      path: monoid/power.hpp
+      title: monoid/power.hpp
+    - icon: ':warning:'
+      path: monoid/rolling_hash.hpp
+      title: Rolling Hash Monoid
+    - icon: ':warning:'
       path: monoid/top_k.hpp
       title: monoid/top_k.hpp
     - icon: ':warning:'

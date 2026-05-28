@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: monoid/power.hpp
+    title: monoid/power.hpp
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -32,7 +35,8 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: monoid/concept.hpp
-  requiredBy: []
+  requiredBy:
+  - monoid/power.hpp
   timestamp: '2026-05-28 17:20:28+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
