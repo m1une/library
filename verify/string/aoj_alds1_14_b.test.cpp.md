@@ -20,14 +20,14 @@ data:
     #include <vector>\n#include <utility>\n\nnamespace m1une {\nnamespace string {\n\
     \n// Standard Rolling Hash for static strings.\n// Precomputes hashes to answer\
     \ substring queries in O(1).\n// Provides advanced operations like LCP, lexicographical\
-    \ comparison, and string repetition in O(log N).\ntemplate <long long Base, long\
-    \ long Mod>\nstruct RollingHash {\n    std::string s;\n    std::vector<long long>\
-    \ hash;\n    std::vector<long long> power;\n\n    RollingHash() = default;\n\n\
-    \    // Constructs the rolling hash table for the given string.\n    explicit\
-    \ RollingHash(const std::string& str) : s(str) {\n        int n = s.size();\n\
-    \        hash.assign(n + 1, 0);\n        power.assign(n + 1, 1);\n        for\
-    \ (int i = 0; i < n; ++i) {\n            // Use __int128_t to prevent overflow\
-    \ during multiplication\n            hash[i + 1] = (static_cast<__int128_t>(hash[i])\
+    \ comparison, and string repetition in O(log N).\ntemplate <long long Base = 10007,\
+    \ long long Mod = (1LL << 61) - 1>\nstruct RollingHash {\n    std::string s;\n\
+    \    std::vector<long long> hash;\n    std::vector<long long> power;\n\n    RollingHash()\
+    \ = default;\n\n    // Constructs the rolling hash table for the given string.\n\
+    \    explicit RollingHash(const std::string& str) : s(str) {\n        int n =\
+    \ s.size();\n        hash.assign(n + 1, 0);\n        power.assign(n + 1, 1);\n\
+    \        for (int i = 0; i < n; ++i) {\n            // Use __int128_t to prevent\
+    \ overflow during multiplication\n            hash[i + 1] = (static_cast<__int128_t>(hash[i])\
     \ * Base + s[i]) % Mod;\n            power[i + 1] = (static_cast<__int128_t>(power[i])\
     \ * Base) % Mod;\n        }\n    }\n\n    // Returns the hash of the substring\
     \ S[l..r) in O(1).\n    long long get(int l, int r) const {\n        long long\
@@ -94,7 +94,7 @@ data:
   isVerificationFile: true
   path: verify/string/aoj_alds1_14_b.test.cpp
   requiredBy: []
-  timestamp: '2026-05-29 02:10:06+09:00'
+  timestamp: '2026-05-29 02:33:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/aoj_alds1_14_b.test.cpp
