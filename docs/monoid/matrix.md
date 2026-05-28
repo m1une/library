@@ -11,6 +11,7 @@ Merging two matrices takes $O(N^3)$ time, so $N$ should be small (typically $N \
 
 ## Example
 
+{% raw %}
 ```cpp
 #include "data_structure/segtree.hpp"
 #include "monoid/matrix.hpp"
@@ -39,3 +40,4 @@ int main() {
     return 0;
 }
 ```
+{% endraw %}
