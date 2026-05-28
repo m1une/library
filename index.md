@@ -29,11 +29,20 @@ data:
       path: monoid/and.hpp
       title: monoid/and.hpp
     - icon: ':warning:'
+      path: monoid/arg_max.hpp
+      title: monoid/arg_max.hpp
+    - icon: ':warning:'
+      path: monoid/arg_min.hpp
+      title: ArgMin Monoid
+    - icon: ':warning:'
       path: monoid/binary_inversion.hpp
       title: Binary Inversion Monoid
     - icon: ':warning:'
       path: monoid/bottom_k.hpp
       title: monoid/bottom_k.hpp
+    - icon: ':warning:'
+      path: monoid/bracket.hpp
+      title: Bracket Monoid
     - icon: ':heavy_check_mark:'
       path: monoid/concept.hpp
       title: Monoid Concept
@@ -85,6 +94,12 @@ data:
     - icon: ':warning:'
       path: monoid/rolling_hash.hpp
       title: Rolling Hash Monoid
+    - icon: ':warning:'
+      path: monoid/strict_max2.hpp
+      title: monoid/strict_max2.hpp
+    - icon: ':warning:'
+      path: monoid/strict_min2.hpp
+      title: Strict Min 2 Monoid
     - icon: ':warning:'
       path: monoid/top_k.hpp
       title: Top K Monoid
