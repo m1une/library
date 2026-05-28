@@ -13,7 +13,7 @@ data:
     links: []
   bundledCode: "#line 1 \"data_structure/bst/treap.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\
-    \ntemplate <typename T>\nstruct treap {\n   private:\n    struct node {\n    \
+    \ntemplate <typename T>\nstruct Treap {\n   private:\n    struct node {\n    \
     \    T _key;\n        int _priority;\n        node *_l, *_r;\n        int _count;\n\
     \n        node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr),\
     \ _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n     \
@@ -54,7 +54,7 @@ data:
     \ key);\n    }\n\n    T* upper_bound_impl(node* t, T key) {\n        if (!t) return\
     \ nullptr;\n        if (key < t->_key) {\n            T* res = upper_bound_impl(t->_l,\
     \ key);\n            return res ? res : &t->_key;\n        }\n        return upper_bound_impl(t->_r,\
-    \ key);\n    }\n\n   public:\n    treap() : _root(nullptr) {\n        srand(time(NULL));\n\
+    \ key);\n    }\n\n   public:\n    Treap() : _root(nullptr) {\n        srand(time(NULL));\n\
     \    }\n\n    void insert(T key) {\n        insert_impl(_root, new node(key));\n\
     \    }\n\n    void erase(T key) {\n        erase_impl(_root, key);\n    }\n\n\
     \    bool contains(T key) {\n        return contains_impl(_root, key);\n    }\n\
@@ -66,7 +66,7 @@ data:
     }  // namespace m1une\n\n"
   code: "#ifndef M1UNE_TREAP_HPP\n#define M1UNE_TREAP_HPP 1\n\n#include <algorithm>\n\
     #include <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\
-    \ntemplate <typename T>\nstruct treap {\n   private:\n    struct node {\n    \
+    \ntemplate <typename T>\nstruct Treap {\n   private:\n    struct node {\n    \
     \    T _key;\n        int _priority;\n        node *_l, *_r;\n        int _count;\n\
     \n        node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr),\
     \ _count(1) {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n     \
@@ -107,7 +107,7 @@ data:
     \ key);\n    }\n\n    T* upper_bound_impl(node* t, T key) {\n        if (!t) return\
     \ nullptr;\n        if (key < t->_key) {\n            T* res = upper_bound_impl(t->_l,\
     \ key);\n            return res ? res : &t->_key;\n        }\n        return upper_bound_impl(t->_r,\
-    \ key);\n    }\n\n   public:\n    treap() : _root(nullptr) {\n        srand(time(NULL));\n\
+    \ key);\n    }\n\n   public:\n    Treap() : _root(nullptr) {\n        srand(time(NULL));\n\
     \    }\n\n    void insert(T key) {\n        insert_impl(_root, new node(key));\n\
     \    }\n\n    void erase(T key) {\n        erase_impl(_root, key);\n    }\n\n\
     \    bool contains(T key) {\n        return contains_impl(_root, key);\n    }\n\
@@ -121,7 +121,7 @@ data:
   isVerificationFile: false
   path: data_structure/bst/treap.hpp
   requiredBy: []
-  timestamp: '2025-09-29 00:53:15+09:00'
+  timestamp: '2026-05-28 16:59:38+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/unit_test/treap.test.cpp

@@ -18,8 +18,8 @@ data:
     \ \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n#line 1 \"data_structure/bst/persistent_treap.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <ctime>\n#include <iostream>\n#include\
     \ <memory>\n#include <optional>\n#include <random>\n\nnamespace m1une {\n\ntemplate\
-    \ <typename T>\nstruct persistent_treap {\n   private:\n    struct node {\n  \
-    \      T _key;\n        int _priority;\n        std::shared_ptr<node> _l, _r;\n\
+    \ <typename T>\nstruct PersistentTreap {\n   private:\n    struct node {\n   \
+    \     T _key;\n        int _priority;\n        std::shared_ptr<node> _l, _r;\n\
     \        int _count;\n\n        node(T key) : _key(key), _priority(rand()), _l(nullptr),\
     \ _r(nullptr), _count(1) {}\n    };\n\n    std::shared_ptr<node> _root;\n\n  \
     \  int count(std::shared_ptr<node> t) {\n        return t ? t->_count : 0;\n \
@@ -65,11 +65,11 @@ data:
     \ {\n        if (!t) return std::nullopt;\n        if (key < t->_key) {\n    \
     \        auto res = upper_bound_impl(t->_l, key);\n            return res.has_value()\
     \ ? res : t->_key;\n        }\n        return upper_bound_impl(t->_r, key);\n\
-    \    }\n\n   public:\n    persistent_treap() : _root(nullptr) {\n        srand(time(NULL));\n\
-    \    }\n\n    persistent_treap(std::shared_ptr<node> root) : _root(root) {}\n\n\
-    \    persistent_treap insert(T key) {\n        return persistent_treap(insert_impl(_root,\
-    \ std::make_shared<node>(key)));\n    }\n\n    persistent_treap erase(T key) {\n\
-    \        return persistent_treap(erase_impl(_root, key));\n    }\n\n    T find_by_order(int\
+    \    }\n\n   public:\n    PersistentTreap() : _root(nullptr) {\n        srand(time(NULL));\n\
+    \    }\n\n    PersistentTreap(std::shared_ptr<node> root) : _root(root) {}\n\n\
+    \    PersistentTreap insert(T key) {\n        return PersistentTreap(insert_impl(_root,\
+    \ std::make_shared<node>(key)));\n    }\n\n    PersistentTreap erase(T key) {\n\
+    \        return PersistentTreap(erase_impl(_root, key));\n    }\n\n    T find_by_order(int\
     \ k) {\n        return find_by_order_impl(_root, k);\n    }\n\n    int order_of_key(T\
     \ key) {\n        return order_of_key_impl(_root, key);\n    }\n\n    std::optional<T>\
     \ lower_bound(T key) {\n        return lower_bound_impl(_root, key);\n    }\n\n\
@@ -86,7 +86,7 @@ data:
     \ distinct_elements.end()), distinct_elements.end());\n\n    auto get_compressed_rank\
     \ = [&](int val) {\n        return std::lower_bound(distinct_elements.begin(),\
     \ distinct_elements.end(), val) - distinct_elements.begin();\n    };\n\n    //\
-    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::persistent_treap<int>>\
+    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::PersistentTreap<int>>\
     \ versions(N + 1);\n    for (int i = 0; i < N; ++i) {\n        versions[i + 1]\
     \ = versions[i].insert(get_compressed_rank(a[i]));\n    }\n\n    for (int q =\
     \ 0; q < Q; ++q) {\n        int l, r, k;\n        std::cin >> l >> r >> k;\n\n\
@@ -116,7 +116,7 @@ data:
     \ distinct_elements.end()), distinct_elements.end());\n\n    auto get_compressed_rank\
     \ = [&](int val) {\n        return std::lower_bound(distinct_elements.begin(),\
     \ distinct_elements.end(), val) - distinct_elements.begin();\n    };\n\n    //\
-    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::persistent_treap<int>>\
+    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::PersistentTreap<int>>\
     \ versions(N + 1);\n    for (int i = 0; i < N; ++i) {\n        versions[i + 1]\
     \ = versions[i].insert(get_compressed_rank(a[i]));\n    }\n\n    for (int q =\
     \ 0; q < Q; ++q) {\n        int l, r, k;\n        std::cin >> l >> r >> k;\n\n\
@@ -140,7 +140,7 @@ data:
   isVerificationFile: true
   path: verify/unit_test/persistent_treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-29 18:40:17+09:00'
+  timestamp: '2026-05-28 16:59:38+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/unit_test/persistent_treap.test.cpp

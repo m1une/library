@@ -17,7 +17,7 @@ data:
   bundledCode: "#line 1 \"verify/unit_test/treap.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/ordered_set\"\
     \n\n#line 1 \"data_structure/bst/treap.hpp\"\n\n\n\n#include <algorithm>\n#include\
     \ <ctime>\n#include <iostream>\n#include <random>\n\nnamespace m1une {\n\ntemplate\
-    \ <typename T>\nstruct treap {\n   private:\n    struct node {\n        T _key;\n\
+    \ <typename T>\nstruct Treap {\n   private:\n    struct node {\n        T _key;\n\
     \        int _priority;\n        node *_l, *_r;\n        int _count;\n\n     \
     \   node(T key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1)\
     \ {}\n    };\n\n    node* _root;\n\n    int count(node* t) {\n        return t\
@@ -58,7 +58,7 @@ data:
     \ key);\n    }\n\n    T* upper_bound_impl(node* t, T key) {\n        if (!t) return\
     \ nullptr;\n        if (key < t->_key) {\n            T* res = upper_bound_impl(t->_l,\
     \ key);\n            return res ? res : &t->_key;\n        }\n        return upper_bound_impl(t->_r,\
-    \ key);\n    }\n\n   public:\n    treap() : _root(nullptr) {\n        srand(time(NULL));\n\
+    \ key);\n    }\n\n   public:\n    Treap() : _root(nullptr) {\n        srand(time(NULL));\n\
     \    }\n\n    void insert(T key) {\n        insert_impl(_root, new node(key));\n\
     \    }\n\n    void erase(T key) {\n        erase_impl(_root, key);\n    }\n\n\
     \    bool contains(T key) {\n        return contains_impl(_root, key);\n    }\n\
@@ -70,7 +70,7 @@ data:
     }  // namespace m1une\n\n#line 4 \"verify/unit_test/treap.test.cpp\"\n\n#line\
     \ 6 \"verify/unit_test/treap.test.cpp\"\n#include <vector>\n\nvoid fast_io() {\n\
     \    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n}\n\nint\
-    \ main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n    m1une::treap<int>\
+    \ main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n    m1une::Treap<int>\
     \ tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n        std::cin >>\
     \ a;\n        tr.insert(a);\n    }\n\n    for (int q = 0; q < Q; ++q) {\n    \
     \    int type, k;\n        std::cin >> type >> k;\n        if (type == 0) {\n\
@@ -95,7 +95,7 @@ data:
     \ \"data_structure/bst/treap.hpp\"\n\n#include <iostream>\n#include <vector>\n\
     \nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
     }\n\nint main() {\n    fast_io();\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
-    \    m1une::treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
+    \    m1une::Treap<int> tr;\n    for (int i = 0; i < N; ++i) {\n        int a;\n\
     \        std::cin >> a;\n        tr.insert(a);\n    }\n\n    for (int q = 0; q\
     \ < Q; ++q) {\n        int type, k;\n        std::cin >> type >> k;\n        if\
     \ (type == 0) {\n            if (!tr.contains(k)) {\n                tr.insert(k);\n\
@@ -120,7 +120,7 @@ data:
   isVerificationFile: true
   path: verify/unit_test/treap.test.cpp
   requiredBy: []
-  timestamp: '2025-09-29 18:40:17+09:00'
+  timestamp: '2026-05-28 16:59:38+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/unit_test/treap.test.cpp

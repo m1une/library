@@ -13,10 +13,10 @@ data:
     links: []
   bundledCode: "#line 1 \"utilities/shifted_array.hpp\"\n\n\n\n#include <stdexcept>\n\
     #include <vector>\n\nnamespace m1une {\n// bool is not allowed\n// if you want\
-    \ to use bool, use char instead\ntemplate <typename T>\nstruct shifted_array {\n\
+    \ to use bool, use char instead\ntemplate <typename T>\nstruct ShiftedArray {\n\
     \   private:\n    long long _offset;\n    long long _step;\n    int _size;\n \
     \   std::vector<T> _data;\n\n   public:\n    // make an array with indices from\
-    \ L to R (including both L and R)\n    // [L, R] (closed interval)\n    shifted_array(long\
+    \ L to R (including both L and R)\n    // [L, R] (closed interval)\n    ShiftedArray(long\
     \ long L, long long R, T init_value = T(), long long step = 1)\n        : _offset(L),\
     \ _step(step), _size((R - L) / step + 1), _data(_size, init_value) {\n       \
     \ if (step <= 0) {\n            throw std::invalid_argument(\"Step must be positive\"\
@@ -34,10 +34,10 @@ data:
     \ m1une\n\n\n"
   code: "#ifndef M1UNE_SHIFTED_ARRAY_HPP\n#define M1UNE_SHIFTED_ARRAY_HPP 1\n\n#include\
     \ <stdexcept>\n#include <vector>\n\nnamespace m1une {\n// bool is not allowed\n\
-    // if you want to use bool, use char instead\ntemplate <typename T>\nstruct shifted_array\
+    // if you want to use bool, use char instead\ntemplate <typename T>\nstruct ShiftedArray\
     \ {\n   private:\n    long long _offset;\n    long long _step;\n    int _size;\n\
     \    std::vector<T> _data;\n\n   public:\n    // make an array with indices from\
-    \ L to R (including both L and R)\n    // [L, R] (closed interval)\n    shifted_array(long\
+    \ L to R (including both L and R)\n    // [L, R] (closed interval)\n    ShiftedArray(long\
     \ long L, long long R, T init_value = T(), long long step = 1)\n        : _offset(L),\
     \ _step(step), _size((R - L) / step + 1), _data(_size, init_value) {\n       \
     \ if (step <= 0) {\n            throw std::invalid_argument(\"Step must be positive\"\
@@ -57,7 +57,7 @@ data:
   isVerificationFile: false
   path: utilities/shifted_array.hpp
   requiredBy: []
-  timestamp: '2025-09-29 00:53:15+09:00'
+  timestamp: '2026-05-28 16:59:38+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/unit_test/shifted_array.test.cpp
