@@ -20,8 +20,14 @@ data:
       path: monoid/add.hpp
       title: monoid/add.hpp
     - icon: ':warning:'
+      path: monoid/affine.hpp
+      title: monoid/affine.hpp
+    - icon: ':warning:'
       path: monoid/concept.hpp
       title: Monoid Concept
+    - icon: ':warning:'
+      path: monoid/gcd.hpp
+      title: monoid/gcd.hpp
     - icon: ':warning:'
       path: monoid/max.hpp
       title: monoid/max.hpp
@@ -31,6 +37,12 @@ data:
     - icon: ':warning:'
       path: monoid/mul.hpp
       title: monoid/mul.hpp
+    - icon: ':warning:'
+      path: monoid/top_k.hpp
+      title: monoid/top_k.hpp
+    - icon: ':warning:'
+      path: monoid/update.hpp
+      title: monoid/update.hpp
     - icon: ':warning:'
       path: monoid/wrapper.hpp
       title: Monoid Wrapper
