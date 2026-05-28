@@ -2,5 +2,3 @@
 
 # m1une's library
 C++ library for competitive programming by [m1une](https://atcoder.jp/users/m1une)
-
-Gemini 2.5 Pro is used for development.
