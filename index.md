@@ -81,7 +81,7 @@ data:
       title: monoid/xor.hpp
   - name: string
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: string/rolling_hash.hpp
       title: Static Rolling Hash
   - name: utilities
@@ -101,6 +101,14 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/bst/treap.test.cpp
       title: verify/data_structure/bst/treap.test.cpp
+  - name: verify/string
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/string/aoj_alds1_14_b.test.cpp
+      title: verify/string/aoj_alds1_14_b.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/string/yosupo_zalgorithm.test.cpp
+      title: verify/string/yosupo_zalgorithm.test.cpp
   - name: verify/utilities
     pages:
     - icon: ':heavy_check_mark:'

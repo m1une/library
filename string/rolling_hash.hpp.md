@@ -5,10 +5,16 @@ data:
   - icon: ':warning:'
     path: monoid/rolling_hash.hpp
     title: monoid/rolling_hash.hpp
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/string/aoj_alds1_14_b.test.cpp
+    title: verify/string/aoj_alds1_14_b.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/string/yosupo_zalgorithm.test.cpp
+    title: verify/string/yosupo_zalgorithm.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"string/rolling_hash.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -131,8 +137,10 @@ data:
   requiredBy:
   - monoid/rolling_hash.hpp
   timestamp: '2026-05-29 01:35:44+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/string/yosupo_zalgorithm.test.cpp
+  - verify/string/aoj_alds1_14_b.test.cpp
 documentation_of: string/rolling_hash.hpp
 layout: document
 title: Static Rolling Hash

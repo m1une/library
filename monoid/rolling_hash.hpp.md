@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: string/rolling_hash.hpp
     title: Static Rolling Hash
   _extendedRequiredBy: []
