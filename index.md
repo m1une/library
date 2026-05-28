@@ -17,11 +17,26 @@ data:
   - name: monoid
     pages:
     - icon: ':warning:'
+      path: monoid/add.hpp
+      title: monoid/add.hpp
+    - icon: ':warning:'
       path: monoid/concept.hpp
       title: Monoid Concept
     - icon: ':warning:'
+      path: monoid/max.hpp
+      title: monoid/max.hpp
+    - icon: ':warning:'
+      path: monoid/min.hpp
+      title: monoid/min.hpp
+    - icon: ':warning:'
+      path: monoid/mul.hpp
+      title: monoid/mul.hpp
+    - icon: ':warning:'
       path: monoid/wrapper.hpp
       title: Monoid Wrapper
+    - icon: ':warning:'
+      path: monoid/xor.hpp
+      title: monoid/xor.hpp
   - name: utilities
     pages:
     - icon: ':warning:'
