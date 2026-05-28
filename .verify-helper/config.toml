@@ -2,6 +2,7 @@
 CXX = "g++"
 CXXFLAGS = [
     "-std=gnu++20",
+    "-I", ".",
     "-O2",
     "-Wall",
     "-Wextra",
