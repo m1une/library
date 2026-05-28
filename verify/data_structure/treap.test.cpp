@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/ordered_set"
 
-#include "data_structure/bst/treap.hpp"
+#include "data_structure/treap.hpp"
 
 #include <iostream>
 #include <vector>
@@ -15,7 +15,7 @@ int main() {
     int N, Q;
     std::cin >> N >> Q;
 
-    m1une::data_structure::bst::Treap<int> tr;
+    m1une::data_structure::Treap<int> tr;
     for (int i = 0; i < N; ++i) {
         int a;
         std::cin >> a;

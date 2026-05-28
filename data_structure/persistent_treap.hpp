@@ -10,7 +10,6 @@
 
 namespace m1une {
 namespace data_structure {
-namespace bst {
 
 template <typename T>
 struct PersistentTreap {
@@ -167,7 +166,6 @@ struct PersistentTreap {
     }
 };
 
-}  // namespace bst
 }  // namespace data_structure
 }  // namespace m1une
 
