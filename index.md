@@ -38,6 +38,12 @@ data:
       path: monoid/gcd.hpp
       title: monoid/gcd.hpp
     - icon: ':warning:'
+      path: monoid/longest_same.hpp
+      title: Longest Same Monoid
+    - icon: ':warning:'
+      path: monoid/longest_true.hpp
+      title: Longest True Monoid
+    - icon: ':warning:'
       path: monoid/max.hpp
       title: monoid/max.hpp
     - icon: ':warning:'
@@ -73,6 +79,9 @@ data:
     - icon: ':warning:'
       path: monoid/top_k.hpp
       title: Top K Monoid
+    - icon: ':warning:'
+      path: monoid/top_k_count.hpp
+      title: Top K Count Monoid
     - icon: ':warning:'
       path: monoid/update.hpp
       title: monoid/update.hpp
