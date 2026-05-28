@@ -29,6 +29,9 @@ data:
       path: monoid/and.hpp
       title: monoid/and.hpp
     - icon: ':warning:'
+      path: monoid/binary_inversion.hpp
+      title: Binary Inversion Monoid
+    - icon: ':warning:'
       path: monoid/bottom_k.hpp
       title: monoid/bottom_k.hpp
     - icon: ':heavy_check_mark:'
@@ -44,6 +47,9 @@ data:
       path: monoid/longest_true.hpp
       title: Longest True Monoid
     - icon: ':warning:'
+      path: monoid/matrix.hpp
+      title: Matrix Monoid
+    - icon: ':warning:'
       path: monoid/max.hpp
       title: monoid/max.hpp
     - icon: ':warning:'
@@ -58,6 +64,9 @@ data:
     - icon: ':warning:'
       path: monoid/min_count.hpp
       title: monoid/min_count.hpp
+    - icon: ':warning:'
+      path: monoid/min_max.hpp
+      title: MinMax Monoid
     - icon: ':warning:'
       path: monoid/min_subarray.hpp
       title: monoid/min_subarray.hpp
