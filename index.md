@@ -23,6 +23,12 @@ data:
       path: monoid/affine.hpp
       title: monoid/affine.hpp
     - icon: ':warning:'
+      path: monoid/and.hpp
+      title: monoid/and.hpp
+    - icon: ':warning:'
+      path: monoid/bottom_k.hpp
+      title: monoid/bottom_k.hpp
+    - icon: ':warning:'
       path: monoid/concept.hpp
       title: Monoid Concept
     - icon: ':warning:'
@@ -32,11 +38,23 @@ data:
       path: monoid/max.hpp
       title: monoid/max.hpp
     - icon: ':warning:'
+      path: monoid/max_count.hpp
+      title: monoid/max_count.hpp
+    - icon: ':warning:'
+      path: monoid/max_subarray.hpp
+      title: monoid/max_subarray.hpp
+    - icon: ':warning:'
       path: monoid/min.hpp
       title: monoid/min.hpp
     - icon: ':warning:'
+      path: monoid/min_count.hpp
+      title: monoid/min_count.hpp
+    - icon: ':warning:'
       path: monoid/mul.hpp
       title: monoid/mul.hpp
+    - icon: ':warning:'
+      path: monoid/or.hpp
+      title: monoid/or.hpp
     - icon: ':warning:'
       path: monoid/top_k.hpp
       title: monoid/top_k.hpp
