@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: data_structure/bst/persistent_treap.hpp
     title: Persistent Treap
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/range_kth_smallest
@@ -17,20 +17,21 @@ data:
   bundledCode: "#line 1 \"verify/unit_test/persistent_treap.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n#line 1 \"data_structure/bst/persistent_treap.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <ctime>\n#include <iostream>\n#include\
-    \ <memory>\n#include <optional>\n#include <random>\n\nnamespace m1une {\n\ntemplate\
-    \ <typename T>\nstruct PersistentTreap {\n   private:\n    struct node {\n   \
-    \     T _key;\n        int _priority;\n        std::shared_ptr<node> _l, _r;\n\
-    \        int _count;\n\n        node(T key) : _key(key), _priority(rand()), _l(nullptr),\
-    \ _r(nullptr), _count(1) {}\n    };\n\n    std::shared_ptr<node> _root;\n\n  \
-    \  int count(std::shared_ptr<node> t) {\n        return t ? t->_count : 0;\n \
-    \   }\n\n    void update_count(std::shared_ptr<node> t) {\n        if (t) {\n\
-    \            t->_count = 1 + count(t->_l) + count(t->_r);\n        }\n    }\n\n\
-    \    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>& l, std::shared_ptr<node>&\
-    \ r) {\n        if (!t) {\n            l = r = nullptr;\n            return;\n\
-    \        }\n        if (key < t->_key) {\n            auto new_node = std::make_shared<node>(*t);\n\
-    \            split(new_node->_l, key, l, new_node->_l);\n            r = new_node;\n\
-    \            update_count(r);\n        } else {\n            auto new_node = std::make_shared<node>(*t);\n\
-    \            split(new_node->_r, key, new_node->_r, r);\n            l = new_node;\n\
+    \ <memory>\n#include <optional>\n#include <random>\n\nnamespace m1une {\nnamespace\
+    \ data_structure {\nnamespace bst {\n\ntemplate <typename T>\nstruct PersistentTreap\
+    \ {\n   private:\n    struct node {\n        T _key;\n        int _priority;\n\
+    \        std::shared_ptr<node> _l, _r;\n        int _count;\n\n        node(T\
+    \ key) : _key(key), _priority(rand()), _l(nullptr), _r(nullptr), _count(1) {}\n\
+    \    };\n\n    std::shared_ptr<node> _root;\n\n    int count(std::shared_ptr<node>\
+    \ t) {\n        return t ? t->_count : 0;\n    }\n\n    void update_count(std::shared_ptr<node>\
+    \ t) {\n        if (t) {\n            t->_count = 1 + count(t->_l) + count(t->_r);\n\
+    \        }\n    }\n\n    void split(std::shared_ptr<node> t, T key, std::shared_ptr<node>&\
+    \ l, std::shared_ptr<node>& r) {\n        if (!t) {\n            l = r = nullptr;\n\
+    \            return;\n        }\n        if (key < t->_key) {\n            auto\
+    \ new_node = std::make_shared<node>(*t);\n            split(new_node->_l, key,\
+    \ l, new_node->_l);\n            r = new_node;\n            update_count(r);\n\
+    \        } else {\n            auto new_node = std::make_shared<node>(*t);\n \
+    \           split(new_node->_r, key, new_node->_r, r);\n            l = new_node;\n\
     \            update_count(l);\n        }\n    }\n\n    std::shared_ptr<node> merge(std::shared_ptr<node>\
     \ l, std::shared_ptr<node> r) {\n        if (!l || !r) return l ? l : r;\n   \
     \     if (l->_priority > r->_priority) {\n            auto new_node = std::make_shared<node>(*l);\n\
@@ -75,9 +76,9 @@ data:
     \ lower_bound(T key) {\n        return lower_bound_impl(_root, key);\n    }\n\n\
     \    std::optional<T> upper_bound(T key) {\n        return upper_bound_impl(_root,\
     \ key);\n    }\n\n    int size() {\n        return count(_root);\n    }\n};\n\n\
-    }  // namespace m1une\n\n\n#line 4 \"verify/unit_test/persistent_treap.test.cpp\"\
-    \n\n#line 7 \"verify/unit_test/persistent_treap.test.cpp\"\n#include <vector>\n\
-    \n// Fast I/O\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
+    }  // namespace bst\n}  // namespace data_structure\n}  // namespace m1une\n\n\
+    \n#line 4 \"verify/unit_test/persistent_treap.test.cpp\"\n\n#line 7 \"verify/unit_test/persistent_treap.test.cpp\"\
+    \n#include <vector>\n\n// Fast I/O\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int N, Q;\n \
     \   std::cin >> N >> Q;\n    std::vector<int> a(N);\n    std::vector<int> distinct_elements;\n\
     \n    for (int i = 0; i < N; ++i) {\n        std::cin >> a[i];\n        distinct_elements.push_back(a[i]);\n\
@@ -86,7 +87,7 @@ data:
     \ distinct_elements.end()), distinct_elements.end());\n\n    auto get_compressed_rank\
     \ = [&](int val) {\n        return std::lower_bound(distinct_elements.begin(),\
     \ distinct_elements.end(), val) - distinct_elements.begin();\n    };\n\n    //\
-    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::PersistentTreap<int>>\
+    \ Build a persistent treap for each prefix of the array\n    \U0001F449 std::vector<m1une::data_structure::bst::PersistentTreap<int>>\
     \ versions(N + 1);\n    for (int i = 0; i < N; ++i) {\n        versions[i + 1]\
     \ = versions[i].insert(get_compressed_rank(a[i]));\n    }\n\n    for (int q =\
     \ 0; q < Q; ++q) {\n        int l, r, k;\n        std::cin >> l >> r >> k;\n\n\
@@ -116,7 +117,7 @@ data:
     \ distinct_elements.end()), distinct_elements.end());\n\n    auto get_compressed_rank\
     \ = [&](int val) {\n        return std::lower_bound(distinct_elements.begin(),\
     \ distinct_elements.end(), val) - distinct_elements.begin();\n    };\n\n    //\
-    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::PersistentTreap<int>>\
+    \ Build a persistent treap for each prefix of the array\n    \U0001F449 std::vector<m1une::data_structure::bst::PersistentTreap<int>>\
     \ versions(N + 1);\n    for (int i = 0; i < N; ++i) {\n        versions[i + 1]\
     \ = versions[i].insert(get_compressed_rank(a[i]));\n    }\n\n    for (int q =\
     \ 0; q < Q; ++q) {\n        int l, r, k;\n        std::cin >> l >> r >> k;\n\n\
@@ -140,8 +141,8 @@ data:
   isVerificationFile: true
   path: verify/unit_test/persistent_treap.test.cpp
   requiredBy: []
-  timestamp: '2026-05-28 16:59:38+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-05-29 01:41:12+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/unit_test/persistent_treap.test.cpp
 layout: document
