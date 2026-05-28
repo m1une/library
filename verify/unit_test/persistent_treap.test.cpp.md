@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/bst/persistent_treap.hpp
     title: Persistent Treap
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/range_kth_smallest
@@ -87,7 +87,7 @@ data:
     \ distinct_elements.end()), distinct_elements.end());\n\n    auto get_compressed_rank\
     \ = [&](int val) {\n        return std::lower_bound(distinct_elements.begin(),\
     \ distinct_elements.end(), val) - distinct_elements.begin();\n    };\n\n    //\
-    \ Build a persistent treap for each prefix of the array\n    \U0001F449 std::vector<m1une::data_structure::bst::PersistentTreap<int>>\
+    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::data_structure::bst::PersistentTreap<int>>\
     \ versions(N + 1);\n    for (int i = 0; i < N; ++i) {\n        versions[i + 1]\
     \ = versions[i].insert(get_compressed_rank(a[i]));\n    }\n\n    for (int q =\
     \ 0; q < Q; ++q) {\n        int l, r, k;\n        std::cin >> l >> r >> k;\n\n\
@@ -117,7 +117,7 @@ data:
     \ distinct_elements.end()), distinct_elements.end());\n\n    auto get_compressed_rank\
     \ = [&](int val) {\n        return std::lower_bound(distinct_elements.begin(),\
     \ distinct_elements.end(), val) - distinct_elements.begin();\n    };\n\n    //\
-    \ Build a persistent treap for each prefix of the array\n    \U0001F449 std::vector<m1une::data_structure::bst::PersistentTreap<int>>\
+    \ Build a persistent treap for each prefix of the array\n    std::vector<m1une::data_structure::bst::PersistentTreap<int>>\
     \ versions(N + 1);\n    for (int i = 0; i < N; ++i) {\n        versions[i + 1]\
     \ = versions[i].insert(get_compressed_rank(a[i]));\n    }\n\n    for (int q =\
     \ 0; q < Q; ++q) {\n        int l, r, k;\n        std::cin >> l >> r >> k;\n\n\
@@ -141,8 +141,8 @@ data:
   isVerificationFile: true
   path: verify/unit_test/persistent_treap.test.cpp
   requiredBy: []
-  timestamp: '2026-05-29 01:41:12+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-05-29 01:53:25+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/unit_test/persistent_treap.test.cpp
 layout: document
