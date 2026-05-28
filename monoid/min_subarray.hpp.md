@@ -4,7 +4,7 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/max_subarray.hpp
-    title: monoid/max_subarray.hpp
+    title: Max Subarray Monoid
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp

@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':warning:'
     path: monoid/top_k.hpp
-    title: monoid/top_k.hpp
+    title: Top K Monoid
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

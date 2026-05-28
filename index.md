@@ -24,7 +24,7 @@ data:
       title: monoid/add.hpp
     - icon: ':warning:'
       path: monoid/affine.hpp
-      title: monoid/affine.hpp
+      title: Affine Monoid
     - icon: ':warning:'
       path: monoid/and.hpp
       title: monoid/and.hpp
@@ -45,7 +45,7 @@ data:
       title: monoid/max_count.hpp
     - icon: ':warning:'
       path: monoid/max_subarray.hpp
-      title: monoid/max_subarray.hpp
+      title: Max Subarray Monoid
     - icon: ':warning:'
       path: monoid/min.hpp
       title: monoid/min.hpp
@@ -69,10 +69,10 @@ data:
       title: monoid/power.hpp
     - icon: ':warning:'
       path: monoid/rolling_hash.hpp
-      title: monoid/rolling_hash.hpp
+      title: Rolling Hash Monoid
     - icon: ':warning:'
       path: monoid/top_k.hpp
-      title: monoid/top_k.hpp
+      title: Top K Monoid
     - icon: ':warning:'
       path: monoid/update.hpp
       title: monoid/update.hpp
