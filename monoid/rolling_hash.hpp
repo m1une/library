@@ -19,7 +19,7 @@ namespace monoid {
 //       init_data[i] = RH::make(S[i]); 
 //   }
 //   Segtree<RH> seg(init_data);
-template <long long Base, long long Mod>
+template <long long Base = 10007, long long Mod = (1LL << 61) - 1>
 struct RollingHash {
     using StringRH = m1une::string::RollingHash<Base, Mod>;
     using value_type = std::pair<long long, long long>;

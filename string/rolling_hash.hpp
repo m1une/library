@@ -12,7 +12,7 @@ namespace string {
 // Standard Rolling Hash for static strings.
 // Precomputes hashes to answer substring queries in O(1).
 // Provides advanced operations like LCP, lexicographical comparison, and string repetition in O(log N).
-template <long long Base, long long Mod>
+template <long long Base = 10007, long long Mod = (1LL << 61) - 1>
 struct RollingHash {
     std::string s;
     std::vector<long long> hash;
