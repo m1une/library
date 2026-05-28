@@ -11,7 +11,7 @@
 namespace m1une {
 
 template <typename T>
-struct persistent_treap {
+struct PersistentTreap {
    private:
     struct node {
         T _key;
@@ -130,18 +130,18 @@ struct persistent_treap {
     }
 
    public:
-    persistent_treap() : _root(nullptr) {
+    PersistentTreap() : _root(nullptr) {
         srand(time(NULL));
     }
 
-    persistent_treap(std::shared_ptr<node> root) : _root(root) {}
+    PersistentTreap(std::shared_ptr<node> root) : _root(root) {}
 
-    persistent_treap insert(T key) {
-        return persistent_treap(insert_impl(_root, std::make_shared<node>(key)));
+    PersistentTreap insert(T key) {
+        return PersistentTreap(insert_impl(_root, std::make_shared<node>(key)));
     }
 
-    persistent_treap erase(T key) {
-        return persistent_treap(erase_impl(_root, key));
+    PersistentTreap erase(T key) {
+        return PersistentTreap(erase_impl(_root, key));
     }
 
     T find_by_order(int k) {

@@ -9,7 +9,7 @@
 namespace m1une {
 
 template <typename T>
-struct treap {
+struct Treap {
    private:
     struct node {
         T _key;
@@ -133,7 +133,7 @@ struct treap {
     }
 
    public:
-    treap() : _root(nullptr) {
+    Treap() : _root(nullptr) {
         srand(time(NULL));
     }
 

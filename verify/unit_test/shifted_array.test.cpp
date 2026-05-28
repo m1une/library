@@ -10,7 +10,7 @@ constexpr long long MAX = 100000;
 long long solve(long long l, long long r) {
     vector<char> is_prime(MAX, 1);
     is_prime[0] = is_prime[1] = 0;
-    m1une::shifted_array<vector<long long>> prime_factors(l, r);
+    m1une::ShiftedArray<vector<long long>> prime_factors(l, r);
     for (long long p = 2; p * p <= r; ++p) {
         if (!is_prime[p]) continue;
         for (long long x = 2 * p; x < MAX; x += p) {

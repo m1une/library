@@ -15,7 +15,7 @@ int main() {
     int N, Q;
     std::cin >> N >> Q;
 
-    m1une::treap<int> tr;
+    m1une::Treap<int> tr;
     for (int i = 0; i < N; ++i) {
         int a;
         std::cin >> a;
