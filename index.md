@@ -14,6 +14,14 @@ data:
     - icon: ':warning:'
       path: math/affine.hpp
       title: math/affine.hpp
+  - name: monoid
+    pages:
+    - icon: ':warning:'
+      path: monoid/concept.hpp
+      title: Monoid Concept
+    - icon: ':warning:'
+      path: monoid/wrapper.hpp
+      title: Monoid Wrapper
   - name: utilities
     pages:
     - icon: ':warning:'
