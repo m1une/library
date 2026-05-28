@@ -4,10 +4,14 @@
 #include <utility>
 
 namespace m1une {
+namespace math {
+
 template <typename T>
 T affine(std::pair<T, T> f, T x) {
     return f.first * x + f.second;
 }
+
+}  // namespace math
 }  // namespace m1une
 
 #endif  // M1UNE_AFFINE_HPP

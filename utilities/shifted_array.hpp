@@ -5,6 +5,8 @@
 #include <vector>
 
 namespace m1une {
+namespace utilities {
+
 // bool is not allowed
 // if you want to use bool, use char instead
 template <typename T>
@@ -50,6 +52,7 @@ struct ShiftedArray {
     }
 };
 
+}  // namespace utilities
 }  // namespace m1une
 
 #endif  // M1UNE_SHIFTED_ARRAY_HPP

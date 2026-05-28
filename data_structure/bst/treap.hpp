@@ -7,6 +7,8 @@
 #include <random>
 
 namespace m1une {
+namespace data_structure {
+namespace bst {
 
 template <typename T>
 struct Treap {
@@ -170,5 +172,7 @@ struct Treap {
     }
 };
 
+}  // namespace bst
+}  // namespace data_structure
 }  // namespace m1une
 #endif  // M1UNE_TREAP_HPP

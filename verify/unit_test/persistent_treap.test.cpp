@@ -33,7 +33,7 @@ int main() {
     };
 
     // Build a persistent treap for each prefix of the array
-    std::vector<m1une::PersistentTreap<int>> versions(N + 1);
+    👉 std::vector<m1une::data_structure::bst::PersistentTreap<int>> versions(N + 1);
     for (int i = 0; i < N; ++i) {
         versions[i + 1] = versions[i].insert(get_compressed_rank(a[i]));
     }

@@ -2,6 +2,8 @@
 #define M1UNE_BIT_CEIL_HPP 1
 
 namespace m1une {
+namespace utilities {
+
 template <typename T>
 constexpr T bit_ceil(T n) {
     if (n <= 1) return 1;
@@ -9,6 +11,8 @@ constexpr T bit_ceil(T n) {
     while (x < n) x <<= 1;
     return x;
 }
+
+}  // namespace utilities
 }  // namespace m1une
 
 #endif  // M1UNE_BIT_CEIL_HPP
