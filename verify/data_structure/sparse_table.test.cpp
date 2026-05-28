@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/staticrmq"
 
-#include "../../data_structure/sparse_table.hpp"
-#include "../../monoid/min.hpp"
+#include "data_structure/sparse_table.hpp"
+#include "monoid/min.hpp"
 
 #include <iostream>
 #include <vector>
