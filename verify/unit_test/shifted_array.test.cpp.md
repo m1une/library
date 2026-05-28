@@ -53,7 +53,7 @@ data:
     \       ++res;\n        }\n    }\n    return res;\n}\n\nint main() {\n    long\
     \ long l, r;\n    cin >> l >> r;\n    cout << solve(l, r) << endl;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858\"\
-    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../utilities/shifted_array.hpp\"\
+    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"utilities/shifted_array.hpp\"\
     \n\nconstexpr long long MAX = 100000;\n\nlong long solve(long long l, long long\
     \ r) {\n    vector<char> is_prime(MAX, 1);\n    is_prime[0] = is_prime[1] = 0;\n\
     \    m1une::utilities::ShiftedArray<vector<long long>> prime_factors(l, r);\n\
@@ -73,7 +73,7 @@ data:
   isVerificationFile: true
   path: verify/unit_test/shifted_array.test.cpp
   requiredBy: []
-  timestamp: '2026-05-29 01:41:12+09:00'
+  timestamp: '2026-05-29 01:50:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/unit_test/shifted_array.test.cpp
