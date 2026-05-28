@@ -5,9 +5,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: data_structure/segtree.hpp
     title: Segment Tree
-  - icon: ':warning:'
-    path: data_structure/sparce_table.hpp
-    title: data_structure/sparce_table.hpp
+  - icon: ':heavy_check_mark:'
+    path: data_structure/sparse_table.hpp
+    title: data_structure/sparse_table.hpp
   - icon: ':warning:'
     path: monoid/power.hpp
     title: monoid/power.hpp
@@ -15,6 +15,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/segtree.test.cpp
     title: verify/data_structure/segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/sparse_table.test.cpp
+    title: verify/data_structure/sparse_table.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -45,12 +48,13 @@ data:
   isVerificationFile: false
   path: monoid/concept.hpp
   requiredBy:
-  - data_structure/sparce_table.hpp
+  - data_structure/sparse_table.hpp
   - data_structure/segtree.hpp
   - monoid/power.hpp
   timestamp: '2026-05-28 17:20:28+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/sparse_table.test.cpp
   - verify/data_structure/segtree.test.cpp
 documentation_of: monoid/concept.hpp
 layout: document

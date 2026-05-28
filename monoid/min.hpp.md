@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/sparse_table.test.cpp
+    title: verify/data_structure/sparse_table.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/min.hpp\"\n\n\n\n#include <algorithm>\n#include <limits>\n\
@@ -30,8 +33,9 @@ data:
   path: monoid/min.hpp
   requiredBy: []
   timestamp: '2026-05-28 17:31:47+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/sparse_table.test.cpp
 documentation_of: monoid/min.hpp
 layout: document
 redirect_from:

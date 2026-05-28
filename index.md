@@ -9,9 +9,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree
-    - icon: ':warning:'
-      path: data_structure/sparce_table.hpp
-      title: data_structure/sparce_table.hpp
+    - icon: ':heavy_check_mark:'
+      path: data_structure/sparse_table.hpp
+      title: data_structure/sparse_table.hpp
     - icon: ':heavy_check_mark:'
       path: data_structure/treap.hpp
       title: data_structure/treap.hpp
@@ -73,7 +73,7 @@ data:
     - icon: ':warning:'
       path: monoid/max_subarray.hpp
       title: Max Subarray Monoid
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/min.hpp
       title: monoid/min.hpp
     - icon: ':warning:'
@@ -141,14 +141,17 @@ data:
   - name: verify/data_structure
     pages:
     - icon: ':heavy_check_mark:'
+      path: verify/data_structure/combined_sparse_table.test.cpp
+      title: verify/data_structure/combined_sparse_table.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_treap.test.cpp
       title: verify/data_structure/persistent_treap.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/segtree.test.cpp
       title: verify/data_structure/segtree.test.cpp
-    - icon: ':x:'
-      path: verify/data_structure/sparce_table.test.cpp
-      title: verify/data_structure/sparce_table.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/sparse_table.test.cpp
+      title: verify/data_structure/sparse_table.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/treap.test.cpp
       title: verify/data_structure/treap.test.cpp

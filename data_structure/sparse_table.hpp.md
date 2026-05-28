@@ -5,13 +5,16 @@ data:
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/sparse_table.test.cpp
+    title: verify/data_structure/sparse_table.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/sparce_table.hpp\"\n\n\n\n#include <vector>\n\
+  bundledCode: "#line 1 \"data_structure/sparse_table.hpp\"\n\n\n\n#include <vector>\n\
     #include <cassert>\n#include <bit>\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#include\
     \ <concepts>\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if\
     \ a type satisfies the requirements of a Monoid.\n// A Monoid must have a `value_type`,\
@@ -22,7 +25,7 @@ data:
     \ { M::id() } -> std::same_as<typename M::value_type>;\n    \n    // 3. Must have\
     \ a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 8 \"data_structure/sparce_table.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
+    \ 8 \"data_structure/sparse_table.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
     \ {\n\n// A Sparse Table utilizing C++20 Concepts for type safety.\n// It requires\
     \ a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\n// [IMPORTANT] For\
     \ O(1) range queries to work correctly, the monoid operation MUST be idempotent.\n\
@@ -77,15 +80,16 @@ data:
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
-  path: data_structure/sparce_table.hpp
+  path: data_structure/sparse_table.hpp
   requiredBy: []
-  timestamp: '2026-05-29 03:36:47+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
-documentation_of: data_structure/sparce_table.hpp
+  timestamp: '2026-05-29 03:39:53+09:00'
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/sparse_table.test.cpp
+documentation_of: data_structure/sparse_table.hpp
 layout: document
 redirect_from:
-- /library/data_structure/sparce_table.hpp
-- /library/data_structure/sparce_table.hpp.html
-title: data_structure/sparce_table.hpp
+- /library/data_structure/sparse_table.hpp
+- /library/data_structure/sparse_table.hpp.html
+title: data_structure/sparse_table.hpp
 ---
