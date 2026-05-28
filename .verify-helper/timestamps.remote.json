@@ -1,6 +1,8 @@
 {
+"verify/data_structure/combined_sparse_table.test.cpp": "2026-05-29 03:39:53 +0900",
 "verify/data_structure/persistent_treap.test.cpp": "2026-05-29 02:16:20 +0900",
 "verify/data_structure/segtree.test.cpp": "2026-05-29 02:24:05 +0900",
+"verify/data_structure/sparse_table.test.cpp": "2026-05-29 03:39:53 +0900",
 "verify/data_structure/treap.test.cpp": "2026-05-29 02:16:20 +0900",
 "verify/string/aoj_alds1_14_b.test.cpp": "2026-05-29 02:33:39 +0900",
 "verify/string/yosupo_zalgorithm.test.cpp": "2026-05-29 02:33:39 +0900",
