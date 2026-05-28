@@ -9,97 +9,14 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/bst/treap.hpp
       title: Treap
-  - name: data_structure/segtree
-    pages:
-    - icon: ':x:'
-      path: data_structure/segtree/lazy_segtree.hpp
-      title: Lazy Segment Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/segtree/segtree.hpp
-      title: Segment Tree
   - name: math
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':warning:'
       path: math/affine.hpp
       title: math/affine.hpp
-  - name: monoid
-    pages:
-    - icon: ':x:'
-      path: monoid/acted_monoid.hpp
-      title: Acted Monoid
-    - icon: ':question:'
-      path: monoid/monoid.hpp
-      title: Monoid
-    - icon: ':x:'
-      path: monoid/monoid_addsz.hpp
-      title: monoid/monoid_addsz.hpp
-    - icon: ':warning:'
-      path: monoid/prim_acted_monoids.hpp
-      title: monoid/prim_acted_monoids.hpp
-    - icon: ':warning:'
-      path: monoid/prim_monoids.hpp
-      title: monoid/prim_monoids.hpp
-  - name: monoid/acted_monoids
-    pages:
-    - icon: ':warning:'
-      path: monoid/acted_monoids/range_add_range_max.hpp
-      title: monoid/acted_monoids/range_add_range_max.hpp
-    - icon: ':warning:'
-      path: monoid/acted_monoids/range_add_range_min.hpp
-      title: monoid/acted_monoids/range_add_range_min.hpp
-    - icon: ':warning:'
-      path: monoid/acted_monoids/range_add_range_sum.hpp
-      title: monoid/acted_monoids/range_add_range_sum.hpp
-    - icon: ':warning:'
-      path: monoid/acted_monoids/range_affine_range_minmax.hpp
-      title: monoid/acted_monoids/range_affine_range_minmax.hpp
-    - icon: ':x:'
-      path: monoid/acted_monoids/range_affine_range_sum.hpp
-      title: monoid/acted_monoids/range_affine_range_sum.hpp
-    - icon: ':warning:'
-      path: monoid/acted_monoids/range_update_range_max.hpp
-      title: monoid/acted_monoids/range_update_range_max.hpp
-    - icon: ':warning:'
-      path: monoid/acted_monoids/range_update_range_min.hpp
-      title: monoid/acted_monoids/range_update_range_min.hpp
-    - icon: ':warning:'
-      path: monoid/acted_monoids/range_update_range_sum.hpp
-      title: monoid/acted_monoids/range_update_range_sum.hpp
-  - name: monoid/monoids
-    pages:
-    - icon: ':x:'
-      path: monoid/monoids/add_monoid.hpp
-      title: monoid/monoids/add_monoid.hpp
-    - icon: ':question:'
-      path: monoid/monoids/affine_monoid.hpp
-      title: monoid/monoids/affine_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/and_monoid.hpp
-      title: monoid/monoids/and_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/max_monoid.hpp
-      title: monoid/monoids/max_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/min_monoid.hpp
-      title: monoid/monoids/min_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/minmax_monoid.hpp
-      title: monoid/monoids/minmax_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/mul_monoid.hpp
-      title: monoid/monoids/mul_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/or_monoid.hpp
-      title: monoid/monoids/or_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/update_monoid.hpp
-      title: monoid/monoids/update_monoid.hpp
-    - icon: ':warning:'
-      path: monoid/monoids/xor_monoid.hpp
-      title: monoid/monoids/xor_monoid.hpp
   - name: utilities
     pages:
-    - icon: ':question:'
+    - icon: ':warning:'
       path: utilities/bit_ceil.hpp
       title: utilities/bit_ceil.hpp
     - icon: ':heavy_check_mark:'
@@ -108,15 +25,9 @@ data:
   verificationCategories:
   - name: verify/unit_test
     pages:
-    - icon: ':x:'
-      path: verify/unit_test/lazy_segtree.test.cpp
-      title: verify/unit_test/lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/unit_test/persistent_treap.test.cpp
       title: verify/unit_test/persistent_treap.test.cpp
-    - icon: ':heavy_check_mark:'
-      path: verify/unit_test/segtree.test.cpp
-      title: verify/unit_test/segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/unit_test/shifted_array.test.cpp
       title: verify/unit_test/shifted_array.test.cpp

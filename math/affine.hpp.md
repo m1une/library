@@ -2,13 +2,10 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: verify/unit_test/segtree.test.cpp
-    title: verify/unit_test/segtree.test.cpp
+  _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':warning:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/affine.hpp\"\n\n\n\n#include <utility>\n\nnamespace\
@@ -22,9 +19,8 @@ data:
   path: math/affine.hpp
   requiredBy: []
   timestamp: '2025-09-28 21:36:02+09:00'
-  verificationStatus: LIBRARY_ALL_AC
-  verifiedWith:
-  - verify/unit_test/segtree.test.cpp
+  verificationStatus: LIBRARY_NO_TESTS
+  verifiedWith: []
 documentation_of: math/affine.hpp
 layout: document
 redirect_from:
