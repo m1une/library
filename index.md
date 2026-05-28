@@ -65,6 +65,9 @@ data:
       path: monoid/max_count.hpp
       title: monoid/max_count.hpp
     - icon: ':warning:'
+      path: monoid/max_plus_matrix.hpp
+      title: monoid/max_plus_matrix.hpp
+    - icon: ':warning:'
       path: monoid/max_subarray.hpp
       title: Max Subarray Monoid
     - icon: ':warning:'
@@ -76,6 +79,9 @@ data:
     - icon: ':warning:'
       path: monoid/min_max.hpp
       title: MinMax Monoid
+    - icon: ':warning:'
+      path: monoid/min_plus_matrix.hpp
+      title: Min-Plus Matrix Monoid
     - icon: ':warning:'
       path: monoid/min_subarray.hpp
       title: monoid/min_subarray.hpp
