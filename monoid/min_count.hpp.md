@@ -23,8 +23,10 @@ data:
     \ the counts if they are equal.\n    static constexpr value_type op(const value_type&\
     \ a, const value_type& b) {\n        if (Compare()(a.first, b.first)) return a;\n\
     \        if (Compare()(b.first, a.first)) return b;\n        return {a.first,\
-    \ a.second + b.second};\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n\n"
+    \ a.second + b.second};\n    }\n\n    // Helper to securely create a leaf node\
+    \ from a single value.\n    static constexpr value_type make(const T& val, int\
+    \ count = 1) {\n        return {val, count};\n    }\n};\n\n}  // namespace monoid\n\
+    }  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_MIN_COUNT_HPP\n#define M1UNE_MONOID_MIN_COUNT_HPP 1\n\
     \n#include <utility>\n#include <limits>\n#include <functional>\n\nnamespace m1une\
     \ {\nnamespace monoid {\n\n// Monoid for finding the optimal value and its frequency\
@@ -37,14 +39,16 @@ data:
     \ the counts if they are equal.\n    static constexpr value_type op(const value_type&\
     \ a, const value_type& b) {\n        if (Compare()(a.first, b.first)) return a;\n\
     \        if (Compare()(b.first, a.first)) return b;\n        return {a.first,\
-    \ a.second + b.second};\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n#endif  // M1UNE_MONOID_MIN_COUNT_HPP\n"
+    \ a.second + b.second};\n    }\n\n    // Helper to securely create a leaf node\
+    \ from a single value.\n    static constexpr value_type make(const T& val, int\
+    \ count = 1) {\n        return {val, count};\n    }\n};\n\n}  // namespace monoid\n\
+    }  // namespace m1une\n\n#endif  // M1UNE_MONOID_MIN_COUNT_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/min_count.hpp
   requiredBy:
   - monoid/max_count.hpp
-  timestamp: '2026-05-28 17:48:02+09:00'
+  timestamp: '2026-06-04 16:59:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/min_count.hpp

@@ -30,12 +30,17 @@ data:
     \ x : y;\n        };\n\n        return {\n            a.sum + b.sum,\n       \
     \     get_opt(a.pre, a.sum + b.pre),\n            get_opt(b.suf, a.suf + b.sum),\n\
     \            get_opt(get_opt(a.opt, b.opt), a.suf + b.pre)\n        };\n    }\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 7 \"monoid/max_subarray.hpp\"\
-    \n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for finding the maximum\
-    \ subarray sum in a range.\n// Defined as a type alias of MinSubarray using std::greater.\n\
-    template <typename T, T Id = std::numeric_limits<T>::lowest() / 2>\nusing MaxSubarray\
-    \ = MinSubarray<T, Id, std::greater<T>>;\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n\n"
+    \n    // Helper to securely create a leaf node from a single value.\n    // Set\
+    \ `allow_empty = true` if empty subarrays (sum = 0) are valid answers.\n    static\
+    \ constexpr value_type make(const T& val, bool allow_empty = false) {\n      \
+    \  if (allow_empty) {\n            T opt_val = Compare()(val, T(0)) ? val : T(0);\n\
+    \            return {val, opt_val, opt_val, opt_val};\n        }\n        return\
+    \ {val, val, val, val};\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
+    \ m1une\n\n\n#line 7 \"monoid/max_subarray.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ monoid {\n\n// Monoid for finding the maximum subarray sum in a range.\n// Defined\
+    \ as a type alias of MinSubarray using std::greater.\ntemplate <typename T, T\
+    \ Id = std::numeric_limits<T>::lowest() / 2>\nusing MaxSubarray = MinSubarray<T,\
+    \ Id, std::greater<T>>;\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: '#ifndef M1UNE_MONOID_MAX_SUBARRAY_HPP
 
     #define M1UNE_MONOID_MAX_SUBARRAY_HPP 1
@@ -75,7 +80,7 @@ data:
   isVerificationFile: false
   path: monoid/max_subarray.hpp
   requiredBy: []
-  timestamp: '2026-05-28 17:59:19+09:00'
+  timestamp: '2026-06-04 16:59:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/max_subarray.hpp
@@ -94,12 +99,12 @@ The underlying state is `m1une::monoid::SubarrayNode<T>`, which holds 4 values:
 
 ## Initialization
 
-To initialize a leaf node for a single value $x$, you must set all four properties based on whether empty subarrays (sum = 0) are allowed.
+To initialize a leaf node for a single value $x$, use the `make(val, allow_empty)` method.
 
 * **If empty subarrays are NOT allowed (Standard):**
-  Use `{x, x, x, x}`.
+  Use `make(x)` or `make(x, false)`. At least 1 element must be chosen.
 * **If empty subarrays ARE allowed (Max is bounded below by 0):**
-  Use `{x, max(0, x), max(0, x), max(0, x)}`.
+  Use `make(x, true)`.
 
 ### Example
 
@@ -117,9 +122,8 @@ int main() {
 
     std::vector<MaxSubM::value_type> init_data(N);
     for (int i = 0; i < N; ++i) {
-        long long x = A[i];
         // Standard initialization (At least 1 element must be chosen)
-        init_data[i] = {x, x, x, x};
+        init_data[i] = MaxSubM::make(A[i]);
     }
 
     m1une::data_structure::Segtree<MaxSubM> seg(init_data);

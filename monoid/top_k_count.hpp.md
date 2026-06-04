@@ -26,8 +26,10 @@ data:
     \ a[i].second + b[j].second});\n                i++;\n                j++;\n \
     \           } else if (Compare()(a[i].first, b[j].first)) {\n                res.push_back(a[i++]);\n\
     \            } else {\n                res.push_back(b[j++]);\n            }\n\
-    \        }\n        return res;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n\n"
+    \        }\n        return res;\n    }\n\n    // Helper to securely create a leaf\
+    \ node from a single value.\n    static constexpr value_type make(const T& val,\
+    \ int count = 1) {\n        return {{val, count}};\n    }\n};\n\n}  // namespace\
+    \ monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_TOP_K_COUNT_HPP\n#define M1UNE_MONOID_TOP_K_COUNT_HPP\
     \ 1\n\n#include <vector>\n#include <utility>\n#include <algorithm>\n#include <functional>\n\
     \nnamespace m1une {\nnamespace monoid {\n\n// Monoid for finding the top K distinct\
@@ -46,13 +48,15 @@ data:
     \ a[i].second + b[j].second});\n                i++;\n                j++;\n \
     \           } else if (Compare()(a[i].first, b[j].first)) {\n                res.push_back(a[i++]);\n\
     \            } else {\n                res.push_back(b[j++]);\n            }\n\
-    \        }\n        return res;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n#endif  // M1UNE_MONOID_TOP_K_COUNT_HPP\n"
+    \        }\n        return res;\n    }\n\n    // Helper to securely create a leaf\
+    \ node from a single value.\n    static constexpr value_type make(const T& val,\
+    \ int count = 1) {\n        return {{val, count}};\n    }\n};\n\n}  // namespace\
+    \ monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_TOP_K_COUNT_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/top_k_count.hpp
   requiredBy: []
-  timestamp: '2026-05-29 03:11:26+09:00'
+  timestamp: '2026-06-04 16:59:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/top_k_count.hpp
@@ -66,7 +70,7 @@ A monoid that maintains the Top $K$ (largest) distinct elements and their freque
 
 ## Initialization
 
-Wrap each single array element into a vector of size 1 containing a pair of the value and count `1`.
+Use the `make(val)` method to construct a leaf node containing a single value with a count of 1.
 
 ### Example
 
@@ -85,7 +89,7 @@ int main() {
 
     std::vector<Top2CM::value_type> init_data(N);
     for (int i = 0; i < N; ++i) {
-        init_data[i] = {{A[i], 1}};
+        init_data[i] = Top2CM::make(A[i]);
     }
 
     m1une::data_structure::Segtree<Top2CM> seg(init_data);

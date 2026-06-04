@@ -17,8 +17,12 @@ data:
     \ f(g(x)) where f = a, g = b.\n    // a.first * (b.first * x + b.second) + a.second\n\
     \    // = (a.first * b.first) * x + (a.first * b.second + a.second)\n    static\
     \ constexpr value_type op(const value_type& a, const value_type& b) { \n     \
-    \   return {a.first * b.first, a.first * b.second + a.second}; \n    }\n};\n\n\
-    }  // namespace monoid\n}  // namespace m1une\n\n\n"
+    \   return {a.first * b.first, a.first * b.second + a.second}; \n    }\n\n   \
+    \ // Helpers to create common affine transformations\n    static constexpr value_type\
+    \ make_add(const T& b) { return {T(1), b}; }\n    static constexpr value_type\
+    \ make_mul(const T& a) { return {a, T(0)}; }\n    static constexpr value_type\
+    \ make_assign(const T& b) { return {T(0), b}; }\n};\n\n}  // namespace monoid\n\
+    }  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_AFFINE_HPP\n#define M1UNE_MONOID_AFFINE_HPP 1\n\n#include\
     \ <utility>\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for affine transformations\
     \ f(x) = ax + b.\n// Represented as a pair {a, b}.\ntemplate <typename T>\nstruct\
@@ -28,13 +32,17 @@ data:
     \ f(g(x)) where f = a, g = b.\n    // a.first * (b.first * x + b.second) + a.second\n\
     \    // = (a.first * b.first) * x + (a.first * b.second + a.second)\n    static\
     \ constexpr value_type op(const value_type& a, const value_type& b) { \n     \
-    \   return {a.first * b.first, a.first * b.second + a.second}; \n    }\n};\n\n\
-    }  // namespace monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_AFFINE_HPP\n"
+    \   return {a.first * b.first, a.first * b.second + a.second}; \n    }\n\n   \
+    \ // Helpers to create common affine transformations\n    static constexpr value_type\
+    \ make_add(const T& b) { return {T(1), b}; }\n    static constexpr value_type\
+    \ make_mul(const T& a) { return {a, T(0)}; }\n    static constexpr value_type\
+    \ make_assign(const T& b) { return {T(0), b}; }\n};\n\n}  // namespace monoid\n\
+    }  // namespace m1une\n\n#endif  // M1UNE_MONOID_AFFINE_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/affine.hpp
   requiredBy: []
-  timestamp: '2026-05-28 17:38:59+09:00'
+  timestamp: '2026-06-04 16:59:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/affine.hpp
@@ -51,11 +59,11 @@ This is particularly useful when you have a sequence of operations like "multipl
 
 ## Initialization
 
-To initialize a single operation $f(x) = ax + b$, create a pair `{a, b}`.
+You can create operations directly using pairs, or use the provided helper functions for clarity:
 
-* **Add $C$:** Use `{1, C}` (since $f(x) = 1 \cdot x + C$)
-* **Multiply by $C$:** Use `{C, 0}` (since $f(x) = C \cdot x + 0$)
-* **Assign $C$:** Use `{0, C}` (since $f(x) = 0 \cdot x + C = C$)
+* **Add $C$:** `make_add(C)` -> `{1, C}`
+* **Multiply by $C$:** `make_mul(C)` -> `{C, 0}`
+* **Assign $C$:** `make_assign(C)` -> `{0, C}`
 
 ### Example
 
@@ -72,8 +80,10 @@ int main() {
     // 1: f(x) = 1x + 5 (Add 5)
     // 2: f(x) = 3x + 0 (Multiply by 3)
     
-    std::vector<std::pair<long long, long long>> ops = {
-        {2, 3}, {1, 5}, {3, 0}
+    std::vector<AffineM::value_type> ops = {
+        {2, 3}, 
+        AffineM::make_add(5), 
+        AffineM::make_mul(3)
     };
 
     m1une::data_structure::Segtree<AffineM> seg(ops);

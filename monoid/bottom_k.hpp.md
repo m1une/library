@@ -28,7 +28,9 @@ data:
     \            } else if (j == (int)b.size()) {\n                res.push_back(a[i++]);\n\
     \            } else if (Compare()(a[i], b[j])) { \n                res.push_back(a[i++]);\n\
     \            } else {\n                res.push_back(b[j++]);\n            }\n\
-    \        }\n        return res;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
+    \        }\n        return res;\n    }\n\n    // Helper to securely create a leaf\
+    \ node from a single value.\n    static constexpr value_type make(const T& val)\
+    \ {\n        return {val};\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
     \ m1une\n\n\n#line 6 \"monoid/bottom_k.hpp\"\n\nnamespace m1une {\nnamespace monoid\
     \ {\n\n// Monoid for finding the bottom K (smallest) elements in a range.\n//\
     \ Defined as a type alias of TopK using std::less.\ntemplate <typename T, int\
@@ -71,7 +73,7 @@ data:
   isVerificationFile: false
   path: monoid/bottom_k.hpp
   requiredBy: []
-  timestamp: '2026-05-28 17:48:02+09:00'
+  timestamp: '2026-06-04 16:59:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/bottom_k.hpp
