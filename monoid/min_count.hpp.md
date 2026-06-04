@@ -3,6 +3,9 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':warning:'
+    path: acted_monoid/range_add_range_min_count.hpp
+    title: Range Add Range Min Count
+  - icon: ':warning:'
     path: monoid/max_count.hpp
     title: MaxCount Monoid
   _extendedVerifiedWith: []
@@ -47,6 +50,7 @@ data:
   isVerificationFile: false
   path: monoid/min_count.hpp
   requiredBy:
+  - acted_monoid/range_add_range_min_count.hpp
   - monoid/max_count.hpp
   timestamp: '2026-06-04 16:59:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS

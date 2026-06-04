@@ -16,6 +16,9 @@ data:
       path: acted_monoid/range_add_range_min.hpp
       title: Range Add Range Min
     - icon: ':warning:'
+      path: acted_monoid/range_add_range_min_count.hpp
+      title: Range Add Range Min Count
+    - icon: ':warning:'
       path: acted_monoid/range_add_range_sum.hpp
       title: Range Add Range Sum
     - icon: ':warning:'
@@ -24,6 +27,9 @@ data:
     - icon: ':warning:'
       path: acted_monoid/range_affine_range_sum.hpp
       title: Range Affine Range Sum
+    - icon: ':warning:'
+      path: acted_monoid/range_affine_range_sum_of_squares.hpp
+      title: Range Affine Range Sum of Squares
     - icon: ':warning:'
       path: acted_monoid/range_ap_add_range_sum.hpp
       title: Range AP Add Range Sum
