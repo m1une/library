@@ -1,5 +1,6 @@
 ---
 title: MinCount Monoid
+documentation_of: ../../monoid/min_count.hpp
 ---
 
 ## Overview
@@ -38,4 +39,3 @@ int main() {
 
     return 0;
 }
-```
