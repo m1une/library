@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: data_structure/sparse_table.hpp
-    title: data_structure/sparse_table.hpp
+    title: Sparse Table
   - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept

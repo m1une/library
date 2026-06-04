@@ -11,7 +11,7 @@ data:
       title: Segment Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/sparse_table.hpp
-      title: data_structure/sparse_table.hpp
+      title: Sparse Table
     - icon: ':heavy_check_mark:'
       path: data_structure/treap.hpp
       title: data_structure/treap.hpp
