@@ -22,6 +22,15 @@ data:
       path: acted_monoid/range_affine_range_sum.hpp
       title: Range Affine Range Sum
     - icon: ':warning:'
+      path: acted_monoid/range_ap_add_range_sum.hpp
+      title: Range AP Add Range Sum
+    - icon: ':warning:'
+      path: acted_monoid/range_ap_update_range_min_max.hpp
+      title: Range AP Update Range Min Max
+    - icon: ':warning:'
+      path: acted_monoid/range_ap_update_range_sum.hpp
+      title: Range AP Update Range Sum
+    - icon: ':warning:'
       path: acted_monoid/range_flip_range_binary_inversion.hpp
       title: Range Flip Range Binary Inversion
     - icon: ':warning:'
