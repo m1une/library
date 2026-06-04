@@ -34,12 +34,12 @@ data:
     \ mapping(const operator_type& f, const value_type& x) {\n        if (x == id())\
     \ return x; // Do not apply the operator to the identity element\n        return\
     \ x + f;\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\
-    #endif\n"
+    #endif  // M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_MIN_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/range_add_range_min.hpp
   requiredBy: []
-  timestamp: '2026-06-04 16:50:12+09:00'
+  timestamp: '2026-06-04 17:06:26+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_add_range_min.hpp

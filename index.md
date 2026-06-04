@@ -20,7 +20,7 @@ data:
       title: acted_monoid/range_affine_range_sum.hpp
     - icon: ':warning:'
       path: acted_monoid/range_update_range_max.hpp
-      title: acted_monoid/range_update_range_max.hpp
+      title: Range Update Range Max
     - icon: ':warning:'
       path: acted_monoid/range_update_range_min.hpp
       title: acted_monoid/range_update_range_min.hpp
@@ -34,7 +34,7 @@ data:
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/persistent_treap.hpp
-      title: data_structure/persistent_treap.hpp
+      title: Persistent Treap
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree
@@ -43,7 +43,7 @@ data:
       title: Sparse Table
     - icon: ':heavy_check_mark:'
       path: data_structure/treap.hpp
-      title: data_structure/treap.hpp
+      title: Treap
   - name: math
     pages:
     - icon: ':warning:'

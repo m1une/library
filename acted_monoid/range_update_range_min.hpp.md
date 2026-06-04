@@ -35,12 +35,13 @@ data:
     \ older one (g)\n        return f.has_value() ? f : g;\n    }\n\n    // Mapping\n\
     \    static constexpr value_type mapping(const operator_type& f, const value_type&\
     \ x) {\n        if (!f.has_value() || x == id()) return x;\n        return f.value();\n\
-    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n#endif\n"
+    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n#endif  //\
+    \ M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MIN_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/range_update_range_min.hpp
   requiredBy: []
-  timestamp: '2026-06-04 16:50:12+09:00'
+  timestamp: '2026-06-04 17:06:26+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_update_range_min.hpp

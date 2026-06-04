@@ -37,12 +37,12 @@ data:
     \ f, const value_type& x) {\n        return {x.sum + f * x.size, x.size};\n  \
     \  }\n\n    // Helper for initializing a leaf node\n    static constexpr value_type\
     \ make(const T& val) {\n        return {val, 1};\n    }\n};\n\n}  // namespace\
-    \ acted_monoid\n}  // namespace m1une\n\n#endif\n"
+    \ acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_SUM_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/range_add_range_sum.hpp
   requiredBy: []
-  timestamp: '2026-06-04 16:50:12+09:00'
+  timestamp: '2026-06-04 17:06:26+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_add_range_sum.hpp

@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: data_structure/treap.hpp
-    title: data_structure/treap.hpp
+    title: Treap
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
