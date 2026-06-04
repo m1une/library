@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':warning:'
     path: acted_monoid/concept.hpp
-    title: acted_monoid/concept.hpp
+    title: Acted Monoid Concept
   - icon: ':heavy_check_mark:'
     path: utilities/bit_ceil.hpp
     title: utilities/bit_ceil.hpp

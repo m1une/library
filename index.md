@@ -5,10 +5,28 @@ data:
     pages:
     - icon: ':warning:'
       path: acted_monoid/concept.hpp
-      title: acted_monoid/concept.hpp
+      title: Acted Monoid Concept
+    - icon: ':warning:'
+      path: acted_monoid/range_add_range_max.hpp
+      title: Range Add Range Max
+    - icon: ':warning:'
+      path: acted_monoid/range_add_range_min.hpp
+      title: acted_monoid/range_add_range_min.hpp
+    - icon: ':warning:'
+      path: acted_monoid/range_add_range_sum.hpp
+      title: Range Add Range Sum
+    - icon: ':warning:'
+      path: acted_monoid/range_affine_range_sum.hpp
+      title: acted_monoid/range_affine_range_sum.hpp
+    - icon: ':warning:'
+      path: acted_monoid/range_update_range_max.hpp
+      title: acted_monoid/range_update_range_max.hpp
+    - icon: ':warning:'
+      path: acted_monoid/range_update_range_min.hpp
+      title: acted_monoid/range_update_range_min.hpp
     - icon: ':warning:'
       path: acted_monoid/wrapper.hpp
-      title: acted_monoid/wrapper.hpp
+      title: Acted Monoid Wrapper
   - name: data_structure
     pages:
     - icon: ':warning:'
