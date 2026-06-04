@@ -4,7 +4,7 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/strict_max2.hpp
-    title: monoid/strict_max2.hpp
+    title: Strict Max 2 Monoid
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp

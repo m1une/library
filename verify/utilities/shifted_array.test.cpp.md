@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: utilities/shifted_array.hpp
-    title: utilities/shifted_array.hpp
+    title: Shifted Array
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

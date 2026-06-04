@@ -4,7 +4,7 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/bottom_k.hpp
-    title: monoid/bottom_k.hpp
+    title: Bottom K Monoid
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp

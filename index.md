@@ -11,19 +11,19 @@ data:
       title: Range Add Range Max
     - icon: ':warning:'
       path: acted_monoid/range_add_range_min.hpp
-      title: acted_monoid/range_add_range_min.hpp
+      title: Range Add Range Min
     - icon: ':warning:'
       path: acted_monoid/range_add_range_sum.hpp
       title: Range Add Range Sum
     - icon: ':warning:'
       path: acted_monoid/range_affine_range_sum.hpp
-      title: acted_monoid/range_affine_range_sum.hpp
+      title: Range Affine Range Sum
     - icon: ':warning:'
       path: acted_monoid/range_update_range_max.hpp
       title: Range Update Range Max
     - icon: ':warning:'
       path: acted_monoid/range_update_range_min.hpp
-      title: acted_monoid/range_update_range_min.hpp
+      title: Range Update Range Min
     - icon: ':warning:'
       path: acted_monoid/wrapper.hpp
       title: Acted Monoid Wrapper
@@ -62,7 +62,7 @@ data:
       title: monoid/and.hpp
     - icon: ':warning:'
       path: monoid/arg_max.hpp
-      title: monoid/arg_max.hpp
+      title: ArgMax Monoid
     - icon: ':warning:'
       path: monoid/arg_min.hpp
       title: ArgMin Monoid
@@ -71,7 +71,7 @@ data:
       title: Binary Inversion Monoid
     - icon: ':warning:'
       path: monoid/bottom_k.hpp
-      title: monoid/bottom_k.hpp
+      title: Bottom K Monoid
     - icon: ':warning:'
       path: monoid/bracket.hpp
       title: Bracket Monoid
@@ -95,10 +95,10 @@ data:
       title: monoid/max.hpp
     - icon: ':warning:'
       path: monoid/max_count.hpp
-      title: monoid/max_count.hpp
+      title: MaxCount Monoid
     - icon: ':warning:'
       path: monoid/max_plus_matrix.hpp
-      title: monoid/max_plus_matrix.hpp
+      title: Max-Plus Matrix Monoid
     - icon: ':warning:'
       path: monoid/max_subarray.hpp
       title: Max Subarray Monoid
@@ -125,16 +125,16 @@ data:
       title: monoid/or.hpp
     - icon: ':warning:'
       path: monoid/permutation.hpp
-      title: monoid/permutation.hpp
+      title: Permutation Monoid
     - icon: ':warning:'
       path: monoid/power.hpp
-      title: monoid/power.hpp
+      title: Monoid Power
     - icon: ':warning:'
       path: monoid/rolling_hash.hpp
       title: Rolling Hash Monoid
     - icon: ':warning:'
       path: monoid/strict_max2.hpp
-      title: monoid/strict_max2.hpp
+      title: Strict Max 2 Monoid
     - icon: ':warning:'
       path: monoid/strict_min2.hpp
       title: Strict Min 2 Monoid
@@ -146,7 +146,7 @@ data:
       title: Top K Count Monoid
     - icon: ':warning:'
       path: monoid/update.hpp
-      title: monoid/update.hpp
+      title: Update Monoid
     - icon: ':warning:'
       path: monoid/wrapper.hpp
       title: Monoid Wrapper
@@ -165,7 +165,7 @@ data:
       title: utilities/bit_ceil.hpp
     - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
-      title: utilities/shifted_array.hpp
+      title: Shifted Array
   verificationCategories:
   - name: verify/data_structure
     pages:

@@ -10,7 +10,7 @@ data:
     title: Sparse Table
   - icon: ':warning:'
     path: monoid/power.hpp
-    title: monoid/power.hpp
+    title: Monoid Power
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/segtree.test.cpp

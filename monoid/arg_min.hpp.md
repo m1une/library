@@ -4,7 +4,7 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/arg_max.hpp
-    title: monoid/arg_max.hpp
+    title: ArgMax Monoid
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp

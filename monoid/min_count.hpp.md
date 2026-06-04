@@ -4,7 +4,7 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: monoid/max_count.hpp
-    title: monoid/max_count.hpp
+    title: MaxCount Monoid
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
