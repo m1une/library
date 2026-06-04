@@ -6,7 +6,7 @@ data:
     title: Monoid Concept
   - icon: ':heavy_check_mark:'
     path: utilities/bit_ceil.hpp
-    title: utilities/bit_ceil.hpp
+    title: Bit Ceil
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'

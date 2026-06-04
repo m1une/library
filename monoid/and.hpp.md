@@ -32,8 +32,18 @@ data:
   verifiedWith: []
 documentation_of: monoid/and.hpp
 layout: document
-redirect_from:
-- /library/monoid/and.hpp
-- /library/monoid/and.hpp.html
-title: monoid/and.hpp
+title: Bitwise AND Monoid
 ---
+
+## Overview
+
+A monoid representing the bitwise AND operation. 
+
+## Template Parameters
+
+* `T`: The underlying integer data type.
+
+## Properties
+
+* **Operation**: Bitwise AND ($a \ \& \ b$)
+* **Identity Element**: `~T(0)` (All bits set to 1)

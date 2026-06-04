@@ -34,8 +34,19 @@ data:
   verifiedWith: []
 documentation_of: monoid/max.hpp
 layout: document
-redirect_from:
-- /library/monoid/max.hpp
-- /library/monoid/max.hpp.html
-title: monoid/max.hpp
+title: Max Monoid
 ---
+
+## Overview
+
+A monoid representing the Maximum operation. It is an idempotent monoid, meaning it is compatible with Sparse Tables for $O(1)$ Range Maximum Queries (RMQ).
+
+## Template Parameters
+
+* `T`: The underlying data type.
+* `Id`: The identity element. Defaults to `std::numeric_limits<T>::lowest()`.
+
+## Properties
+
+* **Operation**: `std::max(a, b)`
+* **Identity Element**: `Id`

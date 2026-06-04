@@ -69,6 +69,7 @@ This is highly useful for fast matrix exponentiation, string repetition, or find
 
 ## Example
 
+{% raw %}
 ```cpp
 #include "monoid/power.hpp"
 #include "monoid/matrix.hpp"
@@ -86,3 +87,4 @@ int main() {
     return 0;
 }
 ```
+{% endraw %}

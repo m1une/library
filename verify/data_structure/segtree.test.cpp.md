@@ -6,13 +6,13 @@ data:
     title: Segment Tree
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
-    title: monoid/add.hpp
+    title: Add Monoid
   - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
   - icon: ':heavy_check_mark:'
     path: utilities/bit_ceil.hpp
-    title: utilities/bit_ceil.hpp
+    title: Bit Ceil
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

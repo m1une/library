@@ -31,8 +31,18 @@ data:
   verifiedWith: []
 documentation_of: monoid/mul.hpp
 layout: document
-redirect_from:
-- /library/monoid/mul.hpp
-- /library/monoid/mul.hpp.html
-title: monoid/mul.hpp
+title: Multiply Monoid
 ---
+
+## Overview
+
+A monoid representing the multiplication operation. Useful for Range Product queries. Commonly used alongside modular arithmetic types (`Modint`) to prevent overflow.
+
+## Template Parameters
+
+* `T`: The underlying numeric data type.
+
+## Properties
+
+* **Operation**: Multiplication ($a \times b$)
+* **Identity Element**: $1$

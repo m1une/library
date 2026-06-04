@@ -81,18 +81,18 @@ data:
     pages:
     - icon: ':warning:'
       path: math/affine.hpp
-      title: math/affine.hpp
+      title: Affine Transformation
   - name: monoid
     pages:
     - icon: ':heavy_check_mark:'
       path: monoid/add.hpp
-      title: monoid/add.hpp
+      title: Add Monoid
     - icon: ':warning:'
       path: monoid/affine.hpp
       title: Affine Monoid
     - icon: ':warning:'
       path: monoid/and.hpp
-      title: monoid/and.hpp
+      title: Bitwise AND Monoid
     - icon: ':warning:'
       path: monoid/arg_max.hpp
       title: ArgMax Monoid
@@ -113,7 +113,7 @@ data:
       title: Monoid Concept
     - icon: ':warning:'
       path: monoid/gcd.hpp
-      title: monoid/gcd.hpp
+      title: GCD Monoid
     - icon: ':warning:'
       path: monoid/longest_same.hpp
       title: Longest Same Monoid
@@ -125,7 +125,7 @@ data:
       title: Matrix Monoid
     - icon: ':warning:'
       path: monoid/max.hpp
-      title: monoid/max.hpp
+      title: Max Monoid
     - icon: ':warning:'
       path: monoid/max_count.hpp
       title: MaxCount Monoid
@@ -137,7 +137,7 @@ data:
       title: Max Subarray Monoid
     - icon: ':heavy_check_mark:'
       path: monoid/min.hpp
-      title: monoid/min.hpp
+      title: Min Monoid
     - icon: ':warning:'
       path: monoid/min_count.hpp
       title: monoid/min_count.hpp
@@ -152,10 +152,10 @@ data:
       title: monoid/min_subarray.hpp
     - icon: ':warning:'
       path: monoid/mul.hpp
-      title: monoid/mul.hpp
+      title: Multiply Monoid
     - icon: ':warning:'
       path: monoid/or.hpp
-      title: monoid/or.hpp
+      title: Bitwise OR Monoid
     - icon: ':warning:'
       path: monoid/permutation.hpp
       title: Permutation Monoid
@@ -185,7 +185,7 @@ data:
       title: Monoid Wrapper
     - icon: ':warning:'
       path: monoid/xor.hpp
-      title: monoid/xor.hpp
+      title: Bitwise XOR Monoid
   - name: string
     pages:
     - icon: ':heavy_check_mark:'
@@ -195,7 +195,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: utilities/bit_ceil.hpp
-      title: utilities/bit_ceil.hpp
+      title: Bit Ceil
     - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
       title: Shifted Array

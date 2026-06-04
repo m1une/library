@@ -53,7 +53,7 @@ An Acted Monoid representing Range Addition operations and Range Minimum queries
 
 ## Template Parameters
 
-* `T`: The underlying scalar data type.
+* `T`: The underlying scalar data type (e.g., `long long`, `int`).
 * `Id`: The identity element for the value monoid. Defaults to `std::numeric_limits<T>::max()`.
 
 ## Example

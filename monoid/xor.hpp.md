@@ -31,8 +31,18 @@ data:
   verifiedWith: []
 documentation_of: monoid/xor.hpp
 layout: document
-redirect_from:
-- /library/monoid/xor.hpp
-- /library/monoid/xor.hpp.html
-title: monoid/xor.hpp
+title: Bitwise XOR Monoid
 ---
+
+## Overview
+
+A monoid representing the bitwise XOR operation. 
+
+## Template Parameters
+
+* `T`: The underlying integer data type.
+
+## Properties
+
+* **Operation**: Bitwise XOR ($a \ \text{\textasciicircum} \ b$)
+* **Identity Element**: $0$

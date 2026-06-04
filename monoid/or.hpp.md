@@ -30,8 +30,18 @@ data:
   verifiedWith: []
 documentation_of: monoid/or.hpp
 layout: document
-redirect_from:
-- /library/monoid/or.hpp
-- /library/monoid/or.hpp.html
-title: monoid/or.hpp
+title: Bitwise OR Monoid
 ---
+
+## Overview
+
+A monoid representing the bitwise OR operation. It is an idempotent monoid, meaning it is compatible with Sparse Tables.
+
+## Template Parameters
+
+* `T`: The underlying integer data type.
+
+## Properties
+
+* **Operation**: Bitwise OR ($a \ | \ b$)
+* **Identity Element**: $0$ (All bits set to 0)

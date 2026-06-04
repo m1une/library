@@ -38,8 +38,19 @@ data:
   - verify/data_structure/sparse_table.test.cpp
 documentation_of: monoid/min.hpp
 layout: document
-redirect_from:
-- /library/monoid/min.hpp
-- /library/monoid/min.hpp.html
-title: monoid/min.hpp
+title: Min Monoid
 ---
+
+## Overview
+
+A monoid representing the Minimum operation. It is an idempotent monoid, meaning it is compatible with Sparse Tables for $O(1)$ Range Minimum Queries (RMQ).
+
+## Template Parameters
+
+* `T`: The underlying data type.
+* `Id`: The identity element. Defaults to `std::numeric_limits<T>::max()`.
+
+## Properties
+
+* **Operation**: `std::min(a, b)`
+* **Identity Element**: `Id`

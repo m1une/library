@@ -9,7 +9,7 @@ data:
     title: Monoid Concept
   - icon: ':heavy_check_mark:'
     path: monoid/min.hpp
-    title: monoid/min.hpp
+    title: Min Monoid
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
