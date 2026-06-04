@@ -45,6 +45,16 @@ struct MinSubarray {
             get_opt(get_opt(a.opt, b.opt), a.suf + b.pre)
         };
     }
+
+    // Helper to securely create a leaf node from a single value.
+    // Set `allow_empty = true` if empty subarrays (sum = 0) are valid answers.
+    static constexpr value_type make(const T& val, bool allow_empty = false) {
+        if (allow_empty) {
+            T opt_val = Compare()(val, T(0)) ? val : T(0);
+            return {val, opt_val, opt_val, opt_val};
+        }
+        return {val, val, val, val};
+    }
 };
 
 }  // namespace monoid

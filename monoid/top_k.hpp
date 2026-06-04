@@ -39,6 +39,11 @@ struct TopK {
         }
         return res;
     }
+
+    // Helper to securely create a leaf node from a single value.
+    static constexpr value_type make(const T& val) {
+        return {val};
+    }
 };
 
 }  // namespace monoid

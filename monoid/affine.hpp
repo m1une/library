@@ -24,6 +24,11 @@ struct Affine {
     static constexpr value_type op(const value_type& a, const value_type& b) { 
         return {a.first * b.first, a.first * b.second + a.second}; 
     }
+
+    // Helpers to create common affine transformations
+    static constexpr value_type make_add(const T& b) { return {T(1), b}; }
+    static constexpr value_type make_mul(const T& a) { return {a, T(0)}; }
+    static constexpr value_type make_assign(const T& b) { return {T(0), b}; }
 };
 
 }  // namespace monoid

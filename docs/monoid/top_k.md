@@ -9,9 +9,7 @@ A monoid that maintains the Top $K$ (largest) elements in a range. The underlyin
 
 ## Initialization
 
-Since the state is a `std::vector<T>`, you must wrap each single array element into a vector of size 1.
-
-* **Leaf Initialization:** `std::vector<T>{x}` or simply `{x}`.
+Since the state is a `std::vector<T>`, you can use the `make(val)` helper to automatically wrap a single array element into a vector of size 1.
 
 ### Example
 
@@ -28,10 +26,9 @@ int main() {
     std::vector<long long> A = {10, 50, 20, 40, 30};
     int N = A.size();
 
-    // Wrap each element in a vector
-    std::vector<std::vector<long long>> init_data(N);
+    std::vector<Top3M::value_type> init_data(N);
     for (int i = 0; i < N; ++i) {
-        init_data[i] = {A[i]};
+        init_data[i] = Top3M::make(A[i]);
     }
 
     m1une::data_structure::Segtree<Top3M> seg(init_data);

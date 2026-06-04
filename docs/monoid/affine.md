@@ -12,11 +12,11 @@ This is particularly useful when you have a sequence of operations like "multipl
 
 ## Initialization
 
-To initialize a single operation $f(x) = ax + b$, create a pair `{a, b}`.
+You can create operations directly using pairs, or use the provided helper functions for clarity:
 
-* **Add $C$:** Use `{1, C}` (since $f(x) = 1 \cdot x + C$)
-* **Multiply by $C$:** Use `{C, 0}` (since $f(x) = C \cdot x + 0$)
-* **Assign $C$:** Use `{0, C}` (since $f(x) = 0 \cdot x + C = C$)
+* **Add $C$:** `make_add(C)` -> `{1, C}`
+* **Multiply by $C$:** `make_mul(C)` -> `{C, 0}`
+* **Assign $C$:** `make_assign(C)` -> `{0, C}`
 
 ### Example
 
@@ -33,8 +33,10 @@ int main() {
     // 1: f(x) = 1x + 5 (Add 5)
     // 2: f(x) = 3x + 0 (Multiply by 3)
     
-    std::vector<std::pair<long long, long long>> ops = {
-        {2, 3}, {1, 5}, {3, 0}
+    std::vector<AffineM::value_type> ops = {
+        {2, 3}, 
+        AffineM::make_add(5), 
+        AffineM::make_mul(3)
     };
 
     m1une::data_structure::Segtree<AffineM> seg(ops);

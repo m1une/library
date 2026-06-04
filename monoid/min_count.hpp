@@ -25,6 +25,11 @@ struct MinCount {
         if (Compare()(b.first, a.first)) return b;
         return {a.first, a.second + b.second};
     }
+
+    // Helper to securely create a leaf node from a single value.
+    static constexpr value_type make(const T& val, int count = 1) {
+        return {val, count};
+    }
 };
 
 }  // namespace monoid

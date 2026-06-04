@@ -9,7 +9,7 @@ A monoid that maintains the Top $K$ (largest) distinct elements and their freque
 
 ## Initialization
 
-Wrap each single array element into a vector of size 1 containing a pair of the value and count `1`.
+Use the `make(val)` method to construct a leaf node containing a single value with a count of 1.
 
 ### Example
 
@@ -28,7 +28,7 @@ int main() {
 
     std::vector<Top2CM::value_type> init_data(N);
     for (int i = 0; i < N; ++i) {
-        init_data[i] = {{A[i], 1}};
+        init_data[i] = Top2CM::make(A[i]);
     }
 
     m1une::data_structure::Segtree<Top2CM> seg(init_data);

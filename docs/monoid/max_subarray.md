@@ -14,12 +14,12 @@ The underlying state is `m1une::monoid::SubarrayNode<T>`, which holds 4 values:
 
 ## Initialization
 
-To initialize a leaf node for a single value $x$, you must set all four properties based on whether empty subarrays (sum = 0) are allowed.
+To initialize a leaf node for a single value $x$, use the `make(val, allow_empty)` method.
 
 * **If empty subarrays are NOT allowed (Standard):**
-  Use `{x, x, x, x}`.
+  Use `make(x)` or `make(x, false)`. At least 1 element must be chosen.
 * **If empty subarrays ARE allowed (Max is bounded below by 0):**
-  Use `{x, max(0, x), max(0, x), max(0, x)}`.
+  Use `make(x, true)`.
 
 ### Example
 
@@ -37,9 +37,8 @@ int main() {
 
     std::vector<MaxSubM::value_type> init_data(N);
     for (int i = 0; i < N; ++i) {
-        long long x = A[i];
         // Standard initialization (At least 1 element must be chosen)
-        init_data[i] = {x, x, x, x};
+        init_data[i] = MaxSubM::make(A[i]);
     }
 
     m1une::data_structure::Segtree<MaxSubM> seg(init_data);
