@@ -1,4 +1,3 @@
-```markdown
 ---
 title: Range Update Range Max
 documentation_of: ../../acted_monoid/range_update_range_max.hpp

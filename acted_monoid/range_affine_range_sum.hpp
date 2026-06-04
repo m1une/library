@@ -47,4 +47,4 @@ struct RangeAffineRangeSum {
 }  // namespace acted_monoid
 }  // namespace m1une
 
-#endif
+#endif  // M1UNE_ACTED_MONOID_RANGE_AFFINE_RANGE_SUM_HPP

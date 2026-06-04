@@ -41,4 +41,4 @@ struct RangeAddRangeSum {
 }  // namespace acted_monoid
 }  // namespace m1une
 
-#endif
+#endif  // M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_SUM_HPP

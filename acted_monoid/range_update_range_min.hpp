@@ -36,4 +36,4 @@ struct RangeUpdateRangeMin {
 }  // namespace acted_monoid
 }  // namespace m1une
 
-#endif
+#endif  // M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MIN_HPP
