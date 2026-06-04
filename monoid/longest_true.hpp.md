@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: acted_monoid/range_update_range_longest_true.hpp
+    title: Range Update Range Longest True
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -46,7 +49,8 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: monoid/longest_true.hpp
-  requiredBy: []
+  requiredBy:
+  - acted_monoid/range_update_range_longest_true.hpp
   timestamp: '2026-05-29 03:11:26+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

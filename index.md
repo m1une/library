@@ -7,6 +7,9 @@ data:
       path: acted_monoid/concept.hpp
       title: Acted Monoid Concept
     - icon: ':warning:'
+      path: acted_monoid/range_add_range_arg_min.hpp
+      title: Range Add Range ArgMin
+    - icon: ':warning:'
       path: acted_monoid/range_add_range_max.hpp
       title: Range Add Range Max
     - icon: ':warning:'
@@ -33,6 +36,9 @@ data:
     - icon: ':warning:'
       path: acted_monoid/range_flip_range_binary_inversion.hpp
       title: Range Flip Range Binary Inversion
+    - icon: ':warning:'
+      path: acted_monoid/range_update_range_longest_true.hpp
+      title: Range Update Range Longest True
     - icon: ':warning:'
       path: acted_monoid/range_update_range_max.hpp
       title: Range Update Range Max

@@ -3,6 +3,9 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':warning:'
+    path: acted_monoid/range_add_range_arg_min.hpp
+    title: Range Add Range ArgMin
+  - icon: ':warning:'
     path: monoid/arg_max.hpp
     title: ArgMax Monoid
   _extendedVerifiedWith: []
@@ -44,6 +47,7 @@ data:
   isVerificationFile: false
   path: monoid/arg_min.hpp
   requiredBy:
+  - acted_monoid/range_add_range_arg_min.hpp
   - monoid/arg_max.hpp
   timestamp: '2026-05-29 03:23:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
