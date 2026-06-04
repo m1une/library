@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':warning:'
     path: monoid/min_subarray.hpp
-    title: monoid/min_subarray.hpp
+    title: Min Subarray Monoid
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

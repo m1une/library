@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':warning:'
     path: monoid/min_count.hpp
-    title: monoid/min_count.hpp
+    title: MinCount Monoid
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
