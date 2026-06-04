@@ -16,14 +16,26 @@ data:
       path: acted_monoid/range_add_range_sum.hpp
       title: Range Add Range Sum
     - icon: ':warning:'
+      path: acted_monoid/range_affine_range_min_max.hpp
+      title: Range Affine Range Min Max
+    - icon: ':warning:'
       path: acted_monoid/range_affine_range_sum.hpp
       title: Range Affine Range Sum
+    - icon: ':warning:'
+      path: acted_monoid/range_flip_range_binary_inversion.hpp
+      title: Range Flip Range Binary Inversion
     - icon: ':warning:'
       path: acted_monoid/range_update_range_max.hpp
       title: Range Update Range Max
     - icon: ':warning:'
       path: acted_monoid/range_update_range_min.hpp
       title: Range Update Range Min
+    - icon: ':warning:'
+      path: acted_monoid/range_update_range_sum.hpp
+      title: Range Update Range Sum
+    - icon: ':warning:'
+      path: acted_monoid/range_xor_range_xor.hpp
+      title: Range Xor Range Xor
     - icon: ':warning:'
       path: acted_monoid/wrapper.hpp
       title: Acted Monoid Wrapper

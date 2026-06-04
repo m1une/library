@@ -1,7 +1,10 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':warning:'
+    path: acted_monoid/range_flip_range_binary_inversion.hpp
+    title: Range Flip Range Binary Inversion
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
@@ -43,7 +46,8 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: monoid/binary_inversion.hpp
-  requiredBy: []
+  requiredBy:
+  - acted_monoid/range_flip_range_binary_inversion.hpp
   timestamp: '2026-05-29 03:15:49+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
