@@ -1,18 +1,6 @@
 ---
 data:
-  _extendedDependsOn:
-  - icon: ':x:'
-    path: acted_monoid/concept.hpp
-    title: Acted Monoid Concept
-  - icon: ':x:'
-    path: acted_monoid/range_affine_range_sum.hpp
-    title: Range Affine Range Sum
-  - icon: ':x:'
-    path: data_structure/lazy_segtree.hpp
-    title: Lazy Segment Tree
-  - icon: ':question:'
-    path: utilities/bit_ceil.hpp
-    title: Bit Ceil
+  _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: true
@@ -25,28 +13,27 @@ data:
     \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
     \  File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/languages/cplusplus.py\"\
     , line 187, in bundle\n    bundler.update(path)\n  File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/languages/cplusplus_bundle.py\"\
-    , line 400, in update\n    raise BundleErrorAt(path, i + 1, \"unable to process\
-    \ #include in #if / #ifdef / #ifndef other than include guards\")\nonlinejudge_verify.languages.cplusplus_bundle.BundleErrorAt:\
-    \ verify/data_structure/lazy_segtree.test.cpp: line 282: unable to process #include\
-    \ in #if / #ifdef / #ifndef other than include guards\n"
+    , line 401, in update\n    self.update(self._resolve(pathlib.Path(included), included_from=path))\n\
+    \                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n \
+    \ File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/languages/cplusplus_bundle.py\"\
+    , line 260, in _resolve\n    raise BundleErrorAt(path, -1, \"no such header\"\
+    )\nonlinejudge_verify.languages.cplusplus_bundle.BundleErrorAt: atcoder/modint:\
+    \ line -1: no such header\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\
     \n\n#ifdef LOCAL\n#define _GLIBCXX_DEBUG\n#pragma GCC optimize(\"O0\")\n#else\n\
     #pragma GCC optimize(\"O3\")\n#pragma GCC optimize(\"unroll-loops\")\n#endif\n\
     \n#include <bits/stdc++.h>\n// #include <bits/extc++.h>\nusing namespace std;\n\
-    \n#include <atcoder/modint>\nusing mint = atcoder::modint998244353;\nistream&\
-    \ operator>>(istream& in, mint& x) {\n    long long a;\n    in >> a;\n    x =\
-    \ a;\n    return in;\n}\nostream& operator<<(ostream& out, const mint& x) {\n\
-    \    return out << x.val();\n}\n\nusing ll = long long;\nusing u32 = unsigned\
-    \ int;\nusing u64 = unsigned long long;\nusing i128 = __int128;\nusing u128 =\
-    \ unsigned __int128;\nusing f128 = __float128;\n\ntemplate <class T>\nconstexpr\
-    \ T infty = 0;\ntemplate <>\nconstexpr int infty<int> = 1'000'000'000;\ntemplate\
-    \ <>\nconstexpr ll infty<ll> = ll(infty<int>) * infty<int> * 2;\ntemplate <>\n\
-    constexpr u32 infty<u32> = infty<int>;\ntemplate <>\nconstexpr u64 infty<u64>\
-    \ = infty<ll>;\ntemplate <>\nconstexpr i128 infty<i128> = i128(infty<ll>) * infty<ll>;\n\
-    template <>\nconstexpr double infty<double> = infty<ll>;\ntemplate <>\nconstexpr\
-    \ long double infty<long double> = infty<ll>;\n\nusing pi = pair<int, int>;\n\
-    using pl = pair<ll, ll>;\nusing vi = vector<int>;\nusing vl = vector<ll>;\ntemplate\
-    \ <class T>\nusing vc = vector<T>;\ntemplate <class T>\nusing vvc = vector<vc<T>>;\n\
+    \n#include \"atcoder/modint\"\nusing mint = atcoder::modint998244353;\n\nusing\
+    \ ll = long long;\nusing u32 = unsigned int;\nusing u64 = unsigned long long;\n\
+    using i128 = __int128;\nusing u128 = unsigned __int128;\nusing f128 = __float128;\n\
+    \ntemplate <class T>\nconstexpr T infty = 0;\ntemplate <>\nconstexpr int infty<int>\
+    \ = 1'000'000'000;\ntemplate <>\nconstexpr ll infty<ll> = ll(infty<int>) * infty<int>\
+    \ * 2;\ntemplate <>\nconstexpr u32 infty<u32> = infty<int>;\ntemplate <>\nconstexpr\
+    \ u64 infty<u64> = infty<ll>;\ntemplate <>\nconstexpr i128 infty<i128> = i128(infty<ll>)\
+    \ * infty<ll>;\ntemplate <>\nconstexpr double infty<double> = infty<ll>;\ntemplate\
+    \ <>\nconstexpr long double infty<long double> = infty<ll>;\n\nusing pi = pair<int,\
+    \ int>;\nusing pl = pair<ll, ll>;\nusing vi = vector<int>;\nusing vl = vector<ll>;\n\
+    template <class T>\nusing vc = vector<T>;\ntemplate <class T>\nusing vvc = vector<vc<T>>;\n\
     using vvi = vvc<int>;\nusing vvl = vvc<ll>;\ntemplate <class T>\nusing vvvc =\
     \ vector<vvc<T>>;\ntemplate <class T>\nusing vvvvc = vector<vvvc<T>>;\ntemplate\
     \ <class T>\nusing vvvvvc = vector<vvvvc<T>>;\ntemplate <class T>\nusing pqg =\
@@ -140,15 +127,11 @@ data:
     \ 80);\n    CPP_DUMP_SET_OPTION(log_label_func, cpp_dump::log_label::filename());\n\
     \    CPP_DUMP_SET_OPTION(enable_asterisk, true);\n    solve();\n    return 0;\n\
     }\n"
-  dependsOn:
-  - acted_monoid/range_affine_range_sum.hpp
-  - data_structure/lazy_segtree.hpp
-  - acted_monoid/concept.hpp
-  - utilities/bit_ceil.hpp
+  dependsOn: []
   isVerificationFile: true
   path: verify/data_structure/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-06 19:23:50+09:00'
+  timestamp: '1970-01-01 00:00:00+00:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_segtree.test.cpp

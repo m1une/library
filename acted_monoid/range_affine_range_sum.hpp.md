@@ -2,13 +2,10 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':x:'
-    path: verify/data_structure/lazy_segtree.test.cpp
-    title: verify/data_structure/lazy_segtree.test.cpp
-  _isVerificationFailed: true
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':warning:'
   attributes:
     links: []
   bundledCode: "#line 1 \"acted_monoid/range_affine_range_sum.hpp\"\n\n\n\n#include\
@@ -54,9 +51,8 @@ data:
   path: acted_monoid/range_affine_range_sum.hpp
   requiredBy: []
   timestamp: '2026-06-04 17:06:26+09:00'
-  verificationStatus: LIBRARY_ALL_WA
-  verifiedWith:
-  - verify/data_structure/lazy_segtree.test.cpp
+  verificationStatus: LIBRARY_NO_TESTS
+  verifiedWith: []
 documentation_of: acted_monoid/range_affine_range_sum.hpp
 layout: document
 title: Range Affine Range Sum
