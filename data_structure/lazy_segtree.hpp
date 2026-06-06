@@ -68,6 +68,37 @@ struct LazySegtree {
         for (int i = _size - 1; i >= 1; i--) update(i);
     }
 
+    // Constructs a lazy segment tree from a vector of a different type U.
+    // It automatically adapts to the Monoid's initialization requirements:
+    // 1. ActedMonoid::make(val) if it exists.
+    // 2. ActedMonoid::make(val, index) if the monoid requires global indices.
+    // 3. static_cast<T>(val) as a fallback for simple monoids.
+    template <typename U>
+    requires (!std::same_as<U, T>) && (
+        requires(U x) { ActedMonoid::make(x); } ||
+        requires(U x, int i) { ActedMonoid::make(x, i); } ||
+        std::convertible_to<U, T>
+    )
+    explicit LazySegtree(const std::vector<U>& v) : _n(int(v.size())) {
+        _size = m1une::utilities::bit_ceil((unsigned int)(_n));
+        _log = 0;
+        while ((1U << _log) < (unsigned int)(_size)) _log++;
+        _d.assign(2 * _size, ActedMonoid::id());
+        _lz.assign(_size, ActedMonoid::op_id());
+        
+        // Compile-time branching based on the available make() signature
+        for (int i = 0; i < _n; i++) {
+            if constexpr (requires(U x) { ActedMonoid::make(x); }) {
+                _d[_size + i] = ActedMonoid::make(v[i]);
+            } else if constexpr (requires(U x, int idx) { ActedMonoid::make(x, idx); }) {
+                _d[_size + i] = ActedMonoid::make(v[i], i);
+            } else {
+                _d[_size + i] = static_cast<T>(v[i]);
+            }
+        }
+        for (int i = _size - 1; i >= 1; i--) update(i);
+    }
+
     // Assigns x to the p-th element.
     void set(int p, T x) {
         assert(0 <= p && p < _n);
