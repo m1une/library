@@ -1,17 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: acted_monoid/concept.hpp
     title: Acted Monoid Concept
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: utilities/bit_ceil.hpp
     title: Bit Ceil
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: verify/data_structure/lazy_segtree.test.cpp
+    title: verify/data_structure/lazy_segtree.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"data_structure/lazy_segtree.hpp\"\n\n\n\n#include <vector>\n\
@@ -249,8 +252,9 @@ data:
   path: data_structure/lazy_segtree.hpp
   requiredBy: []
   timestamp: '2026-06-06 19:21:12+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - verify/data_structure/lazy_segtree.test.cpp
 documentation_of: data_structure/lazy_segtree.hpp
 layout: document
 title: Lazy Segment Tree
