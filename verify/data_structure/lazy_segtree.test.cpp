@@ -12,17 +12,8 @@
 // #include <bits/extc++.h>
 using namespace std;
 
-#include <atcoder/modint>
+#include "atcoder/modint"
 using mint = atcoder::modint998244353;
-istream& operator>>(istream& in, mint& x) {
-    long long a;
-    in >> a;
-    x = a;
-    return in;
-}
-ostream& operator<<(ostream& out, const mint& x) {
-    return out << x.val();
-}
 
 using ll = long long;
 using u32 = unsigned int;
