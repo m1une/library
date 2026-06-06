@@ -83,6 +83,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/dsu.hpp
       title: Disjoint Set Union (DSU)
+    - icon: ':warning:'
+      path: data_structure/dynamic_array.hpp
+      title: Dynamic Array (Implicit Treap)
     - icon: ':heavy_check_mark:'
       path: data_structure/lazy_segtree.hpp
       title: Lazy Segment Tree
