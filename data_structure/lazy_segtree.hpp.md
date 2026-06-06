@@ -54,58 +54,64 @@ data:
     \ _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n  \
     \      _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
     \        for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n        for (int\
-    \ i = _size - 1; i >= 1; i--) update(i);\n    }\n\n    // Assigns x to the p-th\
-    \ element.\n    void set(int p, T x) {\n        assert(0 <= p && p < _n);\n  \
-    \      p += _size;\n        for (int i = _log; i >= 1; i--) push(p >> i);\n  \
-    \      _d[p] = x;\n        for (int i = 1; i <= _log; i++) update(p >> i);\n \
-    \   }\n\n    // Returns the value of the p-th element.\n    T get(int p) {\n \
-    \       assert(0 <= p && p < _n);\n        p += _size;\n        for (int i = _log;\
-    \ i >= 1; i--) push(p >> i);\n        return _d[p];\n    }\n\n    // Returns the\
-    \ product (result of the monoid operation) in the range [l, r).\n    T prod(int\
-    \ l, int r) {\n        assert(0 <= l && l <= r && r <= _n);\n        if (l ==\
-    \ r) return ActedMonoid::id();\n\n        l += _size;\n        r += _size;\n\n\
-    \        for (int i = _log; i >= 1; i--) {\n            if (((l >> i) << i) !=\
-    \ l) push(l >> i);\n            if (((r >> i) << i) != r) push((r - 1) >> i);\n\
-    \        }\n\n        T sml = ActedMonoid::id(), smr = ActedMonoid::id();\n  \
-    \      while (l < r) {\n            if (l & 1) sml = ActedMonoid::op(sml, _d[l++]);\n\
-    \            if (r & 1) smr = ActedMonoid::op(_d[--r], smr);\n            l >>=\
-    \ 1;\n            r >>= 1;\n        }\n\n        return ActedMonoid::op(sml, smr);\n\
-    \    }\n\n    // Returns the product of the entire array.\n    T all_prod() const\
-    \ { return _d[1]; }\n\n    // Applies the operator f to the p-th element.\n  \
-    \  void apply(int p, F f) {\n        assert(0 <= p && p < _n);\n        p += _size;\n\
-    \        for (int i = _log; i >= 1; i--) push(p >> i);\n        _d[p] = ActedMonoid::mapping(f,\
-    \ _d[p]);\n        for (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n\
-    \    // Applies the operator f to all elements in the range [l, r).\n    void\
-    \ apply(int l, int r, F f) {\n        assert(0 <= l && l <= r && r <= _n);\n \
-    \       if (l == r) return;\n\n        l += _size;\n        r += _size;\n\n  \
-    \      for (int i = _log; i >= 1; i--) {\n            if (((l >> i) << i) != l)\
-    \ push(l >> i);\n            if (((r >> i) << i) != r) push((r - 1) >> i);\n \
-    \       }\n\n        {\n            int l2 = l, r2 = r;\n            while (l\
-    \ < r) {\n                if (l & 1) all_apply(l++, f);\n                if (r\
-    \ & 1) all_apply(--r, f);\n                l >>= 1;\n                r >>= 1;\n\
-    \            }\n            l = l2;\n            r = r2;\n        }\n\n      \
-    \  for (int i = 1; i <= _log; i++) {\n            if (((l >> i) << i) != l) update(l\
-    \ >> i);\n            if (((r >> i) << i) != r) update((r - 1) >> i);\n      \
-    \  }\n    }\n\n    // Finds the largest r such that g(prod(l, r)) is true.\n \
-    \   template <class F_pred>\n    int max_right(int l, F_pred g) {\n        assert(0\
-    \ <= l && l <= _n);\n        assert(g(ActedMonoid::id()));\n        if (l == _n)\
-    \ return _n;\n        l += _size;\n        for (int i = _log; i >= 1; i--) push(l\
-    \ >> i);\n        T sm = ActedMonoid::id();\n        do {\n            while (l\
-    \ % 2 == 0) l >>= 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n    \
-    \            while (l < _size) {\n                    push(l);\n             \
-    \       l = (2 * l);\n                    if (g(ActedMonoid::op(sm, _d[l]))) {\n\
-    \                        sm = ActedMonoid::op(sm, _d[l]);\n                  \
-    \      l++;\n                    }\n                }\n                return\
-    \ l - _size;\n            }\n            sm = ActedMonoid::op(sm, _d[l]);\n  \
-    \          l++;\n        } while ((l & -l) != l);\n        return _n;\n    }\n\
-    \n    // Finds the smallest l such that g(prod(l, r)) is true.\n    template <class\
-    \ F_pred>\n    int min_left(int r, F_pred g) {\n        assert(0 <= r && r <=\
-    \ _n);\n        assert(g(ActedMonoid::id()));\n        if (r == 0) return 0;\n\
-    \        r += _size;\n        for (int i = _log; i >= 1; i--) push((r - 1) >>\
-    \ i);\n        T sm = ActedMonoid::id();\n        do {\n            r--;\n   \
-    \         while (r > 1 && (r % 2)) r >>= 1;\n            if (!g(ActedMonoid::op(_d[r],\
-    \ sm))) {\n                while (r < _size) {\n                    push(r);\n\
-    \                    r = (2 * r + 1);\n                    if (g(ActedMonoid::op(_d[r],\
+    \ i = _size - 1; i >= 1; i--) update(i);\n    }\n    explicit LazySegtree(std::vector<T>&&\
+    \ v) : _n(int(v.size())) {\n        _size = m1une::utilities::bit_ceil((unsigned\
+    \ int)(_n));\n        _log = 0;\n        while ((1U << _log) < (unsigned int)(_size))\
+    \ _log++;\n        _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size,\
+    \ ActedMonoid::op_id());\n        for (int i = 0; i < _n; i++) _d[_size + i] =\
+    \ std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
+    \    }\n\n    // Assigns x to the p-th element.\n    void set(int p, T x) {\n\
+    \        assert(0 <= p && p < _n);\n        p += _size;\n        for (int i =\
+    \ _log; i >= 1; i--) push(p >> i);\n        _d[p] = x;\n        for (int i = 1;\
+    \ i <= _log; i++) update(p >> i);\n    }\n\n    // Returns the value of the p-th\
+    \ element.\n    T get(int p) {\n        assert(0 <= p && p < _n);\n        p +=\
+    \ _size;\n        for (int i = _log; i >= 1; i--) push(p >> i);\n        return\
+    \ _d[p];\n    }\n\n    // Returns the product (result of the monoid operation)\
+    \ in the range [l, r).\n    T prod(int l, int r) {\n        assert(0 <= l && l\
+    \ <= r && r <= _n);\n        if (l == r) return ActedMonoid::id();\n\n       \
+    \ l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1; i--)\
+    \ {\n            if (((l >> i) << i) != l) push(l >> i);\n            if (((r\
+    \ >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        T sml = ActedMonoid::id(),\
+    \ smr = ActedMonoid::id();\n        while (l < r) {\n            if (l & 1) sml\
+    \ = ActedMonoid::op(sml, _d[l++]);\n            if (r & 1) smr = ActedMonoid::op(_d[--r],\
+    \ smr);\n            l >>= 1;\n            r >>= 1;\n        }\n\n        return\
+    \ ActedMonoid::op(sml, smr);\n    }\n\n    // Returns the product of the entire\
+    \ array.\n    T all_prod() const { return _d[1]; }\n\n    // Applies the operator\
+    \ f to the p-th element.\n    void apply(int p, F f) {\n        assert(0 <= p\
+    \ && p < _n);\n        p += _size;\n        for (int i = _log; i >= 1; i--) push(p\
+    \ >> i);\n        _d[p] = ActedMonoid::mapping(f, _d[p]);\n        for (int i\
+    \ = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Applies the operator f\
+    \ to all elements in the range [l, r).\n    void apply(int l, int r, F f) {\n\
+    \        assert(0 <= l && l <= r && r <= _n);\n        if (l == r) return;\n\n\
+    \        l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1;\
+    \ i--) {\n            if (((l >> i) << i) != l) push(l >> i);\n            if\
+    \ (((r >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        {\n       \
+    \     int l2 = l, r2 = r;\n            while (l < r) {\n                if (l\
+    \ & 1) all_apply(l++, f);\n                if (r & 1) all_apply(--r, f);\n   \
+    \             l >>= 1;\n                r >>= 1;\n            }\n            l\
+    \ = l2;\n            r = r2;\n        }\n\n        for (int i = 1; i <= _log;\
+    \ i++) {\n            if (((l >> i) << i) != l) update(l >> i);\n            if\
+    \ (((r >> i) << i) != r) update((r - 1) >> i);\n        }\n    }\n\n    // Finds\
+    \ the largest r such that g(prod(l, r)) is true.\n    template <class F_pred>\n\
+    \    int max_right(int l, F_pred g) {\n        assert(0 <= l && l <= _n);\n  \
+    \      assert(g(ActedMonoid::id()));\n        if (l == _n) return _n;\n      \
+    \  l += _size;\n        for (int i = _log; i >= 1; i--) push(l >> i);\n      \
+    \  T sm = ActedMonoid::id();\n        do {\n            while (l % 2 == 0) l >>=\
+    \ 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n                while\
+    \ (l < _size) {\n                    push(l);\n                    l = (2 * l);\n\
+    \                    if (g(ActedMonoid::op(sm, _d[l]))) {\n                  \
+    \      sm = ActedMonoid::op(sm, _d[l]);\n                        l++;\n      \
+    \              }\n                }\n                return l - _size;\n     \
+    \       }\n            sm = ActedMonoid::op(sm, _d[l]);\n            l++;\n  \
+    \      } while ((l & -l) != l);\n        return _n;\n    }\n\n    // Finds the\
+    \ smallest l such that g(prod(l, r)) is true.\n    template <class F_pred>\n \
+    \   int min_left(int r, F_pred g) {\n        assert(0 <= r && r <= _n);\n    \
+    \    assert(g(ActedMonoid::id()));\n        if (r == 0) return 0;\n        r +=\
+    \ _size;\n        for (int i = _log; i >= 1; i--) push((r - 1) >> i);\n      \
+    \  T sm = ActedMonoid::id();\n        do {\n            r--;\n            while\
+    \ (r > 1 && (r % 2)) r >>= 1;\n            if (!g(ActedMonoid::op(_d[r], sm)))\
+    \ {\n                while (r < _size) {\n                    push(r);\n     \
+    \               r = (2 * r + 1);\n                    if (g(ActedMonoid::op(_d[r],\
     \ sm))) {\n                        sm = ActedMonoid::op(_d[r], sm);\n        \
     \                r--;\n                    }\n                }\n            \
     \    return r + 1 - _size;\n            }\n            sm = ActedMonoid::op(_d[r],\
@@ -137,58 +143,64 @@ data:
     \ _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n  \
     \      _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
     \        for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n        for (int\
-    \ i = _size - 1; i >= 1; i--) update(i);\n    }\n\n    // Assigns x to the p-th\
-    \ element.\n    void set(int p, T x) {\n        assert(0 <= p && p < _n);\n  \
-    \      p += _size;\n        for (int i = _log; i >= 1; i--) push(p >> i);\n  \
-    \      _d[p] = x;\n        for (int i = 1; i <= _log; i++) update(p >> i);\n \
-    \   }\n\n    // Returns the value of the p-th element.\n    T get(int p) {\n \
-    \       assert(0 <= p && p < _n);\n        p += _size;\n        for (int i = _log;\
-    \ i >= 1; i--) push(p >> i);\n        return _d[p];\n    }\n\n    // Returns the\
-    \ product (result of the monoid operation) in the range [l, r).\n    T prod(int\
-    \ l, int r) {\n        assert(0 <= l && l <= r && r <= _n);\n        if (l ==\
-    \ r) return ActedMonoid::id();\n\n        l += _size;\n        r += _size;\n\n\
-    \        for (int i = _log; i >= 1; i--) {\n            if (((l >> i) << i) !=\
-    \ l) push(l >> i);\n            if (((r >> i) << i) != r) push((r - 1) >> i);\n\
-    \        }\n\n        T sml = ActedMonoid::id(), smr = ActedMonoid::id();\n  \
-    \      while (l < r) {\n            if (l & 1) sml = ActedMonoid::op(sml, _d[l++]);\n\
-    \            if (r & 1) smr = ActedMonoid::op(_d[--r], smr);\n            l >>=\
-    \ 1;\n            r >>= 1;\n        }\n\n        return ActedMonoid::op(sml, smr);\n\
-    \    }\n\n    // Returns the product of the entire array.\n    T all_prod() const\
-    \ { return _d[1]; }\n\n    // Applies the operator f to the p-th element.\n  \
-    \  void apply(int p, F f) {\n        assert(0 <= p && p < _n);\n        p += _size;\n\
-    \        for (int i = _log; i >= 1; i--) push(p >> i);\n        _d[p] = ActedMonoid::mapping(f,\
-    \ _d[p]);\n        for (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n\
-    \    // Applies the operator f to all elements in the range [l, r).\n    void\
-    \ apply(int l, int r, F f) {\n        assert(0 <= l && l <= r && r <= _n);\n \
-    \       if (l == r) return;\n\n        l += _size;\n        r += _size;\n\n  \
-    \      for (int i = _log; i >= 1; i--) {\n            if (((l >> i) << i) != l)\
-    \ push(l >> i);\n            if (((r >> i) << i) != r) push((r - 1) >> i);\n \
-    \       }\n\n        {\n            int l2 = l, r2 = r;\n            while (l\
-    \ < r) {\n                if (l & 1) all_apply(l++, f);\n                if (r\
-    \ & 1) all_apply(--r, f);\n                l >>= 1;\n                r >>= 1;\n\
-    \            }\n            l = l2;\n            r = r2;\n        }\n\n      \
-    \  for (int i = 1; i <= _log; i++) {\n            if (((l >> i) << i) != l) update(l\
-    \ >> i);\n            if (((r >> i) << i) != r) update((r - 1) >> i);\n      \
-    \  }\n    }\n\n    // Finds the largest r such that g(prod(l, r)) is true.\n \
-    \   template <class F_pred>\n    int max_right(int l, F_pred g) {\n        assert(0\
-    \ <= l && l <= _n);\n        assert(g(ActedMonoid::id()));\n        if (l == _n)\
-    \ return _n;\n        l += _size;\n        for (int i = _log; i >= 1; i--) push(l\
-    \ >> i);\n        T sm = ActedMonoid::id();\n        do {\n            while (l\
-    \ % 2 == 0) l >>= 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n    \
-    \            while (l < _size) {\n                    push(l);\n             \
-    \       l = (2 * l);\n                    if (g(ActedMonoid::op(sm, _d[l]))) {\n\
-    \                        sm = ActedMonoid::op(sm, _d[l]);\n                  \
-    \      l++;\n                    }\n                }\n                return\
-    \ l - _size;\n            }\n            sm = ActedMonoid::op(sm, _d[l]);\n  \
-    \          l++;\n        } while ((l & -l) != l);\n        return _n;\n    }\n\
-    \n    // Finds the smallest l such that g(prod(l, r)) is true.\n    template <class\
-    \ F_pred>\n    int min_left(int r, F_pred g) {\n        assert(0 <= r && r <=\
-    \ _n);\n        assert(g(ActedMonoid::id()));\n        if (r == 0) return 0;\n\
-    \        r += _size;\n        for (int i = _log; i >= 1; i--) push((r - 1) >>\
-    \ i);\n        T sm = ActedMonoid::id();\n        do {\n            r--;\n   \
-    \         while (r > 1 && (r % 2)) r >>= 1;\n            if (!g(ActedMonoid::op(_d[r],\
-    \ sm))) {\n                while (r < _size) {\n                    push(r);\n\
-    \                    r = (2 * r + 1);\n                    if (g(ActedMonoid::op(_d[r],\
+    \ i = _size - 1; i >= 1; i--) update(i);\n    }\n    explicit LazySegtree(std::vector<T>&&\
+    \ v) : _n(int(v.size())) {\n        _size = m1une::utilities::bit_ceil((unsigned\
+    \ int)(_n));\n        _log = 0;\n        while ((1U << _log) < (unsigned int)(_size))\
+    \ _log++;\n        _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size,\
+    \ ActedMonoid::op_id());\n        for (int i = 0; i < _n; i++) _d[_size + i] =\
+    \ std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
+    \    }\n\n    // Assigns x to the p-th element.\n    void set(int p, T x) {\n\
+    \        assert(0 <= p && p < _n);\n        p += _size;\n        for (int i =\
+    \ _log; i >= 1; i--) push(p >> i);\n        _d[p] = x;\n        for (int i = 1;\
+    \ i <= _log; i++) update(p >> i);\n    }\n\n    // Returns the value of the p-th\
+    \ element.\n    T get(int p) {\n        assert(0 <= p && p < _n);\n        p +=\
+    \ _size;\n        for (int i = _log; i >= 1; i--) push(p >> i);\n        return\
+    \ _d[p];\n    }\n\n    // Returns the product (result of the monoid operation)\
+    \ in the range [l, r).\n    T prod(int l, int r) {\n        assert(0 <= l && l\
+    \ <= r && r <= _n);\n        if (l == r) return ActedMonoid::id();\n\n       \
+    \ l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1; i--)\
+    \ {\n            if (((l >> i) << i) != l) push(l >> i);\n            if (((r\
+    \ >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        T sml = ActedMonoid::id(),\
+    \ smr = ActedMonoid::id();\n        while (l < r) {\n            if (l & 1) sml\
+    \ = ActedMonoid::op(sml, _d[l++]);\n            if (r & 1) smr = ActedMonoid::op(_d[--r],\
+    \ smr);\n            l >>= 1;\n            r >>= 1;\n        }\n\n        return\
+    \ ActedMonoid::op(sml, smr);\n    }\n\n    // Returns the product of the entire\
+    \ array.\n    T all_prod() const { return _d[1]; }\n\n    // Applies the operator\
+    \ f to the p-th element.\n    void apply(int p, F f) {\n        assert(0 <= p\
+    \ && p < _n);\n        p += _size;\n        for (int i = _log; i >= 1; i--) push(p\
+    \ >> i);\n        _d[p] = ActedMonoid::mapping(f, _d[p]);\n        for (int i\
+    \ = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Applies the operator f\
+    \ to all elements in the range [l, r).\n    void apply(int l, int r, F f) {\n\
+    \        assert(0 <= l && l <= r && r <= _n);\n        if (l == r) return;\n\n\
+    \        l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1;\
+    \ i--) {\n            if (((l >> i) << i) != l) push(l >> i);\n            if\
+    \ (((r >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        {\n       \
+    \     int l2 = l, r2 = r;\n            while (l < r) {\n                if (l\
+    \ & 1) all_apply(l++, f);\n                if (r & 1) all_apply(--r, f);\n   \
+    \             l >>= 1;\n                r >>= 1;\n            }\n            l\
+    \ = l2;\n            r = r2;\n        }\n\n        for (int i = 1; i <= _log;\
+    \ i++) {\n            if (((l >> i) << i) != l) update(l >> i);\n            if\
+    \ (((r >> i) << i) != r) update((r - 1) >> i);\n        }\n    }\n\n    // Finds\
+    \ the largest r such that g(prod(l, r)) is true.\n    template <class F_pred>\n\
+    \    int max_right(int l, F_pred g) {\n        assert(0 <= l && l <= _n);\n  \
+    \      assert(g(ActedMonoid::id()));\n        if (l == _n) return _n;\n      \
+    \  l += _size;\n        for (int i = _log; i >= 1; i--) push(l >> i);\n      \
+    \  T sm = ActedMonoid::id();\n        do {\n            while (l % 2 == 0) l >>=\
+    \ 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n                while\
+    \ (l < _size) {\n                    push(l);\n                    l = (2 * l);\n\
+    \                    if (g(ActedMonoid::op(sm, _d[l]))) {\n                  \
+    \      sm = ActedMonoid::op(sm, _d[l]);\n                        l++;\n      \
+    \              }\n                }\n                return l - _size;\n     \
+    \       }\n            sm = ActedMonoid::op(sm, _d[l]);\n            l++;\n  \
+    \      } while ((l & -l) != l);\n        return _n;\n    }\n\n    // Finds the\
+    \ smallest l such that g(prod(l, r)) is true.\n    template <class F_pred>\n \
+    \   int min_left(int r, F_pred g) {\n        assert(0 <= r && r <= _n);\n    \
+    \    assert(g(ActedMonoid::id()));\n        if (r == 0) return 0;\n        r +=\
+    \ _size;\n        for (int i = _log; i >= 1; i--) push((r - 1) >> i);\n      \
+    \  T sm = ActedMonoid::id();\n        do {\n            r--;\n            while\
+    \ (r > 1 && (r % 2)) r >>= 1;\n            if (!g(ActedMonoid::op(_d[r], sm)))\
+    \ {\n                while (r < _size) {\n                    push(r);\n     \
+    \               r = (2 * r + 1);\n                    if (g(ActedMonoid::op(_d[r],\
     \ sm))) {\n                        sm = ActedMonoid::op(_d[r], sm);\n        \
     \                r--;\n                    }\n                }\n            \
     \    return r + 1 - _size;\n            }\n            sm = ActedMonoid::op(_d[r],\
@@ -200,7 +212,7 @@ data:
   isVerificationFile: false
   path: data_structure/lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-04 16:47:48+09:00'
+  timestamp: '2026-06-06 18:52:43+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/lazy_segtree.hpp

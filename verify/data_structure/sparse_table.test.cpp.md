@@ -50,6 +50,14 @@ data:
     \ the sparse table\n        for (int k = 1; k < max_log; k++) {\n            for\
     \ (int i = 0; i + (1 << k) <= _n; i++) {\n                _st[k][i] = Monoid::op(_st[k\
     \ - 1][i], _st[k - 1][i + (1 << (k - 1))]);\n            }\n        }\n    }\n\
+    \    explicit SparseTable(std::vector<T>&& v) : _n(int(v.size())) {\n        if\
+    \ (_n == 0) return;\n        \n        int max_log = std::bit_width((unsigned\
+    \ int)_n);\n        _st.assign(max_log, std::vector<T>(_n));\n        \n     \
+    \   // v[i] \u3092\u30E0\u30FC\u30D6\u3057\u3066\u521D\u671F\u5316\n        for\
+    \ (int i = 0; i < _n; i++) {\n            _st[0][i] = std::move(v[i]);\n     \
+    \   }\n        \n        for (int k = 1; k < max_log; k++) {\n            for\
+    \ (int i = 0; i + (1 << k) <= _n; i++) {\n                _st[k][i] = Monoid::op(_st[k\
+    \ - 1][i], _st[k - 1][i + (1 << (k - 1))]);\n            }\n        }\n    }\n\
     \n    // Returns the product (result of the monoid operation) in the range [l,\
     \ r) in O(1) time.\n    // Requires the monoid operation to be idempotent.\n \
     \   T prod(int l, int r) const {\n        assert(0 <= l && l <= r && r <= _n);\n\
@@ -90,7 +98,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/sparse_table.test.cpp
   requiredBy: []
-  timestamp: '2026-05-29 03:39:53+09:00'
+  timestamp: '2026-06-06 18:52:43+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/sparse_table.test.cpp

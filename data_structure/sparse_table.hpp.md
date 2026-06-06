@@ -42,14 +42,22 @@ data:
     \ = v[i];\n        }\n        \n        // Build the sparse table\n        for\
     \ (int k = 1; k < max_log; k++) {\n            for (int i = 0; i + (1 << k) <=\
     \ _n; i++) {\n                _st[k][i] = Monoid::op(_st[k - 1][i], _st[k - 1][i\
-    \ + (1 << (k - 1))]);\n            }\n        }\n    }\n\n    // Returns the product\
-    \ (result of the monoid operation) in the range [l, r) in O(1) time.\n    // Requires\
-    \ the monoid operation to be idempotent.\n    T prod(int l, int r) const {\n \
-    \       assert(0 <= l && l <= r && r <= _n);\n        if (l == r) return Monoid::id();\n\
-    \        \n        // Calculate the largest power of 2 less than or equal to the\
-    \ interval length\n        int k = std::bit_width((unsigned int)(r - l)) - 1;\n\
-    \        return Monoid::op(_st[k][l], _st[k][r - (1 << k)]);\n    }\n};\n\n} \
-    \ // namespace data_structure\n}  // namespace m1une\n\n\n"
+    \ + (1 << (k - 1))]);\n            }\n        }\n    }\n    explicit SparseTable(std::vector<T>&&\
+    \ v) : _n(int(v.size())) {\n        if (_n == 0) return;\n        \n        int\
+    \ max_log = std::bit_width((unsigned int)_n);\n        _st.assign(max_log, std::vector<T>(_n));\n\
+    \        \n        // v[i] \u3092\u30E0\u30FC\u30D6\u3057\u3066\u521D\u671F\u5316\
+    \n        for (int i = 0; i < _n; i++) {\n            _st[0][i] = std::move(v[i]);\n\
+    \        }\n        \n        for (int k = 1; k < max_log; k++) {\n          \
+    \  for (int i = 0; i + (1 << k) <= _n; i++) {\n                _st[k][i] = Monoid::op(_st[k\
+    \ - 1][i], _st[k - 1][i + (1 << (k - 1))]);\n            }\n        }\n    }\n\
+    \n    // Returns the product (result of the monoid operation) in the range [l,\
+    \ r) in O(1) time.\n    // Requires the monoid operation to be idempotent.\n \
+    \   T prod(int l, int r) const {\n        assert(0 <= l && l <= r && r <= _n);\n\
+    \        if (l == r) return Monoid::id();\n        \n        // Calculate the\
+    \ largest power of 2 less than or equal to the interval length\n        int k\
+    \ = std::bit_width((unsigned int)(r - l)) - 1;\n        return Monoid::op(_st[k][l],\
+    \ _st[k][r - (1 << k)]);\n    }\n};\n\n}  // namespace data_structure\n}  // namespace\
+    \ m1une\n\n\n"
   code: "#ifndef M1UNE_SPARSE_TABLE_HPP\n#define M1UNE_SPARSE_TABLE_HPP 1\n\n#include\
     \ <vector>\n#include <cassert>\n#include <bit>\n#include \"monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\n// A Sparse Table utilizing\
@@ -69,20 +77,28 @@ data:
     \        \n        // Build the sparse table\n        for (int k = 1; k < max_log;\
     \ k++) {\n            for (int i = 0; i + (1 << k) <= _n; i++) {\n           \
     \     _st[k][i] = Monoid::op(_st[k - 1][i], _st[k - 1][i + (1 << (k - 1))]);\n\
-    \            }\n        }\n    }\n\n    // Returns the product (result of the\
-    \ monoid operation) in the range [l, r) in O(1) time.\n    // Requires the monoid\
-    \ operation to be idempotent.\n    T prod(int l, int r) const {\n        assert(0\
-    \ <= l && l <= r && r <= _n);\n        if (l == r) return Monoid::id();\n    \
-    \    \n        // Calculate the largest power of 2 less than or equal to the interval\
-    \ length\n        int k = std::bit_width((unsigned int)(r - l)) - 1;\n       \
-    \ return Monoid::op(_st[k][l], _st[k][r - (1 << k)]);\n    }\n};\n\n}  // namespace\
-    \ data_structure\n}  // namespace m1une\n\n#endif  // M1UNE_SPARSE_TABLE_HPP\n"
+    \            }\n        }\n    }\n    explicit SparseTable(std::vector<T>&& v)\
+    \ : _n(int(v.size())) {\n        if (_n == 0) return;\n        \n        int max_log\
+    \ = std::bit_width((unsigned int)_n);\n        _st.assign(max_log, std::vector<T>(_n));\n\
+    \        \n        // v[i] \u3092\u30E0\u30FC\u30D6\u3057\u3066\u521D\u671F\u5316\
+    \n        for (int i = 0; i < _n; i++) {\n            _st[0][i] = std::move(v[i]);\n\
+    \        }\n        \n        for (int k = 1; k < max_log; k++) {\n          \
+    \  for (int i = 0; i + (1 << k) <= _n; i++) {\n                _st[k][i] = Monoid::op(_st[k\
+    \ - 1][i], _st[k - 1][i + (1 << (k - 1))]);\n            }\n        }\n    }\n\
+    \n    // Returns the product (result of the monoid operation) in the range [l,\
+    \ r) in O(1) time.\n    // Requires the monoid operation to be idempotent.\n \
+    \   T prod(int l, int r) const {\n        assert(0 <= l && l <= r && r <= _n);\n\
+    \        if (l == r) return Monoid::id();\n        \n        // Calculate the\
+    \ largest power of 2 less than or equal to the interval length\n        int k\
+    \ = std::bit_width((unsigned int)(r - l)) - 1;\n        return Monoid::op(_st[k][l],\
+    \ _st[k][r - (1 << k)]);\n    }\n};\n\n}  // namespace data_structure\n}  // namespace\
+    \ m1une\n\n#endif  // M1UNE_SPARSE_TABLE_HPP\n"
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
   path: data_structure/sparse_table.hpp
   requiredBy: []
-  timestamp: '2026-05-29 03:39:53+09:00'
+  timestamp: '2026-06-06 18:52:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/sparse_table.test.cpp
