@@ -7,6 +7,9 @@ data:
       path: acted_monoid/concept.hpp
       title: Acted Monoid Concept
     - icon: ':warning:'
+      path: acted_monoid/range_add_range_arg_max.hpp
+      title: Range Add Range ArgMax
+    - icon: ':warning:'
       path: acted_monoid/range_add_range_arg_min.hpp
       title: Range Add Range ArgMin
     - icon: ':warning:'
@@ -49,11 +52,17 @@ data:
       path: acted_monoid/range_mul_range_sum.hpp
       title: Range Multiply Range Sum
     - icon: ':warning:'
+      path: acted_monoid/range_or_range_sum.hpp
+      title: Range OR Range Sum
+    - icon: ':warning:'
       path: acted_monoid/range_update_range_longest_true.hpp
       title: Range Update Range Longest True
     - icon: ':warning:'
       path: acted_monoid/range_update_range_max.hpp
       title: Range Update Range Max
+    - icon: ':warning:'
+      path: acted_monoid/range_update_range_max_subarray.hpp
+      title: Range Update Range Max Subarray
     - icon: ':warning:'
       path: acted_monoid/range_update_range_min.hpp
       title: Range Update Range Min
