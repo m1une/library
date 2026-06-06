@@ -81,6 +81,9 @@ data:
   - name: data_structure
     pages:
     - icon: ':heavy_check_mark:'
+      path: data_structure/dsu.hpp
+      title: Disjoint Set Union (DSU)
+    - icon: ':heavy_check_mark:'
       path: data_structure/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
@@ -220,6 +223,9 @@ data:
   verificationCategories:
   - name: verify/data_structure
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/dsu.test.cpp
+      title: verify/data_structure/dsu.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/lazy_segtree.test.cpp
       title: verify/data_structure/lazy_segtree.test.cpp
