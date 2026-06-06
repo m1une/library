@@ -11,6 +11,9 @@ data:
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
+    path: math/modint.hpp
+    title: math/modint.hpp
+  - icon: ':heavy_check_mark:'
     path: utilities/bit_ceil.hpp
     title: Bit Ceil
   _extendedRequiredBy: []
@@ -23,320 +26,231 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/range_affine_range_sum
     links:
     - https://judge.yosupo.jp/problem/range_affine_range_sum
-    - https://zenn.dev/sassan/articles/19db660e4da0a4
-  bundledCode: "Traceback (most recent call last):\n  File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
-    , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
-    \ basedir=basedir, options={'include_paths': [basedir]}).decode()\n          \
-    \         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
-    \  File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/languages/cplusplus.py\"\
-    , line 187, in bundle\n    bundler.update(path)\n  File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/languages/cplusplus_bundle.py\"\
-    , line 400, in update\n    raise BundleErrorAt(path, i + 1, \"unable to process\
-    \ #include in #if / #ifdef / #ifndef other than include guards\")\nonlinejudge_verify.languages.cplusplus_bundle.BundleErrorAt:\
-    \ verify/data_structure/lazy_segtree.test.cpp: line 810: unable to process #include\
-    \ in #if / #ifdef / #ifndef other than include guards\n"
+  bundledCode: "#line 1 \"verify/data_structure/lazy_segtree.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\n\n#line 1 \"data_structure/lazy_segtree.hpp\"\
+    \n\n\n\n#include <vector>\n#include <cassert>\n#line 1 \"acted_monoid/concept.hpp\"\
+    \n\n\n\n#include <concepts>\n\nnamespace m1une {\nnamespace acted_monoid {\n\n\
+    // Concept defining the requirements for an Acted Monoid.\ntemplate <typename\
+    \ AM>\nconcept IsActedMonoid = requires(\n    typename AM::value_type a, typename\
+    \ AM::value_type b,\n    typename AM::operator_type f, typename AM::operator_type\
+    \ g\n) {\n    // 1. Value Monoid\n    typename AM::value_type;\n    { AM::id()\
+    \ } -> std::same_as<typename AM::value_type>;\n    { AM::op(a, b) } -> std::same_as<typename\
+    \ AM::value_type>;\n\n    // 2. Operator Monoid\n    typename AM::operator_type;\n\
+    \    { AM::op_id() } -> std::same_as<typename AM::operator_type>;\n    { AM::op_comp(f,\
+    \ g) } -> std::same_as<typename AM::operator_type>; // Composition order: f(g(x))\n\
+    \n    // 3. Mapping: Operator x Value -> Value\n    { AM::mapping(f, a) } -> std::same_as<typename\
+    \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
+    \n\n#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace utilities\
+    \ {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1) return\
+    \ 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n}  // namespace\
+    \ utilities\n}  // namespace m1une\n\n\n#line 8 \"data_structure/lazy_segtree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\n// A highly generic Lazy\
+    \ Segment Tree utilizing C++20 Concepts for type safety.\n// It operates on any\
+    \ Acted Monoid structure satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\n\
+    template <m1une::acted_monoid::IsActedMonoid ActedMonoid>\nstruct LazySegtree\
+    \ {\n    using T = typename ActedMonoid::value_type;\n    using F = typename ActedMonoid::operator_type;\n\
+    \n   private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n    std::vector<F>\
+    \ _lz;\n\n    // Recalculates the value of the node k from its children.\n   \
+    \ void update(int k) {\n        _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k +\
+    \ 1]);\n    }\n\n    // Applies the operator f to the node k and updates its lazy\
+    \ tag if it's an internal node.\n    void all_apply(int k, F f) {\n        _d[k]\
+    \ = ActedMonoid::mapping(f, _d[k]);\n        if (k < _size) {\n            _lz[k]\
+    \ = ActedMonoid::op_comp(f, _lz[k]);\n        }\n    }\n\n    // Propagates the\
+    \ lazy tag of the node k down to its children.\n    void push(int k) {\n     \
+    \   all_apply(2 * k, _lz[k]);\n        all_apply(2 * k + 1, _lz[k]);\n       \
+    \ _lz[k] = ActedMonoid::op_id();\n    }\n\n   public:\n    // Constructs an empty\
+    \ lazy segment tree.\n    LazySegtree() : LazySegtree(0) {}\n\n    // Constructs\
+    \ a lazy segment tree of size `n`, initialized with the identity element.\n  \
+    \  explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n, ActedMonoid::id()))\
+    \ {}\n\n    // Constructs a lazy segment tree from an existing vector.\n    explicit\
+    \ LazySegtree(const std::vector<T>& v) : _n(int(v.size())) {\n        _size =\
+    \ m1une::utilities::bit_ceil((unsigned int)(_n));\n        _log = 0;\n       \
+    \ while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2 *\
+    \ _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
+    \        for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n        for (int\
+    \ i = _size - 1; i >= 1; i--) update(i);\n    }\n    explicit LazySegtree(std::vector<T>&&\
+    \ v) : _n(int(v.size())) {\n        _size = m1une::utilities::bit_ceil((unsigned\
+    \ int)(_n));\n        _log = 0;\n        while ((1U << _log) < (unsigned int)(_size))\
+    \ _log++;\n        _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size,\
+    \ ActedMonoid::op_id());\n        for (int i = 0; i < _n; i++) _d[_size + i] =\
+    \ std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
+    \    }\n\n    // Constructs a lazy segment tree from a vector of a different type\
+    \ U.\n    // It automatically adapts to the Monoid's initialization requirements:\n\
+    \    // 1. ActedMonoid::make(val) if it exists.\n    // 2. ActedMonoid::make(val,\
+    \ index) if the monoid requires global indices.\n    // 3. static_cast<T>(val)\
+    \ as a fallback for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
+    \ T>) && (\n        requires(U x) { ActedMonoid::make(x); } ||\n        requires(U\
+    \ x, int i) { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n\
+    \    )\n    explicit LazySegtree(const std::vector<U>& v) : _n(int(v.size()))\
+    \ {\n        _size = m1une::utilities::bit_ceil((unsigned int)(_n));\n       \
+    \ _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n  \
+    \      _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
+    \        \n        // Compile-time branching based on the available make() signature\n\
+    \        for (int i = 0; i < _n; i++) {\n            if constexpr (requires(U\
+    \ x) { ActedMonoid::make(x); }) {\n                _d[_size + i] = ActedMonoid::make(v[i]);\n\
+    \            } else if constexpr (requires(U x, int idx) { ActedMonoid::make(x,\
+    \ idx); }) {\n                _d[_size + i] = ActedMonoid::make(v[i], i);\n  \
+    \          } else {\n                _d[_size + i] = static_cast<T>(v[i]);\n \
+    \           }\n        }\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
+    \    }\n\n    // Assigns x to the p-th element.\n    void set(int p, T x) {\n\
+    \        assert(0 <= p && p < _n);\n        p += _size;\n        for (int i =\
+    \ _log; i >= 1; i--) push(p >> i);\n        _d[p] = x;\n        for (int i = 1;\
+    \ i <= _log; i++) update(p >> i);\n    }\n\n    // Returns the value of the p-th\
+    \ element.\n    T get(int p) {\n        assert(0 <= p && p < _n);\n        p +=\
+    \ _size;\n        for (int i = _log; i >= 1; i--) push(p >> i);\n        return\
+    \ _d[p];\n    }\n\n    // Returns the product (result of the monoid operation)\
+    \ in the range [l, r).\n    T prod(int l, int r) {\n        assert(0 <= l && l\
+    \ <= r && r <= _n);\n        if (l == r) return ActedMonoid::id();\n\n       \
+    \ l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1; i--)\
+    \ {\n            if (((l >> i) << i) != l) push(l >> i);\n            if (((r\
+    \ >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        T sml = ActedMonoid::id(),\
+    \ smr = ActedMonoid::id();\n        while (l < r) {\n            if (l & 1) sml\
+    \ = ActedMonoid::op(sml, _d[l++]);\n            if (r & 1) smr = ActedMonoid::op(_d[--r],\
+    \ smr);\n            l >>= 1;\n            r >>= 1;\n        }\n\n        return\
+    \ ActedMonoid::op(sml, smr);\n    }\n\n    // Returns the product of the entire\
+    \ array.\n    T all_prod() const { return _d[1]; }\n\n    // Applies the operator\
+    \ f to the p-th element.\n    void apply(int p, F f) {\n        assert(0 <= p\
+    \ && p < _n);\n        p += _size;\n        for (int i = _log; i >= 1; i--) push(p\
+    \ >> i);\n        _d[p] = ActedMonoid::mapping(f, _d[p]);\n        for (int i\
+    \ = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Applies the operator f\
+    \ to all elements in the range [l, r).\n    void apply(int l, int r, F f) {\n\
+    \        assert(0 <= l && l <= r && r <= _n);\n        if (l == r) return;\n\n\
+    \        l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1;\
+    \ i--) {\n            if (((l >> i) << i) != l) push(l >> i);\n            if\
+    \ (((r >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        {\n       \
+    \     int l2 = l, r2 = r;\n            while (l < r) {\n                if (l\
+    \ & 1) all_apply(l++, f);\n                if (r & 1) all_apply(--r, f);\n   \
+    \             l >>= 1;\n                r >>= 1;\n            }\n            l\
+    \ = l2;\n            r = r2;\n        }\n\n        for (int i = 1; i <= _log;\
+    \ i++) {\n            if (((l >> i) << i) != l) update(l >> i);\n            if\
+    \ (((r >> i) << i) != r) update((r - 1) >> i);\n        }\n    }\n\n    // Finds\
+    \ the largest r such that g(prod(l, r)) is true.\n    template <class F_pred>\n\
+    \    int max_right(int l, F_pred g) {\n        assert(0 <= l && l <= _n);\n  \
+    \      assert(g(ActedMonoid::id()));\n        if (l == _n) return _n;\n      \
+    \  l += _size;\n        for (int i = _log; i >= 1; i--) push(l >> i);\n      \
+    \  T sm = ActedMonoid::id();\n        do {\n            while (l % 2 == 0) l >>=\
+    \ 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n                while\
+    \ (l < _size) {\n                    push(l);\n                    l = (2 * l);\n\
+    \                    if (g(ActedMonoid::op(sm, _d[l]))) {\n                  \
+    \      sm = ActedMonoid::op(sm, _d[l]);\n                        l++;\n      \
+    \              }\n                }\n                return l - _size;\n     \
+    \       }\n            sm = ActedMonoid::op(sm, _d[l]);\n            l++;\n  \
+    \      } while ((l & -l) != l);\n        return _n;\n    }\n\n    // Finds the\
+    \ smallest l such that g(prod(l, r)) is true.\n    template <class F_pred>\n \
+    \   int min_left(int r, F_pred g) {\n        assert(0 <= r && r <= _n);\n    \
+    \    assert(g(ActedMonoid::id()));\n        if (r == 0) return 0;\n        r +=\
+    \ _size;\n        for (int i = _log; i >= 1; i--) push((r - 1) >> i);\n      \
+    \  T sm = ActedMonoid::id();\n        do {\n            r--;\n            while\
+    \ (r > 1 && (r % 2)) r >>= 1;\n            if (!g(ActedMonoid::op(_d[r], sm)))\
+    \ {\n                while (r < _size) {\n                    push(r);\n     \
+    \               r = (2 * r + 1);\n                    if (g(ActedMonoid::op(_d[r],\
+    \ sm))) {\n                        sm = ActedMonoid::op(_d[r], sm);\n        \
+    \                r--;\n                    }\n                }\n            \
+    \    return r + 1 - _size;\n            }\n            sm = ActedMonoid::op(_d[r],\
+    \ sm);\n        } while ((r & -r) != r);\n        return 0;\n    }\n};\n\n}  //\
+    \ namespace data_structure\n}  // namespace m1une\n\n\n#line 4 \"verify/data_structure/lazy_segtree.test.cpp\"\
+    \n\n#include <bits/stdc++.h>\n\n#line 1 \"acted_monoid/range_affine_range_sum.hpp\"\
+    \n\n\n\n#line 5 \"acted_monoid/range_affine_range_sum.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace acted_monoid {\n\ntemplate <typename T>\nstruct RangeAffineRangeSumNode\
+    \ {\n    T sum;\n    long long size;\n};\n\n// Designed to accept Modint or similar\
+    \ types as T\ntemplate <typename T>\nstruct RangeAffineRangeSum {\n    using value_type\
+    \ = RangeAffineRangeSumNode<T>;\n    using operator_type = std::pair<T, T>; //\
+    \ {a, b} for ax + b\n\n    // Value Monoid\n    static constexpr value_type id()\
+    \ { return {T(0), 0}; }\n    static constexpr value_type op(const value_type&\
+    \ a, const value_type& b) {\n        return {a.sum + b.sum, a.size + b.size};\n\
+    \    }\n\n    // Operator Monoid (Affine Composition)\n    // f(x) = a1*x + b1,\
+    \ g(x) = a2*x + b2\n    // f(g(x)) = a1*(a2*x + b2) + b1 = (a1*a2)*x + (a1*b2\
+    \ + b1)\n    static constexpr operator_type op_id() { return {T(1), T(0)}; }\n\
+    \    static constexpr operator_type op_comp(const operator_type& f, const operator_type&\
+    \ g) {\n        return {f.first * g.first, f.first * g.second + f.second};\n \
+    \   }\n\n    // Mapping\n    // \\sum (a*x_i + b) = a * \\sum x_i + b * size\n\
+    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
+    \ x) {\n        return {f.first * x.sum + f.second * T(x.size), x.size};\n   \
+    \ }\n\n    // Helper for initializing a leaf node\n    static constexpr value_type\
+    \ make(const T& val) {\n        return {val, 1};\n    }\n};\n\n}  // namespace\
+    \ acted_monoid\n}  // namespace m1une\n\n\n#line 1 \"math/modint.hpp\"\n\n\n\n\
+    #line 7 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\ntemplate\
+    \ <uint32_t Modulus>\nstruct ModInt {\n   private:\n    uint32_t _v;\n\n   public:\n\
+    \    static constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n   \
+    \ static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n    \
+    \    x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept :\
+    \ _v(0) {}\n\n    constexpr ModInt(int v) noexcept {\n        long long x = (long\
+    \ long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n       \
+    \ _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(long long v) noexcept\
+    \ {\n        long long x = (long long)(v % (long long)(Modulus));\n        if\
+    \ (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n    }\n\n   \
+    \ constexpr ModInt(unsigned int v) noexcept {\n        _v = static_cast<uint32_t>(v\
+    \ % Modulus);\n    }\n\n    constexpr uint32_t val() const noexcept {\n      \
+    \  return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept {\n      \
+    \  _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n    }\n\n\
+    \    constexpr ModInt& operator--() noexcept {\n        if (_v == 0) _v = Modulus;\n\
+    \        _v--;\n        return *this;\n    }\n\n    constexpr ModInt operator++(int)\
+    \ noexcept {\n        ModInt res = *this;\n        ++*this;\n        return res;\n\
+    \    }\n\n    constexpr ModInt operator--(int) noexcept {\n        ModInt res\
+    \ = *this;\n        --*this;\n        return res;\n    }\n\n    constexpr ModInt&\
+    \ operator+=(const ModInt& rhs) noexcept {\n        _v += rhs._v;\n        if\
+    \ (_v >= Modulus) _v -= Modulus;\n        return *this;\n    }\n\n    constexpr\
+    \ ModInt& operator-=(const ModInt& rhs) noexcept {\n        _v -= rhs._v;\n  \
+    \      if (_v >= Modulus) _v += Modulus;\n        return *this;\n    }\n\n   \
+    \ constexpr ModInt& operator*=(const ModInt& rhs) noexcept {\n        uint64_t\
+    \ z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z % Modulus);\n\
+    \        return *this;\n    }\n\n    constexpr ModInt& operator/=(const ModInt&\
+    \ rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
+    \ ModInt operator+(const ModInt& rhs) const noexcept {\n        return ModInt(*this)\
+    \ += rhs;\n    }\n    constexpr ModInt operator-(const ModInt& rhs) const noexcept\
+    \ {\n        return ModInt(*this) -= rhs;\n    }\n    constexpr ModInt operator*(const\
+    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) *= rhs;\n    }\n\
+    \    constexpr ModInt operator/(const ModInt& rhs) const noexcept {\n        return\
+    \ ModInt(*this) /= rhs;\n    }\n\n    constexpr bool operator==(const ModInt&\
+    \ rhs) const noexcept {\n        return _v == rhs._v;\n    }\n    constexpr bool\
+    \ operator!=(const ModInt& rhs) const noexcept {\n        return _v != rhs._v;\n\
+    \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
+    \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
+    \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int32_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int32_t\
+    \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
+    \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
+    \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
+    \ std::ostream& operator<<(std::ostream& os, const ModInt& rhs) {\n        return\
+    \ os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream& is,\
+    \ ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
+    \        return is;\n    }\n};\n\nusing modint998244353 = ModInt<998244353>;\n\
+    using modint1000000007 = ModInt<1000000007>;\n\n}  // namespace math\n}  // namespace\
+    \ m1une\n\n\n#line 9 \"verify/data_structure/lazy_segtree.test.cpp\"\n\nusing\
+    \ mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
+    \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
+    \    cin >> N >> Q;\n    vector<ll> a(N);\n    for (int i = 0; i < N; ++i) cin\
+    \ >> a[i];\n\n    m1une::data_structure::LazySegtree<AM> seg(a);\n    for (int\
+    \ q = 0; q < Q; ++q) {\n        ll t;\n        cin >> t;\n        if (t == 0)\
+    \ {\n            ll l, r, b, c;\n            cin >> l >> r >> b >> c;\n      \
+    \      seg.apply(l, r, {b, c});\n        } else {\n            ll l, r;\n    \
+    \        cin >> l >> r;\n            auto prd = seg.prod(l, r);\n            cout\
+    \ << prd.sum << '\\n';\n        }\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n\
+    \    cin.tie(nullptr);\n    solve();\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\
-    \n\n#ifdef LOCAL\n#define _GLIBCXX_DEBUG\n#pragma GCC optimize(\"O0\")\n#else\n\
-    #pragma GCC optimize(\"O3\")\n#pragma GCC optimize(\"unroll-loops\")\n#endif\n\
-    \n#include <bits/stdc++.h>\n// #include <bits/extc++.h>\nusing namespace std;\n\
-    \n\n#include <cassert>\n#include <numeric>\n#include <type_traits>\n\n#ifdef _MSC_VER\n\
-    #include <intrin.h>\n#endif\n\n\n#include <utility>\n\n#ifdef _MSC_VER\n#include\
-    \ <intrin.h>\n#endif\n\nnamespace atcoder {\n\nnamespace internal {\n\nconstexpr\
-    \ long long safe_mod(long long x, long long m) {\n    x %= m;\n    if (x < 0)\
-    \ x += m;\n    return x;\n}\n\nstruct barrett {\n    unsigned int _m;\n    unsigned\
-    \ long long im;\n\n    explicit barrett(unsigned int m) : _m(m), im((unsigned\
-    \ long long)(-1) / m + 1) {}\n\n    unsigned int umod() const { return _m; }\n\
-    \n    unsigned int mul(unsigned int a, unsigned int b) const {\n\n        unsigned\
-    \ long long z = a;\n        z *= b;\n#ifdef _MSC_VER\n        unsigned long long\
-    \ x;\n        _umul128(z, im, &x);\n#else\n        unsigned long long x =\n  \
-    \          (unsigned long long)(((unsigned __int128)(z)*im) >> 64);\n#endif\n\
-    \        unsigned long long y = x * _m;\n        return (unsigned int)(z - y +\
-    \ (z < y ? _m : 0));\n    }\n};\n\nconstexpr long long pow_mod_constexpr(long\
-    \ long x, long long n, int m) {\n    if (m == 1) return 0;\n    unsigned int _m\
-    \ = (unsigned int)(m);\n    unsigned long long r = 1;\n    unsigned long long\
-    \ y = safe_mod(x, m);\n    while (n) {\n        if (n & 1) r = (r * y) % _m;\n\
-    \        y = (y * y) % _m;\n        n >>= 1;\n    }\n    return r;\n}\n\nconstexpr\
-    \ bool is_prime_constexpr(int n) {\n    if (n <= 1) return false;\n    if (n ==\
-    \ 2 || n == 7 || n == 61) return true;\n    if (n % 2 == 0) return false;\n  \
-    \  long long d = n - 1;\n    while (d % 2 == 0) d /= 2;\n    constexpr long long\
-    \ bases[3] = {2, 7, 61};\n    for (long long a : bases) {\n        long long t\
-    \ = d;\n        long long y = pow_mod_constexpr(a, t, n);\n        while (t !=\
-    \ n - 1 && y != 1 && y != n - 1) {\n            y = y * y % n;\n            t\
-    \ <<= 1;\n        }\n        if (y != n - 1 && t % 2 == 0) {\n            return\
-    \ false;\n        }\n    }\n    return true;\n}\ntemplate <int n> constexpr bool\
-    \ is_prime = is_prime_constexpr(n);\n\nconstexpr std::pair<long long, long long>\
-    \ inv_gcd(long long a, long long b) {\n    a = safe_mod(a, b);\n    if (a == 0)\
-    \ return {b, 0};\n\n    long long s = b, t = a;\n    long long m0 = 0, m1 = 1;\n\
-    \n    while (t) {\n        long long u = s / t;\n        s -= t * u;\n       \
-    \ m0 -= m1 * u;  // |m1 * u| <= |m1| * s <= b\n\n\n        auto tmp = s;\n   \
-    \     s = t;\n        t = tmp;\n        tmp = m0;\n        m0 = m1;\n        m1\
-    \ = tmp;\n    }\n    if (m0 < 0) m0 += b / s;\n    return {s, m0};\n}\n\nconstexpr\
-    \ int primitive_root_constexpr(int m) {\n    if (m == 2) return 1;\n    if (m\
-    \ == 167772161) return 3;\n    if (m == 469762049) return 3;\n    if (m == 754974721)\
-    \ return 11;\n    if (m == 998244353) return 3;\n    int divs[20] = {};\n    divs[0]\
-    \ = 2;\n    int cnt = 1;\n    int x = (m - 1) / 2;\n    while (x % 2 == 0) x /=\
-    \ 2;\n    for (int i = 3; (long long)(i)*i <= x; i += 2) {\n        if (x % i\
-    \ == 0) {\n            divs[cnt++] = i;\n            while (x % i == 0) {\n  \
-    \              x /= i;\n            }\n        }\n    }\n    if (x > 1) {\n  \
-    \      divs[cnt++] = x;\n    }\n    for (int g = 2;; g++) {\n        bool ok =\
-    \ true;\n        for (int i = 0; i < cnt; i++) {\n            if (pow_mod_constexpr(g,\
-    \ (m - 1) / divs[i], m) == 1) {\n                ok = false;\n               \
-    \ break;\n            }\n        }\n        if (ok) return g;\n    }\n}\ntemplate\
-    \ <int m> constexpr int primitive_root = primitive_root_constexpr(m);\n\nunsigned\
-    \ long long floor_sum_unsigned(unsigned long long n,\n                       \
-    \               unsigned long long m,\n                                      unsigned\
-    \ long long a,\n                                      unsigned long long b) {\n\
-    \    unsigned long long ans = 0;\n    while (true) {\n        if (a >= m) {\n\
-    \            ans += n * (n - 1) / 2 * (a / m);\n            a %= m;\n        }\n\
-    \        if (b >= m) {\n            ans += n * (b / m);\n            b %= m;\n\
-    \        }\n\n        unsigned long long y_max = a * n + b;\n        if (y_max\
-    \ < m) break;\n        n = (unsigned long long)(y_max / m);\n        b = (unsigned\
-    \ long long)(y_max % m);\n        std::swap(m, a);\n    }\n    return ans;\n}\n\
-    \n}  // namespace internal\n\n}  // namespace atcoder\n\n\n#include <cassert>\n\
-    #include <numeric>\n#include <type_traits>\n\nnamespace atcoder {\n\nnamespace\
-    \ internal {\n\n#ifndef _MSC_VER\ntemplate <class T>\nusing is_signed_int128 =\n\
-    \    typename std::conditional<std::is_same<T, __int128_t>::value ||\n       \
-    \                           std::is_same<T, __int128>::value,\n              \
-    \                std::true_type,\n                              std::false_type>::type;\n\
-    \ntemplate <class T>\nusing is_unsigned_int128 =\n    typename std::conditional<std::is_same<T,\
-    \ __uint128_t>::value ||\n                                  std::is_same<T, unsigned\
-    \ __int128>::value,\n                              std::true_type,\n         \
-    \                     std::false_type>::type;\n\ntemplate <class T>\nusing make_unsigned_int128\
-    \ =\n    typename std::conditional<std::is_same<T, __int128_t>::value,\n     \
-    \                         __uint128_t,\n                              unsigned\
-    \ __int128>;\n\ntemplate <class T>\nusing is_integral = typename std::conditional<std::is_integral<T>::value\
-    \ ||\n                                                  is_signed_int128<T>::value\
-    \ ||\n                                                  is_unsigned_int128<T>::value,\n\
-    \                                              std::true_type,\n             \
-    \                                 std::false_type>::type;\n\ntemplate <class T>\n\
-    using is_signed_int = typename std::conditional<(is_integral<T>::value &&\n  \
-    \                                               std::is_signed<T>::value) ||\n\
-    \                                                    is_signed_int128<T>::value,\n\
-    \                                                std::true_type,\n           \
-    \                                     std::false_type>::type;\n\ntemplate <class\
-    \ T>\nusing is_unsigned_int =\n    typename std::conditional<(is_integral<T>::value\
-    \ &&\n                               std::is_unsigned<T>::value) ||\n        \
-    \                          is_unsigned_int128<T>::value,\n                   \
-    \           std::true_type,\n                              std::false_type>::type;\n\
-    \ntemplate <class T>\nusing to_unsigned = typename std::conditional<\n    is_signed_int128<T>::value,\n\
-    \    make_unsigned_int128<T>,\n    typename std::conditional<std::is_signed<T>::value,\n\
-    \                              std::make_unsigned<T>,\n                      \
-    \        std::common_type<T>>::type>::type;\n\n#else\n\ntemplate <class T> using\
-    \ is_integral = typename std::is_integral<T>;\n\ntemplate <class T>\nusing is_signed_int\
-    \ =\n    typename std::conditional<is_integral<T>::value && std::is_signed<T>::value,\n\
-    \                              std::true_type,\n                             \
-    \ std::false_type>::type;\n\ntemplate <class T>\nusing is_unsigned_int =\n   \
-    \ typename std::conditional<is_integral<T>::value &&\n                       \
-    \           std::is_unsigned<T>::value,\n                              std::true_type,\n\
-    \                              std::false_type>::type;\n\ntemplate <class T>\n\
-    using to_unsigned = typename std::conditional<is_signed_int<T>::value,\n     \
-    \                                         std::make_unsigned<T>,\n           \
-    \                                   std::common_type<T>>::type;\n\n#endif\n\n\
-    template <class T>\nusing is_signed_int_t = std::enable_if_t<is_signed_int<T>::value>;\n\
-    \ntemplate <class T>\nusing is_unsigned_int_t = std::enable_if_t<is_unsigned_int<T>::value>;\n\
-    \ntemplate <class T> using to_unsigned_t = typename to_unsigned<T>::type;\n\n\
-    }  // namespace internal\n\n}  // namespace atcoder\n\n\nnamespace atcoder {\n\
-    \nnamespace internal {\n\nstruct modint_base {};\nstruct static_modint_base :\
-    \ modint_base {};\n\ntemplate <class T> using is_modint = std::is_base_of<modint_base,\
-    \ T>;\ntemplate <class T> using is_modint_t = std::enable_if_t<is_modint<T>::value>;\n\
-    \n}  // namespace internal\n\ntemplate <int m, std::enable_if_t<(1 <= m)>* = nullptr>\n\
-    struct static_modint : internal::static_modint_base {\n    using mint = static_modint;\n\
-    \n  public:\n    static constexpr int mod() { return m; }\n    static mint raw(int\
-    \ v) {\n        mint x;\n        x._v = v;\n        return x;\n    }\n\n    static_modint()\
-    \ : _v(0) {}\n    template <class T, internal::is_signed_int_t<T>* = nullptr>\n\
-    \    static_modint(T v) {\n        long long x = (long long)(v % (long long)(umod()));\n\
-    \        if (x < 0) x += umod();\n        _v = (unsigned int)(x);\n    }\n   \
-    \ template <class T, internal::is_unsigned_int_t<T>* = nullptr>\n    static_modint(T\
-    \ v) {\n        _v = (unsigned int)(v % umod());\n    }\n\n    int val() const\
-    \ { return _v; }\n\n    mint& operator++() {\n        _v++;\n        if (_v ==\
-    \ umod()) _v = 0;\n        return *this;\n    }\n    mint& operator--() {\n  \
-    \      if (_v == 0) _v = umod();\n        _v--;\n        return *this;\n    }\n\
-    \    mint operator++(int) {\n        mint result = *this;\n        ++*this;\n\
-    \        return result;\n    }\n    mint operator--(int) {\n        mint result\
-    \ = *this;\n        --*this;\n        return result;\n    }\n\n    mint& operator+=(const\
-    \ mint& rhs) {\n        _v += rhs._v;\n        if (_v >= umod()) _v -= umod();\n\
-    \        return *this;\n    }\n    mint& operator-=(const mint& rhs) {\n     \
-    \   _v -= rhs._v;\n        if (_v >= umod()) _v += umod();\n        return *this;\n\
-    \    }\n    mint& operator*=(const mint& rhs) {\n        unsigned long long z\
-    \ = _v;\n        z *= rhs._v;\n        _v = (unsigned int)(z % umod());\n    \
-    \    return *this;\n    }\n    mint& operator/=(const mint& rhs) { return *this\
-    \ = *this * rhs.inv(); }\n\n    mint operator+() const { return *this; }\n   \
-    \ mint operator-() const { return mint() - *this; }\n\n    mint pow(long long\
-    \ n) const {\n        assert(0 <= n);\n        mint x = *this, r = 1;\n      \
-    \  while (n) {\n            if (n & 1) r *= x;\n            x *= x;\n        \
-    \    n >>= 1;\n        }\n        return r;\n    }\n    mint inv() const {\n \
-    \       if (prime) {\n            assert(_v);\n            return pow(umod() -\
-    \ 2);\n        } else {\n            auto eg = internal::inv_gcd(_v, m);\n   \
-    \         assert(eg.first == 1);\n            return eg.second;\n        }\n \
-    \   }\n\n    friend mint operator+(const mint& lhs, const mint& rhs) {\n     \
-    \   return mint(lhs) += rhs;\n    }\n    friend mint operator-(const mint& lhs,\
-    \ const mint& rhs) {\n        return mint(lhs) -= rhs;\n    }\n    friend mint\
-    \ operator*(const mint& lhs, const mint& rhs) {\n        return mint(lhs) *= rhs;\n\
-    \    }\n    friend mint operator/(const mint& lhs, const mint& rhs) {\n      \
-    \  return mint(lhs) /= rhs;\n    }\n    friend bool operator==(const mint& lhs,\
-    \ const mint& rhs) {\n        return lhs._v == rhs._v;\n    }\n    friend bool\
-    \ operator!=(const mint& lhs, const mint& rhs) {\n        return lhs._v != rhs._v;\n\
-    \    }\n\n  private:\n    unsigned int _v;\n    static constexpr unsigned int\
-    \ umod() { return m; }\n    static constexpr bool prime = internal::is_prime<m>;\n\
-    };\n\ntemplate <int id> struct dynamic_modint : internal::modint_base {\n    using\
-    \ mint = dynamic_modint;\n\n  public:\n    static int mod() { return (int)(bt.umod());\
-    \ }\n    static void set_mod(int m) {\n        assert(1 <= m);\n        bt = internal::barrett(m);\n\
-    \    }\n    static mint raw(int v) {\n        mint x;\n        x._v = v;\n   \
-    \     return x;\n    }\n\n    dynamic_modint() : _v(0) {}\n    template <class\
-    \ T, internal::is_signed_int_t<T>* = nullptr>\n    dynamic_modint(T v) {\n   \
-    \     long long x = (long long)(v % (long long)(mod()));\n        if (x < 0) x\
-    \ += mod();\n        _v = (unsigned int)(x);\n    }\n    template <class T, internal::is_unsigned_int_t<T>*\
-    \ = nullptr>\n    dynamic_modint(T v) {\n        _v = (unsigned int)(v % mod());\n\
-    \    }\n\n    int val() const { return _v; }\n\n    mint& operator++() {\n   \
-    \     _v++;\n        if (_v == umod()) _v = 0;\n        return *this;\n    }\n\
-    \    mint& operator--() {\n        if (_v == 0) _v = umod();\n        _v--;\n\
-    \        return *this;\n    }\n    mint operator++(int) {\n        mint result\
-    \ = *this;\n        ++*this;\n        return result;\n    }\n    mint operator--(int)\
-    \ {\n        mint result = *this;\n        --*this;\n        return result;\n\
-    \    }\n\n    mint& operator+=(const mint& rhs) {\n        _v += rhs._v;\n   \
-    \     if (_v >= umod()) _v -= umod();\n        return *this;\n    }\n    mint&\
-    \ operator-=(const mint& rhs) {\n        _v += mod() - rhs._v;\n        if (_v\
-    \ >= umod()) _v -= umod();\n        return *this;\n    }\n    mint& operator*=(const\
-    \ mint& rhs) {\n        _v = bt.mul(_v, rhs._v);\n        return *this;\n    }\n\
-    \    mint& operator/=(const mint& rhs) { return *this = *this * rhs.inv(); }\n\
-    \n    mint operator+() const { return *this; }\n    mint operator-() const { return\
-    \ mint() - *this; }\n\n    mint pow(long long n) const {\n        assert(0 <=\
-    \ n);\n        mint x = *this, r = 1;\n        while (n) {\n            if (n\
-    \ & 1) r *= x;\n            x *= x;\n            n >>= 1;\n        }\n       \
-    \ return r;\n    }\n    mint inv() const {\n        auto eg = internal::inv_gcd(_v,\
-    \ mod());\n        assert(eg.first == 1);\n        return eg.second;\n    }\n\n\
-    \    friend mint operator+(const mint& lhs, const mint& rhs) {\n        return\
-    \ mint(lhs) += rhs;\n    }\n    friend mint operator-(const mint& lhs, const mint&\
-    \ rhs) {\n        return mint(lhs) -= rhs;\n    }\n    friend mint operator*(const\
-    \ mint& lhs, const mint& rhs) {\n        return mint(lhs) *= rhs;\n    }\n   \
-    \ friend mint operator/(const mint& lhs, const mint& rhs) {\n        return mint(lhs)\
-    \ /= rhs;\n    }\n    friend bool operator==(const mint& lhs, const mint& rhs)\
-    \ {\n        return lhs._v == rhs._v;\n    }\n    friend bool operator!=(const\
-    \ mint& lhs, const mint& rhs) {\n        return lhs._v != rhs._v;\n    }\n\n \
-    \ private:\n    unsigned int _v;\n    static internal::barrett bt;\n    static\
-    \ unsigned int umod() { return bt.umod(); }\n};\ntemplate <int id> internal::barrett\
-    \ dynamic_modint<id>::bt(998244353);\n\nusing modint998244353 = static_modint<998244353>;\n\
-    using modint1000000007 = static_modint<1000000007>;\nusing modint = dynamic_modint<-1>;\n\
-    \nnamespace internal {\n\ntemplate <class T>\nusing is_static_modint = std::is_base_of<internal::static_modint_base,\
-    \ T>;\n\ntemplate <class T>\nusing is_static_modint_t = std::enable_if_t<is_static_modint<T>::value>;\n\
-    \ntemplate <class> struct is_dynamic_modint : public std::false_type {};\ntemplate\
-    \ <int id>\nstruct is_dynamic_modint<dynamic_modint<id>> : public std::true_type\
-    \ {};\n\ntemplate <class T>\nusing is_dynamic_modint_t = std::enable_if_t<is_dynamic_modint<T>::value>;\n\
-    \n}  // namespace internal\n\n}  // namespace atcoder\n\nusing mint = atcoder::modint998244353;\n\
-    istream& operator>>(istream& in, mint& x) {\n    long long a;\n    in >> a;\n\
-    \    x = a;\n    return in;\n}\nostream& operator<<(ostream& out, const mint&\
-    \ x) {\n    return out << x.val();\n}\n\nusing ll = long long;\nusing u32 = unsigned\
-    \ int;\nusing u64 = unsigned long long;\nusing i128 = __int128;\nusing u128 =\
-    \ unsigned __int128;\nusing f128 = __float128;\n\ntemplate <class T>\nconstexpr\
-    \ T infty = 0;\ntemplate <>\nconstexpr int infty<int> = 1'000'000'000;\ntemplate\
-    \ <>\nconstexpr ll infty<ll> = ll(infty<int>) * infty<int> * 2;\ntemplate <>\n\
-    constexpr u32 infty<u32> = infty<int>;\ntemplate <>\nconstexpr u64 infty<u64>\
-    \ = infty<ll>;\ntemplate <>\nconstexpr i128 infty<i128> = i128(infty<ll>) * infty<ll>;\n\
-    template <>\nconstexpr double infty<double> = infty<ll>;\ntemplate <>\nconstexpr\
-    \ long double infty<long double> = infty<ll>;\n\nusing pi = pair<int, int>;\n\
-    using pl = pair<ll, ll>;\nusing vi = vector<int>;\nusing vl = vector<ll>;\ntemplate\
-    \ <class T>\nusing vc = vector<T>;\ntemplate <class T>\nusing vvc = vector<vc<T>>;\n\
-    using vvi = vvc<int>;\nusing vvl = vvc<ll>;\ntemplate <class T>\nusing vvvc =\
-    \ vector<vvc<T>>;\ntemplate <class T>\nusing vvvvc = vector<vvvc<T>>;\ntemplate\
-    \ <class T>\nusing vvvvvc = vector<vvvvc<T>>;\ntemplate <class T>\nusing pqg =\
-    \ std::priority_queue<T, vector<T>, greater<T>>;\ntemplate <class T, class U>\n\
-    using umap = unordered_map<T, U>;\n\n// template <typename K>\n// using tree =\
-    \ __gnu_pbds::tree<K, __gnu_pbds::null_type, std::less<>,\n//                \
-    \               __gnu_pbds::rb_tree_tag,\n//                               __gnu_pbds::tree_order_statistics_node_update>;\n\
-    \n#define vv(type, name, h, ...) vector<vector<type>> name(h, vector<type>(__VA_ARGS__))\n\
-    #define vvv(type, name, h, w, ...) \\\n    vector<vector<vector<type>>> name(h,\
-    \ vector<vector<type>>(w, vector<type>(__VA_ARGS__)))\n#define vvvv(type, name,\
-    \ a, b, c, ...)         \\\n    vector<vector<vector<vector<type>>>> name( \\\n\
-    \        a, vector<vector<vector<type>>>(b, vector<vector<type>>(c, vector<type>(__VA_ARGS__))))\n\
-    \n#define FOR1(a) for (ll _ = 0; _ < (ll)a; ++_)\n#define FOR2(i, a) for (ll i\
-    \ = 0; i < (ll)a; ++i)\n#define FOR3(i, a, b) for (ll i = a; i < (ll)b; ++i)\n\
-    #define FOR4(i, a, b, c) for (ll i = a; i < (ll)b; i += (c))\n#define FOR1_R(a)\
-    \ for (ll i = (a) - 1; i >= 0; --i)\n#define FOR2_R(i, a) for (ll i = (a) - 1;\
-    \ i >= 0; --i)\n#define FOR3_R(i, a, b) for (ll i = (b) - 1; i >= (ll)a; --i)\n\
-    #define overload4(a, b, c, d, e, ...) e\n#define overload3(a, b, c, d, ...) d\n\
-    #define FOR(...) overload4(__VA_ARGS__, FOR4, FOR3, FOR2, FOR1)(__VA_ARGS__)\n\
-    #define FOR_R(...) overload3(__VA_ARGS__, FOR3_R, FOR2_R, FOR1_R)(__VA_ARGS__)\n\
-    \n#define FOR_subset(t, s) for (int t = (s); t >= 0; t = (t == 0 ? -1 : (t - 1)\
-    \ & (s)))\n#define all(x) x.begin(), x.end()\n#define rall(x) x.rbegin(), x.rend()\n\
-    \nint popcnt(int x) {\n    return __builtin_popcount(x);\n}\nint popcnt(u32 x)\
-    \ {\n    return __builtin_popcount(x);\n}\nint popcnt(ll x) {\n    return __builtin_popcountll(x);\n\
-    }\nint popcnt(u64 x) {\n    return __builtin_popcountll(x);\n}\nint popcnt_mod_2(int\
-    \ x) {\n    return __builtin_parity(x);\n}\nint popcnt_mod_2(u32 x) {\n    return\
-    \ __builtin_parity(x);\n}\nint popcnt_mod_2(ll x) {\n    return __builtin_parityll(x);\n\
-    }\nint popcnt_mod_2(u64 x) {\n    return __builtin_parityll(x);\n}\n// (0, 1,\
-    \ 2, 3, 4) -> (-1, 0, 1, 1, 2)\nint topbit(int x) {\n    return (x == 0 ? -1 :\
-    \ 31 - __builtin_clz(x));\n}\nint topbit(u32 x) {\n    return (x == 0 ? -1 : 31\
-    \ - __builtin_clz(x));\n}\nint topbit(ll x) {\n    return (x == 0 ? -1 : 63 -\
-    \ __builtin_clzll(x));\n}\nint topbit(u64 x) {\n    return (x == 0 ? -1 : 63 -\
-    \ __builtin_clzll(x));\n}\n// (0, 1, 2, 3, 4) -> (-1, 0, 1, 0, 2)\nint lowbit(int\
-    \ x) {\n    return (x == 0 ? -1 : __builtin_ctz(x));\n}\nint lowbit(u32 x) {\n\
-    \    return (x == 0 ? -1 : __builtin_ctz(x));\n}\nint lowbit(ll x) {\n    return\
-    \ (x == 0 ? -1 : __builtin_ctzll(x));\n}\nint lowbit(u64 x) {\n    return (x ==\
-    \ 0 ? -1 : __builtin_ctzll(x));\n}\n\ntemplate <typename T>\nT floor(T a, T b)\
-    \ {\n    return a / b - (a % b && (a ^ b) < 0);\n}\ntemplate <typename T>\nT ceil(T\
-    \ x, T y) {\n    return floor(x + y - 1, y);\n}\ntemplate <typename T>\nT bmod(T\
-    \ x, T y) {\n    return x - y * floor(x, y);\n}\ntemplate <typename T>\npair<T,\
-    \ T> divmod(T x, T y) {\n    T q = floor(x, y);\n    return {q, x - q * y};\n\
-    }\n\ntemplate <typename T, typename U>\nT POW(U x_, int n) {\n    T x = x_;\n\
-    \    T ret = 1;\n    while (n > 0) {\n        if (n & 1) ret *= x;\n        x\
-    \ *= x;\n        n >>= 1;\n    }\n    return ret;\n}\n\ntemplate <typename T,\
-    \ typename U>\nT SUM(const vector<U>& A) {\n    T sm = 0;\n    for (auto&& a :\
-    \ A) sm += a;\n    return sm;\n}\n\n#define LB(c, x) distance((c).begin(), lower_bound(all(c),\
-    \ (x)))\n#define UB(c, x) distance((c).begin(), upper_bound(all(c), (x)))\n#define\
-    \ UNIQUE(x) sort(all(x)), x.erase(unique(all(x)), x.end()), x.shrink_to_fit()\n\
-    \ntemplate <class T, class S>\ninline bool chmax(T& a, const S& b) {\n    return\
-    \ (a < b ? a = b, 1 : 0);\n}\ntemplate <class T, class S>\ninline bool chmin(T&\
-    \ a, const S& b) {\n    return (a > b ? a = b, 1 : 0);\n}\n\n// ? \u306F -1\n\
-    vc<int> s_to_vi(const string& S, char first_char) {\n    vc<int> A(S.size());\n\
-    \    FOR(i, S.size()) {\n        A[i] = (S[i] != '?' ? S[i] - first_char : -1);\n\
-    \    }\n    return A;\n}\n\ntemplate <typename T, typename U>\nvector<T> cumsum(vector<U>&\
-    \ A, int off = 1) {\n    int N = A.size();\n    vector<T> B(N + 1);\n    FOR(i,\
-    \ N) {\n        B[i + 1] = B[i] + A[i];\n    }\n    if (off == 0) B.erase(B.begin());\n\
-    \    return B;\n}\n\ntemplate <typename T>\nvector<int> argsort(const vector<T>&\
-    \ A) {\n    vector<int> ids(A.size());\n    iota(all(ids), 0);\n    sort(all(ids),\
-    \ [&](int i, int j) { return (A[i] == A[j] ? i < j : A[i] < A[j]); });\n    return\
-    \ ids;\n}\n\n// A[I[0]], A[I[1]], ...\ntemplate <typename T>\nvc<T> rearrange(const\
-    \ vc<T>& A, const vc<int>& I) {\n    vc<T> B(I.size());\n    FOR(i, I.size())\
-    \ B[i] = A[I[i]];\n    return B;\n}\n\ntemplate <class... T>\nconstexpr auto min(T...\
-    \ a) {\n    return min(initializer_list<common_type_t<T...>>{a...});\n}\ntemplate\
-    \ <class... T>\nconstexpr auto max(T... a) {\n    return max(initializer_list<common_type_t<T...>>{a...});\n\
-    }\n\nvoid print() {\n    cout << '\\n';\n}\ntemplate <class T>\nvoid print(const\
-    \ T& a) {\n    cout << a << '\\n';\n}\ntemplate <class T, class... Ts>\nvoid print(const\
-    \ T& a, const Ts&... b) {\n    cout << a;\n    (cout << ... << (cout << ' ', b));\n\
-    \    cout << '\\n';\n}\ntemplate <class T>\nvoid print(vector<T>& a) {\n    for\
-    \ (int i = 0; i < (int)a.size(); ++i) {\n        cout << a[i] << \" \\n\"[i ==\
-    \ (int)a.size() - 1];\n    }\n}\ntemplate <class T>\nvoid print(vector<vector<T>>&\
-    \ a) {\n    for (int i = 0; i < (int)a.size(); ++i) {\n        for (int j = 0;\
-    \ j < (int)a[i].size(); ++j) {\n            cout << a[i][j] << \" \\n\"[j == (int)a[i].size()\
-    \ - 1];\n        }\n    }\n}\nvoid YESNO(bool b) {\n    cout << (b ? \"YES\" :\
-    \ \"NO\") << endl;\n}\nvoid YesNo(bool b) {\n    cout << (b ? \"Yes\" : \"No\"\
-    ) << endl;\n}\n\n#ifdef LOCAL\n// https://zenn.dev/sassan/articles/19db660e4da0a4\n\
-    #include \"/Library/cpp-dump/dump.hpp\"\n#define dump(...) cpp_dump(__VA_ARGS__)\n\
-    CPP_DUMP_DEFINE_EXPORT_OBJECT(mint, val());\n#else\n#define dump(...)\n#define\
-    \ CPP_DUMP_SET_OPTION(...)\n#define CPP_DUMP_DEFINE_EXPORT_OBJECT(...)\n#define\
-    \ CPP_DUMP_DEFINE_EXPORT_ENUM(...)\n#define CPP_DUMP_DEFINE_DANGEROUS_EXPORT_OBJECT(...)\n\
-    #endif\n\n//----------------------------------------------------------------\n\
-    #include \"acted_monoid/range_affine_range_sum.hpp\"\n#include \"data_structure/lazy_segtree.hpp\"\
-    \nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\nvoid solve() {\n\
-    \    ll N, Q;\n    cin >> N >> Q;\n    vl a(N);\n    FOR(i, N) cin >> a[i];\n\
-    \    m1une::data_structure::LazySegtree<AM> seg(a);\n    FOR(Q) {\n        ll\
-    \ t;\n        cin >> t;\n        if (t == 0) {\n            ll l, r, b, c;\n \
-    \           cin >> l >> r >> b >> c;\n            seg.apply(l, r, {b, c});\n \
-    \       } else {\n            ll l, r;\n            cin >> l >> r;\n         \
-    \   auto prd = seg.prod(l, r);\n            print(prd.sum.val());\n        }\n\
-    \    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\
-    \    cout << fixed << setprecision(20);\n    CPP_DUMP_SET_OPTION(max_line_width,\
-    \ 80);\n    CPP_DUMP_SET_OPTION(log_label_func, cpp_dump::log_label::filename());\n\
-    \    CPP_DUMP_SET_OPTION(enable_asterisk, true);\n    solve();\n    return 0;\n\
-    }\n"
+    \n\n#include \"data_structure/lazy_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\
+    \n#include \"acted_monoid/range_affine_range_sum.hpp\"\n#include \"math/modint.hpp\"\
+    \n\nusing mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
+    \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
+    \    cin >> N >> Q;\n    vector<ll> a(N);\n    for (int i = 0; i < N; ++i) cin\
+    \ >> a[i];\n\n    m1une::data_structure::LazySegtree<AM> seg(a);\n    for (int\
+    \ q = 0; q < Q; ++q) {\n        ll t;\n        cin >> t;\n        if (t == 0)\
+    \ {\n            ll l, r, b, c;\n            cin >> l >> r >> b >> c;\n      \
+    \      seg.apply(l, r, {b, c});\n        } else {\n            ll l, r;\n    \
+    \        cin >> l >> r;\n            auto prd = seg.prod(l, r);\n            cout\
+    \ << prd.sum << '\\n';\n        }\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n\
+    \    cin.tie(nullptr);\n    solve();\n    return 0;\n}\n"
   dependsOn:
-  - acted_monoid/range_affine_range_sum.hpp
   - data_structure/lazy_segtree.hpp
   - acted_monoid/concept.hpp
   - utilities/bit_ceil.hpp
+  - acted_monoid/range_affine_range_sum.hpp
+  - math/modint.hpp
   isVerificationFile: true
   path: verify/data_structure/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-06 19:35:32+09:00'
+  timestamp: '2026-06-06 20:32:01+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_segtree.test.cpp

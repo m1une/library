@@ -103,6 +103,9 @@ data:
     - icon: ':warning:'
       path: math/affine.hpp
       title: Affine Transformation
+    - icon: ':heavy_check_mark:'
+      path: math/modint.hpp
+      title: math/modint.hpp
   - name: monoid
     pages:
     - icon: ':heavy_check_mark:'
