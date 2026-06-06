@@ -12,7 +12,7 @@ data:
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: math/modint.hpp
-    title: math/modint.hpp
+    title: ModInt
   - icon: ':heavy_check_mark:'
     path: utilities/bit_ceil.hpp
     title: Bit Ceil
