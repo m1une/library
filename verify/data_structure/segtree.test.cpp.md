@@ -10,7 +10,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: utilities/bit_ceil.hpp
     title: Bit Ceil
   _extendedRequiredBy: []

@@ -3,7 +3,7 @@ data:
   libraryCategories:
   - name: acted_monoid
     pages:
-    - icon: ':warning:'
+    - icon: ':x:'
       path: acted_monoid/concept.hpp
       title: Acted Monoid Concept
     - icon: ':warning:'
@@ -24,7 +24,7 @@ data:
     - icon: ':warning:'
       path: acted_monoid/range_affine_range_min_max.hpp
       title: Range Affine Range Min Max
-    - icon: ':warning:'
+    - icon: ':x:'
       path: acted_monoid/range_affine_range_sum.hpp
       title: Range Affine Range Sum
     - icon: ':warning:'
@@ -62,7 +62,7 @@ data:
       title: Acted Monoid Wrapper
   - name: data_structure
     pages:
-    - icon: ':warning:'
+    - icon: ':x:'
       path: data_structure/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
@@ -193,7 +193,7 @@ data:
       title: Static Rolling Hash
   - name: utilities
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: utilities/bit_ceil.hpp
       title: Bit Ceil
     - icon: ':heavy_check_mark:'
@@ -202,9 +202,6 @@ data:
   verificationCategories:
   - name: verify/data_structure
     pages:
-    - icon: ':heavy_check_mark:'
-      path: verify/data_structure/combined_sparse_table.test.cpp
-      title: verify/data_structure/combined_sparse_table.test.cpp
     - icon: ':x:'
       path: verify/data_structure/lazy_segtree.test.cpp
       title: verify/data_structure/lazy_segtree.test.cpp
