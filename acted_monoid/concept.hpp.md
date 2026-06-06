@@ -2,16 +2,16 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#include <concepts>\n\n\
@@ -45,7 +45,7 @@ data:
   requiredBy:
   - data_structure/lazy_segtree.hpp
   timestamp: '2026-06-04 16:47:39+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/lazy_segtree.test.cpp
 documentation_of: acted_monoid/concept.hpp

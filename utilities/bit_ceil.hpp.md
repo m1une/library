@@ -2,22 +2,22 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/segtree.hpp
     title: Segment Tree
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/segtree.test.cpp
     title: verify/data_structure/segtree.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace\
@@ -36,7 +36,7 @@ data:
   - data_structure/segtree.hpp
   - data_structure/lazy_segtree.hpp
   timestamp: '2026-05-29 01:41:12+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/segtree.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp

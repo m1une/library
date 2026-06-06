@@ -1,26 +1,28 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: acted_monoid/concept.hpp
     title: Acted Monoid Concept
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: acted_monoid/range_affine_range_sum.hpp
     title: Range Affine Range Sum
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: utilities/bit_ceil.hpp
     title: Bit Ceil
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://judge.yosupo.jp/problem/range_affine_range_sum
     links:
+    - https://judge.yosupo.jp/problem/range_affine_range_sum
     - https://zenn.dev/sassan/articles/19db660e4da0a4
   bundledCode: "Traceback (most recent call last):\n  File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/documentation/build.py\"\
     , line 71, in _render_source_code_stat\n    bundled_code = language.bundle(stat.path,\
@@ -30,9 +32,10 @@ data:
     , line 187, in bundle\n    bundler.update(path)\n  File \"/home/runner/.local/lib/python3.12/site-packages/onlinejudge_verify/languages/cplusplus_bundle.py\"\
     , line 400, in update\n    raise BundleErrorAt(path, i + 1, \"unable to process\
     \ #include in #if / #ifdef / #ifndef other than include guards\")\nonlinejudge_verify.languages.cplusplus_bundle.BundleErrorAt:\
-    \ verify/data_structure/lazy_segtree.test.cpp: line 808: unable to process #include\
+    \ verify/data_structure/lazy_segtree.test.cpp: line 810: unable to process #include\
     \ in #if / #ifdef / #ifndef other than include guards\n"
-  code: "#ifdef LOCAL\n#define _GLIBCXX_DEBUG\n#pragma GCC optimize(\"O0\")\n#else\n\
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\
+    \n\n#ifdef LOCAL\n#define _GLIBCXX_DEBUG\n#pragma GCC optimize(\"O0\")\n#else\n\
     #pragma GCC optimize(\"O3\")\n#pragma GCC optimize(\"unroll-loops\")\n#endif\n\
     \n#include <bits/stdc++.h>\n// #include <bits/extc++.h>\nusing namespace std;\n\
     \n\n#include <cassert>\n#include <numeric>\n#include <type_traits>\n\n#ifdef _MSC_VER\n\
@@ -333,8 +336,8 @@ data:
   isVerificationFile: true
   path: verify/data_structure/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-06 19:31:56+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-06 19:35:32+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_segtree.test.cpp
 layout: document
