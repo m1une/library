@@ -45,6 +45,23 @@ struct SparseTable {
             }
         }
     }
+    explicit SparseTable(std::vector<T>&& v) : _n(int(v.size())) {
+        if (_n == 0) return;
+        
+        int max_log = std::bit_width((unsigned int)_n);
+        _st.assign(max_log, std::vector<T>(_n));
+        
+        // v[i] をムーブして初期化
+        for (int i = 0; i < _n; i++) {
+            _st[0][i] = std::move(v[i]);
+        }
+        
+        for (int k = 1; k < max_log; k++) {
+            for (int i = 0; i + (1 << k) <= _n; i++) {
+                _st[k][i] = Monoid::op(_st[k - 1][i], _st[k - 1][i + (1 << (k - 1))]);
+            }
+        }
+    }
 
     // Returns the product (result of the monoid operation) in the range [l, r) in O(1) time.
     // Requires the monoid operation to be idempotent.
