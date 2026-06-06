@@ -58,12 +58,31 @@ data:
     \   }\n        \n        for (int k = 1; k < max_log; k++) {\n            for\
     \ (int i = 0; i + (1 << k) <= _n; i++) {\n                _st[k][i] = Monoid::op(_st[k\
     \ - 1][i], _st[k - 1][i + (1 << (k - 1))]);\n            }\n        }\n    }\n\
-    \n    // Returns the product (result of the monoid operation) in the range [l,\
-    \ r) in O(1) time.\n    // Requires the monoid operation to be idempotent.\n \
-    \   T prod(int l, int r) const {\n        assert(0 <= l && l <= r && r <= _n);\n\
-    \        if (l == r) return Monoid::id();\n        \n        // Calculate the\
-    \ largest power of 2 less than or equal to the interval length\n        int k\
-    \ = std::bit_width((unsigned int)(r - l)) - 1;\n        return Monoid::op(_st[k][l],\
+    \n    // Constructs a sparse table from a vector of a different type U.\n    //\
+    \ It automatically adapts to the Monoid's initialization requirements:\n    //\
+    \ 1. Monoid::make(val) if it exists.\n    // 2. Monoid::make(val, index) if the\
+    \ monoid requires global indices.\n    // 3. static_cast<T>(val) as a fallback\
+    \ for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
+    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
+    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
+    \  )\n    explicit SparseTable(const std::vector<U>& v) : _n(int(v.size())) {\n\
+    \        if (_n == 0) return;\n        \n        int max_log = std::bit_width((unsigned\
+    \ int)_n);\n        _st.assign(max_log, std::vector<T>(_n));\n        \n     \
+    \   // Compile-time branching based on the available make() signature\n      \
+    \  for (int i = 0; i < _n; i++) {\n            if constexpr (requires(U x) { Monoid::make(x);\
+    \ }) {\n                _st[0][i] = Monoid::make(v[i]);\n            } else if\
+    \ constexpr (requires(U x, int idx) { Monoid::make(x, idx); }) {\n           \
+    \     _st[0][i] = Monoid::make(v[i], i);\n            } else {\n             \
+    \   _st[0][i] = static_cast<T>(v[i]);\n            }\n        }\n        \n  \
+    \      // Build the sparse table\n        for (int k = 1; k < max_log; k++) {\n\
+    \            for (int i = 0; i + (1 << k) <= _n; i++) {\n                _st[k][i]\
+    \ = Monoid::op(_st[k - 1][i], _st[k - 1][i + (1 << (k - 1))]);\n            }\n\
+    \        }\n    }\n\n    // Returns the product (result of the monoid operation)\
+    \ in the range [l, r) in O(1) time.\n    // Requires the monoid operation to be\
+    \ idempotent.\n    T prod(int l, int r) const {\n        assert(0 <= l && l <=\
+    \ r && r <= _n);\n        if (l == r) return Monoid::id();\n        \n       \
+    \ // Calculate the largest power of 2 less than or equal to the interval length\n\
+    \        int k = std::bit_width((unsigned int)(r - l)) - 1;\n        return Monoid::op(_st[k][l],\
     \ _st[k][r - (1 << k)]);\n    }\n};\n\n}  // namespace data_structure\n}  // namespace\
     \ m1une\n\n\n#line 1 \"monoid/min.hpp\"\n\n\n\n#include <algorithm>\n#include\
     \ <limits>\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for minimum (Range\
@@ -98,7 +117,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/sparse_table.test.cpp
   requiredBy: []
-  timestamp: '2026-06-06 18:52:43+09:00'
+  timestamp: '2026-06-06 19:21:12+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/sparse_table.test.cpp
