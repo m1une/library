@@ -43,6 +43,12 @@ data:
       path: acted_monoid/range_flip_range_binary_inversion.hpp
       title: Range Flip Range Binary Inversion
     - icon: ':warning:'
+      path: acted_monoid/range_flip_range_sum.hpp
+      title: Range Flip Range Sum
+    - icon: ':warning:'
+      path: acted_monoid/range_mul_range_sum.hpp
+      title: Range Multiply Range Sum
+    - icon: ':warning:'
       path: acted_monoid/range_update_range_longest_true.hpp
       title: Range Update Range Longest True
     - icon: ':warning:'
@@ -54,6 +60,9 @@ data:
     - icon: ':warning:'
       path: acted_monoid/range_update_range_sum.hpp
       title: Range Update Range Sum
+    - icon: ':warning:'
+      path: acted_monoid/range_xor_range_sum.hpp
+      title: Range XOR Range Sum
     - icon: ':warning:'
       path: acted_monoid/range_xor_range_xor.hpp
       title: Range Xor Range Xor
