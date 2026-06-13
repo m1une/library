@@ -126,8 +126,32 @@ struct DynamicLazyMonoidArray {
             l = r = 0;
             return;
         }
+        if (pos == 0) {
+            l = 0;
+            r = t;
+            return;
+        }
+        if (pos == pool[t].count) {
+            l = t;
+            r = 0;
+            return;
+        }
         push(t);
         int left_count = pool[pool[t].l].count;
+        if (pos == left_count) {
+            l = pool[t].l;
+            pool[t].l = 0;
+            update(t);
+            r = t;
+            return;
+        }
+        if (pos == left_count + 1) {
+            r = pool[t].r;
+            pool[t].r = 0;
+            update(t);
+            l = t;
+            return;
+        }
         if (pos <= left_count) {
             split(pool[t].l, pos, l, pool[t].l);
             r = t;
@@ -140,17 +164,85 @@ struct DynamicLazyMonoidArray {
 
     int merge(int l, int r) {
         if (!l || !r) return l ? l : r;
-        push(l);
-        push(r);
         if (pool[l].priority > pool[r].priority) {
-            pool[l].r = merge(pool[l].r, r);
+            push(l);
+            if (pool[l].r) {
+                pool[l].r = merge(pool[l].r, r);
+            } else {
+                pool[l].r = r;
+            }
             update(l);
             return l;
         } else {
-            pool[r].l = merge(l, pool[r].l);
+            push(r);
+            if (pool[r].l) {
+                pool[r].l = merge(l, pool[r].l);
+            } else {
+                pool[r].l = l;
+            }
             update(r);
             return r;
         }
+    }
+
+    int insert_node(int t, int pos, int node) {
+        if (!t) return node;
+        if (pool[node].priority > pool[t].priority) {
+            split(t, pos, pool[node].l, pool[node].r);
+            update(node);
+            return node;
+        }
+        push(t);
+        int left_count = pool[pool[t].l].count;
+        if (pos <= left_count) {
+            pool[t].l = insert_node(pool[t].l, pos, node);
+        } else {
+            pool[t].r = insert_node(pool[t].r, pos - left_count - 1, node);
+        }
+        update(t);
+        return t;
+    }
+
+    int erase_node(int t, int pos) {
+        push(t);
+        int left_count = pool[pool[t].l].count;
+        if (pos < left_count) {
+            pool[t].l = erase_node(pool[t].l, pos);
+            update(t);
+            return t;
+        }
+        if (pos == left_count) {
+            return merge(pool[t].l, pool[t].r);
+        }
+        pool[t].r = erase_node(pool[t].r, pos - left_count - 1);
+        update(t);
+        return t;
+    }
+
+    void set_node(int t, int pos, T value) {
+        push(t);
+        int left_count = pool[pool[t].l].count;
+        if (pos < left_count) {
+            set_node(pool[t].l, pos, std::move(value));
+        } else if (pos == left_count) {
+            pool[t].val = std::move(value);
+        } else {
+            set_node(pool[t].r, pos - left_count - 1, std::move(value));
+        }
+        update(t);
+    }
+
+    void apply_node(int t, int pos, const F& f) {
+        push(t);
+        int left_count = pool[pool[t].l].count;
+        if (pos < left_count) {
+            apply_node(pool[t].l, pos, f);
+        } else if (pos == left_count) {
+            pool[t].val = ActedMonoid::mapping(f, pool[t].val);
+        } else {
+            apply_node(pool[t].r, pos - left_count - 1, f);
+        }
+        update(t);
     }
 
     int find_node(int t, int pos) {
@@ -344,9 +436,7 @@ struct DynamicLazyMonoidArray {
 
     void insert(int pos, T value) {
         assert(0 <= pos && pos <= size());
-        int l, r;
-        split(root, pos, l, r);
-        root = merge(merge(l, new_node(std::move(value))), r);
+        root = insert_node(root, pos, new_node(std::move(value)));
     }
 
     void insert(int pos, const std::vector<T>& v) {
@@ -403,7 +493,7 @@ struct DynamicLazyMonoidArray {
 
     void erase(int pos) {
         assert(0 <= pos && pos < size());
-        erase(pos, pos + 1);
+        root = erase_node(root, pos);
     }
 
     void erase(int l, int r) {
@@ -447,15 +537,7 @@ struct DynamicLazyMonoidArray {
 
     void set(int pos, T value) {
         assert(0 <= pos && pos < size());
-        int a, b, c;
-        split(root, pos, a, b);
-        split(b, 1, b, c);
-        pool[b].val = std::move(value);
-        pool[b].prod = pool[b].val;
-        pool[b].rprod = pool[b].val;
-        pool[b].lazy = ActedMonoid::op_id();
-        pool[b].has_lazy = false;
-        root = merge(merge(a, b), c);
+        set_node(root, pos, std::move(value));
     }
 
     void reverse(int l, int r) {
@@ -484,7 +566,7 @@ struct DynamicLazyMonoidArray {
 
     void apply(int pos, const F& f) {
         assert(0 <= pos && pos < size());
-        apply(pos, pos + 1, f);
+        apply_node(root, pos, f);
     }
 
     void apply(int l, int r, const F& f) {
