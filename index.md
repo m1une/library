@@ -96,6 +96,9 @@ data:
       path: data_structure/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
+      path: data_structure/ordered_multiset.hpp
+      title: Ordered Multiset
+    - icon: ':heavy_check_mark:'
       path: data_structure/persistent_treap.hpp
       title: Persistent Treap
     - icon: ':heavy_check_mark:'
@@ -250,6 +253,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/lazy_segtree.test.cpp
       title: verify/data_structure/lazy_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/ordered_multiset.test.cpp
+      title: verify/data_structure/ordered_multiset.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_treap.test.cpp
       title: verify/data_structure/persistent_treap.test.cpp
