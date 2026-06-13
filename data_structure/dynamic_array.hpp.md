@@ -87,30 +87,34 @@ data:
     \ noexcept {\n        if (this != &other) {\n            pool = std::move(other.pool);\n\
     \            root = other.root;\n            rng = std::move(other.rng);\n   \
     \         other.reset_to_empty();\n        }\n        return *this;\n    }\n\n\
-    \    explicit DynamicArray(const std::vector<T>& v) : DynamicArray() {\n     \
-    \   pool.reserve(v.size() + 1);\n        root = build_from_vector(v);\n    }\n\
-    \n    explicit DynamicArray(std::vector<T>&& v) : DynamicArray() {\n        pool.reserve(v.size()\
-    \ + 1);\n        root = build_from_vector(std::move(v));\n    }\n\n    DynamicArray(std::initializer_list<T>\
-    \ init) : DynamicArray() {\n        pool.reserve(init.size() + 1);\n        for\
-    \ (const T& x : init) push_back(x);\n    }\n\n    int size() const {\n       \
-    \ return pool[root].count;\n    }\n\n    bool empty() const {\n        return\
-    \ size() == 0;\n    }\n\n    void clear() {\n        reset_to_empty();\n    }\n\
-    \n    void insert(int pos, T val) {\n        assert(0 <= pos && pos <= size());\n\
-    \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
-    \ new_node(std::move(val))), r);\n    }\n\n    void insert(int pos, const std::vector<T>&\
-    \ v) {\n        assert(0 <= pos && pos <= size());\n        pool.reserve(pool.size()\
-    \ + v.size());\n        int mid = build_from_vector(v);\n        int l, r;\n \
-    \       split(root, pos, l, r);\n        root = merge(merge(l, mid), r);\n   \
-    \ }\n\n    void insert(int pos, std::vector<T>&& v) {\n        assert(0 <= pos\
-    \ && pos <= size());\n        pool.reserve(pool.size() + v.size());\n        int\
-    \ mid = build_from_vector(std::move(v));\n        int l, r;\n        split(root,\
+    \    explicit DynamicArray(int n) : DynamicArray(n, T()) {}\n\n    DynamicArray(int\
+    \ n, const T& value) : DynamicArray() {\n        assert(0 <= n);\n        pool.reserve(n\
+    \ + 1);\n        for (int i = 0; i < n; i++) {\n            root = merge(root,\
+    \ new_node(value));\n        }\n    }\n\n    explicit DynamicArray(const std::vector<T>&\
+    \ v) : DynamicArray() {\n        pool.reserve(v.size() + 1);\n        root = build_from_vector(v);\n\
+    \    }\n\n    explicit DynamicArray(std::vector<T>&& v) : DynamicArray() {\n \
+    \       pool.reserve(v.size() + 1);\n        root = build_from_vector(std::move(v));\n\
+    \    }\n\n    DynamicArray(std::initializer_list<T> init) : DynamicArray() {\n\
+    \        pool.reserve(init.size() + 1);\n        for (const T& x : init) push_back(x);\n\
+    \    }\n\n    int size() const {\n        return pool[root].count;\n    }\n\n\
+    \    bool empty() const {\n        return size() == 0;\n    }\n\n    void clear()\
+    \ {\n        reset_to_empty();\n    }\n\n    void insert(int pos, T val) {\n \
+    \       assert(0 <= pos && pos <= size());\n        int l, r;\n        split(root,\
+    \ pos, l, r);\n        root = merge(merge(l, new_node(std::move(val))), r);\n\
+    \    }\n\n    void insert(int pos, const std::vector<T>& v) {\n        assert(0\
+    \ <= pos && pos <= size());\n        pool.reserve(pool.size() + v.size());\n \
+    \       int mid = build_from_vector(v);\n        int l, r;\n        split(root,\
     \ pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n    void insert(int\
-    \ pos, std::initializer_list<T> init) {\n        insert(pos, std::vector<T>(init));\n\
-    \    }\n\n    void insert(int pos, const DynamicArray& other) {\n        assert(0\
-    \ <= pos && pos <= size());\n        if (other.empty()) return;\n        pool.reserve(pool.size()\
-    \ + other.size());\n        int mid = clone_subtree_from(other, other.root);\n\
+    \ pos, std::vector<T>&& v) {\n        assert(0 <= pos && pos <= size());\n   \
+    \     pool.reserve(pool.size() + v.size());\n        int mid = build_from_vector(std::move(v));\n\
     \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
-    \ mid), r);\n    }\n\n    void push_back(T val) {\n        insert(size(), std::move(val));\n\
+    \ mid), r);\n    }\n\n    void insert(int pos, std::initializer_list<T> init)\
+    \ {\n        insert(pos, std::vector<T>(init));\n    }\n\n    void insert(int\
+    \ pos, const DynamicArray& other) {\n        assert(0 <= pos && pos <= size());\n\
+    \        if (other.empty()) return;\n        pool.reserve(pool.size() + other.size());\n\
+    \        int mid = clone_subtree_from(other, other.root);\n        int l, r;\n\
+    \        split(root, pos, l, r);\n        root = merge(merge(l, mid), r);\n  \
+    \  }\n\n    void push_back(T val) {\n        insert(size(), std::move(val));\n\
     \    }\n\n    void push_front(T val) {\n        insert(0, std::move(val));\n \
     \   }\n\n    void append(const std::vector<T>& v) {\n        insert(size(), v);\n\
     \    }\n\n    void append(std::vector<T>&& v) {\n        insert(size(), std::move(v));\n\
@@ -227,30 +231,34 @@ data:
     \ noexcept {\n        if (this != &other) {\n            pool = std::move(other.pool);\n\
     \            root = other.root;\n            rng = std::move(other.rng);\n   \
     \         other.reset_to_empty();\n        }\n        return *this;\n    }\n\n\
-    \    explicit DynamicArray(const std::vector<T>& v) : DynamicArray() {\n     \
-    \   pool.reserve(v.size() + 1);\n        root = build_from_vector(v);\n    }\n\
-    \n    explicit DynamicArray(std::vector<T>&& v) : DynamicArray() {\n        pool.reserve(v.size()\
-    \ + 1);\n        root = build_from_vector(std::move(v));\n    }\n\n    DynamicArray(std::initializer_list<T>\
-    \ init) : DynamicArray() {\n        pool.reserve(init.size() + 1);\n        for\
-    \ (const T& x : init) push_back(x);\n    }\n\n    int size() const {\n       \
-    \ return pool[root].count;\n    }\n\n    bool empty() const {\n        return\
-    \ size() == 0;\n    }\n\n    void clear() {\n        reset_to_empty();\n    }\n\
-    \n    void insert(int pos, T val) {\n        assert(0 <= pos && pos <= size());\n\
-    \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
-    \ new_node(std::move(val))), r);\n    }\n\n    void insert(int pos, const std::vector<T>&\
-    \ v) {\n        assert(0 <= pos && pos <= size());\n        pool.reserve(pool.size()\
-    \ + v.size());\n        int mid = build_from_vector(v);\n        int l, r;\n \
-    \       split(root, pos, l, r);\n        root = merge(merge(l, mid), r);\n   \
-    \ }\n\n    void insert(int pos, std::vector<T>&& v) {\n        assert(0 <= pos\
-    \ && pos <= size());\n        pool.reserve(pool.size() + v.size());\n        int\
-    \ mid = build_from_vector(std::move(v));\n        int l, r;\n        split(root,\
+    \    explicit DynamicArray(int n) : DynamicArray(n, T()) {}\n\n    DynamicArray(int\
+    \ n, const T& value) : DynamicArray() {\n        assert(0 <= n);\n        pool.reserve(n\
+    \ + 1);\n        for (int i = 0; i < n; i++) {\n            root = merge(root,\
+    \ new_node(value));\n        }\n    }\n\n    explicit DynamicArray(const std::vector<T>&\
+    \ v) : DynamicArray() {\n        pool.reserve(v.size() + 1);\n        root = build_from_vector(v);\n\
+    \    }\n\n    explicit DynamicArray(std::vector<T>&& v) : DynamicArray() {\n \
+    \       pool.reserve(v.size() + 1);\n        root = build_from_vector(std::move(v));\n\
+    \    }\n\n    DynamicArray(std::initializer_list<T> init) : DynamicArray() {\n\
+    \        pool.reserve(init.size() + 1);\n        for (const T& x : init) push_back(x);\n\
+    \    }\n\n    int size() const {\n        return pool[root].count;\n    }\n\n\
+    \    bool empty() const {\n        return size() == 0;\n    }\n\n    void clear()\
+    \ {\n        reset_to_empty();\n    }\n\n    void insert(int pos, T val) {\n \
+    \       assert(0 <= pos && pos <= size());\n        int l, r;\n        split(root,\
+    \ pos, l, r);\n        root = merge(merge(l, new_node(std::move(val))), r);\n\
+    \    }\n\n    void insert(int pos, const std::vector<T>& v) {\n        assert(0\
+    \ <= pos && pos <= size());\n        pool.reserve(pool.size() + v.size());\n \
+    \       int mid = build_from_vector(v);\n        int l, r;\n        split(root,\
     \ pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n    void insert(int\
-    \ pos, std::initializer_list<T> init) {\n        insert(pos, std::vector<T>(init));\n\
-    \    }\n\n    void insert(int pos, const DynamicArray& other) {\n        assert(0\
-    \ <= pos && pos <= size());\n        if (other.empty()) return;\n        pool.reserve(pool.size()\
-    \ + other.size());\n        int mid = clone_subtree_from(other, other.root);\n\
+    \ pos, std::vector<T>&& v) {\n        assert(0 <= pos && pos <= size());\n   \
+    \     pool.reserve(pool.size() + v.size());\n        int mid = build_from_vector(std::move(v));\n\
     \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
-    \ mid), r);\n    }\n\n    void push_back(T val) {\n        insert(size(), std::move(val));\n\
+    \ mid), r);\n    }\n\n    void insert(int pos, std::initializer_list<T> init)\
+    \ {\n        insert(pos, std::vector<T>(init));\n    }\n\n    void insert(int\
+    \ pos, const DynamicArray& other) {\n        assert(0 <= pos && pos <= size());\n\
+    \        if (other.empty()) return;\n        pool.reserve(pool.size() + other.size());\n\
+    \        int mid = clone_subtree_from(other, other.root);\n        int l, r;\n\
+    \        split(root, pos, l, r);\n        root = merge(merge(l, mid), r);\n  \
+    \  }\n\n    void push_back(T val) {\n        insert(size(), std::move(val));\n\
     \    }\n\n    void push_front(T val) {\n        insert(0, std::move(val));\n \
     \   }\n\n    void append(const std::vector<T>& v) {\n        insert(size(), v);\n\
     \    }\n\n    void append(std::vector<T>&& v) {\n        insert(size(), std::move(v));\n\
@@ -296,7 +304,7 @@ data:
   isVerificationFile: false
   path: data_structure/dynamic_array.hpp
   requiredBy: []
-  timestamp: '2026-06-14 03:09:20+09:00'
+  timestamp: '2026-06-14 03:55:10+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dynamic_array.test.cpp
@@ -328,6 +336,12 @@ In this document:
 
 * `DynamicArray()`
   Constructs an empty dynamic array. ($O(1)$)
+
+* `DynamicArray(int n)`
+  Constructs a dynamic array with `n` value-initialized elements, like `std::vector<T>(n)`. ($O(N \log N)$)
+
+* `DynamicArray(int n, const T& value)`
+  Constructs a dynamic array with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N \log N)$)
 
 * `DynamicArray(const DynamicArray& other)`
   Copy constructor. Deep copies the array structure and memory pool. ($O(V)$)

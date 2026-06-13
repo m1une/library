@@ -108,7 +108,11 @@ data:
     \ other) noexcept {\n        if (this != &other) {\n            pool = std::move(other.pool);\n\
     \            root = other.root;\n            rng = std::move(other.rng);\n   \
     \         other.reset_to_empty();\n        }\n        return *this;\n    }\n\n\
-    \    explicit DynamicMonoidArray(const std::vector<T>& v) : DynamicMonoidArray()\
+    \    explicit DynamicMonoidArray(int n) : DynamicMonoidArray(n, Monoid::id())\
+    \ {}\n\n    DynamicMonoidArray(int n, const T& value) : DynamicMonoidArray() {\n\
+    \        assert(0 <= n);\n        pool.reserve(n + 1);\n        for (int i = 0;\
+    \ i < n; i++) {\n            root = merge(root, new_node(value));\n        }\n\
+    \    }\n\n    explicit DynamicMonoidArray(const std::vector<T>& v) : DynamicMonoidArray()\
     \ {\n        pool.reserve(v.size() + 1);\n        root = build_from_vector(v);\n\
     \    }\n\n    explicit DynamicMonoidArray(std::vector<T>&& v) : DynamicMonoidArray()\
     \ {\n        pool.reserve(v.size() + 1);\n        root = build_from_vector(std::move(v));\n\
@@ -267,7 +271,11 @@ data:
     \ other) noexcept {\n        if (this != &other) {\n            pool = std::move(other.pool);\n\
     \            root = other.root;\n            rng = std::move(other.rng);\n   \
     \         other.reset_to_empty();\n        }\n        return *this;\n    }\n\n\
-    \    explicit DynamicMonoidArray(const std::vector<T>& v) : DynamicMonoidArray()\
+    \    explicit DynamicMonoidArray(int n) : DynamicMonoidArray(n, Monoid::id())\
+    \ {}\n\n    DynamicMonoidArray(int n, const T& value) : DynamicMonoidArray() {\n\
+    \        assert(0 <= n);\n        pool.reserve(n + 1);\n        for (int i = 0;\
+    \ i < n; i++) {\n            root = merge(root, new_node(value));\n        }\n\
+    \    }\n\n    explicit DynamicMonoidArray(const std::vector<T>& v) : DynamicMonoidArray()\
     \ {\n        pool.reserve(v.size() + 1);\n        root = build_from_vector(v);\n\
     \    }\n\n    explicit DynamicMonoidArray(std::vector<T>&& v) : DynamicMonoidArray()\
     \ {\n        pool.reserve(v.size() + 1);\n        root = build_from_vector(std::move(v));\n\
@@ -344,7 +352,7 @@ data:
   isVerificationFile: false
   path: data_structure/dynamic_monoid_array.hpp
   requiredBy: []
-  timestamp: '2026-06-14 03:36:40+09:00'
+  timestamp: '2026-06-14 03:55:10+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/dynamic_monoid_array.hpp
@@ -374,6 +382,12 @@ In this document:
 
 * `DynamicMonoidArray()`
   Constructs an empty sequence. ($O(1)$)
+
+* `DynamicMonoidArray(int n)`
+  Constructs a sequence with `n` copies of `Monoid::id()`. ($O(N \log N)$)
+
+* `DynamicMonoidArray(int n, const T& value)`
+  Constructs a sequence with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N \log N)$)
 
 * `DynamicMonoidArray(const std::vector<T>& v)`
   Constructs the sequence from monoid values. ($O(N \log N)$)
