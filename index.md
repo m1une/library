@@ -86,7 +86,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_array.hpp
       title: Dynamic Array (Implicit Treap)
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_monoid_array.hpp
       title: Dynamic Monoid Array
     - icon: ':heavy_check_mark:'
@@ -238,6 +238,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/dynamic_array.test.cpp
       title: verify/data_structure/dynamic_array.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/dynamic_monoid_array.test.cpp
+      title: verify/data_structure/dynamic_monoid_array.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/lazy_segtree.test.cpp
       title: verify/data_structure/lazy_segtree.test.cpp

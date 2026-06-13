@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/dynamic_monoid_array.hpp
     title: Dynamic Monoid Array
   - icon: ':heavy_check_mark:'
@@ -15,6 +15,9 @@ data:
     path: monoid/power.hpp
     title: Monoid Power
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/dynamic_monoid_array.test.cpp
+    title: verify/data_structure/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/segtree.test.cpp
     title: verify/data_structure/segtree.test.cpp
@@ -58,6 +61,7 @@ data:
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/dynamic_monoid_array.test.cpp
   - verify/data_structure/sparse_table.test.cpp
   - verify/data_structure/segtree.test.cpp
 documentation_of: monoid/concept.hpp
