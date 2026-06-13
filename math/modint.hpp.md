@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+    title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
   _isVerificationFailed: false
@@ -117,6 +120,7 @@ data:
   timestamp: '2026-06-06 20:32:01+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
 documentation_of: math/modint.hpp
 layout: document

@@ -5,10 +5,13 @@ data:
     path: acted_monoid/concept.hpp
     title: Acted Monoid Concept
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+    title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"data_structure/dynamic_lazy_monoid_array.hpp\"\n\n\n\n#include\
@@ -365,8 +368,9 @@ data:
   path: data_structure/dynamic_lazy_monoid_array.hpp
   requiredBy: []
   timestamp: '2026-06-14 04:05:53+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
 documentation_of: data_structure/dynamic_lazy_monoid_array.hpp
 layout: document
 title: Dynamic Lazy Monoid Array

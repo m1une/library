@@ -2,13 +2,16 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/dynamic_lazy_monoid_array.hpp
     title: Dynamic Lazy Monoid Array
   - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+    title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
@@ -52,6 +55,7 @@ data:
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
 documentation_of: acted_monoid/concept.hpp
 layout: document
