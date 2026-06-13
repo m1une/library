@@ -28,7 +28,9 @@ struct RangeAddRangeArgMax {
         return b;
     }
 
-    static constexpr operator_type op_id() { return T(0); }
+    static constexpr operator_type op_id() {
+        return T(0);
+    }
 
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return f + g;

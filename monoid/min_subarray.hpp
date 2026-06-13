@@ -13,7 +13,7 @@ struct SubarrayNode {
     T sum;
     T pre;
     T suf;
-    T opt; // Holds the optimal value (e.g., min or max)
+    T opt;  // Holds the optimal value (e.g., min or max)
 };
 
 // Monoid for finding the minimum subarray sum in a range.
@@ -34,16 +34,10 @@ struct MinSubarray {
         if (b.opt == Id) return a;
 
         // Lambda to select the optimal value according to the comparison functor.
-        auto get_opt = [](const T& x, const T& y) {
-            return Compare()(x, y) ? x : y;
-        };
+        auto get_opt = [](const T& x, const T& y) { return Compare()(x, y) ? x : y; };
 
-        return {
-            a.sum + b.sum,
-            get_opt(a.pre, a.sum + b.pre),
-            get_opt(b.suf, a.suf + b.sum),
-            get_opt(get_opt(a.opt, b.opt), a.suf + b.pre)
-        };
+        return {a.sum + b.sum, get_opt(a.pre, a.sum + b.pre), get_opt(b.suf, a.suf + b.sum),
+                get_opt(get_opt(a.opt, b.opt), a.suf + b.pre)};
     }
 
     // Helper to securely create a leaf node from a single value.

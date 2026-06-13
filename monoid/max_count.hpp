@@ -1,9 +1,10 @@
 #ifndef M1UNE_MONOID_MAX_COUNT_HPP
 #define M1UNE_MONOID_MAX_COUNT_HPP 1
 
-#include "min_count.hpp"
-#include <limits>
 #include <functional>
+#include <limits>
+
+#include "min_count.hpp"
 
 namespace m1une {
 namespace monoid {

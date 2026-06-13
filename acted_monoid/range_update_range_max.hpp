@@ -14,13 +14,17 @@ struct RangeUpdateRangeMax {
     using operator_type = std::optional<T>;
 
     // Value Monoid (Max)
-    static constexpr value_type id() { return Id; }
+    static constexpr value_type id() {
+        return Id;
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return std::max(a, b);
     }
 
     // Operator Monoid (Update)
-    static constexpr operator_type op_id() { return std::nullopt; }
+    static constexpr operator_type op_id() {
+        return std::nullopt;
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         // Prioritize the newer operation (f) over the older one (g)
         return f.has_value() ? f : g;

@@ -1,9 +1,9 @@
 #ifndef M1UNE_DSU_HPP
 #define M1UNE_DSU_HPP 1
 
-#include <vector>
-#include <numeric>
 #include <algorithm>
+#include <numeric>
+#include <vector>
 
 namespace m1une {
 namespace data_structure {
@@ -62,10 +62,8 @@ struct Dsu {
         for (int i = 0; i < _n; i++) {
             result[leader_buf[i]].push_back(i);
         }
-        result.erase(
-            std::remove_if(result.begin(), result.end(),
-                           [&](const std::vector<int>& v) { return v.empty(); }),
-            result.end());
+        result.erase(std::remove_if(result.begin(), result.end(), [&](const std::vector<int>& v) { return v.empty(); }),
+                     result.end());
         return result;
     }
 };

@@ -1,9 +1,10 @@
 #ifndef M1UNE_MONOID_MAX_SUBARRAY_HPP
 #define M1UNE_MONOID_MAX_SUBARRAY_HPP 1
 
-#include "min_subarray.hpp"
 #include <functional>
 #include <limits>
+
+#include "min_subarray.hpp"
 
 namespace m1une {
 namespace monoid {

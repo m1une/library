@@ -1,8 +1,9 @@
 #ifndef M1UNE_MONOID_BOTTOM_K_HPP
 #define M1UNE_MONOID_BOTTOM_K_HPP 1
 
-#include "top_k.hpp"
 #include <functional>
+
+#include "top_k.hpp"
 
 namespace m1une {
 namespace monoid {

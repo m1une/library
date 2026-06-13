@@ -16,10 +16,12 @@ struct RangeAffineRangeSumNode {
 template <typename T>
 struct RangeAffineRangeSum {
     using value_type = RangeAffineRangeSumNode<T>;
-    using operator_type = std::pair<T, T>; // {a, b} for ax + b
+    using operator_type = std::pair<T, T>;  // {a, b} for ax + b
 
     // Value Monoid
-    static constexpr value_type id() { return {T(0), 0}; }
+    static constexpr value_type id() {
+        return {T(0), 0};
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return {a.sum + b.sum, a.size + b.size};
     }
@@ -27,7 +29,9 @@ struct RangeAffineRangeSum {
     // Operator Monoid (Affine Composition)
     // f(x) = a1*x + b1, g(x) = a2*x + b2
     // f(g(x)) = a1*(a2*x + b2) + b1 = (a1*a2)*x + (a1*b2 + b1)
-    static constexpr operator_type op_id() { return {T(1), T(0)}; }
+    static constexpr operator_type op_id() {
+        return {T(1), T(0)};
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return {f.first * g.first, f.first * g.second + f.second};
     }

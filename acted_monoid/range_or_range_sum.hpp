@@ -37,7 +37,9 @@ struct RangeOrRangeSum {
         return res;
     }
 
-    static constexpr operator_type op_id() { return T(0); }
+    static constexpr operator_type op_id() {
+        return T(0);
+    }
 
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return f | g;
@@ -49,7 +51,7 @@ struct RangeOrRangeSum {
         res.sum = T(0);
         for (int i = 0; i < BITS; ++i) {
             if ((f >> i) & 1) {
-                res.bit_count[i] = x.size; // OR forces the bit to be 1 for all elements
+                res.bit_count[i] = x.size;  // OR forces the bit to be 1 for all elements
             }
             res.sum += static_cast<T>(res.bit_count[i]) * (T(1) << i);
         }

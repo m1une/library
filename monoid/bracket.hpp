@@ -8,8 +8,8 @@ namespace monoid {
 
 struct BracketNode {
     int matched;
-    int unmatched_right; // Count of unmatched ')'
-    int unmatched_left;  // Count of unmatched '('
+    int unmatched_right;  // Count of unmatched ')'
+    int unmatched_left;   // Count of unmatched '('
 };
 
 // Monoid for matching parentheses (Bracket Sequences).
@@ -25,11 +25,8 @@ struct Bracket {
     // The unmatched '(' from the left perfectly matches the unmatched ')' from the right.
     static constexpr value_type op(const value_type& a, const value_type& b) {
         int match = std::min(a.unmatched_left, b.unmatched_right);
-        return {
-            a.matched + b.matched + match,
-            a.unmatched_right + b.unmatched_right - match,
-            a.unmatched_left + b.unmatched_left - match
-        };
+        return {a.matched + b.matched + match, a.unmatched_right + b.unmatched_right - match,
+                a.unmatched_left + b.unmatched_left - match};
     }
 
     // Helper to securely create a leaf node from a single character.

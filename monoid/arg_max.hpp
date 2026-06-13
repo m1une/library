@@ -1,9 +1,10 @@
 #ifndef M1UNE_MONOID_ARG_MAX_HPP
 #define M1UNE_MONOID_ARG_MAX_HPP 1
 
-#include "arg_min.hpp"
-#include <limits>
 #include <functional>
+#include <limits>
+
+#include "arg_min.hpp"
 
 namespace m1une {
 namespace monoid {

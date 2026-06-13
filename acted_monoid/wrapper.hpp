@@ -6,15 +6,7 @@ namespace acted_monoid {
 
 // Wrapper struct to generate an Acted Monoid using Non-Type Template Parameters (NTTP).
 // Useful for quickly defining acted monoids using custom functions or constexpr lambdas during contests.
-template <
-    typename T, 
-    typename E, 
-    auto Op, 
-    auto Id, 
-    auto OpComp, 
-    auto OpId, 
-    auto Mapping
->
+template <typename T, typename E, auto Op, auto Id, auto OpComp, auto OpId, auto Mapping>
 struct Wrapper {
     using value_type = T;
     using operator_type = E;

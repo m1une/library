@@ -14,10 +14,14 @@ struct Min {
     using value_type = T;
 
     // Returns the identity element for minimum.
-    static constexpr T id() { return Id; }
+    static constexpr T id() {
+        return Id;
+    }
 
     // Returns the minimum of a and b.
-    static constexpr T op(const T& a, const T& b) { return std::min(a, b); }
+    static constexpr T op(const T& a, const T& b) {
+        return std::min(a, b);
+    }
 };
 
 }  // namespace monoid

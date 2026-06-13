@@ -36,17 +36,19 @@ struct RangeUpdateRangeMaxSubarray {
         return res;
     }
 
-    static constexpr operator_type op_id() { return std::nullopt; }
+    static constexpr operator_type op_id() {
+        return std::nullopt;
+    }
 
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
-        return f ? f : g; // left-biased because new updates override old ones
+        return f ? f : g;  // left-biased because new updates override old ones
     }
 
     static constexpr value_type mapping(const operator_type& f, const value_type& x) {
         if (!f || x.size == 0) return x;
         value_type res;
         res.sum = (*f) * x.size;
-        T max_val = std::max(T(0), res.sum); 
+        T max_val = std::max(T(0), res.sum);
         // If empty subarrays are NOT allowed, change to: T max_val = (*f) > 0 ? res.sum : (*f);
         res.pref = res.suff = res.max_sub = max_val;
         res.size = x.size;

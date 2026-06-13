@@ -1,9 +1,9 @@
 #ifndef M1UNE_MONOID_MIN_COUNT_HPP
 #define M1UNE_MONOID_MIN_COUNT_HPP 1
 
-#include <utility>
-#include <limits>
 #include <functional>
+#include <limits>
+#include <utility>
 
 namespace m1une {
 namespace monoid {

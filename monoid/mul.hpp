@@ -10,10 +10,14 @@ struct Mul {
     using value_type = T;
 
     // Returns the identity element for multiplication, which is 1.
-    static constexpr T id() { return T(1); }
+    static constexpr T id() {
+        return T(1);
+    }
 
     // Returns the product of a and b.
-    static constexpr T op(const T& a, const T& b) { return a * b; }
+    static constexpr T op(const T& a, const T& b) {
+        return a * b;
+    }
 };
 
 }  // namespace monoid

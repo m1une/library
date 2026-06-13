@@ -10,10 +10,14 @@ struct Or {
     using value_type = T;
 
     // The identity element for bitwise OR is 0 (all bits 0).
-    static constexpr T id() { return T(0); }
+    static constexpr T id() {
+        return T(0);
+    }
 
     // Returns the bitwise OR of a and b.
-    static constexpr T op(const T& a, const T& b) { return a | b; }
+    static constexpr T op(const T& a, const T& b) {
+        return a | b;
+    }
 };
 
 }  // namespace monoid

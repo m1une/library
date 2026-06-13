@@ -1,9 +1,10 @@
 #ifndef M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_ARG_MIN_HPP
 #define M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_ARG_MIN_HPP 1
 
-#include "../monoid/arg_min.hpp"
-#include <limits>
 #include <functional>
+#include <limits>
+
+#include "../monoid/arg_min.hpp"
 
 namespace m1une {
 namespace acted_monoid {
@@ -15,20 +16,24 @@ struct RangeAddRangeArgMin {
     using operator_type = T;
 
     // Value Monoid (ArgMin)
-    static constexpr value_type id() { return BaseMonoid::id(); }
+    static constexpr value_type id() {
+        return BaseMonoid::id();
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return BaseMonoid::op(a, b);
     }
 
     // Operator Monoid (Add)
-    static constexpr operator_type op_id() { return T(0); }
+    static constexpr operator_type op_id() {
+        return T(0);
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return f + g;
     }
 
     // Mapping
     static constexpr value_type mapping(const operator_type& f, const value_type& x) {
-        if (x.second == -1) return x; // Do not apply to the identity element
+        if (x.second == -1) return x;  // Do not apply to the identity element
         return {x.first + f, x.second};
     }
 

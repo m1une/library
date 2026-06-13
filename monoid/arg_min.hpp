@@ -1,9 +1,9 @@
 #ifndef M1UNE_MONOID_ARG_MIN_HPP
 #define M1UNE_MONOID_ARG_MIN_HPP 1
 
+#include <functional>
 #include <limits>
 #include <utility>
-#include <functional>
 
 namespace m1une {
 namespace monoid {

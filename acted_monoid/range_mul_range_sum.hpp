@@ -12,15 +12,19 @@ struct RangeMulRangeSum {
     using operator_type = T;
 
     // Value Monoid (Sum)
-    static constexpr value_type id() { return T(0); }
-    static constexpr value_type op(const value_type& a, const value_type& b) { 
-        return a + b; 
+    static constexpr value_type id() {
+        return T(0);
+    }
+    static constexpr value_type op(const value_type& a, const value_type& b) {
+        return a + b;
     }
 
     // Operator Monoid (Multiply)
-    static constexpr operator_type op_id() { return T(1); }
-    static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) { 
-        return f * g; 
+    static constexpr operator_type op_id() {
+        return T(1);
+    }
+    static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
+        return f * g;
     }
 
     // Mapping: Distribution Property ( f * (a+b) = f*a + f*b )

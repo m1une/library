@@ -1,8 +1,8 @@
 #ifndef M1UNE_MONOID_MIN_PLUS_MATRIX_HPP
 #define M1UNE_MONOID_MIN_PLUS_MATRIX_HPP 1
 
-#include <array>
 #include <algorithm>
+#include <array>
 #include <limits>
 
 namespace m1une {

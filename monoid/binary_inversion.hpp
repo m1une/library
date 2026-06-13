@@ -24,11 +24,7 @@ struct BinaryInversion {
     // Merges two segments and calculates the new inversions.
     // New inversions = left inversions + right inversions + (ones in left * zeros in right)
     static constexpr value_type op(const value_type& a, const value_type& b) {
-        return {
-            a.zeros + b.zeros,
-            a.ones + b.ones,
-            a.inversions + b.inversions + a.ones * b.zeros
-        };
+        return {a.zeros + b.zeros, a.ones + b.ones, a.inversions + b.inversions + a.ones * b.zeros};
     }
 
     // Helper to securely create a leaf node from a value (0 or 1).

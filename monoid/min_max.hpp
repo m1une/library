@@ -20,10 +20,7 @@ struct MinMax {
 
     // Merges two elements, extracting the overall min and max.
     static constexpr value_type op(const value_type& a, const value_type& b) {
-        return {
-            std::min(a.first, b.first),
-            std::max(a.second, b.second)
-        };
+        return {std::min(a.first, b.first), std::max(a.second, b.second)};
     }
 
     // Helper to securely create a leaf node from a single value.

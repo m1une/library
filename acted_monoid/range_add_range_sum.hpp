@@ -16,13 +16,17 @@ struct RangeAddRangeSum {
     using operator_type = T;
 
     // Value Monoid (Sum)
-    static constexpr value_type id() { return {T(0), 0}; }
+    static constexpr value_type id() {
+        return {T(0), 0};
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return {a.sum + b.sum, a.size + b.size};
     }
 
     // Operator Monoid (Add)
-    static constexpr operator_type op_id() { return 0; }
+    static constexpr operator_type op_id() {
+        return 0;
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return f + g;
     }

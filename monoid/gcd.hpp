@@ -12,11 +12,13 @@ struct Gcd {
     using value_type = T;
 
     // The identity element for GCD is 0.
-    static constexpr T id() { return T(0); }
+    static constexpr T id() {
+        return T(0);
+    }
 
     // Returns the greatest common divisor of a and b.
-    static constexpr T op(const T& a, const T& b) { 
-        return std::gcd(a, b); 
+    static constexpr T op(const T& a, const T& b) {
+        return std::gcd(a, b);
     }
 };
 

@@ -16,27 +16,27 @@ struct RangeApAddRangeSumNode {
 template <typename T>
 struct RangeApAddRangeSum {
     using value_type = RangeApAddRangeSumNode<T>;
-    using operator_type = std::pair<T, T>; // {a, b} for adding a * i + b
+    using operator_type = std::pair<T, T>;  // {a, b} for adding a * i + b
 
     // Value Monoid (Sum)
-    static constexpr value_type id() { return {T(0), 0, T(0)}; }
+    static constexpr value_type id() {
+        return {T(0), 0, T(0)};
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return {a.sum + b.sum, a.size + b.size, a.idx_sum + b.idx_sum};
     }
 
     // Operator Monoid (Add)
-    static constexpr operator_type op_id() { return {T(0), T(0)}; }
+    static constexpr operator_type op_id() {
+        return {T(0), T(0)};
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return {f.first + g.first, f.second + g.second};
     }
 
     // Mapping: sum += a * idx_sum + b * size
     static constexpr value_type mapping(const operator_type& f, const value_type& x) {
-        return {
-            x.sum + f.first * x.idx_sum + f.second * T(x.size),
-            x.size,
-            x.idx_sum
-        };
+        return {x.sum + f.first * x.idx_sum + f.second * T(x.size), x.size, x.idx_sum};
     }
 
     // Helper for initializing a leaf node

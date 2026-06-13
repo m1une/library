@@ -7,6 +7,33 @@ using namespace std;
 
 constexpr long long MAX = 100000;
 
+void test_shifted_array_edges() {
+    m1une::utilities::ShiftedArray<int> stepped(-2, 4, 0, 2);
+    stepped[-2] = 1;
+    stepped[0] = 2;
+    stepped[4] = 3;
+    assert(stepped.index(2) == 2);
+    assert(stepped[-2] == 1);
+    assert(stepped[0] == 2);
+    assert(stepped[4] == 3);
+
+    bool rejected = false;
+    try {
+        (void)stepped[1];
+    } catch (const out_of_range&) {
+        rejected = true;
+    }
+    assert(rejected);
+
+    rejected = false;
+    try {
+        m1une::utilities::ShiftedArray<int> invalid_step(0, 10, 0, 0);
+    } catch (const invalid_argument&) {
+        rejected = true;
+    }
+    assert(rejected);
+}
+
 long long solve(long long l, long long r) {
     vector<char> is_prime(MAX, 1);
     is_prime[0] = is_prime[1] = 0;
@@ -41,6 +68,8 @@ long long solve(long long l, long long r) {
 }
 
 int main() {
+    test_shifted_array_edges();
+
     long long l, r;
     cin >> l >> r;
     cout << solve(l, r) << endl;

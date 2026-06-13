@@ -35,7 +35,7 @@ struct LongestSame {
         value_type res;
         res.len = a.len + b.len;
         res.max_len = std::max(a.max_len, b.max_len);
-        
+
         if (a.r_val == b.l_val) {
             res.max_len = std::max(res.max_len, a.r_len + b.l_len);
         }

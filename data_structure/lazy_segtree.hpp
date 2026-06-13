@@ -1,8 +1,11 @@
 #ifndef M1UNE_LAZY_SEGTREE_HPP
 #define M1UNE_LAZY_SEGTREE_HPP 1
 
-#include <vector>
 #include <cassert>
+#include <concepts>
+#include <utility>
+#include <vector>
+
 #include "acted_monoid/concept.hpp"
 #include "utilities/bit_ceil.hpp"
 
@@ -85,8 +88,6 @@ struct LazySegtree {
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, ActedMonoid::id());
         _lz.assign(_size, ActedMonoid::op_id());
-        
-        // Compile-time branching based on the available make() signature
         for (int i = 0; i < _n; i++) {
             if constexpr (requires(U x) { ActedMonoid::make(x); }) {
                 _d[_size + i] = ActedMonoid::make(v[i]);
@@ -141,7 +142,9 @@ struct LazySegtree {
     }
 
     // Returns the product of the entire array.
-    T all_prod() const { return _d[1]; }
+    T all_prod() const {
+        return _d[1];
+    }
 
     // Applies the operator f to the p-th element.
     void apply(int p, F f) {

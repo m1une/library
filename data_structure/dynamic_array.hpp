@@ -1,12 +1,12 @@
 #ifndef M1UNE_DYNAMIC_ARRAY_HPP
 #define M1UNE_DYNAMIC_ARRAY_HPP 1
 
-#include <vector>
-#include <random>
-#include <chrono>
 #include <cassert>
+#include <chrono>
 #include <initializer_list>
-#include <utility> // for std::move
+#include <random>
+#include <utility>
+#include <vector>
 
 namespace m1une {
 namespace data_structure {
@@ -19,8 +19,8 @@ struct DynamicArray {
         int priority;
         int count;
         int l, r;
-        
-        Node() : val(T()), priority(0), count(0), l(0), r(0) {} 
+
+        Node() : val(T()), priority(0), count(0), l(0), r(0) {}
         Node(T val, int priority) : val(std::move(val)), priority(priority), count(1), l(0), r(0) {}
     };
 
@@ -82,11 +82,10 @@ struct DynamicArray {
     }
 
     // 2. Copy Constructor (const lvalue reference)
-    DynamicArray(const DynamicArray& other) 
-        : pool(other.pool), root(other.root), rng(other.rng) {}
+    DynamicArray(const DynamicArray& other) : pool(other.pool), root(other.root), rng(other.rng) {}
 
     // 3. Move Constructor (rvalue reference)
-    DynamicArray(DynamicArray&& other) noexcept 
+    DynamicArray(DynamicArray&& other) noexcept
         : pool(std::move(other.pool)), root(other.root), rng(std::move(other.rng)) {
         other.root = 0;
     }

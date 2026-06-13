@@ -17,10 +17,12 @@ struct RangeAffineRangeSumOfSquaresNode {
 template <typename T>
 struct RangeAffineRangeSumOfSquares {
     using value_type = RangeAffineRangeSumOfSquaresNode<T>;
-    using operator_type = std::pair<T, T>; // {a, b} for f(x) = a*x + b
+    using operator_type = std::pair<T, T>;  // {a, b} for f(x) = a*x + b
 
     // Value Monoid (Sum of Squares, Sum, Size)
-    static constexpr value_type id() { return {T(0), T(0), 0}; }
+    static constexpr value_type id() {
+        return {T(0), T(0), 0};
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return {a.sum_sq + b.sum_sq, a.sum + b.sum, a.size + b.size};
     }
@@ -28,7 +30,9 @@ struct RangeAffineRangeSumOfSquares {
     // Operator Monoid (Affine Composition)
     // f(x) = a1*x + b1, g(x) = a2*x + b2
     // f(g(x)) = a1*(a2*x + b2) + b1 = (a1*a2)*x + (a1*b2 + b1)
-    static constexpr operator_type op_id() { return {T(1), T(0)}; }
+    static constexpr operator_type op_id() {
+        return {T(1), T(0)};
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return {f.first * g.first, f.first * g.second + f.second};
     }
@@ -41,12 +45,8 @@ struct RangeAffineRangeSumOfSquares {
         T a = f.first;
         T b = f.second;
         T sz = static_cast<T>(x.size);
-        
-        return {
-            a * a * x.sum_sq + T(2) * a * b * x.sum + b * b * sz,
-            a * x.sum + b * sz,
-            x.size
-        };
+
+        return {a * a * x.sum_sq + T(2) * a * b * x.sum + b * b * sz, a * x.sum + b * sz, x.size};
     }
 
     // Helper for initializing a leaf node

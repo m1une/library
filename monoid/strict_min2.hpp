@@ -1,16 +1,16 @@
 #ifndef M1UNE_MONOID_STRICT_MIN2_HPP
 #define M1UNE_MONOID_STRICT_MIN2_HPP 1
 
-#include <limits>
 #include <functional>
+#include <limits>
 
 namespace m1une {
 namespace monoid {
 
 template <typename T>
 struct StrictOpt2Node {
-    T opt1; // The strictly best value
-    T opt2; // The strictly second-best value
+    T opt1;  // The strictly best value
+    T opt2;  // The strictly second-best value
 };
 
 // Monoid for finding the strictly 1st and 2nd optimal (minimum by default) values in a range.

@@ -31,10 +31,10 @@ struct LongestTrue {
         value_type res;
         res.len = a.len + b.len;
         res.max_len = std::max({a.max_len, b.max_len, a.r_len + b.l_len});
-        
+
         res.l_len = a.l_len;
         if (a.len == a.l_len) res.l_len += b.l_len;
-        
+
         res.r_len = b.r_len;
         if (b.len == b.r_len) res.r_len += a.r_len;
 

@@ -14,10 +14,14 @@ struct Max {
     using value_type = T;
 
     // Returns the identity element for maximum.
-    static constexpr T id() { return Id; }
+    static constexpr T id() {
+        return Id;
+    }
 
     // Returns the maximum of a and b.
-    static constexpr T op(const T& a, const T& b) { return std::max(a, b); }
+    static constexpr T op(const T& a, const T& b) {
+        return std::max(a, b);
+    }
 };
 
 }  // namespace monoid

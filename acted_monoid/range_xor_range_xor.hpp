@@ -15,12 +15,16 @@ struct RangeXorRangeXor {
     using value_type = RangeXorRangeXorNode<T>;
     using operator_type = T;
 
-    static constexpr value_type id() { return {T(0), 0}; }
+    static constexpr value_type id() {
+        return {T(0), 0};
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return {a.val ^ b.val, a.size + b.size};
     }
 
-    static constexpr operator_type op_id() { return T(0); }
+    static constexpr operator_type op_id() {
+        return T(0);
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return f ^ g;
     }

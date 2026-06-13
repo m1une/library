@@ -13,20 +13,24 @@ struct RangeAddRangeMin {
     using operator_type = T;
 
     // Value Monoid (Min)
-    static constexpr value_type id() { return Id; }
+    static constexpr value_type id() {
+        return Id;
+    }
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return std::min(a, b);
     }
 
     // Operator Monoid (Add)
-    static constexpr operator_type op_id() { return 0; }
+    static constexpr operator_type op_id() {
+        return 0;
+    }
     static constexpr operator_type op_comp(const operator_type& f, const operator_type& g) {
         return f + g;
     }
 
     // Mapping
     static constexpr value_type mapping(const operator_type& f, const value_type& x) {
-        if (x == id()) return x; // Do not apply the operator to the identity element
+        if (x == id()) return x;  // Do not apply the operator to the identity element
         return x + f;
     }
 };

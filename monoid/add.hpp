@@ -10,10 +10,14 @@ struct Add {
     using value_type = T;
 
     // Returns the identity element for addition, which is 0.
-    static constexpr T id() { return T(0); }
+    static constexpr T id() {
+        return T(0);
+    }
 
     // Returns the sum of a and b.
-    static constexpr T op(const T& a, const T& b) { return a + b; }
+    static constexpr T op(const T& a, const T& b) {
+        return a + b;
+    }
 };
 
 }  // namespace monoid

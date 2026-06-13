@@ -1,9 +1,10 @@
 #ifndef M1UNE_MONOID_STRICT_MAX2_HPP
 #define M1UNE_MONOID_STRICT_MAX2_HPP 1
 
-#include "strict_min2.hpp"
-#include <limits>
 #include <functional>
+#include <limits>
+
+#include "strict_min2.hpp"
 
 namespace m1une {
 namespace monoid {

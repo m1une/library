@@ -1,8 +1,11 @@
 #ifndef M1UNE_SEGTREE_HPP
 #define M1UNE_SEGTREE_HPP 1
 
-#include <vector>
 #include <cassert>
+#include <concepts>
+#include <utility>
+#include <vector>
+
 #include "monoid/concept.hpp"
 #include "utilities/bit_ceil.hpp"
 
@@ -47,7 +50,7 @@ struct Segtree {
         for (int i = 0; i < _n; i++) _d[_size + i] = std::move(v[i]);
         for (int i = _size - 1; i >= 1; i--) update(i);
     }
-    
+
     // Constructs a segment tree from a vector of a different type U.
     // It automatically adapts to the Monoid's initialization requirements:
     // 1. Monoid::make(val) if it exists.
@@ -64,8 +67,6 @@ struct Segtree {
         _log = 0;
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, Monoid::id());
-        
-        // Compile-time branching based on the available make() signature
         for (int i = 0; i < _n; i++) {
             if constexpr (requires(U x) { Monoid::make(x); }) {
                 _d[_size + i] = Monoid::make(v[i]);
@@ -108,8 +109,8 @@ struct Segtree {
     }
 
     // Returns the product of the entire array.
-    T all_prod() const { 
-        return _d[1]; 
+    T all_prod() const {
+        return _d[1];
     }
 
     // Finds the largest `r` such that `f(prod(l, r))` is true.

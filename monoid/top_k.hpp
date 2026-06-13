@@ -1,9 +1,9 @@
 #ifndef M1UNE_MONOID_TOP_K_HPP
 #define M1UNE_MONOID_TOP_K_HPP 1
 
-#include <vector>
 #include <algorithm>
 #include <functional>
+#include <vector>
 
 namespace m1une {
 namespace monoid {
@@ -16,22 +16,22 @@ struct TopK {
     using value_type = std::vector<T>;
 
     // The identity element is an empty vector.
-    static constexpr value_type id() { 
-        return std::vector<T>(); 
+    static constexpr value_type id() {
+        return std::vector<T>();
     }
 
     // Merges two sorted vectors and keeps only the first K elements.
     static constexpr value_type op(const value_type& a, const value_type& b) {
         value_type res;
         res.reserve(std::min(K, (int)(a.size() + b.size())));
-        
+
         int i = 0, j = 0;
         while (res.size() < (std::size_t)K && (i < (int)a.size() || j < (int)b.size())) {
             if (i == (int)a.size()) {
                 res.push_back(b[j++]);
             } else if (j == (int)b.size()) {
                 res.push_back(a[i++]);
-            } else if (Compare()(a[i], b[j])) { 
+            } else if (Compare()(a[i], b[j])) {
                 res.push_back(a[i++]);
             } else {
                 res.push_back(b[j++]);

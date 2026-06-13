@@ -1,10 +1,10 @@
 #ifndef M1UNE_MONOID_TOP_K_COUNT_HPP
 #define M1UNE_MONOID_TOP_K_COUNT_HPP 1
 
-#include <vector>
-#include <utility>
 #include <algorithm>
 #include <functional>
+#include <utility>
+#include <vector>
 
 namespace m1une {
 namespace monoid {
@@ -22,7 +22,7 @@ struct TopKCount {
     static constexpr value_type op(const value_type& a, const value_type& b) {
         value_type res;
         res.reserve(std::min(K, (int)(a.size() + b.size())));
-        
+
         int i = 0, j = 0;
         while (res.size() < (std::size_t)K && (i < (int)a.size() || j < (int)b.size())) {
             if (i == (int)a.size()) {
