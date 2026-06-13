@@ -3,8 +3,8 @@
 
 #include <cassert>
 #include <chrono>
+#include <cstdint>
 #include <initializer_list>
-#include <random>
 #include <utility>
 #include <vector>
 
@@ -28,11 +28,18 @@ struct DynamicArray {
 
     std::vector<Node> pool;
     int root;
-    std::mt19937 rng;
+    std::uint32_t rng_state;
 
     int new_node(T val) {
-        pool.push_back(Node(std::move(val), rng()));
+        pool.push_back(Node(std::move(val), next_priority()));
         return pool.size() - 1;
+    }
+
+    int next_priority() {
+        rng_state ^= rng_state << 13;
+        rng_state ^= rng_state >> 17;
+        rng_state ^= rng_state << 5;
+        return int(rng_state);
     }
 
     void update(int t) {
@@ -60,8 +67,32 @@ struct DynamicArray {
             l = r = 0;
             return;
         }
+        if (pos == 0) {
+            l = 0;
+            r = t;
+            return;
+        }
+        if (pos == pool[t].count) {
+            l = t;
+            r = 0;
+            return;
+        }
         push(t);
         int left_count = pool[pool[t].l].count;
+        if (pos == left_count) {
+            l = pool[t].l;
+            pool[t].l = 0;
+            update(t);
+            r = t;
+            return;
+        }
+        if (pos == left_count + 1) {
+            r = pool[t].r;
+            pool[t].r = 0;
+            update(t);
+            l = t;
+            return;
+        }
         if (pos <= left_count) {
             split(pool[t].l, pos, l, pool[t].l);
             r = t;
@@ -74,17 +105,59 @@ struct DynamicArray {
 
     int merge(int l, int r) {
         if (!l || !r) return l ? l : r;
-        push(l);
-        push(r);
         if (pool[l].priority > pool[r].priority) {
-            pool[l].r = merge(pool[l].r, r);
+            push(l);
+            if (pool[l].r) {
+                pool[l].r = merge(pool[l].r, r);
+            } else {
+                pool[l].r = r;
+            }
             update(l);
             return l;
         } else {
-            pool[r].l = merge(l, pool[r].l);
+            push(r);
+            if (pool[r].l) {
+                pool[r].l = merge(l, pool[r].l);
+            } else {
+                pool[r].l = l;
+            }
             update(r);
             return r;
         }
+    }
+
+    int insert_node(int t, int pos, int node) {
+        if (!t) return node;
+        if (pool[node].priority > pool[t].priority) {
+            split(t, pos, pool[node].l, pool[node].r);
+            update(node);
+            return node;
+        }
+        push(t);
+        int left_count = pool[pool[t].l].count;
+        if (pos <= left_count) {
+            pool[t].l = insert_node(pool[t].l, pos, node);
+        } else {
+            pool[t].r = insert_node(pool[t].r, pos - left_count - 1, node);
+        }
+        update(t);
+        return t;
+    }
+
+    int erase_node(int t, int pos) {
+        push(t);
+        int left_count = pool[pool[t].l].count;
+        if (pos < left_count) {
+            pool[t].l = erase_node(pool[t].l, pos);
+            update(t);
+            return t;
+        }
+        if (pos == left_count) {
+            return merge(pool[t].l, pool[t].r);
+        }
+        pool[t].r = erase_node(pool[t].r, pos - left_count - 1);
+        update(t);
+        return t;
     }
 
     int find_node(int t, int pos) {
@@ -156,20 +229,50 @@ struct DynamicArray {
         return res;
     }
 
-    int build_from_vector(const std::vector<T>& v) {
-        int res = 0;
-        for (const T& x : v) {
-            res = merge(res, new_node(x));
+    void update_dfs(int t) {
+        if (!t) return;
+        update_dfs(pool[t].l);
+        update_dfs(pool[t].r);
+        update(t);
+    }
+
+    int build_cartesian(int first, int last) {
+        if (first == last) return 0;
+        std::vector<int> stack;
+        stack.reserve(last - first);
+        for (int i = first; i < last; i++) {
+            int left_child = 0;
+            while (!stack.empty() && pool[stack.back()].priority < pool[i].priority) {
+                left_child = stack.back();
+                stack.pop_back();
+            }
+            pool[i].l = left_child;
+            if (!stack.empty()) {
+                pool[stack.back()].r = i;
+            }
+            stack.push_back(i);
         }
+        int res = stack.front();
+        update_dfs(res);
         return res;
     }
 
-    int build_from_vector(std::vector<T>&& v) {
-        int res = 0;
-        for (T& x : v) {
-            res = merge(res, new_node(std::move(x)));
+    int build_from_vector(const std::vector<T>& v) {
+        int first = int(pool.size());
+        pool.reserve(pool.size() + v.size());
+        for (const T& x : v) {
+            new_node(x);
         }
-        return res;
+        return build_cartesian(first, int(pool.size()));
+    }
+
+    int build_from_vector(std::vector<T>&& v) {
+        int first = int(pool.size());
+        pool.reserve(pool.size() + v.size());
+        for (T& x : v) {
+            new_node(std::move(x));
+        }
+        return build_cartesian(first, int(pool.size()));
     }
 
     void reset_to_empty() {
@@ -179,14 +282,15 @@ struct DynamicArray {
     }
 
    public:
-    DynamicArray() : root(0), rng(std::chrono::steady_clock::now().time_since_epoch().count()) {
+    DynamicArray() : root(0), rng_state(std::uint32_t(std::chrono::steady_clock::now().time_since_epoch().count())) {
         pool.push_back(Node());
+        if (rng_state == 0) rng_state = 1;
     }
 
-    DynamicArray(const DynamicArray& other) : pool(other.pool), root(other.root), rng(other.rng) {}
+    DynamicArray(const DynamicArray& other) : pool(other.pool), root(other.root), rng_state(other.rng_state) {}
 
     DynamicArray(DynamicArray&& other) noexcept
-        : pool(std::move(other.pool)), root(other.root), rng(std::move(other.rng)) {
+        : pool(std::move(other.pool)), root(other.root), rng_state(other.rng_state) {
         other.reset_to_empty();
     }
 
@@ -194,7 +298,7 @@ struct DynamicArray {
         if (this != &other) {
             pool = other.pool;
             root = other.root;
-            rng = other.rng;
+            rng_state = other.rng_state;
         }
         return *this;
     }
@@ -203,7 +307,7 @@ struct DynamicArray {
         if (this != &other) {
             pool = std::move(other.pool);
             root = other.root;
-            rng = std::move(other.rng);
+            rng_state = other.rng_state;
             other.reset_to_empty();
         }
         return *this;
@@ -214,9 +318,11 @@ struct DynamicArray {
     DynamicArray(int n, const T& value) : DynamicArray() {
         assert(0 <= n);
         pool.reserve(n + 1);
+        int first = int(pool.size());
         for (int i = 0; i < n; i++) {
-            root = merge(root, new_node(value));
+            new_node(value);
         }
+        root = build_cartesian(first, int(pool.size()));
     }
 
     explicit DynamicArray(const std::vector<T>& v) : DynamicArray() {
@@ -248,9 +354,7 @@ struct DynamicArray {
 
     void insert(int pos, T val) {
         assert(0 <= pos && pos <= size());
-        int l, r;
-        split(root, pos, l, r);
-        root = merge(merge(l, new_node(std::move(val))), r);
+        root = insert_node(root, pos, new_node(std::move(val)));
     }
 
     void insert(int pos, const std::vector<T>& v) {
@@ -307,7 +411,7 @@ struct DynamicArray {
 
     void erase(int pos) {
         assert(0 <= pos && pos < size());
-        erase(pos, pos + 1);
+        root = erase_node(root, pos);
     }
 
     void erase(int l, int r) {

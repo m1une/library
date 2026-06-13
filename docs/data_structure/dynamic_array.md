@@ -28,10 +28,10 @@ In this document:
   Constructs an empty dynamic array. ($O(1)$)
 
 * `DynamicArray(int n)`
-  Constructs a dynamic array with `n` value-initialized elements, like `std::vector<T>(n)`. ($O(N \log N)$)
+  Constructs a dynamic array with `n` value-initialized elements, like `std::vector<T>(n)`. ($O(N)$)
 
 * `DynamicArray(int n, const T& value)`
-  Constructs a dynamic array with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N \log N)$)
+  Constructs a dynamic array with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N)$)
 
 * `DynamicArray(const DynamicArray& other)`
   Copy constructor. Deep copies the array structure and memory pool. ($O(V)$)
@@ -40,10 +40,10 @@ In this document:
   Move constructor. Takes ownership of the other array's memory pool without reallocating. ($O(1)$)
 
 * `DynamicArray(const std::vector<T>& v)`
-  Constructs the dynamic array initialized with elements from `v`. ($O(N \log N)$)
+  Constructs the dynamic array initialized with elements from `v`. ($O(N)$)
 
 * `DynamicArray(std::vector<T>&& v)`
-  Constructs the dynamic array by moving elements from an rvalue reference of a `std::vector`. ($O(N \log N)$)
+  Constructs the dynamic array by moving elements from an rvalue reference of a `std::vector`. ($O(N)$)
 
 * `DynamicArray(std::initializer_list<T> init)`
   Constructs the dynamic array initialized with an initializer list. ($O(N \log N)$)
@@ -69,7 +69,7 @@ In this document:
   Inserts a new element `val` at the beginning of the array. ($O(\log N)$)
 
 * `void append(const std::vector<T>& v)`
-  Appends every element in `v`. ($O(M \log M + \log N)$)
+  Appends every element in `v`. ($O(M + \log N)$)
 
 * `void append(const DynamicArray& other)`
   Appends a copy of another dynamic array. ($O(M + \log N)$)
@@ -78,7 +78,7 @@ In this document:
   Inserts a new element `val` at the specified 0-based index `pos`. All subsequent elements shift right. ($O(\log N)$)
 
 * `void insert(int pos, const std::vector<T>& v)`
-  Inserts all elements of `v` at `pos`. ($O(M \log M + \log N)$)
+  Inserts all elements of `v` at `pos`. ($O(M + \log N)$)
 
 * `void insert(int pos, const DynamicArray& other)`
   Inserts a copy of another dynamic array at `pos`. ($O(M + \log N)$)

@@ -27,19 +27,19 @@ In this document:
   Constructs an empty sequence. ($O(1)$)
 
 * `DynamicMonoidArray(int n)`
-  Constructs a sequence with `n` copies of `Monoid::id()`. ($O(N \log N)$)
+  Constructs a sequence with `n` copies of `Monoid::id()`. ($O(N)$)
 
 * `DynamicMonoidArray(int n, const T& value)`
-  Constructs a sequence with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N \log N)$)
+  Constructs a sequence with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N)$)
 
 * `DynamicMonoidArray(const std::vector<T>& v)`
-  Constructs the sequence from monoid values. ($O(N \log N)$)
+  Constructs the sequence from monoid values. ($O(N)$)
 
 * `DynamicMonoidArray(std::vector<T>&& v)`
-  Constructs the sequence by moving monoid values. ($O(N \log N)$)
+  Constructs the sequence by moving monoid values. ($O(N)$)
 
 * `DynamicMonoidArray(const std::vector<U>& v)`
-  Constructs the sequence from another type using `Monoid::make(x)` if available, otherwise `static_cast<T>(x)`. ($O(N \log N)$)
+  Constructs the sequence from another type using `Monoid::make(x)` if available, otherwise `static_cast<T>(x)`. ($O(N)$)
 
 * `DynamicMonoidArray(std::initializer_list<T> init)`
   Constructs the sequence from an initializer list of monoid values. ($O(N \log N)$)
@@ -59,7 +59,7 @@ In this document:
   Inserts `value` before index `pos`. ($O(\log N)$)
 
 * `void insert(int pos, const std::vector<T>& v)`
-  Inserts every value in `v` before index `pos`. ($O(M \log M + \log N)$)
+  Inserts every value in `v` before index `pos`. ($O(M + \log N)$)
 
 * `void insert(int pos, const DynamicMonoidArray& other)`
   Inserts a copy of another sequence before index `pos`. ($O(M + \log N)$)
@@ -68,7 +68,7 @@ In this document:
   Inserts one value at the end or beginning. ($O(\log N)$)
 
 * `void append(const std::vector<T>& v)`
-  Appends all values in `v`. ($O(M \log M + \log N)$)
+  Appends all values in `v`. ($O(M + \log N)$)
 
 * `void append(const DynamicMonoidArray& other)`
   Appends a copy of another sequence. ($O(M + \log N)$)
