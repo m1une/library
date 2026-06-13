@@ -274,9 +274,9 @@ layout: toppage
 
 This is a C++ library for competitive programming authored by m1une. I made this library to use it for my own, but you may copy any code from this library for competitive programming purposes.
 
-I used Gemini 2.5 Pro for the development of this library. If you found any bugs, please contact me via [my Twitter account](https://x.com/m1une_kyopro).
+I used generative AI for the development of this library. If you found any bugs, please contact me via [my Twitter account](https://x.com/m1une_kyopro).
 
-みうねが自分で使うためにまとめた競技プログラミング用のライブラリです。 Gemini 2.5 Pro を開発のために使用しています。
+みうねが自分で使うためにまとめた競技プログラミング用のライブラリです。 生成AIを開発のために使用しています。
 
 バグ等を発見した方がいましたら[みうねのTwitter](https://x.com/m1une_kyopro)までご連絡くれると嬉しいです。
 
