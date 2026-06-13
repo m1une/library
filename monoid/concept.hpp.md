@@ -28,10 +28,10 @@ data:
     \ of a Monoid.\n// A Monoid must have a `value_type`, an identity element `id()`,\
     \ and an associative binary operation `op()`.\ntemplate <typename M>\nconcept\
     \ IsMonoid = requires(typename M::value_type a, typename M::value_type b) {\n\
-    \    // 1. Must define `value_type`\n    typename M::value_type;\n    \n    //\
-    \ 2. Must have a static method `id()` returning `value_type`\n    { M::id() }\
-    \ -> std::same_as<typename M::value_type>;\n    \n    // 3. Must have a static\
-    \ method `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
+    \    // 1. Must define `value_type`\n    typename M::value_type;\n\n    // 2.\
+    \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
+    \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
+    \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_CONCEPT_HPP\n#define M1UNE_MONOID_CONCEPT_HPP 1\n\n\
     #include <concepts>\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to\
@@ -39,19 +39,19 @@ data:
     \ a `value_type`, an identity element `id()`, and an associative binary operation\
     \ `op()`.\ntemplate <typename M>\nconcept IsMonoid = requires(typename M::value_type\
     \ a, typename M::value_type b) {\n    // 1. Must define `value_type`\n    typename\
-    \ M::value_type;\n    \n    // 2. Must have a static method `id()` returning `value_type`\n\
-    \    { M::id() } -> std::same_as<typename M::value_type>;\n    \n    // 3. Must\
-    \ have a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) }\
-    \ -> std::same_as<typename M::value_type>;\n};\n\n}  // namespace monoid\n}  //\
-    \ namespace m1une\n\n#endif  // M1UNE_MONOID_CONCEPT_HPP\n"
+    \ M::value_type;\n\n    // 2. Must have a static method `id()` returning `value_type`\n\
+    \    { M::id() } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have\
+    \ a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
+    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n#endif\
+    \  // M1UNE_MONOID_CONCEPT_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/concept.hpp
   requiredBy:
-  - data_structure/sparse_table.hpp
   - data_structure/segtree.hpp
+  - data_structure/sparse_table.hpp
   - monoid/power.hpp
-  timestamp: '2026-05-28 17:20:28+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/sparse_table.test.cpp

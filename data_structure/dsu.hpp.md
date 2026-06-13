@@ -11,8 +11,8 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/dsu.hpp\"\n\n\n\n#include <vector>\n#include\
-    \ <numeric>\n#include <algorithm>\n\nnamespace m1une {\nnamespace data_structure\
+  bundledCode: "#line 1 \"data_structure/dsu.hpp\"\n\n\n\n#include <algorithm>\n#include\
+    \ <numeric>\n#include <vector>\n\nnamespace m1une {\nnamespace data_structure\
     \ {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i] is the\
     \ parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
     \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
@@ -35,12 +35,12 @@ data:
     \           group_size[leader_buf[i]]++;\n        }\n        std::vector<std::vector<int>>\
     \ result(_n);\n        for (int i = 0; i < _n; i++) {\n            result[i].reserve(group_size[i]);\n\
     \        }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
-    \        }\n        result.erase(\n            std::remove_if(result.begin(),\
-    \ result.end(),\n                           [&](const std::vector<int>& v) { return\
-    \ v.empty(); }),\n            result.end());\n        return result;\n    }\n\
-    };\n\n}  // namespace data_structure\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_DSU_HPP\n#define M1UNE_DSU_HPP 1\n\n#include <vector>\n#include\
-    \ <numeric>\n#include <algorithm>\n\nnamespace m1une {\nnamespace data_structure\
+    \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
+    \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
+    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace data_structure\n\
+    }  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_DSU_HPP\n#define M1UNE_DSU_HPP 1\n\n#include <algorithm>\n\
+    #include <numeric>\n#include <vector>\n\nnamespace m1une {\nnamespace data_structure\
     \ {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i] is the\
     \ parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
     \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
@@ -63,15 +63,15 @@ data:
     \           group_size[leader_buf[i]]++;\n        }\n        std::vector<std::vector<int>>\
     \ result(_n);\n        for (int i = 0; i < _n; i++) {\n            result[i].reserve(group_size[i]);\n\
     \        }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
-    \        }\n        result.erase(\n            std::remove_if(result.begin(),\
-    \ result.end(),\n                           [&](const std::vector<int>& v) { return\
-    \ v.empty(); }),\n            result.end());\n        return result;\n    }\n\
-    };\n\n}  // namespace data_structure\n}  // namespace m1une\n\n#endif  // M1UNE_DSU_HPP\n"
+    \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
+    \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
+    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace data_structure\n\
+    }  // namespace m1une\n\n#endif  // M1UNE_DSU_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/dsu.hpp
   requiredBy: []
-  timestamp: '2026-06-06 20:09:38+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dsu.test.cpp

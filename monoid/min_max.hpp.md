@@ -16,11 +16,11 @@ data:
     \ element contains the bounds for min and max.\n    static constexpr value_type\
     \ id() {\n        return {MinId, MaxId};\n    }\n\n    // Merges two elements,\
     \ extracting the overall min and max.\n    static constexpr value_type op(const\
-    \ value_type& a, const value_type& b) {\n        return {\n            std::min(a.first,\
-    \ b.first),\n            std::max(a.second, b.second)\n        };\n    }\n\n \
-    \   // Helper to securely create a leaf node from a single value.\n    static\
-    \ constexpr value_type make(const T& val) {\n        return {val, val};\n    }\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
+    \ value_type& a, const value_type& b) {\n        return {std::min(a.first, b.first),\
+    \ std::max(a.second, b.second)};\n    }\n\n    // Helper to securely create a\
+    \ leaf node from a single value.\n    static constexpr value_type make(const T&\
+    \ val) {\n        return {val, val};\n    }\n};\n\n}  // namespace monoid\n} \
+    \ // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_MIN_MAX_HPP\n#define M1UNE_MONOID_MIN_MAX_HPP 1\n\n\
     #include <algorithm>\n#include <limits>\n#include <utility>\n\nnamespace m1une\
     \ {\nnamespace monoid {\n\n// Monoid for finding both the minimum and maximum\
@@ -30,16 +30,15 @@ data:
     \ and max.\n    static constexpr value_type id() {\n        return {MinId, MaxId};\n\
     \    }\n\n    // Merges two elements, extracting the overall min and max.\n  \
     \  static constexpr value_type op(const value_type& a, const value_type& b) {\n\
-    \        return {\n            std::min(a.first, b.first),\n            std::max(a.second,\
-    \ b.second)\n        };\n    }\n\n    // Helper to securely create a leaf node\
-    \ from a single value.\n    static constexpr value_type make(const T& val) {\n\
-    \        return {val, val};\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n#endif  // M1UNE_MONOID_MIN_MAX_HPP\n"
+    \        return {std::min(a.first, b.first), std::max(a.second, b.second)};\n\
+    \    }\n\n    // Helper to securely create a leaf node from a single value.\n\
+    \    static constexpr value_type make(const T& val) {\n        return {val, val};\n\
+    \    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_MIN_MAX_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/min_max.hpp
   requiredBy: []
-  timestamp: '2026-05-29 03:15:49+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/min_max.hpp

@@ -38,8 +38,8 @@ data:
   timestamp: '2026-05-29 01:41:12+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/segtree.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
+  - verify/data_structure/segtree.test.cpp
 documentation_of: utilities/bit_ceil.hpp
 layout: document
 title: Bit Ceil

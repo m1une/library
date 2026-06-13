@@ -19,15 +19,15 @@ data:
     \    static constexpr value_type op(const value_type& a, const value_type& b)\
     \ {\n        if (a.len == 0) return b;\n        if (b.len == 0) return a;\n\n\
     \        value_type res;\n        res.len = a.len + b.len;\n        res.max_len\
-    \ = std::max(a.max_len, b.max_len);\n        \n        if (a.r_val == b.l_val)\
-    \ {\n            res.max_len = std::max(res.max_len, a.r_len + b.l_len);\n   \
-    \     }\n\n        res.l_val = a.l_val;\n        res.l_len = a.l_len;\n      \
-    \  if (a.len == a.l_len && a.l_val == b.l_val) {\n            res.l_len += b.l_len;\n\
-    \        }\n\n        res.r_val = b.r_val;\n        res.r_len = b.r_len;\n   \
-    \     if (b.len == b.r_len && b.r_val == a.r_val) {\n            res.r_len +=\
-    \ a.r_len;\n        }\n\n        return res;\n    }\n\n    // Helper to securely\
-    \ create a leaf node from a single value.\n    static constexpr value_type make(const\
-    \ T& val) {\n        return {1, 1, val, 1, val, 1};\n    }\n};\n\n}  // namespace\
+    \ = std::max(a.max_len, b.max_len);\n\n        if (a.r_val == b.l_val) {\n   \
+    \         res.max_len = std::max(res.max_len, a.r_len + b.l_len);\n        }\n\
+    \n        res.l_val = a.l_val;\n        res.l_len = a.l_len;\n        if (a.len\
+    \ == a.l_len && a.l_val == b.l_val) {\n            res.l_len += b.l_len;\n   \
+    \     }\n\n        res.r_val = b.r_val;\n        res.r_len = b.r_len;\n      \
+    \  if (b.len == b.r_len && b.r_val == a.r_val) {\n            res.r_len += a.r_len;\n\
+    \        }\n\n        return res;\n    }\n\n    // Helper to securely create a\
+    \ leaf node from a single value.\n    static constexpr value_type make(const T&\
+    \ val) {\n        return {1, 1, val, 1, val, 1};\n    }\n};\n\n}  // namespace\
     \ monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_LONGEST_SAME_HPP\n#define M1UNE_MONOID_LONGEST_SAME_HPP\
     \ 1\n\n#include <algorithm>\n\nnamespace m1une {\nnamespace monoid {\n\ntemplate\
@@ -40,8 +40,8 @@ data:
     \    }\n\n    // Merges two segments.\n    static constexpr value_type op(const\
     \ value_type& a, const value_type& b) {\n        if (a.len == 0) return b;\n \
     \       if (b.len == 0) return a;\n\n        value_type res;\n        res.len\
-    \ = a.len + b.len;\n        res.max_len = std::max(a.max_len, b.max_len);\n  \
-    \      \n        if (a.r_val == b.l_val) {\n            res.max_len = std::max(res.max_len,\
+    \ = a.len + b.len;\n        res.max_len = std::max(a.max_len, b.max_len);\n\n\
+    \        if (a.r_val == b.l_val) {\n            res.max_len = std::max(res.max_len,\
     \ a.r_len + b.l_len);\n        }\n\n        res.l_val = a.l_val;\n        res.l_len\
     \ = a.l_len;\n        if (a.len == a.l_len && a.l_val == b.l_val) {\n        \
     \    res.l_len += b.l_len;\n        }\n\n        res.r_val = b.r_val;\n      \
@@ -55,7 +55,7 @@ data:
   isVerificationFile: false
   path: monoid/longest_same.hpp
   requiredBy: []
-  timestamp: '2026-05-29 03:11:26+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/longest_same.hpp

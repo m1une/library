@@ -13,36 +13,37 @@ data:
     \ T>\nstruct RangeUpdateRangeSumNode {\n    T sum;\n    long long size;\n};\n\n\
     template <typename T>\nstruct RangeUpdateRangeSum {\n    using value_type = RangeUpdateRangeSumNode<T>;\n\
     \    using operator_type = std::optional<T>;\n\n    static constexpr value_type\
-    \ id() { return {T(0), 0}; }\n    static constexpr value_type op(const value_type&\
-    \ a, const value_type& b) {\n        return {a.sum + b.sum, a.size + b.size};\n\
-    \    }\n\n    static constexpr operator_type op_id() { return std::nullopt; }\n\
-    \    static constexpr operator_type op_comp(const operator_type& f, const operator_type&\
-    \ g) {\n        return f.has_value() ? f : g;\n    }\n\n    static constexpr value_type\
-    \ mapping(const operator_type& f, const value_type& x) {\n        if (!f.has_value()\
-    \ || x.size == 0) return x;\n        return {f.value() * static_cast<T>(x.size),\
-    \ x.size};\n    }\n\n    static constexpr value_type make(const T& val) {\n  \
-    \      return {val, 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
-    \ m1une\n\n\n"
-  code: "#ifndef M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_SUM_HPP\n#define M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_SUM_HPP\
-    \ 1\n\n#include <optional>\n\nnamespace m1une {\nnamespace acted_monoid {\n\n\
-    template <typename T>\nstruct RangeUpdateRangeSumNode {\n    T sum;\n    long\
-    \ long size;\n};\n\ntemplate <typename T>\nstruct RangeUpdateRangeSum {\n    using\
-    \ value_type = RangeUpdateRangeSumNode<T>;\n    using operator_type = std::optional<T>;\n\
-    \n    static constexpr value_type id() { return {T(0), 0}; }\n    static constexpr\
-    \ value_type op(const value_type& a, const value_type& b) {\n        return {a.sum\
-    \ + b.sum, a.size + b.size};\n    }\n\n    static constexpr operator_type op_id()\
-    \ { return std::nullopt; }\n    static constexpr operator_type op_comp(const operator_type&\
+    \ id() {\n        return {T(0), 0};\n    }\n    static constexpr value_type op(const\
+    \ value_type& a, const value_type& b) {\n        return {a.sum + b.sum, a.size\
+    \ + b.size};\n    }\n\n    static constexpr operator_type op_id() {\n        return\
+    \ std::nullopt;\n    }\n    static constexpr operator_type op_comp(const operator_type&\
     \ f, const operator_type& g) {\n        return f.has_value() ? f : g;\n    }\n\
     \n    static constexpr value_type mapping(const operator_type& f, const value_type&\
     \ x) {\n        if (!f.has_value() || x.size == 0) return x;\n        return {f.value()\
     \ * static_cast<T>(x.size), x.size};\n    }\n\n    static constexpr value_type\
     \ make(const T& val) {\n        return {val, 1};\n    }\n};\n\n}  // namespace\
-    \ acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_SUM_HPP\n"
+    \ acted_monoid\n}  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_SUM_HPP\n#define M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_SUM_HPP\
+    \ 1\n\n#include <optional>\n\nnamespace m1une {\nnamespace acted_monoid {\n\n\
+    template <typename T>\nstruct RangeUpdateRangeSumNode {\n    T sum;\n    long\
+    \ long size;\n};\n\ntemplate <typename T>\nstruct RangeUpdateRangeSum {\n    using\
+    \ value_type = RangeUpdateRangeSumNode<T>;\n    using operator_type = std::optional<T>;\n\
+    \n    static constexpr value_type id() {\n        return {T(0), 0};\n    }\n \
+    \   static constexpr value_type op(const value_type& a, const value_type& b) {\n\
+    \        return {a.sum + b.sum, a.size + b.size};\n    }\n\n    static constexpr\
+    \ operator_type op_id() {\n        return std::nullopt;\n    }\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f.has_value() ? f : g;\n    }\n\n    static constexpr value_type\
+    \ mapping(const operator_type& f, const value_type& x) {\n        if (!f.has_value()\
+    \ || x.size == 0) return x;\n        return {f.value() * static_cast<T>(x.size),\
+    \ x.size};\n    }\n\n    static constexpr value_type make(const T& val) {\n  \
+    \      return {val, 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
+    \ m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_SUM_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/range_update_range_sum.hpp
   requiredBy: []
-  timestamp: '2026-06-04 17:32:18+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_update_range_sum.hpp

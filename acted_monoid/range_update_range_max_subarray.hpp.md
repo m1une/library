@@ -23,18 +23,18 @@ data:
     \ b.pref);\n        res.suff = std::max(b.suff, b.sum + a.suff);\n        res.max_sub\
     \ = std::max({a.max_sub, b.max_sub, a.suff + b.pref});\n        res.size = a.size\
     \ + b.size;\n        return res;\n    }\n\n    static constexpr operator_type\
-    \ op_id() { return std::nullopt; }\n\n    static constexpr operator_type op_comp(const\
-    \ operator_type& f, const operator_type& g) {\n        return f ? f : g; // left-biased\
-    \ because new updates override old ones\n    }\n\n    static constexpr value_type\
-    \ mapping(const operator_type& f, const value_type& x) {\n        if (!f || x.size\
-    \ == 0) return x;\n        value_type res;\n        res.sum = (*f) * x.size;\n\
-    \        T max_val = std::max(T(0), res.sum); \n        // If empty subarrays\
-    \ are NOT allowed, change to: T max_val = (*f) > 0 ? res.sum : (*f);\n       \
-    \ res.pref = res.suff = res.max_sub = max_val;\n        res.size = x.size;\n \
-    \       return res;\n    }\n\n    static constexpr value_type make(const T& val)\
-    \ {\n        T max_val = std::max(T(0), val);\n        return {val, max_val, max_val,\
-    \ max_val, 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
-    \n\n"
+    \ op_id() {\n        return std::nullopt;\n    }\n\n    static constexpr operator_type\
+    \ op_comp(const operator_type& f, const operator_type& g) {\n        return f\
+    \ ? f : g;  // left-biased because new updates override old ones\n    }\n\n  \
+    \  static constexpr value_type mapping(const operator_type& f, const value_type&\
+    \ x) {\n        if (!f || x.size == 0) return x;\n        value_type res;\n  \
+    \      res.sum = (*f) * x.size;\n        T max_val = std::max(T(0), res.sum);\n\
+    \        // If empty subarrays are NOT allowed, change to: T max_val = (*f) >\
+    \ 0 ? res.sum : (*f);\n        res.pref = res.suff = res.max_sub = max_val;\n\
+    \        res.size = x.size;\n        return res;\n    }\n\n    static constexpr\
+    \ value_type make(const T& val) {\n        T max_val = std::max(T(0), val);\n\
+    \        return {val, max_val, max_val, max_val, 1};\n    }\n};\n\n}  // namespace\
+    \ acted_monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MAX_SUBARRAY_HPP\n#define M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MAX_SUBARRAY_HPP\
     \ 1\n\n#include <algorithm>\n#include <optional>\n\nnamespace m1une {\nnamespace\
     \ acted_monoid {\n\ntemplate <typename T>\nstruct RangeUpdateRangeMaxSubarrayNode\
@@ -50,13 +50,13 @@ data:
     \      res.pref = std::max(a.pref, a.sum + b.pref);\n        res.suff = std::max(b.suff,\
     \ b.sum + a.suff);\n        res.max_sub = std::max({a.max_sub, b.max_sub, a.suff\
     \ + b.pref});\n        res.size = a.size + b.size;\n        return res;\n    }\n\
-    \n    static constexpr operator_type op_id() { return std::nullopt; }\n\n    static\
-    \ constexpr operator_type op_comp(const operator_type& f, const operator_type&\
-    \ g) {\n        return f ? f : g; // left-biased because new updates override\
-    \ old ones\n    }\n\n    static constexpr value_type mapping(const operator_type&\
+    \n    static constexpr operator_type op_id() {\n        return std::nullopt;\n\
+    \    }\n\n    static constexpr operator_type op_comp(const operator_type& f, const\
+    \ operator_type& g) {\n        return f ? f : g;  // left-biased because new updates\
+    \ override old ones\n    }\n\n    static constexpr value_type mapping(const operator_type&\
     \ f, const value_type& x) {\n        if (!f || x.size == 0) return x;\n      \
     \  value_type res;\n        res.sum = (*f) * x.size;\n        T max_val = std::max(T(0),\
-    \ res.sum); \n        // If empty subarrays are NOT allowed, change to: T max_val\
+    \ res.sum);\n        // If empty subarrays are NOT allowed, change to: T max_val\
     \ = (*f) > 0 ? res.sum : (*f);\n        res.pref = res.suff = res.max_sub = max_val;\n\
     \        res.size = x.size;\n        return res;\n    }\n\n    static constexpr\
     \ value_type make(const T& val) {\n        T max_val = std::max(T(0), val);\n\
@@ -66,7 +66,7 @@ data:
   isVerificationFile: false
   path: acted_monoid/range_update_range_max_subarray.hpp
   requiredBy: []
-  timestamp: '2026-06-06 19:59:08+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_update_range_max_subarray.hpp

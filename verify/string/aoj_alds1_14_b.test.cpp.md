@@ -17,7 +17,7 @@ data:
   bundledCode: "#line 1 \"verify/string/aoj_alds1_14_b.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_B\"\n\n\
     #line 1 \"string/rolling_hash.hpp\"\n\n\n\n#include <algorithm>\n#include <string>\n\
-    #include <vector>\n#include <utility>\n\nnamespace m1une {\nnamespace string {\n\
+    #include <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace string {\n\
     \n// Standard Rolling Hash for static strings.\n// Precomputes hashes to answer\
     \ substring queries in O(1).\n// Provides advanced operations like LCP, lexicographical\
     \ comparison, and string repetition in O(log N).\ntemplate <long long Base = 10007,\
@@ -94,7 +94,7 @@ data:
   isVerificationFile: true
   path: verify/string/aoj_alds1_14_b.test.cpp
   requiredBy: []
-  timestamp: '2026-05-29 02:33:39+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/aoj_alds1_14_b.test.cpp

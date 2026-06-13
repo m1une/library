@@ -22,9 +22,9 @@ data:
     \      res.sum = a.sum + b.sum;\n        res.size = a.size + b.size;\n       \
     \ for (int i = 0; i < BITS; ++i) {\n            res.bit_count[i] = a.bit_count[i]\
     \ + b.bit_count[i];\n        }\n        return res;\n    }\n\n    static constexpr\
-    \ operator_type op_id() { return T(0); }\n\n    static constexpr operator_type\
-    \ op_comp(const operator_type& f, const operator_type& g) {\n        return f\
-    \ ^ g;\n    }\n\n    static constexpr value_type mapping(const operator_type&\
+    \ operator_type op_id() {\n        return T(0);\n    }\n\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f ^ g;\n    }\n\n    static constexpr value_type mapping(const operator_type&\
     \ f, const value_type& x) {\n        if (f == T(0) || x.size == 0) return x;\n\
     \        value_type res = x;\n        res.sum = T(0);\n        for (int i = 0;\
     \ i < BITS; ++i) {\n            if ((f >> i) & 1) {\n                res.bit_count[i]\
@@ -48,9 +48,9 @@ data:
     \      res.sum = a.sum + b.sum;\n        res.size = a.size + b.size;\n       \
     \ for (int i = 0; i < BITS; ++i) {\n            res.bit_count[i] = a.bit_count[i]\
     \ + b.bit_count[i];\n        }\n        return res;\n    }\n\n    static constexpr\
-    \ operator_type op_id() { return T(0); }\n\n    static constexpr operator_type\
-    \ op_comp(const operator_type& f, const operator_type& g) {\n        return f\
-    \ ^ g;\n    }\n\n    static constexpr value_type mapping(const operator_type&\
+    \ operator_type op_id() {\n        return T(0);\n    }\n\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f ^ g;\n    }\n\n    static constexpr value_type mapping(const operator_type&\
     \ f, const value_type& x) {\n        if (f == T(0) || x.size == 0) return x;\n\
     \        value_type res = x;\n        res.sum = T(0);\n        for (int i = 0;\
     \ i < BITS; ++i) {\n            if ((f >> i) & 1) {\n                res.bit_count[i]\
@@ -65,7 +65,7 @@ data:
   isVerificationFile: false
   path: acted_monoid/range_xor_range_sum.hpp
   requiredBy: []
-  timestamp: '2026-06-06 19:52:32+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_xor_range_sum.hpp

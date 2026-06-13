@@ -11,63 +11,63 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"acted_monoid/range_add_range_min_count.hpp\"\n\n\n\n#line\
-    \ 1 \"monoid/min_count.hpp\"\n\n\n\n#include <utility>\n#include <limits>\n#include\
-    \ <functional>\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for finding\
-    \ the optimal value and its frequency in a range.\n// Uses a comparison functor\
-    \ (Compare) to determine the optimal value (default is less, i.e., minimum).\n\
-    template <typename T, T Id = std::numeric_limits<T>::max(), typename Compare =\
-    \ std::less<T>>\nstruct MinCount {\n    using value_type = std::pair<T, int>;\n\
-    \n    // The identity element has the specified Id value and a count of 0.\n \
-    \   static constexpr value_type id() {\n        return {Id, 0};\n    }\n\n   \
-    \ // Combines two elements, updating the optimal value and summing the counts\
-    \ if they are equal.\n    static constexpr value_type op(const value_type& a,\
-    \ const value_type& b) {\n        if (Compare()(a.first, b.first)) return a;\n\
+  bundledCode: "#line 1 \"acted_monoid/range_add_range_min_count.hpp\"\n\n\n\n#include\
+    \ <functional>\n#include <limits>\n\n#line 1 \"monoid/min_count.hpp\"\n\n\n\n\
+    #line 6 \"monoid/min_count.hpp\"\n#include <utility>\n\nnamespace m1une {\nnamespace\
+    \ monoid {\n\n// Monoid for finding the optimal value and its frequency in a range.\n\
+    // Uses a comparison functor (Compare) to determine the optimal value (default\
+    \ is less, i.e., minimum).\ntemplate <typename T, T Id = std::numeric_limits<T>::max(),\
+    \ typename Compare = std::less<T>>\nstruct MinCount {\n    using value_type =\
+    \ std::pair<T, int>;\n\n    // The identity element has the specified Id value\
+    \ and a count of 0.\n    static constexpr value_type id() {\n        return {Id,\
+    \ 0};\n    }\n\n    // Combines two elements, updating the optimal value and summing\
+    \ the counts if they are equal.\n    static constexpr value_type op(const value_type&\
+    \ a, const value_type& b) {\n        if (Compare()(a.first, b.first)) return a;\n\
     \        if (Compare()(b.first, a.first)) return b;\n        return {a.first,\
     \ a.second + b.second};\n    }\n\n    // Helper to securely create a leaf node\
     \ from a single value.\n    static constexpr value_type make(const T& val, int\
     \ count = 1) {\n        return {val, count};\n    }\n};\n\n}  // namespace monoid\n\
-    }  // namespace m1une\n\n\n#line 7 \"acted_monoid/range_add_range_min_count.hpp\"\
+    }  // namespace m1une\n\n\n#line 8 \"acted_monoid/range_add_range_min_count.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename T, T Id\
     \ = std::numeric_limits<T>::max(), typename Compare = std::less<T>>\nstruct RangeAddRangeMinCount\
     \ {\n    using BaseMonoid = m1une::monoid::MinCount<T, Id, Compare>;\n    using\
-    \ value_type = typename BaseMonoid::value_type; // std::pair<T, int>\n    using\
+    \ value_type = typename BaseMonoid::value_type;  // std::pair<T, int>\n    using\
     \ operator_type = T;\n\n    // Value Monoid (Min Count)\n    static constexpr\
-    \ value_type id() { return BaseMonoid::id(); }\n    static constexpr value_type\
-    \ op(const value_type& a, const value_type& b) {\n        return BaseMonoid::op(a,\
+    \ value_type id() {\n        return BaseMonoid::id();\n    }\n    static constexpr\
+    \ value_type op(const value_type& a, const value_type& b) {\n        return BaseMonoid::op(a,\
     \ b);\n    }\n\n    // Operator Monoid (Add)\n    static constexpr operator_type\
-    \ op_id() { return T(0); }\n    static constexpr operator_type op_comp(const operator_type&\
-    \ f, const operator_type& g) {\n        return f + g;\n    }\n\n    // Mapping\n\
-    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
-    \ x) {\n        if (x.second == 0) return x; // Do not apply to the identity element\n\
-    \        return {x.first + f, x.second};\n    }\n\n    // Helper for initializing\
-    \ a leaf node\n    static constexpr value_type make(const T& val, int count =\
-    \ 1) {\n        return BaseMonoid::make(val, count);\n    }\n};\n\n}  // namespace\
-    \ acted_monoid\n}  // namespace m1une\n\n\n"
+    \ op_id() {\n        return T(0);\n    }\n    static constexpr operator_type op_comp(const\
+    \ operator_type& f, const operator_type& g) {\n        return f + g;\n    }\n\n\
+    \    // Mapping\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        if (x.second == 0) return x;  // Do not apply\
+    \ to the identity element\n        return {x.first + f, x.second};\n    }\n\n\
+    \    // Helper for initializing a leaf node\n    static constexpr value_type make(const\
+    \ T& val, int count = 1) {\n        return BaseMonoid::make(val, count);\n   \
+    \ }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_MIN_COUNT_HPP\n#define M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_MIN_COUNT_HPP\
-    \ 1\n\n#include \"../monoid/min_count.hpp\"\n#include <limits>\n#include <functional>\n\
-    \nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename T, T Id =\
-    \ std::numeric_limits<T>::max(), typename Compare = std::less<T>>\nstruct RangeAddRangeMinCount\
+    \ 1\n\n#include <functional>\n#include <limits>\n\n#include \"../monoid/min_count.hpp\"\
+    \n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename T, T Id\
+    \ = std::numeric_limits<T>::max(), typename Compare = std::less<T>>\nstruct RangeAddRangeMinCount\
     \ {\n    using BaseMonoid = m1une::monoid::MinCount<T, Id, Compare>;\n    using\
-    \ value_type = typename BaseMonoid::value_type; // std::pair<T, int>\n    using\
+    \ value_type = typename BaseMonoid::value_type;  // std::pair<T, int>\n    using\
     \ operator_type = T;\n\n    // Value Monoid (Min Count)\n    static constexpr\
-    \ value_type id() { return BaseMonoid::id(); }\n    static constexpr value_type\
-    \ op(const value_type& a, const value_type& b) {\n        return BaseMonoid::op(a,\
+    \ value_type id() {\n        return BaseMonoid::id();\n    }\n    static constexpr\
+    \ value_type op(const value_type& a, const value_type& b) {\n        return BaseMonoid::op(a,\
     \ b);\n    }\n\n    // Operator Monoid (Add)\n    static constexpr operator_type\
-    \ op_id() { return T(0); }\n    static constexpr operator_type op_comp(const operator_type&\
-    \ f, const operator_type& g) {\n        return f + g;\n    }\n\n    // Mapping\n\
-    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
-    \ x) {\n        if (x.second == 0) return x; // Do not apply to the identity element\n\
-    \        return {x.first + f, x.second};\n    }\n\n    // Helper for initializing\
-    \ a leaf node\n    static constexpr value_type make(const T& val, int count =\
-    \ 1) {\n        return BaseMonoid::make(val, count);\n    }\n};\n\n}  // namespace\
-    \ acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_MIN_COUNT_HPP\n"
+    \ op_id() {\n        return T(0);\n    }\n    static constexpr operator_type op_comp(const\
+    \ operator_type& f, const operator_type& g) {\n        return f + g;\n    }\n\n\
+    \    // Mapping\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        if (x.second == 0) return x;  // Do not apply\
+    \ to the identity element\n        return {x.first + f, x.second};\n    }\n\n\
+    \    // Helper for initializing a leaf node\n    static constexpr value_type make(const\
+    \ T& val, int count = 1) {\n        return BaseMonoid::make(val, count);\n   \
+    \ }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_MIN_COUNT_HPP\n"
   dependsOn:
   - monoid/min_count.hpp
   isVerificationFile: false
   path: acted_monoid/range_add_range_min_count.hpp
   requiredBy: []
-  timestamp: '2026-06-04 18:10:15+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_add_range_min_count.hpp

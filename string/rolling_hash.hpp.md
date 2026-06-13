@@ -18,7 +18,7 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"string/rolling_hash.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <string>\n#include <vector>\n#include <utility>\n\nnamespace m1une {\n\
+    #include <string>\n#include <utility>\n#include <vector>\n\nnamespace m1une {\n\
     namespace string {\n\n// Standard Rolling Hash for static strings.\n// Precomputes\
     \ hashes to answer substring queries in O(1).\n// Provides advanced operations\
     \ like LCP, lexicographical comparison, and string repetition in O(log N).\ntemplate\
@@ -75,7 +75,7 @@ data:
     \ {\n        return {c % Mod, Base % Mod};\n    }\n};\n\n}  // namespace string\n\
     }  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_STRING_ROLLING_HASH_HPP\n#define M1UNE_STRING_ROLLING_HASH_HPP\
-    \ 1\n\n#include <algorithm>\n#include <string>\n#include <vector>\n#include <utility>\n\
+    \ 1\n\n#include <algorithm>\n#include <string>\n#include <utility>\n#include <vector>\n\
     \nnamespace m1une {\nnamespace string {\n\n// Standard Rolling Hash for static\
     \ strings.\n// Precomputes hashes to answer substring queries in O(1).\n// Provides\
     \ advanced operations like LCP, lexicographical comparison, and string repetition\
@@ -137,7 +137,7 @@ data:
   path: string/rolling_hash.hpp
   requiredBy:
   - monoid/rolling_hash.hpp
-  timestamp: '2026-05-29 02:33:39+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/string/yosupo_zalgorithm.test.cpp

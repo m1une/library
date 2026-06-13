@@ -13,28 +13,29 @@ data:
     \ and Range Sum queries.\n// Operates natively on scalars or Modint classes without\
     \ needing to track segment size.\ntemplate <typename T>\nstruct RangeMulRangeSum\
     \ {\n    using value_type = T;\n    using operator_type = T;\n\n    // Value Monoid\
-    \ (Sum)\n    static constexpr value_type id() { return T(0); }\n    static constexpr\
-    \ value_type op(const value_type& a, const value_type& b) { \n        return a\
-    \ + b; \n    }\n\n    // Operator Monoid (Multiply)\n    static constexpr operator_type\
-    \ op_id() { return T(1); }\n    static constexpr operator_type op_comp(const operator_type&\
-    \ f, const operator_type& g) { \n        return f * g; \n    }\n\n    // Mapping:\
-    \ Distribution Property ( f * (a+b) = f*a + f*b )\n    static constexpr value_type\
-    \ mapping(const operator_type& f, const value_type& x) {\n        return f * x;\n\
-    \    }\n\n    // Helper for initializing a leaf node\n    static constexpr value_type\
-    \ make(const T& val) {\n        return val;\n    }\n};\n\n}  // namespace acted_monoid\n\
-    }  // namespace m1une\n\n\n"
+    \ (Sum)\n    static constexpr value_type id() {\n        return T(0);\n    }\n\
+    \    static constexpr value_type op(const value_type& a, const value_type& b)\
+    \ {\n        return a + b;\n    }\n\n    // Operator Monoid (Multiply)\n    static\
+    \ constexpr operator_type op_id() {\n        return T(1);\n    }\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f * g;\n    }\n\n    // Mapping: Distribution Property ( f * (a+b)\
+    \ = f*a + f*b )\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        return f * x;\n    }\n\n    // Helper for\
+    \ initializing a leaf node\n    static constexpr value_type make(const T& val)\
+    \ {\n        return val;\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
+    \ m1une\n\n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_RANGE_MUL_RANGE_SUM_HPP\n#define M1UNE_ACTED_MONOID_RANGE_MUL_RANGE_SUM_HPP\
     \ 1\n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Acted Monoid for Range\
     \ Multiplication and Range Sum queries.\n// Operates natively on scalars or Modint\
     \ classes without needing to track segment size.\ntemplate <typename T>\nstruct\
     \ RangeMulRangeSum {\n    using value_type = T;\n    using operator_type = T;\n\
-    \n    // Value Monoid (Sum)\n    static constexpr value_type id() { return T(0);\
-    \ }\n    static constexpr value_type op(const value_type& a, const value_type&\
-    \ b) { \n        return a + b; \n    }\n\n    // Operator Monoid (Multiply)\n\
-    \    static constexpr operator_type op_id() { return T(1); }\n    static constexpr\
-    \ operator_type op_comp(const operator_type& f, const operator_type& g) { \n \
-    \       return f * g; \n    }\n\n    // Mapping: Distribution Property ( f * (a+b)\
-    \ = f*a + f*b )\n    static constexpr value_type mapping(const operator_type&\
+    \n    // Value Monoid (Sum)\n    static constexpr value_type id() {\n        return\
+    \ T(0);\n    }\n    static constexpr value_type op(const value_type& a, const\
+    \ value_type& b) {\n        return a + b;\n    }\n\n    // Operator Monoid (Multiply)\n\
+    \    static constexpr operator_type op_id() {\n        return T(1);\n    }\n \
+    \   static constexpr operator_type op_comp(const operator_type& f, const operator_type&\
+    \ g) {\n        return f * g;\n    }\n\n    // Mapping: Distribution Property\
+    \ ( f * (a+b) = f*a + f*b )\n    static constexpr value_type mapping(const operator_type&\
     \ f, const value_type& x) {\n        return f * x;\n    }\n\n    // Helper for\
     \ initializing a leaf node\n    static constexpr value_type make(const T& val)\
     \ {\n        return val;\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
@@ -43,7 +44,7 @@ data:
   isVerificationFile: false
   path: acted_monoid/range_mul_range_sum.hpp
   requiredBy: []
-  timestamp: '2026-06-06 19:52:32+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_mul_range_sum.hpp

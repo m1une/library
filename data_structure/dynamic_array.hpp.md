@@ -8,15 +8,15 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/dynamic_array.hpp\"\n\n\n\n#include <vector>\n\
-    #include <random>\n#include <chrono>\n#include <cassert>\n#include <initializer_list>\n\
-    #include <utility> // for std::move\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\ntemplate <typename T>\nstruct DynamicArray {\n   private:\n    struct Node\
-    \ {\n        T val;\n        int priority;\n        int count;\n        int l,\
-    \ r;\n        \n        Node() : val(T()), priority(0), count(0), l(0), r(0) {}\
-    \ \n        Node(T val, int priority) : val(std::move(val)), priority(priority),\
-    \ count(1), l(0), r(0) {}\n    };\n\n    std::vector<Node> pool;\n    int root;\n\
-    \    std::mt19937 rng;\n\n    int new_node(T val) {\n        pool.push_back(Node(std::move(val),\
+  bundledCode: "#line 1 \"data_structure/dynamic_array.hpp\"\n\n\n\n#include <cassert>\n\
+    #include <chrono>\n#include <initializer_list>\n#include <random>\n#include <utility>\n\
+    #include <vector>\n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate\
+    \ <typename T>\nstruct DynamicArray {\n   private:\n    struct Node {\n      \
+    \  T val;\n        int priority;\n        int count;\n        int l, r;\n\n  \
+    \      Node() : val(T()), priority(0), count(0), l(0), r(0) {}\n        Node(T\
+    \ val, int priority) : val(std::move(val)), priority(priority), count(1), l(0),\
+    \ r(0) {}\n    };\n\n    std::vector<Node> pool;\n    int root;\n    std::mt19937\
+    \ rng;\n\n    int new_node(T val) {\n        pool.push_back(Node(std::move(val),\
     \ rng()));\n        return pool.size() - 1;\n    }\n\n    void update(int t) {\n\
     \        if (t) {\n            pool[t].count = 1 + pool[pool[t].l].count + pool[pool[t].r].count;\n\
     \        }\n    }\n\n    void split(int t, int pos, int& l, int& r) {\n      \
@@ -34,9 +34,9 @@ data:
     \        dump_dfs(pool[t].r, res);\n    }\n\n   public:\n    // 1. Default Constructor\n\
     \    DynamicArray() : root(0), rng(std::chrono::steady_clock::now().time_since_epoch().count())\
     \ {\n        pool.push_back(Node());\n    }\n\n    // 2. Copy Constructor (const\
-    \ lvalue reference)\n    DynamicArray(const DynamicArray& other) \n        : pool(other.pool),\
+    \ lvalue reference)\n    DynamicArray(const DynamicArray& other) : pool(other.pool),\
     \ root(other.root), rng(other.rng) {}\n\n    // 3. Move Constructor (rvalue reference)\n\
-    \    DynamicArray(DynamicArray&& other) noexcept \n        : pool(std::move(other.pool)),\
+    \    DynamicArray(DynamicArray&& other) noexcept\n        : pool(std::move(other.pool)),\
     \ root(other.root), rng(std::move(other.rng)) {\n        other.root = 0;\n   \
     \ }\n\n    // 4. Copy Assignment Operator\n    DynamicArray& operator=(const DynamicArray&\
     \ other) {\n        if (this != &other) {\n            pool = other.pool;\n  \
@@ -76,34 +76,34 @@ data:
     \        dump_dfs(root, res);\n        return res;\n    }\n};\n\n}  // namespace\
     \ data_structure\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_DYNAMIC_ARRAY_HPP\n#define M1UNE_DYNAMIC_ARRAY_HPP 1\n\n#include\
-    \ <vector>\n#include <random>\n#include <chrono>\n#include <cassert>\n#include\
-    \ <initializer_list>\n#include <utility> // for std::move\n\nnamespace m1une {\n\
-    namespace data_structure {\n\ntemplate <typename T>\nstruct DynamicArray {\n \
-    \  private:\n    struct Node {\n        T val;\n        int priority;\n      \
-    \  int count;\n        int l, r;\n        \n        Node() : val(T()), priority(0),\
-    \ count(0), l(0), r(0) {} \n        Node(T val, int priority) : val(std::move(val)),\
-    \ priority(priority), count(1), l(0), r(0) {}\n    };\n\n    std::vector<Node>\
-    \ pool;\n    int root;\n    std::mt19937 rng;\n\n    int new_node(T val) {\n \
-    \       pool.push_back(Node(std::move(val), rng()));\n        return pool.size()\
-    \ - 1;\n    }\n\n    void update(int t) {\n        if (t) {\n            pool[t].count\
-    \ = 1 + pool[pool[t].l].count + pool[pool[t].r].count;\n        }\n    }\n\n \
-    \   void split(int t, int pos, int& l, int& r) {\n        if (!t) {\n        \
-    \    l = r = 0;\n            return;\n        }\n        int left_count = pool[pool[t].l].count;\n\
-    \        if (pos <= left_count) {\n            split(pool[t].l, pos, l, pool[t].l);\n\
-    \            r = t;\n        } else {\n            split(pool[t].r, pos - left_count\
-    \ - 1, pool[t].r, r);\n            l = t;\n        }\n        update(t);\n   \
-    \ }\n\n    int merge(int l, int r) {\n        if (!l || !r) return l ? l : r;\n\
-    \        if (pool[l].priority > pool[r].priority) {\n            pool[l].r = merge(pool[l].r,\
-    \ r);\n            update(l);\n            return l;\n        } else {\n     \
-    \       pool[r].l = merge(l, pool[r].l);\n            update(r);\n           \
-    \ return r;\n        }\n    }\n\n    void dump_dfs(int t, std::vector<T>& res)\
-    \ const {\n        if (!t) return;\n        dump_dfs(pool[t].l, res);\n      \
-    \  res.push_back(pool[t].val);\n        dump_dfs(pool[t].r, res);\n    }\n\n \
-    \  public:\n    // 1. Default Constructor\n    DynamicArray() : root(0), rng(std::chrono::steady_clock::now().time_since_epoch().count())\
+    \ <cassert>\n#include <chrono>\n#include <initializer_list>\n#include <random>\n\
+    #include <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace data_structure\
+    \ {\n\ntemplate <typename T>\nstruct DynamicArray {\n   private:\n    struct Node\
+    \ {\n        T val;\n        int priority;\n        int count;\n        int l,\
+    \ r;\n\n        Node() : val(T()), priority(0), count(0), l(0), r(0) {}\n    \
+    \    Node(T val, int priority) : val(std::move(val)), priority(priority), count(1),\
+    \ l(0), r(0) {}\n    };\n\n    std::vector<Node> pool;\n    int root;\n    std::mt19937\
+    \ rng;\n\n    int new_node(T val) {\n        pool.push_back(Node(std::move(val),\
+    \ rng()));\n        return pool.size() - 1;\n    }\n\n    void update(int t) {\n\
+    \        if (t) {\n            pool[t].count = 1 + pool[pool[t].l].count + pool[pool[t].r].count;\n\
+    \        }\n    }\n\n    void split(int t, int pos, int& l, int& r) {\n      \
+    \  if (!t) {\n            l = r = 0;\n            return;\n        }\n       \
+    \ int left_count = pool[pool[t].l].count;\n        if (pos <= left_count) {\n\
+    \            split(pool[t].l, pos, l, pool[t].l);\n            r = t;\n      \
+    \  } else {\n            split(pool[t].r, pos - left_count - 1, pool[t].r, r);\n\
+    \            l = t;\n        }\n        update(t);\n    }\n\n    int merge(int\
+    \ l, int r) {\n        if (!l || !r) return l ? l : r;\n        if (pool[l].priority\
+    \ > pool[r].priority) {\n            pool[l].r = merge(pool[l].r, r);\n      \
+    \      update(l);\n            return l;\n        } else {\n            pool[r].l\
+    \ = merge(l, pool[r].l);\n            update(r);\n            return r;\n    \
+    \    }\n    }\n\n    void dump_dfs(int t, std::vector<T>& res) const {\n     \
+    \   if (!t) return;\n        dump_dfs(pool[t].l, res);\n        res.push_back(pool[t].val);\n\
+    \        dump_dfs(pool[t].r, res);\n    }\n\n   public:\n    // 1. Default Constructor\n\
+    \    DynamicArray() : root(0), rng(std::chrono::steady_clock::now().time_since_epoch().count())\
     \ {\n        pool.push_back(Node());\n    }\n\n    // 2. Copy Constructor (const\
-    \ lvalue reference)\n    DynamicArray(const DynamicArray& other) \n        : pool(other.pool),\
+    \ lvalue reference)\n    DynamicArray(const DynamicArray& other) : pool(other.pool),\
     \ root(other.root), rng(other.rng) {}\n\n    // 3. Move Constructor (rvalue reference)\n\
-    \    DynamicArray(DynamicArray&& other) noexcept \n        : pool(std::move(other.pool)),\
+    \    DynamicArray(DynamicArray&& other) noexcept\n        : pool(std::move(other.pool)),\
     \ root(other.root), rng(std::move(other.rng)) {\n        other.root = 0;\n   \
     \ }\n\n    // 4. Copy Assignment Operator\n    DynamicArray& operator=(const DynamicArray&\
     \ other) {\n        if (this != &other) {\n            pool = other.pool;\n  \
@@ -146,7 +146,7 @@ data:
   isVerificationFile: false
   path: data_structure/dynamic_array.hpp
   requiredBy: []
-  timestamp: '2026-06-06 20:57:07+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/dynamic_array.hpp

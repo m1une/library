@@ -14,9 +14,9 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"monoid/arg_min.hpp\"\n\n\n\n#include <limits>\n#include\
-    \ <utility>\n#include <functional>\n\nnamespace m1une {\nnamespace monoid {\n\n\
-    // Monoid for finding the optimal value (minimum by default) and its corresponding\
+  bundledCode: "#line 1 \"monoid/arg_min.hpp\"\n\n\n\n#include <functional>\n#include\
+    \ <limits>\n#include <utility>\n\nnamespace m1une {\nnamespace monoid {\n\n//\
+    \ Monoid for finding the optimal value (minimum by default) and its corresponding\
     \ index.\n// Ties are broken by choosing the smaller index.\ntemplate <typename\
     \ T, T Id = std::numeric_limits<T>::max(), typename Compare = std::less<T>>\n\
     struct ArgMin {\n    using value_type = std::pair<T, int>;\n\n    // The identity\
@@ -29,7 +29,7 @@ data:
     \ constexpr value_type make(const T& val, int index) {\n        return {val, index};\n\
     \    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_ARG_MIN_HPP\n#define M1UNE_MONOID_ARG_MIN_HPP 1\n\n\
-    #include <limits>\n#include <utility>\n#include <functional>\n\nnamespace m1une\
+    #include <functional>\n#include <limits>\n#include <utility>\n\nnamespace m1une\
     \ {\nnamespace monoid {\n\n// Monoid for finding the optimal value (minimum by\
     \ default) and its corresponding index.\n// Ties are broken by choosing the smaller\
     \ index.\ntemplate <typename T, T Id = std::numeric_limits<T>::max(), typename\
@@ -49,7 +49,7 @@ data:
   requiredBy:
   - acted_monoid/range_add_range_arg_min.hpp
   - monoid/arg_max.hpp
-  timestamp: '2026-05-29 03:23:39+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/arg_min.hpp

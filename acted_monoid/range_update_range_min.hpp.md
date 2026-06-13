@@ -13,35 +13,36 @@ data:
     \ acted_monoid {\n\ntemplate <typename T, T Id = std::numeric_limits<T>::max()>\n\
     struct RangeUpdateRangeMin {\n    using value_type = T;\n    using operator_type\
     \ = std::optional<T>;\n\n    // Value Monoid (Min)\n    static constexpr value_type\
-    \ id() { return Id; }\n    static constexpr value_type op(const value_type& a,\
-    \ const value_type& b) {\n        return std::min(a, b);\n    }\n\n    // Operator\
-    \ Monoid (Update)\n    static constexpr operator_type op_id() { return std::nullopt;\
-    \ }\n    static constexpr operator_type op_comp(const operator_type& f, const\
-    \ operator_type& g) {\n        // Prioritize the newer operation (f) over the\
-    \ older one (g)\n        return f.has_value() ? f : g;\n    }\n\n    // Mapping\n\
-    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
-    \ x) {\n        if (!f.has_value() || x == id()) return x;\n        return f.value();\n\
-    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n"
+    \ id() {\n        return Id;\n    }\n    static constexpr value_type op(const\
+    \ value_type& a, const value_type& b) {\n        return std::min(a, b);\n    }\n\
+    \n    // Operator Monoid (Update)\n    static constexpr operator_type op_id()\
+    \ {\n        return std::nullopt;\n    }\n    static constexpr operator_type op_comp(const\
+    \ operator_type& f, const operator_type& g) {\n        // Prioritize the newer\
+    \ operation (f) over the older one (g)\n        return f.has_value() ? f : g;\n\
+    \    }\n\n    // Mapping\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        if (!f.has_value() || x == id()) return x;\n\
+    \        return f.value();\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
+    \ m1une\n\n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MIN_HPP\n#define M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MIN_HPP\
     \ 1\n\n#include <algorithm>\n#include <limits>\n#include <optional>\n\nnamespace\
     \ m1une {\nnamespace acted_monoid {\n\ntemplate <typename T, T Id = std::numeric_limits<T>::max()>\n\
     struct RangeUpdateRangeMin {\n    using value_type = T;\n    using operator_type\
     \ = std::optional<T>;\n\n    // Value Monoid (Min)\n    static constexpr value_type\
-    \ id() { return Id; }\n    static constexpr value_type op(const value_type& a,\
-    \ const value_type& b) {\n        return std::min(a, b);\n    }\n\n    // Operator\
-    \ Monoid (Update)\n    static constexpr operator_type op_id() { return std::nullopt;\
-    \ }\n    static constexpr operator_type op_comp(const operator_type& f, const\
-    \ operator_type& g) {\n        // Prioritize the newer operation (f) over the\
-    \ older one (g)\n        return f.has_value() ? f : g;\n    }\n\n    // Mapping\n\
-    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
-    \ x) {\n        if (!f.has_value() || x == id()) return x;\n        return f.value();\n\
-    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n#endif  //\
-    \ M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MIN_HPP\n"
+    \ id() {\n        return Id;\n    }\n    static constexpr value_type op(const\
+    \ value_type& a, const value_type& b) {\n        return std::min(a, b);\n    }\n\
+    \n    // Operator Monoid (Update)\n    static constexpr operator_type op_id()\
+    \ {\n        return std::nullopt;\n    }\n    static constexpr operator_type op_comp(const\
+    \ operator_type& f, const operator_type& g) {\n        // Prioritize the newer\
+    \ operation (f) over the older one (g)\n        return f.has_value() ? f : g;\n\
+    \    }\n\n    // Mapping\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        if (!f.has_value() || x == id()) return x;\n\
+    \        return f.value();\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
+    \ m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_UPDATE_RANGE_MIN_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/range_update_range_min.hpp
   requiredBy: []
-  timestamp: '2026-06-04 17:06:26+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_update_range_min.hpp

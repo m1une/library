@@ -8,9 +8,9 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"monoid/min_plus_matrix.hpp\"\n\n\n\n#include <array>\n#include\
-    \ <algorithm>\n#include <limits>\n\nnamespace m1une {\nnamespace monoid {\n\n\
-    // Monoid for fixed-size square matrix multiplication over the Min-Plus (Tropical)\
+  bundledCode: "#line 1 \"monoid/min_plus_matrix.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <array>\n#include <limits>\n\nnamespace m1une {\nnamespace monoid {\n\
+    \n// Monoid for fixed-size square matrix multiplication over the Min-Plus (Tropical)\
     \ semiring.\n// Useful for Dynamic DP (Minimization) and Shortest Path problems.\n\
     template <typename T, int N, T Inf = std::numeric_limits<T>::max() / 2>\nstruct\
     \ MinPlusMatrix {\n    using value_type = std::array<std::array<T, N>, N>;\n\n\
@@ -35,7 +35,7 @@ data:
     \    }\n        return res;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
     \ m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_MIN_PLUS_MATRIX_HPP\n#define M1UNE_MONOID_MIN_PLUS_MATRIX_HPP\
-    \ 1\n\n#include <array>\n#include <algorithm>\n#include <limits>\n\nnamespace\
+    \ 1\n\n#include <algorithm>\n#include <array>\n#include <limits>\n\nnamespace\
     \ m1une {\nnamespace monoid {\n\n// Monoid for fixed-size square matrix multiplication\
     \ over the Min-Plus (Tropical) semiring.\n// Useful for Dynamic DP (Minimization)\
     \ and Shortest Path problems.\ntemplate <typename T, int N, T Inf = std::numeric_limits<T>::max()\
@@ -64,7 +64,7 @@ data:
   isVerificationFile: false
   path: monoid/min_plus_matrix.hpp
   requiredBy: []
-  timestamp: '2026-05-29 03:25:27+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/min_plus_matrix.hpp

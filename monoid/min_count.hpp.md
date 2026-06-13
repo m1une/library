@@ -14,9 +14,9 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"monoid/min_count.hpp\"\n\n\n\n#include <utility>\n#include\
-    \ <limits>\n#include <functional>\n\nnamespace m1une {\nnamespace monoid {\n\n\
-    // Monoid for finding the optimal value and its frequency in a range.\n// Uses\
+  bundledCode: "#line 1 \"monoid/min_count.hpp\"\n\n\n\n#include <functional>\n#include\
+    \ <limits>\n#include <utility>\n\nnamespace m1une {\nnamespace monoid {\n\n//\
+    \ Monoid for finding the optimal value and its frequency in a range.\n// Uses\
     \ a comparison functor (Compare) to determine the optimal value (default is less,\
     \ i.e., minimum).\ntemplate <typename T, T Id = std::numeric_limits<T>::max(),\
     \ typename Compare = std::less<T>>\nstruct MinCount {\n    using value_type =\
@@ -31,7 +31,7 @@ data:
     \ count = 1) {\n        return {val, count};\n    }\n};\n\n}  // namespace monoid\n\
     }  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_MIN_COUNT_HPP\n#define M1UNE_MONOID_MIN_COUNT_HPP 1\n\
-    \n#include <utility>\n#include <limits>\n#include <functional>\n\nnamespace m1une\
+    \n#include <functional>\n#include <limits>\n#include <utility>\n\nnamespace m1une\
     \ {\nnamespace monoid {\n\n// Monoid for finding the optimal value and its frequency\
     \ in a range.\n// Uses a comparison functor (Compare) to determine the optimal\
     \ value (default is less, i.e., minimum).\ntemplate <typename T, T Id = std::numeric_limits<T>::max(),\
@@ -52,7 +52,7 @@ data:
   requiredBy:
   - acted_monoid/range_add_range_min_count.hpp
   - monoid/max_count.hpp
-  timestamp: '2026-06-04 16:59:38+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/min_count.hpp

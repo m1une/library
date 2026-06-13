@@ -25,26 +25,27 @@ data:
     - https://judge.yosupo.jp/problem/point_add_range_sum
   bundledCode: "#line 1 \"verify/data_structure/segtree.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\n#line 1 \"data_structure/segtree.hpp\"\
-    \n\n\n\n#include <vector>\n#include <cassert>\n#line 1 \"monoid/concept.hpp\"\n\
-    \n\n\n#include <concepts>\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept\
-    \ to check if a type satisfies the requirements of a Monoid.\n// A Monoid must\
-    \ have a `value_type`, an identity element `id()`, and an associative binary operation\
-    \ `op()`.\ntemplate <typename M>\nconcept IsMonoid = requires(typename M::value_type\
-    \ a, typename M::value_type b) {\n    // 1. Must define `value_type`\n    typename\
-    \ M::value_type;\n    \n    // 2. Must have a static method `id()` returning `value_type`\n\
-    \    { M::id() } -> std::same_as<typename M::value_type>;\n    \n    // 3. Must\
-    \ have a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) }\
-    \ -> std::same_as<typename M::value_type>;\n};\n\n}  // namespace monoid\n}  //\
-    \ namespace m1une\n\n\n#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une\
-    \ {\nnamespace utilities {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n)\
-    \ {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n   \
-    \ return x;\n}\n\n}  // namespace utilities\n}  // namespace m1une\n\n\n#line\
-    \ 8 \"data_structure/segtree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\n// A generic Segment Tree utilizing C++20 Concepts for type safety.\n//\
-    \ It requires a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\ntemplate\
-    \ <m1une::monoid::IsMonoid Monoid>\nstruct Segtree {\n    using T = typename Monoid::value_type;\n\
-    \n   private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n\n    void update(int\
-    \ k) {\n        _d[k] = Monoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n   public:\n\
+    \n\n\n\n#include <cassert>\n#include <concepts>\n#include <utility>\n#include\
+    \ <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
+    \ the requirements of a Monoid.\n// A Monoid must have a `value_type`, an identity\
+    \ element `id()`, and an associative binary operation `op()`.\ntemplate <typename\
+    \ M>\nconcept IsMonoid = requires(typename M::value_type a, typename M::value_type\
+    \ b) {\n    // 1. Must define `value_type`\n    typename M::value_type;\n\n  \
+    \  // 2. Must have a static method `id()` returning `value_type`\n    { M::id()\
+    \ } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
+    \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
+    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
+    \ 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace utilities {\n\
+    \ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1) return 1;\n\
+    \    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n}  // namespace\
+    \ utilities\n}  // namespace m1une\n\n\n#line 11 \"data_structure/segtree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\n// A generic Segment Tree\
+    \ utilizing C++20 Concepts for type safety.\n// It requires a Monoid struct that\
+    \ satisfies `m1une::monoid::IsMonoid`.\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
+    struct Segtree {\n    using T = typename Monoid::value_type;\n\n   private:\n\
+    \    int _n, _size, _log;\n    std::vector<T> _d;\n\n    void update(int k) {\n\
+    \        _d[k] = Monoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n   public:\n\
     \    // Constructs an empty segment tree.\n    Segtree() : Segtree(0) {}\n\n \
     \   // Constructs a segment tree of size `n`, initialized with the identity element.\n\
     \    explicit Segtree(int n) : Segtree(std::vector<T>(n, Monoid::id())) {}\n\n\
@@ -58,21 +59,20 @@ data:
     \ _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n  \
     \      _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++)\
     \ _d[_size + i] = std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--)\
-    \ update(i);\n    }\n    \n    // Constructs a segment tree from a vector of a\
-    \ different type U.\n    // It automatically adapts to the Monoid's initialization\
-    \ requirements:\n    // 1. Monoid::make(val) if it exists.\n    // 2. Monoid::make(val,\
-    \ index) if the monoid requires global indices.\n    // 3. static_cast<T>(val)\
-    \ as a fallback for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
+    \ update(i);\n    }\n\n    // Constructs a segment tree from a vector of a different\
+    \ type U.\n    // It automatically adapts to the Monoid's initialization requirements:\n\
+    \    // 1. Monoid::make(val) if it exists.\n    // 2. Monoid::make(val, index)\
+    \ if the monoid requires global indices.\n    // 3. static_cast<T>(val) as a fallback\
+    \ for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
     \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
     \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
     \  )\n    explicit Segtree(const std::vector<U>& v) : _n(int(v.size())) {\n  \
     \      _size = m1une::utilities::bit_ceil((unsigned int)(_n));\n        _log =\
     \ 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2\
-    \ * _size, Monoid::id());\n        \n        // Compile-time branching based on\
-    \ the available make() signature\n        for (int i = 0; i < _n; i++) {\n   \
-    \         if constexpr (requires(U x) { Monoid::make(x); }) {\n              \
-    \  _d[_size + i] = Monoid::make(v[i]);\n            } else if constexpr (requires(U\
-    \ x, int idx) { Monoid::make(x, idx); }) {\n                _d[_size + i] = Monoid::make(v[i],\
+    \ * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) {\n          \
+    \  if constexpr (requires(U x) { Monoid::make(x); }) {\n                _d[_size\
+    \ + i] = Monoid::make(v[i]);\n            } else if constexpr (requires(U x, int\
+    \ idx) { Monoid::make(x, idx); }) {\n                _d[_size + i] = Monoid::make(v[i],\
     \ i);\n            } else {\n                _d[_size + i] = static_cast<T>(v[i]);\n\
     \            }\n        }\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
     \    }\n\n    // Sets the value of the element at index `p` to `x`.\n    void\
@@ -87,20 +87,20 @@ data:
     \ _d[l++]);\n            if (r & 1) smr = Monoid::op(_d[--r], smr);\n        \
     \    l >>= 1;\n            r >>= 1;\n        }\n        return Monoid::op(sml,\
     \ smr);\n    }\n\n    // Returns the product of the entire array.\n    T all_prod()\
-    \ const { \n        return _d[1]; \n    }\n\n    // Finds the largest `r` such\
-    \ that `f(prod(l, r))` is true.\n    // Uses a custom functor or lambda `f`.\n\
-    \    template <class F>\n    int max_right(int l, F f) const {\n        assert(0\
-    \ <= l && l <= _n);\n        assert(f(Monoid::id()));\n        if (l == _n) return\
-    \ _n;\n        l += _size;\n        T sm = Monoid::id();\n        do {\n     \
-    \       while (l % 2 == 0) l >>= 1;\n            if (!f(Monoid::op(sm, _d[l])))\
-    \ {\n                while (l < _size) {\n                    l = (2 * l);\n \
-    \                   if (f(Monoid::op(sm, _d[l]))) {\n                        sm\
-    \ = Monoid::op(sm, _d[l]);\n                        l++;\n                   \
-    \ }\n                }\n                return l - _size;\n            }\n   \
-    \         sm = Monoid::op(sm, _d[l]);\n            l++;\n        } while ((l &\
-    \ -l) != l);\n        return _n;\n    }\n\n    // Finds the smallest `l` such\
-    \ that `f(prod(l, r))` is true.\n    template <class F>\n    int min_left(int\
-    \ r, F f) const {\n        assert(0 <= r && r <= _n);\n        assert(f(Monoid::id()));\n\
+    \ const {\n        return _d[1];\n    }\n\n    // Finds the largest `r` such that\
+    \ `f(prod(l, r))` is true.\n    // Uses a custom functor or lambda `f`.\n    template\
+    \ <class F>\n    int max_right(int l, F f) const {\n        assert(0 <= l && l\
+    \ <= _n);\n        assert(f(Monoid::id()));\n        if (l == _n) return _n;\n\
+    \        l += _size;\n        T sm = Monoid::id();\n        do {\n           \
+    \ while (l % 2 == 0) l >>= 1;\n            if (!f(Monoid::op(sm, _d[l]))) {\n\
+    \                while (l < _size) {\n                    l = (2 * l);\n     \
+    \               if (f(Monoid::op(sm, _d[l]))) {\n                        sm =\
+    \ Monoid::op(sm, _d[l]);\n                        l++;\n                    }\n\
+    \                }\n                return l - _size;\n            }\n       \
+    \     sm = Monoid::op(sm, _d[l]);\n            l++;\n        } while ((l & -l)\
+    \ != l);\n        return _n;\n    }\n\n    // Finds the smallest `l` such that\
+    \ `f(prod(l, r))` is true.\n    template <class F>\n    int min_left(int r, F\
+    \ f) const {\n        assert(0 <= r && r <= _n);\n        assert(f(Monoid::id()));\n\
     \        if (r == 0) return 0;\n        r += _size;\n        T sm = Monoid::id();\n\
     \        do {\n            r--;\n            while (r > 1 && (r % 2)) r >>= 1;\n\
     \            if (!f(Monoid::op(_d[r], sm))) {\n                while (r < _size)\
@@ -113,11 +113,11 @@ data:
     namespace m1une {\nnamespace monoid {\n\n// Monoid for addition (Range Sum).\n\
     template <typename T>\nstruct Add {\n    using value_type = T;\n\n    // Returns\
     \ the identity element for addition, which is 0.\n    static constexpr T id()\
-    \ { return T(0); }\n\n    // Returns the sum of a and b.\n    static constexpr\
-    \ T op(const T& a, const T& b) { return a + b; }\n};\n\n}  // namespace monoid\n\
-    }  // namespace m1une\n\n\n#line 5 \"verify/data_structure/segtree.test.cpp\"\n\
-    #include <iostream>\n#line 7 \"verify/data_structure/segtree.test.cpp\"\n\nvoid\
-    \ fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
+    \ {\n        return T(0);\n    }\n\n    // Returns the sum of a and b.\n    static\
+    \ constexpr T op(const T& a, const T& b) {\n        return a + b;\n    }\n};\n\
+    \n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 5 \"verify/data_structure/segtree.test.cpp\"\
+    \n#include <iostream>\n#line 7 \"verify/data_structure/segtree.test.cpp\"\n\n\
+    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
     }\n\nint main() {\n    fast_io();\n    int n, q;\n    std::cin >> n >> q;\n\n\
     \    std::vector<long long> a(n);\n    for (int i = 0; i < n; i++) {\n       \
     \ std::cin >> a[i];\n    }\n\n    m1une::data_structure::Segtree<m1une::monoid::Add<long\
@@ -147,7 +147,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-06 19:21:12+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/segtree.test.cpp

@@ -22,50 +22,47 @@ data:
     \ 0, 0};\n    }\n\n    // Merges two segments and calculates the new inversions.\n\
     \    // New inversions = left inversions + right inversions + (ones in left *\
     \ zeros in right)\n    static constexpr value_type op(const value_type& a, const\
-    \ value_type& b) {\n        return {\n            a.zeros + b.zeros,\n       \
-    \     a.ones + b.ones,\n            a.inversions + b.inversions + a.ones * b.zeros\n\
-    \        };\n    }\n\n    // Helper to securely create a leaf node from a value\
-    \ (0 or 1).\n    static constexpr value_type make(int val) {\n        if (val\
-    \ == 0) return {1, 0, 0};\n        return {0, 1, 0};\n    }\n};\n\n}  // namespace\
-    \ monoid\n}  // namespace m1une\n\n\n#line 5 \"acted_monoid/range_flip_range_binary_inversion.hpp\"\
+    \ value_type& b) {\n        return {a.zeros + b.zeros, a.ones + b.ones, a.inversions\
+    \ + b.inversions + a.ones * b.zeros};\n    }\n\n    // Helper to securely create\
+    \ a leaf node from a value (0 or 1).\n    static constexpr value_type make(int\
+    \ val) {\n        if (val == 0) return {1, 0, 0};\n        return {0, 1, 0};\n\
+    \    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 5 \"acted_monoid/range_flip_range_binary_inversion.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename T = long\
     \ long>\nstruct RangeFlipRangeBinaryInversion {\n    using value_type = m1une::monoid::BinaryInversionNode<T>;\n\
-    \    using operator_type = bool;\n\n    static constexpr value_type id() { return\
-    \ {0, 0, 0}; }\n    static constexpr value_type op(const value_type& a, const\
-    \ value_type& b) {\n        return {\n            a.zeros + b.zeros,\n       \
-    \     a.ones + b.ones,\n            a.inversions + b.inversions + a.ones * b.zeros\n\
-    \        };\n    }\n\n    static constexpr operator_type op_id() { return false;\
-    \ }\n    static constexpr operator_type op_comp(const operator_type& f, const\
-    \ operator_type& g) {\n        return f ^ g;\n    }\n\n    static constexpr value_type\
-    \ mapping(const operator_type& f, const value_type& x) {\n        if (!f) return\
-    \ x;\n        return {\n            x.ones,\n            x.zeros,\n          \
-    \  x.zeros * x.ones - x.inversions\n        };\n    }\n\n    static constexpr\
-    \ value_type make(int val) {\n        if (val == 0) return {1, 0, 0};\n      \
-    \  return {0, 1, 0};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
-    \ m1une\n\n\n"
+    \    using operator_type = bool;\n\n    static constexpr value_type id() {\n \
+    \       return {0, 0, 0};\n    }\n    static constexpr value_type op(const value_type&\
+    \ a, const value_type& b) {\n        return {a.zeros + b.zeros, a.ones + b.ones,\
+    \ a.inversions + b.inversions + a.ones * b.zeros};\n    }\n\n    static constexpr\
+    \ operator_type op_id() {\n        return false;\n    }\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f ^ g;\n    }\n\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        if (!f) return x;\n        return {x.ones,\
+    \ x.zeros, x.zeros * x.ones - x.inversions};\n    }\n\n    static constexpr value_type\
+    \ make(int val) {\n        if (val == 0) return {1, 0, 0};\n        return {0,\
+    \ 1, 0};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\
+    \n"
   code: "#ifndef M1UNE_ACTED_MONOID_RANGE_FLIP_RANGE_BINARY_INVERSION_HPP\n#define\
     \ M1UNE_ACTED_MONOID_RANGE_FLIP_RANGE_BINARY_INVERSION_HPP 1\n\n#include \"../monoid/binary_inversion.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename T = long\
     \ long>\nstruct RangeFlipRangeBinaryInversion {\n    using value_type = m1une::monoid::BinaryInversionNode<T>;\n\
-    \    using operator_type = bool;\n\n    static constexpr value_type id() { return\
-    \ {0, 0, 0}; }\n    static constexpr value_type op(const value_type& a, const\
-    \ value_type& b) {\n        return {\n            a.zeros + b.zeros,\n       \
-    \     a.ones + b.ones,\n            a.inversions + b.inversions + a.ones * b.zeros\n\
-    \        };\n    }\n\n    static constexpr operator_type op_id() { return false;\
-    \ }\n    static constexpr operator_type op_comp(const operator_type& f, const\
-    \ operator_type& g) {\n        return f ^ g;\n    }\n\n    static constexpr value_type\
-    \ mapping(const operator_type& f, const value_type& x) {\n        if (!f) return\
-    \ x;\n        return {\n            x.ones,\n            x.zeros,\n          \
-    \  x.zeros * x.ones - x.inversions\n        };\n    }\n\n    static constexpr\
-    \ value_type make(int val) {\n        if (val == 0) return {1, 0, 0};\n      \
-    \  return {0, 1, 0};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
-    \ m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_FLIP_RANGE_BINARY_INVERSION_HPP\n"
+    \    using operator_type = bool;\n\n    static constexpr value_type id() {\n \
+    \       return {0, 0, 0};\n    }\n    static constexpr value_type op(const value_type&\
+    \ a, const value_type& b) {\n        return {a.zeros + b.zeros, a.ones + b.ones,\
+    \ a.inversions + b.inversions + a.ones * b.zeros};\n    }\n\n    static constexpr\
+    \ operator_type op_id() {\n        return false;\n    }\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f ^ g;\n    }\n\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        if (!f) return x;\n        return {x.ones,\
+    \ x.zeros, x.zeros * x.ones - x.inversions};\n    }\n\n    static constexpr value_type\
+    \ make(int val) {\n        if (val == 0) return {1, 0, 0};\n        return {0,\
+    \ 1, 0};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\
+    #endif  // M1UNE_ACTED_MONOID_RANGE_FLIP_RANGE_BINARY_INVERSION_HPP\n"
   dependsOn:
   - monoid/binary_inversion.hpp
   isVerificationFile: false
   path: acted_monoid/range_flip_range_binary_inversion.hpp
   requiredBy: []
-  timestamp: '2026-06-04 17:32:18+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_flip_range_binary_inversion.hpp

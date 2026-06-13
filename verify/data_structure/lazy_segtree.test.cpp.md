@@ -28,22 +28,23 @@ data:
     - https://judge.yosupo.jp/problem/range_affine_range_sum
   bundledCode: "#line 1 \"verify/data_structure/lazy_segtree.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\n\n#line 1 \"data_structure/lazy_segtree.hpp\"\
-    \n\n\n\n#include <vector>\n#include <cassert>\n#line 1 \"acted_monoid/concept.hpp\"\
-    \n\n\n\n#include <concepts>\n\nnamespace m1une {\nnamespace acted_monoid {\n\n\
-    // Concept defining the requirements for an Acted Monoid.\ntemplate <typename\
-    \ AM>\nconcept IsActedMonoid = requires(\n    typename AM::value_type a, typename\
-    \ AM::value_type b,\n    typename AM::operator_type f, typename AM::operator_type\
-    \ g\n) {\n    // 1. Value Monoid\n    typename AM::value_type;\n    { AM::id()\
-    \ } -> std::same_as<typename AM::value_type>;\n    { AM::op(a, b) } -> std::same_as<typename\
-    \ AM::value_type>;\n\n    // 2. Operator Monoid\n    typename AM::operator_type;\n\
-    \    { AM::op_id() } -> std::same_as<typename AM::operator_type>;\n    { AM::op_comp(f,\
-    \ g) } -> std::same_as<typename AM::operator_type>; // Composition order: f(g(x))\n\
-    \n    // 3. Mapping: Operator x Value -> Value\n    { AM::mapping(f, a) } -> std::same_as<typename\
+    \n\n\n\n#include <cassert>\n#include <concepts>\n#include <utility>\n#include\
+    \ <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
+    \ for an Acted Monoid.\ntemplate <typename AM>\nconcept IsActedMonoid = requires(typename\
+    \ AM::value_type a, typename AM::value_type b, typename AM::operator_type f,\n\
+    \                                 typename AM::operator_type g) {\n    // 1. Value\
+    \ Monoid\n    typename AM::value_type;\n    { AM::id() } -> std::same_as<typename\
+    \ AM::value_type>;\n    { AM::op(a, b) } -> std::same_as<typename AM::value_type>;\n\
+    \n    // 2. Operator Monoid\n    typename AM::operator_type;\n    { AM::op_id()\
+    \ } -> std::same_as<typename AM::operator_type>;\n    { AM::op_comp(f, g) } ->\
+    \ std::same_as<typename AM::operator_type>;  // Composition order: f(g(x))\n\n\
+    \    // 3. Mapping: Operator x Value -> Value\n    { AM::mapping(f, a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
     \n\n#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace utilities\
     \ {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1) return\
     \ 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n}  // namespace\
-    \ utilities\n}  // namespace m1une\n\n\n#line 8 \"data_structure/lazy_segtree.hpp\"\
+    \ utilities\n}  // namespace m1une\n\n\n#line 11 \"data_structure/lazy_segtree.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\n// A highly generic Lazy\
     \ Segment Tree utilizing C++20 Concepts for type safety.\n// It operates on any\
     \ Acted Monoid structure satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\n\
@@ -85,7 +86,6 @@ data:
     \ {\n        _size = m1une::utilities::bit_ceil((unsigned int)(_n));\n       \
     \ _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n  \
     \      _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
-    \        \n        // Compile-time branching based on the available make() signature\n\
     \        for (int i = 0; i < _n; i++) {\n            if constexpr (requires(U\
     \ x) { ActedMonoid::make(x); }) {\n                _d[_size + i] = ActedMonoid::make(v[i]);\n\
     \            } else if constexpr (requires(U x, int idx) { ActedMonoid::make(x,\
@@ -108,12 +108,12 @@ data:
     \ = ActedMonoid::op(sml, _d[l++]);\n            if (r & 1) smr = ActedMonoid::op(_d[--r],\
     \ smr);\n            l >>= 1;\n            r >>= 1;\n        }\n\n        return\
     \ ActedMonoid::op(sml, smr);\n    }\n\n    // Returns the product of the entire\
-    \ array.\n    T all_prod() const { return _d[1]; }\n\n    // Applies the operator\
-    \ f to the p-th element.\n    void apply(int p, F f) {\n        assert(0 <= p\
-    \ && p < _n);\n        p += _size;\n        for (int i = _log; i >= 1; i--) push(p\
-    \ >> i);\n        _d[p] = ActedMonoid::mapping(f, _d[p]);\n        for (int i\
-    \ = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Applies the operator f\
-    \ to all elements in the range [l, r).\n    void apply(int l, int r, F f) {\n\
+    \ array.\n    T all_prod() const {\n        return _d[1];\n    }\n\n    // Applies\
+    \ the operator f to the p-th element.\n    void apply(int p, F f) {\n        assert(0\
+    \ <= p && p < _n);\n        p += _size;\n        for (int i = _log; i >= 1; i--)\
+    \ push(p >> i);\n        _d[p] = ActedMonoid::mapping(f, _d[p]);\n        for\
+    \ (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Applies the operator\
+    \ f to all elements in the range [l, r).\n    void apply(int l, int r, F f) {\n\
     \        assert(0 <= l && l <= r && r <= _n);\n        if (l == r) return;\n\n\
     \        l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1;\
     \ i--) {\n            if (((l >> i) << i) != l) push(l >> i);\n            if\
@@ -154,32 +154,32 @@ data:
     \ {\nnamespace acted_monoid {\n\ntemplate <typename T>\nstruct RangeAffineRangeSumNode\
     \ {\n    T sum;\n    long long size;\n};\n\n// Designed to accept Modint or similar\
     \ types as T\ntemplate <typename T>\nstruct RangeAffineRangeSum {\n    using value_type\
-    \ = RangeAffineRangeSumNode<T>;\n    using operator_type = std::pair<T, T>; //\
+    \ = RangeAffineRangeSumNode<T>;\n    using operator_type = std::pair<T, T>;  //\
     \ {a, b} for ax + b\n\n    // Value Monoid\n    static constexpr value_type id()\
-    \ { return {T(0), 0}; }\n    static constexpr value_type op(const value_type&\
-    \ a, const value_type& b) {\n        return {a.sum + b.sum, a.size + b.size};\n\
-    \    }\n\n    // Operator Monoid (Affine Composition)\n    // f(x) = a1*x + b1,\
-    \ g(x) = a2*x + b2\n    // f(g(x)) = a1*(a2*x + b2) + b1 = (a1*a2)*x + (a1*b2\
-    \ + b1)\n    static constexpr operator_type op_id() { return {T(1), T(0)}; }\n\
-    \    static constexpr operator_type op_comp(const operator_type& f, const operator_type&\
-    \ g) {\n        return {f.first * g.first, f.first * g.second + f.second};\n \
-    \   }\n\n    // Mapping\n    // \\sum (a*x_i + b) = a * \\sum x_i + b * size\n\
-    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
-    \ x) {\n        return {f.first * x.sum + f.second * T(x.size), x.size};\n   \
-    \ }\n\n    // Helper for initializing a leaf node\n    static constexpr value_type\
-    \ make(const T& val) {\n        return {val, 1};\n    }\n};\n\n}  // namespace\
-    \ acted_monoid\n}  // namespace m1une\n\n\n#line 1 \"math/modint.hpp\"\n\n\n\n\
-    #line 7 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\ntemplate\
-    \ <uint32_t Modulus>\nstruct ModInt {\n   private:\n    uint32_t _v;\n\n   public:\n\
-    \    static constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n   \
-    \ static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n    \
-    \    x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept :\
-    \ _v(0) {}\n\n    constexpr ModInt(int v) noexcept {\n        long long x = (long\
-    \ long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n       \
-    \ _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(long long v) noexcept\
-    \ {\n        long long x = (long long)(v % (long long)(Modulus));\n        if\
-    \ (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n    }\n\n   \
-    \ constexpr ModInt(unsigned int v) noexcept {\n        _v = static_cast<uint32_t>(v\
+    \ {\n        return {T(0), 0};\n    }\n    static constexpr value_type op(const\
+    \ value_type& a, const value_type& b) {\n        return {a.sum + b.sum, a.size\
+    \ + b.size};\n    }\n\n    // Operator Monoid (Affine Composition)\n    // f(x)\
+    \ = a1*x + b1, g(x) = a2*x + b2\n    // f(g(x)) = a1*(a2*x + b2) + b1 = (a1*a2)*x\
+    \ + (a1*b2 + b1)\n    static constexpr operator_type op_id() {\n        return\
+    \ {T(1), T(0)};\n    }\n    static constexpr operator_type op_comp(const operator_type&\
+    \ f, const operator_type& g) {\n        return {f.first * g.first, f.first * g.second\
+    \ + f.second};\n    }\n\n    // Mapping\n    // \\sum (a*x_i + b) = a * \\sum\
+    \ x_i + b * size\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        return {f.first * x.sum + f.second * T(x.size),\
+    \ x.size};\n    }\n\n    // Helper for initializing a leaf node\n    static constexpr\
+    \ value_type make(const T& val) {\n        return {val, 1};\n    }\n};\n\n}  //\
+    \ namespace acted_monoid\n}  // namespace m1une\n\n\n#line 1 \"math/modint.hpp\"\
+    \n\n\n\n#line 7 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\n\
+    template <uint32_t Modulus>\nstruct ModInt {\n   private:\n    uint32_t _v;\n\n\
+    \   public:\n    static constexpr uint32_t mod() {\n        return Modulus;\n\
+    \    }\n\n    static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt\
+    \ x;\n        x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept\
+    \ : _v(0) {}\n\n    constexpr ModInt(int v) noexcept {\n        long long x =\
+    \ (long long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n \
+    \       _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(long long\
+    \ v) noexcept {\n        long long x = (long long)(v % (long long)(Modulus));\n\
+    \        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n  \
+    \  }\n\n    constexpr ModInt(unsigned int v) noexcept {\n        _v = static_cast<uint32_t>(v\
     \ % Modulus);\n    }\n\n    constexpr uint32_t val() const noexcept {\n      \
     \  return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept {\n      \
     \  _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n    }\n\n\
@@ -250,7 +250,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-06 20:32:01+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_segtree.test.cpp

@@ -15,30 +15,29 @@ data:
     \ left_idx;\n    long long right_idx;\n};\n\ntemplate <typename T, T MinId = std::numeric_limits<T>::max(),\
     \ T MaxId = std::numeric_limits<T>::lowest()>\nstruct RangeApUpdateRangeMinMax\
     \ {\n    using value_type = RangeApUpdateRangeMinMaxNode<T>;\n    using operator_type\
-    \ = std::optional<std::pair<T, T>>; // {a, b} for setting to a * i + b\n\n   \
-    \ // Value Monoid (Min & Max)\n    static constexpr value_type id() { \n     \
+    \ = std::optional<std::pair<T, T>>;  // {a, b} for setting to a * i + b\n\n  \
+    \  // Value Monoid (Min & Max)\n    static constexpr value_type id() {\n     \
     \   return {MinId, MaxId, std::numeric_limits<long long>::max(), std::numeric_limits<long\
-    \ long>::lowest()}; \n    }\n\n    static constexpr value_type op(const value_type&\
+    \ long>::lowest()};\n    }\n\n    static constexpr value_type op(const value_type&\
     \ a, const value_type& b) {\n        if (a.min_val == MinId) return b;\n     \
-    \   if (b.min_val == MinId) return a;\n        return {\n            std::min(a.min_val,\
-    \ b.min_val),\n            std::max(a.max_val, b.max_val),\n            std::min(a.left_idx,\
-    \ b.left_idx),\n            std::max(a.right_idx, b.right_idx)\n        };\n \
-    \   }\n\n    // Operator Monoid (Update)\n    static constexpr operator_type op_id()\
-    \ { return std::nullopt; }\n\n    static constexpr operator_type op_comp(const\
-    \ operator_type& f, const operator_type& g) {\n        // Newer operation (f)\
-    \ completely overwrites the older one (g)\n        return f.has_value() ? f :\
-    \ g;\n    }\n\n    // Mapping\n    static constexpr value_type mapping(const operator_type&\
-    \ f, const value_type& x) {\n        if (!f.has_value() || x.min_val == MinId)\
-    \ return x;\n        \n        T a = f.value().first;\n        T b = f.value().second;\n\
-    \        \n        // Evaluate the linear function at the boundaries of the segment\n\
-    \        T val_left = a * static_cast<T>(x.left_idx) + b;\n        T val_right\
-    \ = a * static_cast<T>(x.right_idx) + b;\n        \n        return {\n       \
-    \     std::min(val_left, val_right),\n            std::max(val_left, val_right),\n\
-    \            x.left_idx,\n            x.right_idx\n        };\n    }\n\n    //\
-    \ Helper for initializing a leaf node\n    // Crucial: You MUST pass the 0-based\
-    \ index `idx` during initialization.\n    static constexpr value_type make(const\
-    \ T& val, long long idx) {\n        return {val, val, idx, idx};\n    }\n};\n\n\
-    }  // namespace acted_monoid\n}  // namespace m1une\n\n\n"
+    \   if (b.min_val == MinId) return a;\n        return {std::min(a.min_val, b.min_val),\
+    \ std::max(a.max_val, b.max_val), std::min(a.left_idx, b.left_idx),\n        \
+    \        std::max(a.right_idx, b.right_idx)};\n    }\n\n    // Operator Monoid\
+    \ (Update)\n    static constexpr operator_type op_id() {\n        return std::nullopt;\n\
+    \    }\n\n    static constexpr operator_type op_comp(const operator_type& f, const\
+    \ operator_type& g) {\n        // Newer operation (f) completely overwrites the\
+    \ older one (g)\n        return f.has_value() ? f : g;\n    }\n\n    // Mapping\n\
+    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
+    \ x) {\n        if (!f.has_value() || x.min_val == MinId) return x;\n\n      \
+    \  T a = f.value().first;\n        T b = f.value().second;\n\n        // Evaluate\
+    \ the linear function at the boundaries of the segment\n        T val_left = a\
+    \ * static_cast<T>(x.left_idx) + b;\n        T val_right = a * static_cast<T>(x.right_idx)\
+    \ + b;\n\n        return {std::min(val_left, val_right), std::max(val_left, val_right),\
+    \ x.left_idx, x.right_idx};\n    }\n\n    // Helper for initializing a leaf node\n\
+    \    // Crucial: You MUST pass the 0-based index `idx` during initialization.\n\
+    \    static constexpr value_type make(const T& val, long long idx) {\n       \
+    \ return {val, val, idx, idx};\n    }\n};\n\n}  // namespace acted_monoid\n} \
+    \ // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_RANGE_AP_UPDATE_RANGE_MIN_MAX_HPP\n#define M1UNE_ACTED_MONOID_RANGE_AP_UPDATE_RANGE_MIN_MAX_HPP\
     \ 1\n\n#include <algorithm>\n#include <limits>\n#include <optional>\n#include\
     \ <utility>\n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename\
@@ -46,36 +45,34 @@ data:
     \    long long left_idx;\n    long long right_idx;\n};\n\ntemplate <typename T,\
     \ T MinId = std::numeric_limits<T>::max(), T MaxId = std::numeric_limits<T>::lowest()>\n\
     struct RangeApUpdateRangeMinMax {\n    using value_type = RangeApUpdateRangeMinMaxNode<T>;\n\
-    \    using operator_type = std::optional<std::pair<T, T>>; // {a, b} for setting\
+    \    using operator_type = std::optional<std::pair<T, T>>;  // {a, b} for setting\
     \ to a * i + b\n\n    // Value Monoid (Min & Max)\n    static constexpr value_type\
-    \ id() { \n        return {MinId, MaxId, std::numeric_limits<long long>::max(),\
-    \ std::numeric_limits<long long>::lowest()}; \n    }\n\n    static constexpr value_type\
+    \ id() {\n        return {MinId, MaxId, std::numeric_limits<long long>::max(),\
+    \ std::numeric_limits<long long>::lowest()};\n    }\n\n    static constexpr value_type\
     \ op(const value_type& a, const value_type& b) {\n        if (a.min_val == MinId)\
-    \ return b;\n        if (b.min_val == MinId) return a;\n        return {\n   \
-    \         std::min(a.min_val, b.min_val),\n            std::max(a.max_val, b.max_val),\n\
-    \            std::min(a.left_idx, b.left_idx),\n            std::max(a.right_idx,\
-    \ b.right_idx)\n        };\n    }\n\n    // Operator Monoid (Update)\n    static\
-    \ constexpr operator_type op_id() { return std::nullopt; }\n\n    static constexpr\
-    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
-    \      // Newer operation (f) completely overwrites the older one (g)\n      \
-    \  return f.has_value() ? f : g;\n    }\n\n    // Mapping\n    static constexpr\
-    \ value_type mapping(const operator_type& f, const value_type& x) {\n        if\
-    \ (!f.has_value() || x.min_val == MinId) return x;\n        \n        T a = f.value().first;\n\
-    \        T b = f.value().second;\n        \n        // Evaluate the linear function\
-    \ at the boundaries of the segment\n        T val_left = a * static_cast<T>(x.left_idx)\
-    \ + b;\n        T val_right = a * static_cast<T>(x.right_idx) + b;\n        \n\
-    \        return {\n            std::min(val_left, val_right),\n            std::max(val_left,\
-    \ val_right),\n            x.left_idx,\n            x.right_idx\n        };\n\
-    \    }\n\n    // Helper for initializing a leaf node\n    // Crucial: You MUST\
-    \ pass the 0-based index `idx` during initialization.\n    static constexpr value_type\
-    \ make(const T& val, long long idx) {\n        return {val, val, idx, idx};\n\
-    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n#endif  //\
-    \ M1UNE_ACTED_MONOID_RANGE_AP_UPDATE_RANGE_MIN_MAX_HPP\n"
+    \ return b;\n        if (b.min_val == MinId) return a;\n        return {std::min(a.min_val,\
+    \ b.min_val), std::max(a.max_val, b.max_val), std::min(a.left_idx, b.left_idx),\n\
+    \                std::max(a.right_idx, b.right_idx)};\n    }\n\n    // Operator\
+    \ Monoid (Update)\n    static constexpr operator_type op_id() {\n        return\
+    \ std::nullopt;\n    }\n\n    static constexpr operator_type op_comp(const operator_type&\
+    \ f, const operator_type& g) {\n        // Newer operation (f) completely overwrites\
+    \ the older one (g)\n        return f.has_value() ? f : g;\n    }\n\n    // Mapping\n\
+    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
+    \ x) {\n        if (!f.has_value() || x.min_val == MinId) return x;\n\n      \
+    \  T a = f.value().first;\n        T b = f.value().second;\n\n        // Evaluate\
+    \ the linear function at the boundaries of the segment\n        T val_left = a\
+    \ * static_cast<T>(x.left_idx) + b;\n        T val_right = a * static_cast<T>(x.right_idx)\
+    \ + b;\n\n        return {std::min(val_left, val_right), std::max(val_left, val_right),\
+    \ x.left_idx, x.right_idx};\n    }\n\n    // Helper for initializing a leaf node\n\
+    \    // Crucial: You MUST pass the 0-based index `idx` during initialization.\n\
+    \    static constexpr value_type make(const T& val, long long idx) {\n       \
+    \ return {val, val, idx, idx};\n    }\n};\n\n}  // namespace acted_monoid\n} \
+    \ // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_AP_UPDATE_RANGE_MIN_MAX_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/range_ap_update_range_min_max.hpp
   requiredBy: []
-  timestamp: '2026-06-04 17:38:45+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_ap_update_range_min_max.hpp

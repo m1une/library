@@ -40,16 +40,15 @@ data:
     \        }\n        std::vector<std::vector<int>> result(_n);\n        for (int\
     \ i = 0; i < _n; i++) {\n            result[i].reserve(group_size[i]);\n     \
     \   }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
-    \        }\n        result.erase(\n            std::remove_if(result.begin(),\
-    \ result.end(),\n                           [&](const std::vector<int>& v) { return\
-    \ v.empty(); }),\n            result.end());\n        return result;\n    }\n\
-    };\n\n}  // namespace data_structure\n}  // namespace m1une\n\n\n#line 5 \"verify/data_structure/dsu.test.cpp\"\
-    \nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n\
-    \    cin.tie(nullptr);\n    int N, Q;\n    cin >> N >> Q;\n    m1une::data_structure::Dsu\
-    \ dsu(N);\n    for (int q = 0; q < Q; ++q) {\n        int t, u, v;\n        cin\
-    \ >> t >> u >> v;\n        if (t == 0) {\n            dsu.merge(u, v);\n     \
-    \   } else {\n            cout << (int)dsu.same(u, v) << '\\n';\n        }\n \
-    \   }\n}\n"
+    \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
+    \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
+    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace data_structure\n\
+    }  // namespace m1une\n\n\n#line 5 \"verify/data_structure/dsu.test.cpp\"\nusing\
+    \ namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n\
+    \    int N, Q;\n    cin >> N >> Q;\n    m1une::data_structure::Dsu dsu(N);\n \
+    \   for (int q = 0; q < Q; ++q) {\n        int t, u, v;\n        cin >> t >> u\
+    \ >> v;\n        if (t == 0) {\n            dsu.merge(u, v);\n        } else {\n\
+    \            cout << (int)dsu.same(u, v) << '\\n';\n        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/unionfind\"\n\n#include\
     \ <bits/stdc++.h>\n#include \"data_structure/dsu.hpp\"\nusing namespace std;\n\
     \nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n\
@@ -62,7 +61,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-06 20:09:38+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/dsu.test.cpp

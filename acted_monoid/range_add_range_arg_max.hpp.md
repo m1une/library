@@ -18,14 +18,14 @@ data:
     \ value_type op(const value_type& a, const value_type& b) {\n        // >= gives\
     \ priority to the earlier (leftmost) index in case of a tie\n        if (a.max_val\
     \ >= b.max_val) return a;\n        return b;\n    }\n\n    static constexpr operator_type\
-    \ op_id() { return T(0); }\n\n    static constexpr operator_type op_comp(const\
-    \ operator_type& f, const operator_type& g) {\n        return f + g;\n    }\n\n\
-    \    static constexpr value_type mapping(const operator_type& f, const value_type&\
-    \ x) {\n        if (x.index == -1) return x;\n        return {x.max_val + f, x.index};\n\
-    \    }\n\n    // Helper for initialization, requires passing the index explicitly\n\
-    \    static constexpr value_type make(const T& val, long long index) {\n     \
-    \   return {val, index};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace\
-    \ m1une\n\n\n"
+    \ op_id() {\n        return T(0);\n    }\n\n    static constexpr operator_type\
+    \ op_comp(const operator_type& f, const operator_type& g) {\n        return f\
+    \ + g;\n    }\n\n    static constexpr value_type mapping(const operator_type&\
+    \ f, const value_type& x) {\n        if (x.index == -1) return x;\n        return\
+    \ {x.max_val + f, x.index};\n    }\n\n    // Helper for initialization, requires\
+    \ passing the index explicitly\n    static constexpr value_type make(const T&\
+    \ val, long long index) {\n        return {val, index};\n    }\n};\n\n}  // namespace\
+    \ acted_monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_ARG_MAX_HPP\n#define M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_ARG_MAX_HPP\
     \ 1\n\n#include <limits>\n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate\
     \ <typename T>\nstruct RangeAddRangeArgMaxNode {\n    T max_val;\n    long long\
@@ -36,19 +36,20 @@ data:
     \    }\n\n    static constexpr value_type op(const value_type& a, const value_type&\
     \ b) {\n        // >= gives priority to the earlier (leftmost) index in case of\
     \ a tie\n        if (a.max_val >= b.max_val) return a;\n        return b;\n  \
-    \  }\n\n    static constexpr operator_type op_id() { return T(0); }\n\n    static\
-    \ constexpr operator_type op_comp(const operator_type& f, const operator_type&\
-    \ g) {\n        return f + g;\n    }\n\n    static constexpr value_type mapping(const\
-    \ operator_type& f, const value_type& x) {\n        if (x.index == -1) return\
-    \ x;\n        return {x.max_val + f, x.index};\n    }\n\n    // Helper for initialization,\
-    \ requires passing the index explicitly\n    static constexpr value_type make(const\
-    \ T& val, long long index) {\n        return {val, index};\n    }\n};\n\n}  //\
-    \ namespace acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_ARG_MAX_HPP\n"
+    \  }\n\n    static constexpr operator_type op_id() {\n        return T(0);\n \
+    \   }\n\n    static constexpr operator_type op_comp(const operator_type& f, const\
+    \ operator_type& g) {\n        return f + g;\n    }\n\n    static constexpr value_type\
+    \ mapping(const operator_type& f, const value_type& x) {\n        if (x.index\
+    \ == -1) return x;\n        return {x.max_val + f, x.index};\n    }\n\n    //\
+    \ Helper for initialization, requires passing the index explicitly\n    static\
+    \ constexpr value_type make(const T& val, long long index) {\n        return {val,\
+    \ index};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\
+    #endif  // M1UNE_ACTED_MONOID_RANGE_ADD_RANGE_ARG_MAX_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/range_add_range_arg_max.hpp
   requiredBy: []
-  timestamp: '2026-06-06 19:59:08+09:00'
+  timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_add_range_arg_max.hpp
