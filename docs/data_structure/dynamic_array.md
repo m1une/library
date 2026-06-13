@@ -9,6 +9,15 @@ documentation_of: ../../data_structure/dynamic_array.hpp
 
 Because it relies on an array-based memory pool instead of standard pointers, copying the data structure copies one contiguous pool and avoids per-node heap allocation.
 
+## Complexity Notation
+
+In this document:
+
+* `N` is the current number of elements in the array.
+* `M` is the number of elements inserted or appended from another container.
+* `K` is the number of elements returned or moved into a newly returned array.
+* `V` is the current size of the internal memory pool, including erased nodes that have not been reused.
+
 ## Template Parameters
 
 * `T`: The underlying data type of the elements.
@@ -19,7 +28,7 @@ Because it relies on an array-based memory pool instead of standard pointers, co
   Constructs an empty dynamic array. ($O(1)$)
 
 * `DynamicArray(const DynamicArray& other)`
-  Copy constructor. Deep copies the array structure and memory pool. ($O(V)$ where $V$ is the capacity of the memory pool)
+  Copy constructor. Deep copies the array structure and memory pool. ($O(V)$)
 
 * `DynamicArray(DynamicArray&& other)`
   Move constructor. Takes ownership of the other array's memory pool without reallocating. ($O(1)$)
@@ -105,10 +114,10 @@ Because it relies on an array-based memory pool instead of standard pointers, co
   Dumps the entire array state into a standard `std::vector`. ($O(N)$)
 
 * `std::vector<T> to_vector(int l, int r) const`
-  Dumps the half-open range $[l, r)$ into a standard `std::vector`. ($O(K + \log N)$)
+  Dumps the half-open range $[l, r)$ into a standard `std::vector`, where `K = r - l`. ($O(K + \log N)$)
 
 * `DynamicArray split_off(int pos)`
-  Removes $[pos, N)$ from the current array and returns it as a new `DynamicArray`. Because each `DynamicArray` owns its own memory pool, the returned suffix is copied into a new pool. ($O(K + \log N)$)
+  Removes $[pos, N)$ from the current array and returns it as a new `DynamicArray`, where `K = N - pos`. Because each `DynamicArray` owns its own memory pool, the returned suffix is copied into a new pool. ($O(K + \log N)$)
 
 ## Example
 

@@ -9,6 +9,14 @@ documentation_of: ../../data_structure/dynamic_monoid_array.hpp
 
 Each node stores both forward and reversed products, so `reverse(l, r)` works correctly even when the monoid operation is not commutative.
 
+## Complexity Notation
+
+In this document:
+
+* `N` is the current number of elements in the sequence.
+* `M` is the number of elements inserted or appended from another container.
+* `K` is the number of elements returned or moved into a newly returned sequence.
+
 ## Template Parameters
 
 * `Monoid`: A monoid satisfying `m1une::monoid::IsMonoid`.
@@ -93,10 +101,10 @@ Each node stores both forward and reversed products, so `reverse(l, r)` works co
   Dumps the sequence into a standard vector. ($O(N)$)
 
 * `std::vector<T> to_vector(int l, int r) const`
-  Dumps the half-open range $[l, r)$ into a standard vector. ($O(K + \log N)$)
+  Dumps the half-open range $[l, r)$ into a standard vector, where `K = r - l`. ($O(K + \log N)$)
 
 * `DynamicMonoidArray split_off(int pos)`
-  Removes $[pos, N)$ from the current sequence and returns it as a new sequence. Because each sequence owns its memory pool, the returned suffix is copied into a new pool. ($O(K + \log N)$)
+  Removes $[pos, N)$ from the current sequence and returns it as a new sequence, where `K = N - pos`. Because each sequence owns its memory pool, the returned suffix is copied into a new pool. ($O(K + \log N)$)
 
 ## Notes
 
