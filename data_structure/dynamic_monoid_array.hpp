@@ -246,6 +246,16 @@ struct DynamicMonoidArray {
         return *this;
     }
 
+    explicit DynamicMonoidArray(int n) : DynamicMonoidArray(n, Monoid::id()) {}
+
+    DynamicMonoidArray(int n, const T& value) : DynamicMonoidArray() {
+        assert(0 <= n);
+        pool.reserve(n + 1);
+        for (int i = 0; i < n; i++) {
+            root = merge(root, new_node(value));
+        }
+    }
+
     explicit DynamicMonoidArray(const std::vector<T>& v) : DynamicMonoidArray() {
         pool.reserve(v.size() + 1);
         root = build_from_vector(v);

@@ -27,6 +27,12 @@ In this document:
 * `DynamicArray()`
   Constructs an empty dynamic array. ($O(1)$)
 
+* `DynamicArray(int n)`
+  Constructs a dynamic array with `n` value-initialized elements, like `std::vector<T>(n)`. ($O(N \log N)$)
+
+* `DynamicArray(int n, const T& value)`
+  Constructs a dynamic array with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N \log N)$)
+
 * `DynamicArray(const DynamicArray& other)`
   Copy constructor. Deep copies the array structure and memory pool. ($O(V)$)
 

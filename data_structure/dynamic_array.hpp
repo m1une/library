@@ -209,6 +209,16 @@ struct DynamicArray {
         return *this;
     }
 
+    explicit DynamicArray(int n) : DynamicArray(n, T()) {}
+
+    DynamicArray(int n, const T& value) : DynamicArray() {
+        assert(0 <= n);
+        pool.reserve(n + 1);
+        for (int i = 0; i < n; i++) {
+            root = merge(root, new_node(value));
+        }
+    }
+
     explicit DynamicArray(const std::vector<T>& v) : DynamicArray() {
         pool.reserve(v.size() + 1);
         root = build_from_vector(v);

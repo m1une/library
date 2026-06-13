@@ -26,6 +26,12 @@ In this document:
 * `DynamicMonoidArray()`
   Constructs an empty sequence. ($O(1)$)
 
+* `DynamicMonoidArray(int n)`
+  Constructs a sequence with `n` copies of `Monoid::id()`. ($O(N \log N)$)
+
+* `DynamicMonoidArray(int n, const T& value)`
+  Constructs a sequence with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N \log N)$)
+
 * `DynamicMonoidArray(const std::vector<T>& v)`
   Constructs the sequence from monoid values. ($O(N \log N)$)
 
