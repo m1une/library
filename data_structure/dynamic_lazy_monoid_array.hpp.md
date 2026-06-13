@@ -69,16 +69,49 @@ data:
     \ pool[t].lazy);\n            pool[t].lazy = ActedMonoid::op_id();\n         \
     \   pool[t].has_lazy = false;\n        }\n    }\n\n    void split(int t, int pos,\
     \ int& l, int& r) {\n        if (!t) {\n            l = r = 0;\n            return;\n\
-    \        }\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
-    \        if (pos <= left_count) {\n            split(pool[t].l, pos, l, pool[t].l);\n\
-    \            r = t;\n        } else {\n            split(pool[t].r, pos - left_count\
+    \        }\n        if (pos == 0) {\n            l = 0;\n            r = t;\n\
+    \            return;\n        }\n        if (pos == pool[t].count) {\n       \
+    \     l = t;\n            r = 0;\n            return;\n        }\n        push(t);\n\
+    \        int left_count = pool[pool[t].l].count;\n        if (pos == left_count)\
+    \ {\n            l = pool[t].l;\n            pool[t].l = 0;\n            update(t);\n\
+    \            r = t;\n            return;\n        }\n        if (pos == left_count\
+    \ + 1) {\n            r = pool[t].r;\n            pool[t].r = 0;\n           \
+    \ update(t);\n            l = t;\n            return;\n        }\n        if (pos\
+    \ <= left_count) {\n            split(pool[t].l, pos, l, pool[t].l);\n       \
+    \     r = t;\n        } else {\n            split(pool[t].r, pos - left_count\
     \ - 1, pool[t].r, r);\n            l = t;\n        }\n        update(t);\n   \
     \ }\n\n    int merge(int l, int r) {\n        if (!l || !r) return l ? l : r;\n\
-    \        push(l);\n        push(r);\n        if (pool[l].priority > pool[r].priority)\
-    \ {\n            pool[l].r = merge(pool[l].r, r);\n            update(l);\n  \
-    \          return l;\n        } else {\n            pool[r].l = merge(l, pool[r].l);\n\
-    \            update(r);\n            return r;\n        }\n    }\n\n    int find_node(int\
-    \ t, int pos) {\n        while (t) {\n            push(t);\n            int left_count\
+    \        if (pool[l].priority > pool[r].priority) {\n            push(l);\n  \
+    \          if (pool[l].r) {\n                pool[l].r = merge(pool[l].r, r);\n\
+    \            } else {\n                pool[l].r = r;\n            }\n       \
+    \     update(l);\n            return l;\n        } else {\n            push(r);\n\
+    \            if (pool[r].l) {\n                pool[r].l = merge(l, pool[r].l);\n\
+    \            } else {\n                pool[r].l = l;\n            }\n       \
+    \     update(r);\n            return r;\n        }\n    }\n\n    int insert_node(int\
+    \ t, int pos, int node) {\n        if (!t) return node;\n        if (pool[node].priority\
+    \ > pool[t].priority) {\n            split(t, pos, pool[node].l, pool[node].r);\n\
+    \            update(node);\n            return node;\n        }\n        push(t);\n\
+    \        int left_count = pool[pool[t].l].count;\n        if (pos <= left_count)\
+    \ {\n            pool[t].l = insert_node(pool[t].l, pos, node);\n        } else\
+    \ {\n            pool[t].r = insert_node(pool[t].r, pos - left_count - 1, node);\n\
+    \        }\n        update(t);\n        return t;\n    }\n\n    int erase_node(int\
+    \ t, int pos) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos < left_count) {\n            pool[t].l = erase_node(pool[t].l,\
+    \ pos);\n            update(t);\n            return t;\n        }\n        if\
+    \ (pos == left_count) {\n            return merge(pool[t].l, pool[t].r);\n   \
+    \     }\n        pool[t].r = erase_node(pool[t].r, pos - left_count - 1);\n  \
+    \      update(t);\n        return t;\n    }\n\n    void set_node(int t, int pos,\
+    \ T value) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos < left_count) {\n            set_node(pool[t].l, pos, std::move(value));\n\
+    \        } else if (pos == left_count) {\n            pool[t].val = std::move(value);\n\
+    \        } else {\n            set_node(pool[t].r, pos - left_count - 1, std::move(value));\n\
+    \        }\n        update(t);\n    }\n\n    void apply_node(int t, int pos, const\
+    \ F& f) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos < left_count) {\n            apply_node(pool[t].l, pos, f);\n\
+    \        } else if (pos == left_count) {\n            pool[t].val = ActedMonoid::mapping(f,\
+    \ pool[t].val);\n        } else {\n            apply_node(pool[t].r, pos - left_count\
+    \ - 1, f);\n        }\n        update(t);\n    }\n\n    int find_node(int t, int\
+    \ pos) {\n        while (t) {\n            push(t);\n            int left_count\
     \ = pool[pool[t].l].count;\n            if (pos < left_count) {\n            \
     \    t = pool[t].l;\n            } else if (pos == left_count) {\n           \
     \     return t;\n            } else {\n                pos -= left_count + 1;\n\
@@ -151,44 +184,40 @@ data:
     \ {\n        return pool[root].count;\n    }\n\n    bool empty() const {\n   \
     \     return size() == 0;\n    }\n\n    void clear() {\n        reset_to_empty();\n\
     \    }\n\n    void insert(int pos, T value) {\n        assert(0 <= pos && pos\
-    \ <= size());\n        int l, r;\n        split(root, pos, l, r);\n        root\
-    \ = merge(merge(l, new_node(std::move(value))), r);\n    }\n\n    void insert(int\
-    \ pos, const std::vector<T>& v) {\n        assert(0 <= pos && pos <= size());\n\
-    \        pool.reserve(pool.size() + v.size());\n        int mid = build_from_vector(v);\n\
+    \ <= size());\n        root = insert_node(root, pos, new_node(std::move(value)));\n\
+    \    }\n\n    void insert(int pos, const std::vector<T>& v) {\n        assert(0\
+    \ <= pos && pos <= size());\n        pool.reserve(pool.size() + v.size());\n \
+    \       int mid = build_from_vector(v);\n        int l, r;\n        split(root,\
+    \ pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n    void insert(int\
+    \ pos, std::vector<T>&& v) {\n        assert(0 <= pos && pos <= size());\n   \
+    \     pool.reserve(pool.size() + v.size());\n        int mid = build_from_vector(std::move(v));\n\
     \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
-    \ mid), r);\n    }\n\n    void insert(int pos, std::vector<T>&& v) {\n       \
-    \ assert(0 <= pos && pos <= size());\n        pool.reserve(pool.size() + v.size());\n\
-    \        int mid = build_from_vector(std::move(v));\n        int l, r;\n     \
-    \   split(root, pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n\
-    \    void insert(int pos, std::initializer_list<T> init) {\n        insert(pos,\
-    \ std::vector<T>(init));\n    }\n\n    void insert(int pos, const DynamicLazyMonoidArray&\
-    \ other) {\n        assert(0 <= pos && pos <= size());\n        if (other.empty())\
-    \ return;\n        pool.reserve(pool.size() + other.size());\n        int mid\
-    \ = clone_subtree_from(other, other.root);\n        int l, r;\n        split(root,\
-    \ pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n    void push_back(T\
-    \ value) {\n        insert(size(), std::move(value));\n    }\n\n    void push_front(T\
-    \ value) {\n        insert(0, std::move(value));\n    }\n\n    void append(const\
-    \ std::vector<T>& v) {\n        insert(size(), v);\n    }\n\n    void append(std::vector<T>&&\
-    \ v) {\n        insert(size(), std::move(v));\n    }\n\n    void append(const\
-    \ DynamicLazyMonoidArray& other) {\n        insert(size(), other);\n    }\n\n\
-    \    void erase(int pos) {\n        assert(0 <= pos && pos < size());\n      \
-    \  erase(pos, pos + 1);\n    }\n\n    void erase(int l, int r) {\n        assert(0\
-    \ <= l && l <= r && r <= size());\n        if (l == r) return;\n        int a,\
-    \ b, c;\n        split(root, l, a, b);\n        split(b, r - l, b, c);\n     \
-    \   root = merge(a, c);\n    }\n\n    void pop_back() {\n        assert(!empty());\n\
-    \        erase(size() - 1);\n    }\n\n    void pop_front() {\n        assert(!empty());\n\
-    \        erase(0);\n    }\n\n    T get(int pos) {\n        assert(0 <= pos &&\
-    \ pos < size());\n        int t = find_node(root, pos);\n        return pool[t].val;\n\
-    \    }\n\n    T operator[](int pos) {\n        return get(pos);\n    }\n\n   \
-    \ T front() {\n        assert(!empty());\n        return get(0);\n    }\n\n  \
-    \  T back() {\n        assert(!empty());\n        return get(size() - 1);\n  \
-    \  }\n\n    void set(int pos, T value) {\n        assert(0 <= pos && pos < size());\n\
-    \        int a, b, c;\n        split(root, pos, a, b);\n        split(b, 1, b,\
-    \ c);\n        pool[b].val = std::move(value);\n        pool[b].prod = pool[b].val;\n\
-    \        pool[b].rprod = pool[b].val;\n        pool[b].lazy = ActedMonoid::op_id();\n\
-    \        pool[b].has_lazy = false;\n        root = merge(merge(a, b), c);\n  \
-    \  }\n\n    void reverse(int l, int r) {\n        assert(0 <= l && l <= r && r\
-    \ <= size());\n        if (l == r) return;\n        int a, b, c;\n        split(root,\
+    \ mid), r);\n    }\n\n    void insert(int pos, std::initializer_list<T> init)\
+    \ {\n        insert(pos, std::vector<T>(init));\n    }\n\n    void insert(int\
+    \ pos, const DynamicLazyMonoidArray& other) {\n        assert(0 <= pos && pos\
+    \ <= size());\n        if (other.empty()) return;\n        pool.reserve(pool.size()\
+    \ + other.size());\n        int mid = clone_subtree_from(other, other.root);\n\
+    \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
+    \ mid), r);\n    }\n\n    void push_back(T value) {\n        insert(size(), std::move(value));\n\
+    \    }\n\n    void push_front(T value) {\n        insert(0, std::move(value));\n\
+    \    }\n\n    void append(const std::vector<T>& v) {\n        insert(size(), v);\n\
+    \    }\n\n    void append(std::vector<T>&& v) {\n        insert(size(), std::move(v));\n\
+    \    }\n\n    void append(const DynamicLazyMonoidArray& other) {\n        insert(size(),\
+    \ other);\n    }\n\n    void erase(int pos) {\n        assert(0 <= pos && pos\
+    \ < size());\n        root = erase_node(root, pos);\n    }\n\n    void erase(int\
+    \ l, int r) {\n        assert(0 <= l && l <= r && r <= size());\n        if (l\
+    \ == r) return;\n        int a, b, c;\n        split(root, l, a, b);\n       \
+    \ split(b, r - l, b, c);\n        root = merge(a, c);\n    }\n\n    void pop_back()\
+    \ {\n        assert(!empty());\n        erase(size() - 1);\n    }\n\n    void\
+    \ pop_front() {\n        assert(!empty());\n        erase(0);\n    }\n\n    T\
+    \ get(int pos) {\n        assert(0 <= pos && pos < size());\n        int t = find_node(root,\
+    \ pos);\n        return pool[t].val;\n    }\n\n    T operator[](int pos) {\n \
+    \       return get(pos);\n    }\n\n    T front() {\n        assert(!empty());\n\
+    \        return get(0);\n    }\n\n    T back() {\n        assert(!empty());\n\
+    \        return get(size() - 1);\n    }\n\n    void set(int pos, T value) {\n\
+    \        assert(0 <= pos && pos < size());\n        set_node(root, pos, std::move(value));\n\
+    \    }\n\n    void reverse(int l, int r) {\n        assert(0 <= l && l <= r &&\
+    \ r <= size());\n        if (l == r) return;\n        int a, b, c;\n        split(root,\
     \ l, a, b);\n        split(b, r - l, b, c);\n        apply_reverse(b);\n     \
     \   root = merge(merge(a, b), c);\n    }\n\n    void reverse() {\n        apply_reverse(root);\n\
     \    }\n\n    void rotate(int l, int m, int r) {\n        assert(0 <= l && l <=\
@@ -196,7 +225,7 @@ data:
     \  int a, b, c, d;\n        split(root, l, a, b);\n        split(b, m - l, b,\
     \ c);\n        split(c, r - m, c, d);\n        root = merge(merge(a, c), merge(b,\
     \ d));\n    }\n\n    void apply(int pos, const F& f) {\n        assert(0 <= pos\
-    \ && pos < size());\n        apply(pos, pos + 1, f);\n    }\n\n    void apply(int\
+    \ && pos < size());\n        apply_node(root, pos, f);\n    }\n\n    void apply(int\
     \ l, int r, const F& f) {\n        assert(0 <= l && l <= r && r <= size());\n\
     \        if (l == r) return;\n        int a, b, c;\n        split(root, l, a,\
     \ b);\n        split(b, r - l, b, c);\n        all_apply(b, f);\n        root\
@@ -259,16 +288,49 @@ data:
     \ pool[t].lazy);\n            pool[t].lazy = ActedMonoid::op_id();\n         \
     \   pool[t].has_lazy = false;\n        }\n    }\n\n    void split(int t, int pos,\
     \ int& l, int& r) {\n        if (!t) {\n            l = r = 0;\n            return;\n\
-    \        }\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
-    \        if (pos <= left_count) {\n            split(pool[t].l, pos, l, pool[t].l);\n\
-    \            r = t;\n        } else {\n            split(pool[t].r, pos - left_count\
+    \        }\n        if (pos == 0) {\n            l = 0;\n            r = t;\n\
+    \            return;\n        }\n        if (pos == pool[t].count) {\n       \
+    \     l = t;\n            r = 0;\n            return;\n        }\n        push(t);\n\
+    \        int left_count = pool[pool[t].l].count;\n        if (pos == left_count)\
+    \ {\n            l = pool[t].l;\n            pool[t].l = 0;\n            update(t);\n\
+    \            r = t;\n            return;\n        }\n        if (pos == left_count\
+    \ + 1) {\n            r = pool[t].r;\n            pool[t].r = 0;\n           \
+    \ update(t);\n            l = t;\n            return;\n        }\n        if (pos\
+    \ <= left_count) {\n            split(pool[t].l, pos, l, pool[t].l);\n       \
+    \     r = t;\n        } else {\n            split(pool[t].r, pos - left_count\
     \ - 1, pool[t].r, r);\n            l = t;\n        }\n        update(t);\n   \
     \ }\n\n    int merge(int l, int r) {\n        if (!l || !r) return l ? l : r;\n\
-    \        push(l);\n        push(r);\n        if (pool[l].priority > pool[r].priority)\
-    \ {\n            pool[l].r = merge(pool[l].r, r);\n            update(l);\n  \
-    \          return l;\n        } else {\n            pool[r].l = merge(l, pool[r].l);\n\
-    \            update(r);\n            return r;\n        }\n    }\n\n    int find_node(int\
-    \ t, int pos) {\n        while (t) {\n            push(t);\n            int left_count\
+    \        if (pool[l].priority > pool[r].priority) {\n            push(l);\n  \
+    \          if (pool[l].r) {\n                pool[l].r = merge(pool[l].r, r);\n\
+    \            } else {\n                pool[l].r = r;\n            }\n       \
+    \     update(l);\n            return l;\n        } else {\n            push(r);\n\
+    \            if (pool[r].l) {\n                pool[r].l = merge(l, pool[r].l);\n\
+    \            } else {\n                pool[r].l = l;\n            }\n       \
+    \     update(r);\n            return r;\n        }\n    }\n\n    int insert_node(int\
+    \ t, int pos, int node) {\n        if (!t) return node;\n        if (pool[node].priority\
+    \ > pool[t].priority) {\n            split(t, pos, pool[node].l, pool[node].r);\n\
+    \            update(node);\n            return node;\n        }\n        push(t);\n\
+    \        int left_count = pool[pool[t].l].count;\n        if (pos <= left_count)\
+    \ {\n            pool[t].l = insert_node(pool[t].l, pos, node);\n        } else\
+    \ {\n            pool[t].r = insert_node(pool[t].r, pos - left_count - 1, node);\n\
+    \        }\n        update(t);\n        return t;\n    }\n\n    int erase_node(int\
+    \ t, int pos) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos < left_count) {\n            pool[t].l = erase_node(pool[t].l,\
+    \ pos);\n            update(t);\n            return t;\n        }\n        if\
+    \ (pos == left_count) {\n            return merge(pool[t].l, pool[t].r);\n   \
+    \     }\n        pool[t].r = erase_node(pool[t].r, pos - left_count - 1);\n  \
+    \      update(t);\n        return t;\n    }\n\n    void set_node(int t, int pos,\
+    \ T value) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos < left_count) {\n            set_node(pool[t].l, pos, std::move(value));\n\
+    \        } else if (pos == left_count) {\n            pool[t].val = std::move(value);\n\
+    \        } else {\n            set_node(pool[t].r, pos - left_count - 1, std::move(value));\n\
+    \        }\n        update(t);\n    }\n\n    void apply_node(int t, int pos, const\
+    \ F& f) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos < left_count) {\n            apply_node(pool[t].l, pos, f);\n\
+    \        } else if (pos == left_count) {\n            pool[t].val = ActedMonoid::mapping(f,\
+    \ pool[t].val);\n        } else {\n            apply_node(pool[t].r, pos - left_count\
+    \ - 1, f);\n        }\n        update(t);\n    }\n\n    int find_node(int t, int\
+    \ pos) {\n        while (t) {\n            push(t);\n            int left_count\
     \ = pool[pool[t].l].count;\n            if (pos < left_count) {\n            \
     \    t = pool[t].l;\n            } else if (pos == left_count) {\n           \
     \     return t;\n            } else {\n                pos -= left_count + 1;\n\
@@ -341,44 +403,40 @@ data:
     \ {\n        return pool[root].count;\n    }\n\n    bool empty() const {\n   \
     \     return size() == 0;\n    }\n\n    void clear() {\n        reset_to_empty();\n\
     \    }\n\n    void insert(int pos, T value) {\n        assert(0 <= pos && pos\
-    \ <= size());\n        int l, r;\n        split(root, pos, l, r);\n        root\
-    \ = merge(merge(l, new_node(std::move(value))), r);\n    }\n\n    void insert(int\
-    \ pos, const std::vector<T>& v) {\n        assert(0 <= pos && pos <= size());\n\
-    \        pool.reserve(pool.size() + v.size());\n        int mid = build_from_vector(v);\n\
+    \ <= size());\n        root = insert_node(root, pos, new_node(std::move(value)));\n\
+    \    }\n\n    void insert(int pos, const std::vector<T>& v) {\n        assert(0\
+    \ <= pos && pos <= size());\n        pool.reserve(pool.size() + v.size());\n \
+    \       int mid = build_from_vector(v);\n        int l, r;\n        split(root,\
+    \ pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n    void insert(int\
+    \ pos, std::vector<T>&& v) {\n        assert(0 <= pos && pos <= size());\n   \
+    \     pool.reserve(pool.size() + v.size());\n        int mid = build_from_vector(std::move(v));\n\
     \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
-    \ mid), r);\n    }\n\n    void insert(int pos, std::vector<T>&& v) {\n       \
-    \ assert(0 <= pos && pos <= size());\n        pool.reserve(pool.size() + v.size());\n\
-    \        int mid = build_from_vector(std::move(v));\n        int l, r;\n     \
-    \   split(root, pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n\
-    \    void insert(int pos, std::initializer_list<T> init) {\n        insert(pos,\
-    \ std::vector<T>(init));\n    }\n\n    void insert(int pos, const DynamicLazyMonoidArray&\
-    \ other) {\n        assert(0 <= pos && pos <= size());\n        if (other.empty())\
-    \ return;\n        pool.reserve(pool.size() + other.size());\n        int mid\
-    \ = clone_subtree_from(other, other.root);\n        int l, r;\n        split(root,\
-    \ pos, l, r);\n        root = merge(merge(l, mid), r);\n    }\n\n    void push_back(T\
-    \ value) {\n        insert(size(), std::move(value));\n    }\n\n    void push_front(T\
-    \ value) {\n        insert(0, std::move(value));\n    }\n\n    void append(const\
-    \ std::vector<T>& v) {\n        insert(size(), v);\n    }\n\n    void append(std::vector<T>&&\
-    \ v) {\n        insert(size(), std::move(v));\n    }\n\n    void append(const\
-    \ DynamicLazyMonoidArray& other) {\n        insert(size(), other);\n    }\n\n\
-    \    void erase(int pos) {\n        assert(0 <= pos && pos < size());\n      \
-    \  erase(pos, pos + 1);\n    }\n\n    void erase(int l, int r) {\n        assert(0\
-    \ <= l && l <= r && r <= size());\n        if (l == r) return;\n        int a,\
-    \ b, c;\n        split(root, l, a, b);\n        split(b, r - l, b, c);\n     \
-    \   root = merge(a, c);\n    }\n\n    void pop_back() {\n        assert(!empty());\n\
-    \        erase(size() - 1);\n    }\n\n    void pop_front() {\n        assert(!empty());\n\
-    \        erase(0);\n    }\n\n    T get(int pos) {\n        assert(0 <= pos &&\
-    \ pos < size());\n        int t = find_node(root, pos);\n        return pool[t].val;\n\
-    \    }\n\n    T operator[](int pos) {\n        return get(pos);\n    }\n\n   \
-    \ T front() {\n        assert(!empty());\n        return get(0);\n    }\n\n  \
-    \  T back() {\n        assert(!empty());\n        return get(size() - 1);\n  \
-    \  }\n\n    void set(int pos, T value) {\n        assert(0 <= pos && pos < size());\n\
-    \        int a, b, c;\n        split(root, pos, a, b);\n        split(b, 1, b,\
-    \ c);\n        pool[b].val = std::move(value);\n        pool[b].prod = pool[b].val;\n\
-    \        pool[b].rprod = pool[b].val;\n        pool[b].lazy = ActedMonoid::op_id();\n\
-    \        pool[b].has_lazy = false;\n        root = merge(merge(a, b), c);\n  \
-    \  }\n\n    void reverse(int l, int r) {\n        assert(0 <= l && l <= r && r\
-    \ <= size());\n        if (l == r) return;\n        int a, b, c;\n        split(root,\
+    \ mid), r);\n    }\n\n    void insert(int pos, std::initializer_list<T> init)\
+    \ {\n        insert(pos, std::vector<T>(init));\n    }\n\n    void insert(int\
+    \ pos, const DynamicLazyMonoidArray& other) {\n        assert(0 <= pos && pos\
+    \ <= size());\n        if (other.empty()) return;\n        pool.reserve(pool.size()\
+    \ + other.size());\n        int mid = clone_subtree_from(other, other.root);\n\
+    \        int l, r;\n        split(root, pos, l, r);\n        root = merge(merge(l,\
+    \ mid), r);\n    }\n\n    void push_back(T value) {\n        insert(size(), std::move(value));\n\
+    \    }\n\n    void push_front(T value) {\n        insert(0, std::move(value));\n\
+    \    }\n\n    void append(const std::vector<T>& v) {\n        insert(size(), v);\n\
+    \    }\n\n    void append(std::vector<T>&& v) {\n        insert(size(), std::move(v));\n\
+    \    }\n\n    void append(const DynamicLazyMonoidArray& other) {\n        insert(size(),\
+    \ other);\n    }\n\n    void erase(int pos) {\n        assert(0 <= pos && pos\
+    \ < size());\n        root = erase_node(root, pos);\n    }\n\n    void erase(int\
+    \ l, int r) {\n        assert(0 <= l && l <= r && r <= size());\n        if (l\
+    \ == r) return;\n        int a, b, c;\n        split(root, l, a, b);\n       \
+    \ split(b, r - l, b, c);\n        root = merge(a, c);\n    }\n\n    void pop_back()\
+    \ {\n        assert(!empty());\n        erase(size() - 1);\n    }\n\n    void\
+    \ pop_front() {\n        assert(!empty());\n        erase(0);\n    }\n\n    T\
+    \ get(int pos) {\n        assert(0 <= pos && pos < size());\n        int t = find_node(root,\
+    \ pos);\n        return pool[t].val;\n    }\n\n    T operator[](int pos) {\n \
+    \       return get(pos);\n    }\n\n    T front() {\n        assert(!empty());\n\
+    \        return get(0);\n    }\n\n    T back() {\n        assert(!empty());\n\
+    \        return get(size() - 1);\n    }\n\n    void set(int pos, T value) {\n\
+    \        assert(0 <= pos && pos < size());\n        set_node(root, pos, std::move(value));\n\
+    \    }\n\n    void reverse(int l, int r) {\n        assert(0 <= l && l <= r &&\
+    \ r <= size());\n        if (l == r) return;\n        int a, b, c;\n        split(root,\
     \ l, a, b);\n        split(b, r - l, b, c);\n        apply_reverse(b);\n     \
     \   root = merge(merge(a, b), c);\n    }\n\n    void reverse() {\n        apply_reverse(root);\n\
     \    }\n\n    void rotate(int l, int m, int r) {\n        assert(0 <= l && l <=\
@@ -386,7 +444,7 @@ data:
     \  int a, b, c, d;\n        split(root, l, a, b);\n        split(b, m - l, b,\
     \ c);\n        split(c, r - m, c, d);\n        root = merge(merge(a, c), merge(b,\
     \ d));\n    }\n\n    void apply(int pos, const F& f) {\n        assert(0 <= pos\
-    \ && pos < size());\n        apply(pos, pos + 1, f);\n    }\n\n    void apply(int\
+    \ && pos < size());\n        apply_node(root, pos, f);\n    }\n\n    void apply(int\
     \ l, int r, const F& f) {\n        assert(0 <= l && l <= r && r <= size());\n\
     \        if (l == r) return;\n        int a, b, c;\n        split(root, l, a,\
     \ b);\n        split(b, r - l, b, c);\n        all_apply(b, f);\n        root\
@@ -411,7 +469,7 @@ data:
   isVerificationFile: false
   path: data_structure/dynamic_lazy_monoid_array.hpp
   requiredBy: []
-  timestamp: '2026-06-14 04:29:03+09:00'
+  timestamp: '2026-06-14 04:39:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
