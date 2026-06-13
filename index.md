@@ -83,7 +83,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/dsu.hpp
       title: Disjoint Set Union (DSU)
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_array.hpp
       title: Dynamic Array (Implicit Treap)
     - icon: ':heavy_check_mark:'
@@ -232,6 +232,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/dsu.test.cpp
       title: verify/data_structure/dsu.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/dynamic_array.test.cpp
+      title: verify/data_structure/dynamic_array.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/lazy_segtree.test.cpp
       title: verify/data_structure/lazy_segtree.test.cpp
