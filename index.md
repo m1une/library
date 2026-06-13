@@ -86,6 +86,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_array.hpp
       title: Dynamic Array (Implicit Treap)
+    - icon: ':warning:'
+      path: data_structure/dynamic_monoid_array.hpp
+      title: Dynamic Monoid Array
     - icon: ':heavy_check_mark:'
       path: data_structure/lazy_segtree.hpp
       title: Lazy Segment Tree
