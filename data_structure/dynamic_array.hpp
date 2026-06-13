@@ -22,7 +22,8 @@ struct DynamicArray {
         bool rev;
 
         Node() : val(T()), priority(0), count(0), l(0), r(0), rev(false) {}
-        Node(T val, int priority) : val(std::move(val)), priority(priority), count(1), l(0), r(0), rev(false) {}
+        Node(T value, int node_priority)
+            : val(std::move(value)), priority(node_priority), count(1), l(0), r(0), rev(false) {}
     };
 
     std::vector<Node> pool;
