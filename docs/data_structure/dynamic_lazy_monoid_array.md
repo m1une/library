@@ -27,19 +27,19 @@ In this document:
   Constructs an empty sequence. ($O(1)$)
 
 * `DynamicLazyMonoidArray(int n)`
-  Constructs a sequence with `n` copies of `ActedMonoid::id()`. ($O(N \log N)$)
+  Constructs a sequence with `n` copies of `ActedMonoid::id()`. ($O(N)$)
 
 * `DynamicLazyMonoidArray(int n, const T& value)`
-  Constructs a sequence with `n` copies of `value`. ($O(N \log N)$)
+  Constructs a sequence with `n` copies of `value`. ($O(N)$)
 
 * `DynamicLazyMonoidArray(const std::vector<T>& v)`
-  Constructs the sequence from acted-monoid values. ($O(N \log N)$)
+  Constructs the sequence from acted-monoid values. ($O(N)$)
 
 * `DynamicLazyMonoidArray(std::vector<T>&& v)`
-  Constructs the sequence by moving acted-monoid values. ($O(N \log N)$)
+  Constructs the sequence by moving acted-monoid values. ($O(N)$)
 
 * `DynamicLazyMonoidArray(const std::vector<U>& v)`
-  Constructs the sequence from another type using `ActedMonoid::make(x)` if available, otherwise `static_cast<T>(x)`. ($O(N \log N)$)
+  Constructs the sequence from another type using `ActedMonoid::make(x)` if available, otherwise `static_cast<T>(x)`. ($O(N)$)
 
 * `DynamicLazyMonoidArray(std::initializer_list<T> init)`
   Constructs the sequence from an initializer list of acted-monoid values. ($O(N \log N)$)
@@ -59,7 +59,7 @@ In this document:
   Inserts `value` before index `pos`. ($O(\log N)$)
 
 * `void insert(int pos, const std::vector<T>& v)`
-  Inserts every value in `v` before index `pos`. ($O(M \log M + \log N)$)
+  Inserts every value in `v` before index `pos`. ($O(M + \log N)$)
 
 * `void insert(int pos, const DynamicLazyMonoidArray& other)`
   Inserts a copy of another sequence before index `pos`. ($O(M + \log N)$)
@@ -68,7 +68,7 @@ In this document:
   Inserts one value at the end or beginning. ($O(\log N)$)
 
 * `void append(const std::vector<T>& v)`
-  Appends all values in `v`. ($O(M \log M + \log N)$)
+  Appends all values in `v`. ($O(M + \log N)$)
 
 * `void append(const DynamicLazyMonoidArray& other)`
   Appends a copy of another sequence. ($O(M + \log N)$)

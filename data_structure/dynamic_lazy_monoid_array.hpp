@@ -4,8 +4,8 @@
 #include <cassert>
 #include <chrono>
 #include <concepts>
+#include <cstdint>
 #include <initializer_list>
-#include <random>
 #include <utility>
 #include <vector>
 
@@ -29,6 +29,7 @@ struct DynamicLazyMonoidArray {
         int count;
         int l, r;
         bool rev;
+        bool has_lazy;
 
         Node()
             : val(ActedMonoid::id()),
@@ -39,7 +40,8 @@ struct DynamicLazyMonoidArray {
               count(0),
               l(0),
               r(0),
-              rev(false) {}
+              rev(false),
+              has_lazy(false) {}
 
         Node(T value, int node_priority)
             : val(std::move(value)),
@@ -50,12 +52,13 @@ struct DynamicLazyMonoidArray {
               count(1),
               l(0),
               r(0),
-              rev(false) {}
+              rev(false),
+              has_lazy(false) {}
     };
 
     std::vector<Node> pool;
     int root;
-    std::mt19937 rng;
+    std::uint32_t rng_state;
 
     template <typename U>
     static T make_value(const U& value) {
@@ -67,8 +70,15 @@ struct DynamicLazyMonoidArray {
     }
 
     int new_node(T value) {
-        pool.push_back(Node(std::move(value), rng()));
+        pool.push_back(Node(std::move(value), next_priority()));
         return int(pool.size()) - 1;
+    }
+
+    int next_priority() {
+        rng_state ^= rng_state << 13;
+        rng_state ^= rng_state >> 17;
+        rng_state ^= rng_state << 5;
+        return int(rng_state);
     }
 
     void update(int t) {
@@ -86,6 +96,7 @@ struct DynamicLazyMonoidArray {
         pool[t].prod = ActedMonoid::mapping(f, pool[t].prod);
         pool[t].rprod = ActedMonoid::mapping(f, pool[t].rprod);
         pool[t].lazy = ActedMonoid::op_comp(f, pool[t].lazy);
+        pool[t].has_lazy = true;
     }
 
     void apply_reverse(int t) {
@@ -102,9 +113,12 @@ struct DynamicLazyMonoidArray {
             apply_reverse(pool[t].r);
             pool[t].rev = false;
         }
-        all_apply(pool[t].l, pool[t].lazy);
-        all_apply(pool[t].r, pool[t].lazy);
-        pool[t].lazy = ActedMonoid::op_id();
+        if (pool[t].has_lazy) {
+            all_apply(pool[t].l, pool[t].lazy);
+            all_apply(pool[t].r, pool[t].lazy);
+            pool[t].lazy = ActedMonoid::op_id();
+            pool[t].has_lazy = false;
+        }
     }
 
     void split(int t, int pos, int& l, int& r) {
@@ -186,29 +200,60 @@ struct DynamicLazyMonoidArray {
         return res;
     }
 
-    int build_from_vector(const std::vector<T>& v) {
-        int res = 0;
-        for (const T& x : v) {
-            res = merge(res, new_node(x));
+    void update_dfs(int t) {
+        if (!t) return;
+        update_dfs(pool[t].l);
+        update_dfs(pool[t].r);
+        update(t);
+    }
+
+    int build_cartesian(int first, int last) {
+        if (first == last) return 0;
+        std::vector<int> stack;
+        stack.reserve(last - first);
+        for (int i = first; i < last; i++) {
+            int left_child = 0;
+            while (!stack.empty() && pool[stack.back()].priority < pool[i].priority) {
+                left_child = stack.back();
+                stack.pop_back();
+            }
+            pool[i].l = left_child;
+            if (!stack.empty()) {
+                pool[stack.back()].r = i;
+            }
+            stack.push_back(i);
         }
+        int res = stack.front();
+        update_dfs(res);
         return res;
     }
 
-    int build_from_vector(std::vector<T>&& v) {
-        int res = 0;
-        for (T& x : v) {
-            res = merge(res, new_node(std::move(x)));
+    int build_from_vector(const std::vector<T>& v) {
+        int first = int(pool.size());
+        pool.reserve(pool.size() + v.size());
+        for (const T& x : v) {
+            new_node(x);
         }
-        return res;
+        return build_cartesian(first, int(pool.size()));
+    }
+
+    int build_from_vector(std::vector<T>&& v) {
+        int first = int(pool.size());
+        pool.reserve(pool.size() + v.size());
+        for (T& x : v) {
+            new_node(std::move(x));
+        }
+        return build_cartesian(first, int(pool.size()));
     }
 
     template <typename U>
     int build_from_values(const std::vector<U>& v) {
-        int res = 0;
+        int first = int(pool.size());
+        pool.reserve(pool.size() + v.size());
         for (const U& x : v) {
-            res = merge(res, new_node(make_value(x)));
+            new_node(make_value(x));
         }
-        return res;
+        return build_cartesian(first, int(pool.size()));
     }
 
     void reset_to_empty() {
@@ -218,14 +263,17 @@ struct DynamicLazyMonoidArray {
     }
 
    public:
-    DynamicLazyMonoidArray() : root(0), rng(std::chrono::steady_clock::now().time_since_epoch().count()) {
+    DynamicLazyMonoidArray()
+        : root(0), rng_state(std::uint32_t(std::chrono::steady_clock::now().time_since_epoch().count())) {
         pool.push_back(Node());
+        if (rng_state == 0) rng_state = 1;
     }
 
-    DynamicLazyMonoidArray(const DynamicLazyMonoidArray& other) : pool(other.pool), root(other.root), rng(other.rng) {}
+    DynamicLazyMonoidArray(const DynamicLazyMonoidArray& other)
+        : pool(other.pool), root(other.root), rng_state(other.rng_state) {}
 
     DynamicLazyMonoidArray(DynamicLazyMonoidArray&& other) noexcept
-        : pool(std::move(other.pool)), root(other.root), rng(std::move(other.rng)) {
+        : pool(std::move(other.pool)), root(other.root), rng_state(other.rng_state) {
         other.reset_to_empty();
     }
 
@@ -233,7 +281,7 @@ struct DynamicLazyMonoidArray {
         if (this != &other) {
             pool = other.pool;
             root = other.root;
-            rng = other.rng;
+            rng_state = other.rng_state;
         }
         return *this;
     }
@@ -242,7 +290,7 @@ struct DynamicLazyMonoidArray {
         if (this != &other) {
             pool = std::move(other.pool);
             root = other.root;
-            rng = std::move(other.rng);
+            rng_state = other.rng_state;
             other.reset_to_empty();
         }
         return *this;
@@ -253,9 +301,11 @@ struct DynamicLazyMonoidArray {
     DynamicLazyMonoidArray(int n, const T& value) : DynamicLazyMonoidArray() {
         assert(0 <= n);
         pool.reserve(n + 1);
+        int first = int(pool.size());
         for (int i = 0; i < n; i++) {
-            root = merge(root, new_node(value));
+            new_node(value);
         }
+        root = build_cartesian(first, int(pool.size()));
     }
 
     explicit DynamicLazyMonoidArray(const std::vector<T>& v) : DynamicLazyMonoidArray() {
@@ -404,6 +454,7 @@ struct DynamicLazyMonoidArray {
         pool[b].prod = pool[b].val;
         pool[b].rprod = pool[b].val;
         pool[b].lazy = ActedMonoid::op_id();
+        pool[b].has_lazy = false;
         root = merge(merge(a, b), c);
     }
 

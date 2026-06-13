@@ -12,6 +12,8 @@ using AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;
 using Array = m1une::data_structure::DynamicLazyMonoidArray<AM>;
 
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     int N, Q;
     cin >> N >> Q;
     vector<int> a(N);
