@@ -13,7 +13,7 @@ contest.
 
 | Directory | Contents |
 | --- | --- |
-| `data_structure/` | Segment trees, sparse table, DSU, ordered sets, and related containers. |
+| `data_structure/` | Segment trees, sparse table, DSU, ordered sets, hash tables, and related containers. |
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
 | `math/`, `string/`, `utilities/` | Standalone helpers. |
