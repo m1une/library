@@ -5,6 +5,7 @@
 "verify/data_structure/dynamic_monoid_array.test.cpp": "2026-06-14 04:44:05 +0900",
 "verify/data_structure/lazy_segtree.test.cpp": "2026-06-13 20:51:48 +0900",
 "verify/data_structure/ordered_multiset.test.cpp": "2026-06-14 04:54:20 +0900",
+"verify/data_structure/ordered_set.test.cpp": "2026-06-14 13:58:34 +0900",
 "verify/data_structure/persistent_treap.test.cpp": "2026-05-29 02:16:20 +0900",
 "verify/data_structure/segtree.test.cpp": "2026-06-13 20:51:48 +0900",
 "verify/data_structure/sparse_table.test.cpp": "2026-06-13 20:51:48 +0900",
