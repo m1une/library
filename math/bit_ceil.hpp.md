@@ -3,12 +3,18 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
+    path: data_structure/dual_segtree.hpp
+    title: Dual Segment Tree
+  - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/segtree.hpp
     title: Segment Tree
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/dual_segtree.test.cpp
+    title: verify/data_structure/dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
@@ -34,9 +40,11 @@ data:
   requiredBy:
   - data_structure/segtree.hpp
   - data_structure/lazy_segtree.hpp
+  - data_structure/dual_segtree.hpp
   timestamp: '2026-06-15 01:47:39+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/dual_segtree.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
   - verify/data_structure/segtree.test.cpp
 documentation_of: math/bit_ceil.hpp

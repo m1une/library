@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/data_structure/dual_segtree.test.cpp
+    title: verify/data_structure/dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
     title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
@@ -121,6 +124,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+  - verify/data_structure/dual_segtree.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
 documentation_of: math/modint.hpp
 layout: document
