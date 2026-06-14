@@ -1,5 +1,5 @@
 ---
-title: Dynamic Array (Implicit Treap)
+title: Dynamic Array
 documentation_of: ../../data_structure/dynamic_array.hpp
 ---
 

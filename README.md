@@ -6,7 +6,7 @@ C++20 library for competitive programming by [m1une](https://atcoder.jp/users/m1
 
 ## Structure
 
-* `data_structure/`: segment trees, sparse table, DSU, treaps, and related containers.
+* `data_structure/`: segment trees, sparse table, DSU, ordered sets, and related containers.
 * `monoid/`: reusable monoids for generic data structures.
 * `acted_monoid/`: acted monoids for lazy segment trees.
 * `math/`, `string/`, `utilities/`: standalone helpers.
