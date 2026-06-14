@@ -95,20 +95,28 @@ title: Monoid Concept
 
 ## Overview
 
-Provides a C++20 `concept` to constrain template arguments for Monoids. This ensures that the given type satisfies the mathematical requirements of a monoid, enabling safer and more readable template instantiations (e.g., in Segment Trees).
+`m1une::monoid::IsMonoid` is the C++20 concept used by generic data structures
+such as `Segtree`. It checks that a type exposes the interface needed by the
+library: a value type, an identity element, and a binary operation.
+
+The concept checks the shape of the interface. The mathematical laws are still
+the user's responsibility:
+
+* `op` should be associative.
+* `id()` should be a left and right identity for `op`.
 
 ## Concept Requirements
 
-To satisfy `m1une::monoid::IsMonoid`, a struct `M` must implement the following:
+To satisfy `m1une::monoid::IsMonoid`, a type `M` must implement:
 
 * `using value_type = T;`
-  An alias for the underlying type of the monoid.
-  
+  The type stored by the monoid.
+
 * `static constexpr T id();`
-  A static function returning the identity element of the monoid.
-  
+  Returns the identity element.
+
 * `static constexpr T op(const T& a, const T& b);`
-  A static function representing the associative binary operation.
+  Combines two values.
 
 ## Example
 
@@ -122,6 +130,5 @@ struct MinMonoid {
     static constexpr int op(const int& a, const int& b) { return std::min(a, b); }
 };
 
-// This assertion will pass at compile time
 static_assert(m1une::monoid::IsMonoid<MinMonoid>);
 ```

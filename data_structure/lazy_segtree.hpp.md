@@ -311,58 +311,86 @@ title: Lazy Segment Tree
 
 ## Overview
 
-A highly generic Lazy Segment Tree that supports both range queries and range updates (modifications) in $O(\log N)$ time. It operates on any Acted Monoid structure that satisfies the `m1une::acted_monoid::IsActedMonoid` concept.
+`m1une::data_structure::LazySegtree` is a generic lazy segment tree for range
+queries and range updates. It is parameterized by an acted monoid: one monoid
+describes how values are combined for queries, and another monoid describes how
+lazy update operators are composed.
+
+Use it when updates affect a whole interval. For point updates only, `Segtree`
+is simpler.
 
 ## Template Parameters
 
-* `ActedMonoid`: A struct representing the mathematical acted monoid, combining the `value_type`, `operator_type`, algebraic identities, internal operations, and the cross-mapping function.
+* `ActedMonoid`: A type satisfying `m1une::acted_monoid::IsActedMonoid`.
+
+The acted monoid must provide:
+
+* `using value_type = T`
+* `using operator_type = F`
+* `id()` and `op(a, b)` for query values
+* `op_id()` and `op_comp(f, g)` for lazy operators
+* `mapping(f, x)` to apply an operator to a value
+
+Ready-made acted monoids are available in `acted_monoid/`.
+
+## Construction
+
+* `LazySegtree()`: creates an empty tree.
+* `LazySegtree(int n)`: creates `n` elements initialized with
+  `ActedMonoid::id()`.
+* `LazySegtree(const std::vector<T>& v)`: builds from acted-monoid values.
+* `LazySegtree(std::vector<T>&& v)`: builds from moved acted-monoid values.
+* `LazySegtree(const std::vector<U>& v)`: builds from another value type when
+  `ActedMonoid::make(value)`, `ActedMonoid::make(value, index)`, or
+  `static_cast<T>(value)` is available.
+
+All non-empty constructors build the tree in $O(N)$ time.
 
 ## Methods
 
-* `LazySegtree(int n)`
-  Initializes an array of size $n$ with the value monoid's identity element. Time complexity: $O(N)$.
-
-* `LazySegtree(const std::vector<T>& v)`
-  Builds the lazy segment tree from the given vector in $O(N)$ time.
-
 * `int size()`
-  Returns the number of elements. Time complexity: $O(1)$.
+  Returns the number of elements. Complexity: $O(1)$.
 
 * `bool empty()`
-  Returns whether the tree is empty. Time complexity: $O(1)$.
+  Returns whether the tree has no elements. Complexity: $O(1)$.
 
 * `void set(int p, T x)`
-  Assigns $x$ to the $p$-th element. Time complexity: $O(\log N)$.
+  Assigns `x` to index `p`. Complexity: $O(\log N)$.
 
 * `T get(int p)`
-  Returns the $p$-th element. Time complexity: $O(\log N)$.
+  Pushes pending lazy updates on the path and returns the value at index `p`.
+  Complexity: $O(\log N)$.
 
 * `T operator[](int p)`
-  Returns the $p$-th element. Time complexity: $O(\log N)$.
+  Returns the value at index `p`. Complexity: $O(\log N)$.
 
 * `T prod(int l, int r)`
-  Returns the result of the monoid operation over the range $[l, r)$. Time complexity: $O(\log N)$.
+  Returns the value monoid product over `[l, r)`. Complexity: $O(\log N)$.
 
 * `T all_prod()`
-  Returns the product of the entire array. Time complexity: $O(1)$.
+  Returns the product of the entire array. Complexity: $O(1)$.
 
 * `std::vector<T> to_vector()`
-  Returns all elements as a vector. Time complexity: $O(N)$.
+  Pushes all pending updates and returns all elements as a vector.
+  Complexity: $O(N)$.
 
 * `std::vector<T> to_vector(int l, int r)`
-  Returns the elements in $[l, r)$ as a vector. Time complexity: $O((r-l)\log N)$.
+  Returns the elements in `[l, r)` as a vector. Complexity:
+  $O((r-l)\log N)$.
 
 * `void apply(int p, F f)`
-  Applies the operator $f$ to the $p$-th element. Time complexity: $O(\log N)$.
+  Applies operator `f` to index `p`. Complexity: $O(\log N)$.
 
 * `void apply(int l, int r, F f)`
-  Applies the operator $f$ to all elements in the range $[l, r)$. Time complexity: $O(\log N)$.
+  Applies operator `f` to every element in `[l, r)`. Complexity: $O(\log N)$.
 
 * `int max_right<G>(int l, G g)`
-  Returns the largest index $r$ such that `g(prod(l, r))` is `true`. Time complexity: $O(\log N)$.
+  Returns the largest index `r` such that `g(prod(l, r))` is `true`.
+  The predicate must satisfy `g(ActedMonoid::id())`. Complexity: $O(\log N)$.
 
 * `int min_left<G>(int r, G g)`
-  Returns the smallest index $l$ such that `g(prod(l, r))` is `true`. Time complexity: $O(\log N)$.
+  Returns the smallest index `l` such that `g(prod(l, r))` is `true`.
+  The predicate must satisfy `g(ActedMonoid::id())`. Complexity: $O(\log N)$.
 
 ## Example
 
@@ -373,21 +401,16 @@ A highly generic Lazy Segment Tree that supports both range queries and range up
 #include <vector>
 
 int main() {
-    int n = 6;
     std::vector<long long> v = {1, 3, 2, 5, 4, 0};
 
-    // Use Range Add Range Min acted monoid
     using AM = m1une::acted_monoid::RangeAddRangeMin<long long>;
     m1une::data_structure::LazySegtree<AM> seg(v);
 
-    // Get min of range [1, 5) -> min(3, 2, 5, 4) = 2
-    std::cout << seg.prod(1, 5) << "\n";
+    std::cout << seg.prod(1, 5) << "\n";  // 2
 
-    // Add 10 to all elements in range [1, 4) -> v becomes {1, 13, 12, 15, 4, 0}
     seg.apply(1, 4, 10);
 
-    // Get min of range [1, 5) -> min(13, 12, 15, 4) = 4
-    std::cout << seg.prod(1, 5) << "\n";
+    std::cout << seg.prod(1, 5) << "\n";  // 4
 
     return 0;
 }

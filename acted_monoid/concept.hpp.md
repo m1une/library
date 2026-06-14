@@ -88,19 +88,45 @@ title: Acted Monoid Concept
 
 ## Overview
 
-An Acted Monoid (also known as a Monoid Action) is a mathematical structure used in data structures like Lazy Segment Trees. It defines how a set of operations (operators) interacts with a set of elements (values). It consists of three parts:
-1. A **Value Monoid**: The monoid over the values of the array.
-2. An **Operator Monoid**: The monoid over the lazy operations applied to the array.
-3. A **Mapping Function**: A function that defines how an operator from the operator monoid is applied to a value from the value monoid.
+`m1une::acted_monoid::IsActedMonoid` is the C++20 concept used by lazy
+propagation data structures such as `LazySegtree`.
+
+An acted monoid has three parts:
+
+1. A value monoid, which combines segment values for queries.
+2. An operator monoid, which combines lazy update operations.
+3. A mapping function, which applies one operator to one value.
+
+For example, in range-add range-sum:
+
+* the value stores `(sum, size)`,
+* the lazy operator stores the amount to add,
+* `mapping(add, value)` increases the sum by `add * size`.
 
 ## Requirements
 
-The `m1une::acted_monoid::IsActedMonoid` concept requires the type to implement the following members:
+The concept requires the type to implement these members:
 
-- `using value_type`: The type of the value elements.
-- `using operator_type`: The type of the operator elements.
-- `static constexpr value_type id()`: Returns the identity element of the value monoid.
-- `static constexpr value_type op(const value_type& a, const value_type& b)`: Returns the result of the binary operation of the value monoid.
-- `static constexpr operator_type op_id()`: Returns the identity element (no-op) of the operator monoid.
-- `static constexpr operator_type op_comp(const operator_type& f, const operator_type& g)`: Returns the composition of two operators $f$ and $g$. The semantics must be $f(g(x))$, meaning $g$ is applied first, then $f$.
-- `static constexpr value_type mapping(const operator_type& f, const value_type& x)`: Returns the result of applying the operator $f$ to the value $x$.
+* `using value_type`
+  The type stored for each segment.
+
+* `using operator_type`
+  The type stored for each lazy operation.
+
+* `static constexpr value_type id()`
+  Returns the identity element of the value monoid.
+
+* `static constexpr value_type op(const value_type& a, const value_type& b)`
+  Combines two segment values.
+
+* `static constexpr operator_type op_id()`
+  Returns the identity operation.
+
+* `static constexpr operator_type op_comp(const operator_type& f, const operator_type& g)`
+  Composes two operators. The order is `f(g(x))`: apply `g` first, then `f`.
+
+* `static constexpr value_type mapping(const operator_type& f, const value_type& x)`
+  Applies operator `f` to value `x`.
+
+The concept checks the interface only. Associativity, identity laws, and the
+interaction between `mapping` and `op` must be satisfied by the implementation.
