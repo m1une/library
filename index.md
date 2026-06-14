@@ -108,6 +108,12 @@ data:
       path: data_structure/persistent_dynamic_array.hpp
       title: Persistent Dynamic Array
     - icon: ':heavy_check_mark:'
+      path: data_structure/persistent_dynamic_lazy_monoid_array.hpp
+      title: Persistent Dynamic Lazy Monoid Array
+    - icon: ':heavy_check_mark:'
+      path: data_structure/persistent_dynamic_monoid_array.hpp
+      title: Persistent Dynamic Monoid Array
+    - icon: ':heavy_check_mark:'
       path: data_structure/persistent_lazy_segtree.hpp
       title: Persistent Lazy Segment Tree
     - icon: ':heavy_check_mark:'
@@ -280,6 +286,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_dynamic_array.test.cpp
       title: verify/data_structure/persistent_dynamic_array.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+      title: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_dynamic_monoid_array.test.cpp
+      title: verify/data_structure/persistent_dynamic_monoid_array.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_lazy_segtree.test.cpp
       title: verify/data_structure/persistent_lazy_segtree.test.cpp

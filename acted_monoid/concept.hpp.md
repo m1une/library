@@ -9,6 +9,9 @@ data:
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
+    path: data_structure/persistent_dynamic_lazy_monoid_array.hpp
+    title: Persistent Dynamic Lazy Monoid Array
+  - icon: ':heavy_check_mark:'
     path: data_structure/persistent_lazy_segtree.hpp
     title: Persistent Lazy Segment Tree
   _extendedVerifiedWith:
@@ -18,6 +21,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+    title: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/persistent_lazy_segtree.test.cpp
     title: verify/data_structure/persistent_lazy_segtree.test.cpp
@@ -58,11 +64,13 @@ data:
   requiredBy:
   - data_structure/lazy_segtree.hpp
   - data_structure/persistent_lazy_segtree.hpp
+  - data_structure/persistent_dynamic_lazy_monoid_array.hpp
   - data_structure/dynamic_lazy_monoid_array.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+  - verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
   - verify/data_structure/persistent_lazy_segtree.test.cpp
 documentation_of: acted_monoid/concept.hpp
