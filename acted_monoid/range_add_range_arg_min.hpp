@@ -33,13 +33,13 @@ struct RangeAddRangeArgMin {
 
     // Mapping
     static constexpr value_type mapping(const operator_type& f, const value_type& x) {
-        if (x.second == -1) return x;  // Do not apply to the identity element
-        return {x.first + f, x.second};
+        if (x.size == 0) return x;
+        return {x.value + f, x.size, x.ord};
     }
 
     // Helper for initializing a leaf node
-    static constexpr value_type make(const T& val, int index) {
-        return BaseMonoid::make(val, index);
+    static constexpr value_type make(const T& val) {
+        return BaseMonoid::make(val);
     }
 };
 

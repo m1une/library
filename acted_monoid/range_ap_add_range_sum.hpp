@@ -10,7 +10,7 @@ template <typename T>
 struct RangeApAddRangeSumNode {
     T sum;
     long long size;
-    T idx_sum;
+    T ord_sum;
 };
 
 template <typename T>
@@ -23,7 +23,7 @@ struct RangeApAddRangeSum {
         return {T(0), 0, T(0)};
     }
     static constexpr value_type op(const value_type& a, const value_type& b) {
-        return {a.sum + b.sum, a.size + b.size, a.idx_sum + b.idx_sum};
+        return {a.sum + b.sum, a.size + b.size, a.ord_sum + b.ord_sum + T(a.size) * T(b.size)};
     }
 
     // Operator Monoid (Add)
@@ -34,15 +34,24 @@ struct RangeApAddRangeSum {
         return {f.first + g.first, f.second + g.second};
     }
 
-    // Mapping: sum += a * idx_sum + b * size
     static constexpr value_type mapping(const operator_type& f, const value_type& x) {
-        return {x.sum + f.first * x.idx_sum + f.second * T(x.size), x.size, x.idx_sum};
+        return mapping(f, x, 0);
     }
 
-    // Helper for initializing a leaf node
-    // Crucial: You MUST pass the 0-based index `idx` during initialization.
-    static constexpr value_type make(const T& val, long long idx) {
-        return {val, 1, T(idx)};
+    static constexpr value_type mapping(const operator_type& f, const value_type& x, long long ord) {
+        return {x.sum + f.first * (x.ord_sum + T(ord) * T(x.size)) + f.second * T(x.size), x.size, x.ord_sum};
+    }
+
+    static constexpr operator_type op_shift(const operator_type& f, long long ord) {
+        return {f.first, f.second + f.first * T(ord)};
+    }
+
+    static constexpr operator_type op_reverse(const operator_type& f, long long size) {
+        return {-f.first, f.second + f.first * T(size - 1)};
+    }
+
+    static constexpr value_type make(const T& val) {
+        return {val, 1, T(0)};
     }
 };
 

@@ -2,6 +2,7 @@
 #define M1UNE_LAZY_SEGTREE_HPP 1
 
 #include <cassert>
+#include <bit>
 #include <concepts>
 #include <utility>
 #include <vector>
@@ -29,9 +30,36 @@ struct LazySegtree {
         _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k + 1]);
     }
 
+    static T mapping_at(const F& f, const T& value, long long ord) {
+        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g, x, i); }) {
+            return ActedMonoid::mapping(f, value, ord);
+        } else {
+            return ActedMonoid::mapping(f, value);
+        }
+    }
+
+    static F shift_operator(const F& f, long long ord) {
+        if constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {
+            return ActedMonoid::op_shift(f, ord);
+        } else {
+            return f;
+        }
+    }
+
+    int node_length(int k) const {
+        int level = std::bit_width((unsigned int)k) - 1;
+        return _size >> level;
+    }
+
+    int node_left(int k) const {
+        int level = std::bit_width((unsigned int)k) - 1;
+        int len = _size >> level;
+        return (k - (1 << level)) * len;
+    }
+
     // Applies the operator f to the node k and updates its lazy tag if it's an internal node.
     void all_apply(int k, F f) {
-        _d[k] = ActedMonoid::mapping(f, _d[k]);
+        _d[k] = mapping_at(f, _d[k], 0);
         if (k < _size) {
             _lz[k] = ActedMonoid::op_comp(f, _lz[k]);
         }
@@ -40,7 +68,7 @@ struct LazySegtree {
     // Propagates the lazy tag of the node k down to its children.
     void push(int k) {
         all_apply(2 * k, _lz[k]);
-        all_apply(2 * k + 1, _lz[k]);
+        all_apply(2 * k + 1, shift_operator(_lz[k], node_length(k) / 2));
         _lz[k] = ActedMonoid::op_id();
     }
 
@@ -184,7 +212,7 @@ struct LazySegtree {
         assert(0 <= p && p < _n);
         p += _size;
         for (int i = _log; i >= 1; i--) push(p >> i);
-        _d[p] = ActedMonoid::mapping(f, _d[p]);
+        _d[p] = mapping_at(f, _d[p], 0);
         for (int i = 1; i <= _log; i++) update(p >> i);
     }
 
@@ -193,6 +221,7 @@ struct LazySegtree {
         assert(0 <= l && l <= r && r <= _n);
         if (l == r) return;
 
+        int base_l = l;
         l += _size;
         r += _size;
 
@@ -204,8 +233,14 @@ struct LazySegtree {
         {
             int l2 = l, r2 = r;
             while (l < r) {
-                if (l & 1) all_apply(l++, f);
-                if (r & 1) all_apply(--r, f);
+                if (l & 1) {
+                    all_apply(l, shift_operator(f, node_left(l) - base_l));
+                    l++;
+                }
+                if (r & 1) {
+                    --r;
+                    all_apply(r, shift_operator(f, node_left(r) - base_l));
+                }
                 l >>= 1;
                 r >>= 1;
             }

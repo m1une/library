@@ -11,7 +11,7 @@ template <typename T>
 struct RangeApUpdateRangeSumNode {
     T sum;
     long long size;
-    T idx_sum;
+    T ord_sum;
 };
 
 template <typename T>
@@ -24,7 +24,7 @@ struct RangeApUpdateRangeSum {
         return {T(0), 0, T(0)};
     }
     static constexpr value_type op(const value_type& a, const value_type& b) {
-        return {a.sum + b.sum, a.size + b.size, a.idx_sum + b.idx_sum};
+        return {a.sum + b.sum, a.size + b.size, a.ord_sum + b.ord_sum + T(a.size) * T(b.size)};
     }
 
     // Operator Monoid (Update)
@@ -36,16 +36,28 @@ struct RangeApUpdateRangeSum {
         return f.has_value() ? f : g;
     }
 
-    // Mapping: sum = a * idx_sum + b * size
     static constexpr value_type mapping(const operator_type& f, const value_type& x) {
-        if (!f.has_value() || x.size == 0) return x;
-        return {f.value().first * x.idx_sum + f.value().second * T(x.size), x.size, x.idx_sum};
+        return mapping(f, x, 0);
     }
 
-    // Helper for initializing a leaf node
-    // Crucial: You MUST pass the 0-based index `idx` during initialization.
-    static constexpr value_type make(const T& val, long long idx) {
-        return {val, 1, T(idx)};
+    static constexpr value_type mapping(const operator_type& f, const value_type& x, long long ord) {
+        if (!f.has_value() || x.size == 0) return x;
+        return {f.value().first * (x.ord_sum + T(ord) * T(x.size)) + f.value().second * T(x.size), x.size,
+                x.ord_sum};
+    }
+
+    static constexpr operator_type op_shift(const operator_type& f, long long ord) {
+        if (!f.has_value()) return f;
+        return std::pair<T, T>{f.value().first, f.value().second + f.value().first * T(ord)};
+    }
+
+    static constexpr operator_type op_reverse(const operator_type& f, long long size) {
+        if (!f.has_value()) return f;
+        return std::pair<T, T>{-f.value().first, f.value().second + f.value().first * T(size - 1)};
+    }
+
+    static constexpr value_type make(const T& val) {
+        return {val, 1, T(0)};
     }
 };
 

@@ -39,6 +39,10 @@ It supports insertion, deletion, reversal, rotation, point assignment, range app
 * `to_vector`
   Dumps a range or the whole sequence without mutating the version. $O(K + \log N)$ for a range, $O(N)$ for all values.
 
+## Notes
+
+Order-aware acted monoids should store relative order information such as `size`, `ord`, or `ord_sum`, not immutable global indices. Arithmetic-progression acted monoids use range-local order; to apply a global formula on `[l, r)`, shift the constant term by `a * l`.
+
 ## Example
 
 ```cpp

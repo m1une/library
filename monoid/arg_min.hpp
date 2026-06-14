@@ -3,32 +3,38 @@
 
 #include <functional>
 #include <limits>
-#include <utility>
 
 namespace m1une {
 namespace monoid {
 
-// Monoid for finding the optimal value (minimum by default) and its corresponding index.
-// Ties are broken by choosing the smaller index.
+template <typename T>
+struct ArgMinNode {
+    T value;
+    long long size;
+    long long ord;
+};
+
+// Monoid for finding the optimal value (minimum by default) and its relative order.
+// Ties are broken by choosing the earlier element.
 template <typename T, T Id = std::numeric_limits<T>::max(), typename Compare = std::less<T>>
 struct ArgMin {
-    using value_type = std::pair<T, int>;
+    using value_type = ArgMinNode<T>;
 
-    // The identity element uses the Id value and an invalid index.
     static constexpr value_type id() {
-        return {Id, -1};
+        return {Id, 0, -1};
     }
 
-    // Merges two elements based on the Compare functor.
     static constexpr value_type op(const value_type& a, const value_type& b) {
-        if (Compare()(a.first, b.first)) return a;
-        if (Compare()(b.first, a.first)) return b;
-        return (a.second < b.second) ? a : b;
+        if (a.size == 0) return b;
+        if (b.size == 0) return a;
+        long long size = a.size + b.size;
+        if (Compare()(a.value, b.value)) return {a.value, size, a.ord};
+        if (Compare()(b.value, a.value)) return {b.value, size, b.ord + a.size};
+        return {a.value, size, a.ord};
     }
 
-    // Helper to create a leaf node.
-    static constexpr value_type make(const T& val, int index) {
-        return {val, index};
+    static constexpr value_type make(const T& val) {
+        return {val, 1, 0};
     }
 };
 

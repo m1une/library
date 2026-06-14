@@ -69,6 +69,30 @@ struct DynamicLazyMonoidArray {
         }
     }
 
+    static T mapping_at(const F& f, const T& value, long long ord) {
+        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g, x, i); }) {
+            return ActedMonoid::mapping(f, value, ord);
+        } else {
+            return ActedMonoid::mapping(f, value);
+        }
+    }
+
+    static F shift_operator(const F& f, long long ord) {
+        if constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {
+            return ActedMonoid::op_shift(f, ord);
+        } else {
+            return f;
+        }
+    }
+
+    static F reverse_operator(const F& f, long long size) {
+        if constexpr (requires(F g, long long n) { ActedMonoid::op_reverse(g, n); }) {
+            return ActedMonoid::op_reverse(f, size);
+        } else {
+            return f;
+        }
+    }
+
     int new_node(T value) {
         pool.push_back(Node(std::move(value), next_priority()));
         return int(pool.size()) - 1;
@@ -92,9 +116,10 @@ struct DynamicLazyMonoidArray {
 
     void all_apply(int t, const F& f) {
         if (!t) return;
-        pool[t].val = ActedMonoid::mapping(f, pool[t].val);
-        pool[t].prod = ActedMonoid::mapping(f, pool[t].prod);
-        pool[t].rprod = ActedMonoid::mapping(f, pool[t].rprod);
+        int left_count = pool[t].rev ? pool[pool[t].r].count : pool[pool[t].l].count;
+        pool[t].val = mapping_at(f, pool[t].val, left_count);
+        pool[t].prod = mapping_at(f, pool[t].prod, 0);
+        pool[t].rprod = mapping_at(reverse_operator(f, pool[t].count), pool[t].rprod, 0);
         pool[t].lazy = ActedMonoid::op_comp(f, pool[t].lazy);
         pool[t].has_lazy = true;
     }
@@ -103,6 +128,9 @@ struct DynamicLazyMonoidArray {
         if (!t) return;
         pool[t].rev = !pool[t].rev;
         std::swap(pool[t].prod, pool[t].rprod);
+        if (pool[t].has_lazy) {
+            pool[t].lazy = reverse_operator(pool[t].lazy, pool[t].count);
+        }
     }
 
     void push(int t) {
@@ -115,7 +143,7 @@ struct DynamicLazyMonoidArray {
         }
         if (pool[t].has_lazy) {
             all_apply(pool[t].l, pool[t].lazy);
-            all_apply(pool[t].r, pool[t].lazy);
+            all_apply(pool[t].r, shift_operator(pool[t].lazy, pool[pool[t].l].count + 1));
             pool[t].lazy = ActedMonoid::op_id();
             pool[t].has_lazy = false;
         }
@@ -238,7 +266,7 @@ struct DynamicLazyMonoidArray {
         if (pos < left_count) {
             apply_node(pool[t].l, pos, f);
         } else if (pos == left_count) {
-            pool[t].val = ActedMonoid::mapping(f, pool[t].val);
+            pool[t].val = mapping_at(f, pool[t].val, 0);
         } else {
             apply_node(pool[t].r, pos - left_count - 1, f);
         }

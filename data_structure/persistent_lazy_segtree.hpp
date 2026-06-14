@@ -63,6 +63,28 @@ struct PersistentLazySegtree {
         }
     }
 
+    static T mapping_at(const F& f, const T& value, long long ord) {
+        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g, x, i); }) {
+            return ActedMonoid::mapping(f, value, ord);
+        } else {
+            return ActedMonoid::mapping(f, value);
+        }
+    }
+
+    static F shift_operator(const F& f, long long ord) {
+        if constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {
+            return ActedMonoid::op_shift(f, ord);
+        } else {
+            return f;
+        }
+    }
+
+    F compose_for_child(const F& inherited, const Node& node, long long ord) const {
+        F shifted = shift_operator(inherited, ord);
+        if (!node.has_lazy) return shifted;
+        return ActedMonoid::op_comp(shifted, shift_operator(node.lazy, ord));
+    }
+
     int build(int l, int r, const std::vector<T>& v) const {
         if (l == r) return 0;
         if (r - l == 1) return new_node(Node(v[l]));
@@ -93,7 +115,7 @@ struct PersistentLazySegtree {
 
     void all_apply_to_node(int t, const F& f) const {
         Node& node = (*_pool)[t];
-        node.val = ActedMonoid::mapping(f, node.val);
+        node.val = mapping_at(f, node.val, 0);
         node.lazy = ActedMonoid::op_comp(f, node.lazy);
         node.has_lazy = true;
     }
@@ -104,11 +126,12 @@ struct PersistentLazySegtree {
         return res;
     }
 
-    void push(int t) const {
+    void push(int t, int l, int r) const {
         Node& node = (*_pool)[t];
         if (!node.has_lazy) return;
+        int m = (l + r) >> 1;
         node.l = all_apply_clone(node.l, node.lazy);
-        node.r = all_apply_clone(node.r, node.lazy);
+        node.r = all_apply_clone(node.r, shift_operator(node.lazy, m - l));
         node.lazy = ActedMonoid::op_id();
         node.has_lazy = false;
     }
@@ -127,7 +150,7 @@ struct PersistentLazySegtree {
             node.has_lazy = false;
             return t;
         }
-        push(t);
+        push(t, l, r);
         int m = (l + r) >> 1;
         if (p < m) {
             (*_pool)[t].l = set_node((*_pool)[t].l, l, m, p, std::move(value));
@@ -142,10 +165,10 @@ struct PersistentLazySegtree {
         if (qr <= l || r <= ql) return t;
         t = clone_node(t);
         if (ql <= l && r <= qr) {
-            all_apply_to_node(t, f);
+            all_apply_to_node(t, shift_operator(f, l - ql));
             return t;
         }
-        push(t);
+        push(t, l, r);
         int m = (l + r) >> 1;
         (*_pool)[t].l = apply_node((*_pool)[t].l, l, m, ql, qr, f);
         (*_pool)[t].r = apply_node((*_pool)[t].r, m, r, ql, qr, f);
@@ -156,23 +179,22 @@ struct PersistentLazySegtree {
     T prod_node(int t, int l, int r, int ql, int qr, const F& inherited) const {
         if (!t || qr <= l || r <= ql) return ActedMonoid::id();
         const Node& node = (*_pool)[t];
-        if (ql <= l && r <= qr) return ActedMonoid::mapping(inherited, node.val);
+        if (ql <= l && r <= qr) return mapping_at(inherited, node.val, 0);
         int m = (l + r) >> 1;
-        F next = node.has_lazy ? ActedMonoid::op_comp(inherited, node.lazy) : inherited;
-        return ActedMonoid::op(prod_node(node.l, l, m, ql, qr, next), prod_node(node.r, m, r, ql, qr, next));
+        return ActedMonoid::op(prod_node(node.l, l, m, ql, qr, compose_for_child(inherited, node, 0)),
+                               prod_node(node.r, m, r, ql, qr, compose_for_child(inherited, node, m - l)));
     }
 
     void collect_node(int t, int l, int r, int ql, int qr, const F& inherited, std::vector<T>& res) const {
         if (!t || qr <= l || r <= ql) return;
         const Node& node = (*_pool)[t];
         if (r - l == 1) {
-            res.push_back(ActedMonoid::mapping(inherited, node.val));
+            res.push_back(mapping_at(inherited, node.val, 0));
             return;
         }
         int m = (l + r) >> 1;
-        F next = node.has_lazy ? ActedMonoid::op_comp(inherited, node.lazy) : inherited;
-        collect_node(node.l, l, m, ql, qr, next, res);
-        collect_node(node.r, m, r, ql, qr, next, res);
+        collect_node(node.l, l, m, ql, qr, compose_for_child(inherited, node, 0), res);
+        collect_node(node.r, m, r, ql, qr, compose_for_child(inherited, node, m - l), res);
     }
 
     template <class G>
@@ -180,7 +202,7 @@ struct PersistentLazySegtree {
         if (r <= ql) return r;
         const Node& node = (*_pool)[t];
         if (ql <= l) {
-            T nxt = ActedMonoid::op(sm, ActedMonoid::mapping(inherited, node.val));
+            T nxt = ActedMonoid::op(sm, mapping_at(inherited, node.val, 0));
             if (g(nxt)) {
                 sm = std::move(nxt);
                 return r;
@@ -188,10 +210,9 @@ struct PersistentLazySegtree {
             if (r - l == 1) return l;
         }
         int m = (l + r) >> 1;
-        F next = node.has_lazy ? ActedMonoid::op_comp(inherited, node.lazy) : inherited;
-        int res = max_right_node(node.l, l, m, ql, sm, next, g);
+        int res = max_right_node(node.l, l, m, ql, sm, compose_for_child(inherited, node, 0), g);
         if (res < m) return res;
-        return max_right_node(node.r, m, r, ql, sm, next, g);
+        return max_right_node(node.r, m, r, ql, sm, compose_for_child(inherited, node, m - l), g);
     }
 
     template <class G>
@@ -199,7 +220,7 @@ struct PersistentLazySegtree {
         if (qr <= l) return l;
         const Node& node = (*_pool)[t];
         if (r <= qr) {
-            T nxt = ActedMonoid::op(ActedMonoid::mapping(inherited, node.val), sm);
+            T nxt = ActedMonoid::op(mapping_at(inherited, node.val, 0), sm);
             if (g(nxt)) {
                 sm = std::move(nxt);
                 return l;
@@ -207,10 +228,9 @@ struct PersistentLazySegtree {
             if (r - l == 1) return r;
         }
         int m = (l + r) >> 1;
-        F next = node.has_lazy ? ActedMonoid::op_comp(inherited, node.lazy) : inherited;
-        int res = min_left_node(node.r, m, r, qr, sm, next, g);
+        int res = min_left_node(node.r, m, r, qr, sm, compose_for_child(inherited, node, m - l), g);
         if (m < res) return res;
-        return min_left_node(node.l, l, m, qr, sm, next, g);
+        return min_left_node(node.l, l, m, qr, sm, compose_for_child(inherited, node, 0), g);
     }
 
    public:

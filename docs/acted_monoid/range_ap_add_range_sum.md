@@ -7,13 +7,13 @@ documentation_of: ../../acted_monoid/range_ap_add_range_sum.hpp
 
 An Acted Monoid that supports adding an arithmetic progression to a range, alongside range sum queries. 
 
-The operator is represented as a function $f(i) = a \cdot i + b$, where $i$ is the original global 0-based index of the array element.
+The operator is represented as a function $f(i) = a \cdot i + b$, where $i$ is the 0-based order inside the updated range.
 
 ### Important Usage Note
 
-Because standard lazy segment trees do not pass array bounds downwards during propagation, the node state (`value_type`) must store the sum of the indices (`idx_sum`) it covers, along with the standard `size`. 
+The node state (`value_type`) stores `size` and the sum of relative orders (`ord_sum`) it covers. This makes it usable in dynamic arrays where global indices change after insertions, deletions, and reversals.
 
-When initializing the leaf nodes, you **must provide the index** of the element to the `make(val, idx)` helper.
+To apply a global formula on `[l, r)`, convert it to range-local form first: `a * global_i + b` becomes `a * local_i + (a * l + b)`.
 
 ## Example
 
@@ -27,24 +27,13 @@ using AM = m1une::acted_monoid::RangeApAddRangeSum<long long>;
 
 int main() {
     std::vector<long long> A = {0, 0, 0, 0, 0};
-    int N = A.size();
-    
-    std::vector<AM::value_type> init_nodes(N);
-    for(int i = 0; i < N; ++i) {
-        // Pass both the initial value AND the current index 'i'
-        init_nodes[i] = AM::make(A[i], i);
-    }
-    
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::data_structure::LazySegtree<AM> seg(A);
 
-    // Add f(i) = 2 * i + 5 to the range [1, 4)
-    // index 1: 2(1) + 5 = 7
-    // index 2: 2(2) + 5 = 9
-    // index 3: 2(3) + 5 = 11
-    // Array becomes: {0, 7, 9, 11, 0}
+    // Add f(i) = 2 * i + 5 to the range [1, 4), where i is local to [1, 4)
+    // Array becomes: {0, 5, 7, 9, 0}
     seg.apply(1, 4, {2, 5});
 
-    // Query sum of range [0, 5) -> 0 + 7 + 9 + 11 + 0 = 27
+    // Query sum of range [0, 5) -> 0 + 5 + 7 + 9 + 0 = 21
     std::cout << seg.prod(0, 5).sum << "\n";
 
     return 0;

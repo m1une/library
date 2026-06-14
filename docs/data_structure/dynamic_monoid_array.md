@@ -116,7 +116,7 @@ In this document:
 
 Unlike `DynamicArray`, this structure does not expose mutable references to elements. Use `set(pos, value)` to update a value so that stored monoid products remain correct.
 
-For monoids whose element depends on the global index, such as an arg-min monoid storing positions, insertions and deletions change indices and require a different design.
+Order-aware monoids should store relative order information such as `size` and `ord`, not immutable global indices. For example, `monoid::ArgMin` returns `ord` relative to the queried range, so it remains valid after insertions, deletions, and reversals.
 
 ## Example
 

@@ -7,14 +7,13 @@ documentation_of: ../../acted_monoid/range_ap_update_range_min_max.hpp
 
 An exceptionally powerful Acted Monoid that supports overwriting a range with an Arithmetic Progression (AP) and querying both the **minimum** and **maximum** values in a range.
 
-The operator replaces existing elements with a linear function $f(i) = a \cdot i + b$, where $i$ is the original global 0-based index of the array element.
+The operator replaces existing elements with a linear function $f(i) = a \cdot i + b$, where $i$ is the 0-based order inside the updated range.
 
 ### Mathematical Mechanism
 
 Unlike AP Addition (which cannot support Min/Max queries because the sum of an arbitrary curve and a line is unpredictable), AP **Update** completely overwrites the segment data with a perfectly straight line. 
 
-Because a linear function is monotonic, the minimum and maximum values over any continuous range will **always** strictly occur at the boundary endpoints (either `left_idx` or `right_idx`). 
-Therefore, by storing the indices of the segment boundaries in the `value_type`, the new Min/Max can be computed in $O(1)$ time simply by evaluating $f(\text{left\_idx})$ and $f(\text{right\_idx})$.
+Because a linear function is monotonic, the minimum and maximum values over any continuous range occur at the boundary endpoints. Therefore, by storing the segment `size`, the new Min/Max can be computed in $O(1)$ time by evaluating the local endpoints.
 
 ## Template Parameters
 
@@ -28,20 +27,18 @@ Therefore, by storing the indices of the segment boundaries in the `value_type`,
   The state maintained in each segment tree node:
   * `min_val`: The minimum scalar within the range.
   * `max_val`: The maximum scalar within the range.
-  * `left_idx`: The globally smallest index this node covers.
-  * `right_idx`: The globally largest index this node covers.
+  * `size`: The number of elements in the range.
 * `using operator_type = std::optional<std::pair<T, T>>;`
   An optional pair representing the linear coefficient and addend `{a, b}` for the overwrite function $f(i) = a \cdot i + b$.
 
 ## Element Creation
 
-When initializing the leaf nodes, you **must provide the global index** of the element to the `make(val, idx)` helper.
+Leaf nodes are initialized with `make(val)` or by constructing a data structure directly from raw values.
 
-### `static constexpr value_type make(const T& val, long long idx)`
+### `static constexpr value_type make(const T& val)`
 * **Parameters:**
   * `val`: The initial scalar value of the element.
-  * `idx`: The 0-based global index of the element.
-* **Returns:** A fully initialized node where boundaries and min/max values converge on a single element.
+* **Returns:** A fully initialized single-element node.
 
 ## Example
 
@@ -57,27 +54,16 @@ using AM = m1une::acted_monoid::RangeApUpdateRangeMinMax<long long>;
 
 int main() {
     std::vector<long long> A = {10, 5, 20, 15, 30};
-    int N = A.size();
-    
-    std::vector<AM::value_type> init_nodes(N);
-    for(int i = 0; i < N; ++i) {
-        init_nodes[i] = AM::make(A[i], i);
-    }
-    
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::data_structure::LazySegtree<AM> seg(A);
 
-    // Overwrite the range [1, 5) with a decreasing arithmetic progression: f(i) = -3 * i + 100
-    // index 1: -3(1) + 100 = 97
-    // index 2: -3(2) + 100 = 94
-    // index 3: -3(3) + 100 = 91
-    // index 4: -3(4) + 100 = 88
-    // Array conceptually becomes: {10, 97, 94, 91, 88}
+    // Overwrite the range [1, 5) with f(i) = -3 * i + 100, where i is local to [1, 5)
+    // Array conceptually becomes: {10, 100, 97, 94, 91}
     seg.apply(1, 5, std::optional<std::pair<long long, long long>>({-3, 100}));
 
-    // Query Min/Max of range [2, 5) -> Elements: {94, 91, 88}
+    // Query Min/Max of range [2, 5) -> Elements: {97, 94, 91}
     auto q = seg.prod(2, 5);
-    std::cout << "Min: " << q.min_val << "\n"; // Output: 88
-    std::cout << "Max: " << q.max_val << "\n"; // Output: 94
+    std::cout << "Min: " << q.min_val << "\n"; // Output: 91
+    std::cout << "Max: " << q.max_val << "\n"; // Output: 97
 
     return 0;
 }

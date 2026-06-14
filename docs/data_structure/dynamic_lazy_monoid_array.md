@@ -132,7 +132,7 @@ Array a(std::vector<long long>(n, 0)); // uses AM::make(x)
 Array b(n, AM::make(0));               // explicit leaf value
 ```
 
-For acted monoids whose value depends on the global index, such as arithmetic-progression actions storing positions, insertions and deletions change indices and require a different design.
+Order-aware acted monoids should store relative order information such as `size`, `ord`, or `ord_sum`, not immutable global indices. Arithmetic-progression acted monoids use range-local order; to apply a global formula on `[l, r)`, shift the constant term by `a * l`.
 
 ## Example
 
