@@ -65,33 +65,49 @@ data:
     \   }\n\n    template <typename U>\n    static T make_value(const U& value) {\n\
     \        if constexpr (requires(U x) { ActedMonoid::make(x); }) {\n          \
     \  return ActedMonoid::make(value);\n        } else {\n            return static_cast<T>(value);\n\
-    \        }\n    }\n\n    NodePtr make_node(T val, int priority, bool rev, NodePtr\
-    \ l, NodePtr r) const {\n        return std::make_shared<Node>(std::move(val),\
+    \        }\n    }\n\n    static T mapping_at(const F& f, const T& value, long\
+    \ long ord) {\n        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g,\
+    \ x, i); }) {\n            return ActedMonoid::mapping(f, value, ord);\n     \
+    \   } else {\n            return ActedMonoid::mapping(f, value);\n        }\n\
+    \    }\n\n    static F shift_operator(const F& f, long long ord) {\n        if\
+    \ constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {\n\
+    \            return ActedMonoid::op_shift(f, ord);\n        } else {\n       \
+    \     return f;\n        }\n    }\n\n    static F reverse_operator(const F& f,\
+    \ long long size) {\n        if constexpr (requires(F g, long long n) { ActedMonoid::op_reverse(g,\
+    \ n); }) {\n            return ActedMonoid::op_reverse(f, size);\n        } else\
+    \ {\n            return f;\n        }\n    }\n\n    static F compose_for_child(const\
+    \ F& inherited, const NodePtr& t, long long ord) {\n        F shifted = shift_operator(inherited,\
+    \ ord);\n        if (!t->has_lazy) return shifted;\n        return ActedMonoid::op_comp(shifted,\
+    \ shift_operator(t->lazy, ord));\n    }\n\n    NodePtr make_node(T val, int priority,\
+    \ bool rev, NodePtr l, NodePtr r) const {\n        return std::make_shared<Node>(std::move(val),\
     \ priority, rev, std::move(l), std::move(r));\n    }\n\n    NodePtr make_raw_node(T\
     \ val, T prod, T rprod, F lazy, int priority, int count, bool rev, bool has_lazy,\n\
     \                          NodePtr l, NodePtr r) const {\n        return std::make_shared<Node>(std::move(val),\
     \ std::move(prod), std::move(rprod), std::move(lazy), priority,\n            \
     \                          count, rev, has_lazy, std::move(l), std::move(r));\n\
     \    }\n\n    NodePtr reversed_node(const NodePtr& t) const {\n        if (!t)\
-    \ return nullptr;\n        return make_raw_node(t->val, t->rprod, t->prod, t->lazy,\
-    \ t->priority, t->count, !t->rev, t->has_lazy, t->l,\n                       \
-    \      t->r);\n    }\n\n    NodePtr all_apply(const NodePtr& t, const F& f) const\
-    \ {\n        if (!t) return nullptr;\n        return make_raw_node(ActedMonoid::mapping(f,\
-    \ t->val), ActedMonoid::mapping(f, t->prod),\n                             ActedMonoid::mapping(f,\
-    \ t->rprod), ActedMonoid::op_comp(f, t->lazy), t->priority,\n                \
-    \             t->count, t->rev, true, t->l, t->r);\n    }\n\n    NodePtr push(const\
-    \ NodePtr& t) const {\n        if (!t) return nullptr;\n        if (!t->rev &&\
-    \ !t->has_lazy) return t;\n        NodePtr l = t->l;\n        NodePtr r = t->r;\n\
-    \        if (t->rev) {\n            std::swap(l, r);\n            l = reversed_node(l);\n\
-    \            r = reversed_node(r);\n        }\n        if (t->has_lazy) {\n  \
-    \          l = all_apply(l, t->lazy);\n            r = all_apply(r, t->lazy);\n\
-    \        }\n        return make_node(t->val, t->priority, false, std::move(l),\
-    \ std::move(r));\n    }\n\n    NodePtr merge(const NodePtr& l, const NodePtr&\
-    \ r) const {\n        if (!l || !r) return l ? l : r;\n        if (l->priority\
-    \ > r->priority) {\n            NodePtr t = push(l);\n            return make_node(t->val,\
-    \ t->priority, false, t->l, merge(t->r, r));\n        }\n        NodePtr t = push(r);\n\
-    \        return make_node(t->val, t->priority, false, merge(l, t->l), t->r);\n\
-    \    }\n\n    std::pair<NodePtr, NodePtr> split(const NodePtr& t, int pos) const\
+    \ return nullptr;\n        F lazy = t->has_lazy ? reverse_operator(t->lazy, t->count)\
+    \ : t->lazy;\n        return make_raw_node(t->val, t->rprod, t->prod, lazy, t->priority,\
+    \ t->count, !t->rev, t->has_lazy, t->l,\n                             t->r);\n\
+    \    }\n\n    NodePtr all_apply(const NodePtr& t, const F& f) const {\n      \
+    \  if (!t) return nullptr;\n        int left_count = t->rev ? subtree_size(t->r)\
+    \ : subtree_size(t->l);\n        return make_raw_node(mapping_at(f, t->val, left_count),\
+    \ mapping_at(f, t->prod, 0),\n                             mapping_at(reverse_operator(f,\
+    \ t->count), t->rprod, 0),\n                             ActedMonoid::op_comp(f,\
+    \ t->lazy), t->priority, t->count, t->rev, true, t->l, t->r);\n    }\n\n    NodePtr\
+    \ push(const NodePtr& t) const {\n        if (!t) return nullptr;\n        if\
+    \ (!t->rev && !t->has_lazy) return t;\n        NodePtr l = t->l;\n        NodePtr\
+    \ r = t->r;\n        if (t->rev) {\n            std::swap(l, r);\n           \
+    \ l = reversed_node(l);\n            r = reversed_node(r);\n        }\n      \
+    \  if (t->has_lazy) {\n            l = all_apply(l, t->lazy);\n            r =\
+    \ all_apply(r, shift_operator(t->lazy, subtree_size(l) + 1));\n        }\n   \
+    \     return make_node(t->val, t->priority, false, std::move(l), std::move(r));\n\
+    \    }\n\n    NodePtr merge(const NodePtr& l, const NodePtr& r) const {\n    \
+    \    if (!l || !r) return l ? l : r;\n        if (l->priority > r->priority) {\n\
+    \            NodePtr t = push(l);\n            return make_node(t->val, t->priority,\
+    \ false, t->l, merge(t->r, r));\n        }\n        NodePtr t = push(r);\n   \
+    \     return make_node(t->val, t->priority, false, merge(l, t->l), t->r);\n  \
+    \  }\n\n    std::pair<NodePtr, NodePtr> split(const NodePtr& t, int pos) const\
     \ {\n        if (!t) return {nullptr, nullptr};\n        NodePtr u = push(t);\n\
     \        int left_count = subtree_size(u->l);\n        if (pos <= left_count)\
     \ {\n            auto [a, b] = split(u->l, pos);\n            return {a, make_node(u->val,\
@@ -108,42 +124,42 @@ data:
     \ {\n        while (t) {\n            bool cur_reversed = reversed ^ t->rev;\n\
     \            NodePtr l = cur_reversed ? t->r : t->l;\n            NodePtr r =\
     \ cur_reversed ? t->l : t->r;\n            int left_count = subtree_size(l);\n\
-    \            if (pos < left_count) {\n                if (t->has_lazy) inherited\
-    \ = ActedMonoid::op_comp(inherited, t->lazy);\n                t = std::move(l);\n\
-    \                reversed = cur_reversed;\n            } else if (pos == left_count)\
-    \ {\n                return ActedMonoid::mapping(inherited, t->val);\n       \
-    \     } else {\n                if (t->has_lazy) inherited = ActedMonoid::op_comp(inherited,\
-    \ t->lazy);\n                pos -= left_count + 1;\n                t = std::move(r);\n\
-    \                reversed = cur_reversed;\n            }\n        }\n        return\
-    \ ActedMonoid::id();\n    }\n\n    T prod_dfs(const NodePtr& t, int ql, int qr,\
-    \ int offset, const F& inherited, bool reversed = false) const {\n        if (!t\
-    \ || qr <= offset || offset + t->count <= ql) return ActedMonoid::id();\n    \
-    \    bool cur_reversed = reversed ^ t->rev;\n        if (ql <= offset && offset\
-    \ + t->count <= qr) {\n            return ActedMonoid::mapping(inherited, reversed\
-    \ ? t->rprod : t->prod);\n        }\n        const NodePtr& l = cur_reversed ?\
-    \ t->r : t->l;\n        const NodePtr& r = cur_reversed ? t->l : t->r;\n     \
-    \   F next = t->has_lazy ? ActedMonoid::op_comp(inherited, t->lazy) : inherited;\n\
-    \        int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
-    \        T res = prod_dfs(l, ql, qr, offset, next, cur_reversed);\n        if\
-    \ (ql <= node_pos && node_pos < qr) res = ActedMonoid::op(res, ActedMonoid::mapping(inherited,\
-    \ t->val));\n        return ActedMonoid::op(res, prod_dfs(r, ql, qr, node_pos\
-    \ + 1, next, cur_reversed));\n    }\n\n    void dump_dfs(const NodePtr& t, std::vector<T>&\
-    \ res, const F& inherited, bool reversed = false) const {\n        if (!t) return;\n\
-    \        bool cur_reversed = reversed ^ t->rev;\n        const NodePtr& l = cur_reversed\
+    \            if (pos < left_count) {\n                inherited = compose_for_child(inherited,\
+    \ t, 0);\n                t = std::move(l);\n                reversed = cur_reversed;\n\
+    \            } else if (pos == left_count) {\n                return mapping_at(inherited,\
+    \ t->val, left_count);\n            } else {\n                pos -= left_count\
+    \ + 1;\n                inherited = compose_for_child(inherited, t, left_count\
+    \ + 1);\n                t = std::move(r);\n                reversed = cur_reversed;\n\
+    \            }\n        }\n        return ActedMonoid::id();\n    }\n\n    T prod_dfs(const\
+    \ NodePtr& t, int ql, int qr, int offset, const F& inherited, bool reversed =\
+    \ false) const {\n        if (!t || qr <= offset || offset + t->count <= ql) return\
+    \ ActedMonoid::id();\n        bool cur_reversed = reversed ^ t->rev;\n       \
+    \ if (ql <= offset && offset + t->count <= qr) {\n            return mapping_at(inherited,\
+    \ reversed ? t->rprod : t->prod, 0);\n        }\n        const NodePtr& l = cur_reversed\
     \ ? t->r : t->l;\n        const NodePtr& r = cur_reversed ? t->l : t->r;\n   \
-    \     F next = t->has_lazy ? ActedMonoid::op_comp(inherited, t->lazy) : inherited;\n\
-    \        dump_dfs(l, res, next, cur_reversed);\n        res.push_back(ActedMonoid::mapping(inherited,\
-    \ t->val));\n        dump_dfs(r, res, next, cur_reversed);\n    }\n\n    void\
-    \ dump_range_dfs(const NodePtr& t, int ql, int qr, int offset, std::vector<T>&\
+    \     int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
+    \        T res = prod_dfs(l, ql, qr, offset, compose_for_child(inherited, t, 0),\
+    \ cur_reversed);\n        if (ql <= node_pos && node_pos < qr) res = ActedMonoid::op(res,\
+    \ mapping_at(inherited, t->val, left_count));\n        return ActedMonoid::op(\n\
+    \            res, prod_dfs(r, ql, qr, node_pos + 1, compose_for_child(inherited,\
+    \ t, left_count + 1), cur_reversed));\n    }\n\n    void dump_dfs(const NodePtr&\
+    \ t, std::vector<T>& res, const F& inherited, bool reversed = false) const {\n\
+    \        if (!t) return;\n        bool cur_reversed = reversed ^ t->rev;\n   \
+    \     const NodePtr& l = cur_reversed ? t->r : t->l;\n        const NodePtr& r\
+    \ = cur_reversed ? t->l : t->r;\n        int left_count = subtree_size(l);\n \
+    \       dump_dfs(l, res, compose_for_child(inherited, t, 0), cur_reversed);\n\
+    \        res.push_back(mapping_at(inherited, t->val, left_count));\n        dump_dfs(r,\
+    \ res, compose_for_child(inherited, t, left_count + 1), cur_reversed);\n    }\n\
+    \n    void dump_range_dfs(const NodePtr& t, int ql, int qr, int offset, std::vector<T>&\
     \ res, const F& inherited,\n                        bool reversed = false) const\
     \ {\n        if (!t || qr <= offset || offset + t->count <= ql) return;\n    \
     \    bool cur_reversed = reversed ^ t->rev;\n        const NodePtr& l = cur_reversed\
     \ ? t->r : t->l;\n        const NodePtr& r = cur_reversed ? t->l : t->r;\n   \
-    \     F next = t->has_lazy ? ActedMonoid::op_comp(inherited, t->lazy) : inherited;\n\
-    \        int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
-    \        dump_range_dfs(l, ql, qr, offset, res, next, cur_reversed);\n       \
-    \ if (ql <= node_pos && node_pos < qr) res.push_back(ActedMonoid::mapping(inherited,\
-    \ t->val));\n        dump_range_dfs(r, ql, qr, node_pos + 1, res, next, cur_reversed);\n\
+    \     int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
+    \        dump_range_dfs(l, ql, qr, offset, res, compose_for_child(inherited, t,\
+    \ 0), cur_reversed);\n        if (ql <= node_pos && node_pos < qr) res.push_back(mapping_at(inherited,\
+    \ t->val, left_count));\n        dump_range_dfs(r, ql, qr, node_pos + 1, res,\
+    \ compose_for_child(inherited, t, left_count + 1),\n                       cur_reversed);\n\
     \    }\n\n    NodePtr build_from_nodes(std::vector<BuildNode>& nodes, int t) const\
     \ {\n        if (t == -1) return nullptr;\n        NodePtr l = build_from_nodes(nodes,\
     \ nodes[t].l);\n        NodePtr r = build_from_nodes(nodes, nodes[t].r);\n   \
@@ -305,33 +321,49 @@ data:
     \   }\n\n    template <typename U>\n    static T make_value(const U& value) {\n\
     \        if constexpr (requires(U x) { ActedMonoid::make(x); }) {\n          \
     \  return ActedMonoid::make(value);\n        } else {\n            return static_cast<T>(value);\n\
-    \        }\n    }\n\n    NodePtr make_node(T val, int priority, bool rev, NodePtr\
-    \ l, NodePtr r) const {\n        return std::make_shared<Node>(std::move(val),\
+    \        }\n    }\n\n    static T mapping_at(const F& f, const T& value, long\
+    \ long ord) {\n        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g,\
+    \ x, i); }) {\n            return ActedMonoid::mapping(f, value, ord);\n     \
+    \   } else {\n            return ActedMonoid::mapping(f, value);\n        }\n\
+    \    }\n\n    static F shift_operator(const F& f, long long ord) {\n        if\
+    \ constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {\n\
+    \            return ActedMonoid::op_shift(f, ord);\n        } else {\n       \
+    \     return f;\n        }\n    }\n\n    static F reverse_operator(const F& f,\
+    \ long long size) {\n        if constexpr (requires(F g, long long n) { ActedMonoid::op_reverse(g,\
+    \ n); }) {\n            return ActedMonoid::op_reverse(f, size);\n        } else\
+    \ {\n            return f;\n        }\n    }\n\n    static F compose_for_child(const\
+    \ F& inherited, const NodePtr& t, long long ord) {\n        F shifted = shift_operator(inherited,\
+    \ ord);\n        if (!t->has_lazy) return shifted;\n        return ActedMonoid::op_comp(shifted,\
+    \ shift_operator(t->lazy, ord));\n    }\n\n    NodePtr make_node(T val, int priority,\
+    \ bool rev, NodePtr l, NodePtr r) const {\n        return std::make_shared<Node>(std::move(val),\
     \ priority, rev, std::move(l), std::move(r));\n    }\n\n    NodePtr make_raw_node(T\
     \ val, T prod, T rprod, F lazy, int priority, int count, bool rev, bool has_lazy,\n\
     \                          NodePtr l, NodePtr r) const {\n        return std::make_shared<Node>(std::move(val),\
     \ std::move(prod), std::move(rprod), std::move(lazy), priority,\n            \
     \                          count, rev, has_lazy, std::move(l), std::move(r));\n\
     \    }\n\n    NodePtr reversed_node(const NodePtr& t) const {\n        if (!t)\
-    \ return nullptr;\n        return make_raw_node(t->val, t->rprod, t->prod, t->lazy,\
-    \ t->priority, t->count, !t->rev, t->has_lazy, t->l,\n                       \
-    \      t->r);\n    }\n\n    NodePtr all_apply(const NodePtr& t, const F& f) const\
-    \ {\n        if (!t) return nullptr;\n        return make_raw_node(ActedMonoid::mapping(f,\
-    \ t->val), ActedMonoid::mapping(f, t->prod),\n                             ActedMonoid::mapping(f,\
-    \ t->rprod), ActedMonoid::op_comp(f, t->lazy), t->priority,\n                \
-    \             t->count, t->rev, true, t->l, t->r);\n    }\n\n    NodePtr push(const\
-    \ NodePtr& t) const {\n        if (!t) return nullptr;\n        if (!t->rev &&\
-    \ !t->has_lazy) return t;\n        NodePtr l = t->l;\n        NodePtr r = t->r;\n\
-    \        if (t->rev) {\n            std::swap(l, r);\n            l = reversed_node(l);\n\
-    \            r = reversed_node(r);\n        }\n        if (t->has_lazy) {\n  \
-    \          l = all_apply(l, t->lazy);\n            r = all_apply(r, t->lazy);\n\
-    \        }\n        return make_node(t->val, t->priority, false, std::move(l),\
-    \ std::move(r));\n    }\n\n    NodePtr merge(const NodePtr& l, const NodePtr&\
-    \ r) const {\n        if (!l || !r) return l ? l : r;\n        if (l->priority\
-    \ > r->priority) {\n            NodePtr t = push(l);\n            return make_node(t->val,\
-    \ t->priority, false, t->l, merge(t->r, r));\n        }\n        NodePtr t = push(r);\n\
-    \        return make_node(t->val, t->priority, false, merge(l, t->l), t->r);\n\
-    \    }\n\n    std::pair<NodePtr, NodePtr> split(const NodePtr& t, int pos) const\
+    \ return nullptr;\n        F lazy = t->has_lazy ? reverse_operator(t->lazy, t->count)\
+    \ : t->lazy;\n        return make_raw_node(t->val, t->rprod, t->prod, lazy, t->priority,\
+    \ t->count, !t->rev, t->has_lazy, t->l,\n                             t->r);\n\
+    \    }\n\n    NodePtr all_apply(const NodePtr& t, const F& f) const {\n      \
+    \  if (!t) return nullptr;\n        int left_count = t->rev ? subtree_size(t->r)\
+    \ : subtree_size(t->l);\n        return make_raw_node(mapping_at(f, t->val, left_count),\
+    \ mapping_at(f, t->prod, 0),\n                             mapping_at(reverse_operator(f,\
+    \ t->count), t->rprod, 0),\n                             ActedMonoid::op_comp(f,\
+    \ t->lazy), t->priority, t->count, t->rev, true, t->l, t->r);\n    }\n\n    NodePtr\
+    \ push(const NodePtr& t) const {\n        if (!t) return nullptr;\n        if\
+    \ (!t->rev && !t->has_lazy) return t;\n        NodePtr l = t->l;\n        NodePtr\
+    \ r = t->r;\n        if (t->rev) {\n            std::swap(l, r);\n           \
+    \ l = reversed_node(l);\n            r = reversed_node(r);\n        }\n      \
+    \  if (t->has_lazy) {\n            l = all_apply(l, t->lazy);\n            r =\
+    \ all_apply(r, shift_operator(t->lazy, subtree_size(l) + 1));\n        }\n   \
+    \     return make_node(t->val, t->priority, false, std::move(l), std::move(r));\n\
+    \    }\n\n    NodePtr merge(const NodePtr& l, const NodePtr& r) const {\n    \
+    \    if (!l || !r) return l ? l : r;\n        if (l->priority > r->priority) {\n\
+    \            NodePtr t = push(l);\n            return make_node(t->val, t->priority,\
+    \ false, t->l, merge(t->r, r));\n        }\n        NodePtr t = push(r);\n   \
+    \     return make_node(t->val, t->priority, false, merge(l, t->l), t->r);\n  \
+    \  }\n\n    std::pair<NodePtr, NodePtr> split(const NodePtr& t, int pos) const\
     \ {\n        if (!t) return {nullptr, nullptr};\n        NodePtr u = push(t);\n\
     \        int left_count = subtree_size(u->l);\n        if (pos <= left_count)\
     \ {\n            auto [a, b] = split(u->l, pos);\n            return {a, make_node(u->val,\
@@ -348,42 +380,42 @@ data:
     \ {\n        while (t) {\n            bool cur_reversed = reversed ^ t->rev;\n\
     \            NodePtr l = cur_reversed ? t->r : t->l;\n            NodePtr r =\
     \ cur_reversed ? t->l : t->r;\n            int left_count = subtree_size(l);\n\
-    \            if (pos < left_count) {\n                if (t->has_lazy) inherited\
-    \ = ActedMonoid::op_comp(inherited, t->lazy);\n                t = std::move(l);\n\
-    \                reversed = cur_reversed;\n            } else if (pos == left_count)\
-    \ {\n                return ActedMonoid::mapping(inherited, t->val);\n       \
-    \     } else {\n                if (t->has_lazy) inherited = ActedMonoid::op_comp(inherited,\
-    \ t->lazy);\n                pos -= left_count + 1;\n                t = std::move(r);\n\
-    \                reversed = cur_reversed;\n            }\n        }\n        return\
-    \ ActedMonoid::id();\n    }\n\n    T prod_dfs(const NodePtr& t, int ql, int qr,\
-    \ int offset, const F& inherited, bool reversed = false) const {\n        if (!t\
-    \ || qr <= offset || offset + t->count <= ql) return ActedMonoid::id();\n    \
-    \    bool cur_reversed = reversed ^ t->rev;\n        if (ql <= offset && offset\
-    \ + t->count <= qr) {\n            return ActedMonoid::mapping(inherited, reversed\
-    \ ? t->rprod : t->prod);\n        }\n        const NodePtr& l = cur_reversed ?\
-    \ t->r : t->l;\n        const NodePtr& r = cur_reversed ? t->l : t->r;\n     \
-    \   F next = t->has_lazy ? ActedMonoid::op_comp(inherited, t->lazy) : inherited;\n\
-    \        int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
-    \        T res = prod_dfs(l, ql, qr, offset, next, cur_reversed);\n        if\
-    \ (ql <= node_pos && node_pos < qr) res = ActedMonoid::op(res, ActedMonoid::mapping(inherited,\
-    \ t->val));\n        return ActedMonoid::op(res, prod_dfs(r, ql, qr, node_pos\
-    \ + 1, next, cur_reversed));\n    }\n\n    void dump_dfs(const NodePtr& t, std::vector<T>&\
-    \ res, const F& inherited, bool reversed = false) const {\n        if (!t) return;\n\
-    \        bool cur_reversed = reversed ^ t->rev;\n        const NodePtr& l = cur_reversed\
+    \            if (pos < left_count) {\n                inherited = compose_for_child(inherited,\
+    \ t, 0);\n                t = std::move(l);\n                reversed = cur_reversed;\n\
+    \            } else if (pos == left_count) {\n                return mapping_at(inherited,\
+    \ t->val, left_count);\n            } else {\n                pos -= left_count\
+    \ + 1;\n                inherited = compose_for_child(inherited, t, left_count\
+    \ + 1);\n                t = std::move(r);\n                reversed = cur_reversed;\n\
+    \            }\n        }\n        return ActedMonoid::id();\n    }\n\n    T prod_dfs(const\
+    \ NodePtr& t, int ql, int qr, int offset, const F& inherited, bool reversed =\
+    \ false) const {\n        if (!t || qr <= offset || offset + t->count <= ql) return\
+    \ ActedMonoid::id();\n        bool cur_reversed = reversed ^ t->rev;\n       \
+    \ if (ql <= offset && offset + t->count <= qr) {\n            return mapping_at(inherited,\
+    \ reversed ? t->rprod : t->prod, 0);\n        }\n        const NodePtr& l = cur_reversed\
     \ ? t->r : t->l;\n        const NodePtr& r = cur_reversed ? t->l : t->r;\n   \
-    \     F next = t->has_lazy ? ActedMonoid::op_comp(inherited, t->lazy) : inherited;\n\
-    \        dump_dfs(l, res, next, cur_reversed);\n        res.push_back(ActedMonoid::mapping(inherited,\
-    \ t->val));\n        dump_dfs(r, res, next, cur_reversed);\n    }\n\n    void\
-    \ dump_range_dfs(const NodePtr& t, int ql, int qr, int offset, std::vector<T>&\
+    \     int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
+    \        T res = prod_dfs(l, ql, qr, offset, compose_for_child(inherited, t, 0),\
+    \ cur_reversed);\n        if (ql <= node_pos && node_pos < qr) res = ActedMonoid::op(res,\
+    \ mapping_at(inherited, t->val, left_count));\n        return ActedMonoid::op(\n\
+    \            res, prod_dfs(r, ql, qr, node_pos + 1, compose_for_child(inherited,\
+    \ t, left_count + 1), cur_reversed));\n    }\n\n    void dump_dfs(const NodePtr&\
+    \ t, std::vector<T>& res, const F& inherited, bool reversed = false) const {\n\
+    \        if (!t) return;\n        bool cur_reversed = reversed ^ t->rev;\n   \
+    \     const NodePtr& l = cur_reversed ? t->r : t->l;\n        const NodePtr& r\
+    \ = cur_reversed ? t->l : t->r;\n        int left_count = subtree_size(l);\n \
+    \       dump_dfs(l, res, compose_for_child(inherited, t, 0), cur_reversed);\n\
+    \        res.push_back(mapping_at(inherited, t->val, left_count));\n        dump_dfs(r,\
+    \ res, compose_for_child(inherited, t, left_count + 1), cur_reversed);\n    }\n\
+    \n    void dump_range_dfs(const NodePtr& t, int ql, int qr, int offset, std::vector<T>&\
     \ res, const F& inherited,\n                        bool reversed = false) const\
     \ {\n        if (!t || qr <= offset || offset + t->count <= ql) return;\n    \
     \    bool cur_reversed = reversed ^ t->rev;\n        const NodePtr& l = cur_reversed\
     \ ? t->r : t->l;\n        const NodePtr& r = cur_reversed ? t->l : t->r;\n   \
-    \     F next = t->has_lazy ? ActedMonoid::op_comp(inherited, t->lazy) : inherited;\n\
-    \        int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
-    \        dump_range_dfs(l, ql, qr, offset, res, next, cur_reversed);\n       \
-    \ if (ql <= node_pos && node_pos < qr) res.push_back(ActedMonoid::mapping(inherited,\
-    \ t->val));\n        dump_range_dfs(r, ql, qr, node_pos + 1, res, next, cur_reversed);\n\
+    \     int left_count = subtree_size(l);\n        int node_pos = offset + left_count;\n\
+    \        dump_range_dfs(l, ql, qr, offset, res, compose_for_child(inherited, t,\
+    \ 0), cur_reversed);\n        if (ql <= node_pos && node_pos < qr) res.push_back(mapping_at(inherited,\
+    \ t->val, left_count));\n        dump_range_dfs(r, ql, qr, node_pos + 1, res,\
+    \ compose_for_child(inherited, t, left_count + 1),\n                       cur_reversed);\n\
     \    }\n\n    NodePtr build_from_nodes(std::vector<BuildNode>& nodes, int t) const\
     \ {\n        if (t == -1) return nullptr;\n        NodePtr l = build_from_nodes(nodes,\
     \ nodes[t].l);\n        NodePtr r = build_from_nodes(nodes, nodes[t].r);\n   \
@@ -512,7 +544,7 @@ data:
   isVerificationFile: false
   path: data_structure/persistent_dynamic_lazy_monoid_array.hpp
   requiredBy: []
-  timestamp: '2026-06-15 02:04:13+09:00'
+  timestamp: '2026-06-15 02:20:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
@@ -556,6 +588,10 @@ It supports insertion, deletion, reversal, rotation, point assignment, range app
 
 * `to_vector`
   Dumps a range or the whole sequence without mutating the version. $O(K + \log N)$ for a range, $O(N)$ for all values.
+
+## Notes
+
+Order-aware acted monoids should store relative order information such as `size`, `ord`, or `ord_sum`, not immutable global indices. Arithmetic-progression acted monoids use range-local order; to apply a global formula on `[l, r)`, shift the constant term by `a * l`.
 
 ## Example
 

@@ -47,44 +47,58 @@ data:
     \ U>\n    static T make_value(const U& value) {\n        if constexpr (requires(U\
     \ x) { ActedMonoid::make(x); }) {\n            return ActedMonoid::make(value);\n\
     \        } else {\n            return static_cast<T>(value);\n        }\n    }\n\
-    \n    int new_node(T value) {\n        pool.push_back(Node(std::move(value), next_priority()));\n\
-    \        return int(pool.size()) - 1;\n    }\n\n    int next_priority() {\n  \
-    \      rng_state ^= rng_state << 13;\n        rng_state ^= rng_state >> 17;\n\
-    \        rng_state ^= rng_state << 5;\n        return int(rng_state);\n    }\n\
-    \n    void update(int t) {\n        if (!t) return;\n        int l = pool[t].l;\n\
-    \        int r = pool[t].r;\n        pool[t].count = 1 + pool[l].count + pool[r].count;\n\
-    \        pool[t].prod = ActedMonoid::op(ActedMonoid::op(pool[l].prod, pool[t].val),\
-    \ pool[r].prod);\n        pool[t].rprod = ActedMonoid::op(ActedMonoid::op(pool[r].rprod,\
-    \ pool[t].val), pool[l].rprod);\n    }\n\n    void all_apply(int t, const F& f)\
-    \ {\n        if (!t) return;\n        pool[t].val = ActedMonoid::mapping(f, pool[t].val);\n\
-    \        pool[t].prod = ActedMonoid::mapping(f, pool[t].prod);\n        pool[t].rprod\
-    \ = ActedMonoid::mapping(f, pool[t].rprod);\n        pool[t].lazy = ActedMonoid::op_comp(f,\
-    \ pool[t].lazy);\n        pool[t].has_lazy = true;\n    }\n\n    void apply_reverse(int\
-    \ t) {\n        if (!t) return;\n        pool[t].rev = !pool[t].rev;\n       \
-    \ std::swap(pool[t].prod, pool[t].rprod);\n    }\n\n    void push(int t) {\n \
-    \       if (!t) return;\n        if (pool[t].rev) {\n            std::swap(pool[t].l,\
-    \ pool[t].r);\n            apply_reverse(pool[t].l);\n            apply_reverse(pool[t].r);\n\
+    \n    static T mapping_at(const F& f, const T& value, long long ord) {\n     \
+    \   if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g, x,\
+    \ i); }) {\n            return ActedMonoid::mapping(f, value, ord);\n        }\
+    \ else {\n            return ActedMonoid::mapping(f, value);\n        }\n    }\n\
+    \n    static F shift_operator(const F& f, long long ord) {\n        if constexpr\
+    \ (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {\n          \
+    \  return ActedMonoid::op_shift(f, ord);\n        } else {\n            return\
+    \ f;\n        }\n    }\n\n    static F reverse_operator(const F& f, long long\
+    \ size) {\n        if constexpr (requires(F g, long long n) { ActedMonoid::op_reverse(g,\
+    \ n); }) {\n            return ActedMonoid::op_reverse(f, size);\n        } else\
+    \ {\n            return f;\n        }\n    }\n\n    int new_node(T value) {\n\
+    \        pool.push_back(Node(std::move(value), next_priority()));\n        return\
+    \ int(pool.size()) - 1;\n    }\n\n    int next_priority() {\n        rng_state\
+    \ ^= rng_state << 13;\n        rng_state ^= rng_state >> 17;\n        rng_state\
+    \ ^= rng_state << 5;\n        return int(rng_state);\n    }\n\n    void update(int\
+    \ t) {\n        if (!t) return;\n        int l = pool[t].l;\n        int r = pool[t].r;\n\
+    \        pool[t].count = 1 + pool[l].count + pool[r].count;\n        pool[t].prod\
+    \ = ActedMonoid::op(ActedMonoid::op(pool[l].prod, pool[t].val), pool[r].prod);\n\
+    \        pool[t].rprod = ActedMonoid::op(ActedMonoid::op(pool[r].rprod, pool[t].val),\
+    \ pool[l].rprod);\n    }\n\n    void all_apply(int t, const F& f) {\n        if\
+    \ (!t) return;\n        int left_count = pool[t].rev ? pool[pool[t].r].count :\
+    \ pool[pool[t].l].count;\n        pool[t].val = mapping_at(f, pool[t].val, left_count);\n\
+    \        pool[t].prod = mapping_at(f, pool[t].prod, 0);\n        pool[t].rprod\
+    \ = mapping_at(reverse_operator(f, pool[t].count), pool[t].rprod, 0);\n      \
+    \  pool[t].lazy = ActedMonoid::op_comp(f, pool[t].lazy);\n        pool[t].has_lazy\
+    \ = true;\n    }\n\n    void apply_reverse(int t) {\n        if (!t) return;\n\
+    \        pool[t].rev = !pool[t].rev;\n        std::swap(pool[t].prod, pool[t].rprod);\n\
+    \        if (pool[t].has_lazy) {\n            pool[t].lazy = reverse_operator(pool[t].lazy,\
+    \ pool[t].count);\n        }\n    }\n\n    void push(int t) {\n        if (!t)\
+    \ return;\n        if (pool[t].rev) {\n            std::swap(pool[t].l, pool[t].r);\n\
+    \            apply_reverse(pool[t].l);\n            apply_reverse(pool[t].r);\n\
     \            pool[t].rev = false;\n        }\n        if (pool[t].has_lazy) {\n\
     \            all_apply(pool[t].l, pool[t].lazy);\n            all_apply(pool[t].r,\
-    \ pool[t].lazy);\n            pool[t].lazy = ActedMonoid::op_id();\n         \
-    \   pool[t].has_lazy = false;\n        }\n    }\n\n    void split(int t, int pos,\
-    \ int& l, int& r) {\n        if (!t) {\n            l = r = 0;\n            return;\n\
-    \        }\n        if (pos == 0) {\n            l = 0;\n            r = t;\n\
-    \            return;\n        }\n        if (pos == pool[t].count) {\n       \
-    \     l = t;\n            r = 0;\n            return;\n        }\n        push(t);\n\
-    \        int left_count = pool[pool[t].l].count;\n        if (pos == left_count)\
-    \ {\n            l = pool[t].l;\n            pool[t].l = 0;\n            update(t);\n\
-    \            r = t;\n            return;\n        }\n        if (pos == left_count\
-    \ + 1) {\n            r = pool[t].r;\n            pool[t].r = 0;\n           \
-    \ update(t);\n            l = t;\n            return;\n        }\n        if (pos\
-    \ <= left_count) {\n            split(pool[t].l, pos, l, pool[t].l);\n       \
-    \     r = t;\n        } else {\n            split(pool[t].r, pos - left_count\
-    \ - 1, pool[t].r, r);\n            l = t;\n        }\n        update(t);\n   \
-    \ }\n\n    int merge(int l, int r) {\n        if (!l || !r) return l ? l : r;\n\
-    \        if (pool[l].priority > pool[r].priority) {\n            push(l);\n  \
-    \          if (pool[l].r) {\n                pool[l].r = merge(pool[l].r, r);\n\
-    \            } else {\n                pool[l].r = r;\n            }\n       \
-    \     update(l);\n            return l;\n        } else {\n            push(r);\n\
+    \ shift_operator(pool[t].lazy, pool[pool[t].l].count + 1));\n            pool[t].lazy\
+    \ = ActedMonoid::op_id();\n            pool[t].has_lazy = false;\n        }\n\
+    \    }\n\n    void split(int t, int pos, int& l, int& r) {\n        if (!t) {\n\
+    \            l = r = 0;\n            return;\n        }\n        if (pos == 0)\
+    \ {\n            l = 0;\n            r = t;\n            return;\n        }\n\
+    \        if (pos == pool[t].count) {\n            l = t;\n            r = 0;\n\
+    \            return;\n        }\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos == left_count) {\n            l = pool[t].l;\n            pool[t].l\
+    \ = 0;\n            update(t);\n            r = t;\n            return;\n    \
+    \    }\n        if (pos == left_count + 1) {\n            r = pool[t].r;\n   \
+    \         pool[t].r = 0;\n            update(t);\n            l = t;\n       \
+    \     return;\n        }\n        if (pos <= left_count) {\n            split(pool[t].l,\
+    \ pos, l, pool[t].l);\n            r = t;\n        } else {\n            split(pool[t].r,\
+    \ pos - left_count - 1, pool[t].r, r);\n            l = t;\n        }\n      \
+    \  update(t);\n    }\n\n    int merge(int l, int r) {\n        if (!l || !r) return\
+    \ l ? l : r;\n        if (pool[l].priority > pool[r].priority) {\n           \
+    \ push(l);\n            if (pool[l].r) {\n                pool[l].r = merge(pool[l].r,\
+    \ r);\n            } else {\n                pool[l].r = r;\n            }\n \
+    \           update(l);\n            return l;\n        } else {\n            push(r);\n\
     \            if (pool[r].l) {\n                pool[r].l = merge(l, pool[r].l);\n\
     \            } else {\n                pool[r].l = l;\n            }\n       \
     \     update(r);\n            return r;\n        }\n    }\n\n    int insert_node(int\
@@ -108,10 +122,10 @@ data:
     \        }\n        update(t);\n    }\n\n    void apply_node(int t, int pos, const\
     \ F& f) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
     \        if (pos < left_count) {\n            apply_node(pool[t].l, pos, f);\n\
-    \        } else if (pos == left_count) {\n            pool[t].val = ActedMonoid::mapping(f,\
-    \ pool[t].val);\n        } else {\n            apply_node(pool[t].r, pos - left_count\
-    \ - 1, f);\n        }\n        update(t);\n    }\n\n    int find_node(int t, int\
-    \ pos) {\n        while (t) {\n            push(t);\n            int left_count\
+    \        } else if (pos == left_count) {\n            pool[t].val = mapping_at(f,\
+    \ pool[t].val, 0);\n        } else {\n            apply_node(pool[t].r, pos -\
+    \ left_count - 1, f);\n        }\n        update(t);\n    }\n\n    int find_node(int\
+    \ t, int pos) {\n        while (t) {\n            push(t);\n            int left_count\
     \ = pool[pool[t].l].count;\n            if (pos < left_count) {\n            \
     \    t = pool[t].l;\n            } else if (pos == left_count) {\n           \
     \     return t;\n            } else {\n                pos -= left_count + 1;\n\
@@ -266,44 +280,58 @@ data:
     \ U>\n    static T make_value(const U& value) {\n        if constexpr (requires(U\
     \ x) { ActedMonoid::make(x); }) {\n            return ActedMonoid::make(value);\n\
     \        } else {\n            return static_cast<T>(value);\n        }\n    }\n\
-    \n    int new_node(T value) {\n        pool.push_back(Node(std::move(value), next_priority()));\n\
-    \        return int(pool.size()) - 1;\n    }\n\n    int next_priority() {\n  \
-    \      rng_state ^= rng_state << 13;\n        rng_state ^= rng_state >> 17;\n\
-    \        rng_state ^= rng_state << 5;\n        return int(rng_state);\n    }\n\
-    \n    void update(int t) {\n        if (!t) return;\n        int l = pool[t].l;\n\
-    \        int r = pool[t].r;\n        pool[t].count = 1 + pool[l].count + pool[r].count;\n\
-    \        pool[t].prod = ActedMonoid::op(ActedMonoid::op(pool[l].prod, pool[t].val),\
-    \ pool[r].prod);\n        pool[t].rprod = ActedMonoid::op(ActedMonoid::op(pool[r].rprod,\
-    \ pool[t].val), pool[l].rprod);\n    }\n\n    void all_apply(int t, const F& f)\
-    \ {\n        if (!t) return;\n        pool[t].val = ActedMonoid::mapping(f, pool[t].val);\n\
-    \        pool[t].prod = ActedMonoid::mapping(f, pool[t].prod);\n        pool[t].rprod\
-    \ = ActedMonoid::mapping(f, pool[t].rprod);\n        pool[t].lazy = ActedMonoid::op_comp(f,\
-    \ pool[t].lazy);\n        pool[t].has_lazy = true;\n    }\n\n    void apply_reverse(int\
-    \ t) {\n        if (!t) return;\n        pool[t].rev = !pool[t].rev;\n       \
-    \ std::swap(pool[t].prod, pool[t].rprod);\n    }\n\n    void push(int t) {\n \
-    \       if (!t) return;\n        if (pool[t].rev) {\n            std::swap(pool[t].l,\
-    \ pool[t].r);\n            apply_reverse(pool[t].l);\n            apply_reverse(pool[t].r);\n\
+    \n    static T mapping_at(const F& f, const T& value, long long ord) {\n     \
+    \   if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g, x,\
+    \ i); }) {\n            return ActedMonoid::mapping(f, value, ord);\n        }\
+    \ else {\n            return ActedMonoid::mapping(f, value);\n        }\n    }\n\
+    \n    static F shift_operator(const F& f, long long ord) {\n        if constexpr\
+    \ (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {\n          \
+    \  return ActedMonoid::op_shift(f, ord);\n        } else {\n            return\
+    \ f;\n        }\n    }\n\n    static F reverse_operator(const F& f, long long\
+    \ size) {\n        if constexpr (requires(F g, long long n) { ActedMonoid::op_reverse(g,\
+    \ n); }) {\n            return ActedMonoid::op_reverse(f, size);\n        } else\
+    \ {\n            return f;\n        }\n    }\n\n    int new_node(T value) {\n\
+    \        pool.push_back(Node(std::move(value), next_priority()));\n        return\
+    \ int(pool.size()) - 1;\n    }\n\n    int next_priority() {\n        rng_state\
+    \ ^= rng_state << 13;\n        rng_state ^= rng_state >> 17;\n        rng_state\
+    \ ^= rng_state << 5;\n        return int(rng_state);\n    }\n\n    void update(int\
+    \ t) {\n        if (!t) return;\n        int l = pool[t].l;\n        int r = pool[t].r;\n\
+    \        pool[t].count = 1 + pool[l].count + pool[r].count;\n        pool[t].prod\
+    \ = ActedMonoid::op(ActedMonoid::op(pool[l].prod, pool[t].val), pool[r].prod);\n\
+    \        pool[t].rprod = ActedMonoid::op(ActedMonoid::op(pool[r].rprod, pool[t].val),\
+    \ pool[l].rprod);\n    }\n\n    void all_apply(int t, const F& f) {\n        if\
+    \ (!t) return;\n        int left_count = pool[t].rev ? pool[pool[t].r].count :\
+    \ pool[pool[t].l].count;\n        pool[t].val = mapping_at(f, pool[t].val, left_count);\n\
+    \        pool[t].prod = mapping_at(f, pool[t].prod, 0);\n        pool[t].rprod\
+    \ = mapping_at(reverse_operator(f, pool[t].count), pool[t].rprod, 0);\n      \
+    \  pool[t].lazy = ActedMonoid::op_comp(f, pool[t].lazy);\n        pool[t].has_lazy\
+    \ = true;\n    }\n\n    void apply_reverse(int t) {\n        if (!t) return;\n\
+    \        pool[t].rev = !pool[t].rev;\n        std::swap(pool[t].prod, pool[t].rprod);\n\
+    \        if (pool[t].has_lazy) {\n            pool[t].lazy = reverse_operator(pool[t].lazy,\
+    \ pool[t].count);\n        }\n    }\n\n    void push(int t) {\n        if (!t)\
+    \ return;\n        if (pool[t].rev) {\n            std::swap(pool[t].l, pool[t].r);\n\
+    \            apply_reverse(pool[t].l);\n            apply_reverse(pool[t].r);\n\
     \            pool[t].rev = false;\n        }\n        if (pool[t].has_lazy) {\n\
     \            all_apply(pool[t].l, pool[t].lazy);\n            all_apply(pool[t].r,\
-    \ pool[t].lazy);\n            pool[t].lazy = ActedMonoid::op_id();\n         \
-    \   pool[t].has_lazy = false;\n        }\n    }\n\n    void split(int t, int pos,\
-    \ int& l, int& r) {\n        if (!t) {\n            l = r = 0;\n            return;\n\
-    \        }\n        if (pos == 0) {\n            l = 0;\n            r = t;\n\
-    \            return;\n        }\n        if (pos == pool[t].count) {\n       \
-    \     l = t;\n            r = 0;\n            return;\n        }\n        push(t);\n\
-    \        int left_count = pool[pool[t].l].count;\n        if (pos == left_count)\
-    \ {\n            l = pool[t].l;\n            pool[t].l = 0;\n            update(t);\n\
-    \            r = t;\n            return;\n        }\n        if (pos == left_count\
-    \ + 1) {\n            r = pool[t].r;\n            pool[t].r = 0;\n           \
-    \ update(t);\n            l = t;\n            return;\n        }\n        if (pos\
-    \ <= left_count) {\n            split(pool[t].l, pos, l, pool[t].l);\n       \
-    \     r = t;\n        } else {\n            split(pool[t].r, pos - left_count\
-    \ - 1, pool[t].r, r);\n            l = t;\n        }\n        update(t);\n   \
-    \ }\n\n    int merge(int l, int r) {\n        if (!l || !r) return l ? l : r;\n\
-    \        if (pool[l].priority > pool[r].priority) {\n            push(l);\n  \
-    \          if (pool[l].r) {\n                pool[l].r = merge(pool[l].r, r);\n\
-    \            } else {\n                pool[l].r = r;\n            }\n       \
-    \     update(l);\n            return l;\n        } else {\n            push(r);\n\
+    \ shift_operator(pool[t].lazy, pool[pool[t].l].count + 1));\n            pool[t].lazy\
+    \ = ActedMonoid::op_id();\n            pool[t].has_lazy = false;\n        }\n\
+    \    }\n\n    void split(int t, int pos, int& l, int& r) {\n        if (!t) {\n\
+    \            l = r = 0;\n            return;\n        }\n        if (pos == 0)\
+    \ {\n            l = 0;\n            r = t;\n            return;\n        }\n\
+    \        if (pos == pool[t].count) {\n            l = t;\n            r = 0;\n\
+    \            return;\n        }\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
+    \        if (pos == left_count) {\n            l = pool[t].l;\n            pool[t].l\
+    \ = 0;\n            update(t);\n            r = t;\n            return;\n    \
+    \    }\n        if (pos == left_count + 1) {\n            r = pool[t].r;\n   \
+    \         pool[t].r = 0;\n            update(t);\n            l = t;\n       \
+    \     return;\n        }\n        if (pos <= left_count) {\n            split(pool[t].l,\
+    \ pos, l, pool[t].l);\n            r = t;\n        } else {\n            split(pool[t].r,\
+    \ pos - left_count - 1, pool[t].r, r);\n            l = t;\n        }\n      \
+    \  update(t);\n    }\n\n    int merge(int l, int r) {\n        if (!l || !r) return\
+    \ l ? l : r;\n        if (pool[l].priority > pool[r].priority) {\n           \
+    \ push(l);\n            if (pool[l].r) {\n                pool[l].r = merge(pool[l].r,\
+    \ r);\n            } else {\n                pool[l].r = r;\n            }\n \
+    \           update(l);\n            return l;\n        } else {\n            push(r);\n\
     \            if (pool[r].l) {\n                pool[r].l = merge(l, pool[r].l);\n\
     \            } else {\n                pool[r].l = l;\n            }\n       \
     \     update(r);\n            return r;\n        }\n    }\n\n    int insert_node(int\
@@ -327,10 +355,10 @@ data:
     \        }\n        update(t);\n    }\n\n    void apply_node(int t, int pos, const\
     \ F& f) {\n        push(t);\n        int left_count = pool[pool[t].l].count;\n\
     \        if (pos < left_count) {\n            apply_node(pool[t].l, pos, f);\n\
-    \        } else if (pos == left_count) {\n            pool[t].val = ActedMonoid::mapping(f,\
-    \ pool[t].val);\n        } else {\n            apply_node(pool[t].r, pos - left_count\
-    \ - 1, f);\n        }\n        update(t);\n    }\n\n    int find_node(int t, int\
-    \ pos) {\n        while (t) {\n            push(t);\n            int left_count\
+    \        } else if (pos == left_count) {\n            pool[t].val = mapping_at(f,\
+    \ pool[t].val, 0);\n        } else {\n            apply_node(pool[t].r, pos -\
+    \ left_count - 1, f);\n        }\n        update(t);\n    }\n\n    int find_node(int\
+    \ t, int pos) {\n        while (t) {\n            push(t);\n            int left_count\
     \ = pool[pool[t].l].count;\n            if (pos < left_count) {\n            \
     \    t = pool[t].l;\n            } else if (pos == left_count) {\n           \
     \     return t;\n            } else {\n                pos -= left_count + 1;\n\
@@ -469,7 +497,7 @@ data:
   isVerificationFile: false
   path: data_structure/dynamic_lazy_monoid_array.hpp
   requiredBy: []
-  timestamp: '2026-06-14 04:39:58+09:00'
+  timestamp: '2026-06-15 02:20:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
@@ -607,7 +635,7 @@ Array a(std::vector<long long>(n, 0)); // uses AM::make(x)
 Array b(n, AM::make(0));               // explicit leaf value
 ```
 
-For acted monoids whose value depends on the global index, such as arithmetic-progression actions storing positions, insertions and deletions change indices and require a different design.
+Order-aware acted monoids should store relative order information such as `size`, `ord`, or `ord_sum`, not immutable global indices. Arithmetic-progression acted monoids use range-local order; to apply a global formula on `[l, r)`, shift the constant term by `a * l`.
 
 ## Example
 

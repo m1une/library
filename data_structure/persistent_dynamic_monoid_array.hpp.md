@@ -470,6 +470,10 @@ Each node stores both forward and reversed products, so range reversal works for
 * `to_vector`
   Dumps a range or the whole sequence. $O(K + \log N)$ for a range, $O(N)$ for all values.
 
+## Notes
+
+Order-aware monoids should store relative order information such as `size` and `ord`, not immutable global indices. For example, `monoid::ArgMin` returns `ord` relative to the queried range, so it remains valid after insertions, deletions, and reversals.
+
 ## Example
 
 ```cpp

@@ -13,24 +13,24 @@ data:
     links: []
   bundledCode: "#line 1 \"monoid/arg_max.hpp\"\n\n\n\n#include <functional>\n#include\
     \ <limits>\n\n#line 1 \"monoid/arg_min.hpp\"\n\n\n\n#line 6 \"monoid/arg_min.hpp\"\
-    \n#include <utility>\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for\
-    \ finding the optimal value (minimum by default) and its corresponding index.\n\
-    // Ties are broken by choosing the smaller index.\ntemplate <typename T, T Id\
-    \ = std::numeric_limits<T>::max(), typename Compare = std::less<T>>\nstruct ArgMin\
-    \ {\n    using value_type = std::pair<T, int>;\n\n    // The identity element\
-    \ uses the Id value and an invalid index.\n    static constexpr value_type id()\
-    \ {\n        return {Id, -1};\n    }\n\n    // Merges two elements based on the\
-    \ Compare functor.\n    static constexpr value_type op(const value_type& a, const\
-    \ value_type& b) {\n        if (Compare()(a.first, b.first)) return a;\n     \
-    \   if (Compare()(b.first, a.first)) return b;\n        return (a.second < b.second)\
-    \ ? a : b;\n    }\n\n    // Helper to create a leaf node.\n    static constexpr\
-    \ value_type make(const T& val, int index) {\n        return {val, index};\n \
-    \   }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 8 \"monoid/arg_max.hpp\"\
-    \n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for finding the maximum\
-    \ value and its corresponding index.\n// Defined as a type alias of ArgMin using\
-    \ std::greater.\ntemplate <typename T, T Id = std::numeric_limits<T>::lowest()>\n\
-    using ArgMax = ArgMin<T, Id, std::greater<T>>;\n\n}  // namespace monoid\n}  //\
-    \ namespace m1une\n\n\n"
+    \n\nnamespace m1une {\nnamespace monoid {\n\ntemplate <typename T>\nstruct ArgMinNode\
+    \ {\n    T value;\n    long long size;\n    long long ord;\n};\n\n// Monoid for\
+    \ finding the optimal value (minimum by default) and its relative order.\n// Ties\
+    \ are broken by choosing the earlier element.\ntemplate <typename T, T Id = std::numeric_limits<T>::max(),\
+    \ typename Compare = std::less<T>>\nstruct ArgMin {\n    using value_type = ArgMinNode<T>;\n\
+    \n    static constexpr value_type id() {\n        return {Id, 0, -1};\n    }\n\
+    \n    static constexpr value_type op(const value_type& a, const value_type& b)\
+    \ {\n        if (a.size == 0) return b;\n        if (b.size == 0) return a;\n\
+    \        long long size = a.size + b.size;\n        if (Compare()(a.value, b.value))\
+    \ return {a.value, size, a.ord};\n        if (Compare()(b.value, a.value)) return\
+    \ {b.value, size, b.ord + a.size};\n        return {a.value, size, a.ord};\n \
+    \   }\n\n    static constexpr value_type make(const T& val) {\n        return\
+    \ {val, 1, 0};\n    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\
+    \n#line 8 \"monoid/arg_max.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n\
+    // Monoid for finding the maximum value and its corresponding index.\n// Defined\
+    \ as a type alias of ArgMin using std::greater.\ntemplate <typename T, T Id =\
+    \ std::numeric_limits<T>::lowest()>\nusing ArgMax = ArgMin<T, Id, std::greater<T>>;\n\
+    \n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: '#ifndef M1UNE_MONOID_ARG_MAX_HPP
 
     #define M1UNE_MONOID_ARG_MAX_HPP 1
@@ -71,7 +71,7 @@ data:
   isVerificationFile: false
   path: monoid/arg_max.hpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-15 02:20:43+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/arg_max.hpp
@@ -81,7 +81,7 @@ title: ArgMax Monoid
 
 ## Overview
 
-A monoid for finding both the maximum value and its index in a range. If there are multiple maximum values, it returns the one with the smallest index.
+A monoid for finding both the maximum value and its relative order in a range. If there are multiple maximum values, it returns the earliest one.
 
 This is defined as a type alias of `ArgMin` using `std::greater`. For the minimum counterpart, see `monoid/arg_min.hpp`.
 
@@ -97,19 +97,12 @@ using ArgMaxM = m1une::monoid::ArgMax<long long>;
 
 int main() {
     std::vector<long long> A = {4, 8, 5, 8, 2};
-    int N = A.size();
+    m1une::data_structure::Segtree<ArgMaxM> seg(A);
 
-    std::vector<ArgMaxM::value_type> init_data(N);
-    for (int i = 0; i < N; ++i) {
-        init_data[i] = ArgMaxM::make(A[i], i);
-    }
-
-    m1une::data_structure::Segtree<ArgMaxM> seg(init_data);
-
-    auto res = seg.prod(0, N);
+    auto res = seg.prod(0, A.size());
     
-    std::cout << "Max Value: " << res.first << "\n"; // Output: 8
-    std::cout << "Index: " << res.second << "\n";    // Output: 1 (Index 1 is chosen over Index 3)
+    std::cout << "Max Value: " << res.value << "\n"; // Output: 8
+    std::cout << "Order: " << res.ord << "\n";       // Output: 1 (Order 1 is chosen over order 3)
 
     return 0;
 }

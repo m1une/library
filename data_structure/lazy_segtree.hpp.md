@@ -18,40 +18,52 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"data_structure/lazy_segtree.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <concepts>\n#include <utility>\n#include <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\
-    \n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace acted_monoid\
-    \ {\n\n// Concept defining the requirements for an Acted Monoid.\ntemplate <typename\
-    \ AM>\nconcept IsActedMonoid = requires(typename AM::value_type a, typename AM::value_type\
-    \ b, typename AM::operator_type f,\n                                 typename\
-    \ AM::operator_type g) {\n    // 1. Value Monoid\n    typename AM::value_type;\n\
-    \    { AM::id() } -> std::same_as<typename AM::value_type>;\n    { AM::op(a, b)\
-    \ } -> std::same_as<typename AM::value_type>;\n\n    // 2. Operator Monoid\n \
-    \   typename AM::operator_type;\n    { AM::op_id() } -> std::same_as<typename\
-    \ AM::operator_type>;\n    { AM::op_comp(f, g) } -> std::same_as<typename AM::operator_type>;\
-    \  // Composition order: f(g(x))\n\n    // 3. Mapping: Operator x Value -> Value\n\
-    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n}\
-    \  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 1 \"math/bit_ceil.hpp\"\
-    \n\n\n\nnamespace m1une {\nnamespace math {\n\ntemplate <typename T>\nconstexpr\
-    \ T bit_ceil(T n) {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n)\
-    \ x <<= 1;\n    return x;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 11 \"data_structure/lazy_segtree.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ data_structure {\n\n// A highly generic Lazy Segment Tree utilizing C++20 Concepts\
-    \ for type safety.\n// It operates on any Acted Monoid structure satisfying the\
-    \ `m1une::acted_monoid::IsActedMonoid` concept.\ntemplate <m1une::acted_monoid::IsActedMonoid\
-    \ ActedMonoid>\nstruct LazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
-    \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    int _n,\
-    \ _size, _log;\n    std::vector<T> _d;\n    std::vector<F> _lz;\n\n    // Recalculates\
-    \ the value of the node k from its children.\n    void update(int k) {\n     \
-    \   _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n    // Applies\
-    \ the operator f to the node k and updates its lazy tag if it's an internal node.\n\
-    \    void all_apply(int k, F f) {\n        _d[k] = ActedMonoid::mapping(f, _d[k]);\n\
-    \        if (k < _size) {\n            _lz[k] = ActedMonoid::op_comp(f, _lz[k]);\n\
-    \        }\n    }\n\n    // Propagates the lazy tag of the node k down to its\
-    \ children.\n    void push(int k) {\n        all_apply(2 * k, _lz[k]);\n     \
-    \   all_apply(2 * k + 1, _lz[k]);\n        _lz[k] = ActedMonoid::op_id();\n  \
-    \  }\n\n   public:\n    // Constructs an empty lazy segment tree.\n    LazySegtree()\
-    \ : LazySegtree(0) {}\n\n    // Constructs a lazy segment tree of size `n`, initialized\
-    \ with the identity element.\n    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n,\
+    #include <bit>\n#include <concepts>\n#include <utility>\n#include <vector>\n\n\
+    #line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
+    \ for an Acted Monoid.\ntemplate <typename AM>\nconcept IsActedMonoid = requires(typename\
+    \ AM::value_type a, typename AM::value_type b, typename AM::operator_type f,\n\
+    \                                 typename AM::operator_type g) {\n    // 1. Value\
+    \ Monoid\n    typename AM::value_type;\n    { AM::id() } -> std::same_as<typename\
+    \ AM::value_type>;\n    { AM::op(a, b) } -> std::same_as<typename AM::value_type>;\n\
+    \n    // 2. Operator Monoid\n    typename AM::operator_type;\n    { AM::op_id()\
+    \ } -> std::same_as<typename AM::operator_type>;\n    { AM::op_comp(f, g) } ->\
+    \ std::same_as<typename AM::operator_type>;  // Composition order: f(g(x))\n\n\
+    \    // 3. Mapping: Operator x Value -> Value\n    { AM::mapping(f, a) } -> std::same_as<typename\
+    \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
+    \n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace math {\n\
+    \ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1) return 1;\n\
+    \    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n}  // namespace\
+    \ math\n}  // namespace m1une\n\n\n#line 12 \"data_structure/lazy_segtree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\n// A highly generic Lazy\
+    \ Segment Tree utilizing C++20 Concepts for type safety.\n// It operates on any\
+    \ Acted Monoid structure satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\n\
+    template <m1une::acted_monoid::IsActedMonoid ActedMonoid>\nstruct LazySegtree\
+    \ {\n    using T = typename ActedMonoid::value_type;\n    using F = typename ActedMonoid::operator_type;\n\
+    \n   private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n    std::vector<F>\
+    \ _lz;\n\n    // Recalculates the value of the node k from its children.\n   \
+    \ void update(int k) {\n        _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k +\
+    \ 1]);\n    }\n\n    static T mapping_at(const F& f, const T& value, long long\
+    \ ord) {\n        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g,\
+    \ x, i); }) {\n            return ActedMonoid::mapping(f, value, ord);\n     \
+    \   } else {\n            return ActedMonoid::mapping(f, value);\n        }\n\
+    \    }\n\n    static F shift_operator(const F& f, long long ord) {\n        if\
+    \ constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {\n\
+    \            return ActedMonoid::op_shift(f, ord);\n        } else {\n       \
+    \     return f;\n        }\n    }\n\n    int node_length(int k) const {\n    \
+    \    int level = std::bit_width((unsigned int)k) - 1;\n        return _size >>\
+    \ level;\n    }\n\n    int node_left(int k) const {\n        int level = std::bit_width((unsigned\
+    \ int)k) - 1;\n        int len = _size >> level;\n        return (k - (1 << level))\
+    \ * len;\n    }\n\n    // Applies the operator f to the node k and updates its\
+    \ lazy tag if it's an internal node.\n    void all_apply(int k, F f) {\n     \
+    \   _d[k] = mapping_at(f, _d[k], 0);\n        if (k < _size) {\n            _lz[k]\
+    \ = ActedMonoid::op_comp(f, _lz[k]);\n        }\n    }\n\n    // Propagates the\
+    \ lazy tag of the node k down to its children.\n    void push(int k) {\n     \
+    \   all_apply(2 * k, _lz[k]);\n        all_apply(2 * k + 1, shift_operator(_lz[k],\
+    \ node_length(k) / 2));\n        _lz[k] = ActedMonoid::op_id();\n    }\n\n   public:\n\
+    \    // Constructs an empty lazy segment tree.\n    LazySegtree() : LazySegtree(0)\
+    \ {}\n\n    // Constructs a lazy segment tree of size `n`, initialized with the\
+    \ identity element.\n    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n,\
     \ ActedMonoid::id())) {}\n\n    // Constructs a lazy segment tree from an existing\
     \ vector.\n    explicit LazySegtree(const std::vector<T>& v) : _n(int(v.size()))\
     \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
@@ -110,27 +122,30 @@ data:
     \     for (int i = l; i < r; i++) res.push_back(get(i));\n        return res;\n\
     \    }\n\n    // Applies the operator f to the p-th element.\n    void apply(int\
     \ p, F f) {\n        assert(0 <= p && p < _n);\n        p += _size;\n        for\
-    \ (int i = _log; i >= 1; i--) push(p >> i);\n        _d[p] = ActedMonoid::mapping(f,\
-    \ _d[p]);\n        for (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n\
-    \    // Applies the operator f to all elements in the range [l, r).\n    void\
-    \ apply(int l, int r, F f) {\n        assert(0 <= l && l <= r && r <= _n);\n \
-    \       if (l == r) return;\n\n        l += _size;\n        r += _size;\n\n  \
-    \      for (int i = _log; i >= 1; i--) {\n            if (((l >> i) << i) != l)\
-    \ push(l >> i);\n            if (((r >> i) << i) != r) push((r - 1) >> i);\n \
-    \       }\n\n        {\n            int l2 = l, r2 = r;\n            while (l\
-    \ < r) {\n                if (l & 1) all_apply(l++, f);\n                if (r\
-    \ & 1) all_apply(--r, f);\n                l >>= 1;\n                r >>= 1;\n\
-    \            }\n            l = l2;\n            r = r2;\n        }\n\n      \
-    \  for (int i = 1; i <= _log; i++) {\n            if (((l >> i) << i) != l) update(l\
-    \ >> i);\n            if (((r >> i) << i) != r) update((r - 1) >> i);\n      \
-    \  }\n    }\n\n    // Finds the largest r such that g(prod(l, r)) is true.\n \
-    \   template <class F_pred>\n    int max_right(int l, F_pred g) {\n        assert(0\
-    \ <= l && l <= _n);\n        assert(g(ActedMonoid::id()));\n        if (l == _n)\
-    \ return _n;\n        l += _size;\n        for (int i = _log; i >= 1; i--) push(l\
-    \ >> i);\n        T sm = ActedMonoid::id();\n        do {\n            while (l\
-    \ % 2 == 0) l >>= 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n    \
-    \            while (l < _size) {\n                    push(l);\n             \
-    \       l = (2 * l);\n                    if (g(ActedMonoid::op(sm, _d[l]))) {\n\
+    \ (int i = _log; i >= 1; i--) push(p >> i);\n        _d[p] = mapping_at(f, _d[p],\
+    \ 0);\n        for (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n    //\
+    \ Applies the operator f to all elements in the range [l, r).\n    void apply(int\
+    \ l, int r, F f) {\n        assert(0 <= l && l <= r && r <= _n);\n        if (l\
+    \ == r) return;\n\n        int base_l = l;\n        l += _size;\n        r +=\
+    \ _size;\n\n        for (int i = _log; i >= 1; i--) {\n            if (((l >>\
+    \ i) << i) != l) push(l >> i);\n            if (((r >> i) << i) != r) push((r\
+    \ - 1) >> i);\n        }\n\n        {\n            int l2 = l, r2 = r;\n     \
+    \       while (l < r) {\n                if (l & 1) {\n                    all_apply(l,\
+    \ shift_operator(f, node_left(l) - base_l));\n                    l++;\n     \
+    \           }\n                if (r & 1) {\n                    --r;\n      \
+    \              all_apply(r, shift_operator(f, node_left(r) - base_l));\n     \
+    \           }\n                l >>= 1;\n                r >>= 1;\n          \
+    \  }\n            l = l2;\n            r = r2;\n        }\n\n        for (int\
+    \ i = 1; i <= _log; i++) {\n            if (((l >> i) << i) != l) update(l >>\
+    \ i);\n            if (((r >> i) << i) != r) update((r - 1) >> i);\n        }\n\
+    \    }\n\n    // Finds the largest r such that g(prod(l, r)) is true.\n    template\
+    \ <class F_pred>\n    int max_right(int l, F_pred g) {\n        assert(0 <= l\
+    \ && l <= _n);\n        assert(g(ActedMonoid::id()));\n        if (l == _n) return\
+    \ _n;\n        l += _size;\n        for (int i = _log; i >= 1; i--) push(l >>\
+    \ i);\n        T sm = ActedMonoid::id();\n        do {\n            while (l %\
+    \ 2 == 0) l >>= 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n      \
+    \          while (l < _size) {\n                    push(l);\n               \
+    \     l = (2 * l);\n                    if (g(ActedMonoid::op(sm, _d[l]))) {\n\
     \                        sm = ActedMonoid::op(sm, _d[l]);\n                  \
     \      l++;\n                    }\n                }\n                return\
     \ l - _size;\n            }\n            sm = ActedMonoid::op(sm, _d[l]);\n  \
@@ -149,25 +164,37 @@ data:
     \ sm);\n        } while ((r & -r) != r);\n        return 0;\n    }\n};\n\n}  //\
     \ namespace data_structure\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_LAZY_SEGTREE_HPP\n#define M1UNE_LAZY_SEGTREE_HPP 1\n\n#include\
-    \ <cassert>\n#include <concepts>\n#include <utility>\n#include <vector>\n\n#include\
-    \ \"acted_monoid/concept.hpp\"\n#include \"math/bit_ceil.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace data_structure {\n\n// A highly generic Lazy Segment Tree utilizing\
-    \ C++20 Concepts for type safety.\n// It operates on any Acted Monoid structure\
-    \ satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\ntemplate <m1une::acted_monoid::IsActedMonoid\
-    \ ActedMonoid>\nstruct LazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
-    \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    int _n,\
-    \ _size, _log;\n    std::vector<T> _d;\n    std::vector<F> _lz;\n\n    // Recalculates\
-    \ the value of the node k from its children.\n    void update(int k) {\n     \
-    \   _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n    // Applies\
-    \ the operator f to the node k and updates its lazy tag if it's an internal node.\n\
-    \    void all_apply(int k, F f) {\n        _d[k] = ActedMonoid::mapping(f, _d[k]);\n\
-    \        if (k < _size) {\n            _lz[k] = ActedMonoid::op_comp(f, _lz[k]);\n\
-    \        }\n    }\n\n    // Propagates the lazy tag of the node k down to its\
-    \ children.\n    void push(int k) {\n        all_apply(2 * k, _lz[k]);\n     \
-    \   all_apply(2 * k + 1, _lz[k]);\n        _lz[k] = ActedMonoid::op_id();\n  \
-    \  }\n\n   public:\n    // Constructs an empty lazy segment tree.\n    LazySegtree()\
-    \ : LazySegtree(0) {}\n\n    // Constructs a lazy segment tree of size `n`, initialized\
-    \ with the identity element.\n    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n,\
+    \ <cassert>\n#include <bit>\n#include <concepts>\n#include <utility>\n#include\
+    \ <vector>\n\n#include \"acted_monoid/concept.hpp\"\n#include \"math/bit_ceil.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\n// A highly generic Lazy\
+    \ Segment Tree utilizing C++20 Concepts for type safety.\n// It operates on any\
+    \ Acted Monoid structure satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\n\
+    template <m1une::acted_monoid::IsActedMonoid ActedMonoid>\nstruct LazySegtree\
+    \ {\n    using T = typename ActedMonoid::value_type;\n    using F = typename ActedMonoid::operator_type;\n\
+    \n   private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n    std::vector<F>\
+    \ _lz;\n\n    // Recalculates the value of the node k from its children.\n   \
+    \ void update(int k) {\n        _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k +\
+    \ 1]);\n    }\n\n    static T mapping_at(const F& f, const T& value, long long\
+    \ ord) {\n        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g,\
+    \ x, i); }) {\n            return ActedMonoid::mapping(f, value, ord);\n     \
+    \   } else {\n            return ActedMonoid::mapping(f, value);\n        }\n\
+    \    }\n\n    static F shift_operator(const F& f, long long ord) {\n        if\
+    \ constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {\n\
+    \            return ActedMonoid::op_shift(f, ord);\n        } else {\n       \
+    \     return f;\n        }\n    }\n\n    int node_length(int k) const {\n    \
+    \    int level = std::bit_width((unsigned int)k) - 1;\n        return _size >>\
+    \ level;\n    }\n\n    int node_left(int k) const {\n        int level = std::bit_width((unsigned\
+    \ int)k) - 1;\n        int len = _size >> level;\n        return (k - (1 << level))\
+    \ * len;\n    }\n\n    // Applies the operator f to the node k and updates its\
+    \ lazy tag if it's an internal node.\n    void all_apply(int k, F f) {\n     \
+    \   _d[k] = mapping_at(f, _d[k], 0);\n        if (k < _size) {\n            _lz[k]\
+    \ = ActedMonoid::op_comp(f, _lz[k]);\n        }\n    }\n\n    // Propagates the\
+    \ lazy tag of the node k down to its children.\n    void push(int k) {\n     \
+    \   all_apply(2 * k, _lz[k]);\n        all_apply(2 * k + 1, shift_operator(_lz[k],\
+    \ node_length(k) / 2));\n        _lz[k] = ActedMonoid::op_id();\n    }\n\n   public:\n\
+    \    // Constructs an empty lazy segment tree.\n    LazySegtree() : LazySegtree(0)\
+    \ {}\n\n    // Constructs a lazy segment tree of size `n`, initialized with the\
+    \ identity element.\n    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n,\
     \ ActedMonoid::id())) {}\n\n    // Constructs a lazy segment tree from an existing\
     \ vector.\n    explicit LazySegtree(const std::vector<T>& v) : _n(int(v.size()))\
     \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
@@ -226,27 +253,30 @@ data:
     \     for (int i = l; i < r; i++) res.push_back(get(i));\n        return res;\n\
     \    }\n\n    // Applies the operator f to the p-th element.\n    void apply(int\
     \ p, F f) {\n        assert(0 <= p && p < _n);\n        p += _size;\n        for\
-    \ (int i = _log; i >= 1; i--) push(p >> i);\n        _d[p] = ActedMonoid::mapping(f,\
-    \ _d[p]);\n        for (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n\
-    \    // Applies the operator f to all elements in the range [l, r).\n    void\
-    \ apply(int l, int r, F f) {\n        assert(0 <= l && l <= r && r <= _n);\n \
-    \       if (l == r) return;\n\n        l += _size;\n        r += _size;\n\n  \
-    \      for (int i = _log; i >= 1; i--) {\n            if (((l >> i) << i) != l)\
-    \ push(l >> i);\n            if (((r >> i) << i) != r) push((r - 1) >> i);\n \
-    \       }\n\n        {\n            int l2 = l, r2 = r;\n            while (l\
-    \ < r) {\n                if (l & 1) all_apply(l++, f);\n                if (r\
-    \ & 1) all_apply(--r, f);\n                l >>= 1;\n                r >>= 1;\n\
-    \            }\n            l = l2;\n            r = r2;\n        }\n\n      \
-    \  for (int i = 1; i <= _log; i++) {\n            if (((l >> i) << i) != l) update(l\
-    \ >> i);\n            if (((r >> i) << i) != r) update((r - 1) >> i);\n      \
-    \  }\n    }\n\n    // Finds the largest r such that g(prod(l, r)) is true.\n \
-    \   template <class F_pred>\n    int max_right(int l, F_pred g) {\n        assert(0\
-    \ <= l && l <= _n);\n        assert(g(ActedMonoid::id()));\n        if (l == _n)\
-    \ return _n;\n        l += _size;\n        for (int i = _log; i >= 1; i--) push(l\
-    \ >> i);\n        T sm = ActedMonoid::id();\n        do {\n            while (l\
-    \ % 2 == 0) l >>= 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n    \
-    \            while (l < _size) {\n                    push(l);\n             \
-    \       l = (2 * l);\n                    if (g(ActedMonoid::op(sm, _d[l]))) {\n\
+    \ (int i = _log; i >= 1; i--) push(p >> i);\n        _d[p] = mapping_at(f, _d[p],\
+    \ 0);\n        for (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n    //\
+    \ Applies the operator f to all elements in the range [l, r).\n    void apply(int\
+    \ l, int r, F f) {\n        assert(0 <= l && l <= r && r <= _n);\n        if (l\
+    \ == r) return;\n\n        int base_l = l;\n        l += _size;\n        r +=\
+    \ _size;\n\n        for (int i = _log; i >= 1; i--) {\n            if (((l >>\
+    \ i) << i) != l) push(l >> i);\n            if (((r >> i) << i) != r) push((r\
+    \ - 1) >> i);\n        }\n\n        {\n            int l2 = l, r2 = r;\n     \
+    \       while (l < r) {\n                if (l & 1) {\n                    all_apply(l,\
+    \ shift_operator(f, node_left(l) - base_l));\n                    l++;\n     \
+    \           }\n                if (r & 1) {\n                    --r;\n      \
+    \              all_apply(r, shift_operator(f, node_left(r) - base_l));\n     \
+    \           }\n                l >>= 1;\n                r >>= 1;\n          \
+    \  }\n            l = l2;\n            r = r2;\n        }\n\n        for (int\
+    \ i = 1; i <= _log; i++) {\n            if (((l >> i) << i) != l) update(l >>\
+    \ i);\n            if (((r >> i) << i) != r) update((r - 1) >> i);\n        }\n\
+    \    }\n\n    // Finds the largest r such that g(prod(l, r)) is true.\n    template\
+    \ <class F_pred>\n    int max_right(int l, F_pred g) {\n        assert(0 <= l\
+    \ && l <= _n);\n        assert(g(ActedMonoid::id()));\n        if (l == _n) return\
+    \ _n;\n        l += _size;\n        for (int i = _log; i >= 1; i--) push(l >>\
+    \ i);\n        T sm = ActedMonoid::id();\n        do {\n            while (l %\
+    \ 2 == 0) l >>= 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n      \
+    \          while (l < _size) {\n                    push(l);\n               \
+    \     l = (2 * l);\n                    if (g(ActedMonoid::op(sm, _d[l]))) {\n\
     \                        sm = ActedMonoid::op(sm, _d[l]);\n                  \
     \      l++;\n                    }\n                }\n                return\
     \ l - _size;\n            }\n            sm = ActedMonoid::op(sm, _d[l]);\n  \
@@ -270,7 +300,7 @@ data:
   isVerificationFile: false
   path: data_structure/lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-15 01:47:39+09:00'
+  timestamp: '2026-06-15 02:20:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/lazy_segtree.test.cpp
