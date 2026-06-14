@@ -1,11 +1,11 @@
 ---
 title: Bit Ceil
-documentation_of: ../../utilities/bit_ceil.hpp
+documentation_of: ../../math/bit_ceil.hpp
 ---
 
 ## Overview
 
-A utility function that calculates the smallest power of two that is greater than or equal to a given number `n`.
+A math utility function that calculates the smallest power of two that is greater than or equal to a given number `n`.
 
 This is frequently used internally to determine the optimal underlying array size for complete binary tree structures (like Segment Trees) so that their length is perfectly aligned to a power of 2.
 

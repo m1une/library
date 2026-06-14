@@ -2,7 +2,7 @@
 #define M1UNE_BIT_CEIL_HPP 1
 
 namespace m1une {
-namespace utilities {
+namespace math {
 
 template <typename T>
 constexpr T bit_ceil(T n) {
@@ -12,7 +12,7 @@ constexpr T bit_ceil(T n) {
     return x;
 }
 
-}  // namespace utilities
+}  // namespace math
 }  // namespace m1une
 
 #endif  // M1UNE_BIT_CEIL_HPP

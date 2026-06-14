@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "acted_monoid/concept.hpp"
-#include "utilities/bit_ceil.hpp"
+#include "math/bit_ceil.hpp"
 
 namespace m1une {
 namespace data_structure {
@@ -53,7 +53,7 @@ struct LazySegtree {
 
     // Constructs a lazy segment tree from an existing vector.
     explicit LazySegtree(const std::vector<T>& v) : _n(int(v.size())) {
-        _size = m1une::utilities::bit_ceil((unsigned int)(_n));
+        _size = m1une::math::bit_ceil((unsigned int)(_n));
         _log = 0;
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, ActedMonoid::id());
@@ -62,7 +62,7 @@ struct LazySegtree {
         for (int i = _size - 1; i >= 1; i--) update(i);
     }
     explicit LazySegtree(std::vector<T>&& v) : _n(int(v.size())) {
-        _size = m1une::utilities::bit_ceil((unsigned int)(_n));
+        _size = m1une::math::bit_ceil((unsigned int)(_n));
         _log = 0;
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, ActedMonoid::id());
@@ -83,7 +83,7 @@ struct LazySegtree {
         std::convertible_to<U, T>
     )
     explicit LazySegtree(const std::vector<U>& v) : _n(int(v.size())) {
-        _size = m1une::utilities::bit_ceil((unsigned int)(_n));
+        _size = m1une::math::bit_ceil((unsigned int)(_n));
         _log = 0;
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, ActedMonoid::id());

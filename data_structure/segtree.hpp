@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "monoid/concept.hpp"
-#include "utilities/bit_ceil.hpp"
+#include "math/bit_ceil.hpp"
 
 namespace m1une {
 namespace data_structure {
@@ -35,7 +35,7 @@ struct Segtree {
 
     // Constructs a segment tree from an existing vector.
     explicit Segtree(const std::vector<T>& v) : _n(int(v.size())) {
-        _size = m1une::utilities::bit_ceil((unsigned int)(_n));
+        _size = m1une::math::bit_ceil((unsigned int)(_n));
         _log = 0;
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, Monoid::id());
@@ -43,7 +43,7 @@ struct Segtree {
         for (int i = _size - 1; i >= 1; i--) update(i);
     }
     explicit Segtree(std::vector<T>&& v) : _n(int(v.size())) {
-        _size = m1une::utilities::bit_ceil((unsigned int)(_n));
+        _size = m1une::math::bit_ceil((unsigned int)(_n));
         _log = 0;
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, Monoid::id());
@@ -63,7 +63,7 @@ struct Segtree {
         std::convertible_to<U, T>
     )
     explicit Segtree(const std::vector<U>& v) : _n(int(v.size())) {
-        _size = m1une::utilities::bit_ceil((unsigned int)(_n));
+        _size = m1une::math::bit_ceil((unsigned int)(_n));
         _log = 0;
         while ((1U << _log) < (unsigned int)(_size)) _log++;
         _d.assign(2 * _size, Monoid::id());
