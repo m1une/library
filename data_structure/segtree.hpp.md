@@ -67,11 +67,15 @@ data:
     \ idx) { Monoid::make(x, idx); }) {\n                _d[_size + i] = Monoid::make(v[i],\
     \ i);\n            } else {\n                _d[_size + i] = static_cast<T>(v[i]);\n\
     \            }\n        }\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
-    \    }\n\n    // Sets the value of the element at index `p` to `x`.\n    void\
-    \ set(int p, T x) {\n        assert(0 <= p && p < _n);\n        p += _size;\n\
-    \        _d[p] = x;\n        for (int i = 1; i <= _log; i++) update(p >> i);\n\
-    \    }\n\n    // Returns the value of the element at index `p`.\n    T get(int\
-    \ p) const {\n        assert(0 <= p && p < _n);\n        return _d[p + _size];\n\
+    \    }\n\n    // Returns the number of elements.\n    int size() const {\n   \
+    \     return _n;\n    }\n\n    // Returns whether the tree is empty.\n    bool\
+    \ empty() const {\n        return _n == 0;\n    }\n\n    // Sets the value of\
+    \ the element at index `p` to `x`.\n    void set(int p, T x) {\n        assert(0\
+    \ <= p && p < _n);\n        p += _size;\n        _d[p] = x;\n        for (int\
+    \ i = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Returns the value of\
+    \ the element at index `p`.\n    T get(int p) const {\n        assert(0 <= p &&\
+    \ p < _n);\n        return _d[p + _size];\n    }\n\n    // Returns the value of\
+    \ the element at index `p`.\n    T operator[](int p) const {\n        return get(p);\n\
     \    }\n\n    // Returns the product (result of the monoid operation) in the range\
     \ [l, r).\n    T prod(int l, int r) const {\n        assert(0 <= l && l <= r &&\
     \ r <= _n);\n        T sml = Monoid::id(), smr = Monoid::id();\n        l += _size;\n\
@@ -79,20 +83,25 @@ data:
     \ _d[l++]);\n            if (r & 1) smr = Monoid::op(_d[--r], smr);\n        \
     \    l >>= 1;\n            r >>= 1;\n        }\n        return Monoid::op(sml,\
     \ smr);\n    }\n\n    // Returns the product of the entire array.\n    T all_prod()\
-    \ const {\n        return _d[1];\n    }\n\n    // Finds the largest `r` such that\
-    \ `f(prod(l, r))` is true.\n    // Uses a custom functor or lambda `f`.\n    template\
-    \ <class F>\n    int max_right(int l, F f) const {\n        assert(0 <= l && l\
-    \ <= _n);\n        assert(f(Monoid::id()));\n        if (l == _n) return _n;\n\
-    \        l += _size;\n        T sm = Monoid::id();\n        do {\n           \
-    \ while (l % 2 == 0) l >>= 1;\n            if (!f(Monoid::op(sm, _d[l]))) {\n\
-    \                while (l < _size) {\n                    l = (2 * l);\n     \
-    \               if (f(Monoid::op(sm, _d[l]))) {\n                        sm =\
-    \ Monoid::op(sm, _d[l]);\n                        l++;\n                    }\n\
-    \                }\n                return l - _size;\n            }\n       \
-    \     sm = Monoid::op(sm, _d[l]);\n            l++;\n        } while ((l & -l)\
-    \ != l);\n        return _n;\n    }\n\n    // Finds the smallest `l` such that\
-    \ `f(prod(l, r))` is true.\n    template <class F>\n    int min_left(int r, F\
-    \ f) const {\n        assert(0 <= r && r <= _n);\n        assert(f(Monoid::id()));\n\
+    \ const {\n        return _d[1];\n    }\n\n    // Returns all elements as a vector.\n\
+    \    std::vector<T> to_vector() const {\n        return to_vector(0, _n);\n  \
+    \  }\n\n    // Returns the elements in the range [l, r) as a vector.\n    std::vector<T>\
+    \ to_vector(int l, int r) const {\n        assert(0 <= l && l <= r && r <= _n);\n\
+    \        std::vector<T> res;\n        res.reserve(r - l);\n        for (int i\
+    \ = l; i < r; i++) res.push_back(_d[_size + i]);\n        return res;\n    }\n\
+    \n    // Finds the largest `r` such that `f(prod(l, r))` is true.\n    // Uses\
+    \ a custom functor or lambda `f`.\n    template <class F>\n    int max_right(int\
+    \ l, F f) const {\n        assert(0 <= l && l <= _n);\n        assert(f(Monoid::id()));\n\
+    \        if (l == _n) return _n;\n        l += _size;\n        T sm = Monoid::id();\n\
+    \        do {\n            while (l % 2 == 0) l >>= 1;\n            if (!f(Monoid::op(sm,\
+    \ _d[l]))) {\n                while (l < _size) {\n                    l = (2\
+    \ * l);\n                    if (f(Monoid::op(sm, _d[l]))) {\n               \
+    \         sm = Monoid::op(sm, _d[l]);\n                        l++;\n        \
+    \            }\n                }\n                return l - _size;\n       \
+    \     }\n            sm = Monoid::op(sm, _d[l]);\n            l++;\n        }\
+    \ while ((l & -l) != l);\n        return _n;\n    }\n\n    // Finds the smallest\
+    \ `l` such that `f(prod(l, r))` is true.\n    template <class F>\n    int min_left(int\
+    \ r, F f) const {\n        assert(0 <= r && r <= _n);\n        assert(f(Monoid::id()));\n\
     \        if (r == 0) return 0;\n        r += _size;\n        T sm = Monoid::id();\n\
     \        do {\n            r--;\n            while (r > 1 && (r % 2)) r >>= 1;\n\
     \            if (!f(Monoid::op(_d[r], sm))) {\n                while (r < _size)\
@@ -139,11 +148,15 @@ data:
     \ idx) { Monoid::make(x, idx); }) {\n                _d[_size + i] = Monoid::make(v[i],\
     \ i);\n            } else {\n                _d[_size + i] = static_cast<T>(v[i]);\n\
     \            }\n        }\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
-    \    }\n\n    // Sets the value of the element at index `p` to `x`.\n    void\
-    \ set(int p, T x) {\n        assert(0 <= p && p < _n);\n        p += _size;\n\
-    \        _d[p] = x;\n        for (int i = 1; i <= _log; i++) update(p >> i);\n\
-    \    }\n\n    // Returns the value of the element at index `p`.\n    T get(int\
-    \ p) const {\n        assert(0 <= p && p < _n);\n        return _d[p + _size];\n\
+    \    }\n\n    // Returns the number of elements.\n    int size() const {\n   \
+    \     return _n;\n    }\n\n    // Returns whether the tree is empty.\n    bool\
+    \ empty() const {\n        return _n == 0;\n    }\n\n    // Sets the value of\
+    \ the element at index `p` to `x`.\n    void set(int p, T x) {\n        assert(0\
+    \ <= p && p < _n);\n        p += _size;\n        _d[p] = x;\n        for (int\
+    \ i = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Returns the value of\
+    \ the element at index `p`.\n    T get(int p) const {\n        assert(0 <= p &&\
+    \ p < _n);\n        return _d[p + _size];\n    }\n\n    // Returns the value of\
+    \ the element at index `p`.\n    T operator[](int p) const {\n        return get(p);\n\
     \    }\n\n    // Returns the product (result of the monoid operation) in the range\
     \ [l, r).\n    T prod(int l, int r) const {\n        assert(0 <= l && l <= r &&\
     \ r <= _n);\n        T sml = Monoid::id(), smr = Monoid::id();\n        l += _size;\n\
@@ -151,20 +164,25 @@ data:
     \ _d[l++]);\n            if (r & 1) smr = Monoid::op(_d[--r], smr);\n        \
     \    l >>= 1;\n            r >>= 1;\n        }\n        return Monoid::op(sml,\
     \ smr);\n    }\n\n    // Returns the product of the entire array.\n    T all_prod()\
-    \ const {\n        return _d[1];\n    }\n\n    // Finds the largest `r` such that\
-    \ `f(prod(l, r))` is true.\n    // Uses a custom functor or lambda `f`.\n    template\
-    \ <class F>\n    int max_right(int l, F f) const {\n        assert(0 <= l && l\
-    \ <= _n);\n        assert(f(Monoid::id()));\n        if (l == _n) return _n;\n\
-    \        l += _size;\n        T sm = Monoid::id();\n        do {\n           \
-    \ while (l % 2 == 0) l >>= 1;\n            if (!f(Monoid::op(sm, _d[l]))) {\n\
-    \                while (l < _size) {\n                    l = (2 * l);\n     \
-    \               if (f(Monoid::op(sm, _d[l]))) {\n                        sm =\
-    \ Monoid::op(sm, _d[l]);\n                        l++;\n                    }\n\
-    \                }\n                return l - _size;\n            }\n       \
-    \     sm = Monoid::op(sm, _d[l]);\n            l++;\n        } while ((l & -l)\
-    \ != l);\n        return _n;\n    }\n\n    // Finds the smallest `l` such that\
-    \ `f(prod(l, r))` is true.\n    template <class F>\n    int min_left(int r, F\
-    \ f) const {\n        assert(0 <= r && r <= _n);\n        assert(f(Monoid::id()));\n\
+    \ const {\n        return _d[1];\n    }\n\n    // Returns all elements as a vector.\n\
+    \    std::vector<T> to_vector() const {\n        return to_vector(0, _n);\n  \
+    \  }\n\n    // Returns the elements in the range [l, r) as a vector.\n    std::vector<T>\
+    \ to_vector(int l, int r) const {\n        assert(0 <= l && l <= r && r <= _n);\n\
+    \        std::vector<T> res;\n        res.reserve(r - l);\n        for (int i\
+    \ = l; i < r; i++) res.push_back(_d[_size + i]);\n        return res;\n    }\n\
+    \n    // Finds the largest `r` such that `f(prod(l, r))` is true.\n    // Uses\
+    \ a custom functor or lambda `f`.\n    template <class F>\n    int max_right(int\
+    \ l, F f) const {\n        assert(0 <= l && l <= _n);\n        assert(f(Monoid::id()));\n\
+    \        if (l == _n) return _n;\n        l += _size;\n        T sm = Monoid::id();\n\
+    \        do {\n            while (l % 2 == 0) l >>= 1;\n            if (!f(Monoid::op(sm,\
+    \ _d[l]))) {\n                while (l < _size) {\n                    l = (2\
+    \ * l);\n                    if (f(Monoid::op(sm, _d[l]))) {\n               \
+    \         sm = Monoid::op(sm, _d[l]);\n                        l++;\n        \
+    \            }\n                }\n                return l - _size;\n       \
+    \     }\n            sm = Monoid::op(sm, _d[l]);\n            l++;\n        }\
+    \ while ((l & -l) != l);\n        return _n;\n    }\n\n    // Finds the smallest\
+    \ `l` such that `f(prod(l, r))` is true.\n    template <class F>\n    int min_left(int\
+    \ r, F f) const {\n        assert(0 <= r && r <= _n);\n        assert(f(Monoid::id()));\n\
     \        if (r == 0) return 0;\n        r += _size;\n        T sm = Monoid::id();\n\
     \        do {\n            r--;\n            while (r > 1 && (r % 2)) r >>= 1;\n\
     \            if (!f(Monoid::op(_d[r], sm))) {\n                while (r < _size)\
@@ -180,7 +198,7 @@ data:
   isVerificationFile: false
   path: data_structure/segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-14 14:28:09+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/segtree.test.cpp
@@ -205,10 +223,19 @@ A highly generic Segment Tree that operates on any Monoid structure satisfying t
 * `Segtree(const std::vector<T>& v)`
   Builds the segment tree from the given vector in $O(N)$ time.
 
+* `int size()`
+  Returns the number of elements. Time complexity: $O(1)$.
+
+* `bool empty()`
+  Returns whether the tree is empty. Time complexity: $O(1)$.
+
 * `void set(int p, T x)`
   Assigns $x$ to the $p$-th element. Time complexity: $O(\log N)$.
 
 * `T get(int p)`
+  Returns the $p$-th element. Time complexity: $O(1)$.
+
+* `T operator[](int p)`
   Returns the $p$-th element. Time complexity: $O(1)$.
 
 * `T prod(int l, int r)`
@@ -216,6 +243,12 @@ A highly generic Segment Tree that operates on any Monoid structure satisfying t
 
 * `T all_prod()`
   Returns the product of the entire array. Time complexity: $O(1)$.
+
+* `std::vector<T> to_vector()`
+  Returns all elements as a vector. Time complexity: $O(N)$.
+
+* `std::vector<T> to_vector(int l, int r)`
+  Returns the elements in $[l, r)$ as a vector. Time complexity: $O(r-l)$.
 
 * `int max_right<F>(int l, F f)`
   Returns the largest index $r$ such that `f(prod(l, r))` is `true`. Time complexity: $O(\log N)$.

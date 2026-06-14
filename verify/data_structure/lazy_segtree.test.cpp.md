@@ -92,58 +92,69 @@ data:
     \ idx); }) {\n                _d[_size + i] = ActedMonoid::make(v[i], i);\n  \
     \          } else {\n                _d[_size + i] = static_cast<T>(v[i]);\n \
     \           }\n        }\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
-    \    }\n\n    // Assigns x to the p-th element.\n    void set(int p, T x) {\n\
-    \        assert(0 <= p && p < _n);\n        p += _size;\n        for (int i =\
-    \ _log; i >= 1; i--) push(p >> i);\n        _d[p] = x;\n        for (int i = 1;\
-    \ i <= _log; i++) update(p >> i);\n    }\n\n    // Returns the value of the p-th\
-    \ element.\n    T get(int p) {\n        assert(0 <= p && p < _n);\n        p +=\
-    \ _size;\n        for (int i = _log; i >= 1; i--) push(p >> i);\n        return\
-    \ _d[p];\n    }\n\n    // Returns the product (result of the monoid operation)\
-    \ in the range [l, r).\n    T prod(int l, int r) {\n        assert(0 <= l && l\
-    \ <= r && r <= _n);\n        if (l == r) return ActedMonoid::id();\n\n       \
-    \ l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1; i--)\
-    \ {\n            if (((l >> i) << i) != l) push(l >> i);\n            if (((r\
-    \ >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        T sml = ActedMonoid::id(),\
-    \ smr = ActedMonoid::id();\n        while (l < r) {\n            if (l & 1) sml\
-    \ = ActedMonoid::op(sml, _d[l++]);\n            if (r & 1) smr = ActedMonoid::op(_d[--r],\
+    \    }\n\n    // Returns the number of elements.\n    int size() const {\n   \
+    \     return _n;\n    }\n\n    // Returns whether the tree is empty.\n    bool\
+    \ empty() const {\n        return _n == 0;\n    }\n\n    // Assigns x to the p-th\
+    \ element.\n    void set(int p, T x) {\n        assert(0 <= p && p < _n);\n  \
+    \      p += _size;\n        for (int i = _log; i >= 1; i--) push(p >> i);\n  \
+    \      _d[p] = x;\n        for (int i = 1; i <= _log; i++) update(p >> i);\n \
+    \   }\n\n    // Returns the value of the p-th element.\n    T get(int p) {\n \
+    \       assert(0 <= p && p < _n);\n        p += _size;\n        for (int i = _log;\
+    \ i >= 1; i--) push(p >> i);\n        return _d[p];\n    }\n\n    // Returns the\
+    \ value of the p-th element.\n    T operator[](int p) {\n        return get(p);\n\
+    \    }\n\n    // Returns the product (result of the monoid operation) in the range\
+    \ [l, r).\n    T prod(int l, int r) {\n        assert(0 <= l && l <= r && r <=\
+    \ _n);\n        if (l == r) return ActedMonoid::id();\n\n        l += _size;\n\
+    \        r += _size;\n\n        for (int i = _log; i >= 1; i--) {\n          \
+    \  if (((l >> i) << i) != l) push(l >> i);\n            if (((r >> i) << i) !=\
+    \ r) push((r - 1) >> i);\n        }\n\n        T sml = ActedMonoid::id(), smr\
+    \ = ActedMonoid::id();\n        while (l < r) {\n            if (l & 1) sml =\
+    \ ActedMonoid::op(sml, _d[l++]);\n            if (r & 1) smr = ActedMonoid::op(_d[--r],\
     \ smr);\n            l >>= 1;\n            r >>= 1;\n        }\n\n        return\
     \ ActedMonoid::op(sml, smr);\n    }\n\n    // Returns the product of the entire\
-    \ array.\n    T all_prod() const {\n        return _d[1];\n    }\n\n    // Applies\
-    \ the operator f to the p-th element.\n    void apply(int p, F f) {\n        assert(0\
-    \ <= p && p < _n);\n        p += _size;\n        for (int i = _log; i >= 1; i--)\
-    \ push(p >> i);\n        _d[p] = ActedMonoid::mapping(f, _d[p]);\n        for\
-    \ (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n    // Applies the operator\
-    \ f to all elements in the range [l, r).\n    void apply(int l, int r, F f) {\n\
-    \        assert(0 <= l && l <= r && r <= _n);\n        if (l == r) return;\n\n\
-    \        l += _size;\n        r += _size;\n\n        for (int i = _log; i >= 1;\
-    \ i--) {\n            if (((l >> i) << i) != l) push(l >> i);\n            if\
-    \ (((r >> i) << i) != r) push((r - 1) >> i);\n        }\n\n        {\n       \
-    \     int l2 = l, r2 = r;\n            while (l < r) {\n                if (l\
-    \ & 1) all_apply(l++, f);\n                if (r & 1) all_apply(--r, f);\n   \
-    \             l >>= 1;\n                r >>= 1;\n            }\n            l\
-    \ = l2;\n            r = r2;\n        }\n\n        for (int i = 1; i <= _log;\
-    \ i++) {\n            if (((l >> i) << i) != l) update(l >> i);\n            if\
-    \ (((r >> i) << i) != r) update((r - 1) >> i);\n        }\n    }\n\n    // Finds\
-    \ the largest r such that g(prod(l, r)) is true.\n    template <class F_pred>\n\
-    \    int max_right(int l, F_pred g) {\n        assert(0 <= l && l <= _n);\n  \
-    \      assert(g(ActedMonoid::id()));\n        if (l == _n) return _n;\n      \
-    \  l += _size;\n        for (int i = _log; i >= 1; i--) push(l >> i);\n      \
-    \  T sm = ActedMonoid::id();\n        do {\n            while (l % 2 == 0) l >>=\
-    \ 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n                while\
-    \ (l < _size) {\n                    push(l);\n                    l = (2 * l);\n\
-    \                    if (g(ActedMonoid::op(sm, _d[l]))) {\n                  \
-    \      sm = ActedMonoid::op(sm, _d[l]);\n                        l++;\n      \
-    \              }\n                }\n                return l - _size;\n     \
-    \       }\n            sm = ActedMonoid::op(sm, _d[l]);\n            l++;\n  \
-    \      } while ((l & -l) != l);\n        return _n;\n    }\n\n    // Finds the\
-    \ smallest l such that g(prod(l, r)) is true.\n    template <class F_pred>\n \
-    \   int min_left(int r, F_pred g) {\n        assert(0 <= r && r <= _n);\n    \
-    \    assert(g(ActedMonoid::id()));\n        if (r == 0) return 0;\n        r +=\
-    \ _size;\n        for (int i = _log; i >= 1; i--) push((r - 1) >> i);\n      \
-    \  T sm = ActedMonoid::id();\n        do {\n            r--;\n            while\
-    \ (r > 1 && (r % 2)) r >>= 1;\n            if (!g(ActedMonoid::op(_d[r], sm)))\
-    \ {\n                while (r < _size) {\n                    push(r);\n     \
-    \               r = (2 * r + 1);\n                    if (g(ActedMonoid::op(_d[r],\
+    \ array.\n    T all_prod() const {\n        return _d[1];\n    }\n\n    // Returns\
+    \ all elements as a vector.\n    std::vector<T> to_vector() {\n        for (int\
+    \ k = 1; k < _size; k++) push(k);\n        std::vector<T> res;\n        res.reserve(_n);\n\
+    \        for (int i = 0; i < _n; i++) res.push_back(_d[_size + i]);\n        return\
+    \ res;\n    }\n\n    // Returns the elements in the range [l, r) as a vector.\n\
+    \    std::vector<T> to_vector(int l, int r) {\n        assert(0 <= l && l <= r\
+    \ && r <= _n);\n        std::vector<T> res;\n        res.reserve(r - l);\n   \
+    \     for (int i = l; i < r; i++) res.push_back(get(i));\n        return res;\n\
+    \    }\n\n    // Applies the operator f to the p-th element.\n    void apply(int\
+    \ p, F f) {\n        assert(0 <= p && p < _n);\n        p += _size;\n        for\
+    \ (int i = _log; i >= 1; i--) push(p >> i);\n        _d[p] = ActedMonoid::mapping(f,\
+    \ _d[p]);\n        for (int i = 1; i <= _log; i++) update(p >> i);\n    }\n\n\
+    \    // Applies the operator f to all elements in the range [l, r).\n    void\
+    \ apply(int l, int r, F f) {\n        assert(0 <= l && l <= r && r <= _n);\n \
+    \       if (l == r) return;\n\n        l += _size;\n        r += _size;\n\n  \
+    \      for (int i = _log; i >= 1; i--) {\n            if (((l >> i) << i) != l)\
+    \ push(l >> i);\n            if (((r >> i) << i) != r) push((r - 1) >> i);\n \
+    \       }\n\n        {\n            int l2 = l, r2 = r;\n            while (l\
+    \ < r) {\n                if (l & 1) all_apply(l++, f);\n                if (r\
+    \ & 1) all_apply(--r, f);\n                l >>= 1;\n                r >>= 1;\n\
+    \            }\n            l = l2;\n            r = r2;\n        }\n\n      \
+    \  for (int i = 1; i <= _log; i++) {\n            if (((l >> i) << i) != l) update(l\
+    \ >> i);\n            if (((r >> i) << i) != r) update((r - 1) >> i);\n      \
+    \  }\n    }\n\n    // Finds the largest r such that g(prod(l, r)) is true.\n \
+    \   template <class F_pred>\n    int max_right(int l, F_pred g) {\n        assert(0\
+    \ <= l && l <= _n);\n        assert(g(ActedMonoid::id()));\n        if (l == _n)\
+    \ return _n;\n        l += _size;\n        for (int i = _log; i >= 1; i--) push(l\
+    \ >> i);\n        T sm = ActedMonoid::id();\n        do {\n            while (l\
+    \ % 2 == 0) l >>= 1;\n            if (!g(ActedMonoid::op(sm, _d[l]))) {\n    \
+    \            while (l < _size) {\n                    push(l);\n             \
+    \       l = (2 * l);\n                    if (g(ActedMonoid::op(sm, _d[l]))) {\n\
+    \                        sm = ActedMonoid::op(sm, _d[l]);\n                  \
+    \      l++;\n                    }\n                }\n                return\
+    \ l - _size;\n            }\n            sm = ActedMonoid::op(sm, _d[l]);\n  \
+    \          l++;\n        } while ((l & -l) != l);\n        return _n;\n    }\n\
+    \n    // Finds the smallest l such that g(prod(l, r)) is true.\n    template <class\
+    \ F_pred>\n    int min_left(int r, F_pred g) {\n        assert(0 <= r && r <=\
+    \ _n);\n        assert(g(ActedMonoid::id()));\n        if (r == 0) return 0;\n\
+    \        r += _size;\n        for (int i = _log; i >= 1; i--) push((r - 1) >>\
+    \ i);\n        T sm = ActedMonoid::id();\n        do {\n            r--;\n   \
+    \         while (r > 1 && (r % 2)) r >>= 1;\n            if (!g(ActedMonoid::op(_d[r],\
+    \ sm))) {\n                while (r < _size) {\n                    push(r);\n\
+    \                    r = (2 * r + 1);\n                    if (g(ActedMonoid::op(_d[r],\
     \ sm))) {\n                        sm = ActedMonoid::op(_d[r], sm);\n        \
     \                r--;\n                    }\n                }\n            \
     \    return r + 1 - _size;\n            }\n            sm = ActedMonoid::op(_d[r],\
@@ -221,26 +232,34 @@ data:
     \ mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
     \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
     \    cin >> N >> Q;\n    vector<ll> a(N);\n    for (int i = 0; i < N; ++i) cin\
-    \ >> a[i];\n\n    m1une::data_structure::LazySegtree<AM> seg(a);\n    for (int\
-    \ q = 0; q < Q; ++q) {\n        ll t;\n        cin >> t;\n        if (t == 0)\
-    \ {\n            ll l, r, b, c;\n            cin >> l >> r >> b >> c;\n      \
-    \      seg.apply(l, r, {b, c});\n        } else {\n            ll l, r;\n    \
-    \        cin >> l >> r;\n            auto prd = seg.prod(l, r);\n            cout\
-    \ << prd.sum << '\\n';\n        }\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n\
-    \    cin.tie(nullptr);\n    solve();\n    return 0;\n}\n"
+    \ >> a[i];\n\n    m1une::data_structure::LazySegtree<AM> seg(a);\n    assert(seg.size()\
+    \ == N);\n    assert(seg.empty() == (N == 0));\n    auto values = seg.to_vector();\n\
+    \    assert(int(values.size()) == N);\n    for (int i = 0; i < N; i++) {\n   \
+    \     assert(values[i].sum == mint(a[i]));\n        assert(seg[i].sum == mint(a[i]));\n\
+    \    }\n    for (int q = 0; q < Q; ++q) {\n        ll t;\n        cin >> t;\n\
+    \        if (t == 0) {\n            ll l, r, b, c;\n            cin >> l >> r\
+    \ >> b >> c;\n            seg.apply(l, r, {b, c});\n        } else {\n       \
+    \     ll l, r;\n            cin >> l >> r;\n            auto prd = seg.prod(l,\
+    \ r);\n            cout << prd.sum << '\\n';\n        }\n    }\n}\n\nint main()\
+    \ {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    solve();\n \
+    \   return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\
     \n\n#include \"data_structure/lazy_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\
     \n#include \"acted_monoid/range_affine_range_sum.hpp\"\n#include \"math/modint.hpp\"\
     \n\nusing mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
     \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
     \    cin >> N >> Q;\n    vector<ll> a(N);\n    for (int i = 0; i < N; ++i) cin\
-    \ >> a[i];\n\n    m1une::data_structure::LazySegtree<AM> seg(a);\n    for (int\
-    \ q = 0; q < Q; ++q) {\n        ll t;\n        cin >> t;\n        if (t == 0)\
-    \ {\n            ll l, r, b, c;\n            cin >> l >> r >> b >> c;\n      \
-    \      seg.apply(l, r, {b, c});\n        } else {\n            ll l, r;\n    \
-    \        cin >> l >> r;\n            auto prd = seg.prod(l, r);\n            cout\
-    \ << prd.sum << '\\n';\n        }\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n\
-    \    cin.tie(nullptr);\n    solve();\n    return 0;\n}\n"
+    \ >> a[i];\n\n    m1une::data_structure::LazySegtree<AM> seg(a);\n    assert(seg.size()\
+    \ == N);\n    assert(seg.empty() == (N == 0));\n    auto values = seg.to_vector();\n\
+    \    assert(int(values.size()) == N);\n    for (int i = 0; i < N; i++) {\n   \
+    \     assert(values[i].sum == mint(a[i]));\n        assert(seg[i].sum == mint(a[i]));\n\
+    \    }\n    for (int q = 0; q < Q; ++q) {\n        ll t;\n        cin >> t;\n\
+    \        if (t == 0) {\n            ll l, r, b, c;\n            cin >> l >> r\
+    \ >> b >> c;\n            seg.apply(l, r, {b, c});\n        } else {\n       \
+    \     ll l, r;\n            cin >> l >> r;\n            auto prd = seg.prod(l,\
+    \ r);\n            cout << prd.sum << '\\n';\n        }\n    }\n}\n\nint main()\
+    \ {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    solve();\n \
+    \   return 0;\n}\n"
   dependsOn:
   - data_structure/lazy_segtree.hpp
   - acted_monoid/concept.hpp
@@ -250,7 +269,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-14 14:28:09+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_segtree.test.cpp

@@ -21,7 +21,7 @@ data:
     - icon: ':warning:'
       path: acted_monoid/range_add_range_min_count.hpp
       title: Range Add Range Min Count
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: acted_monoid/range_add_range_sum.hpp
       title: Range Add Range Sum
     - icon: ':warning:'
@@ -105,11 +105,17 @@ data:
       path: data_structure/ordered_set.hpp
       title: Ordered Set
     - icon: ':heavy_check_mark:'
+      path: data_structure/persistent_lazy_segtree.hpp
+      title: Persistent Lazy Segment Tree
+    - icon: ':heavy_check_mark:'
       path: data_structure/persistent_ordered_multiset.hpp
       title: Persistent Ordered Multiset
     - icon: ':heavy_check_mark:'
       path: data_structure/persistent_ordered_set.hpp
       title: Persistent Ordered Set
+    - icon: ':heavy_check_mark:'
+      path: data_structure/persistent_segtree.hpp
+      title: Persistent Segment Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree
@@ -269,11 +275,17 @@ data:
       path: verify/data_structure/ordered_set.test.cpp
       title: verify/data_structure/ordered_set.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_lazy_segtree.test.cpp
+      title: verify/data_structure/persistent_lazy_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_ordered_multiset.test.cpp
       title: verify/data_structure/persistent_ordered_multiset.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_ordered_set.test.cpp
       title: verify/data_structure/persistent_ordered_set.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_segtree.test.cpp
+      title: verify/data_structure/persistent_segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/segtree.test.cpp
       title: verify/data_structure/segtree.test.cpp
