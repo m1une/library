@@ -9,6 +9,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
     title: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+    title: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -547,6 +550,7 @@ data:
   timestamp: '2026-06-15 02:20:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
   - verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
 documentation_of: data_structure/persistent_dynamic_lazy_monoid_array.hpp
 layout: document

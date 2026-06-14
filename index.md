@@ -33,7 +33,7 @@ data:
     - icon: ':warning:'
       path: acted_monoid/range_affine_range_sum_of_squares.hpp
       title: Range Affine Range Sum of Squares
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: acted_monoid/range_ap_add_range_sum.hpp
       title: Range AP Add Range Sum
     - icon: ':warning:'
@@ -272,6 +272,9 @@ data:
       path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
       title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
+      title: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/data_structure/dynamic_monoid_array.test.cpp
       title: verify/data_structure/dynamic_monoid_array.test.cpp
     - icon: ':heavy_check_mark:'
@@ -289,6 +292,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
       title: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+      title: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_dynamic_monoid_array.test.cpp
       title: verify/data_structure/persistent_dynamic_monoid_array.test.cpp
