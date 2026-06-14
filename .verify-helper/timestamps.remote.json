@@ -1,6 +1,7 @@
 {
 "verify/data_structure/disjoint_sparse_table.test.cpp": "2026-06-14 14:16:23 +0900",
 "verify/data_structure/dsu.test.cpp": "2026-06-13 20:51:48 +0900",
+"verify/data_structure/dual_segtree.test.cpp": "2026-06-15 02:52:47 +0900",
 "verify/data_structure/dynamic_array.test.cpp": "2026-06-14 04:44:05 +0900",
 "verify/data_structure/dynamic_lazy_monoid_array.test.cpp": "2026-06-15 02:20:43 +0900",
 "verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp": "2026-06-15 02:24:35 +0900",
