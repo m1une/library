@@ -9,6 +9,7 @@
 "verify/data_structure/lazy_segtree.test.cpp": "2026-06-15 02:20:43 +0900",
 "verify/data_structure/ordered_multiset.test.cpp": "2026-06-14 04:54:20 +0900",
 "verify/data_structure/ordered_set.test.cpp": "2026-06-14 13:58:34 +0900",
+"verify/data_structure/persistent_dual_segtree.test.cpp": "2026-06-15 03:00:13 +0900",
 "verify/data_structure/persistent_dynamic_array.test.cpp": "2026-06-15 01:54:32 +0900",
 "verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp": "2026-06-15 02:20:43 +0900",
 "verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp": "2026-06-15 02:24:35 +0900",
