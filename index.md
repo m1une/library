@@ -85,7 +85,7 @@ data:
       title: Disjoint Set Union (DSU)
     - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_array.hpp
-      title: Dynamic Array (Implicit Treap)
+      title: Dynamic Array
     - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_lazy_monoid_array.hpp
       title: Dynamic Lazy Monoid Array
@@ -102,17 +102,17 @@ data:
       path: data_structure/ordered_set.hpp
       title: Ordered Set
     - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_treap.hpp
-      title: Persistent Treap
+      path: data_structure/persistent_ordered_multiset.hpp
+      title: Persistent Ordered Multiset
+    - icon: ':heavy_check_mark:'
+      path: data_structure/persistent_ordered_set.hpp
+      title: Persistent Ordered Set
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/sparse_table.hpp
       title: Sparse Table
-    - icon: ':heavy_check_mark:'
-      path: data_structure/treap.hpp
-      title: Treap
   - name: math
     pages:
     - icon: ':warning:'
@@ -263,17 +263,17 @@ data:
       path: verify/data_structure/ordered_set.test.cpp
       title: verify/data_structure/ordered_set.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_treap.test.cpp
-      title: verify/data_structure/persistent_treap.test.cpp
+      path: verify/data_structure/persistent_ordered_multiset.test.cpp
+      title: verify/data_structure/persistent_ordered_multiset.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_ordered_set.test.cpp
+      title: verify/data_structure/persistent_ordered_set.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/segtree.test.cpp
       title: verify/data_structure/segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/sparse_table.test.cpp
       title: verify/data_structure/sparse_table.test.cpp
-    - icon: ':heavy_check_mark:'
-      path: verify/data_structure/treap.test.cpp
-      title: verify/data_structure/treap.test.cpp
   - name: verify/string
     pages:
     - icon: ':heavy_check_mark:'

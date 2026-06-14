@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: data_structure/dynamic_array.hpp
-    title: Dynamic Array (Implicit Treap)
+    title: Dynamic Array
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

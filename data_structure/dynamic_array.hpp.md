@@ -384,7 +384,7 @@ data:
   - verify/data_structure/dynamic_array.test.cpp
 documentation_of: data_structure/dynamic_array.hpp
 layout: document
-title: Dynamic Array (Implicit Treap)
+title: Dynamic Array
 ---
 
 ## Overview
