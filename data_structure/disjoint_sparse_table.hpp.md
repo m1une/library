@@ -151,14 +151,11 @@ Unlike a normal Sparse Table, the monoid operation does not need to be idempoten
 
 ## Methods
 
-* `DisjointSparseTable()`
-  Constructs an empty disjoint sparse table. Time complexity: $O(1)$.
-
-* `DisjointSparseTable(const std::vector<T>& v)`
-  Builds the disjoint sparse table from the given vector. Time complexity: $O(N \log N)$.
-
-* `T prod(int l, int r)`
-  Returns the result of the monoid operation over the range $[l, r)$. Time complexity: $O(1)$.
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `DisjointSparseTable()` | Constructs an empty disjoint sparse table. | $O(1)$ |
+| `DisjointSparseTable(const std::vector<T>& v)` | Builds from `v`. | $O(N \log N)$ |
+| `T prod(int l, int r)` | Returns the monoid product over `[l, r)`. | $O(1)$ |
 
 ## Example
 

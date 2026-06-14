@@ -149,7 +149,7 @@ title: Static Rolling Hash
 
 ## Overview
 
-A robust data structure that precomputes the hash values of a string's prefixes to answer substring hash queries in $O(1)$ time. It uses `__int128_t` internally to safely prevent integer overflow. 
+A robust data structure that precomputes the hash values of a string's prefixes to answer substring hash queries in $O(1)$ time. It uses `__int128_t` internally to safely prevent integer overflow.
 
 In addition to standard substring hashes, this class supports advanced operations such as finding the Longest Common Prefix (LCP), lexicographical comparison, and string repetition in $O(\log N)$ time. It also provides static helpers for calculating hashes dynamically and powering the `monoid::RollingHash`.
 
@@ -160,76 +160,23 @@ In addition to standard substring hashes, this class supports advanced operation
 
 ## Instance Methods
 
-### `RollingHash(const std::string& s)`
-Constructs the prefix hashes and base powers. Keeps a copy of the string for character comparisons.
-* **Parameters:**
-  * `s`: The target string to be hashed.
-* **Complexity:** $O(N)$ time and space, where $N$ is the length of `s`.
-
-### `long long get(int l, int r) const`
-Returns the hash value of the substring $S[l \dots r-1]$.
-* **Parameters:**
-  * `l`: The starting index of the substring (0-indexed, inclusive).
-  * `r`: The ending index of the substring (0-indexed, exclusive). Must satisfy $0 \le l \le r \le |S|$.
-* **Returns:** The hash value of the specified substring.
-* **Complexity:** $O(1)$ time.
-
-### `long long concat(int l1, int r1, int l2, int r2) const`
-Returns the hash of a new string formed by concatenating substring $S[l1 \dots r1-1]$ and substring $S[l2 \dots r2-1]$.
-* **Parameters:**
-  * `l1, r1`: The [inclusive, exclusive) bounds for the first substring.
-  * `l2, r2`: The [inclusive, exclusive) bounds for the second substring.
-* **Returns:** The hash value of the concatenated string.
-* **Complexity:** $O(1)$ time.
-
-### `int lcp(int l1, int r1, int l2, int r2) const`
-Finds the length of the Longest Common Prefix (LCP) between two substrings.
-* **Parameters:**
-  * `l1, r1`: The bounds for the first substring.
-  * `l2, r2`: The bounds for the second substring.
-* **Returns:** The integer length of the longest common prefix.
-* **Complexity:** $O(\log(\min(r1-l1, r2-l2)))$ time using binary search.
-
-### `int compare(int l1, int r1, int l2, int r2) const`
-Lexicographically compares two substrings $S[l1 \dots r1-1]$ and $S[l2 \dots r2-1]$.
-* **Parameters:** Same as `lcp`.
-* **Returns:** * `-1`: If the first substring is strictly smaller.
-  * `0`: If both substrings are exactly equal.
-  * `1`: If the first substring is strictly larger.
-* **Complexity:** $O(\log N)$ time.
-
-### `long long repeat(int l, int r, long long k) const`
-Returns the hash of the substring $S[l \dots r-1]$ repeated `k` times.
-* **Parameters:**
-  * `l, r`: The bounds for the substring to be repeated.
-  * `k`: The number of times the substring should be repeated.
-* **Returns:** The hash value of the repeated string.
-* **Complexity:** $O(\log k)$ time.
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `RollingHash(const std::string& s)` | Builds prefix hashes and base powers for `s`, and keeps a copy for character comparisons. | $O(N)$ time and space |
+| `long long get(int l, int r) const` | Returns the hash of substring `[l, r)`. | $O(1)$ |
+| `long long concat(int l1, int r1, int l2, int r2) const` | Returns the hash of `[l1, r1)` followed by `[l2, r2)`. | $O(1)$ |
+| `int lcp(int l1, int r1, int l2, int r2) const` | Returns the longest common prefix length of two substrings. | $O(\log(\min(r1-l1, r2-l2)))$ |
+| `int compare(int l1, int r1, int l2, int r2) const` | Lexicographically compares two substrings. Returns `-1`, `0`, or `1`. | $O(\log N)$ |
+| `long long repeat(int l, int r, long long k) const` | Returns the hash of substring `[l, r)` repeated `k` times. | $O(\log k)$ |
 
 ## Static Helper Methods
 
-### `static long long compute_hash(const std::string& str)`
-Computes the hash of a string without building the prefix arrays. Useful for obtaining the hash of a pattern string quickly.
-* **Parameters:** `str`: The target string.
-* **Returns:** The hash value of `str`.
-* **Complexity:** $O(N)$ time, $O(1)$ auxiliary space.
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `static long long compute_hash(const std::string& str)` | Computes the hash of `str` without building prefix arrays. | $O(N)$ time, $O(1)$ auxiliary space |
+| `static constexpr long long combine(long long h1, long long h2, long long base_power2)` | Returns the hash of a left string with hash `h1` followed by a right string with hash `h2`. `base_power2` is $Base^{\text{right length}} \bmod Mod$. | $O(1)$ |
+| `static constexpr long long repeat_hash(long long h, long long p, long long k)` | Returns the hash of a string with hash `h` repeated `k` times. `p` is $Base^{\text{string length}} \bmod Mod$. | $O(\log k)$ |
 
-### `static constexpr long long combine(long long h1, long long h2, long long base_power2)`
-Safely combines two hashes. Equivalent to appending a string with hash `h2` to the right of a string with hash `h1`.
-* **Parameters:**
-  * `h1`: The hash of the left string.
-  * `h2`: The hash of the right string.
-  * `base_power2`: The value of $Base^{\text{length of the right string}} \pmod{Mod}$.
-* **Returns:** The combined hash value.
-
-### `static constexpr long long repeat_hash(long long h, long long p, long long k)`
-Returns the combined hash of a string repeated `k` times.
-* **Parameters:**
-  * `h`: The hash of the string to be repeated.
-  * `p`: The value of $Base^{\text{length of the string}} \pmod{Mod}$.
-  * `k`: The number of repetitions.
-* **Returns:** The hash value of the repeated string.
-* 
 ## Example
 
 ```cpp

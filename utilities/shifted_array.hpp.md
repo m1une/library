@@ -80,23 +80,11 @@ A convenient wrapper around `std::vector` that allows arbitrary index ranges, in
 
 ## Methods
 
-### `ShiftedArray(long long L, long long R, T init_value = T(), long long step = 1)`
-Constructs an array with indices ranging from `L` to `R` (inclusive).
-
-* `L`: The left bound (inclusive).
-* `R`: The right bound (inclusive).
-* `init_value`: The default value for each stored element.
-* `step`: The positive index step size.
-* **Throws:** `std::invalid_argument` if `step <= 0` or `L > R`.
-
-### `T &operator[](long long i)`
-Accesses the element at the adjusted index `i`.
-* **Complexity:** $O(1)$ time.
-* **Throws:** `std::out_of_range` if `i` is outside the configured bounds or is not aligned to `step`.
-
-### `long long index(long long i) const`
-Returns the internal 0-based vector index corresponding to the shifted index `i`.
-* **Throws:** `std::out_of_range` if `i` is outside the configured bounds or is not aligned to `step`.
+| Method | Description | Complexity / Throws |
+| --- | --- | --- |
+| `ShiftedArray(long long L, long long R, T init_value = T(), long long step = 1)` | Constructs an array for indices `L, L + step, ... , R`. `init_value` is used for every stored element. | Throws `std::invalid_argument` if `step <= 0` or `L > R`. |
+| `T& operator[](long long i)` | Accesses the element at shifted index `i`. | $O(1)$; throws `std::out_of_range` if `i` is outside the configured bounds or is not aligned to `step`. |
+| `long long index(long long i) const` | Returns the internal 0-based vector index for shifted index `i`. | $O(1)$; throws `std::out_of_range` if `i` is outside the configured bounds or is not aligned to `step`. |
 
 ## Example
 

@@ -143,48 +143,30 @@ For convenience, the library provides the following common type aliases:
 
 ## Constructors
 
-* `ModInt()`
-  Initializes the value to `0`.
-  * **Time complexity:** $\mathcal{O}(1)$
-
-* `ModInt(int v)` / `ModInt(long long v)` / `ModInt(unsigned int v)`
-  Initializes the structure with the given integer value. Negative values are properly converted to their positive modulo equivalents (e.g., `-1` becomes `Modulus - 1`).
-  * **Time complexity:** $\mathcal{O}(1)$
+| Constructor | Description | Complexity |
+| --- | --- | --- |
+| `ModInt()` | Initializes the value to `0`. | $\mathcal{O}(1)$ |
+| `ModInt(int v)`, `ModInt(long long v)`, `ModInt(unsigned int v)` | Initializes from an integer. Negative values are converted to their positive modulo equivalents. | $\mathcal{O}(1)$ |
 
 ## Methods
 
-* `uint32_t val() const`
-  Returns the internal stored value (`_v`), which is guaranteed to be in the range `[0, Modulus - 1]`.
-  * **Time complexity:** $\mathcal{O}(1)$
-
-* `ModInt pow(long long n) const`
-  Computes the $n$-th power of the current value using binary exponentiation.
-  * **Time complexity:** $\mathcal{O}(\log n)$
-
-* `ModInt inv() const`
-  Computes the modular multiplicative inverse using the Extended Euclidean Algorithm. Note: The modulus must be coprime to the current value for a valid inverse to exist.
-  * **Time complexity:** $\mathcal{O}(\log(\text{Modulus}))$
-
-* `static uint32_t mod()`
-  Returns the `Modulus` parameter associated with this type.
-  * **Time complexity:** $\mathcal{O}(1)$
-
-* `static ModInt raw(uint32_t v)`
-  Constructs a `ModInt` directly from an unsigned integer without applying the modulo operator. This is faster and should only be used if `v` is strictly less than `Modulus`.
-  * **Time complexity:** $\mathcal{O}(1)$
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `uint32_t val() const` | Returns the stored value in `[0, Modulus - 1]`. | $\mathcal{O}(1)$ |
+| `ModInt pow(long long n) const` | Computes the `n`-th power by binary exponentiation. | $\mathcal{O}(\log n)$ |
+| `ModInt inv() const` | Computes the modular inverse by the extended Euclidean algorithm. The value and modulus must be coprime. | $\mathcal{O}(\log(\text{Modulus}))$ |
+| `static uint32_t mod()` | Returns the modulus associated with this type. | $\mathcal{O}(1)$ |
+| `static ModInt raw(uint32_t v)` | Constructs directly from `v` without applying `% Modulus`. Use only when `v < Modulus`. | $\mathcal{O}(1)$ |
 
 ## Operators
 
-* **Arithmetic (`+`, `-`, `*`, `+=`, `-=`, `*=`):** Performs basic addition, subtraction, or multiplication with automatic modulo adjustments.
-  * **Time complexity:** $\mathcal{O}(1)$
-* **Division (`/`, `/=`):** Multiplies by the modular inverse of the right-hand side.
-  * **Time complexity:** $\mathcal{O}(\log(\text{Modulus}))$
-* **Increment/Decrement (`++`, `--`):** Safely wraps values around $0$ and $Modulus - 1$.
-  * **Time complexity:** $\mathcal{O}(1)$
-* **Comparison (`==`, `!=`):** Compares the internal values.
-  * **Time complexity:** $\mathcal{O}(1)$
-* **Stream I/O (`<<`, `>>`):** Inputs standard integers or outputs the internal value.
-  * **Time complexity:** $\mathcal{O}(1)$
+| Operators | Description | Complexity |
+| --- | --- | --- |
+| `+`, `-`, `*`, `+=`, `-=`, `*=` | Performs addition, subtraction, or multiplication with automatic modulo adjustment. | $\mathcal{O}(1)$ |
+| `/`, `/=` | Multiplies by the modular inverse of the right-hand side. | $\mathcal{O}(\log(\text{Modulus}))$ |
+| `++`, `--` | Increments or decrements while wrapping around `0` and `Modulus - 1`. | $\mathcal{O}(1)$ |
+| `==`, `!=` | Compares stored values. | $\mathcal{O}(1)$ |
+| `<<`, `>>` | Outputs the stored value or inputs a standard integer. | $\mathcal{O}(1)$ |
 
 ## Example
 
