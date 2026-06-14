@@ -128,6 +128,9 @@ data:
       path: math/affine.hpp
       title: Affine Transformation
     - icon: ':heavy_check_mark:'
+      path: math/bit_ceil.hpp
+      title: Bit Ceil
+    - icon: ':heavy_check_mark:'
       path: math/modint.hpp
       title: ModInt
   - name: monoid
@@ -241,9 +244,6 @@ data:
       title: Static Rolling Hash
   - name: utilities
     pages:
-    - icon: ':heavy_check_mark:'
-      path: utilities/bit_ceil.hpp
-      title: Bit Ceil
     - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
       title: Shifted Array

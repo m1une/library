@@ -2,11 +2,11 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: math/bit_ceil.hpp
+    title: Bit Ceil
+  - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':heavy_check_mark:'
-    path: utilities/bit_ceil.hpp
-    title: Bit Ceil
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
@@ -28,39 +28,39 @@ data:
     \ `value_type`\n    { M::id() } -> std::same_as<typename M::value_type>;\n\n \
     \   // 3. Must have a static method `op(a, b)` returning `value_type`\n    { M::op(a,\
     \ b) } -> std::same_as<typename M::value_type>;\n};\n\n}  // namespace monoid\n\
-    }  // namespace m1une\n\n\n#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace\
-    \ m1une {\nnamespace utilities {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T\
-    \ n) {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n\
-    \    return x;\n}\n\n}  // namespace utilities\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"data_structure/segtree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\n// A generic Segment Tree utilizing C++20 Concepts for type safety.\n//\
-    \ It requires a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\ntemplate\
-    \ <m1une::monoid::IsMonoid Monoid>\nstruct Segtree {\n    using T = typename Monoid::value_type;\n\
-    \n   private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n\n    void update(int\
-    \ k) {\n        _d[k] = Monoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n   public:\n\
+    }  // namespace m1une\n\n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\nnamespace m1une\
+    \ {\nnamespace math {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n\
+    \    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return\
+    \ x;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 11 \"data_structure/segtree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\n// A generic Segment Tree\
+    \ utilizing C++20 Concepts for type safety.\n// It requires a Monoid struct that\
+    \ satisfies `m1une::monoid::IsMonoid`.\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
+    struct Segtree {\n    using T = typename Monoid::value_type;\n\n   private:\n\
+    \    int _n, _size, _log;\n    std::vector<T> _d;\n\n    void update(int k) {\n\
+    \        _d[k] = Monoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n   public:\n\
     \    // Constructs an empty segment tree.\n    Segtree() : Segtree(0) {}\n\n \
     \   // Constructs a segment tree of size `n`, initialized with the identity element.\n\
     \    explicit Segtree(int n) : Segtree(std::vector<T>(n, Monoid::id())) {}\n\n\
     \    // Constructs a segment tree from an existing vector.\n    explicit Segtree(const\
-    \ std::vector<T>& v) : _n(int(v.size())) {\n        _size = m1une::utilities::bit_ceil((unsigned\
+    \ std::vector<T>& v) : _n(int(v.size())) {\n        _size = m1une::math::bit_ceil((unsigned\
     \ int)(_n));\n        _log = 0;\n        while ((1U << _log) < (unsigned int)(_size))\
     \ _log++;\n        _d.assign(2 * _size, Monoid::id());\n        for (int i = 0;\
     \ i < _n; i++) _d[_size + i] = v[i];\n        for (int i = _size - 1; i >= 1;\
     \ i--) update(i);\n    }\n    explicit Segtree(std::vector<T>&& v) : _n(int(v.size()))\
-    \ {\n        _size = m1une::utilities::bit_ceil((unsigned int)(_n));\n       \
-    \ _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n  \
-    \      _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++)\
-    \ _d[_size + i] = std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--)\
-    \ update(i);\n    }\n\n    // Constructs a segment tree from a vector of a different\
-    \ type U.\n    // It automatically adapts to the Monoid's initialization requirements:\n\
+    \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
+    \ = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n       \
+    \ _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) _d[_size\
+    \ + i] = std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
+    \    }\n\n    // Constructs a segment tree from a vector of a different type U.\n\
+    \    // It automatically adapts to the Monoid's initialization requirements:\n\
     \    // 1. Monoid::make(val) if it exists.\n    // 2. Monoid::make(val, index)\
     \ if the monoid requires global indices.\n    // 3. static_cast<T>(val) as a fallback\
     \ for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
     \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
     \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
     \  )\n    explicit Segtree(const std::vector<U>& v) : _n(int(v.size())) {\n  \
-    \      _size = m1une::utilities::bit_ceil((unsigned int)(_n));\n        _log =\
-    \ 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2\
+    \      _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log = 0;\n\
+    \        while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2\
     \ * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) {\n          \
     \  if constexpr (requires(U x) { Monoid::make(x); }) {\n                _d[_size\
     \ + i] = Monoid::make(v[i]);\n            } else if constexpr (requires(U x, int\
@@ -113,7 +113,7 @@ data:
     \ data_structure\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_SEGTREE_HPP\n#define M1UNE_SEGTREE_HPP 1\n\n#include <cassert>\n\
     #include <concepts>\n#include <utility>\n#include <vector>\n\n#include \"monoid/concept.hpp\"\
-    \n#include \"utilities/bit_ceil.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
+    \n#include \"math/bit_ceil.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
     \ {\n\n// A generic Segment Tree utilizing C++20 Concepts for type safety.\n//\
     \ It requires a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\ntemplate\
     \ <m1une::monoid::IsMonoid Monoid>\nstruct Segtree {\n    using T = typename Monoid::value_type;\n\
@@ -123,25 +123,25 @@ data:
     \   // Constructs a segment tree of size `n`, initialized with the identity element.\n\
     \    explicit Segtree(int n) : Segtree(std::vector<T>(n, Monoid::id())) {}\n\n\
     \    // Constructs a segment tree from an existing vector.\n    explicit Segtree(const\
-    \ std::vector<T>& v) : _n(int(v.size())) {\n        _size = m1une::utilities::bit_ceil((unsigned\
+    \ std::vector<T>& v) : _n(int(v.size())) {\n        _size = m1une::math::bit_ceil((unsigned\
     \ int)(_n));\n        _log = 0;\n        while ((1U << _log) < (unsigned int)(_size))\
     \ _log++;\n        _d.assign(2 * _size, Monoid::id());\n        for (int i = 0;\
     \ i < _n; i++) _d[_size + i] = v[i];\n        for (int i = _size - 1; i >= 1;\
     \ i--) update(i);\n    }\n    explicit Segtree(std::vector<T>&& v) : _n(int(v.size()))\
-    \ {\n        _size = m1une::utilities::bit_ceil((unsigned int)(_n));\n       \
-    \ _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n  \
-    \      _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++)\
-    \ _d[_size + i] = std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--)\
-    \ update(i);\n    }\n\n    // Constructs a segment tree from a vector of a different\
-    \ type U.\n    // It automatically adapts to the Monoid's initialization requirements:\n\
+    \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
+    \ = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n       \
+    \ _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) _d[_size\
+    \ + i] = std::move(v[i]);\n        for (int i = _size - 1; i >= 1; i--) update(i);\n\
+    \    }\n\n    // Constructs a segment tree from a vector of a different type U.\n\
+    \    // It automatically adapts to the Monoid's initialization requirements:\n\
     \    // 1. Monoid::make(val) if it exists.\n    // 2. Monoid::make(val, index)\
     \ if the monoid requires global indices.\n    // 3. static_cast<T>(val) as a fallback\
     \ for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
     \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
     \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
     \  )\n    explicit Segtree(const std::vector<U>& v) : _n(int(v.size())) {\n  \
-    \      _size = m1une::utilities::bit_ceil((unsigned int)(_n));\n        _log =\
-    \ 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2\
+    \      _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log = 0;\n\
+    \        while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2\
     \ * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) {\n          \
     \  if constexpr (requires(U x) { Monoid::make(x); }) {\n                _d[_size\
     \ + i] = Monoid::make(v[i]);\n            } else if constexpr (requires(U x, int\
@@ -194,11 +194,11 @@ data:
     \ data_structure\n}  // namespace m1une\n\n#endif  // M1UNE_SEGTREE_HPP\n"
   dependsOn:
   - monoid/concept.hpp
-  - utilities/bit_ceil.hpp
+  - math/bit_ceil.hpp
   isVerificationFile: false
   path: data_structure/segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-14 14:28:09+09:00'
+  timestamp: '2026-06-15 01:47:39+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/segtree.test.cpp

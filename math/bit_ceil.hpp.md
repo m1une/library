@@ -20,34 +20,33 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"utilities/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace\
-    \ utilities {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n\
-    \ <= 1) return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\
-    \n}  // namespace utilities\n}  // namespace m1une\n\n\n"
+  bundledCode: "#line 1 \"math/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace\
+    \ math {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1)\
+    \ return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n} \
+    \ // namespace math\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_BIT_CEIL_HPP\n#define M1UNE_BIT_CEIL_HPP 1\n\nnamespace m1une\
-    \ {\nnamespace utilities {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n)\
-    \ {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n   \
-    \ return x;\n}\n\n}  // namespace utilities\n}  // namespace m1une\n\n#endif \
-    \ // M1UNE_BIT_CEIL_HPP\n"
+    \ {\nnamespace math {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n\
+    \    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return\
+    \ x;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n#endif  // M1UNE_BIT_CEIL_HPP\n"
   dependsOn: []
   isVerificationFile: false
-  path: utilities/bit_ceil.hpp
+  path: math/bit_ceil.hpp
   requiredBy:
   - data_structure/segtree.hpp
   - data_structure/lazy_segtree.hpp
-  timestamp: '2026-05-29 01:41:12+09:00'
+  timestamp: '2026-06-15 01:47:39+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/lazy_segtree.test.cpp
   - verify/data_structure/segtree.test.cpp
-documentation_of: utilities/bit_ceil.hpp
+documentation_of: math/bit_ceil.hpp
 layout: document
 title: Bit Ceil
 ---
 
 ## Overview
 
-A utility function that calculates the smallest power of two that is greater than or equal to a given number `n`.
+A math utility function that calculates the smallest power of two that is greater than or equal to a given number `n`.
 
 This is frequently used internally to determine the optimal underlying array size for complete binary tree structures (like Segment Trees) so that their length is perfectly aligned to a power of 2.
 
