@@ -4,18 +4,25 @@
 
 C++20 library for competitive programming by [m1une](https://atcoder.jp/users/m1une).
 
+This repository is organized as header-only building blocks. Data structures live in
+`data_structure/`, and reusable algebraic definitions live in `monoid/` and
+`acted_monoid/` so they can be combined without rewriting boilerplate during a
+contest.
+
 ## Structure
 
-* `data_structure/`: segment trees, sparse table, DSU, ordered sets, and related containers.
-* `monoid/`: reusable monoids for generic data structures.
-* `acted_monoid/`: acted monoids for lazy segment trees.
-* `math/`, `string/`, `utilities/`: standalone helpers.
-* `verify/`: online-judge-verify-helper tests.
-* `docs/`: generated documentation sources for the headers.
+| Directory | Contents |
+| --- | --- |
+| `data_structure/` | Segment trees, sparse table, DSU, ordered sets, and related containers. |
+| `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
+| `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
+| `math/`, `string/`, `utilities/` | Standalone helpers. |
+| `verify/` | Online Judge Verify Helper tests. |
+| `docs/` | Markdown documentation for the public headers. |
 
 ## Usage
 
-Include headers directly from the repository root:
+Include headers directly from the repository root and compile with C++20:
 
 ```cpp
 #include "data_structure/segtree.hpp"
@@ -23,6 +30,25 @@ Include headers directly from the repository root:
 ```
 
 Most generic data structures are parameterized by a monoid or acted monoid, so prefer the ready-made definitions in `monoid/` and `acted_monoid/` when possible.
+
+```cpp
+using Sum = m1une::monoid::Add<long long>;
+m1une::data_structure::Segtree<Sum> seg(std::vector<long long>{1, 2, 3, 4});
+
+seg.set(1, 10);
+long long answer = seg.prod(0, 3);  // 1 + 10 + 3
+```
+
+## Documentation Conventions
+
+* Ranges are half-open: `[l, r)` includes `l` and excludes `r`.
+* Indices are zero-based.
+* `prod(l, r)` means "fold the values in `[l, r)` with the selected monoid".
+* Lazy segment trees use acted monoids: the value monoid describes queries, and
+  the operator monoid describes updates.
+* Some monoids store metadata in their `value_type`. When a monoid provides
+  `make(value)` or `make(value, index)`, the data structures use it automatically
+  while building from a vector of another type.
 
 ## Verification
 

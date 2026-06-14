@@ -5,52 +5,74 @@ documentation_of: ../../data_structure/segtree.hpp
 
 ## Overview
 
-A highly generic Segment Tree that operates on any Monoid structure satisfying the `m1une::monoid::IsMonoid` concept. It allows for point updates and range queries in $O(\log N)$ time, as well as binary search on the tree (`max_right`, `min_left`) in $O(\log N)$ time.
+`m1une::data_structure::Segtree` is a generic segment tree for point updates and
+range queries. The query operation is supplied by a monoid, so the same data
+structure can handle sums, minimums, maximums, gcd, affine composition, and other
+associative operations.
+
+Use it when updates affect one position at a time. For range updates, use
+`LazySegtree` with an acted monoid instead.
 
 ## Template Parameters
 
-* `Monoid`: A struct representing the mathematical monoid, providing `value_type`, `id()`, and `op(a, b)`. You can find standard monoids in the `monoid/` directory.
+* `Monoid`: A type satisfying `m1une::monoid::IsMonoid`.
+
+The monoid must provide:
+
+* `using value_type = T`
+* `static constexpr T id()`
+* `static constexpr T op(const T& a, const T& b)`
+
+Ready-made monoids are available in `monoid/`.
+
+## Construction
+
+* `Segtree()`: creates an empty tree.
+* `Segtree(int n)`: creates `n` elements initialized with `Monoid::id()`.
+* `Segtree(const std::vector<T>& v)`: builds from monoid values.
+* `Segtree(std::vector<T>&& v)`: builds from moved monoid values.
+* `Segtree(const std::vector<U>& v)`: builds from another value type when
+  `Monoid::make(value)`, `Monoid::make(value, index)`, or `static_cast<T>(value)`
+  is available.
+
+All non-empty constructors build the tree in $O(N)$ time.
 
 ## Methods
 
-* `Segtree(int n)`
-  Initializes an array of size $n$ with the monoid's identity element. Time complexity: $O(N)$.
-
-* `Segtree(const std::vector<T>& v)`
-  Builds the segment tree from the given vector in $O(N)$ time.
-
 * `int size()`
-  Returns the number of elements. Time complexity: $O(1)$.
+  Returns the number of elements. Complexity: $O(1)$.
 
 * `bool empty()`
-  Returns whether the tree is empty. Time complexity: $O(1)$.
+  Returns whether the tree has no elements. Complexity: $O(1)$.
 
 * `void set(int p, T x)`
-  Assigns $x$ to the $p$-th element. Time complexity: $O(\log N)$.
+  Assigns `x` to index `p`. Complexity: $O(\log N)$.
 
 * `T get(int p)`
-  Returns the $p$-th element. Time complexity: $O(1)$.
+  Returns the value at index `p`. Complexity: $O(1)$.
 
 * `T operator[](int p)`
-  Returns the $p$-th element. Time complexity: $O(1)$.
+  Returns the value at index `p`. Complexity: $O(1)$.
 
 * `T prod(int l, int r)`
-  Returns the result of the monoid operation over the range $[l, r)$. Time complexity: $O(\log N)$.
+  Returns the monoid product over `[l, r)`. Complexity: $O(\log N)$.
 
 * `T all_prod()`
-  Returns the product of the entire array. Time complexity: $O(1)$.
+  Returns the product of the entire array. Complexity: $O(1)$.
 
 * `std::vector<T> to_vector()`
-  Returns all elements as a vector. Time complexity: $O(N)$.
+  Returns all elements as a vector. Complexity: $O(N)$.
 
 * `std::vector<T> to_vector(int l, int r)`
-  Returns the elements in $[l, r)$ as a vector. Time complexity: $O(r-l)$.
+  Returns the elements in `[l, r)` as a vector. Complexity: $O(r-l)$.
 
 * `int max_right<F>(int l, F f)`
-  Returns the largest index $r$ such that `f(prod(l, r))` is `true`. Time complexity: $O(\log N)$.
+  Returns the largest index `r` such that `f(prod(l, r))` is `true`.
+  The predicate must satisfy `f(Monoid::id())`. Complexity: $O(\log N)$.
 
 * `int min_left<F>(int r, F f)`
-  Returns the smallest index $l$ such that `f(prod(l, r))` is `true`. Time complexity: $O(\log N)$.
+  Returns the smallest index `l` such that `f(prod(l, r))` is `true`.
+  The predicate must satisfy `f(Monoid::id())`. Complexity: $O(\log N)$.
 
 ## Example
 
@@ -58,16 +80,16 @@ A highly generic Segment Tree that operates on any Monoid structure satisfying t
 #include "data_structure/segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
+#include <vector>
 
 int main() {
-    int n = 5;
-    m1une::data_structure::Segtree<m1une::monoid::Add<long long>> seg(n);
+    using Sum = m1une::monoid::Add<long long>;
+    m1une::data_structure::Segtree<Sum> seg(std::vector<long long>{0, 0, 0, 0, 0});
 
     seg.set(0, 10);
     seg.set(2, 20);
 
-    // Get sum of range [0, 3) -> 10 + 0 + 20 = 30
-    std::cout << seg.prod(0, 3) << "\n"; 
+    std::cout << seg.prod(0, 3) << "\n";  // 30
 
     return 0;
 }
