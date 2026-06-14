@@ -19,10 +19,19 @@ A highly generic Lazy Segment Tree that supports both range queries and range up
 * `LazySegtree(const std::vector<T>& v)`
   Builds the lazy segment tree from the given vector in $O(N)$ time.
 
+* `int size()`
+  Returns the number of elements. Time complexity: $O(1)$.
+
+* `bool empty()`
+  Returns whether the tree is empty. Time complexity: $O(1)$.
+
 * `void set(int p, T x)`
   Assigns $x$ to the $p$-th element. Time complexity: $O(\log N)$.
 
 * `T get(int p)`
+  Returns the $p$-th element. Time complexity: $O(\log N)$.
+
+* `T operator[](int p)`
   Returns the $p$-th element. Time complexity: $O(\log N)$.
 
 * `T prod(int l, int r)`
@@ -30,6 +39,12 @@ A highly generic Lazy Segment Tree that supports both range queries and range up
 
 * `T all_prod()`
   Returns the product of the entire array. Time complexity: $O(1)$.
+
+* `std::vector<T> to_vector()`
+  Returns all elements as a vector. Time complexity: $O(N)$.
+
+* `std::vector<T> to_vector(int l, int r)`
+  Returns the elements in $[l, r)$ as a vector. Time complexity: $O((r-l)\log N)$.
 
 * `void apply(int p, F f)`
   Applies the operator $f$ to the $p$-th element. Time complexity: $O(\log N)$.

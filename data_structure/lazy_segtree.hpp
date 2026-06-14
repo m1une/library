@@ -100,6 +100,16 @@ struct LazySegtree {
         for (int i = _size - 1; i >= 1; i--) update(i);
     }
 
+    // Returns the number of elements.
+    int size() const {
+        return _n;
+    }
+
+    // Returns whether the tree is empty.
+    bool empty() const {
+        return _n == 0;
+    }
+
     // Assigns x to the p-th element.
     void set(int p, T x) {
         assert(0 <= p && p < _n);
@@ -115,6 +125,11 @@ struct LazySegtree {
         p += _size;
         for (int i = _log; i >= 1; i--) push(p >> i);
         return _d[p];
+    }
+
+    // Returns the value of the p-th element.
+    T operator[](int p) {
+        return get(p);
     }
 
     // Returns the product (result of the monoid operation) in the range [l, r).
@@ -144,6 +159,24 @@ struct LazySegtree {
     // Returns the product of the entire array.
     T all_prod() const {
         return _d[1];
+    }
+
+    // Returns all elements as a vector.
+    std::vector<T> to_vector() {
+        for (int k = 1; k < _size; k++) push(k);
+        std::vector<T> res;
+        res.reserve(_n);
+        for (int i = 0; i < _n; i++) res.push_back(_d[_size + i]);
+        return res;
+    }
+
+    // Returns the elements in the range [l, r) as a vector.
+    std::vector<T> to_vector(int l, int r) {
+        assert(0 <= l && l <= r && r <= _n);
+        std::vector<T> res;
+        res.reserve(r - l);
+        for (int i = l; i < r; i++) res.push_back(get(i));
+        return res;
     }
 
     // Applies the operator f to the p-th element.

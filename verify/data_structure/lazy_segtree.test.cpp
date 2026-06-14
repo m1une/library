@@ -21,6 +21,14 @@ void solve() {
     for (int i = 0; i < N; ++i) cin >> a[i];
 
     m1une::data_structure::LazySegtree<AM> seg(a);
+    assert(seg.size() == N);
+    assert(seg.empty() == (N == 0));
+    auto values = seg.to_vector();
+    assert(int(values.size()) == N);
+    for (int i = 0; i < N; i++) {
+        assert(values[i].sum == mint(a[i]));
+        assert(seg[i].sum == mint(a[i]));
+    }
     for (int q = 0; q < Q; ++q) {
         ll t;
         cin >> t;

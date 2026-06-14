@@ -2,6 +2,7 @@
 
 #include "data_structure/segtree.hpp"
 #include "monoid/add.hpp"
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -21,6 +22,10 @@ int main() {
     }
 
     m1une::data_structure::Segtree<m1une::monoid::Add<long long>> seg(a);
+    assert(seg.size() == n);
+    assert(seg.empty() == (n == 0));
+    assert(seg.to_vector() == a);
+    for (int i = 0; i < n; i++) assert(seg[i] == a[i]);
 
     for (int i = 0; i < q; i++) {
         int type;

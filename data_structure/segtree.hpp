@@ -79,6 +79,16 @@ struct Segtree {
         for (int i = _size - 1; i >= 1; i--) update(i);
     }
 
+    // Returns the number of elements.
+    int size() const {
+        return _n;
+    }
+
+    // Returns whether the tree is empty.
+    bool empty() const {
+        return _n == 0;
+    }
+
     // Sets the value of the element at index `p` to `x`.
     void set(int p, T x) {
         assert(0 <= p && p < _n);
@@ -91,6 +101,11 @@ struct Segtree {
     T get(int p) const {
         assert(0 <= p && p < _n);
         return _d[p + _size];
+    }
+
+    // Returns the value of the element at index `p`.
+    T operator[](int p) const {
+        return get(p);
     }
 
     // Returns the product (result of the monoid operation) in the range [l, r).
@@ -111,6 +126,20 @@ struct Segtree {
     // Returns the product of the entire array.
     T all_prod() const {
         return _d[1];
+    }
+
+    // Returns all elements as a vector.
+    std::vector<T> to_vector() const {
+        return to_vector(0, _n);
+    }
+
+    // Returns the elements in the range [l, r) as a vector.
+    std::vector<T> to_vector(int l, int r) const {
+        assert(0 <= l && l <= r && r <= _n);
+        std::vector<T> res;
+        res.reserve(r - l);
+        for (int i = l; i < r; i++) res.push_back(_d[_size + i]);
+        return res;
     }
 
     // Finds the largest `r` such that `f(prod(l, r))` is true.

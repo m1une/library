@@ -19,10 +19,19 @@ A highly generic Segment Tree that operates on any Monoid structure satisfying t
 * `Segtree(const std::vector<T>& v)`
   Builds the segment tree from the given vector in $O(N)$ time.
 
+* `int size()`
+  Returns the number of elements. Time complexity: $O(1)$.
+
+* `bool empty()`
+  Returns whether the tree is empty. Time complexity: $O(1)$.
+
 * `void set(int p, T x)`
   Assigns $x$ to the $p$-th element. Time complexity: $O(\log N)$.
 
 * `T get(int p)`
+  Returns the $p$-th element. Time complexity: $O(1)$.
+
+* `T operator[](int p)`
   Returns the $p$-th element. Time complexity: $O(1)$.
 
 * `T prod(int l, int r)`
@@ -30,6 +39,12 @@ A highly generic Segment Tree that operates on any Monoid structure satisfying t
 
 * `T all_prod()`
   Returns the product of the entire array. Time complexity: $O(1)$.
+
+* `std::vector<T> to_vector()`
+  Returns all elements as a vector. Time complexity: $O(N)$.
+
+* `std::vector<T> to_vector(int l, int r)`
+  Returns the elements in $[l, r)$ as a vector. Time complexity: $O(r-l)$.
 
 * `int max_right<F>(int l, F f)`
   Returns the largest index $r$ such that `f(prod(l, r))` is `true`. Time complexity: $O(\log N)$.
