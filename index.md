@@ -99,6 +99,9 @@ data:
       path: data_structure/ordered_multiset.hpp
       title: Ordered Multiset
     - icon: ':heavy_check_mark:'
+      path: data_structure/ordered_set.hpp
+      title: Ordered Set
+    - icon: ':heavy_check_mark:'
       path: data_structure/persistent_treap.hpp
       title: Persistent Treap
     - icon: ':heavy_check_mark:'
@@ -256,6 +259,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/ordered_multiset.test.cpp
       title: verify/data_structure/ordered_multiset.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/ordered_set.test.cpp
+      title: verify/data_structure/ordered_set.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_treap.test.cpp
       title: verify/data_structure/persistent_treap.test.cpp

@@ -1,11 +1,17 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: data_structure/ordered_set.hpp
+    title: Ordered Set
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/ordered_multiset.test.cpp
     title: verify/data_structure/ordered_multiset.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/ordered_set.test.cpp
+    title: verify/data_structure/ordered_set.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -272,11 +278,13 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: data_structure/ordered_multiset.hpp
-  requiredBy: []
+  requiredBy:
+  - data_structure/ordered_set.hpp
   timestamp: '2026-06-14 04:54:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/ordered_multiset.test.cpp
+  - verify/data_structure/ordered_set.test.cpp
 documentation_of: data_structure/ordered_multiset.hpp
 layout: document
 title: Ordered Multiset
