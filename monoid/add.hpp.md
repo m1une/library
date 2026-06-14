@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/data_structure/disjoint_sparse_table.test.cpp
+    title: verify/data_structure/disjoint_sparse_table.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/dynamic_monoid_array.test.cpp
     title: verify/data_structure/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
@@ -37,6 +40,7 @@ data:
   verifiedWith:
   - verify/data_structure/dynamic_monoid_array.test.cpp
   - verify/data_structure/segtree.test.cpp
+  - verify/data_structure/disjoint_sparse_table.test.cpp
 documentation_of: monoid/add.hpp
 layout: document
 title: Add Monoid

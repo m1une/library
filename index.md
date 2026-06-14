@@ -81,6 +81,9 @@ data:
   - name: data_structure
     pages:
     - icon: ':heavy_check_mark:'
+      path: data_structure/disjoint_sparse_table.hpp
+      title: Disjoint Sparse Table
+    - icon: ':heavy_check_mark:'
       path: data_structure/dsu.hpp
       title: Disjoint Set Union (DSU)
     - icon: ':heavy_check_mark:'
@@ -241,6 +244,9 @@ data:
   verificationCategories:
   - name: verify/data_structure
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/disjoint_sparse_table.test.cpp
+      title: verify/data_structure/disjoint_sparse_table.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/dsu.test.cpp
       title: verify/data_structure/dsu.test.cpp

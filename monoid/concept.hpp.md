@@ -3,6 +3,9 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
+    path: data_structure/disjoint_sparse_table.hpp
+    title: Disjoint Sparse Table
+  - icon: ':heavy_check_mark:'
     path: data_structure/dynamic_monoid_array.hpp
     title: Dynamic Monoid Array
   - icon: ':heavy_check_mark:'
@@ -15,6 +18,9 @@ data:
     path: monoid/power.hpp
     title: Monoid Power
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/disjoint_sparse_table.test.cpp
+    title: verify/data_structure/disjoint_sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/dynamic_monoid_array.test.cpp
     title: verify/data_structure/dynamic_monoid_array.test.cpp
@@ -56,6 +62,7 @@ data:
   requiredBy:
   - data_structure/segtree.hpp
   - data_structure/dynamic_monoid_array.hpp
+  - data_structure/disjoint_sparse_table.hpp
   - data_structure/sparse_table.hpp
   - monoid/power.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
@@ -64,6 +71,7 @@ data:
   - verify/data_structure/dynamic_monoid_array.test.cpp
   - verify/data_structure/sparse_table.test.cpp
   - verify/data_structure/segtree.test.cpp
+  - verify/data_structure/disjoint_sparse_table.test.cpp
 documentation_of: monoid/concept.hpp
 layout: document
 title: Monoid Concept
