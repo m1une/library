@@ -105,6 +105,9 @@ data:
       path: data_structure/ordered_set.hpp
       title: Ordered Set
     - icon: ':heavy_check_mark:'
+      path: data_structure/persistent_dynamic_array.hpp
+      title: Persistent Dynamic Array
+    - icon: ':heavy_check_mark:'
       path: data_structure/persistent_lazy_segtree.hpp
       title: Persistent Lazy Segment Tree
     - icon: ':heavy_check_mark:'
@@ -274,6 +277,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/ordered_set.test.cpp
       title: verify/data_structure/ordered_set.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_dynamic_array.test.cpp
+      title: verify/data_structure/persistent_dynamic_array.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_lazy_segtree.test.cpp
       title: verify/data_structure/persistent_lazy_segtree.test.cpp
