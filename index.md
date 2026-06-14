@@ -117,6 +117,9 @@ data:
       path: data_structure/ordered_set.hpp
       title: Ordered Set
     - icon: ':heavy_check_mark:'
+      path: data_structure/persistent_dsu.hpp
+      title: Persistent Disjoint Set Union
+    - icon: ':heavy_check_mark:'
       path: data_structure/persistent_dual_segtree.hpp
       title: Persistent Dual Segment Tree
     - icon: ':heavy_check_mark:'
@@ -313,6 +316,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/ordered_set.test.cpp
       title: verify/data_structure/ordered_set.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_dsu.test.cpp
+      title: verify/data_structure/persistent_dsu.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/persistent_dsu_library_checker.test.cpp
+      title: verify/data_structure/persistent_dsu_library_checker.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_dual_segtree.test.cpp
       title: verify/data_structure/persistent_dual_segtree.test.cpp
