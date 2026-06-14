@@ -46,71 +46,30 @@ In this document:
 
 ## Methods
 
-* `int size() const`
-  Returns the number of elements. ($O(1)$)
-
-* `bool empty() const`
-  Returns whether the sequence is empty. ($O(1)$)
-
-* `void clear()`
-  Removes all elements. ($O(1)$)
-
-* `void insert(int pos, T value)`
-  Inserts `value` before index `pos`. ($O(\log N)$)
-
-* `void insert(int pos, const std::vector<T>& v)`
-  Inserts every value in `v` before index `pos`. ($O(M + \log N)$)
-
-* `void insert(int pos, const DynamicMonoidArray& other)`
-  Inserts a copy of another sequence before index `pos`. ($O(M + \log N)$)
-
-* `void push_back(T value)`, `void push_front(T value)`
-  Inserts one value at the end or beginning. ($O(\log N)$)
-
-* `void append(const std::vector<T>& v)`
-  Appends all values in `v`. ($O(M + \log N)$)
-
-* `void append(const DynamicMonoidArray& other)`
-  Appends a copy of another sequence. ($O(M + \log N)$)
-
-* `void erase(int pos)`
-  Removes the value at index `pos`. ($O(\log N)$)
-
-* `void erase(int l, int r)`
-  Removes the half-open range $[l, r)$. ($O(\log N)$)
-
-* `void pop_back()`, `void pop_front()`
-  Removes one value from the end or beginning. ($O(\log N)$)
-
-* `T get(int pos) const`
-  Returns the value at index `pos`. ($O(\log N)$)
-
-* `void set(int pos, T value)`
-  Replaces the value at index `pos` and rebuilds affected products. ($O(\log N)$)
-
-* `void reverse(int l, int r)`
-  Reverses the half-open range $[l, r)$. ($O(\log N)$)
-
-* `void reverse()`
-  Reverses the entire sequence. ($O(1)$)
-
-* `void rotate(int l, int m, int r)`
-  Applies `std::rotate`-style rotation to $[l, r)$, moving $[m, r)$ before $[l, m)$. ($O(\log N)$)
-
-* `T prod(int l, int r)`
-  Returns the monoid product over $[l, r)$. ($O(\log N)$)
-
-* `T all_prod() const`
-  Returns the monoid product over the whole sequence. ($O(1)$)
-
-* `std::vector<T> to_vector() const`
-  Dumps the sequence into a standard vector. ($O(N)$)
-
-* `std::vector<T> to_vector(int l, int r) const`
-  Dumps the half-open range $[l, r)$ into a standard vector, where `K = r - l`. ($O(K + \log N)$)
-
-* `DynamicMonoidArray split_off(int pos)`
-  Removes $[pos, N)$ from the current sequence and returns it as a new sequence, where `K = N - pos`. Because each sequence owns its memory pool, the returned suffix is copied into a new pool. ($O(K + \log N)$)
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `int size() const` | Returns the number of elements. | $O(1)$ |
+| `bool empty() const` | Returns whether the sequence is empty. | $O(1)$ |
+| `void clear()` | Removes all elements. | $O(1)$ |
+| `void insert(int pos, T value)` | Inserts `value` before index `pos`. | $O(\log N)$ |
+| `void insert(int pos, const std::vector<T>& v)` | Inserts every value in `v` before index `pos`. | $O(M + \log N)$ |
+| `void insert(int pos, const DynamicMonoidArray& other)` | Inserts a copy of `other` before index `pos`. | $O(M + \log N)$ |
+| `void push_back(T value)`, `void push_front(T value)` | Inserts one value at the end or beginning. | $O(\log N)$ |
+| `void append(const std::vector<T>& v)` | Appends all values in `v`. | $O(M + \log N)$ |
+| `void append(const DynamicMonoidArray& other)` | Appends a copy of `other`. | $O(M + \log N)$ |
+| `void erase(int pos)` | Removes the value at index `pos`. | $O(\log N)$ |
+| `void erase(int l, int r)` | Removes the half-open range `[l, r)`. | $O(\log N)$ |
+| `void pop_back()`, `void pop_front()` | Removes one value from the end or beginning. | $O(\log N)$ |
+| `T get(int pos) const` | Returns the value at index `pos`. | $O(\log N)$ |
+| `void set(int pos, T value)` | Replaces index `pos` and rebuilds affected products. | $O(\log N)$ |
+| `void reverse(int l, int r)` | Reverses the half-open range `[l, r)`. | $O(\log N)$ |
+| `void reverse()` | Reverses the entire sequence. | $O(1)$ |
+| `void rotate(int l, int m, int r)` | Moves `[m, r)` before `[l, m)`, like `std::rotate`. | $O(\log N)$ |
+| `T prod(int l, int r)` | Returns the monoid product over `[l, r)`. | $O(\log N)$ |
+| `T all_prod() const` | Returns the monoid product over the whole sequence. | $O(1)$ |
+| `std::vector<T> to_vector() const` | Dumps the sequence to `std::vector`. | $O(N)$ |
+| `std::vector<T> to_vector(int l, int r) const` | Dumps `[l, r)` to `std::vector`, where `K = r - l`. | $O(K + \log N)$ |
+| `DynamicMonoidArray split_off(int pos)` | Removes `[pos, N)` and returns it as a new sequence with its own pool, where `K = N - pos`. | $O(K + \log N)$ |
 
 ## Notes
 

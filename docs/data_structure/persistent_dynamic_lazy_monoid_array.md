@@ -15,29 +15,16 @@ It supports insertion, deletion, reversal, rotation, point assignment, range app
 
 ## Main Operations
 
-* `insert`, `push_back`, `push_front`, `append`
-  Return a version with values inserted. Expected $O(\log N)$ for one value and expected $O(M + \log N)$ for a vector.
-
-* `erase`, `pop_back`, `pop_front`
-  Return a version with values removed. Expected $O(\log N)$.
-
-* `set`
-  Returns a version with one value replaced. Expected $O(\log N)$.
-
-* `apply`
-  Returns a version with an operator applied to one value or a half-open range. Expected $O(\log N)$.
-
-* `reverse`, `rotate`
-  Return versions with sequence order changed. Expected $O(\log N)$; whole-sequence `reverse()` is $O(1)$.
-
-* `prod`, `all_prod`
-  Return acted-monoid products over a range or the whole sequence. Expected $O(\log N)$ for `prod`, $O(1)$ for `all_prod`.
-
-* `split`, `split_off`
-  Return persistent split versions. Expected $O(\log N)$.
-
-* `to_vector`
-  Dumps a range or the whole sequence without mutating the version. $O(K + \log N)$ for a range, $O(N)$ for all values.
+| Operation | Description | Complexity |
+| --- | --- | --- |
+| `insert`, `push_back`, `push_front`, `append` | Return a version with values inserted. | Expected $O(\log N)$ for one value; expected $O(M + \log N)$ for a vector |
+| `erase`, `pop_back`, `pop_front` | Return a version with values removed. | Expected $O(\log N)$ |
+| `set` | Returns a version with one value replaced. | Expected $O(\log N)$ |
+| `apply` | Returns a version with an operator applied to one value or a half-open range. | Expected $O(\log N)$ |
+| `reverse`, `rotate` | Return versions with sequence order changed. | Expected $O(\log N)$; whole-sequence `reverse()` is $O(1)$ |
+| `prod`, `all_prod` | Return acted-monoid products over a range or the whole sequence. | Expected $O(\log N)$ for `prod`; $O(1)$ for `all_prod` |
+| `split`, `split_off` | Return persistent split versions. | Expected $O(\log N)$ |
+| `to_vector` | Dumps a range or the whole sequence without mutating the version. | $O(K + \log N)$ for a range; $O(N)$ for all values |
 
 ## Notes
 

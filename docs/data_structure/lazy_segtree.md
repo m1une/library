@@ -42,49 +42,21 @@ All non-empty constructors build the tree in $O(N)$ time.
 
 ## Methods
 
-* `int size()`
-  Returns the number of elements. Complexity: $O(1)$.
-
-* `bool empty()`
-  Returns whether the tree has no elements. Complexity: $O(1)$.
-
-* `void set(int p, T x)`
-  Assigns `x` to index `p`. Complexity: $O(\log N)$.
-
-* `T get(int p)`
-  Pushes pending lazy updates on the path and returns the value at index `p`.
-  Complexity: $O(\log N)$.
-
-* `T operator[](int p)`
-  Returns the value at index `p`. Complexity: $O(\log N)$.
-
-* `T prod(int l, int r)`
-  Returns the value monoid product over `[l, r)`. Complexity: $O(\log N)$.
-
-* `T all_prod()`
-  Returns the product of the entire array. Complexity: $O(1)$.
-
-* `std::vector<T> to_vector()`
-  Pushes all pending updates and returns all elements as a vector.
-  Complexity: $O(N)$.
-
-* `std::vector<T> to_vector(int l, int r)`
-  Returns the elements in `[l, r)` as a vector. Complexity:
-  $O((r-l)\log N)$.
-
-* `void apply(int p, F f)`
-  Applies operator `f` to index `p`. Complexity: $O(\log N)$.
-
-* `void apply(int l, int r, F f)`
-  Applies operator `f` to every element in `[l, r)`. Complexity: $O(\log N)$.
-
-* `int max_right<G>(int l, G g)`
-  Returns the largest index `r` such that `g(prod(l, r))` is `true`.
-  The predicate must satisfy `g(ActedMonoid::id())`. Complexity: $O(\log N)$.
-
-* `int min_left<G>(int r, G g)`
-  Returns the smallest index `l` such that `g(prod(l, r))` is `true`.
-  The predicate must satisfy `g(ActedMonoid::id())`. Complexity: $O(\log N)$.
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `int size()` | Returns the number of elements. | $O(1)$ |
+| `bool empty()` | Returns whether the tree has no elements. | $O(1)$ |
+| `void set(int p, T x)` | Assigns `x` to index `p`. | $O(\log N)$ |
+| `T get(int p)` | Pushes pending lazy updates on the path and returns the value at index `p`. | $O(\log N)$ |
+| `T operator[](int p)` | Returns the value at index `p`. | $O(\log N)$ |
+| `T prod(int l, int r)` | Returns the value monoid product over `[l, r)`. | $O(\log N)$ |
+| `T all_prod()` | Returns the product of the entire array. | $O(1)$ |
+| `std::vector<T> to_vector()` | Pushes all pending updates and returns all elements. | $O(N)$ |
+| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O((r-l)\log N)$ |
+| `void apply(int p, F f)` | Applies operator `f` to index `p`. | $O(\log N)$ |
+| `void apply(int l, int r, F f)` | Applies operator `f` to every element in `[l, r)`. | $O(\log N)$ |
+| `int max_right<G>(int l, G g)` | Returns the largest `r` such that `g(prod(l, r))` is `true`. Requires `g(ActedMonoid::id())`. | $O(\log N)$ |
+| `int min_left<G>(int r, G g)` | Returns the smallest `l` such that `g(prod(l, r))` is `true`. Requires `g(ActedMonoid::id())`. | $O(\log N)$ |
 
 ## Example
 

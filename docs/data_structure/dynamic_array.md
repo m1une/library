@@ -53,77 +53,32 @@ In this document:
 
 ## Methods
 
-* `int size() const`
-  Returns the number of elements currently in the array. ($O(1)$)
-
-* `bool empty() const`
-  Returns whether the array is empty. ($O(1)$)
-
-* `void clear()`
-  Removes all elements. ($O(1)$)
-
-* `void push_back(T val)`
-  Appends a new element `val` to the end of the array. ($O(\log N)$)
-
-* `void push_front(T val)`
-  Inserts a new element `val` at the beginning of the array. ($O(\log N)$)
-
-* `void append(const std::vector<T>& v)`
-  Appends every element in `v`. ($O(M + \log N)$)
-
-* `void append(const DynamicArray& other)`
-  Appends a copy of another dynamic array. ($O(M + \log N)$)
-
-* `void insert(int pos, T val)`
-  Inserts a new element `val` at the specified 0-based index `pos`. All subsequent elements shift right. ($O(\log N)$)
-
-* `void insert(int pos, const std::vector<T>& v)`
-  Inserts all elements of `v` at `pos`. ($O(M + \log N)$)
-
-* `void insert(int pos, const DynamicArray& other)`
-  Inserts a copy of another dynamic array at `pos`. ($O(M + \log N)$)
-
-* `void erase(int pos)`
-  Removes the element at the specified 0-based index `pos`. All subsequent elements shift left. ($O(\log N)$)
-
-* `void erase(int l, int r)`
-  Removes the half-open range $[l, r)$. ($O(\log N)$)
-
-* `void pop_back()`, `void pop_front()`
-  Removes one element from the back or front. ($O(\log N)$)
-
-* `T& at(int pos)`, `const T& at(int pos) const`
-  Returns a reference to the element at `pos`. ($O(\log N)$)
-
-* `operator[]`
-  Alias for `at(pos)`. ($O(\log N)$)
-
-* `T& front()`, `T& back()`
-  Returns a reference to the first or last element. ($O(\log N)$)
-
-* `T get(int pos) const`
-  Returns the element at the specified 0-based index `pos`. ($O(\log N)$)
-
-* `void set(int pos, T val)`
-  Overwrites the element at index `pos` with `val`. ($O(\log N)$)
-
-* `void reverse(int l, int r)`
-  Reverses the half-open range $[l, r)$ using lazy propagation. ($O(\log N)$)
-
-* `void reverse()`
-  Reverses the entire array. ($O(1)$ amortized through lazy propagation)
-
-* `void rotate(int l, int m, int r)`
-  Applies `std::rotate`-style rotation to $[l, r)$, moving $[m, r)$ before $[l, m)$. ($O(\log N)$)
-
-* `std::vector<T> to_vector() const`
-  Dumps the entire array state into a standard `std::vector`. ($O(N)$)
-
-* `std::vector<T> to_vector(int l, int r) const`
-  Dumps the half-open range $[l, r)$ into a standard `std::vector`, where `K = r - l`. ($O(K + \log N)$)
-
-* `DynamicArray split_off(int pos)`
-  Removes $[pos, N)$ from the current array and returns it as a new `DynamicArray`, where `K = N - pos`. Because each `DynamicArray` owns its own memory pool, the returned suffix is copied into a new pool. ($O(K + \log N)$)
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `int size() const` | Returns the current number of elements. | $O(1)$ |
+| `bool empty() const` | Returns whether the array is empty. | $O(1)$ |
+| `void clear()` | Removes all elements. | $O(1)$ |
+| `void push_back(T val)` | Appends `val` to the end. | $O(\log N)$ |
+| `void push_front(T val)` | Inserts `val` at the beginning. | $O(\log N)$ |
+| `void append(const std::vector<T>& v)` | Appends every element in `v`. | $O(M + \log N)$ |
+| `void append(const DynamicArray& other)` | Appends a copy of another dynamic array. | $O(M + \log N)$ |
+| `void insert(int pos, T val)` | Inserts `val` before index `pos`. | $O(\log N)$ |
+| `void insert(int pos, const std::vector<T>& v)` | Inserts all elements of `v` before index `pos`. | $O(M + \log N)$ |
+| `void insert(int pos, const DynamicArray& other)` | Inserts a copy of `other` before index `pos`. | $O(M + \log N)$ |
+| `void erase(int pos)` | Removes the element at index `pos`. | $O(\log N)$ |
+| `void erase(int l, int r)` | Removes the half-open range `[l, r)`. | $O(\log N)$ |
+| `void pop_back()`, `void pop_front()` | Removes one element from the back or front. | $O(\log N)$ |
+| `T& at(int pos)`, `const T& at(int pos) const` | Returns a reference to the element at `pos`. | $O(\log N)$ |
+| `operator[]` | Alias for `at(pos)`. | $O(\log N)$ |
+| `T& front()`, `T& back()` | Returns a reference to the first or last element. | $O(\log N)$ |
+| `T get(int pos) const` | Returns a copy of the element at `pos`. | $O(\log N)$ |
+| `void set(int pos, T val)` | Overwrites the element at index `pos` with `val`. | $O(\log N)$ |
+| `void reverse(int l, int r)` | Reverses the half-open range `[l, r)` lazily. | $O(\log N)$ |
+| `void reverse()` | Reverses the entire array lazily. | $O(1)$ amortized |
+| `void rotate(int l, int m, int r)` | Moves `[m, r)` before `[l, m)`, like `std::rotate`. | $O(\log N)$ |
+| `std::vector<T> to_vector() const` | Dumps the entire array to `std::vector`. | $O(N)$ |
+| `std::vector<T> to_vector(int l, int r) const` | Dumps `[l, r)` to `std::vector`, where `K = r - l`. | $O(K + \log N)$ |
+| `DynamicArray split_off(int pos)` | Removes `[pos, N)` and returns it as a new array with its own pool, where `K = N - pos`. | $O(K + \log N)$ |
 
 ## Example
 
@@ -147,7 +102,7 @@ int main() {
     arr.append(tail);           // {0, 1, 2, 10, 4, 3}
 
     for (int x : arr.to_vector()) {
-        std::cout << x << " "; 
+        std::cout << x << " ";
     }
     std::cout << "\n";
 
