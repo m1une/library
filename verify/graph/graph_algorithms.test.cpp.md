@@ -85,51 +85,67 @@ data:
     \ <cassert>\n#include <iostream>\n#include <set>\n#include <string>\n#include\
     \ <vector>\n\n#line 1 \"graph/all.hpp\"\n\n\n\n#line 1 \"graph/directed.hpp\"\n\
     \n\n\n#line 1 \"graph/cycle_detection.hpp\"\n\n\n\n#line 6 \"graph/cycle_detection.hpp\"\
-    \n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 6 \"graph/graph.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace graph {\n\ntemplate <class T = int>\nstruct Edge {\n    using\
-    \ cost_type = T;\n\n    int from;\n    int to;\n    T cost;\n    int id;\n\n \
-    \   Edge() : from(-1), to(-1), cost(T()), id(-1) {}\n    Edge(int from_, int to_,\
-    \ T cost_ = T(1), int id_ = -1) : from(from_), to(to_), cost(cost_), id(id_) {}\n\
-    \n    int other(int v) const {\n        assert(v == from || v == to);\n      \
-    \  return from ^ to ^ v;\n    }\n};\n\ntemplate <class T = int>\nstruct Graph\
-    \ {\n    using edge_type = Edge<T>;\n    using cost_type = T;\n\n   private:\n\
-    \    int _n;\n    int _edge_count;\n    std::vector<std::vector<edge_type>> _g;\n\
-    \n   public:\n    Graph() : _n(0), _edge_count(0) {}\n    explicit Graph(int n)\
+    \n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\n#include <utility>\n\
+    #line 7 \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
+    \ <class T = int>\nstruct Edge {\n    using cost_type = T;\n\n    int from;\n\
+    \    int to;\n    T cost;\n    int id;\n    bool alive;\n\n    Edge() : from(-1),\
+    \ to(-1), cost(T()), id(-1), alive(true) {}\n    Edge(int from_, int to_, T cost_\
+    \ = T(1), int id_ = -1, bool alive_ = true)\n        : from(from_), to(to_), cost(cost_),\
+    \ id(id_), alive(alive_) {}\n\n    int other(int v) const {\n        assert(v\
+    \ == from || v == to);\n        return from ^ to ^ v;\n    }\n};\n\ntemplate <class\
+    \ T = int>\nstruct Graph {\n    using edge_type = Edge<T>;\n    using cost_type\
+    \ = T;\n\n   private:\n    int _n;\n    int _edge_count;\n    std::vector<std::vector<edge_type>>\
+    \ _g;\n    std::vector<std::vector<std::pair<int, int>>> _edge_positions;\n\n\
+    \   public:\n    Graph() : _n(0), _edge_count(0) {}\n    explicit Graph(int n)\
     \ : _n(n), _edge_count(0), _g(n) {\n        assert(0 <= n);\n    }\n\n    int\
     \ size() const {\n        return _n;\n    }\n\n    bool empty() const {\n    \
     \    return _n == 0;\n    }\n\n    int edge_count() const {\n        return _edge_count;\n\
     \    }\n\n    int add_vertex() {\n        _g.emplace_back();\n        return _n++;\n\
     \    }\n\n    int add_directed_edge(int from, int to, T cost = T(1)) {\n     \
     \   assert(0 <= from && from < _n);\n        assert(0 <= to && to < _n);\n   \
-    \     int id = _edge_count++;\n        _g[from].push_back(edge_type(from, to,\
-    \ cost, id));\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost\
+    \     int id = _edge_count++;\n        int idx = int(_g[from].size());\n     \
+    \   _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.push_back({{from,\
+    \ idx}});\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost\
     \ = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
-    \        int id = _edge_count++;\n        _g[u].push_back(edge_type(u, v, cost,\
-    \ id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        return id;\n\
+    \        int id = _edge_count++;\n        int u_idx = int(_g[u].size());\n   \
+    \     int v_idx = int(_g[v].size());\n        _g[u].push_back(edge_type(u, v,\
+    \ cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        _edge_positions.push_back({{u,\
+    \ u_idx}, {v, v_idx}});\n        return id;\n    }\n\n    void set_edge_alive(int\
+    \ id, bool alive) {\n        assert(0 <= id && id < _edge_count);\n        for\
+    \ (auto [v, idx] : _edge_positions[id]) {\n            _g[v][idx].alive = alive;\n\
+    \        }\n    }\n\n    void erase_edge(int id) {\n        set_edge_alive(id,\
+    \ false);\n    }\n\n    void revive_edge(int id) {\n        set_edge_alive(id,\
+    \ true);\n    }\n\n    bool is_edge_alive(int id) const {\n        assert(0 <=\
+    \ id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n  \
+    \      auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
     \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
     \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
     \    }\n\n    const std::vector<std::vector<edge_type>>& adjacency() const {\n\
     \        return _g;\n    }\n\n    std::vector<std::vector<edge_type>>& adjacency()\
-    \ {\n        return _g;\n    }\n\n    std::vector<edge_type> edges() const {\n\
-    \        std::vector<edge_type> result;\n        result.reserve(_edge_count);\n\
+    \ {\n        return _g;\n    }\n\n    std::vector<edge_type> edges(bool include_inactive\
+    \ = false) const {\n        std::vector<edge_type> result;\n        result.reserve(_edge_count);\n\
     \        std::vector<char> used(_edge_count, false);\n        for (int v = 0;\
     \ v < _n; v++) {\n            for (const auto& e : _g[v]) {\n                if\
-    \ (0 <= e.id && e.id < _edge_count) {\n                    if (used[e.id]) continue;\n\
-    \                    used[e.id] = true;\n                }\n                result.push_back(e);\n\
+    \ (!include_inactive && !e.alive) continue;\n                if (0 <= e.id &&\
+    \ e.id < _edge_count) {\n                    if (used[e.id]) continue;\n     \
+    \               used[e.id] = true;\n                }\n                result.push_back(e);\n\
     \            }\n        }\n        return result;\n    }\n\n    Graph reversed()\
     \ const {\n        Graph result(_n);\n        result._edge_count = _edge_count;\n\
-    \        for (int v = 0; v < _n; v++) {\n            for (const auto& e : _g[v])\
-    \ {\n                result._g[e.to].push_back(edge_type(e.to, e.from, e.cost,\
-    \ e.id));\n            }\n        }\n        return result;\n    }\n};\n\n}  //\
-    \ namespace graph\n}  // namespace m1une\n\n\n#line 8 \"graph/cycle_detection.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\nstruct Cycle {\n    std::vector<int>\
-    \ vertices;\n    std::vector<int> edge_ids;\n\n    bool empty() const {\n    \
-    \    return vertices.empty();\n    }\n};\n\ninline Cycle restore_cycle(int from,\
-    \ int to, int closing_edge, const std::vector<int>& parent,\n                \
-    \           const std::vector<int>& parent_edge) {\n    Cycle result;\n    result.vertices.push_back(to);\n\
-    \n    std::vector<int> middle_vertices;\n    std::vector<int> middle_edges;\n\
-    \    for (int v = from; v != to; v = parent[v]) {\n        middle_vertices.push_back(v);\n\
+    \        result._edge_positions.assign(_edge_count, {});\n        for (int v =\
+    \ 0; v < _n; v++) {\n            for (const auto& e : _g[v]) {\n             \
+    \   int idx = int(result._g[e.to].size());\n                result._g[e.to].push_back(edge_type(e.to,\
+    \ e.from, e.cost, e.id, e.alive));\n                if (0 <= e.id && e.id < _edge_count)\
+    \ result._edge_positions[e.id].push_back({e.to, idx});\n            }\n      \
+    \  }\n        return result;\n    }\n};\n\n}  // namespace graph\n}  // namespace\
+    \ m1une\n\n\n#line 8 \"graph/cycle_detection.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ graph {\n\nstruct Cycle {\n    std::vector<int> vertices;\n    std::vector<int>\
+    \ edge_ids;\n\n    bool empty() const {\n        return vertices.empty();\n  \
+    \  }\n};\n\ninline Cycle restore_cycle(int from, int to, int closing_edge, const\
+    \ std::vector<int>& parent,\n                           const std::vector<int>&\
+    \ parent_edge) {\n    Cycle result;\n    result.vertices.push_back(to);\n\n  \
+    \  std::vector<int> middle_vertices;\n    std::vector<int> middle_edges;\n   \
+    \ for (int v = from; v != to; v = parent[v]) {\n        middle_vertices.push_back(v);\n\
     \        middle_edges.push_back(parent_edge[v]);\n    }\n    std::reverse(middle_vertices.begin(),\
     \ middle_vertices.end());\n    std::reverse(middle_edges.begin(), middle_edges.end());\n\
     \n    result.vertices.insert(result.vertices.end(), middle_vertices.begin(), middle_vertices.end());\n\
@@ -139,76 +155,76 @@ data:
     \ Graph<T>& g) {\n    int n = g.size();\n    std::vector<int> color(n, 0), parent(n,\
     \ -1), parent_edge(n, -1);\n    Cycle result;\n\n    auto dfs = [&](auto self,\
     \ int v) -> bool {\n        color[v] = 1;\n        for (const auto& e : g[v])\
-    \ {\n            if (color[e.to] == 0) {\n                parent[e.to] = v;\n\
-    \                parent_edge[e.to] = e.id;\n                if (self(self, e.to))\
-    \ return true;\n            } else if (color[e.to] == 1) {\n                result\
-    \ = restore_cycle(v, e.to, e.id, parent, parent_edge);\n                return\
-    \ true;\n            }\n        }\n        color[v] = 2;\n        return false;\n\
-    \    };\n\n    for (int v = 0; v < n; v++) {\n        if (color[v] == 0 && dfs(dfs,\
-    \ v)) break;\n    }\n    return result;\n}\n\ntemplate <class T>\nCycle find_undirected_cycle(const\
-    \ Graph<T>& g) {\n    int n = g.size();\n    std::vector<int> color(n, 0), parent(n,\
-    \ -1), parent_edge(n, -1);\n    Cycle result;\n\n    auto dfs = [&](auto self,\
-    \ int v, int pe) -> bool {\n        color[v] = 1;\n        for (const auto& e\
-    \ : g[v]) {\n            if (e.id == pe) continue;\n            if (color[e.to]\
-    \ == 0) {\n                parent[e.to] = v;\n                parent_edge[e.to]\
-    \ = e.id;\n                if (self(self, e.to, e.id)) return true;\n        \
-    \    } else if (color[e.to] == 1) {\n                result = restore_cycle(v,\
-    \ e.to, e.id, parent, parent_edge);\n                return true;\n          \
-    \  }\n        }\n        color[v] = 2;\n        return false;\n    };\n\n    for\
-    \ (int v = 0; v < n; v++) {\n        if (color[v] == 0 && dfs(dfs, v, -1)) break;\n\
-    \    }\n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 1 \"graph/flow.hpp\"\n\n\n\n#line 1 \"graph/max_flow.hpp\"\n\n\n\n#line\
-    \ 6 \"graph/max_flow.hpp\"\n#include <limits>\n#include <queue>\n#include <utility>\n\
-    #line 10 \"graph/max_flow.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
-    \ <class Cap>\nstruct MaxFlow {\n    struct Edge {\n        int from;\n      \
-    \  int to;\n        Cap cap;\n        Cap flow;\n    };\n\n   private:\n    struct\
-    \ InternalEdge {\n        int to;\n        int rev;\n        Cap cap;\n    };\n\
-    \n    int _n;\n    std::vector<std::pair<int, int>> _pos;\n    std::vector<std::vector<InternalEdge>>\
-    \ _g;\n\n   public:\n    MaxFlow() : MaxFlow(0) {}\n\n    explicit MaxFlow(int\
-    \ n) : _n(n), _g(n) {\n        assert(0 <= n);\n    }\n\n    int size() const\
-    \ {\n        return _n;\n    }\n\n    int edge_count() const {\n        return\
-    \ int(_pos.size());\n    }\n\n    int add_edge(int from, int to, Cap cap) {\n\
-    \        assert(0 <= from && from < _n);\n        assert(0 <= to && to < _n);\n\
-    \        assert(Cap(0) <= cap);\n        int id = int(_pos.size());\n        int\
-    \ from_id = int(_g[from].size());\n        int to_id = int(_g[to].size());\n \
-    \       if (from == to) to_id++;\n        _pos.emplace_back(from, from_id);\n\
-    \        _g[from].push_back(InternalEdge{to, to_id, cap});\n        _g[to].push_back(InternalEdge{from,\
-    \ from_id, Cap(0)});\n        return id;\n    }\n\n    Edge get_edge(int i) const\
-    \ {\n        assert(0 <= i && i < int(_pos.size()));\n        auto [from, idx]\
-    \ = _pos[i];\n        const auto& e = _g[from][idx];\n        const auto& re =\
-    \ _g[e.to][e.rev];\n        return Edge{from, e.to, e.cap + re.cap, re.cap};\n\
-    \    }\n\n    std::vector<Edge> edges() const {\n        std::vector<Edge> result;\n\
-    \        result.reserve(_pos.size());\n        for (int i = 0; i < int(_pos.size());\
-    \ i++) result.push_back(get_edge(i));\n        return result;\n    }\n\n    void\
-    \ change_edge(int i, Cap new_cap, Cap new_flow) {\n        assert(0 <= i && i\
-    \ < int(_pos.size()));\n        assert(Cap(0) <= new_flow && new_flow <= new_cap);\n\
-    \        auto [from, idx] = _pos[i];\n        auto& e = _g[from][idx];\n     \
-    \   auto& re = _g[e.to][e.rev];\n        e.cap = new_cap - new_flow;\n       \
-    \ re.cap = new_flow;\n    }\n\n    Cap max_flow(int s, int t) {\n        return\
-    \ max_flow(s, t, std::numeric_limits<Cap>::max());\n    }\n\n    Cap max_flow(int\
-    \ s, int t, Cap flow_limit) {\n        assert(0 <= s && s < _n);\n        assert(0\
-    \ <= t && t < _n);\n        assert(s != t);\n\n        std::vector<int> level(_n),\
-    \ iter(_n);\n        auto bfs = [&]() -> bool {\n            std::fill(level.begin(),\
-    \ level.end(), -1);\n            std::queue<int> que;\n            level[s] =\
-    \ 0;\n            que.push(s);\n            while (!que.empty()) {\n         \
-    \       int v = que.front();\n                que.pop();\n                for\
-    \ (const auto& e : _g[v]) {\n                    if (e.cap == Cap(0) || level[e.to]\
-    \ != -1) continue;\n                    level[e.to] = level[v] + 1;\n        \
-    \            if (e.to == t) return true;\n                    que.push(e.to);\n\
-    \                }\n            }\n            return level[t] != -1;\n      \
-    \  };\n\n        auto dfs = [&](auto self, int v, Cap up) -> Cap {\n         \
-    \   if (v == t) return up;\n            for (int& i = iter[v]; i < int(_g[v].size());\
-    \ i++) {\n                auto& e = _g[v][i];\n                if (e.cap == Cap(0)\
-    \ || level[v] >= level[e.to]) continue;\n                Cap d = self(self, e.to,\
-    \ std::min(up, e.cap));\n                if (d == Cap(0)) continue;\n        \
-    \        e.cap -= d;\n                _g[e.to][e.rev].cap += d;\n            \
-    \    return d;\n            }\n            return Cap(0);\n        };\n\n    \
-    \    Cap flow = 0;\n        while (flow < flow_limit && bfs()) {\n           \
-    \ std::fill(iter.begin(), iter.end(), 0);\n            while (flow < flow_limit)\
-    \ {\n                Cap f = dfs(dfs, s, flow_limit - flow);\n               \
-    \ if (f == Cap(0)) break;\n                flow += f;\n            }\n       \
-    \ }\n        return flow;\n    }\n\n    std::vector<bool> min_cut(int s) const\
-    \ {\n        assert(0 <= s && s < _n);\n        std::vector<bool> visited(_n,\
+    \ {\n            if (!e.alive) continue;\n            if (color[e.to] == 0) {\n\
+    \                parent[e.to] = v;\n                parent_edge[e.to] = e.id;\n\
+    \                if (self(self, e.to)) return true;\n            } else if (color[e.to]\
+    \ == 1) {\n                result = restore_cycle(v, e.to, e.id, parent, parent_edge);\n\
+    \                return true;\n            }\n        }\n        color[v] = 2;\n\
+    \        return false;\n    };\n\n    for (int v = 0; v < n; v++) {\n        if\
+    \ (color[v] == 0 && dfs(dfs, v)) break;\n    }\n    return result;\n}\n\ntemplate\
+    \ <class T>\nCycle find_undirected_cycle(const Graph<T>& g) {\n    int n = g.size();\n\
+    \    std::vector<int> color(n, 0), parent(n, -1), parent_edge(n, -1);\n    Cycle\
+    \ result;\n\n    auto dfs = [&](auto self, int v, int pe) -> bool {\n        color[v]\
+    \ = 1;\n        for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n\
+    \            if (e.id == pe) continue;\n            if (color[e.to] == 0) {\n\
+    \                parent[e.to] = v;\n                parent_edge[e.to] = e.id;\n\
+    \                if (self(self, e.to, e.id)) return true;\n            } else\
+    \ if (color[e.to] == 1) {\n                result = restore_cycle(v, e.to, e.id,\
+    \ parent, parent_edge);\n                return true;\n            }\n       \
+    \ }\n        color[v] = 2;\n        return false;\n    };\n\n    for (int v =\
+    \ 0; v < n; v++) {\n        if (color[v] == 0 && dfs(dfs, v, -1)) break;\n   \
+    \ }\n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\
+    \n#line 1 \"graph/flow.hpp\"\n\n\n\n#line 1 \"graph/max_flow.hpp\"\n\n\n\n#line\
+    \ 6 \"graph/max_flow.hpp\"\n#include <limits>\n#include <queue>\n#line 10 \"graph/max_flow.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap>\nstruct MaxFlow\
+    \ {\n    struct Edge {\n        int from;\n        int to;\n        Cap cap;\n\
+    \        Cap flow;\n    };\n\n   private:\n    struct InternalEdge {\n       \
+    \ int to;\n        int rev;\n        Cap cap;\n    };\n\n    int _n;\n    std::vector<std::pair<int,\
+    \ int>> _pos;\n    std::vector<std::vector<InternalEdge>> _g;\n\n   public:\n\
+    \    MaxFlow() : MaxFlow(0) {}\n\n    explicit MaxFlow(int n) : _n(n), _g(n) {\n\
+    \        assert(0 <= n);\n    }\n\n    int size() const {\n        return _n;\n\
+    \    }\n\n    int edge_count() const {\n        return int(_pos.size());\n   \
+    \ }\n\n    int add_edge(int from, int to, Cap cap) {\n        assert(0 <= from\
+    \ && from < _n);\n        assert(0 <= to && to < _n);\n        assert(Cap(0) <=\
+    \ cap);\n        int id = int(_pos.size());\n        int from_id = int(_g[from].size());\n\
+    \        int to_id = int(_g[to].size());\n        if (from == to) to_id++;\n \
+    \       _pos.emplace_back(from, from_id);\n        _g[from].push_back(InternalEdge{to,\
+    \ to_id, cap});\n        _g[to].push_back(InternalEdge{from, from_id, Cap(0)});\n\
+    \        return id;\n    }\n\n    Edge get_edge(int i) const {\n        assert(0\
+    \ <= i && i < int(_pos.size()));\n        auto [from, idx] = _pos[i];\n      \
+    \  const auto& e = _g[from][idx];\n        const auto& re = _g[e.to][e.rev];\n\
+    \        return Edge{from, e.to, e.cap + re.cap, re.cap};\n    }\n\n    std::vector<Edge>\
+    \ edges() const {\n        std::vector<Edge> result;\n        result.reserve(_pos.size());\n\
+    \        for (int i = 0; i < int(_pos.size()); i++) result.push_back(get_edge(i));\n\
+    \        return result;\n    }\n\n    void change_edge(int i, Cap new_cap, Cap\
+    \ new_flow) {\n        assert(0 <= i && i < int(_pos.size()));\n        assert(Cap(0)\
+    \ <= new_flow && new_flow <= new_cap);\n        auto [from, idx] = _pos[i];\n\
+    \        auto& e = _g[from][idx];\n        auto& re = _g[e.to][e.rev];\n     \
+    \   e.cap = new_cap - new_flow;\n        re.cap = new_flow;\n    }\n\n    Cap\
+    \ max_flow(int s, int t) {\n        return max_flow(s, t, std::numeric_limits<Cap>::max());\n\
+    \    }\n\n    Cap max_flow(int s, int t, Cap flow_limit) {\n        assert(0 <=\
+    \ s && s < _n);\n        assert(0 <= t && t < _n);\n        assert(s != t);\n\n\
+    \        std::vector<int> level(_n), iter(_n);\n        auto bfs = [&]() -> bool\
+    \ {\n            std::fill(level.begin(), level.end(), -1);\n            std::queue<int>\
+    \ que;\n            level[s] = 0;\n            que.push(s);\n            while\
+    \ (!que.empty()) {\n                int v = que.front();\n                que.pop();\n\
+    \                for (const auto& e : _g[v]) {\n                    if (e.cap\
+    \ == Cap(0) || level[e.to] != -1) continue;\n                    level[e.to] =\
+    \ level[v] + 1;\n                    if (e.to == t) return true;\n           \
+    \         que.push(e.to);\n                }\n            }\n            return\
+    \ level[t] != -1;\n        };\n\n        auto dfs = [&](auto self, int v, Cap\
+    \ up) -> Cap {\n            if (v == t) return up;\n            for (int& i =\
+    \ iter[v]; i < int(_g[v].size()); i++) {\n                auto& e = _g[v][i];\n\
+    \                if (e.cap == Cap(0) || level[v] >= level[e.to]) continue;\n \
+    \               Cap d = self(self, e.to, std::min(up, e.cap));\n             \
+    \   if (d == Cap(0)) continue;\n                e.cap -= d;\n                _g[e.to][e.rev].cap\
+    \ += d;\n                return d;\n            }\n            return Cap(0);\n\
+    \        };\n\n        Cap flow = 0;\n        while (flow < flow_limit && bfs())\
+    \ {\n            std::fill(iter.begin(), iter.end(), 0);\n            while (flow\
+    \ < flow_limit) {\n                Cap f = dfs(dfs, s, flow_limit - flow);\n \
+    \               if (f == Cap(0)) break;\n                flow += f;\n        \
+    \    }\n        }\n        return flow;\n    }\n\n    std::vector<bool> min_cut(int\
+    \ s) const {\n        assert(0 <= s && s < _n);\n        std::vector<bool> visited(_n,\
     \ false);\n        std::queue<int> que;\n        visited[s] = true;\n        que.push(s);\n\
     \        while (!que.empty()) {\n            int v = que.front();\n          \
     \  que.pop();\n            for (const auto& e : _g[v]) {\n                if (e.cap\
@@ -291,38 +307,38 @@ data:
     \  return comp[u] == comp[v];\n    }\n\n    template <class T>\n    Graph<int>\
     \ dag(const Graph<T>& g) const {\n        std::vector<std::pair<int, int>> edges;\n\
     \        for (int v = 0; v < g.size(); v++) {\n            for (const auto& e\
-    \ : g[v]) {\n                int a = comp[e.from], b = comp[e.to];\n         \
-    \       if (a != b) edges.emplace_back(a, b);\n            }\n        }\n    \
-    \    std::sort(edges.begin(), edges.end());\n        edges.erase(std::unique(edges.begin(),\
-    \ edges.end()), edges.end());\n\n        Graph<int> result(count);\n        for\
-    \ (auto [a, b] : edges) result.add_directed_edge(a, b);\n        return result;\n\
-    \    }\n};\n\ntemplate <class T>\nSccResult strongly_connected_components(const\
+    \ : g[v]) {\n                if (!e.alive) continue;\n                int a =\
+    \ comp[e.from], b = comp[e.to];\n                if (a != b) edges.emplace_back(a,\
+    \ b);\n            }\n        }\n        std::sort(edges.begin(), edges.end());\n\
+    \        edges.erase(std::unique(edges.begin(), edges.end()), edges.end());\n\n\
+    \        Graph<int> result(count);\n        for (auto [a, b] : edges) result.add_directed_edge(a,\
+    \ b);\n        return result;\n    }\n};\n\ntemplate <class T>\nSccResult strongly_connected_components(const\
     \ Graph<T>& g) {\n    int n = g.size();\n    std::vector<int> ord(n, -1), low(n,\
     \ 0), comp(n, -1), stack;\n    std::vector<char> in_stack(n, false);\n    std::vector<std::vector<int>>\
     \ groups;\n    int now = 0;\n\n    auto dfs = [&](auto self, int v) -> void {\n\
     \        ord[v] = low[v] = now++;\n        stack.push_back(v);\n        in_stack[v]\
-    \ = true;\n\n        for (const auto& e : g[v]) {\n            int to = e.to;\n\
-    \            if (ord[to] == -1) {\n                self(self, to);\n         \
-    \       low[v] = std::min(low[v], low[to]);\n            } else if (in_stack[to])\
-    \ {\n                low[v] = std::min(low[v], ord[to]);\n            }\n    \
-    \    }\n\n        if (low[v] != ord[v]) return;\n        std::vector<int> group;\n\
-    \        while (true) {\n            int u = stack.back();\n            stack.pop_back();\n\
-    \            in_stack[u] = false;\n            group.push_back(u);\n         \
-    \   if (u == v) break;\n        }\n        groups.push_back(std::move(group));\n\
-    \    };\n\n    for (int v = 0; v < n; v++) {\n        if (ord[v] == -1) dfs(dfs,\
-    \ v);\n    }\n\n    std::reverse(groups.begin(), groups.end());\n    for (int\
-    \ i = 0; i < int(groups.size()); i++) {\n        for (int v : groups[i]) comp[v]\
-    \ = i;\n    }\n\n    return SccResult{int(groups.size()), std::move(comp), std::move(groups)};\n\
-    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/shortest_path.hpp\"\
-    \n\n\n\n#line 1 \"graph/bellman_ford.hpp\"\n\n\n\n#line 9 \"graph/bellman_ford.hpp\"\
-    \n\n#line 11 \"graph/bellman_ford.hpp\"\n\nnamespace m1une {\nnamespace graph\
-    \ {\n\ntemplate <class T>\nstruct BellmanFordResult {\n    std::vector<T> dist;\n\
-    \    std::vector<int> parent;\n    std::vector<int> parent_edge;\n    std::vector<bool>\
-    \ negative;\n    T inf;\n    bool has_negative_cycle;\n\n    bool reachable(int\
-    \ v) const {\n        assert(0 <= v && v < int(dist.size()));\n        return\
-    \ dist[v] != inf;\n    }\n\n    bool affected_by_negative_cycle(int v) const {\n\
-    \        assert(0 <= v && v < int(negative.size()));\n        return negative[v];\n\
-    \    }\n\n    std::vector<int> path(int t) const {\n        assert(reachable(t));\n\
+    \ = true;\n\n        for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n\
+    \            int to = e.to;\n            if (ord[to] == -1) {\n              \
+    \  self(self, to);\n                low[v] = std::min(low[v], low[to]);\n    \
+    \        } else if (in_stack[to]) {\n                low[v] = std::min(low[v],\
+    \ ord[to]);\n            }\n        }\n\n        if (low[v] != ord[v]) return;\n\
+    \        std::vector<int> group;\n        while (true) {\n            int u =\
+    \ stack.back();\n            stack.pop_back();\n            in_stack[u] = false;\n\
+    \            group.push_back(u);\n            if (u == v) break;\n        }\n\
+    \        groups.push_back(std::move(group));\n    };\n\n    for (int v = 0; v\
+    \ < n; v++) {\n        if (ord[v] == -1) dfs(dfs, v);\n    }\n\n    std::reverse(groups.begin(),\
+    \ groups.end());\n    for (int i = 0; i < int(groups.size()); i++) {\n       \
+    \ for (int v : groups[i]) comp[v] = i;\n    }\n\n    return SccResult{int(groups.size()),\
+    \ std::move(comp), std::move(groups)};\n}\n\n}  // namespace graph\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"graph/shortest_path.hpp\"\n\n\n\n#line 1 \"graph/bellman_ford.hpp\"\
+    \n\n\n\n#line 9 \"graph/bellman_ford.hpp\"\n\n#line 11 \"graph/bellman_ford.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct BellmanFordResult\
+    \ {\n    std::vector<T> dist;\n    std::vector<int> parent;\n    std::vector<int>\
+    \ parent_edge;\n    std::vector<bool> negative;\n    T inf;\n    bool has_negative_cycle;\n\
+    \n    bool reachable(int v) const {\n        assert(0 <= v && v < int(dist.size()));\n\
+    \        return dist[v] != inf;\n    }\n\n    bool affected_by_negative_cycle(int\
+    \ v) const {\n        assert(0 <= v && v < int(negative.size()));\n        return\
+    \ negative[v];\n    }\n\n    std::vector<int> path(int t) const {\n        assert(reachable(t));\n\
     \        assert(!affected_by_negative_cycle(t));\n        std::vector<int> result;\n\
     \        for (int v = t; v != -1; v = parent[v]) result.push_back(v);\n      \
     \  std::reverse(result.begin(), result.end());\n        return result;\n    }\n\
@@ -336,36 +352,38 @@ data:
     \    }\n\n    std::vector<int> relaxed_vertices;\n    for (int iter = 0; iter\
     \ < n; iter++) {\n        bool updated = false;\n        for (int v = 0; v < n;\
     \ v++) {\n            if (result.dist[v] == inf) continue;\n            for (const\
-    \ auto& e : g[v]) {\n                T nd = result.dist[v] + e.cost;\n       \
-    \         if (result.dist[e.to] <= nd) continue;\n                result.dist[e.to]\
-    \ = nd;\n                result.parent[e.to] = v;\n                result.parent_edge[e.to]\
-    \ = e.id;\n                updated = true;\n                if (iter == n - 1)\
-    \ relaxed_vertices.push_back(e.to);\n            }\n        }\n        if (!updated)\
-    \ break;\n    }\n\n    std::queue<int> que;\n    for (int v : relaxed_vertices)\
-    \ {\n        if (result.negative[v]) continue;\n        result.negative[v] = true;\n\
-    \        que.push(v);\n    }\n    while (!que.empty()) {\n        int v = que.front();\n\
-    \        que.pop();\n        for (const auto& e : g[v]) {\n            if (result.negative[e.to])\
-    \ continue;\n            result.negative[e.to] = true;\n            que.push(e.to);\n\
-    \        }\n    }\n\n    for (bool x : result.negative) result.has_negative_cycle\
-    \ = result.has_negative_cycle || x;\n    return result;\n}\n\ntemplate <class\
-    \ T>\nBellmanFordResult<T> bellman_ford(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max()\
-    \ / T(4)) {\n    return bellman_ford(g, std::vector<int>{s}, inf);\n}\n\n}  //\
-    \ namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/bfs.hpp\"\n\n\n\n\
-    #line 8 \"graph/bfs.hpp\"\n\n#line 10 \"graph/bfs.hpp\"\n\nnamespace m1une {\n\
-    namespace graph {\n\nstruct BfsResult {\n    std::vector<int> dist;\n    std::vector<int>\
-    \ parent;\n    std::vector<int> parent_edge;\n\n    bool reachable(int v) const\
-    \ {\n        assert(0 <= v && v < int(dist.size()));\n        return dist[v] !=\
-    \ -1;\n    }\n\n    std::vector<int> path(int t) const {\n        assert(reachable(t));\n\
-    \        std::vector<int> result;\n        for (int v = t; v != -1; v = parent[v])\
-    \ result.push_back(v);\n        std::reverse(result.begin(), result.end());\n\
-    \        return result;\n    }\n};\n\ntemplate <class T>\nBfsResult bfs(const\
-    \ Graph<T>& g, const std::vector<int>& sources) {\n    int n = g.size();\n   \
-    \ BfsResult result;\n    result.dist.assign(n, -1);\n    result.parent.assign(n,\
-    \ -1);\n    result.parent_edge.assign(n, -1);\n\n    std::queue<int> que;\n  \
-    \  for (int s : sources) {\n        assert(0 <= s && s < n);\n        if (result.dist[s]\
-    \ != -1) continue;\n        result.dist[s] = 0;\n        que.push(s);\n    }\n\
-    \n    while (!que.empty()) {\n        int v = que.front();\n        que.pop();\n\
-    \        for (const auto& e : g[v]) {\n            if (result.dist[e.to] != -1)\
+    \ auto& e : g[v]) {\n                if (!e.alive) continue;\n               \
+    \ T nd = result.dist[v] + e.cost;\n                if (result.dist[e.to] <= nd)\
+    \ continue;\n                result.dist[e.to] = nd;\n                result.parent[e.to]\
+    \ = v;\n                result.parent_edge[e.to] = e.id;\n                updated\
+    \ = true;\n                if (iter == n - 1) relaxed_vertices.push_back(e.to);\n\
+    \            }\n        }\n        if (!updated) break;\n    }\n\n    std::queue<int>\
+    \ que;\n    for (int v : relaxed_vertices) {\n        if (result.negative[v])\
+    \ continue;\n        result.negative[v] = true;\n        que.push(v);\n    }\n\
+    \    while (!que.empty()) {\n        int v = que.front();\n        que.pop();\n\
+    \        for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n \
+    \           if (result.negative[e.to]) continue;\n            result.negative[e.to]\
+    \ = true;\n            que.push(e.to);\n        }\n    }\n\n    for (bool x :\
+    \ result.negative) result.has_negative_cycle = result.has_negative_cycle || x;\n\
+    \    return result;\n}\n\ntemplate <class T>\nBellmanFordResult<T> bellman_ford(const\
+    \ Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4)) {\n    return\
+    \ bellman_ford(g, std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  //\
+    \ namespace m1une\n\n\n#line 1 \"graph/bfs.hpp\"\n\n\n\n#line 8 \"graph/bfs.hpp\"\
+    \n\n#line 10 \"graph/bfs.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
+    \ BfsResult {\n    std::vector<int> dist;\n    std::vector<int> parent;\n    std::vector<int>\
+    \ parent_edge;\n\n    bool reachable(int v) const {\n        assert(0 <= v &&\
+    \ v < int(dist.size()));\n        return dist[v] != -1;\n    }\n\n    std::vector<int>\
+    \ path(int t) const {\n        assert(reachable(t));\n        std::vector<int>\
+    \ result;\n        for (int v = t; v != -1; v = parent[v]) result.push_back(v);\n\
+    \        std::reverse(result.begin(), result.end());\n        return result;\n\
+    \    }\n};\n\ntemplate <class T>\nBfsResult bfs(const Graph<T>& g, const std::vector<int>&\
+    \ sources) {\n    int n = g.size();\n    BfsResult result;\n    result.dist.assign(n,\
+    \ -1);\n    result.parent.assign(n, -1);\n    result.parent_edge.assign(n, -1);\n\
+    \n    std::queue<int> que;\n    for (int s : sources) {\n        assert(0 <= s\
+    \ && s < n);\n        if (result.dist[s] != -1) continue;\n        result.dist[s]\
+    \ = 0;\n        que.push(s);\n    }\n\n    while (!que.empty()) {\n        int\
+    \ v = que.front();\n        que.pop();\n        for (const auto& e : g[v]) {\n\
+    \            if (!e.alive) continue;\n            if (result.dist[e.to] != -1)\
     \ continue;\n            result.dist[e.to] = result.dist[v] + 1;\n           \
     \ result.parent[e.to] = v;\n            result.parent_edge[e.to] = e.id;\n   \
     \         que.push(e.to);\n        }\n    }\n\n    return result;\n}\n\ntemplate\
@@ -377,17 +395,18 @@ data:
     \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstd::optional<std::vector<int>>\
     \ topological_sort(const Graph<T>& g) {\n    int n = g.size();\n    std::vector<int>\
     \ indeg(n, 0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& e\
-    \ : g[v]) indeg[e.to]++;\n    }\n\n    std::queue<int> que;\n    for (int v =\
-    \ 0; v < n; v++) {\n        if (indeg[v] == 0) que.push(v);\n    }\n\n    std::vector<int>\
-    \ order;\n    order.reserve(n);\n    while (!que.empty()) {\n        int v = que.front();\n\
+    \ : g[v]) {\n            if (!e.alive) continue;\n            indeg[e.to]++;\n\
+    \        }\n    }\n\n    std::queue<int> que;\n    for (int v = 0; v < n; v++)\
+    \ {\n        if (indeg[v] == 0) que.push(v);\n    }\n\n    std::vector<int> order;\n\
+    \    order.reserve(n);\n    while (!que.empty()) {\n        int v = que.front();\n\
     \        que.pop();\n        order.push_back(v);\n        for (const auto& e :\
-    \ g[v]) {\n            indeg[e.to]--;\n            if (indeg[e.to] == 0) que.push(e.to);\n\
-    \        }\n    }\n\n    if (int(order.size()) != n) return std::nullopt;\n  \
-    \  return order;\n}\n\ntemplate <class T>\nbool is_dag(const Graph<T>& g) {\n\
-    \    return topological_sort(g).has_value();\n}\n\n}  // namespace graph\n}  //\
-    \ namespace m1une\n\n\n#line 12 \"graph/dag_shortest_path.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace graph {\n\ntemplate <class T>\nstruct DagShortestPathResult {\n\
-    \    std::vector<T> dist;\n    std::vector<int> parent;\n    std::vector<int>\
+    \ g[v]) {\n            if (!e.alive) continue;\n            indeg[e.to]--;\n \
+    \           if (indeg[e.to] == 0) que.push(e.to);\n        }\n    }\n\n    if\
+    \ (int(order.size()) != n) return std::nullopt;\n    return order;\n}\n\ntemplate\
+    \ <class T>\nbool is_dag(const Graph<T>& g) {\n    return topological_sort(g).has_value();\n\
+    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 12 \"graph/dag_shortest_path.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct DagShortestPathResult\
+    \ {\n    std::vector<T> dist;\n    std::vector<int> parent;\n    std::vector<int>\
     \ parent_edge;\n    std::vector<int> topological_order;\n    T inf;\n\n    bool\
     \ reachable(int v) const {\n        assert(0 <= v && v < int(dist.size()));\n\
     \        return dist[v] != inf;\n    }\n\n    std::vector<int> path(int t) const\
@@ -402,10 +421,11 @@ data:
     \ *order;\n    result.inf = inf;\n\n    for (int s : sources) {\n        assert(0\
     \ <= s && s < n);\n        if (result.dist[s] == T(0)) continue;\n        result.dist[s]\
     \ = T(0);\n    }\n\n    for (int v : *order) {\n        if (result.dist[v] ==\
-    \ inf) continue;\n        for (const auto& e : g[v]) {\n            T nd = result.dist[v]\
-    \ + e.cost;\n            if (result.dist[e.to] <= nd) continue;\n            result.dist[e.to]\
-    \ = nd;\n            result.parent[e.to] = v;\n            result.parent_edge[e.to]\
-    \ = e.id;\n        }\n    }\n\n    return result;\n}\n\ntemplate <class T>\nstd::optional<DagShortestPathResult<T>>\
+    \ inf) continue;\n        for (const auto& e : g[v]) {\n            if (!e.alive)\
+    \ continue;\n            T nd = result.dist[v] + e.cost;\n            if (result.dist[e.to]\
+    \ <= nd) continue;\n            result.dist[e.to] = nd;\n            result.parent[e.to]\
+    \ = v;\n            result.parent_edge[e.to] = e.id;\n        }\n    }\n\n   \
+    \ return result;\n}\n\ntemplate <class T>\nstd::optional<DagShortestPathResult<T>>\
     \ dag_shortest_path(\n    const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max()\
     \ / T(4)) {\n    return dag_shortest_path(g, std::vector<int>{s}, inf);\n}\n\n\
     }  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/dijkstra.hpp\"\
@@ -427,27 +447,28 @@ data:
     \  if (result.dist[s] == T(0)) continue;\n        result.dist[s] = T(0);\n   \
     \     que.emplace(T(0), s);\n    }\n\n    while (!que.empty()) {\n        auto\
     \ [d, v] = que.top();\n        que.pop();\n        if (result.dist[v] != d) continue;\n\
-    \        for (const auto& e : g[v]) {\n            T nd = d + e.cost;\n      \
-    \      if (result.dist[e.to] <= nd) continue;\n            result.dist[e.to] =\
-    \ nd;\n            result.parent[e.to] = v;\n            result.parent_edge[e.to]\
-    \ = e.id;\n            que.emplace(nd, e.to);\n        }\n    }\n\n    return\
-    \ result;\n}\n\ntemplate <class T>\nDijkstraResult<T> dijkstra(const Graph<T>&\
-    \ g, int s, T inf = std::numeric_limits<T>::max() / T(4)) {\n    return dijkstra(g,\
-    \ std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 1 \"graph/warshall_floyd.hpp\"\n\n\n\n#line 8 \"graph/warshall_floyd.hpp\"\
-    \n\n#line 10 \"graph/warshall_floyd.hpp\"\n\nnamespace m1une {\nnamespace graph\
-    \ {\n\ntemplate <class T>\nstd::vector<std::vector<T>> warshall_floyd(std::vector<std::vector<T>>\
-    \ dist,\n                                           T inf = std::numeric_limits<T>::max()\
-    \ / T(4)) {\n    int n = int(dist.size());\n    for (int k = 0; k < n; k++) {\n\
-    \        for (int i = 0; i < n; i++) {\n            if (dist[i][k] == inf) continue;\n\
-    \            for (int j = 0; j < n; j++) {\n                if (dist[k][j] ==\
-    \ inf) continue;\n                T nd = dist[i][k] + dist[k][j];\n          \
-    \      if (nd < dist[i][j]) dist[i][j] = nd;\n            }\n        }\n    }\n\
-    \    return dist;\n}\n\ntemplate <class T>\nstd::vector<std::vector<T>> warshall_floyd(const\
-    \ Graph<T>& g, T inf = std::numeric_limits<T>::max() / T(4)) {\n    int n = g.size();\n\
-    \    std::vector<std::vector<T>> dist(n, std::vector<T>(n, inf));\n    for (int\
-    \ i = 0; i < n; i++) dist[i][i] = T(0);\n    for (int v = 0; v < n; v++) {\n \
-    \       for (const auto& e : g[v]) {\n            if (e.cost < dist[e.from][e.to])\
+    \        for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n \
+    \           T nd = d + e.cost;\n            if (result.dist[e.to] <= nd) continue;\n\
+    \            result.dist[e.to] = nd;\n            result.parent[e.to] = v;\n \
+    \           result.parent_edge[e.to] = e.id;\n            que.emplace(nd, e.to);\n\
+    \        }\n    }\n\n    return result;\n}\n\ntemplate <class T>\nDijkstraResult<T>\
+    \ dijkstra(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4))\
+    \ {\n    return dijkstra(g, std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n\
+    }  // namespace m1une\n\n\n#line 1 \"graph/warshall_floyd.hpp\"\n\n\n\n#line 8\
+    \ \"graph/warshall_floyd.hpp\"\n\n#line 10 \"graph/warshall_floyd.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace graph {\n\ntemplate <class T>\nstd::vector<std::vector<T>>\
+    \ warshall_floyd(std::vector<std::vector<T>> dist,\n                         \
+    \                  T inf = std::numeric_limits<T>::max() / T(4)) {\n    int n\
+    \ = int(dist.size());\n    for (int k = 0; k < n; k++) {\n        for (int i =\
+    \ 0; i < n; i++) {\n            if (dist[i][k] == inf) continue;\n           \
+    \ for (int j = 0; j < n; j++) {\n                if (dist[k][j] == inf) continue;\n\
+    \                T nd = dist[i][k] + dist[k][j];\n                if (nd < dist[i][j])\
+    \ dist[i][j] = nd;\n            }\n        }\n    }\n    return dist;\n}\n\ntemplate\
+    \ <class T>\nstd::vector<std::vector<T>> warshall_floyd(const Graph<T>& g, T inf\
+    \ = std::numeric_limits<T>::max() / T(4)) {\n    int n = g.size();\n    std::vector<std::vector<T>>\
+    \ dist(n, std::vector<T>(n, inf));\n    for (int i = 0; i < n; i++) dist[i][i]\
+    \ = T(0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& e : g[v])\
+    \ {\n            if (!e.alive) continue;\n            if (e.cost < dist[e.from][e.to])\
     \ dist[e.from][e.to] = e.cost;\n        }\n    }\n    return warshall_floyd(std::move(dist),\
     \ inf);\n}\n\ntemplate <class T>\nbool warshall_floyd_add_directed_edge(std::vector<std::vector<T>>&\
     \ dist, int from, int to, T cost,\n                                      T inf\
@@ -496,72 +517,72 @@ data:
     \        assert(0 <= s && s < n);\n        if (result.dist[s] == 0) continue;\n\
     \        result.dist[s] = 0;\n        deq.push_back(s);\n    }\n\n    while (!deq.empty())\
     \ {\n        int v = deq.front();\n        deq.pop_front();\n        for (const\
-    \ auto& e : g[v]) {\n            int w;\n            if (e.cost == T(0)) {\n \
-    \               w = 0;\n            } else {\n                assert(e.cost ==\
-    \ T(1));\n                w = 1;\n            }\n            int nd = result.dist[v]\
-    \ + w;\n            if (result.dist[e.to] <= nd) continue;\n            result.dist[e.to]\
-    \ = nd;\n            result.parent[e.to] = v;\n            result.parent_edge[e.to]\
-    \ = e.id;\n            if (w == 0) {\n                deq.push_front(e.to);\n\
-    \            } else {\n                deq.push_back(e.to);\n            }\n \
-    \       }\n    }\n\n    return result;\n}\n\ntemplate <class T>\nZeroOneBfsResult\
-    \ zero_one_bfs(const Graph<T>& g, int s, int inf = std::numeric_limits<int>::max()\
-    \ / 2) {\n    return zero_one_bfs(g, std::vector<int>{s}, inf);\n}\n\n}  // namespace\
-    \ graph\n}  // namespace m1une\n\n\n#line 10 \"graph/shortest_path.hpp\"\n\n\n\
-    #line 10 \"graph/directed.hpp\"\n\n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include\
-    \ <array>\n#line 8 \"graph/grid.hpp\"\n\n#line 10 \"graph/grid.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace graph {\n\nstruct Grid {\n   private:\n    int _h;\n    int\
-    \ _w;\n\n   public:\n    static constexpr std::array<int, 4> di4 = {-1, 0, 1,\
-    \ 0};\n    static constexpr std::array<int, 4> dj4 = {0, 1, 0, -1};\n    static\
-    \ constexpr std::array<int, 8> di8 = {-1, -1, -1, 0, 0, 1, 1, 1};\n    static\
-    \ constexpr std::array<int, 8> dj8 = {-1, 0, 1, -1, 1, -1, 0, 1};\n\n    Grid()\
-    \ : _h(0), _w(0) {}\n    Grid(int h, int w) : _h(h), _w(w) {\n        assert(0\
-    \ <= h);\n        assert(0 <= w);\n    }\n\n    int height() const {\n       \
-    \ return _h;\n    }\n\n    int width() const {\n        return _w;\n    }\n\n\
-    \    int size() const {\n        return _h * _w;\n    }\n\n    bool empty() const\
-    \ {\n        return size() == 0;\n    }\n\n    bool inside(int i, int j) const\
-    \ {\n        return 0 <= i && i < _h && 0 <= j && j < _w;\n    }\n\n    int id(int\
-    \ i, int j) const {\n        assert(inside(i, j));\n        return i * _w + j;\n\
-    \    }\n\n    std::pair<int, int> pos(int v) const {\n        assert(0 <= v &&\
-    \ v < size());\n        return {v / _w, v % _w};\n    }\n\n    std::vector<std::pair<int,\
-    \ int>> adj4(int i, int j) const {\n        assert(inside(i, j));\n        std::vector<std::pair<int,\
-    \ int>> result;\n        result.reserve(4);\n        for (int k = 0; k < 4; k++)\
-    \ {\n            int ni = i + di4[k], nj = j + dj4[k];\n            if (inside(ni,\
+    \ auto& e : g[v]) {\n            if (!e.alive) continue;\n            int w;\n\
+    \            if (e.cost == T(0)) {\n                w = 0;\n            } else\
+    \ {\n                assert(e.cost == T(1));\n                w = 1;\n       \
+    \     }\n            int nd = result.dist[v] + w;\n            if (result.dist[e.to]\
+    \ <= nd) continue;\n            result.dist[e.to] = nd;\n            result.parent[e.to]\
+    \ = v;\n            result.parent_edge[e.to] = e.id;\n            if (w == 0)\
+    \ {\n                deq.push_front(e.to);\n            } else {\n           \
+    \     deq.push_back(e.to);\n            }\n        }\n    }\n\n    return result;\n\
+    }\n\ntemplate <class T>\nZeroOneBfsResult zero_one_bfs(const Graph<T>& g, int\
+    \ s, int inf = std::numeric_limits<int>::max() / 2) {\n    return zero_one_bfs(g,\
+    \ std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
+    \n\n#line 10 \"graph/shortest_path.hpp\"\n\n\n#line 10 \"graph/directed.hpp\"\n\
+    \n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\
+    \n\n#line 10 \"graph/grid.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
+    \ Grid {\n   private:\n    int _h;\n    int _w;\n\n   public:\n    static constexpr\
+    \ std::array<int, 4> di4 = {-1, 0, 1, 0};\n    static constexpr std::array<int,\
+    \ 4> dj4 = {0, 1, 0, -1};\n    static constexpr std::array<int, 8> di8 = {-1,\
+    \ -1, -1, 0, 0, 1, 1, 1};\n    static constexpr std::array<int, 8> dj8 = {-1,\
+    \ 0, 1, -1, 1, -1, 0, 1};\n\n    Grid() : _h(0), _w(0) {}\n    Grid(int h, int\
+    \ w) : _h(h), _w(w) {\n        assert(0 <= h);\n        assert(0 <= w);\n    }\n\
+    \n    int height() const {\n        return _h;\n    }\n\n    int width() const\
+    \ {\n        return _w;\n    }\n\n    int size() const {\n        return _h *\
+    \ _w;\n    }\n\n    bool empty() const {\n        return size() == 0;\n    }\n\
+    \n    bool inside(int i, int j) const {\n        return 0 <= i && i < _h && 0\
+    \ <= j && j < _w;\n    }\n\n    int id(int i, int j) const {\n        assert(inside(i,\
+    \ j));\n        return i * _w + j;\n    }\n\n    std::pair<int, int> pos(int v)\
+    \ const {\n        assert(0 <= v && v < size());\n        return {v / _w, v %\
+    \ _w};\n    }\n\n    std::vector<std::pair<int, int>> adj4(int i, int j) const\
+    \ {\n        assert(inside(i, j));\n        std::vector<std::pair<int, int>> result;\n\
+    \        result.reserve(4);\n        for (int k = 0; k < 4; k++) {\n         \
+    \   int ni = i + di4[k], nj = j + dj4[k];\n            if (inside(ni, nj)) result.emplace_back(ni,\
+    \ nj);\n        }\n        return result;\n    }\n\n    std::vector<std::pair<int,\
+    \ int>> adj8(int i, int j) const {\n        assert(inside(i, j));\n        std::vector<std::pair<int,\
+    \ int>> result;\n        result.reserve(8);\n        for (int k = 0; k < 8; k++)\
+    \ {\n            int ni = i + di8[k], nj = j + dj8[k];\n            if (inside(ni,\
     \ nj)) result.emplace_back(ni, nj);\n        }\n        return result;\n    }\n\
-    \n    std::vector<std::pair<int, int>> adj8(int i, int j) const {\n        assert(inside(i,\
-    \ j));\n        std::vector<std::pair<int, int>> result;\n        result.reserve(8);\n\
-    \        for (int k = 0; k < 8; k++) {\n            int ni = i + di8[k], nj =\
-    \ j + dj8[k];\n            if (inside(ni, nj)) result.emplace_back(ni, nj);\n\
-    \        }\n        return result;\n    }\n\n    std::vector<int> adj4_ids(int\
-    \ v) const {\n        auto [i, j] = pos(v);\n        std::vector<int> result;\n\
-    \        result.reserve(4);\n        for (auto [ni, nj] : adj4(i, j)) result.push_back(id(ni,\
-    \ nj));\n        return result;\n    }\n\n    std::vector<int> adj8_ids(int v)\
-    \ const {\n        auto [i, j] = pos(v);\n        std::vector<int> result;\n \
-    \       result.reserve(8);\n        for (auto [ni, nj] : adj8(i, j)) result.push_back(id(ni,\
-    \ nj));\n        return result;\n    }\n\n    Graph<int> graph4() const {\n  \
-    \      return graph4([](int, int) { return true; });\n    }\n\n    Graph<int>\
-    \ graph8() const {\n        return graph8([](int, int) { return true; });\n  \
-    \  }\n\n    template <class Passable>\n    Graph<int> graph4(Passable passable)\
-    \ const {\n        Graph<int> g(size());\n        for (int i = 0; i < _h; i++)\
-    \ {\n            for (int j = 0; j < _w; j++) {\n                if (!passable(i,\
-    \ j)) continue;\n                int v = id(i, j);\n                for (auto\
-    \ [ni, nj] : adj4(i, j)) {\n                    if (!passable(ni, nj)) continue;\n\
-    \                    int to = id(ni, nj);\n                    if (v < to) g.add_edge(v,\
-    \ to);\n                }\n            }\n        }\n        return g;\n    }\n\
-    \n    template <class Passable>\n    Graph<int> graph8(Passable passable) const\
-    \ {\n        Graph<int> g(size());\n        for (int i = 0; i < _h; i++) {\n \
-    \           for (int j = 0; j < _w; j++) {\n                if (!passable(i, j))\
-    \ continue;\n                int v = id(i, j);\n                for (auto [ni,\
-    \ nj] : adj8(i, j)) {\n                    if (!passable(ni, nj)) continue;\n\
-    \                    int to = id(ni, nj);\n                    if (v < to) g.add_edge(v,\
-    \ to);\n                }\n            }\n        }\n        return g;\n    }\n\
-    };\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/undirected.hpp\"\
-    \n\n\n\n#line 1 \"graph/bipartite.hpp\"\n\n\n\n#line 6 \"graph/bipartite.hpp\"\
-    \n\n#line 8 \"graph/bipartite.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\n\
-    struct BipartiteResult {\n    bool is_bipartite;\n    std::vector<int> color;\n\
-    };\n\ntemplate <class T>\nBipartiteResult bipartite(const Graph<T>& g) {\n   \
-    \ int n = g.size();\n    BipartiteResult result;\n    result.is_bipartite = true;\n\
-    \    result.color.assign(n, -1);\n\n    std::vector<std::vector<int>> adjacency(n);\n\
-    \    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
+    \n    std::vector<int> adj4_ids(int v) const {\n        auto [i, j] = pos(v);\n\
+    \        std::vector<int> result;\n        result.reserve(4);\n        for (auto\
+    \ [ni, nj] : adj4(i, j)) result.push_back(id(ni, nj));\n        return result;\n\
+    \    }\n\n    std::vector<int> adj8_ids(int v) const {\n        auto [i, j] =\
+    \ pos(v);\n        std::vector<int> result;\n        result.reserve(8);\n    \
+    \    for (auto [ni, nj] : adj8(i, j)) result.push_back(id(ni, nj));\n        return\
+    \ result;\n    }\n\n    Graph<int> graph4() const {\n        return graph4([](int,\
+    \ int) { return true; });\n    }\n\n    Graph<int> graph8() const {\n        return\
+    \ graph8([](int, int) { return true; });\n    }\n\n    template <class Passable>\n\
+    \    Graph<int> graph4(Passable passable) const {\n        Graph<int> g(size());\n\
+    \        for (int i = 0; i < _h; i++) {\n            for (int j = 0; j < _w; j++)\
+    \ {\n                if (!passable(i, j)) continue;\n                int v = id(i,\
+    \ j);\n                for (auto [ni, nj] : adj4(i, j)) {\n                  \
+    \  if (!passable(ni, nj)) continue;\n                    int to = id(ni, nj);\n\
+    \                    if (v < to) g.add_edge(v, to);\n                }\n     \
+    \       }\n        }\n        return g;\n    }\n\n    template <class Passable>\n\
+    \    Graph<int> graph8(Passable passable) const {\n        Graph<int> g(size());\n\
+    \        for (int i = 0; i < _h; i++) {\n            for (int j = 0; j < _w; j++)\
+    \ {\n                if (!passable(i, j)) continue;\n                int v = id(i,\
+    \ j);\n                for (auto [ni, nj] : adj8(i, j)) {\n                  \
+    \  if (!passable(ni, nj)) continue;\n                    int to = id(ni, nj);\n\
+    \                    if (v < to) g.add_edge(v, to);\n                }\n     \
+    \       }\n        }\n        return g;\n    }\n};\n\n}  // namespace graph\n\
+    }  // namespace m1une\n\n\n#line 1 \"graph/undirected.hpp\"\n\n\n\n#line 1 \"\
+    graph/bipartite.hpp\"\n\n\n\n#line 6 \"graph/bipartite.hpp\"\n\n#line 8 \"graph/bipartite.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\nstruct BipartiteResult {\n    bool\
+    \ is_bipartite;\n    std::vector<int> color;\n};\n\ntemplate <class T>\nBipartiteResult\
+    \ bipartite(const Graph<T>& g) {\n    int n = g.size();\n    BipartiteResult result;\n\
+    \    result.is_bipartite = true;\n    result.color.assign(n, -1);\n\n    std::vector<std::vector<int>>\
+    \ adjacency(n);\n    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
     \        adjacency[e.to].push_back(e.from);\n    }\n\n    std::queue<int> que;\n\
     \    for (int s = 0; s < n; s++) {\n        if (result.color[s] != -1) continue;\n\
     \        result.color[s] = 0;\n        que.push(s);\n        while (!que.empty())\
@@ -638,16 +659,17 @@ data:
     \    result.ord.assign(n, -1);\n    result.low.assign(n, -1);\n    int now = 0;\n\
     \n    auto dfs = [&](auto self, int v, int parent_edge) -> void {\n        result.ord[v]\
     \ = result.low[v] = now++;\n        int child_count = 0;\n        bool is_articulation\
-    \ = false;\n\n        for (const auto& e : g[v]) {\n            if (e.id == parent_edge)\
-    \ continue;\n            int to = e.to;\n            if (result.ord[to] == -1)\
-    \ {\n                child_count++;\n                self(self, to, e.id);\n \
-    \               result.low[v] = std::min(result.low[v], result.low[to]);\n   \
-    \             if (parent_edge != -1 && result.ord[v] <= result.low[to]) is_articulation\
-    \ = true;\n                if (result.ord[v] < result.low[to]) {\n           \
-    \         result.bridges.push_back(e);\n                    result.bridge_ids.push_back(e.id);\n\
-    \                }\n            } else {\n                result.low[v] = std::min(result.low[v],\
-    \ result.ord[to]);\n            }\n        }\n\n        if (parent_edge == -1\
-    \ && child_count >= 2) is_articulation = true;\n        if (is_articulation) result.articulation.push_back(v);\n\
+    \ = false;\n\n        for (const auto& e : g[v]) {\n            if (!e.alive)\
+    \ continue;\n            if (e.id == parent_edge) continue;\n            int to\
+    \ = e.to;\n            if (result.ord[to] == -1) {\n                child_count++;\n\
+    \                self(self, to, e.id);\n                result.low[v] = std::min(result.low[v],\
+    \ result.low[to]);\n                if (parent_edge != -1 && result.ord[v] <=\
+    \ result.low[to]) is_articulation = true;\n                if (result.ord[v] <\
+    \ result.low[to]) {\n                    result.bridges.push_back(e);\n      \
+    \              result.bridge_ids.push_back(e.id);\n                }\n       \
+    \     } else {\n                result.low[v] = std::min(result.low[v], result.ord[to]);\n\
+    \            }\n        }\n\n        if (parent_edge == -1 && child_count >= 2)\
+    \ is_articulation = true;\n        if (is_articulation) result.articulation.push_back(v);\n\
     \    };\n\n    for (int v = 0; v < n; v++) {\n        if (result.ord[v] == -1)\
     \ dfs(dfs, v, -1);\n    }\n    std::sort(result.articulation.begin(), result.articulation.end());\n\
     \    std::sort(result.bridge_ids.begin(), result.bridge_ids.end());\n    return\
@@ -658,23 +680,32 @@ data:
     \ == 2);\n    int e0 = g.add_directed_edge(0, 1, 4);\n    int e1 = g.add_edge(1,\
     \ 2, 5);\n    assert(e0 == 0);\n    assert(e1 == 1);\n    assert(g.edge_count()\
     \ == 2);\n    assert(g[1].size() == 1);\n    assert(g.edges().size() == 2);\n\
-    \    auto rev = g.reversed();\n    assert(rev[1][0].to == 0);\n}\n\nvoid test_bfs()\
-    \ {\n    Graph<int> g(5);\n    g.add_directed_edge(0, 1);\n    g.add_directed_edge(0,\
-    \ 2);\n    g.add_directed_edge(1, 3);\n    g.add_directed_edge(2, 3);\n    g.add_directed_edge(3,\
-    \ 4);\n\n    auto res = m1une::graph::bfs(g, 0);\n    assert(res.dist[0] == 0);\n\
-    \    assert(res.dist[3] == 2);\n    assert(res.dist[4] == 3);\n    auto path =\
-    \ res.path(4);\n    assert(path.front() == 0);\n    assert(path.back() == 4);\n\
-    \    assert(path.size() == 4);\n}\n\nvoid test_dijkstra() {\n    Graph<long long>\
-    \ g(5);\n    g.add_directed_edge(0, 1, 4);\n    g.add_directed_edge(0, 2, 1);\n\
-    \    g.add_directed_edge(2, 1, 2);\n    g.add_directed_edge(1, 3, 1);\n    g.add_directed_edge(2,\
-    \ 3, 7);\n    g.add_directed_edge(3, 4, 3);\n\n    auto res = m1une::graph::dijkstra(g,\
-    \ 0);\n    assert(res.dist[1] == 3);\n    assert(res.dist[4] == 7);\n    assert((res.path(4)\
-    \ == std::vector<int>{0, 2, 1, 3, 4}));\n}\n\nvoid test_zero_one_bfs() {\n   \
-    \ Graph<int> g(6);\n    g.add_directed_edge(0, 1, 1);\n    g.add_directed_edge(0,\
-    \ 2, 0);\n    g.add_directed_edge(2, 1, 0);\n    g.add_directed_edge(1, 3, 1);\n\
-    \    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3, 4, 0);\n\n    auto\
-    \ res = m1une::graph::zero_one_bfs(g, 0);\n    assert(res.dist[0] == 0);\n   \
-    \ assert(res.dist[1] == 0);\n    assert(res.dist[3] == 1);\n    assert(res.dist[4]\
+    \    auto rev = g.reversed();\n    assert(rev[1][0].to == 0);\n}\n\nvoid test_edge_alive()\
+    \ {\n    Graph<int> g(4);\n    int e01 = g.add_edge(0, 1);\n    int e12 = g.add_edge(1,\
+    \ 2);\n    int e23 = g.add_edge(2, 3);\n    (void)e01;\n    (void)e23;\n\n   \
+    \ assert(g.edge_count() == 3);\n    assert(g.edges().size() == 3);\n    auto res\
+    \ = m1une::graph::bfs(g, 0);\n    assert(res.dist[3] == 3);\n\n    g.erase_edge(e12);\n\
+    \    assert(!g.is_edge_alive(e12));\n    assert(g.edges().size() == 2);\n    assert(g.edges(true).size()\
+    \ == 3);\n    auto cut = m1une::graph::bfs(g, 0);\n    assert(!cut.reachable(3));\n\
+    \n    auto rev = g.reversed();\n    assert(!rev.is_edge_alive(e12));\n    assert(rev.edges().size()\
+    \ == 2);\n\n    g.revive_edge(e12);\n    assert(g.is_edge_alive(e12));\n    auto\
+    \ restored = m1une::graph::bfs(g, 0);\n    assert(restored.dist[3] == 3);\n}\n\
+    \nvoid test_bfs() {\n    Graph<int> g(5);\n    g.add_directed_edge(0, 1);\n  \
+    \  g.add_directed_edge(0, 2);\n    g.add_directed_edge(1, 3);\n    g.add_directed_edge(2,\
+    \ 3);\n    g.add_directed_edge(3, 4);\n\n    auto res = m1une::graph::bfs(g, 0);\n\
+    \    assert(res.dist[0] == 0);\n    assert(res.dist[3] == 2);\n    assert(res.dist[4]\
+    \ == 3);\n    auto path = res.path(4);\n    assert(path.front() == 0);\n    assert(path.back()\
+    \ == 4);\n    assert(path.size() == 4);\n}\n\nvoid test_dijkstra() {\n    Graph<long\
+    \ long> g(5);\n    g.add_directed_edge(0, 1, 4);\n    g.add_directed_edge(0, 2,\
+    \ 1);\n    g.add_directed_edge(2, 1, 2);\n    g.add_directed_edge(1, 3, 1);\n\
+    \    g.add_directed_edge(2, 3, 7);\n    g.add_directed_edge(3, 4, 3);\n\n    auto\
+    \ res = m1une::graph::dijkstra(g, 0);\n    assert(res.dist[1] == 3);\n    assert(res.dist[4]\
+    \ == 7);\n    assert((res.path(4) == std::vector<int>{0, 2, 1, 3, 4}));\n}\n\n\
+    void test_zero_one_bfs() {\n    Graph<int> g(6);\n    g.add_directed_edge(0, 1,\
+    \ 1);\n    g.add_directed_edge(0, 2, 0);\n    g.add_directed_edge(2, 1, 0);\n\
+    \    g.add_directed_edge(1, 3, 1);\n    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3,\
+    \ 4, 0);\n\n    auto res = m1une::graph::zero_one_bfs(g, 0);\n    assert(res.dist[0]\
+    \ == 0);\n    assert(res.dist[1] == 0);\n    assert(res.dist[3] == 1);\n    assert(res.dist[4]\
     \ == 1);\n    assert(!res.reachable(5));\n    assert((res.path(4) == std::vector<int>{0,\
     \ 2, 3, 4}));\n\n    auto multi = m1une::graph::zero_one_bfs(g, std::vector<int>{1,\
     \ 5});\n    assert(multi.dist[1] == 0);\n    assert(multi.dist[4] == 1);\n   \
@@ -785,9 +816,9 @@ data:
     \    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1, 2, 1, 2);\n   \
     \ negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0, 2, 2);\n\
     \    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1,\
-    \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_bfs();\n\
-    \    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n  \
-    \  test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
+    \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_edge_alive();\n\
+    \    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n\
+    \    test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
     \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
     \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    test_max_flow();\n\
     \    test_min_cost_flow();\n\n    long long a, b;\n    std::cin >> a >> b;\n \
@@ -800,7 +831,16 @@ data:
     \ 1, 4);\n    int e1 = g.add_edge(1, 2, 5);\n    assert(e0 == 0);\n    assert(e1\
     \ == 1);\n    assert(g.edge_count() == 2);\n    assert(g[1].size() == 1);\n  \
     \  assert(g.edges().size() == 2);\n    auto rev = g.reversed();\n    assert(rev[1][0].to\
-    \ == 0);\n}\n\nvoid test_bfs() {\n    Graph<int> g(5);\n    g.add_directed_edge(0,\
+    \ == 0);\n}\n\nvoid test_edge_alive() {\n    Graph<int> g(4);\n    int e01 = g.add_edge(0,\
+    \ 1);\n    int e12 = g.add_edge(1, 2);\n    int e23 = g.add_edge(2, 3);\n    (void)e01;\n\
+    \    (void)e23;\n\n    assert(g.edge_count() == 3);\n    assert(g.edges().size()\
+    \ == 3);\n    auto res = m1une::graph::bfs(g, 0);\n    assert(res.dist[3] == 3);\n\
+    \n    g.erase_edge(e12);\n    assert(!g.is_edge_alive(e12));\n    assert(g.edges().size()\
+    \ == 2);\n    assert(g.edges(true).size() == 3);\n    auto cut = m1une::graph::bfs(g,\
+    \ 0);\n    assert(!cut.reachable(3));\n\n    auto rev = g.reversed();\n    assert(!rev.is_edge_alive(e12));\n\
+    \    assert(rev.edges().size() == 2);\n\n    g.revive_edge(e12);\n    assert(g.is_edge_alive(e12));\n\
+    \    auto restored = m1une::graph::bfs(g, 0);\n    assert(restored.dist[3] ==\
+    \ 3);\n}\n\nvoid test_bfs() {\n    Graph<int> g(5);\n    g.add_directed_edge(0,\
     \ 1);\n    g.add_directed_edge(0, 2);\n    g.add_directed_edge(1, 3);\n    g.add_directed_edge(2,\
     \ 3);\n    g.add_directed_edge(3, 4);\n\n    auto res = m1une::graph::bfs(g, 0);\n\
     \    assert(res.dist[0] == 0);\n    assert(res.dist[3] == 2);\n    assert(res.dist[4]\
@@ -926,9 +966,9 @@ data:
     \    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1, 2, 1, 2);\n   \
     \ negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0, 2, 2);\n\
     \    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1,\
-    \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_bfs();\n\
-    \    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n  \
-    \  test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
+    \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_edge_alive();\n\
+    \    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n\
+    \    test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
     \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
     \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    test_max_flow();\n\
     \    test_min_cost_flow();\n\n    long long a, b;\n    std::cin >> a >> b;\n \
@@ -960,7 +1000,7 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-16 02:22:43+09:00'
+  timestamp: '2026-06-16 02:32:54+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp
