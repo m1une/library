@@ -422,6 +422,58 @@ void test_general_matching() {
     assert(g.is_edge_alive(g23));
 }
 
+void test_maximum_clique_and_independent_set() {
+    Graph<int> g(7);
+    int removed_clique_edge = -1;
+    for (int i = 0; i < 4; i++) {
+        for (int j = i + 1; j < 4; j++) {
+            int id = g.add_edge(i, j);
+            if (i == 0 && j == 2) removed_clique_edge = id;
+        }
+    }
+    g.add_edge(4, 0);
+    g.add_edge(4, 1);
+    g.add_edge(5, 1);
+    g.add_edge(5, 2);
+
+    auto clique = m1une::graph::maximum_clique(g);
+    assert(clique.size() == 4);
+    assert((clique.vertices == std::vector<int>{0, 1, 2, 3}));
+    assert(m1une::graph::is_clique(g, clique.vertices));
+    assert(m1une::graph::maximum_clique_size(g) == 4);
+
+    auto independent = m1une::graph::maximum_independent_set(g);
+    assert(independent.size() == 4);
+    assert((independent.vertices == std::vector<int>{3, 4, 5, 6}));
+    assert(m1une::graph::is_independent_set(g, independent.vertices));
+    assert(m1une::graph::maximum_independent_set_size(g) == 4);
+
+    assert(!m1une::graph::is_clique(g, std::vector<int>{0, 2, 4}));
+    assert(!m1une::graph::is_independent_set(g, std::vector<int>{4, 0}));
+
+    g.erase_edge(removed_clique_edge);
+    assert(m1une::graph::maximum_clique_size(g) == 3);
+    g.revive_edge(removed_clique_edge);
+    assert(m1une::graph::maximum_clique_size(g) == 4);
+
+    Graph<int> directed(3);
+    directed.add_directed_edge(0, 1);
+    directed.add_directed_edge(1, 2);
+    auto directed_clique = m1une::graph::maximum_clique(directed);
+    auto directed_independent = m1une::graph::maximum_independent_set(directed);
+    assert(directed_clique.size() == 2);
+    assert(directed_independent.size() == 2);
+    assert((directed_independent.vertices == std::vector<int>{0, 2}));
+
+    Graph<int> empty(4);
+    assert(m1une::graph::maximum_clique_size(empty) == 1);
+    assert(m1une::graph::maximum_independent_set_size(empty) == 4);
+
+    Graph<int> none(0);
+    assert(m1une::graph::maximum_clique(none).empty());
+    assert(m1une::graph::maximum_independent_set(none).empty());
+}
+
 void test_cycle_detection() {
     Graph<int> dg(3);
     dg.add_directed_edge(0, 1);
@@ -700,6 +752,7 @@ int main() {
     test_lowlink();
     test_bipartite_and_components();
     test_general_matching();
+    test_maximum_clique_and_independent_set();
     test_cycle_detection();
     test_kruskal();
     test_grid();

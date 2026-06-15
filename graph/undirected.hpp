@@ -9,6 +9,7 @@
 #include "graph/grid.hpp"
 #include "graph/kruskal.hpp"
 #include "graph/lowlink.hpp"
+#include "graph/maximum_clique.hpp"
 #include "graph/shortest_path.hpp"
 
 #endif  // M1UNE_GRAPH_UNDIRECTED_HPP
