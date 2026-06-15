@@ -22,6 +22,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
+  - icon: ':heavy_check_mark:'
+    path: graph/zero_one_bfs.hpp
+    title: 0-1 BFS
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
@@ -244,8 +247,35 @@ data:
     \    return updated;\n}\n\ntemplate <class T>\nbool has_negative_cycle(const std::vector<std::vector<T>>&\
     \ dist) {\n    int n = int(dist.size());\n    for (int i = 0; i < n; i++) {\n\
     \        if (dist[i][i] < T(0)) return true;\n    }\n    return false;\n}\n\n\
-    }  // namespace graph\n}  // namespace m1une\n\n\n#line 9 \"graph/shortest_path.hpp\"\
-    \n\n\n"
+    }  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/zero_one_bfs.hpp\"\
+    \n\n\n\n#line 6 \"graph/zero_one_bfs.hpp\"\n#include <deque>\n#line 9 \"graph/zero_one_bfs.hpp\"\
+    \n\n#line 11 \"graph/zero_one_bfs.hpp\"\n\nnamespace m1une {\nnamespace graph\
+    \ {\n\nstruct ZeroOneBfsResult {\n    std::vector<int> dist;\n    std::vector<int>\
+    \ parent;\n    std::vector<int> parent_edge;\n    int inf;\n\n    bool reachable(int\
+    \ v) const {\n        assert(0 <= v && v < int(dist.size()));\n        return\
+    \ dist[v] != inf;\n    }\n\n    std::vector<int> path(int t) const {\n       \
+    \ assert(reachable(t));\n        std::vector<int> result;\n        for (int v\
+    \ = t; v != -1; v = parent[v]) result.push_back(v);\n        std::reverse(result.begin(),\
+    \ result.end());\n        return result;\n    }\n};\n\ntemplate <class T>\nZeroOneBfsResult\
+    \ zero_one_bfs(const Graph<T>& g, const std::vector<int>& sources,\n         \
+    \                     int inf = std::numeric_limits<int>::max() / 2) {\n    int\
+    \ n = g.size();\n    ZeroOneBfsResult result;\n    result.dist.assign(n, inf);\n\
+    \    result.parent.assign(n, -1);\n    result.parent_edge.assign(n, -1);\n   \
+    \ result.inf = inf;\n\n    std::deque<int> deq;\n    for (int s : sources) {\n\
+    \        assert(0 <= s && s < n);\n        if (result.dist[s] == 0) continue;\n\
+    \        result.dist[s] = 0;\n        deq.push_back(s);\n    }\n\n    while (!deq.empty())\
+    \ {\n        int v = deq.front();\n        deq.pop_front();\n        for (const\
+    \ auto& e : g[v]) {\n            int w;\n            if (e.cost == T(0)) {\n \
+    \               w = 0;\n            } else {\n                assert(e.cost ==\
+    \ T(1));\n                w = 1;\n            }\n            int nd = result.dist[v]\
+    \ + w;\n            if (result.dist[e.to] <= nd) continue;\n            result.dist[e.to]\
+    \ = nd;\n            result.parent[e.to] = v;\n            result.parent_edge[e.to]\
+    \ = e.id;\n            if (w == 0) {\n                deq.push_front(e.to);\n\
+    \            } else {\n                deq.push_back(e.to);\n            }\n \
+    \       }\n    }\n\n    return result;\n}\n\ntemplate <class T>\nZeroOneBfsResult\
+    \ zero_one_bfs(const Graph<T>& g, int s, int inf = std::numeric_limits<int>::max()\
+    \ / 2) {\n    return zero_one_bfs(g, std::vector<int>{s}, inf);\n}\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n\n#line 10 \"graph/shortest_path.hpp\"\n\n\n"
   code: '#ifndef M1UNE_GRAPH_SHORTEST_PATH_HPP
 
     #define M1UNE_GRAPH_SHORTEST_PATH_HPP 1
@@ -261,6 +291,8 @@ data:
 
     #include "graph/warshall_floyd.hpp"
 
+    #include "graph/zero_one_bfs.hpp"
+
 
     #endif  // M1UNE_GRAPH_SHORTEST_PATH_HPP
 
@@ -273,13 +305,14 @@ data:
   - graph/topological_sort.hpp
   - graph/dijkstra.hpp
   - graph/warshall_floyd.hpp
+  - graph/zero_one_bfs.hpp
   isVerificationFile: false
   path: graph/shortest_path.hpp
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
   - graph/directed.hpp
-  timestamp: '2026-06-16 02:19:59+09:00'
+  timestamp: '2026-06-16 02:22:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
@@ -302,6 +335,7 @@ is `dag_shortest_path`, which is specifically for directed acyclic graphs.
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
 | `graph/bfs.hpp` | Direction-respecting | Shortest paths by number of edges. |
+| `graph/zero_one_bfs.hpp` | Direction-respecting | Shortest paths with edge costs `0` or `1`. |
 | `graph/dag_shortest_path.hpp` | Directed DAG only | Shortest paths in a DAG, including negative edge costs. |
 | `graph/dijkstra.hpp` | Direction-respecting | Non-negative weighted shortest paths. |
 | `graph/bellman_ford.hpp` | Direction-respecting | Shortest paths with negative edges. |

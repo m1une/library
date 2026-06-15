@@ -67,6 +67,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
+  - icon: ':heavy_check_mark:'
+    path: graph/zero_one_bfs.hpp
+    title: 0-1 BFS
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -475,23 +478,51 @@ data:
     \    return updated;\n}\n\ntemplate <class T>\nbool has_negative_cycle(const std::vector<std::vector<T>>&\
     \ dist) {\n    int n = int(dist.size());\n    for (int i = 0; i < n; i++) {\n\
     \        if (dist[i][i] < T(0)) return true;\n    }\n    return false;\n}\n\n\
-    }  // namespace graph\n}  // namespace m1une\n\n\n#line 9 \"graph/shortest_path.hpp\"\
-    \n\n\n#line 10 \"graph/directed.hpp\"\n\n\n#line 1 \"graph/grid.hpp\"\n\n\n\n\
-    #include <array>\n#line 8 \"graph/grid.hpp\"\n\n#line 10 \"graph/grid.hpp\"\n\n\
-    namespace m1une {\nnamespace graph {\n\nstruct Grid {\n   private:\n    int _h;\n\
-    \    int _w;\n\n   public:\n    static constexpr std::array<int, 4> di4 = {-1,\
-    \ 0, 1, 0};\n    static constexpr std::array<int, 4> dj4 = {0, 1, 0, -1};\n  \
-    \  static constexpr std::array<int, 8> di8 = {-1, -1, -1, 0, 0, 1, 1, 1};\n  \
-    \  static constexpr std::array<int, 8> dj8 = {-1, 0, 1, -1, 1, -1, 0, 1};\n\n\
-    \    Grid() : _h(0), _w(0) {}\n    Grid(int h, int w) : _h(h), _w(w) {\n     \
-    \   assert(0 <= h);\n        assert(0 <= w);\n    }\n\n    int height() const\
-    \ {\n        return _h;\n    }\n\n    int width() const {\n        return _w;\n\
-    \    }\n\n    int size() const {\n        return _h * _w;\n    }\n\n    bool empty()\
-    \ const {\n        return size() == 0;\n    }\n\n    bool inside(int i, int j)\
-    \ const {\n        return 0 <= i && i < _h && 0 <= j && j < _w;\n    }\n\n   \
-    \ int id(int i, int j) const {\n        assert(inside(i, j));\n        return\
-    \ i * _w + j;\n    }\n\n    std::pair<int, int> pos(int v) const {\n        assert(0\
-    \ <= v && v < size());\n        return {v / _w, v % _w};\n    }\n\n    std::vector<std::pair<int,\
+    }  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/zero_one_bfs.hpp\"\
+    \n\n\n\n#line 6 \"graph/zero_one_bfs.hpp\"\n#include <deque>\n#line 9 \"graph/zero_one_bfs.hpp\"\
+    \n\n#line 11 \"graph/zero_one_bfs.hpp\"\n\nnamespace m1une {\nnamespace graph\
+    \ {\n\nstruct ZeroOneBfsResult {\n    std::vector<int> dist;\n    std::vector<int>\
+    \ parent;\n    std::vector<int> parent_edge;\n    int inf;\n\n    bool reachable(int\
+    \ v) const {\n        assert(0 <= v && v < int(dist.size()));\n        return\
+    \ dist[v] != inf;\n    }\n\n    std::vector<int> path(int t) const {\n       \
+    \ assert(reachable(t));\n        std::vector<int> result;\n        for (int v\
+    \ = t; v != -1; v = parent[v]) result.push_back(v);\n        std::reverse(result.begin(),\
+    \ result.end());\n        return result;\n    }\n};\n\ntemplate <class T>\nZeroOneBfsResult\
+    \ zero_one_bfs(const Graph<T>& g, const std::vector<int>& sources,\n         \
+    \                     int inf = std::numeric_limits<int>::max() / 2) {\n    int\
+    \ n = g.size();\n    ZeroOneBfsResult result;\n    result.dist.assign(n, inf);\n\
+    \    result.parent.assign(n, -1);\n    result.parent_edge.assign(n, -1);\n   \
+    \ result.inf = inf;\n\n    std::deque<int> deq;\n    for (int s : sources) {\n\
+    \        assert(0 <= s && s < n);\n        if (result.dist[s] == 0) continue;\n\
+    \        result.dist[s] = 0;\n        deq.push_back(s);\n    }\n\n    while (!deq.empty())\
+    \ {\n        int v = deq.front();\n        deq.pop_front();\n        for (const\
+    \ auto& e : g[v]) {\n            int w;\n            if (e.cost == T(0)) {\n \
+    \               w = 0;\n            } else {\n                assert(e.cost ==\
+    \ T(1));\n                w = 1;\n            }\n            int nd = result.dist[v]\
+    \ + w;\n            if (result.dist[e.to] <= nd) continue;\n            result.dist[e.to]\
+    \ = nd;\n            result.parent[e.to] = v;\n            result.parent_edge[e.to]\
+    \ = e.id;\n            if (w == 0) {\n                deq.push_front(e.to);\n\
+    \            } else {\n                deq.push_back(e.to);\n            }\n \
+    \       }\n    }\n\n    return result;\n}\n\ntemplate <class T>\nZeroOneBfsResult\
+    \ zero_one_bfs(const Graph<T>& g, int s, int inf = std::numeric_limits<int>::max()\
+    \ / 2) {\n    return zero_one_bfs(g, std::vector<int>{s}, inf);\n}\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n\n#line 10 \"graph/shortest_path.hpp\"\n\n\n\
+    #line 10 \"graph/directed.hpp\"\n\n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include\
+    \ <array>\n#line 8 \"graph/grid.hpp\"\n\n#line 10 \"graph/grid.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace graph {\n\nstruct Grid {\n   private:\n    int _h;\n    int\
+    \ _w;\n\n   public:\n    static constexpr std::array<int, 4> di4 = {-1, 0, 1,\
+    \ 0};\n    static constexpr std::array<int, 4> dj4 = {0, 1, 0, -1};\n    static\
+    \ constexpr std::array<int, 8> di8 = {-1, -1, -1, 0, 0, 1, 1, 1};\n    static\
+    \ constexpr std::array<int, 8> dj8 = {-1, 0, 1, -1, 1, -1, 0, 1};\n\n    Grid()\
+    \ : _h(0), _w(0) {}\n    Grid(int h, int w) : _h(h), _w(w) {\n        assert(0\
+    \ <= h);\n        assert(0 <= w);\n    }\n\n    int height() const {\n       \
+    \ return _h;\n    }\n\n    int width() const {\n        return _w;\n    }\n\n\
+    \    int size() const {\n        return _h * _w;\n    }\n\n    bool empty() const\
+    \ {\n        return size() == 0;\n    }\n\n    bool inside(int i, int j) const\
+    \ {\n        return 0 <= i && i < _h && 0 <= j && j < _w;\n    }\n\n    int id(int\
+    \ i, int j) const {\n        assert(inside(i, j));\n        return i * _w + j;\n\
+    \    }\n\n    std::pair<int, int> pos(int v) const {\n        assert(0 <= v &&\
+    \ v < size());\n        return {v / _w, v % _w};\n    }\n\n    std::vector<std::pair<int,\
     \ int>> adj4(int i, int j) const {\n        assert(inside(i, j));\n        std::vector<std::pair<int,\
     \ int>> result;\n        result.reserve(4);\n        for (int k = 0; k < 4; k++)\
     \ {\n            int ni = i + di4[k], nj = j + dj4[k];\n            if (inside(ni,\
@@ -638,9 +669,18 @@ data:
     \    g.add_directed_edge(2, 1, 2);\n    g.add_directed_edge(1, 3, 1);\n    g.add_directed_edge(2,\
     \ 3, 7);\n    g.add_directed_edge(3, 4, 3);\n\n    auto res = m1une::graph::dijkstra(g,\
     \ 0);\n    assert(res.dist[1] == 3);\n    assert(res.dist[4] == 7);\n    assert((res.path(4)\
-    \ == std::vector<int>{0, 2, 1, 3, 4}));\n}\n\nvoid test_bellman_ford() {\n   \
-    \ Graph<long long> g(5);\n    g.add_directed_edge(0, 1, 1);\n    g.add_directed_edge(1,\
-    \ 2, -3);\n    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3, 1, 1);\n\
+    \ == std::vector<int>{0, 2, 1, 3, 4}));\n}\n\nvoid test_zero_one_bfs() {\n   \
+    \ Graph<int> g(6);\n    g.add_directed_edge(0, 1, 1);\n    g.add_directed_edge(0,\
+    \ 2, 0);\n    g.add_directed_edge(2, 1, 0);\n    g.add_directed_edge(1, 3, 1);\n\
+    \    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3, 4, 0);\n\n    auto\
+    \ res = m1une::graph::zero_one_bfs(g, 0);\n    assert(res.dist[0] == 0);\n   \
+    \ assert(res.dist[1] == 0);\n    assert(res.dist[3] == 1);\n    assert(res.dist[4]\
+    \ == 1);\n    assert(!res.reachable(5));\n    assert((res.path(4) == std::vector<int>{0,\
+    \ 2, 3, 4}));\n\n    auto multi = m1une::graph::zero_one_bfs(g, std::vector<int>{1,\
+    \ 5});\n    assert(multi.dist[1] == 0);\n    assert(multi.dist[4] == 1);\n   \
+    \ assert(multi.dist[5] == 0);\n}\n\nvoid test_bellman_ford() {\n    Graph<long\
+    \ long> g(5);\n    g.add_directed_edge(0, 1, 1);\n    g.add_directed_edge(1, 2,\
+    \ -3);\n    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3, 1, 1);\n\
     \    g.add_directed_edge(0, 4, 5);\n\n    auto res = m1une::graph::bellman_ford(g,\
     \ 0);\n    assert(res.has_negative_cycle);\n    assert(res.affected_by_negative_cycle(1));\n\
     \    assert(res.affected_by_negative_cycle(2));\n    assert(res.affected_by_negative_cycle(3));\n\
@@ -746,12 +786,12 @@ data:
     \ negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0, 2, 2);\n\
     \    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1,\
     \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_bfs();\n\
-    \    test_dijkstra();\n    test_bellman_ford();\n    test_dag_shortest_path();\n\
-    \    test_warshall_floyd();\n    test_topological_sort();\n    test_scc();\n \
-    \   test_lowlink();\n    test_bipartite_and_components();\n    test_cycle_detection();\n\
-    \    test_kruskal();\n    test_grid();\n    test_max_flow();\n    test_min_cost_flow();\n\
-    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
-    n';\n}\n"
+    \    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n  \
+    \  test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
+    \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
+    \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    test_max_flow();\n\
+    \    test_min_cost_flow();\n\n    long long a, b;\n    std::cin >> a >> b;\n \
+    \   std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <set>\n#include <string>\n#include\
     \ <vector>\n\n#include \"graph/all.hpp\"\n\nusing m1une::graph::Graph;\n\nvoid\
@@ -771,17 +811,25 @@ data:
     \    g.add_directed_edge(2, 3, 7);\n    g.add_directed_edge(3, 4, 3);\n\n    auto\
     \ res = m1une::graph::dijkstra(g, 0);\n    assert(res.dist[1] == 3);\n    assert(res.dist[4]\
     \ == 7);\n    assert((res.path(4) == std::vector<int>{0, 2, 1, 3, 4}));\n}\n\n\
-    void test_bellman_ford() {\n    Graph<long long> g(5);\n    g.add_directed_edge(0,\
-    \ 1, 1);\n    g.add_directed_edge(1, 2, -3);\n    g.add_directed_edge(2, 3, 1);\n\
-    \    g.add_directed_edge(3, 1, 1);\n    g.add_directed_edge(0, 4, 5);\n\n    auto\
-    \ res = m1une::graph::bellman_ford(g, 0);\n    assert(res.has_negative_cycle);\n\
-    \    assert(res.affected_by_negative_cycle(1));\n    assert(res.affected_by_negative_cycle(2));\n\
-    \    assert(res.affected_by_negative_cycle(3));\n    assert(!res.affected_by_negative_cycle(4));\n\
-    \    assert(res.dist[4] == 5);\n}\n\nvoid test_dag_shortest_path() {\n    Graph<long\
-    \ long> g(6);\n    g.add_directed_edge(0, 1, 2);\n    g.add_directed_edge(0, 2,\
-    \ 5);\n    g.add_directed_edge(1, 2, -4);\n    g.add_directed_edge(1, 4, 10);\n\
-    \    g.add_directed_edge(2, 3, 3);\n    g.add_directed_edge(3, 4, 1);\n\n    auto\
-    \ res = m1une::graph::dag_shortest_path(g, 0);\n    assert(res.has_value());\n\
+    void test_zero_one_bfs() {\n    Graph<int> g(6);\n    g.add_directed_edge(0, 1,\
+    \ 1);\n    g.add_directed_edge(0, 2, 0);\n    g.add_directed_edge(2, 1, 0);\n\
+    \    g.add_directed_edge(1, 3, 1);\n    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3,\
+    \ 4, 0);\n\n    auto res = m1une::graph::zero_one_bfs(g, 0);\n    assert(res.dist[0]\
+    \ == 0);\n    assert(res.dist[1] == 0);\n    assert(res.dist[3] == 1);\n    assert(res.dist[4]\
+    \ == 1);\n    assert(!res.reachable(5));\n    assert((res.path(4) == std::vector<int>{0,\
+    \ 2, 3, 4}));\n\n    auto multi = m1une::graph::zero_one_bfs(g, std::vector<int>{1,\
+    \ 5});\n    assert(multi.dist[1] == 0);\n    assert(multi.dist[4] == 1);\n   \
+    \ assert(multi.dist[5] == 0);\n}\n\nvoid test_bellman_ford() {\n    Graph<long\
+    \ long> g(5);\n    g.add_directed_edge(0, 1, 1);\n    g.add_directed_edge(1, 2,\
+    \ -3);\n    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3, 1, 1);\n\
+    \    g.add_directed_edge(0, 4, 5);\n\n    auto res = m1une::graph::bellman_ford(g,\
+    \ 0);\n    assert(res.has_negative_cycle);\n    assert(res.affected_by_negative_cycle(1));\n\
+    \    assert(res.affected_by_negative_cycle(2));\n    assert(res.affected_by_negative_cycle(3));\n\
+    \    assert(!res.affected_by_negative_cycle(4));\n    assert(res.dist[4] == 5);\n\
+    }\n\nvoid test_dag_shortest_path() {\n    Graph<long long> g(6);\n    g.add_directed_edge(0,\
+    \ 1, 2);\n    g.add_directed_edge(0, 2, 5);\n    g.add_directed_edge(1, 2, -4);\n\
+    \    g.add_directed_edge(1, 4, 10);\n    g.add_directed_edge(2, 3, 3);\n    g.add_directed_edge(3,\
+    \ 4, 1);\n\n    auto res = m1une::graph::dag_shortest_path(g, 0);\n    assert(res.has_value());\n\
     \    assert(res->dist[0] == 0);\n    assert(res->dist[2] == -2);\n    assert(res->dist[4]\
     \ == 2);\n    assert(!res->reachable(5));\n    assert((res->path(4) == std::vector<int>{0,\
     \ 1, 2, 3, 4}));\n    assert(res->topological_order.size() == 6);\n\n    auto\
@@ -879,12 +927,12 @@ data:
     \ negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0, 2, 2);\n\
     \    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1,\
     \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_bfs();\n\
-    \    test_dijkstra();\n    test_bellman_ford();\n    test_dag_shortest_path();\n\
-    \    test_warshall_floyd();\n    test_topological_sort();\n    test_scc();\n \
-    \   test_lowlink();\n    test_bipartite_and_components();\n    test_cycle_detection();\n\
-    \    test_kruskal();\n    test_grid();\n    test_max_flow();\n    test_min_cost_flow();\n\
-    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
-    n';\n}\n"
+    \    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n  \
+    \  test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
+    \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
+    \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    test_max_flow();\n\
+    \    test_min_cost_flow();\n\n    long long a, b;\n    std::cin >> a >> b;\n \
+    \   std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - graph/all.hpp
   - graph/directed.hpp
@@ -901,6 +949,7 @@ data:
   - graph/topological_sort.hpp
   - graph/dijkstra.hpp
   - graph/warshall_floyd.hpp
+  - graph/zero_one_bfs.hpp
   - graph/grid.hpp
   - graph/undirected.hpp
   - graph/bipartite.hpp
@@ -911,7 +960,7 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-16 02:19:59+09:00'
+  timestamp: '2026-06-16 02:22:43+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp

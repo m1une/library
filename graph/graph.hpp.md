@@ -53,6 +53,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
+  - icon: ':heavy_check_mark:'
+    path: graph/zero_one_bfs.hpp
+    title: 0-1 BFS
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -151,6 +154,7 @@ data:
   - graph/connected_components.hpp
   - graph/all.hpp
   - graph/lowlink.hpp
+  - graph/zero_one_bfs.hpp
   - graph/grid.hpp
   - graph/topological_sort.hpp
   - graph/cycle_detection.hpp

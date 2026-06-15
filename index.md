@@ -214,6 +214,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: graph/warshall_floyd.hpp
       title: Warshall-Floyd
+    - icon: ':heavy_check_mark:'
+      path: graph/zero_one_bfs.hpp
+      title: 0-1 BFS
   - name: math
     pages:
     - icon: ':warning:'
