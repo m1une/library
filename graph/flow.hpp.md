@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bounded_flow.hpp
     title: Bounded Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bounded_min_cost_flow.hpp
     title: Bounded Min Cost Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/max_flow.hpp
     title: Max Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/min_cost_flow.hpp
     title: Min Cost Flow
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/flow.hpp\"\n\n\n\n#line 1 \"graph/bounded_flow.hpp\"\
@@ -304,7 +304,7 @@ data:
   - graph/all.hpp
   - graph/directed.hpp
   timestamp: '2026-06-16 02:49:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/flow.hpp

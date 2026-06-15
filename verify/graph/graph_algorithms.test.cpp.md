@@ -1,86 +1,86 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: data_structure/dsu.hpp
     title: Disjoint Set Union (DSU)
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bellman_ford.hpp
     title: Bellman-Ford
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bfs.hpp
     title: BFS
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bipartite.hpp
     title: Bipartite Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bounded_flow.hpp
     title: Bounded Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bounded_min_cost_flow.hpp
     title: Bounded Min Cost Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/connected_components.hpp
     title: Connected Components
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/cycle_detection.hpp
     title: Cycle Detection
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dag_shortest_path.hpp
     title: DAG Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dijkstra.hpp
     title: Dijkstra
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/flow.hpp
     title: Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/grid.hpp
     title: Grid
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/kruskal.hpp
     title: Kruskal
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowlink.hpp
     title: LowLink
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/max_flow.hpp
     title: Max Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/min_cost_flow.hpp
     title: Min Cost Flow
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/scc.hpp
     title: Strongly Connected Components
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/topological_sort.hpp
     title: Topological Sort
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -703,12 +703,15 @@ data:
     \                    if (v < to) g.add_edge(v, to);\n                }\n     \
     \       }\n        }\n        return g;\n    }\n};\n\n}  // namespace graph\n\
     }  // namespace m1une\n\n\n#line 1 \"graph/undirected.hpp\"\n\n\n\n#line 1 \"\
-    graph/bipartite.hpp\"\n\n\n\n#line 6 \"graph/bipartite.hpp\"\n\n#line 8 \"graph/bipartite.hpp\"\
+    graph/bipartite.hpp\"\n\n\n\n#line 8 \"graph/bipartite.hpp\"\n\n#line 10 \"graph/bipartite.hpp\"\
     \n\nnamespace m1une {\nnamespace graph {\n\nstruct BipartiteResult {\n    bool\
-    \ is_bipartite;\n    std::vector<int> color;\n};\n\ntemplate <class T>\nBipartiteResult\
-    \ bipartite(const Graph<T>& g) {\n    int n = g.size();\n    BipartiteResult result;\n\
-    \    result.is_bipartite = true;\n    result.color.assign(n, -1);\n\n    std::vector<std::vector<int>>\
-    \ adjacency(n);\n    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
+    \ is_bipartite;\n    std::vector<int> color;\n    std::vector<int> left_vertices;\n\
+    \    std::vector<int> right_vertices;\n    std::vector<int> left_id;\n    std::vector<int>\
+    \ right_id;\n};\n\ntemplate <class T>\nBipartiteResult bipartite(const Graph<T>&\
+    \ g) {\n    int n = g.size();\n    BipartiteResult result;\n    result.is_bipartite\
+    \ = true;\n    result.color.assign(n, -1);\n    result.left_id.assign(n, -1);\n\
+    \    result.right_id.assign(n, -1);\n\n    std::vector<std::vector<int>> adjacency(n);\n\
+    \    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
     \        adjacency[e.to].push_back(e.from);\n    }\n\n    std::queue<int> que;\n\
     \    for (int s = 0; s < n; s++) {\n        if (result.color[s] != -1) continue;\n\
     \        result.color[s] = 0;\n        que.push(s);\n        while (!que.empty())\
@@ -717,26 +720,144 @@ data:
     \                   result.color[to] = result.color[v] ^ 1;\n                \
     \    que.push(to);\n                } else if (result.color[to] == result.color[v])\
     \ {\n                    result.is_bipartite = false;\n                    return\
-    \ result;\n                }\n            }\n        }\n    }\n\n    return result;\n\
-    }\n\ntemplate <class T>\nbool is_bipartite(const Graph<T>& g) {\n    return bipartite(g).is_bipartite;\n\
-    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/connected_components.hpp\"\
-    \n\n\n\n#line 6 \"graph/connected_components.hpp\"\n\n#line 1 \"data_structure/dsu.hpp\"\
-    \n\n\n\n#line 5 \"data_structure/dsu.hpp\"\n#include <numeric>\n#line 7 \"data_structure/dsu.hpp\"\
-    \n\nnamespace m1une {\nnamespace data_structure {\n\nstruct Dsu {\n   private:\n\
-    \    int _n;\n    // parent_or_size[i] is the parent of i if it's >= 0.\n    //\
-    \ If it's < 0, then i is a root and -parent_or_size[i] is the size of the group.\n\
-    \    std::vector<int> parent_or_size;\n\n   public:\n    Dsu() : _n(0) {}\n  \
-    \  explicit Dsu(int n) : _n(n), parent_or_size(n, -1) {}\n\n    // Merges the\
-    \ group containing 'a' with the group containing 'b'.\n    // Returns the leader\
-    \ of the merged group.\n    int merge(int a, int b) {\n        int x = leader(a),\
-    \ y = leader(b);\n        if (x == y) return x;\n        // Union by size\n  \
-    \      if (-parent_or_size[x] < -parent_or_size[y]) std::swap(x, y);\n       \
-    \ parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y] = x;\n  \
-    \      return x;\n    }\n\n    // Returns true if 'a' and 'b' belong to the same\
-    \ group.\n    bool same(int a, int b) {\n        return leader(a) == leader(b);\n\
-    \    }\n\n    // Returns the leader (representative) of the group containing 'a'.\n\
-    \    int leader(int a) {\n        if (parent_or_size[a] < 0) return a;\n     \
-    \   // Path compression\n        return parent_or_size[a] = leader(parent_or_size[a]);\n\
+    \ result;\n                }\n            }\n        }\n    }\n\n    for (int\
+    \ v = 0; v < n; v++) {\n        if (result.color[v] == 0) {\n            result.left_id[v]\
+    \ = int(result.left_vertices.size());\n            result.left_vertices.push_back(v);\n\
+    \        } else {\n            result.right_id[v] = int(result.right_vertices.size());\n\
+    \            result.right_vertices.push_back(v);\n        }\n    }\n\n    return\
+    \ result;\n}\n\ntemplate <class T>\nbool is_bipartite(const Graph<T>& g) {\n \
+    \   return bipartite(g).is_bipartite;\n}\n\nstruct BipartiteVertexSet {\n    std::vector<int>\
+    \ left;\n    std::vector<int> right;\n\n    int size() const {\n        return\
+    \ int(left.size() + right.size());\n    }\n};\n\nstruct BipartiteMatching {\n\
+    \    struct Edge {\n        int left;\n        int right;\n        int id;\n \
+    \       bool alive;\n    };\n\n    struct Pair {\n        int left;\n        int\
+    \ right;\n        int edge_id;\n    };\n\n   private:\n    int _left_size;\n \
+    \   int _right_size;\n    std::vector<Edge> _edges;\n    std::vector<std::vector<int>>\
+    \ _adj;\n    std::vector<std::vector<int>> _radj;\n    std::vector<int> _left_match;\n\
+    \    std::vector<int> _right_match;\n    std::vector<int> _left_match_edge;\n\
+    \    std::vector<int> _right_match_edge;\n    bool _calculated;\n\n    void invalidate()\
+    \ {\n        _calculated = false;\n    }\n\n    void ensure_matching() {\n   \
+    \     if (!_calculated) max_matching();\n    }\n\n   public:\n    BipartiteMatching()\
+    \ : BipartiteMatching(0, 0) {}\n\n    BipartiteMatching(int left_size, int right_size)\n\
+    \        : _left_size(left_size),\n          _right_size(right_size),\n      \
+    \    _adj(left_size),\n          _radj(right_size),\n          _left_match(left_size,\
+    \ -1),\n          _right_match(right_size, -1),\n          _left_match_edge(left_size,\
+    \ -1),\n          _right_match_edge(right_size, -1),\n          _calculated(false)\
+    \ {\n        assert(0 <= left_size);\n        assert(0 <= right_size);\n    }\n\
+    \n    int left_size() const {\n        return _left_size;\n    }\n\n    int right_size()\
+    \ const {\n        return _right_size;\n    }\n\n    int edge_count() const {\n\
+    \        return int(_edges.size());\n    }\n\n    int add_edge(int left, int right)\
+    \ {\n        assert(0 <= left && left < _left_size);\n        assert(0 <= right\
+    \ && right < _right_size);\n        int id = int(_edges.size());\n        _edges.push_back(Edge{left,\
+    \ right, id, true});\n        _adj[left].push_back(id);\n        _radj[right].push_back(id);\n\
+    \        invalidate();\n        return id;\n    }\n\n    Edge get_edge(int i)\
+    \ const {\n        assert(0 <= i && i < int(_edges.size()));\n        return _edges[i];\n\
+    \    }\n\n    std::vector<Edge> edges(bool include_inactive = false) const {\n\
+    \        std::vector<Edge> result;\n        result.reserve(_edges.size());\n \
+    \       for (const auto& e : _edges) {\n            if (include_inactive || e.alive)\
+    \ result.push_back(e);\n        }\n        return result;\n    }\n\n    void set_edge_alive(int\
+    \ id, bool alive) {\n        assert(0 <= id && id < int(_edges.size()));\n   \
+    \     _edges[id].alive = alive;\n        invalidate();\n    }\n\n    void erase_edge(int\
+    \ id) {\n        set_edge_alive(id, false);\n    }\n\n    void revive_edge(int\
+    \ id) {\n        set_edge_alive(id, true);\n    }\n\n    bool is_edge_alive(int\
+    \ id) const {\n        assert(0 <= id && id < int(_edges.size()));\n        return\
+    \ _edges[id].alive;\n    }\n\n    int max_matching() {\n        _left_match.assign(_left_size,\
+    \ -1);\n        _right_match.assign(_right_size, -1);\n        _left_match_edge.assign(_left_size,\
+    \ -1);\n        _right_match_edge.assign(_right_size, -1);\n\n        std::vector<int>\
+    \ dist(_left_size);\n        auto bfs = [&]() -> bool {\n            std::queue<int>\
+    \ que;\n            bool found = false;\n            for (int l = 0; l < _left_size;\
+    \ l++) {\n                if (_left_match[l] == -1) {\n                    dist[l]\
+    \ = 0;\n                    que.push(l);\n                } else {\n         \
+    \           dist[l] = -1;\n                }\n            }\n\n            while\
+    \ (!que.empty()) {\n                int l = que.front();\n                que.pop();\n\
+    \                for (int id : _adj[l]) {\n                    const auto& e =\
+    \ _edges[id];\n                    if (!e.alive) continue;\n                 \
+    \   int next_left = _right_match[e.right];\n                    if (next_left\
+    \ == -1) {\n                        found = true;\n                    } else\
+    \ if (dist[next_left] == -1) {\n                        dist[next_left] = dist[l]\
+    \ + 1;\n                        que.push(next_left);\n                    }\n\
+    \                }\n            }\n            return found;\n        };\n\n \
+    \       auto dfs = [&](auto self, int l) -> bool {\n            for (int id :\
+    \ _adj[l]) {\n                const auto& e = _edges[id];\n                if\
+    \ (!e.alive) continue;\n                int next_left = _right_match[e.right];\n\
+    \                if (next_left != -1 && (dist[next_left] != dist[l] + 1 || !self(self,\
+    \ next_left))) {\n                    continue;\n                }\n         \
+    \       _left_match[l] = e.right;\n                _right_match[e.right] = l;\n\
+    \                _left_match_edge[l] = id;\n                _right_match_edge[e.right]\
+    \ = id;\n                return true;\n            }\n            dist[l] = -1;\n\
+    \            return false;\n        };\n\n        int result = 0;\n        while\
+    \ (bfs()) {\n            for (int l = 0; l < _left_size; l++) {\n            \
+    \    if (_left_match[l] == -1 && dfs(dfs, l)) result++;\n            }\n     \
+    \   }\n\n        _calculated = true;\n        return result;\n    }\n\n    int\
+    \ matching_size() {\n        ensure_matching();\n        int result = 0;\n   \
+    \     for (int right : _left_match) {\n            if (right != -1) result++;\n\
+    \        }\n        return result;\n    }\n\n    std::vector<int> left_match()\
+    \ {\n        ensure_matching();\n        return _left_match;\n    }\n\n    std::vector<int>\
+    \ right_match() {\n        ensure_matching();\n        return _right_match;\n\
+    \    }\n\n    std::vector<Pair> matching() {\n        ensure_matching();\n   \
+    \     std::vector<Pair> result;\n        for (int l = 0; l < _left_size; l++)\
+    \ {\n            if (_left_match[l] != -1) result.push_back(Pair{l, _left_match[l],\
+    \ _left_match_edge[l]});\n        }\n        return result;\n    }\n\n    BipartiteVertexSet\
+    \ minimum_vertex_cover() {\n        ensure_matching();\n\n        std::vector<char>\
+    \ visited_left(_left_size, false), visited_right(_right_size, false);\n      \
+    \  std::queue<int> que;\n        for (int l = 0; l < _left_size; l++) {\n    \
+    \        if (_left_match[l] == -1) {\n                visited_left[l] = true;\n\
+    \                que.push(l);\n            }\n        }\n\n        while (!que.empty())\
+    \ {\n            int l = que.front();\n            que.pop();\n            for\
+    \ (int id : _adj[l]) {\n                const auto& e = _edges[id];\n        \
+    \        if (!e.alive || _left_match_edge[l] == id || visited_right[e.right])\
+    \ continue;\n                visited_right[e.right] = true;\n                int\
+    \ next_left = _right_match[e.right];\n                if (next_left != -1 && !visited_left[next_left])\
+    \ {\n                    visited_left[next_left] = true;\n                   \
+    \ que.push(next_left);\n                }\n            }\n        }\n\n      \
+    \  BipartiteVertexSet result;\n        for (int l = 0; l < _left_size; l++) {\n\
+    \            if (!visited_left[l]) result.left.push_back(l);\n        }\n    \
+    \    for (int r = 0; r < _right_size; r++) {\n            if (visited_right[r])\
+    \ result.right.push_back(r);\n        }\n        return result;\n    }\n\n   \
+    \ BipartiteVertexSet maximum_independent_set() {\n        auto cover = minimum_vertex_cover();\n\
+    \        std::vector<char> in_left_cover(_left_size, false), in_right_cover(_right_size,\
+    \ false);\n        for (int l : cover.left) in_left_cover[l] = true;\n       \
+    \ for (int r : cover.right) in_right_cover[r] = true;\n\n        BipartiteVertexSet\
+    \ result;\n        for (int l = 0; l < _left_size; l++) {\n            if (!in_left_cover[l])\
+    \ result.left.push_back(l);\n        }\n        for (int r = 0; r < _right_size;\
+    \ r++) {\n            if (!in_right_cover[r]) result.right.push_back(r);\n   \
+    \     }\n        return result;\n    }\n\n    std::optional<std::vector<int>>\
+    \ minimum_edge_cover() {\n        ensure_matching();\n\n        std::vector<int>\
+    \ result;\n        std::vector<char> covered_left(_left_size, false), covered_right(_right_size,\
+    \ false);\n        std::vector<char> used_edge(_edges.size(), false);\n\n    \
+    \    auto use_edge = [&](int id) {\n            if (used_edge[id]) return;\n \
+    \           used_edge[id] = true;\n            result.push_back(id);\n       \
+    \     covered_left[_edges[id].left] = true;\n            covered_right[_edges[id].right]\
+    \ = true;\n        };\n\n        for (int l = 0; l < _left_size; l++) {\n    \
+    \        if (_left_match_edge[l] != -1) use_edge(_left_match_edge[l]);\n     \
+    \   }\n\n        for (int l = 0; l < _left_size; l++) {\n            if (covered_left[l])\
+    \ continue;\n            int id = -1;\n            for (int edge_id : _adj[l])\
+    \ {\n                if (_edges[edge_id].alive) {\n                    id = edge_id;\n\
+    \                    break;\n                }\n            }\n            if\
+    \ (id == -1) return std::nullopt;\n            use_edge(id);\n        }\n\n  \
+    \      for (int r = 0; r < _right_size; r++) {\n            if (covered_right[r])\
+    \ continue;\n            int id = -1;\n            for (int edge_id : _radj[r])\
+    \ {\n                if (_edges[edge_id].alive) {\n                    id = edge_id;\n\
+    \                    break;\n                }\n            }\n            if\
+    \ (id == -1) return std::nullopt;\n            use_edge(id);\n        }\n\n  \
+    \      return result;\n    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\
+    \n\n#line 1 \"graph/connected_components.hpp\"\n\n\n\n#line 6 \"graph/connected_components.hpp\"\
+    \n\n#line 1 \"data_structure/dsu.hpp\"\n\n\n\n#line 5 \"data_structure/dsu.hpp\"\
+    \n#include <numeric>\n#line 7 \"data_structure/dsu.hpp\"\n\nnamespace m1une {\n\
+    namespace data_structure {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i]\
+    \ is the parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
+    \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
+    \    Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1)\
+    \ {}\n\n    // Merges the group containing 'a' with the group containing 'b'.\n\
+    \    // Returns the leader of the merged group.\n    int merge(int a, int b) {\n\
+    \        int x = leader(a), y = leader(b);\n        if (x == y) return x;\n  \
+    \      // Union by size\n        if (-parent_or_size[x] < -parent_or_size[y])\
+    \ std::swap(x, y);\n        parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y]\
+    \ = x;\n        return x;\n    }\n\n    // Returns true if 'a' and 'b' belong\
+    \ to the same group.\n    bool same(int a, int b) {\n        return leader(a)\
+    \ == leader(b);\n    }\n\n    // Returns the leader (representative) of the group\
+    \ containing 'a'.\n    int leader(int a) {\n        if (parent_or_size[a] < 0)\
+    \ return a;\n        // Path compression\n        return parent_or_size[a] = leader(parent_or_size[a]);\n\
     \    }\n\n    // Returns the size of the group containing 'a'.\n    int size(int\
     \ a) {\n        return -parent_or_size[leader(a)];\n    }\n\n    // Returns a\
     \ list of all groups, where each group is a vector of its elements.\n    std::vector<std::vector<int>>\
@@ -883,23 +1004,54 @@ data:
     \ == std::vector<int>{b0, b1}));\n}\n\nvoid test_bipartite_and_components() {\n\
     \    Graph<int> square(4);\n    square.add_edge(0, 1);\n    square.add_edge(1,\
     \ 2);\n    square.add_edge(2, 3);\n    square.add_edge(3, 0);\n    auto bp = m1une::graph::bipartite(square);\n\
-    \    assert(bp.is_bipartite);\n    assert(bp.color[0] == bp.color[2]);\n\n   \
-    \ Graph<int> triangle(3);\n    triangle.add_edge(0, 1);\n    triangle.add_edge(1,\
+    \    assert(bp.is_bipartite);\n    assert(bp.color[0] == bp.color[2]);\n    assert((bp.left_vertices\
+    \ == std::vector<int>{0, 2}));\n    assert((bp.right_vertices == std::vector<int>{1,\
+    \ 3}));\n    assert(bp.left_id[2] == 1);\n    assert(bp.right_id[3] == 1);\n \
+    \   auto built = m1une::graph::make_bipartite_matching(square);\n    assert(built.has_value());\n\
+    \    assert(built->matching.left_size() == 2);\n    assert(built->matching.right_size()\
+    \ == 2);\n    assert(built->matching.max_matching() == 2);\n    for (const auto&\
+    \ p : built->matching.matching()) {\n        int u = built->left_vertex(p.left);\n\
+    \        int v = built->right_vertex(p.right);\n        assert(bp.color[u] ==\
+    \ 0);\n        assert(bp.color[v] == 1);\n        assert(square.is_edge_alive(built->original_edge(p.edge_id)));\n\
+    \    }\n\n    Graph<int> triangle(3);\n    triangle.add_edge(0, 1);\n    triangle.add_edge(1,\
     \ 2);\n    triangle.add_edge(2, 0);\n    assert(!m1une::graph::is_bipartite(triangle));\n\
-    \n    Graph<int> cc_graph(5);\n    cc_graph.add_edge(0, 1);\n    cc_graph.add_edge(2,\
+    \    assert(!m1une::graph::make_bipartite_matching(triangle).has_value());\n\n\
+    \    Graph<int> cc_graph(5);\n    cc_graph.add_edge(0, 1);\n    cc_graph.add_edge(2,\
     \ 3);\n    auto cc = m1une::graph::connected_components(cc_graph);\n    assert(cc.count\
     \ == 3);\n    assert(cc.same(0, 1));\n    assert(cc.same(2, 3));\n    assert(!cc.same(0,\
     \ 2));\n\n    Graph<int> directed(2);\n    directed.add_directed_edge(1, 0);\n\
     \    assert(m1une::graph::is_bipartite(directed));\n    auto weak = m1une::graph::connected_components(directed);\n\
-    \    assert(weak.count == 1);\n}\n\nvoid test_cycle_detection() {\n    Graph<int>\
-    \ dg(3);\n    dg.add_directed_edge(0, 1);\n    dg.add_directed_edge(1, 2);\n \
-    \   dg.add_directed_edge(2, 0);\n    auto directed = m1une::graph::find_directed_cycle(dg);\n\
-    \    assert(!directed.empty());\n    assert(directed.vertices.front() == directed.vertices.back());\n\
-    \    assert(directed.edge_ids.size() + 1 == directed.vertices.size());\n\n   \
-    \ Graph<int> ug(4);\n    ug.add_edge(0, 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2,\
-    \ 0);\n    ug.add_edge(2, 3);\n    auto undirected = m1une::graph::find_undirected_cycle(ug);\n\
-    \    assert(!undirected.empty());\n    assert(undirected.vertices.front() == undirected.vertices.back());\n\
-    }\n\nvoid test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
+    \    assert(weak.count == 1);\n\n    m1une::graph::BipartiteMatching bm(3, 2);\n\
+    \    int e00 = bm.add_edge(0, 0);\n    int e10 = bm.add_edge(1, 0);\n    int e11\
+    \ = bm.add_edge(1, 1);\n    int e21 = bm.add_edge(2, 1);\n    assert(bm.left_size()\
+    \ == 3);\n    assert(bm.right_size() == 2);\n    assert(bm.edge_count() == 4);\n\
+    \    assert(bm.get_edge(e10).left == 1);\n    assert(bm.max_matching() == 2);\n\
+    \    assert(bm.matching_size() == 2);\n    auto pairs = bm.matching();\n    assert(pairs.size()\
+    \ == 2);\n    auto left_match = bm.left_match();\n    auto right_match = bm.right_match();\n\
+    \    for (const auto& p : pairs) {\n        assert(left_match[p.left] == p.right);\n\
+    \        assert(right_match[p.right] == p.left);\n    }\n\n    auto cover = bm.minimum_vertex_cover();\n\
+    \    assert(cover.left.empty());\n    assert((cover.right == std::vector<int>{0,\
+    \ 1}));\n    assert(cover.size() == 2);\n    auto independent = bm.maximum_independent_set();\n\
+    \    assert((independent.left == std::vector<int>{0, 1, 2}));\n    assert(independent.right.empty());\n\
+    \n    auto edge_cover = bm.minimum_edge_cover();\n    assert(edge_cover.has_value());\n\
+    \    assert(edge_cover->size() == 3);\n    std::vector<bool> covered_left(3, false),\
+    \ covered_right(2, false);\n    for (int id : *edge_cover) {\n        auto edge\
+    \ = bm.get_edge(id);\n        covered_left[edge.left] = true;\n        covered_right[edge.right]\
+    \ = true;\n    }\n    assert((covered_left == std::vector<bool>{true, true, true}));\n\
+    \    assert((covered_right == std::vector<bool>{true, true}));\n\n    bm.erase_edge(e11);\n\
+    \    bm.erase_edge(e21);\n    assert(!bm.is_edge_alive(e21));\n    assert(bm.edges().size()\
+    \ == 2);\n    assert(bm.edges(true).size() == 4);\n    assert(bm.max_matching()\
+    \ == 1);\n    bm.revive_edge(e21);\n    assert(bm.max_matching() == 2);\n\n  \
+    \  m1une::graph::BipartiteMatching isolated(1, 1);\n    assert(!isolated.minimum_edge_cover().has_value());\n\
+    \n    (void)e00;\n}\n\nvoid test_cycle_detection() {\n    Graph<int> dg(3);\n\
+    \    dg.add_directed_edge(0, 1);\n    dg.add_directed_edge(1, 2);\n    dg.add_directed_edge(2,\
+    \ 0);\n    auto directed = m1une::graph::find_directed_cycle(dg);\n    assert(!directed.empty());\n\
+    \    assert(directed.vertices.front() == directed.vertices.back());\n    assert(directed.edge_ids.size()\
+    \ + 1 == directed.vertices.size());\n\n    Graph<int> ug(4);\n    ug.add_edge(0,\
+    \ 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2, 0);\n    ug.add_edge(2, 3);\n\
+    \    auto undirected = m1une::graph::find_undirected_cycle(ug);\n    assert(!undirected.empty());\n\
+    \    assert(undirected.vertices.front() == undirected.vertices.back());\n}\n\n\
+    void test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
     \    g.add_edge(1, 2, 2);\n    g.add_edge(2, 3, 3);\n    g.add_edge(0, 3, 10);\n\
     \    g.add_edge(0, 2, 4);\n\n    auto mst = m1une::graph::kruskal(g);\n    assert(mst.cost\
     \ == 6);\n    assert(mst.edges.size() == 3);\n    assert(mst.components == 1);\n\
@@ -1088,23 +1240,54 @@ data:
     \ == std::vector<int>{b0, b1}));\n}\n\nvoid test_bipartite_and_components() {\n\
     \    Graph<int> square(4);\n    square.add_edge(0, 1);\n    square.add_edge(1,\
     \ 2);\n    square.add_edge(2, 3);\n    square.add_edge(3, 0);\n    auto bp = m1une::graph::bipartite(square);\n\
-    \    assert(bp.is_bipartite);\n    assert(bp.color[0] == bp.color[2]);\n\n   \
-    \ Graph<int> triangle(3);\n    triangle.add_edge(0, 1);\n    triangle.add_edge(1,\
+    \    assert(bp.is_bipartite);\n    assert(bp.color[0] == bp.color[2]);\n    assert((bp.left_vertices\
+    \ == std::vector<int>{0, 2}));\n    assert((bp.right_vertices == std::vector<int>{1,\
+    \ 3}));\n    assert(bp.left_id[2] == 1);\n    assert(bp.right_id[3] == 1);\n \
+    \   auto built = m1une::graph::make_bipartite_matching(square);\n    assert(built.has_value());\n\
+    \    assert(built->matching.left_size() == 2);\n    assert(built->matching.right_size()\
+    \ == 2);\n    assert(built->matching.max_matching() == 2);\n    for (const auto&\
+    \ p : built->matching.matching()) {\n        int u = built->left_vertex(p.left);\n\
+    \        int v = built->right_vertex(p.right);\n        assert(bp.color[u] ==\
+    \ 0);\n        assert(bp.color[v] == 1);\n        assert(square.is_edge_alive(built->original_edge(p.edge_id)));\n\
+    \    }\n\n    Graph<int> triangle(3);\n    triangle.add_edge(0, 1);\n    triangle.add_edge(1,\
     \ 2);\n    triangle.add_edge(2, 0);\n    assert(!m1une::graph::is_bipartite(triangle));\n\
-    \n    Graph<int> cc_graph(5);\n    cc_graph.add_edge(0, 1);\n    cc_graph.add_edge(2,\
+    \    assert(!m1une::graph::make_bipartite_matching(triangle).has_value());\n\n\
+    \    Graph<int> cc_graph(5);\n    cc_graph.add_edge(0, 1);\n    cc_graph.add_edge(2,\
     \ 3);\n    auto cc = m1une::graph::connected_components(cc_graph);\n    assert(cc.count\
     \ == 3);\n    assert(cc.same(0, 1));\n    assert(cc.same(2, 3));\n    assert(!cc.same(0,\
     \ 2));\n\n    Graph<int> directed(2);\n    directed.add_directed_edge(1, 0);\n\
     \    assert(m1une::graph::is_bipartite(directed));\n    auto weak = m1une::graph::connected_components(directed);\n\
-    \    assert(weak.count == 1);\n}\n\nvoid test_cycle_detection() {\n    Graph<int>\
-    \ dg(3);\n    dg.add_directed_edge(0, 1);\n    dg.add_directed_edge(1, 2);\n \
-    \   dg.add_directed_edge(2, 0);\n    auto directed = m1une::graph::find_directed_cycle(dg);\n\
-    \    assert(!directed.empty());\n    assert(directed.vertices.front() == directed.vertices.back());\n\
-    \    assert(directed.edge_ids.size() + 1 == directed.vertices.size());\n\n   \
-    \ Graph<int> ug(4);\n    ug.add_edge(0, 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2,\
-    \ 0);\n    ug.add_edge(2, 3);\n    auto undirected = m1une::graph::find_undirected_cycle(ug);\n\
-    \    assert(!undirected.empty());\n    assert(undirected.vertices.front() == undirected.vertices.back());\n\
-    }\n\nvoid test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
+    \    assert(weak.count == 1);\n\n    m1une::graph::BipartiteMatching bm(3, 2);\n\
+    \    int e00 = bm.add_edge(0, 0);\n    int e10 = bm.add_edge(1, 0);\n    int e11\
+    \ = bm.add_edge(1, 1);\n    int e21 = bm.add_edge(2, 1);\n    assert(bm.left_size()\
+    \ == 3);\n    assert(bm.right_size() == 2);\n    assert(bm.edge_count() == 4);\n\
+    \    assert(bm.get_edge(e10).left == 1);\n    assert(bm.max_matching() == 2);\n\
+    \    assert(bm.matching_size() == 2);\n    auto pairs = bm.matching();\n    assert(pairs.size()\
+    \ == 2);\n    auto left_match = bm.left_match();\n    auto right_match = bm.right_match();\n\
+    \    for (const auto& p : pairs) {\n        assert(left_match[p.left] == p.right);\n\
+    \        assert(right_match[p.right] == p.left);\n    }\n\n    auto cover = bm.minimum_vertex_cover();\n\
+    \    assert(cover.left.empty());\n    assert((cover.right == std::vector<int>{0,\
+    \ 1}));\n    assert(cover.size() == 2);\n    auto independent = bm.maximum_independent_set();\n\
+    \    assert((independent.left == std::vector<int>{0, 1, 2}));\n    assert(independent.right.empty());\n\
+    \n    auto edge_cover = bm.minimum_edge_cover();\n    assert(edge_cover.has_value());\n\
+    \    assert(edge_cover->size() == 3);\n    std::vector<bool> covered_left(3, false),\
+    \ covered_right(2, false);\n    for (int id : *edge_cover) {\n        auto edge\
+    \ = bm.get_edge(id);\n        covered_left[edge.left] = true;\n        covered_right[edge.right]\
+    \ = true;\n    }\n    assert((covered_left == std::vector<bool>{true, true, true}));\n\
+    \    assert((covered_right == std::vector<bool>{true, true}));\n\n    bm.erase_edge(e11);\n\
+    \    bm.erase_edge(e21);\n    assert(!bm.is_edge_alive(e21));\n    assert(bm.edges().size()\
+    \ == 2);\n    assert(bm.edges(true).size() == 4);\n    assert(bm.max_matching()\
+    \ == 1);\n    bm.revive_edge(e21);\n    assert(bm.max_matching() == 2);\n\n  \
+    \  m1une::graph::BipartiteMatching isolated(1, 1);\n    assert(!isolated.minimum_edge_cover().has_value());\n\
+    \n    (void)e00;\n}\n\nvoid test_cycle_detection() {\n    Graph<int> dg(3);\n\
+    \    dg.add_directed_edge(0, 1);\n    dg.add_directed_edge(1, 2);\n    dg.add_directed_edge(2,\
+    \ 0);\n    auto directed = m1une::graph::find_directed_cycle(dg);\n    assert(!directed.empty());\n\
+    \    assert(directed.vertices.front() == directed.vertices.back());\n    assert(directed.edge_ids.size()\
+    \ + 1 == directed.vertices.size());\n\n    Graph<int> ug(4);\n    ug.add_edge(0,\
+    \ 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2, 0);\n    ug.add_edge(2, 3);\n\
+    \    auto undirected = m1une::graph::find_undirected_cycle(ug);\n    assert(!undirected.empty());\n\
+    \    assert(undirected.vertices.front() == undirected.vertices.back());\n}\n\n\
+    void test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
     \    g.add_edge(1, 2, 2);\n    g.add_edge(2, 3, 3);\n    g.add_edge(0, 3, 10);\n\
     \    g.add_edge(0, 2, 4);\n\n    auto mst = m1une::graph::kruskal(g);\n    assert(mst.cost\
     \ == 6);\n    assert(mst.edges.size() == 3);\n    assert(mst.components == 1);\n\
@@ -1238,8 +1421,8 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-16 02:49:24+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-16 03:00:02+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp
 layout: document
