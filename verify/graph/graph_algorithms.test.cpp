@@ -270,6 +270,67 @@ void test_grid() {
     assert(all4.edge_count() == 17);
 }
 
+void test_max_flow() {
+    m1une::graph::MaxFlow<long long> mf(4);
+    int e0 = mf.add_edge(0, 1, 2);
+    int e1 = mf.add_edge(0, 2, 1);
+    int e2 = mf.add_edge(1, 2, 1);
+    int e3 = mf.add_edge(1, 3, 1);
+    int e4 = mf.add_edge(2, 3, 2);
+    (void)e1;
+    (void)e2;
+    (void)e3;
+    (void)e4;
+
+    assert(mf.size() == 4);
+    assert(mf.edge_count() == 5);
+    assert(mf.max_flow(0, 3) == 3);
+    auto edges = mf.edges();
+    long long outgoing = 0;
+    for (const auto& e : edges) {
+        if (e.from == 0) outgoing += e.flow;
+        assert(0 <= e.flow && e.flow <= e.cap);
+    }
+    assert(outgoing == 3);
+    assert(mf.get_edge(e0).cap == 2);
+
+    auto cut = mf.min_cut(0);
+    assert(cut[0]);
+    assert(!cut[3]);
+
+    mf.change_edge(e0, 3, 1);
+    auto changed = mf.get_edge(e0);
+    assert(changed.cap == 3);
+    assert(changed.flow == 1);
+}
+
+void test_min_cost_flow() {
+    m1une::graph::MinCostFlow<long long, long long> mcf(4);
+    mcf.add_edge(0, 1, 2, 1);
+    mcf.add_edge(0, 2, 1, 2);
+    mcf.add_edge(1, 2, 1, 0);
+    mcf.add_edge(1, 3, 1, 3);
+    mcf.add_edge(2, 3, 2, 1);
+
+    auto result = mcf.flow(0, 3, 2);
+    assert(result.first == 2);
+    assert(result.second == 5);
+    auto edges = mcf.edges();
+    long long total_source_flow = 0;
+    for (const auto& e : edges) {
+        if (e.from == 0) total_source_flow += e.flow;
+        assert(0 <= e.flow && e.flow <= e.cap);
+    }
+    assert(total_source_flow == 2);
+
+    m1une::graph::MinCostFlow<long long, long long> negative(3);
+    negative.add_edge(0, 1, 1, -5);
+    negative.add_edge(1, 2, 1, 2);
+    negative.add_edge(0, 2, 1, 10);
+    auto slope = negative.slope(0, 2, 2);
+    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1, -3}, {2, 7}}));
+}
+
 int main() {
     test_graph_container();
     test_bfs();
@@ -283,6 +344,8 @@ int main() {
     test_cycle_detection();
     test_kruskal();
     test_grid();
+    test_max_flow();
+    test_min_cost_flow();
 
     long long a, b;
     std::cin >> a >> b;

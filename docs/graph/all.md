@@ -26,6 +26,8 @@ individual graph includes.
 | `graph/connected_components.hpp` | Weak connected components. |
 | `graph/cycle_detection.hpp` | Finds one directed or undirected cycle. |
 | `graph/kruskal.hpp` | Minimum spanning forest. |
+| `graph/max_flow.hpp` | Dinic maximum flow and minimum cut. |
+| `graph/min_cost_flow.hpp` | Minimum-cost flow with potentials. |
 
 ## Example
 

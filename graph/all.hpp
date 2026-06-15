@@ -11,6 +11,8 @@
 #include "graph/grid.hpp"
 #include "graph/kruskal.hpp"
 #include "graph/lowlink.hpp"
+#include "graph/max_flow.hpp"
+#include "graph/min_cost_flow.hpp"
 #include "graph/scc.hpp"
 #include "graph/topological_sort.hpp"
 #include "graph/warshall_floyd.hpp"
