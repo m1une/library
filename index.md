@@ -185,6 +185,12 @@ data:
       path: graph/lowlink.hpp
       title: LowLink
     - icon: ':heavy_check_mark:'
+      path: graph/max_flow.hpp
+      title: Max Flow
+    - icon: ':heavy_check_mark:'
+      path: graph/min_cost_flow.hpp
+      title: Min Cost Flow
+    - icon: ':heavy_check_mark:'
       path: graph/scc.hpp
       title: Strongly Connected Components
     - icon: ':heavy_check_mark:'
