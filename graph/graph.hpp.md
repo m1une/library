@@ -21,6 +21,9 @@ data:
     path: graph/cycle_detection.hpp
     title: Cycle Detection
   - icon: ':heavy_check_mark:'
+    path: graph/dag_shortest_path.hpp
+    title: DAG Shortest Path
+  - icon: ':heavy_check_mark:'
     path: graph/dijkstra.hpp
     title: Dijkstra
   - icon: ':heavy_check_mark:'
@@ -144,6 +147,7 @@ data:
   - graph/kruskal.hpp
   - graph/bipartite.hpp
   - graph/bellman_ford.hpp
+  - graph/dag_shortest_path.hpp
   - graph/connected_components.hpp
   - graph/all.hpp
   - graph/lowlink.hpp

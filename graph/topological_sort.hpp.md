@@ -9,8 +9,17 @@ data:
     path: graph/all.hpp
     title: Graph All
   - icon: ':heavy_check_mark:'
+    path: graph/dag_shortest_path.hpp
+    title: DAG Shortest Path
+  - icon: ':heavy_check_mark:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
+  - icon: ':heavy_check_mark:'
+    path: graph/shortest_path.hpp
+    title: Shortest Path
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -90,8 +99,11 @@ data:
   isVerificationFile: false
   path: graph/topological_sort.hpp
   requiredBy:
+  - graph/dag_shortest_path.hpp
   - graph/all.hpp
+  - graph/undirected.hpp
   - graph/directed.hpp
+  - graph/shortest_path.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

@@ -170,6 +170,9 @@ data:
       path: graph/cycle_detection.hpp
       title: Cycle Detection
     - icon: ':heavy_check_mark:'
+      path: graph/dag_shortest_path.hpp
+      title: DAG Shortest Path
+    - icon: ':heavy_check_mark:'
       path: graph/dijkstra.hpp
       title: Dijkstra
     - icon: ':heavy_check_mark:'

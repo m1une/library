@@ -11,6 +11,9 @@ data:
     path: graph/cycle_detection.hpp
     title: Cycle Detection
   - icon: ':heavy_check_mark:'
+    path: graph/dag_shortest_path.hpp
+    title: DAG Shortest Path
+  - icon: ':heavy_check_mark:'
     path: graph/dijkstra.hpp
     title: Dijkstra
   - icon: ':heavy_check_mark:'
@@ -336,7 +339,45 @@ data:
     \ result.parent[e.to] = v;\n            result.parent_edge[e.to] = e.id;\n   \
     \         que.push(e.to);\n        }\n    }\n\n    return result;\n}\n\ntemplate\
     \ <class T>\nBfsResult bfs(const Graph<T>& g, int s) {\n    return bfs(g, std::vector<int>{s});\n\
-    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/dijkstra.hpp\"\
+    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/dag_shortest_path.hpp\"\
+    \n\n\n\n#line 7 \"graph/dag_shortest_path.hpp\"\n#include <optional>\n#line 9\
+    \ \"graph/dag_shortest_path.hpp\"\n\n#line 1 \"graph/topological_sort.hpp\"\n\n\
+    \n\n#line 7 \"graph/topological_sort.hpp\"\n\n#line 9 \"graph/topological_sort.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstd::optional<std::vector<int>>\
+    \ topological_sort(const Graph<T>& g) {\n    int n = g.size();\n    std::vector<int>\
+    \ indeg(n, 0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& e\
+    \ : g[v]) indeg[e.to]++;\n    }\n\n    std::queue<int> que;\n    for (int v =\
+    \ 0; v < n; v++) {\n        if (indeg[v] == 0) que.push(v);\n    }\n\n    std::vector<int>\
+    \ order;\n    order.reserve(n);\n    while (!que.empty()) {\n        int v = que.front();\n\
+    \        que.pop();\n        order.push_back(v);\n        for (const auto& e :\
+    \ g[v]) {\n            indeg[e.to]--;\n            if (indeg[e.to] == 0) que.push(e.to);\n\
+    \        }\n    }\n\n    if (int(order.size()) != n) return std::nullopt;\n  \
+    \  return order;\n}\n\ntemplate <class T>\nbool is_dag(const Graph<T>& g) {\n\
+    \    return topological_sort(g).has_value();\n}\n\n}  // namespace graph\n}  //\
+    \ namespace m1une\n\n\n#line 12 \"graph/dag_shortest_path.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace graph {\n\ntemplate <class T>\nstruct DagShortestPathResult {\n\
+    \    std::vector<T> dist;\n    std::vector<int> parent;\n    std::vector<int>\
+    \ parent_edge;\n    std::vector<int> topological_order;\n    T inf;\n\n    bool\
+    \ reachable(int v) const {\n        assert(0 <= v && v < int(dist.size()));\n\
+    \        return dist[v] != inf;\n    }\n\n    std::vector<int> path(int t) const\
+    \ {\n        assert(reachable(t));\n        std::vector<int> result;\n       \
+    \ for (int v = t; v != -1; v = parent[v]) result.push_back(v);\n        std::reverse(result.begin(),\
+    \ result.end());\n        return result;\n    }\n};\n\ntemplate <class T>\nstd::optional<DagShortestPathResult<T>>\
+    \ dag_shortest_path(\n    const Graph<T>& g, const std::vector<int>& sources,\
+    \ T inf = std::numeric_limits<T>::max() / T(4)) {\n    int n = g.size();\n   \
+    \ auto order = topological_sort(g);\n    if (!order) return std::nullopt;\n\n\
+    \    DagShortestPathResult<T> result;\n    result.dist.assign(n, inf);\n    result.parent.assign(n,\
+    \ -1);\n    result.parent_edge.assign(n, -1);\n    result.topological_order =\
+    \ *order;\n    result.inf = inf;\n\n    for (int s : sources) {\n        assert(0\
+    \ <= s && s < n);\n        if (result.dist[s] == T(0)) continue;\n        result.dist[s]\
+    \ = T(0);\n    }\n\n    for (int v : *order) {\n        if (result.dist[v] ==\
+    \ inf) continue;\n        for (const auto& e : g[v]) {\n            T nd = result.dist[v]\
+    \ + e.cost;\n            if (result.dist[e.to] <= nd) continue;\n            result.dist[e.to]\
+    \ = nd;\n            result.parent[e.to] = v;\n            result.parent_edge[e.to]\
+    \ = e.id;\n        }\n    }\n\n    return result;\n}\n\ntemplate <class T>\nstd::optional<DagShortestPathResult<T>>\
+    \ dag_shortest_path(\n    const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max()\
+    \ / T(4)) {\n    return dag_shortest_path(g, std::vector<int>{s}, inf);\n}\n\n\
+    }  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/dijkstra.hpp\"\
     \n\n\n\n#line 11 \"graph/dijkstra.hpp\"\n\n#line 13 \"graph/dijkstra.hpp\"\n\n\
     namespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct DijkstraResult\
     \ {\n    std::vector<T> dist;\n    std::vector<int> parent;\n    std::vector<int>\
@@ -406,21 +447,8 @@ data:
     \    return updated;\n}\n\ntemplate <class T>\nbool has_negative_cycle(const std::vector<std::vector<T>>&\
     \ dist) {\n    int n = int(dist.size());\n    for (int i = 0; i < n; i++) {\n\
     \        if (dist[i][i] < T(0)) return true;\n    }\n    return false;\n}\n\n\
-    }  // namespace graph\n}  // namespace m1une\n\n\n#line 8 \"graph/shortest_path.hpp\"\
-    \n\n\n#line 1 \"graph/topological_sort.hpp\"\n\n\n\n#include <optional>\n#line\
-    \ 7 \"graph/topological_sort.hpp\"\n\n#line 9 \"graph/topological_sort.hpp\"\n\
-    \nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstd::optional<std::vector<int>>\
-    \ topological_sort(const Graph<T>& g) {\n    int n = g.size();\n    std::vector<int>\
-    \ indeg(n, 0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& e\
-    \ : g[v]) indeg[e.to]++;\n    }\n\n    std::queue<int> que;\n    for (int v =\
-    \ 0; v < n; v++) {\n        if (indeg[v] == 0) que.push(v);\n    }\n\n    std::vector<int>\
-    \ order;\n    order.reserve(n);\n    while (!que.empty()) {\n        int v = que.front();\n\
-    \        que.pop();\n        order.push_back(v);\n        for (const auto& e :\
-    \ g[v]) {\n            indeg[e.to]--;\n            if (indeg[e.to] == 0) que.push(e.to);\n\
-    \        }\n    }\n\n    if (int(order.size()) != n) return std::nullopt;\n  \
-    \  return order;\n}\n\ntemplate <class T>\nbool is_dag(const Graph<T>& g) {\n\
-    \    return topological_sort(g).has_value();\n}\n\n}  // namespace graph\n}  //\
-    \ namespace m1une\n\n\n#line 10 \"graph/directed.hpp\"\n\n\n"
+    }  // namespace graph\n}  // namespace m1une\n\n\n#line 9 \"graph/shortest_path.hpp\"\
+    \n\n\n#line 10 \"graph/directed.hpp\"\n\n\n"
   code: '#ifndef M1UNE_GRAPH_DIRECTED_HPP
 
     #define M1UNE_GRAPH_DIRECTED_HPP 1
@@ -452,14 +480,15 @@ data:
   - graph/shortest_path.hpp
   - graph/bellman_ford.hpp
   - graph/bfs.hpp
+  - graph/dag_shortest_path.hpp
+  - graph/topological_sort.hpp
   - graph/dijkstra.hpp
   - graph/warshall_floyd.hpp
-  - graph/topological_sort.hpp
   isVerificationFile: false
   path: graph/directed.hpp
   requiredBy:
   - graph/all.hpp
-  timestamp: '2026-06-16 02:16:43+09:00'
+  timestamp: '2026-06-16 02:19:59+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
@@ -480,7 +509,7 @@ depends on edge direction.
 
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
-| `graph/shortest_path.hpp` | Direction-respecting | BFS, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
+| `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
 | `graph/topological_sort.hpp` | Directed only | DAG ordering and directed cycle check. |
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Use `find_directed_cycle(g)` for directed graphs. |
