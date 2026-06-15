@@ -385,6 +385,53 @@ struct BipartiteMatching {
     }
 };
 
+struct BipartiteMatchingGraph {
+    BipartiteResult parts;
+    BipartiteMatching matching;
+    std::vector<int> original_edge_id;
+
+    int left_vertex(int left) const {
+        assert(0 <= left && left < int(parts.left_vertices.size()));
+        return parts.left_vertices[left];
+    }
+
+    int right_vertex(int right) const {
+        assert(0 <= right && right < int(parts.right_vertices.size()));
+        return parts.right_vertices[right];
+    }
+
+    int original_edge(int edge_id) const {
+        assert(0 <= edge_id && edge_id < int(original_edge_id.size()));
+        return original_edge_id[edge_id];
+    }
+};
+
+template <class T>
+std::optional<BipartiteMatchingGraph> make_bipartite_matching(const Graph<T>& g) {
+    auto parts = bipartite(g);
+    if (!parts.is_bipartite) return std::nullopt;
+
+    BipartiteMatchingGraph result;
+    result.parts = parts;
+    result.matching = BipartiteMatching(int(parts.left_vertices.size()), int(parts.right_vertices.size()));
+
+    for (const auto& e : g.edges()) {
+        int left, right;
+        if (parts.color[e.from] == 0) {
+            left = parts.left_id[e.from];
+            right = parts.right_id[e.to];
+        } else {
+            left = parts.left_id[e.to];
+            right = parts.right_id[e.from];
+        }
+        int id = result.matching.add_edge(left, right);
+        if (int(result.original_edge_id.size()) <= id) result.original_edge_id.resize(id + 1);
+        result.original_edge_id[id] = e.id;
+    }
+
+    return result;
+}
+
 }  // namespace graph
 }  // namespace m1une
 

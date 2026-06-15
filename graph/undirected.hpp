@@ -4,6 +4,7 @@
 #include "graph/bipartite.hpp"
 #include "graph/connected_components.hpp"
 #include "graph/cycle_detection.hpp"
+#include "graph/general_matching.hpp"
 #include "graph/graph.hpp"
 #include "graph/grid.hpp"
 #include "graph/kruskal.hpp"

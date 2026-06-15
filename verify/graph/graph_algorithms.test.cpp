@@ -344,6 +344,84 @@ void test_bipartite_and_components() {
     (void)e00;
 }
 
+void test_general_matching() {
+    m1une::graph::GeneralMatching blossom(6);
+    int e01 = blossom.add_edge(0, 1);
+    int e12 = blossom.add_edge(1, 2);
+    int e23 = blossom.add_edge(2, 3);
+    int e34 = blossom.add_edge(3, 4);
+    int e40 = blossom.add_edge(4, 0);
+    int e15 = blossom.add_edge(1, 5);
+    (void)e12;
+    (void)e23;
+    (void)e34;
+    (void)e40;
+
+    assert(blossom.size() == 6);
+    assert(blossom.edge_count() == 6);
+    assert(blossom.get_edge(e01).other(0) == 1);
+    assert(blossom.max_matching() == 3);
+    assert(blossom.matching_size() == 3);
+    auto mate = blossom.mate();
+    auto mate_edge = blossom.mate_edge();
+    for (int v = 0; v < 6; v++) {
+        assert(mate[v] != -1);
+        assert(mate[mate[v]] == v);
+        assert(mate_edge[v] != -1);
+    }
+    auto pairs = blossom.matching();
+    assert(pairs.size() == 3);
+    for (const auto& p : pairs) {
+        assert(mate[p.from] == p.to);
+        assert(mate[p.to] == p.from);
+    }
+
+    auto edge_cover = blossom.minimum_edge_cover();
+    assert(edge_cover.has_value());
+    assert(edge_cover->size() == 3);
+    std::vector<bool> covered(6, false);
+    for (int id : *edge_cover) {
+        auto edge = blossom.get_edge(id);
+        covered[edge.from] = true;
+        covered[edge.to] = true;
+    }
+    assert((covered == std::vector<bool>{true, true, true, true, true, true}));
+
+    blossom.erase_edge(e15);
+    assert(!blossom.is_edge_alive(e15));
+    assert(blossom.edges().size() == 5);
+    assert(blossom.edges(true).size() == 6);
+    assert(blossom.max_matching() == 2);
+    assert(!blossom.minimum_edge_cover().has_value());
+    blossom.revive_edge(e15);
+    assert(blossom.max_matching() == 3);
+
+    m1une::graph::GeneralMatching path(3);
+    path.add_edge(0, 1);
+    path.add_edge(1, 2);
+    auto path_cover = path.minimum_edge_cover();
+    assert(path_cover.has_value());
+    assert(path_cover->size() == 2);
+
+    m1une::graph::GeneralMatching isolated(1);
+    assert(!isolated.minimum_edge_cover().has_value());
+
+    Graph<int> g(4);
+    int g01 = g.add_edge(0, 1);
+    int g12 = g.add_edge(1, 2);
+    int g20 = g.add_edge(2, 0);
+    int g23 = g.add_edge(2, 3);
+    (void)g01;
+    (void)g12;
+    (void)g20;
+    auto built = m1une::graph::make_general_matching(g);
+    assert(built.matching.max_matching() == 2);
+    for (const auto& p : built.matching.matching()) {
+        assert(g.is_edge_alive(built.original_edge(p.edge_id)));
+    }
+    assert(g.is_edge_alive(g23));
+}
+
 void test_cycle_detection() {
     Graph<int> dg(3);
     dg.add_directed_edge(0, 1);
@@ -621,6 +699,7 @@ int main() {
     test_scc();
     test_lowlink();
     test_bipartite_and_components();
+    test_general_matching();
     test_cycle_detection();
     test_kruskal();
     test_grid();
