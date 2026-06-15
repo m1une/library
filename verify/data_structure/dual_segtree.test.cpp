@@ -4,12 +4,11 @@
 
 #include <bits/stdc++.h>
 
-#include "acted_monoid/range_affine_range_sum.hpp"
 #include "math/modint.hpp"
+#include "monoid/affine.hpp"
 
 using mint = m1une::math::modint998244353;
-
-using AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;
+using Affine = m1une::monoid::Affine<mint>;
 
 using namespace std;
 using ll = long long;
@@ -17,16 +16,20 @@ using ll = long long;
 void solve() {
     ll N, Q;
     cin >> N >> Q;
-    vector<ll> a(N);
-    for (int i = 0; i < N; ++i) cin >> a[i];
+    vector<Affine::value_type> a(N);
+    for (int i = 0; i < N; ++i) {
+        ll x;
+        cin >> x;
+        a[i] = {0, x};
+    }
 
-    m1une::data_structure::DualSegtree<AM> seg(a);
+    m1une::data_structure::DualSegtree<Affine> seg(a);
     assert(seg.size() == N);
     assert(seg.empty() == (N == 0));
     auto values = seg.to_vector();
     assert(int(values.size()) == N);
     for (int i = 0; i < N; i++) {
-        assert(values[i].sum == mint(a[i]));
+        assert(values[i].second == a[i].second);
     }
     for (int q = 0; q < Q; ++q) {
         ll t;
@@ -38,7 +41,7 @@ void solve() {
         } else {
             ll i;
             cin >> i;
-            cout << seg.get(i).sum << '\n';
+            cout << seg.get(i).second << '\n';
         }
     }
 }
