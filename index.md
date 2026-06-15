@@ -165,7 +165,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: monoid/add.hpp
       title: Add Monoid
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/affine.hpp
       title: Affine Monoid
     - icon: ':warning:'
