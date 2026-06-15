@@ -27,5 +27,6 @@
 "verify/data_structure/sparse_table.test.cpp": "2026-06-13 20:51:48 +0900",
 "verify/string/aoj_alds1_14_b.test.cpp": "2026-06-13 20:51:48 +0900",
 "verify/string/yosupo_zalgorithm.test.cpp": "2026-06-13 20:51:48 +0900",
+"verify/utilities/basic_utilities.test.cpp": "2026-06-15 23:35:14 +0900",
 "verify/utilities/shifted_array.test.cpp": "2026-06-13 20:51:48 +0900"
 }
