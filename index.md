@@ -83,7 +83,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/disjoint_sparse_table.hpp
       title: Disjoint Sparse Table
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/dsu.hpp
       title: Disjoint Set Union (DSU)
     - icon: ':heavy_check_mark:'
@@ -151,76 +151,82 @@ data:
       title: Sparse Table
   - name: graph
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/all.hpp
       title: Graph All
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bellman_ford.hpp
       title: Bellman-Ford
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bfs.hpp
       title: BFS
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bipartite.hpp
       title: Bipartite Graph
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bounded_flow.hpp
       title: Bounded Flow
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bounded_min_cost_flow.hpp
       title: Bounded Min Cost Flow
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/connected_components.hpp
       title: Connected Components
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/cycle_detection.hpp
       title: Cycle Detection
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/dag_shortest_path.hpp
       title: DAG Shortest Path
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/dijkstra.hpp
       title: Dijkstra
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/directed.hpp
       title: Directed Graph Algorithms
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/flow.hpp
       title: Flow
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
+      path: graph/general_matching.hpp
+      title: General Matching
+    - icon: ':heavy_check_mark:'
       path: graph/graph.hpp
       title: Graph
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/grid.hpp
       title: Grid
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/kruskal.hpp
       title: Kruskal
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/lowlink.hpp
       title: LowLink
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/max_flow.hpp
       title: Max Flow
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
+      path: graph/maximum_clique.hpp
+      title: Maximum Clique and Independent Set
+    - icon: ':heavy_check_mark:'
       path: graph/min_cost_flow.hpp
       title: Min Cost Flow
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/scc.hpp
       title: Strongly Connected Components
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/shortest_path.hpp
       title: Shortest Path
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/topological_sort.hpp
       title: Topological Sort
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/undirected.hpp
       title: Undirected Graph Algorithms
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/warshall_floyd.hpp
       title: Warshall-Floyd
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/zero_one_bfs.hpp
       title: 0-1 BFS
   - name: math
@@ -455,7 +461,7 @@ data:
       title: verify/data_structure/sparse_table.test.cpp
   - name: verify/graph
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/graph/graph_algorithms.test.cpp
       title: verify/graph/graph_algorithms.test.cpp
   - name: verify/string

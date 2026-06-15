@@ -1,86 +1,92 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/dsu.hpp
     title: Disjoint Set Union (DSU)
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/bellman_ford.hpp
     title: Bellman-Ford
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/bfs.hpp
     title: BFS
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/bipartite.hpp
     title: Bipartite Graph
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/bounded_flow.hpp
     title: Bounded Flow
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/bounded_min_cost_flow.hpp
     title: Bounded Min Cost Flow
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/connected_components.hpp
     title: Connected Components
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/cycle_detection.hpp
     title: Cycle Detection
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/dag_shortest_path.hpp
     title: DAG Shortest Path
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/dijkstra.hpp
     title: Dijkstra
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/flow.hpp
     title: Flow
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
+    path: graph/general_matching.hpp
+    title: General Matching
+  - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/grid.hpp
     title: Grid
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/kruskal.hpp
     title: Kruskal
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/lowlink.hpp
     title: LowLink
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/max_flow.hpp
     title: Max Flow
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
+    path: graph/maximum_clique.hpp
+    title: Maximum Clique and Independent Set
+  - icon: ':heavy_check_mark:'
     path: graph/min_cost_flow.hpp
     title: Min Cost Flow
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/scc.hpp
     title: Strongly Connected Components
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/topological_sort.hpp
     title: Topological Sort
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/all.hpp\"\n\n\n\n#line 1 \"graph/directed.hpp\"\n\n\
@@ -834,8 +840,26 @@ data:
     \ {\n                if (_edges[edge_id].alive) {\n                    id = edge_id;\n\
     \                    break;\n                }\n            }\n            if\
     \ (id == -1) return std::nullopt;\n            use_edge(id);\n        }\n\n  \
-    \      return result;\n    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 1 \"graph/connected_components.hpp\"\n\n\n\n#line 6 \"graph/connected_components.hpp\"\
+    \      return result;\n    }\n};\n\nstruct BipartiteMatchingGraph {\n    BipartiteResult\
+    \ parts;\n    BipartiteMatching matching;\n    std::vector<int> original_edge_id;\n\
+    \n    int left_vertex(int left) const {\n        assert(0 <= left && left < int(parts.left_vertices.size()));\n\
+    \        return parts.left_vertices[left];\n    }\n\n    int right_vertex(int\
+    \ right) const {\n        assert(0 <= right && right < int(parts.right_vertices.size()));\n\
+    \        return parts.right_vertices[right];\n    }\n\n    int original_edge(int\
+    \ edge_id) const {\n        assert(0 <= edge_id && edge_id < int(original_edge_id.size()));\n\
+    \        return original_edge_id[edge_id];\n    }\n};\n\ntemplate <class T>\n\
+    std::optional<BipartiteMatchingGraph> make_bipartite_matching(const Graph<T>&\
+    \ g) {\n    auto parts = bipartite(g);\n    if (!parts.is_bipartite) return std::nullopt;\n\
+    \n    BipartiteMatchingGraph result;\n    result.parts = parts;\n    result.matching\
+    \ = BipartiteMatching(int(parts.left_vertices.size()), int(parts.right_vertices.size()));\n\
+    \n    for (const auto& e : g.edges()) {\n        int left, right;\n        if\
+    \ (parts.color[e.from] == 0) {\n            left = parts.left_id[e.from];\n  \
+    \          right = parts.right_id[e.to];\n        } else {\n            left =\
+    \ parts.left_id[e.to];\n            right = parts.right_id[e.from];\n        }\n\
+    \        int id = result.matching.add_edge(left, right);\n        if (int(result.original_edge_id.size())\
+    \ <= id) result.original_edge_id.resize(id + 1);\n        result.original_edge_id[id]\
+    \ = e.id;\n    }\n\n    return result;\n}\n\n}  // namespace graph\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"graph/connected_components.hpp\"\n\n\n\n#line 6 \"graph/connected_components.hpp\"\
     \n\n#line 1 \"data_structure/dsu.hpp\"\n\n\n\n#line 5 \"data_structure/dsu.hpp\"\
     \n#include <numeric>\n#line 7 \"data_structure/dsu.hpp\"\n\nnamespace m1une {\n\
     namespace data_structure {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i]\
@@ -878,32 +902,139 @@ data:
     \     }\n        int c = leader_to_comp[leader];\n        result.comp[v] = c;\n\
     \        result.groups[c].push_back(v);\n    }\n    result.count = int(result.groups.size());\n\
     \n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n\
-    #line 1 \"graph/kruskal.hpp\"\n\n\n\n#line 6 \"graph/kruskal.hpp\"\n\n#line 9\
-    \ \"graph/kruskal.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class\
-    \ T>\nstruct MinimumSpanningForest {\n    T cost;\n    std::vector<Edge<T>> edges;\n\
-    \    int components;\n\n    bool is_spanning_tree(int n) const {\n        return\
-    \ components <= 1 && int(edges.size()) == std::max(0, n - 1);\n    }\n};\n\ntemplate\
-    \ <class T>\nMinimumSpanningForest<T> kruskal(const Graph<T>& g) {\n    int n\
-    \ = g.size();\n    auto edges = g.edges();\n    std::sort(edges.begin(), edges.end(),\
-    \ [](const auto& a, const auto& b) {\n        return a.cost < b.cost;\n    });\n\
-    \n    m1une::data_structure::Dsu dsu(n);\n    MinimumSpanningForest<T> result;\n\
-    \    result.cost = T(0);\n    result.components = n;\n\n    for (const auto& e\
-    \ : edges) {\n        if (dsu.same(e.from, e.to)) continue;\n        dsu.merge(e.from,\
-    \ e.to);\n        result.cost += e.cost;\n        result.edges.push_back(e);\n\
-    \        result.components--;\n    }\n\n    return result;\n}\n\n}  // namespace\
-    \ graph\n}  // namespace m1une\n\n\n#line 1 \"graph/lowlink.hpp\"\n\n\n\n#line\
-    \ 6 \"graph/lowlink.hpp\"\n\n#line 8 \"graph/lowlink.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace graph {\n\ntemplate <class T>\nstruct LowLinkResult {\n    std::vector<int>\
-    \ ord;\n    std::vector<int> low;\n    std::vector<int> articulation;\n    std::vector<Edge<T>>\
-    \ bridges;\n    std::vector<int> bridge_ids;\n};\n\ntemplate <class T>\nLowLinkResult<T>\
-    \ lowlink(const Graph<T>& g) {\n    int n = g.size();\n    LowLinkResult<T> result;\n\
-    \    result.ord.assign(n, -1);\n    result.low.assign(n, -1);\n    int now = 0;\n\
-    \n    auto dfs = [&](auto self, int v, int parent_edge) -> void {\n        result.ord[v]\
-    \ = result.low[v] = now++;\n        int child_count = 0;\n        bool is_articulation\
-    \ = false;\n\n        for (const auto& e : g[v]) {\n            if (!e.alive)\
-    \ continue;\n            if (e.id == parent_edge) continue;\n            int to\
-    \ = e.to;\n            if (result.ord[to] == -1) {\n                child_count++;\n\
-    \                self(self, to, e.id);\n                result.low[v] = std::min(result.low[v],\
+    #line 1 \"graph/general_matching.hpp\"\n\n\n\n#line 9 \"graph/general_matching.hpp\"\
+    \n\n#line 11 \"graph/general_matching.hpp\"\n\nnamespace m1une {\nnamespace graph\
+    \ {\n\nstruct GeneralMatching {\n    struct Edge {\n        int from;\n      \
+    \  int to;\n        int id;\n        bool alive;\n\n        int other(int v) const\
+    \ {\n            assert(v == from || v == to);\n            return from ^ to ^\
+    \ v;\n        }\n    };\n\n    struct Pair {\n        int from;\n        int to;\n\
+    \        int edge_id;\n    };\n\n   private:\n    int _n;\n    std::vector<Edge>\
+    \ _edges;\n    std::vector<std::vector<int>> _adj;\n    std::vector<int> _mate;\n\
+    \    std::vector<int> _mate_edge;\n    bool _calculated;\n\n    void invalidate()\
+    \ {\n        _calculated = false;\n    }\n\n    void ensure_matching() {\n   \
+    \     if (!_calculated) max_matching();\n    }\n\n    int lca(int a, int b, const\
+    \ std::vector<int>& base, const std::vector<int>& parent) const {\n        std::vector<char>\
+    \ used(_n, false);\n        while (true) {\n            a = base[a];\n       \
+    \     used[a] = true;\n            if (_mate[a] == -1) break;\n            a =\
+    \ parent[_mate[a]];\n        }\n        while (true) {\n            b = base[b];\n\
+    \            if (used[b]) return b;\n            b = parent[_mate[b]];\n     \
+    \   }\n    }\n\n    void mark_path(int v, int b, int child, int child_edge, std::vector<int>&\
+    \ base, std::vector<int>& parent,\n                   std::vector<int>& parent_edge,\
+    \ std::vector<char>& blossom) const {\n        while (base[v] != b) {\n      \
+    \      blossom[base[v]] = true;\n            blossom[base[_mate[v]]] = true;\n\
+    \            parent[v] = child;\n            parent_edge[v] = child_edge;\n\n\
+    \            int matched = _mate[v];\n            int next_v = parent[matched];\n\
+    \            int next_edge = parent_edge[matched];\n            child = matched;\n\
+    \            child_edge = next_edge;\n            v = next_v;\n        }\n   \
+    \ }\n\n    int find_augmenting_path(int root, std::vector<int>& parent, std::vector<int>&\
+    \ parent_edge) const {\n        std::vector<char> used(_n, false), blossom(_n,\
+    \ false);\n        std::vector<int> base(_n);\n        std::queue<int> que;\n\n\
+    \        parent.assign(_n, -1);\n        parent_edge.assign(_n, -1);\n       \
+    \ for (int i = 0; i < _n; i++) base[i] = i;\n\n        used[root] = true;\n  \
+    \      que.push(root);\n        while (!que.empty()) {\n            int v = que.front();\n\
+    \            que.pop();\n            for (int id : _adj[v]) {\n              \
+    \  const auto& e = _edges[id];\n                if (!e.alive) continue;\n    \
+    \            int u = e.other(v);\n                if (base[v] == base[u] || _mate[v]\
+    \ == u) continue;\n\n                if (u == root || (_mate[u] != -1 && parent[_mate[u]]\
+    \ != -1)) {\n                    int cur_base = lca(v, u, base, parent);\n   \
+    \                 std::fill(blossom.begin(), blossom.end(), false);\n        \
+    \            mark_path(v, cur_base, u, id, base, parent, parent_edge, blossom);\n\
+    \                    mark_path(u, cur_base, v, id, base, parent, parent_edge,\
+    \ blossom);\n                    for (int i = 0; i < _n; i++) {\n            \
+    \            if (!blossom[base[i]]) continue;\n                        base[i]\
+    \ = cur_base;\n                        if (!used[i]) {\n                     \
+    \       used[i] = true;\n                            que.push(i);\n          \
+    \              }\n                    }\n                } else if (parent[u]\
+    \ == -1) {\n                    parent[u] = v;\n                    parent_edge[u]\
+    \ = id;\n                    if (_mate[u] == -1) return u;\n                 \
+    \   int next = _mate[u];\n                    used[next] = true;\n           \
+    \         que.push(next);\n                }\n            }\n        }\n     \
+    \   return -1;\n    }\n\n   public:\n    GeneralMatching() : GeneralMatching(0)\
+    \ {}\n\n    explicit GeneralMatching(int n) : _n(n), _adj(n), _mate(n, -1), _mate_edge(n,\
+    \ -1), _calculated(false) {\n        assert(0 <= n);\n    }\n\n    int size()\
+    \ const {\n        return _n;\n    }\n\n    int edge_count() const {\n       \
+    \ return int(_edges.size());\n    }\n\n    int add_edge(int from, int to) {\n\
+    \        assert(0 <= from && from < _n);\n        assert(0 <= to && to < _n);\n\
+    \        assert(from != to);\n        int id = int(_edges.size());\n        _edges.push_back(Edge{from,\
+    \ to, id, true});\n        _adj[from].push_back(id);\n        _adj[to].push_back(id);\n\
+    \        invalidate();\n        return id;\n    }\n\n    Edge get_edge(int i)\
+    \ const {\n        assert(0 <= i && i < int(_edges.size()));\n        return _edges[i];\n\
+    \    }\n\n    std::vector<Edge> edges(bool include_inactive = false) const {\n\
+    \        std::vector<Edge> result;\n        result.reserve(_edges.size());\n \
+    \       for (const auto& e : _edges) {\n            if (include_inactive || e.alive)\
+    \ result.push_back(e);\n        }\n        return result;\n    }\n\n    void set_edge_alive(int\
+    \ id, bool alive) {\n        assert(0 <= id && id < int(_edges.size()));\n   \
+    \     _edges[id].alive = alive;\n        invalidate();\n    }\n\n    void erase_edge(int\
+    \ id) {\n        set_edge_alive(id, false);\n    }\n\n    void revive_edge(int\
+    \ id) {\n        set_edge_alive(id, true);\n    }\n\n    bool is_edge_alive(int\
+    \ id) const {\n        assert(0 <= id && id < int(_edges.size()));\n        return\
+    \ _edges[id].alive;\n    }\n\n    int max_matching() {\n        _mate.assign(_n,\
+    \ -1);\n        _mate_edge.assign(_n, -1);\n\n        int result = 0;\n      \
+    \  std::vector<int> parent, parent_edge;\n        for (int root = 0; root < _n;\
+    \ root++) {\n            if (_mate[root] != -1) continue;\n            int finish\
+    \ = find_augmenting_path(root, parent, parent_edge);\n            if (finish ==\
+    \ -1) continue;\n\n            result++;\n            while (finish != -1) {\n\
+    \                int prev = parent[finish];\n                int next = _mate[prev];\n\
+    \                int edge_id = parent_edge[finish];\n                _mate[finish]\
+    \ = prev;\n                _mate[prev] = finish;\n                _mate_edge[finish]\
+    \ = edge_id;\n                _mate_edge[prev] = edge_id;\n                finish\
+    \ = next;\n            }\n        }\n\n        _calculated = true;\n        return\
+    \ result;\n    }\n\n    int matching_size() {\n        ensure_matching();\n  \
+    \      int result = 0;\n        for (int v = 0; v < _n; v++) {\n            if\
+    \ (v < _mate[v]) result++;\n        }\n        return result;\n    }\n\n    std::vector<int>\
+    \ mate() {\n        ensure_matching();\n        return _mate;\n    }\n\n    std::vector<int>\
+    \ mate_edge() {\n        ensure_matching();\n        return _mate_edge;\n    }\n\
+    \n    std::vector<Pair> matching() {\n        ensure_matching();\n        std::vector<Pair>\
+    \ result;\n        for (int v = 0; v < _n; v++) {\n            if (v < _mate[v])\
+    \ result.push_back(Pair{v, _mate[v], _mate_edge[v]});\n        }\n        return\
+    \ result;\n    }\n\n    std::optional<std::vector<int>> minimum_edge_cover() {\n\
+    \        ensure_matching();\n\n        std::vector<int> result;\n        std::vector<char>\
+    \ covered(_n, false), used_edge(_edges.size(), false);\n\n        auto use_edge\
+    \ = [&](int id) {\n            if (used_edge[id]) return;\n            used_edge[id]\
+    \ = true;\n            result.push_back(id);\n            covered[_edges[id].from]\
+    \ = true;\n            covered[_edges[id].to] = true;\n        };\n\n        for\
+    \ (int v = 0; v < _n; v++) {\n            if (v < _mate[v]) use_edge(_mate_edge[v]);\n\
+    \        }\n\n        for (int v = 0; v < _n; v++) {\n            if (covered[v])\
+    \ continue;\n            int id = -1;\n            for (int edge_id : _adj[v])\
+    \ {\n                if (_edges[edge_id].alive) {\n                    id = edge_id;\n\
+    \                    break;\n                }\n            }\n            if\
+    \ (id == -1) return std::nullopt;\n            use_edge(id);\n        }\n\n  \
+    \      return result;\n    }\n};\n\nstruct GeneralMatchingGraph {\n    GeneralMatching\
+    \ matching;\n    std::vector<int> original_edge_id;\n\n    int original_edge(int\
+    \ edge_id) const {\n        assert(0 <= edge_id && edge_id < int(original_edge_id.size()));\n\
+    \        return original_edge_id[edge_id];\n    }\n};\n\ntemplate <class T>\n\
+    GeneralMatchingGraph make_general_matching(const Graph<T>& g) {\n    GeneralMatchingGraph\
+    \ result;\n    result.matching = GeneralMatching(g.size());\n    for (const auto&\
+    \ e : g.edges()) {\n        int id = result.matching.add_edge(e.from, e.to);\n\
+    \        if (int(result.original_edge_id.size()) <= id) result.original_edge_id.resize(id\
+    \ + 1);\n        result.original_edge_id[id] = e.id;\n    }\n    return result;\n\
+    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/kruskal.hpp\"\
+    \n\n\n\n#line 6 \"graph/kruskal.hpp\"\n\n#line 9 \"graph/kruskal.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct MinimumSpanningForest\
+    \ {\n    T cost;\n    std::vector<Edge<T>> edges;\n    int components;\n\n   \
+    \ bool is_spanning_tree(int n) const {\n        return components <= 1 && int(edges.size())\
+    \ == std::max(0, n - 1);\n    }\n};\n\ntemplate <class T>\nMinimumSpanningForest<T>\
+    \ kruskal(const Graph<T>& g) {\n    int n = g.size();\n    auto edges = g.edges();\n\
+    \    std::sort(edges.begin(), edges.end(), [](const auto& a, const auto& b) {\n\
+    \        return a.cost < b.cost;\n    });\n\n    m1une::data_structure::Dsu dsu(n);\n\
+    \    MinimumSpanningForest<T> result;\n    result.cost = T(0);\n    result.components\
+    \ = n;\n\n    for (const auto& e : edges) {\n        if (dsu.same(e.from, e.to))\
+    \ continue;\n        dsu.merge(e.from, e.to);\n        result.cost += e.cost;\n\
+    \        result.edges.push_back(e);\n        result.components--;\n    }\n\n \
+    \   return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line\
+    \ 1 \"graph/lowlink.hpp\"\n\n\n\n#line 6 \"graph/lowlink.hpp\"\n\n#line 8 \"graph/lowlink.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct LowLinkResult\
+    \ {\n    std::vector<int> ord;\n    std::vector<int> low;\n    std::vector<int>\
+    \ articulation;\n    std::vector<Edge<T>> bridges;\n    std::vector<int> bridge_ids;\n\
+    };\n\ntemplate <class T>\nLowLinkResult<T> lowlink(const Graph<T>& g) {\n    int\
+    \ n = g.size();\n    LowLinkResult<T> result;\n    result.ord.assign(n, -1);\n\
+    \    result.low.assign(n, -1);\n    int now = 0;\n\n    auto dfs = [&](auto self,\
+    \ int v, int parent_edge) -> void {\n        result.ord[v] = result.low[v] = now++;\n\
+    \        int child_count = 0;\n        bool is_articulation = false;\n\n     \
+    \   for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n      \
+    \      if (e.id == parent_edge) continue;\n            int to = e.to;\n      \
+    \      if (result.ord[to] == -1) {\n                child_count++;\n         \
+    \       self(self, to, e.id);\n                result.low[v] = std::min(result.low[v],\
     \ result.low[to]);\n                if (parent_edge != -1 && result.ord[v] <=\
     \ result.low[to]) is_articulation = true;\n                if (result.ord[v] <\
     \ result.low[to]) {\n                    result.bridges.push_back(e);\n      \
@@ -914,8 +1045,87 @@ data:
     \    };\n\n    for (int v = 0; v < n; v++) {\n        if (result.ord[v] == -1)\
     \ dfs(dfs, v, -1);\n    }\n    std::sort(result.articulation.begin(), result.articulation.end());\n\
     \    std::sort(result.bridge_ids.begin(), result.bridge_ids.end());\n    return\
-    \ result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 12 \"\
-    graph/undirected.hpp\"\n\n\n#line 10 \"graph/all.hpp\"\n\n\n"
+    \ result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/maximum_clique.hpp\"\
+    \n\n\n\n#line 7 \"graph/maximum_clique.hpp\"\n\n#line 9 \"graph/maximum_clique.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\nstruct MaximumCliqueResult {\n   \
+    \ std::vector<int> vertices;\n\n    int size() const {\n        return int(vertices.size());\n\
+    \    }\n\n    bool empty() const {\n        return vertices.empty();\n    }\n\
+    };\n\nstruct MaximumIndependentSetResult {\n    std::vector<int> vertices;\n\n\
+    \    int size() const {\n        return int(vertices.size());\n    }\n\n    bool\
+    \ empty() const {\n        return vertices.empty();\n    }\n};\n\nnamespace detail\
+    \ {\n\nstruct MaximumCliqueBranchAndBound {\n    using Word = unsigned long long;\n\
+    \n    int n;\n    int word_count;\n    std::vector<std::vector<Word>> adjacent;\n\
+    \    std::vector<int> current;\n    std::vector<int> best;\n\n    explicit MaximumCliqueBranchAndBound(int\
+    \ n_)\n        : n(n_), word_count((n_ + 63) / 64), adjacent(n_, std::vector<Word>(word_count,\
+    \ Word(0))) {}\n\n    static int lowbit_index(Word x) {\n        return __builtin_ctzll(x);\n\
+    \    }\n\n    bool empty_bits(const std::vector<Word>& bits) const {\n       \
+    \ for (Word x : bits) {\n            if (x != Word(0)) return false;\n       \
+    \ }\n        return true;\n    }\n\n    int first_vertex(const std::vector<Word>&\
+    \ bits) const {\n        for (int i = 0; i < word_count; i++) {\n            if\
+    \ (bits[i] != Word(0)) return i * 64 + lowbit_index(bits[i]);\n        }\n   \
+    \     return -1;\n    }\n\n    void set_bit(std::vector<Word>& bits, int v) const\
+    \ {\n        bits[v >> 6] |= Word(1) << (v & 63);\n    }\n\n    void clear_bit(std::vector<Word>&\
+    \ bits, int v) const {\n        bits[v >> 6] &= ~(Word(1) << (v & 63));\n    }\n\
+    \n    bool test_bit(const std::vector<Word>& bits, int v) const {\n        return\
+    \ (bits[v >> 6] >> (v & 63)) & Word(1);\n    }\n\n    void add_edge(int u, int\
+    \ v) {\n        assert(0 <= u && u < n);\n        assert(0 <= v && v < n);\n \
+    \       assert(u != v);\n        adjacent[u][v >> 6] |= Word(1) << (v & 63);\n\
+    \        adjacent[v][u >> 6] |= Word(1) << (u & 63);\n    }\n\n    std::vector<Word>\
+    \ intersect(const std::vector<Word>& a, const std::vector<Word>& b) const {\n\
+    \        std::vector<Word> result(word_count);\n        for (int i = 0; i < word_count;\
+    \ i++) result[i] = a[i] & b[i];\n        return result;\n    }\n\n    void greedy_color(const\
+    \ std::vector<Word>& candidates, std::vector<int>& order, std::vector<int>& color)\
+    \ const {\n        order.clear();\n        color.clear();\n\n        std::vector<Word>\
+    \ remaining = candidates;\n        int color_count = 0;\n        while (!empty_bits(remaining))\
+    \ {\n            color_count++;\n            std::vector<Word> available = remaining;\n\
+    \            while (!empty_bits(available)) {\n                int v = first_vertex(available);\n\
+    \                order.push_back(v);\n                color.push_back(color_count);\n\
+    \n                clear_bit(remaining, v);\n                clear_bit(available,\
+    \ v);\n                for (int i = 0; i < word_count; i++) available[i] &= ~adjacent[v][i];\n\
+    \            }\n        }\n    }\n\n    void expand(std::vector<Word> candidates)\
+    \ {\n        if (empty_bits(candidates)) {\n            if (current.size() > best.size())\
+    \ best = current;\n            return;\n        }\n\n        std::vector<int>\
+    \ order, color;\n        greedy_color(candidates, order, color);\n\n        for\
+    \ (int i = int(order.size()) - 1; i >= 0; i--) {\n            if (int(current.size())\
+    \ + color[i] <= int(best.size())) return;\n\n            int v = order[i];\n \
+    \           if (!test_bit(candidates, v)) continue;\n\n            current.push_back(v);\n\
+    \            auto next = intersect(candidates, adjacent[v]);\n            expand(next);\n\
+    \            current.pop_back();\n\n            clear_bit(candidates, v);\n  \
+    \      }\n    }\n\n    std::vector<int> solve() {\n        std::vector<Word> candidates(word_count,\
+    \ Word(0));\n        for (int v = 0; v < n; v++) set_bit(candidates, v);\n   \
+    \     expand(candidates);\n        std::sort(best.begin(), best.end());\n    \
+    \    return best;\n    }\n};\n\ntemplate <class T>\nstd::vector<std::vector<char>>\
+    \ undirected_adjacency_matrix(const Graph<T>& g) {\n    int n = g.size();\n  \
+    \  std::vector<std::vector<char>> adjacent(n, std::vector<char>(n, false));\n\
+    \    for (const auto& e : g.edges()) {\n        if (e.from == e.to) continue;\n\
+    \        adjacent[e.from][e.to] = true;\n        adjacent[e.to][e.from] = true;\n\
+    \    }\n    return adjacent;\n}\n\n}  // namespace detail\n\ntemplate <class T>\n\
+    bool is_clique(const Graph<T>& g, const std::vector<int>& vertices) {\n    auto\
+    \ adjacent = detail::undirected_adjacency_matrix(g);\n    for (int v : vertices)\
+    \ {\n        assert(0 <= v && v < g.size());\n    }\n    for (int i = 0; i < int(vertices.size());\
+    \ i++) {\n        for (int j = i + 1; j < int(vertices.size()); j++) {\n     \
+    \       if (!adjacent[vertices[i]][vertices[j]]) return false;\n        }\n  \
+    \  }\n    return true;\n}\n\ntemplate <class T>\nbool is_independent_set(const\
+    \ Graph<T>& g, const std::vector<int>& vertices) {\n    auto adjacent = detail::undirected_adjacency_matrix(g);\n\
+    \    for (int v : vertices) {\n        assert(0 <= v && v < g.size());\n    }\n\
+    \    for (int i = 0; i < int(vertices.size()); i++) {\n        for (int j = i\
+    \ + 1; j < int(vertices.size()); j++) {\n            if (adjacent[vertices[i]][vertices[j]])\
+    \ return false;\n        }\n    }\n    return true;\n}\n\ntemplate <class T>\n\
+    MaximumCliqueResult maximum_clique(const Graph<T>& g) {\n    auto adjacent = detail::undirected_adjacency_matrix(g);\n\
+    \    detail::MaximumCliqueBranchAndBound solver(g.size());\n    for (int i = 0;\
+    \ i < g.size(); i++) {\n        for (int j = i + 1; j < g.size(); j++) {\n   \
+    \         if (adjacent[i][j]) solver.add_edge(i, j);\n        }\n    }\n    return\
+    \ MaximumCliqueResult{solver.solve()};\n}\n\ntemplate <class T>\nint maximum_clique_size(const\
+    \ Graph<T>& g) {\n    return maximum_clique(g).size();\n}\n\ntemplate <class T>\n\
+    MaximumIndependentSetResult maximum_independent_set(const Graph<T>& g) {\n   \
+    \ auto adjacent = detail::undirected_adjacency_matrix(g);\n    detail::MaximumCliqueBranchAndBound\
+    \ solver(g.size());\n    for (int i = 0; i < g.size(); i++) {\n        for (int\
+    \ j = i + 1; j < g.size(); j++) {\n            if (!adjacent[i][j]) solver.add_edge(i,\
+    \ j);\n        }\n    }\n    return MaximumIndependentSetResult{solver.solve()};\n\
+    }\n\ntemplate <class T>\nint maximum_independent_set_size(const Graph<T>& g) {\n\
+    \    return maximum_independent_set(g).size();\n}\n\n}  // namespace graph\n}\
+    \  // namespace m1une\n\n\n#line 14 \"graph/undirected.hpp\"\n\n\n#line 10 \"\
+    graph/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_GRAPH_ALL_HPP
 
     #define M1UNE_GRAPH_ALL_HPP 1
@@ -960,13 +1170,15 @@ data:
   - graph/bipartite.hpp
   - graph/connected_components.hpp
   - data_structure/dsu.hpp
+  - graph/general_matching.hpp
   - graph/kruskal.hpp
   - graph/lowlink.hpp
+  - graph/maximum_clique.hpp
   isVerificationFile: false
   path: graph/all.hpp
   requiredBy: []
-  timestamp: '2026-06-16 03:00:02+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2026-06-16 03:14:40+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/all.hpp
@@ -1002,6 +1214,8 @@ individual graph includes.
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
 | `graph/lowlink.hpp` | Undirected only | Articulation points and bridges. |
 | `graph/bipartite.hpp` | Direction ignored / explicit bipartite sides | Two-colorability, maximum matching, minimum vertex cover, maximum independent set, and minimum edge cover. |
+| `graph/general_matching.hpp` | Undirected only | Maximum-cardinality matching and minimum edge cover in general undirected graphs. |
+| `graph/maximum_clique.hpp` | Direction ignored | Exact maximum clique and maximum independent set with bitset branch-and-bound. |
 | `graph/connected_components.hpp` | Direction ignored | Weak/ordinary connected components. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Finds one cycle with the matching function. |
 | `graph/kruskal.hpp` | Undirected only | Minimum spanning forest. |

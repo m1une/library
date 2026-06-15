@@ -2,28 +2,28 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/connected_components.hpp
     title: Connected Components
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/kruskal.hpp
     title: Kruskal
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/dsu.test.cpp
     title: verify/data_structure/dsu.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"data_structure/dsu.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -91,7 +91,7 @@ data:
   - graph/all.hpp
   - graph/undirected.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dsu.test.cpp
   - verify/graph/graph_algorithms.test.cpp

@@ -1,47 +1,47 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/bellman_ford.hpp
     title: Bellman-Ford
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/bfs.hpp
     title: BFS
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/dag_shortest_path.hpp
     title: DAG Shortest Path
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/dijkstra.hpp
     title: Dijkstra
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/topological_sort.hpp
     title: Topological Sort
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/shortest_path.hpp\"\n\n\n\n#line 1 \"graph/bellman_ford.hpp\"\
@@ -334,7 +334,7 @@ data:
   - graph/undirected.hpp
   - graph/directed.hpp
   timestamp: '2026-06-16 02:32:54+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/shortest_path.hpp

@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/bipartite.hpp\"\n\n\n\n#include <cassert>\n#include\
@@ -210,8 +210,26 @@ data:
     \ {\n                if (_edges[edge_id].alive) {\n                    id = edge_id;\n\
     \                    break;\n                }\n            }\n            if\
     \ (id == -1) return std::nullopt;\n            use_edge(id);\n        }\n\n  \
-    \      return result;\n    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n"
+    \      return result;\n    }\n};\n\nstruct BipartiteMatchingGraph {\n    BipartiteResult\
+    \ parts;\n    BipartiteMatching matching;\n    std::vector<int> original_edge_id;\n\
+    \n    int left_vertex(int left) const {\n        assert(0 <= left && left < int(parts.left_vertices.size()));\n\
+    \        return parts.left_vertices[left];\n    }\n\n    int right_vertex(int\
+    \ right) const {\n        assert(0 <= right && right < int(parts.right_vertices.size()));\n\
+    \        return parts.right_vertices[right];\n    }\n\n    int original_edge(int\
+    \ edge_id) const {\n        assert(0 <= edge_id && edge_id < int(original_edge_id.size()));\n\
+    \        return original_edge_id[edge_id];\n    }\n};\n\ntemplate <class T>\n\
+    std::optional<BipartiteMatchingGraph> make_bipartite_matching(const Graph<T>&\
+    \ g) {\n    auto parts = bipartite(g);\n    if (!parts.is_bipartite) return std::nullopt;\n\
+    \n    BipartiteMatchingGraph result;\n    result.parts = parts;\n    result.matching\
+    \ = BipartiteMatching(int(parts.left_vertices.size()), int(parts.right_vertices.size()));\n\
+    \n    for (const auto& e : g.edges()) {\n        int left, right;\n        if\
+    \ (parts.color[e.from] == 0) {\n            left = parts.left_id[e.from];\n  \
+    \          right = parts.right_id[e.to];\n        } else {\n            left =\
+    \ parts.left_id[e.to];\n            right = parts.right_id[e.from];\n        }\n\
+    \        int id = result.matching.add_edge(left, right);\n        if (int(result.original_edge_id.size())\
+    \ <= id) result.original_edge_id.resize(id + 1);\n        result.original_edge_id[id]\
+    \ = e.id;\n    }\n\n    return result;\n}\n\n}  // namespace graph\n}  // namespace\
+    \ m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_BIPARTITE_HPP\n#define M1UNE_GRAPH_BIPARTITE_HPP 1\n\n\
     #include <cassert>\n#include <optional>\n#include <queue>\n#include <vector>\n\
     \n#include \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
@@ -350,8 +368,26 @@ data:
     \ {\n                if (_edges[edge_id].alive) {\n                    id = edge_id;\n\
     \                    break;\n                }\n            }\n            if\
     \ (id == -1) return std::nullopt;\n            use_edge(id);\n        }\n\n  \
-    \      return result;\n    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n#endif  // M1UNE_GRAPH_BIPARTITE_HPP\n"
+    \      return result;\n    }\n};\n\nstruct BipartiteMatchingGraph {\n    BipartiteResult\
+    \ parts;\n    BipartiteMatching matching;\n    std::vector<int> original_edge_id;\n\
+    \n    int left_vertex(int left) const {\n        assert(0 <= left && left < int(parts.left_vertices.size()));\n\
+    \        return parts.left_vertices[left];\n    }\n\n    int right_vertex(int\
+    \ right) const {\n        assert(0 <= right && right < int(parts.right_vertices.size()));\n\
+    \        return parts.right_vertices[right];\n    }\n\n    int original_edge(int\
+    \ edge_id) const {\n        assert(0 <= edge_id && edge_id < int(original_edge_id.size()));\n\
+    \        return original_edge_id[edge_id];\n    }\n};\n\ntemplate <class T>\n\
+    std::optional<BipartiteMatchingGraph> make_bipartite_matching(const Graph<T>&\
+    \ g) {\n    auto parts = bipartite(g);\n    if (!parts.is_bipartite) return std::nullopt;\n\
+    \n    BipartiteMatchingGraph result;\n    result.parts = parts;\n    result.matching\
+    \ = BipartiteMatching(int(parts.left_vertices.size()), int(parts.right_vertices.size()));\n\
+    \n    for (const auto& e : g.edges()) {\n        int left, right;\n        if\
+    \ (parts.color[e.from] == 0) {\n            left = parts.left_id[e.from];\n  \
+    \          right = parts.right_id[e.to];\n        } else {\n            left =\
+    \ parts.left_id[e.to];\n            right = parts.right_id[e.from];\n        }\n\
+    \        int id = result.matching.add_edge(left, right);\n        if (int(result.original_edge_id.size())\
+    \ <= id) result.original_edge_id.resize(id + 1);\n        result.original_edge_id[id]\
+    \ = e.id;\n    }\n\n    return result;\n}\n\n}  // namespace graph\n}  // namespace\
+    \ m1une\n\n#endif  // M1UNE_GRAPH_BIPARTITE_HPP\n"
   dependsOn:
   - graph/graph.hpp
   isVerificationFile: false
@@ -359,8 +395,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-16 03:00:02+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2026-06-16 03:05:57+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/bipartite.hpp
