@@ -26,6 +26,9 @@ data:
     path: graph/graph.hpp
     title: Graph
   - icon: ':heavy_check_mark:'
+    path: graph/grid.hpp
+    title: Grid
+  - icon: ':heavy_check_mark:'
     path: graph/kruskal.hpp
     title: Kruskal
   - icon: ':heavy_check_mark:'
@@ -267,9 +270,56 @@ data:
     \ result;\n}\n\ntemplate <class T>\nDijkstraResult<T> dijkstra(const Graph<T>&\
     \ g, int s, T inf = std::numeric_limits<T>::max() / T(4)) {\n    return dijkstra(g,\
     \ std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 1 \"graph/kruskal.hpp\"\n\n\n\n#line 6 \"graph/kruskal.hpp\"\n\n#line\
-    \ 9 \"graph/kruskal.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
-    \ <class T>\nstruct MinimumSpanningForest {\n    T cost;\n    std::vector<Edge<T>>\
+    \n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\
+    \n\n#line 10 \"graph/grid.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
+    \ Grid {\n   private:\n    int _h;\n    int _w;\n\n   public:\n    static constexpr\
+    \ std::array<int, 4> di4 = {-1, 0, 1, 0};\n    static constexpr std::array<int,\
+    \ 4> dj4 = {0, 1, 0, -1};\n    static constexpr std::array<int, 8> di8 = {-1,\
+    \ -1, -1, 0, 0, 1, 1, 1};\n    static constexpr std::array<int, 8> dj8 = {-1,\
+    \ 0, 1, -1, 1, -1, 0, 1};\n\n    Grid() : _h(0), _w(0) {}\n    Grid(int h, int\
+    \ w) : _h(h), _w(w) {\n        assert(0 <= h);\n        assert(0 <= w);\n    }\n\
+    \n    int height() const {\n        return _h;\n    }\n\n    int width() const\
+    \ {\n        return _w;\n    }\n\n    int size() const {\n        return _h *\
+    \ _w;\n    }\n\n    bool empty() const {\n        return size() == 0;\n    }\n\
+    \n    bool inside(int i, int j) const {\n        return 0 <= i && i < _h && 0\
+    \ <= j && j < _w;\n    }\n\n    int id(int i, int j) const {\n        assert(inside(i,\
+    \ j));\n        return i * _w + j;\n    }\n\n    std::pair<int, int> pos(int v)\
+    \ const {\n        assert(0 <= v && v < size());\n        return {v / _w, v %\
+    \ _w};\n    }\n\n    std::vector<std::pair<int, int>> adj4(int i, int j) const\
+    \ {\n        assert(inside(i, j));\n        std::vector<std::pair<int, int>> result;\n\
+    \        result.reserve(4);\n        for (int k = 0; k < 4; k++) {\n         \
+    \   int ni = i + di4[k], nj = j + dj4[k];\n            if (inside(ni, nj)) result.emplace_back(ni,\
+    \ nj);\n        }\n        return result;\n    }\n\n    std::vector<std::pair<int,\
+    \ int>> adj8(int i, int j) const {\n        assert(inside(i, j));\n        std::vector<std::pair<int,\
+    \ int>> result;\n        result.reserve(8);\n        for (int k = 0; k < 8; k++)\
+    \ {\n            int ni = i + di8[k], nj = j + dj8[k];\n            if (inside(ni,\
+    \ nj)) result.emplace_back(ni, nj);\n        }\n        return result;\n    }\n\
+    \n    std::vector<int> adj4_ids(int v) const {\n        auto [i, j] = pos(v);\n\
+    \        std::vector<int> result;\n        result.reserve(4);\n        for (auto\
+    \ [ni, nj] : adj4(i, j)) result.push_back(id(ni, nj));\n        return result;\n\
+    \    }\n\n    std::vector<int> adj8_ids(int v) const {\n        auto [i, j] =\
+    \ pos(v);\n        std::vector<int> result;\n        result.reserve(8);\n    \
+    \    for (auto [ni, nj] : adj8(i, j)) result.push_back(id(ni, nj));\n        return\
+    \ result;\n    }\n\n    Graph<int> graph4() const {\n        return graph4([](int,\
+    \ int) { return true; });\n    }\n\n    Graph<int> graph8() const {\n        return\
+    \ graph8([](int, int) { return true; });\n    }\n\n    template <class Passable>\n\
+    \    Graph<int> graph4(Passable passable) const {\n        Graph<int> g(size());\n\
+    \        for (int i = 0; i < _h; i++) {\n            for (int j = 0; j < _w; j++)\
+    \ {\n                if (!passable(i, j)) continue;\n                int v = id(i,\
+    \ j);\n                for (auto [ni, nj] : adj4(i, j)) {\n                  \
+    \  if (!passable(ni, nj)) continue;\n                    int to = id(ni, nj);\n\
+    \                    if (v < to) g.add_edge(v, to);\n                }\n     \
+    \       }\n        }\n        return g;\n    }\n\n    template <class Passable>\n\
+    \    Graph<int> graph8(Passable passable) const {\n        Graph<int> g(size());\n\
+    \        for (int i = 0; i < _h; i++) {\n            for (int j = 0; j < _w; j++)\
+    \ {\n                if (!passable(i, j)) continue;\n                int v = id(i,\
+    \ j);\n                for (auto [ni, nj] : adj8(i, j)) {\n                  \
+    \  if (!passable(ni, nj)) continue;\n                    int to = id(ni, nj);\n\
+    \                    if (v < to) g.add_edge(v, to);\n                }\n     \
+    \       }\n        }\n        return g;\n    }\n};\n\n}  // namespace graph\n\
+    }  // namespace m1une\n\n\n#line 1 \"graph/kruskal.hpp\"\n\n\n\n#line 6 \"graph/kruskal.hpp\"\
+    \n\n#line 9 \"graph/kruskal.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\n\
+    template <class T>\nstruct MinimumSpanningForest {\n    T cost;\n    std::vector<Edge<T>>\
     \ edges;\n    int components;\n\n    bool is_spanning_tree(int n) const {\n  \
     \      return components <= 1 && int(edges.size()) == std::max(0, n - 1);\n  \
     \  }\n};\n\ntemplate <class T>\nMinimumSpanningForest<T> kruskal(const Graph<T>&\
@@ -390,7 +440,7 @@ data:
     \    return updated;\n}\n\ntemplate <class T>\nbool has_negative_cycle(const std::vector<std::vector<T>>&\
     \ dist) {\n    int n = int(dist.size());\n    for (int i = 0; i < n; i++) {\n\
     \        if (dist[i][i] < T(0)) return true;\n    }\n    return false;\n}\n\n\
-    }  // namespace graph\n}  // namespace m1une\n\n\n#line 16 \"graph/all.hpp\"\n\
+    }  // namespace graph\n}  // namespace m1une\n\n\n#line 17 \"graph/all.hpp\"\n\
     \n\n"
   code: '#ifndef M1UNE_GRAPH_ALL_HPP
 
@@ -410,6 +460,8 @@ data:
     #include "graph/dijkstra.hpp"
 
     #include "graph/graph.hpp"
+
+    #include "graph/grid.hpp"
 
     #include "graph/kruskal.hpp"
 
@@ -434,6 +486,7 @@ data:
   - data_structure/dsu.hpp
   - graph/cycle_detection.hpp
   - graph/dijkstra.hpp
+  - graph/grid.hpp
   - graph/kruskal.hpp
   - graph/lowlink.hpp
   - graph/scc.hpp
@@ -442,7 +495,7 @@ data:
   isVerificationFile: false
   path: graph/all.hpp
   requiredBy: []
-  timestamp: '2026-06-16 01:54:11+09:00'
+  timestamp: '2026-06-16 02:03:40+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
@@ -466,6 +519,7 @@ individual graph includes.
 | `graph/dijkstra.hpp` | Non-negative weighted shortest paths. |
 | `graph/bellman_ford.hpp` | Shortest paths with negative edges and negative-cycle marking. |
 | `graph/warshall_floyd.hpp` | All-pairs shortest paths. |
+| `graph/grid.hpp` | Helper for converting 2D grid cells to graph vertex ids. |
 | `graph/topological_sort.hpp` | DAG ordering and cycle check. |
 | `graph/scc.hpp` | Strongly connected components and condensation DAG. |
 | `graph/lowlink.hpp` | Articulation points and bridges in undirected graphs. |

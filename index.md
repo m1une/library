@@ -176,6 +176,9 @@ data:
       path: graph/graph.hpp
       title: Graph
     - icon: ':heavy_check_mark:'
+      path: graph/grid.hpp
+      title: Grid
+    - icon: ':heavy_check_mark:'
       path: graph/kruskal.hpp
       title: Kruskal
     - icon: ':heavy_check_mark:'

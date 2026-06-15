@@ -24,6 +24,9 @@ data:
     path: graph/dijkstra.hpp
     title: Dijkstra
   - icon: ':heavy_check_mark:'
+    path: graph/grid.hpp
+    title: Grid
+  - icon: ':heavy_check_mark:'
     path: graph/kruskal.hpp
     title: Kruskal
   - icon: ':heavy_check_mark:'
@@ -135,6 +138,7 @@ data:
   - graph/connected_components.hpp
   - graph/all.hpp
   - graph/lowlink.hpp
+  - graph/grid.hpp
   - graph/topological_sort.hpp
   - graph/cycle_detection.hpp
   - graph/bfs.hpp

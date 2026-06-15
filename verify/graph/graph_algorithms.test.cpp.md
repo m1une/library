@@ -29,6 +29,9 @@ data:
     path: graph/graph.hpp
     title: Graph
   - icon: ':heavy_check_mark:'
+    path: graph/grid.hpp
+    title: Grid
+  - icon: ':heavy_check_mark:'
     path: graph/kruskal.hpp
     title: Kruskal
   - icon: ':heavy_check_mark:'
@@ -55,31 +58,32 @@ data:
     - https://judge.yosupo.jp/problem/aplusb
   bundledCode: "#line 1 \"verify/graph/graph_algorithms.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#include <iostream>\n#include <vector>\n\n#line 1 \"graph/all.hpp\"\
-    \n\n\n\n#line 1 \"graph/bellman_ford.hpp\"\n\n\n\n#line 6 \"graph/bellman_ford.hpp\"\
-    \n#include <limits>\n#include <queue>\n#line 9 \"graph/bellman_ford.hpp\"\n\n\
-    #line 1 \"graph/graph.hpp\"\n\n\n\n#line 6 \"graph/graph.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace graph {\n\ntemplate <class T = int>\nstruct Edge {\n    using cost_type\
-    \ = T;\n\n    int from;\n    int to;\n    T cost;\n    int id;\n\n    Edge() :\
-    \ from(-1), to(-1), cost(T()), id(-1) {}\n    Edge(int from_, int to_, T cost_\
-    \ = T(1), int id_ = -1) : from(from_), to(to_), cost(cost_), id(id_) {}\n\n  \
-    \  int other(int v) const {\n        assert(v == from || v == to);\n        return\
-    \ from ^ to ^ v;\n    }\n};\n\ntemplate <class T = int>\nstruct Graph {\n    using\
-    \ edge_type = Edge<T>;\n    using cost_type = T;\n\n   private:\n    int _n;\n\
-    \    int _edge_count;\n    std::vector<std::vector<edge_type>> _g;\n\n   public:\n\
-    \    Graph() : _n(0), _edge_count(0) {}\n    explicit Graph(int n) : _n(n), _edge_count(0),\
-    \ _g(n) {\n        assert(0 <= n);\n    }\n\n    int size() const {\n        return\
-    \ _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n    }\n\n \
-    \   int edge_count() const {\n        return _edge_count;\n    }\n\n    int add_vertex()\
-    \ {\n        _g.emplace_back();\n        return _n++;\n    }\n\n    int add_directed_edge(int\
-    \ from, int to, T cost = T(1)) {\n        assert(0 <= from && from < _n);\n  \
-    \      assert(0 <= to && to < _n);\n        int id = _edge_count++;\n        _g[from].push_back(edge_type(from,\
-    \ to, cost, id));\n        return id;\n    }\n\n    int add_edge(int u, int v,\
-    \ T cost = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v &&\
-    \ v < _n);\n        int id = _edge_count++;\n        _g[u].push_back(edge_type(u,\
-    \ v, cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n      \
-    \  return id;\n    }\n\n    const std::vector<edge_type>& operator[](int v) const\
-    \ {\n        assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
+    \ <cassert>\n#include <iostream>\n#include <set>\n#include <string>\n#include\
+    \ <vector>\n\n#line 1 \"graph/all.hpp\"\n\n\n\n#line 1 \"graph/bellman_ford.hpp\"\
+    \n\n\n\n#line 6 \"graph/bellman_ford.hpp\"\n#include <limits>\n#include <queue>\n\
+    #line 9 \"graph/bellman_ford.hpp\"\n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line\
+    \ 6 \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class\
+    \ T = int>\nstruct Edge {\n    using cost_type = T;\n\n    int from;\n    int\
+    \ to;\n    T cost;\n    int id;\n\n    Edge() : from(-1), to(-1), cost(T()), id(-1)\
+    \ {}\n    Edge(int from_, int to_, T cost_ = T(1), int id_ = -1) : from(from_),\
+    \ to(to_), cost(cost_), id(id_) {}\n\n    int other(int v) const {\n        assert(v\
+    \ == from || v == to);\n        return from ^ to ^ v;\n    }\n};\n\ntemplate <class\
+    \ T = int>\nstruct Graph {\n    using edge_type = Edge<T>;\n    using cost_type\
+    \ = T;\n\n   private:\n    int _n;\n    int _edge_count;\n    std::vector<std::vector<edge_type>>\
+    \ _g;\n\n   public:\n    Graph() : _n(0), _edge_count(0) {}\n    explicit Graph(int\
+    \ n) : _n(n), _edge_count(0), _g(n) {\n        assert(0 <= n);\n    }\n\n    int\
+    \ size() const {\n        return _n;\n    }\n\n    bool empty() const {\n    \
+    \    return _n == 0;\n    }\n\n    int edge_count() const {\n        return _edge_count;\n\
+    \    }\n\n    int add_vertex() {\n        _g.emplace_back();\n        return _n++;\n\
+    \    }\n\n    int add_directed_edge(int from, int to, T cost = T(1)) {\n     \
+    \   assert(0 <= from && from < _n);\n        assert(0 <= to && to < _n);\n   \
+    \     int id = _edge_count++;\n        _g[from].push_back(edge_type(from, to,\
+    \ cost, id));\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost\
+    \ = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
+    \        int id = _edge_count++;\n        _g[u].push_back(edge_type(u, v, cost,\
+    \ id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        return id;\n\
+    \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
+    \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
     \    }\n\n    const std::vector<std::vector<edge_type>>& adjacency() const {\n\
     \        return _g;\n    }\n\n    std::vector<std::vector<edge_type>>& adjacency()\
@@ -272,9 +276,56 @@ data:
     \ result;\n}\n\ntemplate <class T>\nDijkstraResult<T> dijkstra(const Graph<T>&\
     \ g, int s, T inf = std::numeric_limits<T>::max() / T(4)) {\n    return dijkstra(g,\
     \ std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 1 \"graph/kruskal.hpp\"\n\n\n\n#line 6 \"graph/kruskal.hpp\"\n\n#line\
-    \ 9 \"graph/kruskal.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
-    \ <class T>\nstruct MinimumSpanningForest {\n    T cost;\n    std::vector<Edge<T>>\
+    \n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\
+    \n\n#line 10 \"graph/grid.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
+    \ Grid {\n   private:\n    int _h;\n    int _w;\n\n   public:\n    static constexpr\
+    \ std::array<int, 4> di4 = {-1, 0, 1, 0};\n    static constexpr std::array<int,\
+    \ 4> dj4 = {0, 1, 0, -1};\n    static constexpr std::array<int, 8> di8 = {-1,\
+    \ -1, -1, 0, 0, 1, 1, 1};\n    static constexpr std::array<int, 8> dj8 = {-1,\
+    \ 0, 1, -1, 1, -1, 0, 1};\n\n    Grid() : _h(0), _w(0) {}\n    Grid(int h, int\
+    \ w) : _h(h), _w(w) {\n        assert(0 <= h);\n        assert(0 <= w);\n    }\n\
+    \n    int height() const {\n        return _h;\n    }\n\n    int width() const\
+    \ {\n        return _w;\n    }\n\n    int size() const {\n        return _h *\
+    \ _w;\n    }\n\n    bool empty() const {\n        return size() == 0;\n    }\n\
+    \n    bool inside(int i, int j) const {\n        return 0 <= i && i < _h && 0\
+    \ <= j && j < _w;\n    }\n\n    int id(int i, int j) const {\n        assert(inside(i,\
+    \ j));\n        return i * _w + j;\n    }\n\n    std::pair<int, int> pos(int v)\
+    \ const {\n        assert(0 <= v && v < size());\n        return {v / _w, v %\
+    \ _w};\n    }\n\n    std::vector<std::pair<int, int>> adj4(int i, int j) const\
+    \ {\n        assert(inside(i, j));\n        std::vector<std::pair<int, int>> result;\n\
+    \        result.reserve(4);\n        for (int k = 0; k < 4; k++) {\n         \
+    \   int ni = i + di4[k], nj = j + dj4[k];\n            if (inside(ni, nj)) result.emplace_back(ni,\
+    \ nj);\n        }\n        return result;\n    }\n\n    std::vector<std::pair<int,\
+    \ int>> adj8(int i, int j) const {\n        assert(inside(i, j));\n        std::vector<std::pair<int,\
+    \ int>> result;\n        result.reserve(8);\n        for (int k = 0; k < 8; k++)\
+    \ {\n            int ni = i + di8[k], nj = j + dj8[k];\n            if (inside(ni,\
+    \ nj)) result.emplace_back(ni, nj);\n        }\n        return result;\n    }\n\
+    \n    std::vector<int> adj4_ids(int v) const {\n        auto [i, j] = pos(v);\n\
+    \        std::vector<int> result;\n        result.reserve(4);\n        for (auto\
+    \ [ni, nj] : adj4(i, j)) result.push_back(id(ni, nj));\n        return result;\n\
+    \    }\n\n    std::vector<int> adj8_ids(int v) const {\n        auto [i, j] =\
+    \ pos(v);\n        std::vector<int> result;\n        result.reserve(8);\n    \
+    \    for (auto [ni, nj] : adj8(i, j)) result.push_back(id(ni, nj));\n        return\
+    \ result;\n    }\n\n    Graph<int> graph4() const {\n        return graph4([](int,\
+    \ int) { return true; });\n    }\n\n    Graph<int> graph8() const {\n        return\
+    \ graph8([](int, int) { return true; });\n    }\n\n    template <class Passable>\n\
+    \    Graph<int> graph4(Passable passable) const {\n        Graph<int> g(size());\n\
+    \        for (int i = 0; i < _h; i++) {\n            for (int j = 0; j < _w; j++)\
+    \ {\n                if (!passable(i, j)) continue;\n                int v = id(i,\
+    \ j);\n                for (auto [ni, nj] : adj4(i, j)) {\n                  \
+    \  if (!passable(ni, nj)) continue;\n                    int to = id(ni, nj);\n\
+    \                    if (v < to) g.add_edge(v, to);\n                }\n     \
+    \       }\n        }\n        return g;\n    }\n\n    template <class Passable>\n\
+    \    Graph<int> graph8(Passable passable) const {\n        Graph<int> g(size());\n\
+    \        for (int i = 0; i < _h; i++) {\n            for (int j = 0; j < _w; j++)\
+    \ {\n                if (!passable(i, j)) continue;\n                int v = id(i,\
+    \ j);\n                for (auto [ni, nj] : adj8(i, j)) {\n                  \
+    \  if (!passable(ni, nj)) continue;\n                    int to = id(ni, nj);\n\
+    \                    if (v < to) g.add_edge(v, to);\n                }\n     \
+    \       }\n        }\n        return g;\n    }\n};\n\n}  // namespace graph\n\
+    }  // namespace m1une\n\n\n#line 1 \"graph/kruskal.hpp\"\n\n\n\n#line 6 \"graph/kruskal.hpp\"\
+    \n\n#line 9 \"graph/kruskal.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\n\
+    template <class T>\nstruct MinimumSpanningForest {\n    T cost;\n    std::vector<Edge<T>>\
     \ edges;\n    int components;\n\n    bool is_spanning_tree(int n) const {\n  \
     \      return components <= 1 && int(edges.size()) == std::max(0, n - 1);\n  \
     \  }\n};\n\ntemplate <class T>\nMinimumSpanningForest<T> kruskal(const Graph<T>&\
@@ -395,8 +446,8 @@ data:
     \    return updated;\n}\n\ntemplate <class T>\nbool has_negative_cycle(const std::vector<std::vector<T>>&\
     \ dist) {\n    int n = int(dist.size());\n    for (int i = 0; i < n; i++) {\n\
     \        if (dist[i][i] < T(0)) return true;\n    }\n    return false;\n}\n\n\
-    }  // namespace graph\n}  // namespace m1une\n\n\n#line 16 \"graph/all.hpp\"\n\
-    \n\n#line 9 \"verify/graph/graph_algorithms.test.cpp\"\n\nusing m1une::graph::Graph;\n\
+    }  // namespace graph\n}  // namespace m1une\n\n\n#line 17 \"graph/all.hpp\"\n\
+    \n\n#line 11 \"verify/graph/graph_algorithms.test.cpp\"\n\nusing m1une::graph::Graph;\n\
     \nvoid test_graph_container() {\n    Graph<int> g(2);\n    assert(g.size() ==\
     \ 2);\n    int added = g.add_vertex();\n    assert(added == 2);\n    int e0 =\
     \ g.add_directed_edge(0, 1, 4);\n    int e1 = g.add_edge(1, 2, 5);\n    assert(e0\
@@ -471,40 +522,58 @@ data:
     \    g.add_edge(1, 2, 2);\n    g.add_edge(2, 3, 3);\n    g.add_edge(0, 3, 10);\n\
     \    g.add_edge(0, 2, 4);\n\n    auto mst = m1une::graph::kruskal(g);\n    assert(mst.cost\
     \ == 6);\n    assert(mst.edges.size() == 3);\n    assert(mst.components == 1);\n\
-    \    assert(mst.is_spanning_tree(g.size()));\n}\n\nint main() {\n    test_graph_container();\n\
-    \    test_bfs();\n    test_dijkstra();\n    test_bellman_ford();\n    test_warshall_floyd();\n\
-    \    test_topological_sort();\n    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
-    \    test_cycle_detection();\n    test_kruskal();\n\n    long long a, b;\n   \
-    \ std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \    assert(mst.is_spanning_tree(g.size()));\n}\n\nvoid test_grid() {\n    m1une::graph::Grid\
+    \ grid(3, 4);\n    assert(grid.height() == 3);\n    assert(grid.width() == 4);\n\
+    \    assert(grid.size() == 12);\n    assert(grid.inside(2, 3));\n    assert(!grid.inside(3,\
+    \ 0));\n    assert(grid.id(2, 3) == 11);\n    assert(grid.pos(6) == std::make_pair(1,\
+    \ 2));\n\n    auto adj4 = grid.adj4(0, 0);\n    assert((adj4 == std::vector<std::pair<int,\
+    \ int>>{{0, 1}, {1, 0}}));\n\n    auto adj8 = grid.adj8(1, 1);\n    assert(adj8.size()\
+    \ == 8);\n    auto adj4_ids = grid.adj4_ids(grid.id(1, 1));\n    std::set<int>\
+    \ expected_ids = {grid.id(0, 1), grid.id(1, 2), grid.id(2, 1), grid.id(1, 0)};\n\
+    \    assert(std::set<int>(adj4_ids.begin(), adj4_ids.end()) == expected_ids);\n\
+    \n    std::vector<std::string> s = {\n        \"....\",\n        \".##.\",\n \
+    \       \"....\",\n    };\n    auto passable = [&](int i, int j) {\n        return\
+    \ s[i][j] != '#';\n    };\n\n    auto g4 = grid.graph4(passable);\n    assert(g4.size()\
+    \ == grid.size());\n    assert(g4[grid.id(1, 1)].empty());\n    auto res = m1une::graph::bfs(g4,\
+    \ grid.id(0, 0));\n    assert(res.dist[grid.id(2, 3)] == 5);\n    assert(res.dist[grid.id(1,\
+    \ 1)] == -1);\n\n    auto g8 = grid.graph8(passable);\n    auto res8 = m1une::graph::bfs(g8,\
+    \ grid.id(0, 0));\n    assert(res8.dist[grid.id(2, 3)] == 4);\n\n    auto all4\
+    \ = grid.graph4();\n    assert(all4.edge_count() == 17);\n}\n\nint main() {\n\
+    \    test_graph_container();\n    test_bfs();\n    test_dijkstra();\n    test_bellman_ford();\n\
+    \    test_warshall_floyd();\n    test_topological_sort();\n    test_scc();\n \
+    \   test_lowlink();\n    test_bipartite_and_components();\n    test_cycle_detection();\n\
+    \    test_kruskal();\n    test_grid();\n\n    long long a, b;\n    std::cin >>\
+    \ a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <iostream>\n#include <vector>\n\n#include \"graph/all.hpp\"\
-    \n\nusing m1une::graph::Graph;\n\nvoid test_graph_container() {\n    Graph<int>\
-    \ g(2);\n    assert(g.size() == 2);\n    int added = g.add_vertex();\n    assert(added\
-    \ == 2);\n    int e0 = g.add_directed_edge(0, 1, 4);\n    int e1 = g.add_edge(1,\
-    \ 2, 5);\n    assert(e0 == 0);\n    assert(e1 == 1);\n    assert(g.edge_count()\
-    \ == 2);\n    assert(g[1].size() == 1);\n    assert(g.edges().size() == 2);\n\
-    \    auto rev = g.reversed();\n    assert(rev[1][0].to == 0);\n}\n\nvoid test_bfs()\
-    \ {\n    Graph<int> g(5);\n    g.add_directed_edge(0, 1);\n    g.add_directed_edge(0,\
-    \ 2);\n    g.add_directed_edge(1, 3);\n    g.add_directed_edge(2, 3);\n    g.add_directed_edge(3,\
-    \ 4);\n\n    auto res = m1une::graph::bfs(g, 0);\n    assert(res.dist[0] == 0);\n\
-    \    assert(res.dist[3] == 2);\n    assert(res.dist[4] == 3);\n    auto path =\
-    \ res.path(4);\n    assert(path.front() == 0);\n    assert(path.back() == 4);\n\
-    \    assert(path.size() == 4);\n}\n\nvoid test_dijkstra() {\n    Graph<long long>\
-    \ g(5);\n    g.add_directed_edge(0, 1, 4);\n    g.add_directed_edge(0, 2, 1);\n\
-    \    g.add_directed_edge(2, 1, 2);\n    g.add_directed_edge(1, 3, 1);\n    g.add_directed_edge(2,\
-    \ 3, 7);\n    g.add_directed_edge(3, 4, 3);\n\n    auto res = m1une::graph::dijkstra(g,\
-    \ 0);\n    assert(res.dist[1] == 3);\n    assert(res.dist[4] == 7);\n    assert((res.path(4)\
-    \ == std::vector<int>{0, 2, 1, 3, 4}));\n}\n\nvoid test_bellman_ford() {\n   \
-    \ Graph<long long> g(5);\n    g.add_directed_edge(0, 1, 1);\n    g.add_directed_edge(1,\
-    \ 2, -3);\n    g.add_directed_edge(2, 3, 1);\n    g.add_directed_edge(3, 1, 1);\n\
-    \    g.add_directed_edge(0, 4, 5);\n\n    auto res = m1une::graph::bellman_ford(g,\
-    \ 0);\n    assert(res.has_negative_cycle);\n    assert(res.affected_by_negative_cycle(1));\n\
-    \    assert(res.affected_by_negative_cycle(2));\n    assert(res.affected_by_negative_cycle(3));\n\
-    \    assert(!res.affected_by_negative_cycle(4));\n    assert(res.dist[4] == 5);\n\
-    }\n\nvoid test_warshall_floyd() {\n    Graph<long long> g(4);\n    g.add_directed_edge(0,\
-    \ 1, 3);\n    g.add_directed_edge(1, 2, 4);\n    g.add_directed_edge(0, 2, 10);\n\
-    \    g.add_directed_edge(2, 3, -2);\n\n    auto dist = m1une::graph::warshall_floyd(g);\n\
-    \    assert(dist[0][2] == 7);\n    assert(dist[0][3] == 5);\n    assert(!m1une::graph::has_negative_cycle(dist));\n\
+    #include <cassert>\n#include <iostream>\n#include <set>\n#include <string>\n#include\
+    \ <vector>\n\n#include \"graph/all.hpp\"\n\nusing m1une::graph::Graph;\n\nvoid\
+    \ test_graph_container() {\n    Graph<int> g(2);\n    assert(g.size() == 2);\n\
+    \    int added = g.add_vertex();\n    assert(added == 2);\n    int e0 = g.add_directed_edge(0,\
+    \ 1, 4);\n    int e1 = g.add_edge(1, 2, 5);\n    assert(e0 == 0);\n    assert(e1\
+    \ == 1);\n    assert(g.edge_count() == 2);\n    assert(g[1].size() == 1);\n  \
+    \  assert(g.edges().size() == 2);\n    auto rev = g.reversed();\n    assert(rev[1][0].to\
+    \ == 0);\n}\n\nvoid test_bfs() {\n    Graph<int> g(5);\n    g.add_directed_edge(0,\
+    \ 1);\n    g.add_directed_edge(0, 2);\n    g.add_directed_edge(1, 3);\n    g.add_directed_edge(2,\
+    \ 3);\n    g.add_directed_edge(3, 4);\n\n    auto res = m1une::graph::bfs(g, 0);\n\
+    \    assert(res.dist[0] == 0);\n    assert(res.dist[3] == 2);\n    assert(res.dist[4]\
+    \ == 3);\n    auto path = res.path(4);\n    assert(path.front() == 0);\n    assert(path.back()\
+    \ == 4);\n    assert(path.size() == 4);\n}\n\nvoid test_dijkstra() {\n    Graph<long\
+    \ long> g(5);\n    g.add_directed_edge(0, 1, 4);\n    g.add_directed_edge(0, 2,\
+    \ 1);\n    g.add_directed_edge(2, 1, 2);\n    g.add_directed_edge(1, 3, 1);\n\
+    \    g.add_directed_edge(2, 3, 7);\n    g.add_directed_edge(3, 4, 3);\n\n    auto\
+    \ res = m1une::graph::dijkstra(g, 0);\n    assert(res.dist[1] == 3);\n    assert(res.dist[4]\
+    \ == 7);\n    assert((res.path(4) == std::vector<int>{0, 2, 1, 3, 4}));\n}\n\n\
+    void test_bellman_ford() {\n    Graph<long long> g(5);\n    g.add_directed_edge(0,\
+    \ 1, 1);\n    g.add_directed_edge(1, 2, -3);\n    g.add_directed_edge(2, 3, 1);\n\
+    \    g.add_directed_edge(3, 1, 1);\n    g.add_directed_edge(0, 4, 5);\n\n    auto\
+    \ res = m1une::graph::bellman_ford(g, 0);\n    assert(res.has_negative_cycle);\n\
+    \    assert(res.affected_by_negative_cycle(1));\n    assert(res.affected_by_negative_cycle(2));\n\
+    \    assert(res.affected_by_negative_cycle(3));\n    assert(!res.affected_by_negative_cycle(4));\n\
+    \    assert(res.dist[4] == 5);\n}\n\nvoid test_warshall_floyd() {\n    Graph<long\
+    \ long> g(4);\n    g.add_directed_edge(0, 1, 3);\n    g.add_directed_edge(1, 2,\
+    \ 4);\n    g.add_directed_edge(0, 2, 10);\n    g.add_directed_edge(2, 3, -2);\n\
+    \n    auto dist = m1une::graph::warshall_floyd(g);\n    assert(dist[0][2] == 7);\n\
+    \    assert(dist[0][3] == 5);\n    assert(!m1une::graph::has_negative_cycle(dist));\n\
     \n    bool changed = m1une::graph::warshall_floyd_add_directed_edge(dist, 3, 1,\
     \ 1LL);\n    assert(changed);\n    assert(dist[0][1] == 3);\n    assert(dist[2][1]\
     \ == -1);\n    assert(dist[3][2] == 5);\n\n    changed = m1une::graph::warshall_floyd_add_directed_edge(dist,\
@@ -552,11 +621,28 @@ data:
     \    g.add_edge(1, 2, 2);\n    g.add_edge(2, 3, 3);\n    g.add_edge(0, 3, 10);\n\
     \    g.add_edge(0, 2, 4);\n\n    auto mst = m1une::graph::kruskal(g);\n    assert(mst.cost\
     \ == 6);\n    assert(mst.edges.size() == 3);\n    assert(mst.components == 1);\n\
-    \    assert(mst.is_spanning_tree(g.size()));\n}\n\nint main() {\n    test_graph_container();\n\
-    \    test_bfs();\n    test_dijkstra();\n    test_bellman_ford();\n    test_warshall_floyd();\n\
-    \    test_topological_sort();\n    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
-    \    test_cycle_detection();\n    test_kruskal();\n\n    long long a, b;\n   \
-    \ std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \    assert(mst.is_spanning_tree(g.size()));\n}\n\nvoid test_grid() {\n    m1une::graph::Grid\
+    \ grid(3, 4);\n    assert(grid.height() == 3);\n    assert(grid.width() == 4);\n\
+    \    assert(grid.size() == 12);\n    assert(grid.inside(2, 3));\n    assert(!grid.inside(3,\
+    \ 0));\n    assert(grid.id(2, 3) == 11);\n    assert(grid.pos(6) == std::make_pair(1,\
+    \ 2));\n\n    auto adj4 = grid.adj4(0, 0);\n    assert((adj4 == std::vector<std::pair<int,\
+    \ int>>{{0, 1}, {1, 0}}));\n\n    auto adj8 = grid.adj8(1, 1);\n    assert(adj8.size()\
+    \ == 8);\n    auto adj4_ids = grid.adj4_ids(grid.id(1, 1));\n    std::set<int>\
+    \ expected_ids = {grid.id(0, 1), grid.id(1, 2), grid.id(2, 1), grid.id(1, 0)};\n\
+    \    assert(std::set<int>(adj4_ids.begin(), adj4_ids.end()) == expected_ids);\n\
+    \n    std::vector<std::string> s = {\n        \"....\",\n        \".##.\",\n \
+    \       \"....\",\n    };\n    auto passable = [&](int i, int j) {\n        return\
+    \ s[i][j] != '#';\n    };\n\n    auto g4 = grid.graph4(passable);\n    assert(g4.size()\
+    \ == grid.size());\n    assert(g4[grid.id(1, 1)].empty());\n    auto res = m1une::graph::bfs(g4,\
+    \ grid.id(0, 0));\n    assert(res.dist[grid.id(2, 3)] == 5);\n    assert(res.dist[grid.id(1,\
+    \ 1)] == -1);\n\n    auto g8 = grid.graph8(passable);\n    auto res8 = m1une::graph::bfs(g8,\
+    \ grid.id(0, 0));\n    assert(res8.dist[grid.id(2, 3)] == 4);\n\n    auto all4\
+    \ = grid.graph4();\n    assert(all4.edge_count() == 17);\n}\n\nint main() {\n\
+    \    test_graph_container();\n    test_bfs();\n    test_dijkstra();\n    test_bellman_ford();\n\
+    \    test_warshall_floyd();\n    test_topological_sort();\n    test_scc();\n \
+    \   test_lowlink();\n    test_bipartite_and_components();\n    test_cycle_detection();\n\
+    \    test_kruskal();\n    test_grid();\n\n    long long a, b;\n    std::cin >>\
+    \ a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - graph/all.hpp
   - graph/bellman_ford.hpp
@@ -567,6 +653,7 @@ data:
   - data_structure/dsu.hpp
   - graph/cycle_detection.hpp
   - graph/dijkstra.hpp
+  - graph/grid.hpp
   - graph/kruskal.hpp
   - graph/lowlink.hpp
   - graph/scc.hpp
@@ -575,7 +662,7 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-16 01:54:11+09:00'
+  timestamp: '2026-06-16 02:03:40+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp
