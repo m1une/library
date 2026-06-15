@@ -272,17 +272,32 @@ data:
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'
+      path: utilities/bisect.hpp
+      title: Bisect
+    - icon: ':heavy_check_mark:'
+      path: utilities/chmin_chmax.hpp
+      title: Chmin Chmax
+    - icon: ':heavy_check_mark:'
+      path: utilities/compressor.hpp
+      title: Compressor
+    - icon: ':heavy_check_mark:'
       path: utilities/int128.hpp
       title: Int128
     - icon: ':heavy_check_mark:'
       path: utilities/random.hpp
       title: Random
     - icon: ':heavy_check_mark:'
+      path: utilities/run_length_encoding.hpp
+      title: Run Length Encoding
+    - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
       title: Shifted Array
     - icon: ':heavy_check_mark:'
       path: utilities/timer.hpp
       title: Timer
+    - icon: ':heavy_check_mark:'
+      path: utilities/y_combinator.hpp
+      title: Y Combinator
   verificationCategories:
   - name: verify/data_structure
     pages:
@@ -377,6 +392,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/utilities/basic_utilities.test.cpp
       title: verify/utilities/basic_utilities.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/utilities/extra_utilities.test.cpp
+      title: verify/utilities/extra_utilities.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/utilities/shifted_array.test.cpp
       title: verify/utilities/shifted_array.test.cpp
