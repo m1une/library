@@ -17,7 +17,9 @@ individual graph includes.
 | `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | BFS, 0-1 BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
 | `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths and flow. |
 | `graph/undirected.hpp` | Undirected-oriented bundle | Undirected algorithms plus shortest paths and grid helpers. |
-| `graph/flow.hpp` | Directed flow network | Max flow and min-cost flow. |
+| `graph/flow.hpp` | Directed flow network | Bounded flow, bounded min-cost flow, max flow, and min-cost flow. |
+| `graph/bounded_flow.hpp` | Directed flow network | Feasible flow with lower/upper bounds, balances, and negative flow intervals. |
+| `graph/bounded_min_cost_flow.hpp` | Directed flow network | Minimum-cost feasible flow with lower/upper bounds, balances, and negative flow intervals. |
 | `graph/bfs.hpp` | Direction-respecting | Unweighted shortest paths. |
 | `graph/zero_one_bfs.hpp` | Direction-respecting | Shortest paths with edge costs `0` or `1`. |
 | `graph/dag_shortest_path.hpp` | Directed DAG only | Shortest paths in a DAG, including negative edge costs. |

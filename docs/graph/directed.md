@@ -19,4 +19,4 @@ depends on edge direction.
 | `graph/topological_sort.hpp` | Directed only | DAG ordering and directed cycle check. |
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Use `find_directed_cycle(g)` for directed graphs. |
-| `graph/flow.hpp` | Directed flow network | Max flow and min-cost flow. |
+| `graph/flow.hpp` | Directed flow network | Bounded flow, bounded min-cost flow, max flow, and min-cost flow. |
