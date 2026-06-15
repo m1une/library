@@ -448,8 +448,15 @@ void test_maximum_clique_and_independent_set() {
     assert(m1une::graph::is_independent_set(g, independent.vertices));
     assert(m1une::graph::maximum_independent_set_size(g) == 4);
 
+    auto cover = m1une::graph::minimum_vertex_cover(g);
+    assert(cover.size() == 3);
+    assert((cover.vertices == std::vector<int>{0, 1, 2}));
+    assert(m1une::graph::is_vertex_cover(g, cover.vertices));
+    assert(m1une::graph::minimum_vertex_cover_size(g) == 3);
+
     assert(!m1une::graph::is_clique(g, std::vector<int>{0, 2, 4}));
     assert(!m1une::graph::is_independent_set(g, std::vector<int>{4, 0}));
+    assert(!m1une::graph::is_vertex_cover(g, std::vector<int>{0, 1}));
 
     g.erase_edge(removed_clique_edge);
     assert(m1une::graph::maximum_clique_size(g) == 3);
@@ -461,17 +468,31 @@ void test_maximum_clique_and_independent_set() {
     directed.add_directed_edge(1, 2);
     auto directed_clique = m1une::graph::maximum_clique(directed);
     auto directed_independent = m1une::graph::maximum_independent_set(directed);
+    auto directed_cover = m1une::graph::minimum_vertex_cover(directed);
     assert(directed_clique.size() == 2);
     assert(directed_independent.size() == 2);
     assert((directed_independent.vertices == std::vector<int>{0, 2}));
+    assert((directed_cover.vertices == std::vector<int>{1}));
 
     Graph<int> empty(4);
     assert(m1une::graph::maximum_clique_size(empty) == 1);
     assert(m1une::graph::maximum_independent_set_size(empty) == 4);
+    assert(m1une::graph::minimum_vertex_cover(empty).empty());
+
+    Graph<int> path(6);
+    for (int i = 0; i + 1 < 6; i++) path.add_edge(i, i + 1);
+    assert(m1une::graph::maximum_independent_set_size(path) == 3);
+    assert(m1une::graph::minimum_vertex_cover_size(path) == 3);
+
+    Graph<int> cycle(5);
+    for (int i = 0; i < 5; i++) cycle.add_edge(i, (i + 1) % 5);
+    assert(m1une::graph::maximum_independent_set_size(cycle) == 2);
+    assert(m1une::graph::minimum_vertex_cover_size(cycle) == 3);
 
     Graph<int> none(0);
     assert(m1une::graph::maximum_clique(none).empty());
     assert(m1une::graph::maximum_independent_set(none).empty());
+    assert(m1une::graph::minimum_vertex_cover(none).empty());
 }
 
 void test_cycle_detection() {
