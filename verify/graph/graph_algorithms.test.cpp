@@ -60,6 +60,29 @@ void test_dijkstra() {
     assert((res.path(4) == std::vector<int>{0, 2, 1, 3, 4}));
 }
 
+void test_zero_one_bfs() {
+    Graph<int> g(6);
+    g.add_directed_edge(0, 1, 1);
+    g.add_directed_edge(0, 2, 0);
+    g.add_directed_edge(2, 1, 0);
+    g.add_directed_edge(1, 3, 1);
+    g.add_directed_edge(2, 3, 1);
+    g.add_directed_edge(3, 4, 0);
+
+    auto res = m1une::graph::zero_one_bfs(g, 0);
+    assert(res.dist[0] == 0);
+    assert(res.dist[1] == 0);
+    assert(res.dist[3] == 1);
+    assert(res.dist[4] == 1);
+    assert(!res.reachable(5));
+    assert((res.path(4) == std::vector<int>{0, 2, 3, 4}));
+
+    auto multi = m1une::graph::zero_one_bfs(g, std::vector<int>{1, 5});
+    assert(multi.dist[1] == 0);
+    assert(multi.dist[4] == 1);
+    assert(multi.dist[5] == 0);
+}
+
 void test_bellman_ford() {
     Graph<long long> g(5);
     g.add_directed_edge(0, 1, 1);
@@ -363,6 +386,7 @@ int main() {
     test_graph_container();
     test_bfs();
     test_dijkstra();
+    test_zero_one_bfs();
     test_bellman_ford();
     test_dag_shortest_path();
     test_warshall_floyd();
