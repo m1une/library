@@ -18,6 +18,11 @@ This information identifies:
 Use it for network vulnerability problems, bridge counting, biconnected
 component preprocessing, and similar undirected connectivity tasks.
 
+## Graph Orientation
+
+Undirected only. Build the graph with `add_edge`. LowLink is not the right tool
+for directed bridges or directed articulation-like notions.
+
 ## How to Use It
 
 Build the graph with `add_edge`, not two calls to `add_directed_edge`. The

@@ -13,8 +13,10 @@ away, and so on.
 Use BFS when the answer is measured by the number of edges, not by edge
 weights. For weighted shortest paths, use Dijkstra or Bellman-Ford instead.
 
-The direction of edges is respected. If you want undirected movement, build the
-graph with `add_edge`.
+## Graph Orientation
+
+Direction is respected. `bfs` works on directed graphs as written, and also on
+undirected graphs built with `add_edge`.
 
 ## How to Use It
 

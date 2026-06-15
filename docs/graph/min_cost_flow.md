@@ -13,6 +13,12 @@ potentials. It first computes initial potentials with Bellman-Ford, so negative
 edge costs are allowed as long as there is no reachable negative-cost cycle
 with residual capacity.
 
+## Graph Orientation
+
+Directed flow network. An edge added by `add_edge(from, to, cap, cost)` can
+send flow only from `from` to `to`. For an undirected capacity, add both
+directions with the desired costs.
+
 The graph is stateful. Running `flow` or `slope` changes residual capacities and
 stores the chosen flow. Use `get_edge` or `edges` afterward to inspect the
 result.

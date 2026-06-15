@@ -16,6 +16,12 @@ indegree of its outgoing neighbors.
 
 If the graph has a directed cycle, no topological order exists.
 
+## Graph Orientation
+
+Directed only. Topological sort is defined for directed acyclic graphs. For
+undirected cycle checks, use `find_undirected_cycle` or LowLink-related tools
+instead.
+
 ## How to Use It
 
 Build a directed graph with `add_directed_edge`. Then call

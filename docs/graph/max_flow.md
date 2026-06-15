@@ -13,6 +13,11 @@ with BFS and sends blocking flow with DFS. It is the standard choice for many
 competitive programming max-flow tasks, including bipartite matching,
 edge-disjoint paths, and minimum `s-t` cut problems.
 
+## Graph Orientation
+
+Directed flow network. An edge added by `add_edge(from, to, cap)` can send flow
+only from `from` to `to`. For an undirected capacity, add both directions.
+
 The graph is stateful. Running `max_flow` changes residual capacities and
 stores the resulting flow. Use `get_edge` or `edges` after running it to inspect
 how much flow passed through each original edge.

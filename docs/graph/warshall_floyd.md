@@ -16,6 +16,11 @@ well-defined.
 
 For one-source shortest paths on larger graphs, use Dijkstra or Bellman-Ford.
 
+## Graph Orientation
+
+Direction is respected. `warshall_floyd` works on directed graphs as written,
+and also on undirected graphs built with `add_edge`.
+
 ## How to Use It
 
 There are two entry points:

@@ -16,6 +16,11 @@ Use it when you need a minimum spanning tree (connected graph) or minimum
 spanning forest (possibly disconnected graph). It is especially convenient when
 the input is an edge list or when $M\log M$ is acceptable.
 
+## Graph Orientation
+
+Undirected only. Build the graph with `add_edge`. A directed edge does not
+represent the usual MST problem.
+
 ## How to Use It
 
 Build an undirected weighted graph with `add_edge`, then call `kruskal(g)`.

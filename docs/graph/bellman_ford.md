@@ -16,7 +16,10 @@ cycle. Every vertex reachable from such a cycle is marked as `negative`.
 Use Bellman-Ford when negative edge costs are possible. If all edge costs are
 non-negative, Dijkstra is much faster.
 
-The direction of edges is respected.
+## Graph Orientation
+
+Direction is respected. `bellman_ford` works on directed graphs as written, and
+also on undirected graphs built with `add_edge`.
 
 ## How to Use It
 

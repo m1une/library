@@ -21,6 +21,11 @@ graph always has `H * W` vertices, so `grid.id(i, j)` remains valid and stable
 for every cell. Blocked cells simply become isolated if you use a passable
 predicate.
 
+## Graph Orientation
+
+The graph builders create undirected grid graphs. Use `graph4` for four-way
+movement and `graph8` for eight-way movement.
+
 ## How to Use It
 
 Create `Grid grid(H, W)`, then use `id(i, j)` before calling graph algorithms

@@ -16,6 +16,11 @@ Use SCC when you need to reason about mutual reachability, directed cycles,
 This implementation is based on Tarjan's DFS lowlink method and runs in linear
 time.
 
+## Graph Orientation
+
+Directed only. SCCs are about mutual reachability through directed edges. For
+ordinary undirected components, use `connected_components`.
+
 ## How to Use It
 
 Build a directed graph with `add_directed_edge`, then call

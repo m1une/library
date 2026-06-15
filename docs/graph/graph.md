@@ -16,6 +16,16 @@ defaults to `1`.
 Undirected edges are stored as two adjacency entries with the same edge id, so
 algorithms can distinguish logical edges from adjacency arcs.
 
+## Graph Orientation
+
+`Graph<T>` itself supports both directed and undirected graphs.
+
+* `add_directed_edge(from, to, cost)` stores one directed arc.
+* `add_edge(u, v, cost)` stores two arcs with one shared logical edge id.
+
+Algorithm pages state whether they respect direction, require undirected edges,
+or ignore direction.
+
 ## How to Use It
 
 Create a graph with the number of vertices, then add edges.

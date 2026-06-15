@@ -16,6 +16,14 @@ rules are different:
 * in an undirected graph, the DFS must ignore only the exact edge used to enter
   the current vertex.
 
+## Graph Orientation
+
+This header has both variants:
+
+* `find_directed_cycle(g)` respects edge direction;
+* `find_undirected_cycle(g)` treats edges as undirected and should be used with
+  graphs built by `add_edge`.
+
 ## How to Use It
 
 Use `find_directed_cycle(g)` for graphs built with `add_directed_edge`. Use

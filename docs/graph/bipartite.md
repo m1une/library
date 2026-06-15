@@ -17,6 +17,11 @@ where only the endpoint constraint matters.
 Use this for two-team assignments, parity constraints, grid checkerboard
 problems, and "does an odd cycle exist?" checks.
 
+## Graph Orientation
+
+Direction is ignored. Each edge is treated as an undirected constraint between
+its endpoints.
+
 ## How to Use It
 
 Call `bipartite(g)` when you need both the yes/no answer and the colors. Call

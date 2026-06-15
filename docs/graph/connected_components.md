@@ -17,6 +17,11 @@ Use this when you need to split a graph into independent pieces, count
 components, check ordinary connectivity, or process each connected block
 separately.
 
+## Graph Orientation
+
+Direction is ignored. On a directed graph, this computes weakly connected
+components. For strongly connected components, use `strongly_connected_components`.
+
 ## How to Use It
 
 Call `connected_components(g)`.

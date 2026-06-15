@@ -13,8 +13,10 @@ Use it for typical weighted shortest path problems with costs like time,
 distance, or price. Do not use it if a reachable edge can have a negative cost;
 use Bellman-Ford in that case.
 
-The direction of edges is respected. Use `add_edge` for an undirected weighted
-graph.
+## Graph Orientation
+
+Direction is respected. `dijkstra` works on directed graphs as written, and
+also on undirected graphs built with `add_edge`.
 
 ## How to Use It
 
