@@ -250,12 +250,29 @@ void test_bipartite_and_components() {
     auto bp = m1une::graph::bipartite(square);
     assert(bp.is_bipartite);
     assert(bp.color[0] == bp.color[2]);
+    assert((bp.left_vertices == std::vector<int>{0, 2}));
+    assert((bp.right_vertices == std::vector<int>{1, 3}));
+    assert(bp.left_id[2] == 1);
+    assert(bp.right_id[3] == 1);
+    auto built = m1une::graph::make_bipartite_matching(square);
+    assert(built.has_value());
+    assert(built->matching.left_size() == 2);
+    assert(built->matching.right_size() == 2);
+    assert(built->matching.max_matching() == 2);
+    for (const auto& p : built->matching.matching()) {
+        int u = built->left_vertex(p.left);
+        int v = built->right_vertex(p.right);
+        assert(bp.color[u] == 0);
+        assert(bp.color[v] == 1);
+        assert(square.is_edge_alive(built->original_edge(p.edge_id)));
+    }
 
     Graph<int> triangle(3);
     triangle.add_edge(0, 1);
     triangle.add_edge(1, 2);
     triangle.add_edge(2, 0);
     assert(!m1une::graph::is_bipartite(triangle));
+    assert(!m1une::graph::make_bipartite_matching(triangle).has_value());
 
     Graph<int> cc_graph(5);
     cc_graph.add_edge(0, 1);
@@ -271,6 +288,60 @@ void test_bipartite_and_components() {
     assert(m1une::graph::is_bipartite(directed));
     auto weak = m1une::graph::connected_components(directed);
     assert(weak.count == 1);
+
+    m1une::graph::BipartiteMatching bm(3, 2);
+    int e00 = bm.add_edge(0, 0);
+    int e10 = bm.add_edge(1, 0);
+    int e11 = bm.add_edge(1, 1);
+    int e21 = bm.add_edge(2, 1);
+    assert(bm.left_size() == 3);
+    assert(bm.right_size() == 2);
+    assert(bm.edge_count() == 4);
+    assert(bm.get_edge(e10).left == 1);
+    assert(bm.max_matching() == 2);
+    assert(bm.matching_size() == 2);
+    auto pairs = bm.matching();
+    assert(pairs.size() == 2);
+    auto left_match = bm.left_match();
+    auto right_match = bm.right_match();
+    for (const auto& p : pairs) {
+        assert(left_match[p.left] == p.right);
+        assert(right_match[p.right] == p.left);
+    }
+
+    auto cover = bm.minimum_vertex_cover();
+    assert(cover.left.empty());
+    assert((cover.right == std::vector<int>{0, 1}));
+    assert(cover.size() == 2);
+    auto independent = bm.maximum_independent_set();
+    assert((independent.left == std::vector<int>{0, 1, 2}));
+    assert(independent.right.empty());
+
+    auto edge_cover = bm.minimum_edge_cover();
+    assert(edge_cover.has_value());
+    assert(edge_cover->size() == 3);
+    std::vector<bool> covered_left(3, false), covered_right(2, false);
+    for (int id : *edge_cover) {
+        auto edge = bm.get_edge(id);
+        covered_left[edge.left] = true;
+        covered_right[edge.right] = true;
+    }
+    assert((covered_left == std::vector<bool>{true, true, true}));
+    assert((covered_right == std::vector<bool>{true, true}));
+
+    bm.erase_edge(e11);
+    bm.erase_edge(e21);
+    assert(!bm.is_edge_alive(e21));
+    assert(bm.edges().size() == 2);
+    assert(bm.edges(true).size() == 4);
+    assert(bm.max_matching() == 1);
+    bm.revive_edge(e21);
+    assert(bm.max_matching() == 2);
+
+    m1une::graph::BipartiteMatching isolated(1, 1);
+    assert(!isolated.minimum_edge_cover().has_value());
+
+    (void)e00;
 }
 
 void test_cycle_detection() {

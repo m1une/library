@@ -30,7 +30,7 @@ individual graph includes.
 | `graph/topological_sort.hpp` | Directed only | DAG ordering and cycle check. |
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
 | `graph/lowlink.hpp` | Undirected only | Articulation points and bridges. |
-| `graph/bipartite.hpp` | Direction ignored | Two-colorability check. |
+| `graph/bipartite.hpp` | Direction ignored / explicit bipartite sides | Two-colorability, maximum matching, minimum vertex cover, maximum independent set, and minimum edge cover. |
 | `graph/connected_components.hpp` | Direction ignored | Weak/ordinary connected components. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Finds one cycle with the matching function. |
 | `graph/kruskal.hpp` | Undirected only | Minimum spanning forest. |
