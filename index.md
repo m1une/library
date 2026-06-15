@@ -149,6 +149,47 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/sparse_table.hpp
       title: Sparse Table
+  - name: graph
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: graph/all.hpp
+      title: Graph All
+    - icon: ':heavy_check_mark:'
+      path: graph/bellman_ford.hpp
+      title: Bellman-Ford
+    - icon: ':heavy_check_mark:'
+      path: graph/bfs.hpp
+      title: BFS
+    - icon: ':heavy_check_mark:'
+      path: graph/bipartite.hpp
+      title: Bipartite Graph
+    - icon: ':heavy_check_mark:'
+      path: graph/connected_components.hpp
+      title: Connected Components
+    - icon: ':heavy_check_mark:'
+      path: graph/cycle_detection.hpp
+      title: Cycle Detection
+    - icon: ':heavy_check_mark:'
+      path: graph/dijkstra.hpp
+      title: Dijkstra
+    - icon: ':heavy_check_mark:'
+      path: graph/graph.hpp
+      title: Graph
+    - icon: ':heavy_check_mark:'
+      path: graph/kruskal.hpp
+      title: Kruskal
+    - icon: ':heavy_check_mark:'
+      path: graph/lowlink.hpp
+      title: LowLink
+    - icon: ':heavy_check_mark:'
+      path: graph/scc.hpp
+      title: Strongly Connected Components
+    - icon: ':heavy_check_mark:'
+      path: graph/topological_sort.hpp
+      title: Topological Sort
+    - icon: ':heavy_check_mark:'
+      path: graph/warshall_floyd.hpp
+      title: Warshall-Floyd
   - name: math
     pages:
     - icon: ':warning:'
@@ -379,6 +420,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/sparse_table.test.cpp
       title: verify/data_structure/sparse_table.test.cpp
+  - name: verify/graph
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/graph/graph_algorithms.test.cpp
+      title: verify/graph/graph_algorithms.test.cpp
   - name: verify/string
     pages:
     - icon: ':heavy_check_mark:'
