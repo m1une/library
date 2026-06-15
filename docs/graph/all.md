@@ -14,11 +14,12 @@ individual graph includes.
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
 | `graph/graph.hpp` | Container | `Graph<T>` and `Edge<T>` adjacency-list container. |
-| `graph/shortest_path.hpp` | Direction-respecting | BFS, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
+| `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
 | `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths and flow. |
 | `graph/undirected.hpp` | Undirected-oriented bundle | Undirected algorithms plus shortest paths and grid helpers. |
 | `graph/flow.hpp` | Directed flow network | Max flow and min-cost flow. |
 | `graph/bfs.hpp` | Direction-respecting | Unweighted shortest paths. |
+| `graph/dag_shortest_path.hpp` | Directed DAG only | Shortest paths in a DAG, including negative edge costs. |
 | `graph/dijkstra.hpp` | Direction-respecting | Non-negative weighted shortest paths. |
 | `graph/bellman_ford.hpp` | Direction-respecting | Shortest paths with negative edges and negative-cycle marking. |
 | `graph/warshall_floyd.hpp` | Direction-respecting | All-pairs shortest paths. |

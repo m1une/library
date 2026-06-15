@@ -15,7 +15,7 @@ depends on edge direction.
 
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
-| `graph/shortest_path.hpp` | Direction-respecting | BFS, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
+| `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
 | `graph/topological_sort.hpp` | Directed only | DAG ordering and directed cycle check. |
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Use `find_directed_cycle(g)` for directed graphs. |

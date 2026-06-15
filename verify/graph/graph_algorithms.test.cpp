@@ -77,6 +77,34 @@ void test_bellman_ford() {
     assert(res.dist[4] == 5);
 }
 
+void test_dag_shortest_path() {
+    Graph<long long> g(6);
+    g.add_directed_edge(0, 1, 2);
+    g.add_directed_edge(0, 2, 5);
+    g.add_directed_edge(1, 2, -4);
+    g.add_directed_edge(1, 4, 10);
+    g.add_directed_edge(2, 3, 3);
+    g.add_directed_edge(3, 4, 1);
+
+    auto res = m1une::graph::dag_shortest_path(g, 0);
+    assert(res.has_value());
+    assert(res->dist[0] == 0);
+    assert(res->dist[2] == -2);
+    assert(res->dist[4] == 2);
+    assert(!res->reachable(5));
+    assert((res->path(4) == std::vector<int>{0, 1, 2, 3, 4}));
+    assert(res->topological_order.size() == 6);
+
+    auto multi = m1une::graph::dag_shortest_path(g, std::vector<int>{1, 5});
+    assert(multi.has_value());
+    assert(multi->dist[4] == 0);
+    assert(multi->dist[5] == 0);
+
+    g.add_directed_edge(4, 1, 1);
+    auto cyclic = m1une::graph::dag_shortest_path(g, 0);
+    assert(!cyclic.has_value());
+}
+
 void test_warshall_floyd() {
     Graph<long long> g(4);
     g.add_directed_edge(0, 1, 3);
@@ -336,6 +364,7 @@ int main() {
     test_bfs();
     test_dijkstra();
     test_bellman_ford();
+    test_dag_shortest_path();
     test_warshall_floyd();
     test_topological_sort();
     test_scc();

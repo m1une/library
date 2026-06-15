@@ -6,8 +6,9 @@ documentation_of: ../../graph/undirected.hpp
 ## Overview
 
 `graph/undirected.hpp` includes algorithms whose main interpretation is
-undirected, plus direction-respecting shortest paths that also work on graphs
-built with `add_edge`.
+undirected, plus the shortest-path bundle. In that bundle, use the
+direction-respecting algorithms on graphs built with `add_edge`; the DAG
+shortest-path helper is directed-only.
 
 Use this header when edges represent two-way movement or an endpoint constraint
 where direction should not matter.
@@ -16,7 +17,7 @@ where direction should not matter.
 
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
-| `graph/shortest_path.hpp` | Direction-respecting | Works on undirected graphs built with `add_edge`. |
+| `graph/shortest_path.hpp` | Mixed shortest-path bundle | Use BFS, Dijkstra, Bellman-Ford, and Warshall-Floyd on undirected graphs built with `add_edge`; DAG shortest path is directed-only. |
 | `graph/lowlink.hpp` | Undirected only | Articulation points and bridges. |
 | `graph/kruskal.hpp` | Undirected only | Minimum spanning forest. |
 | `graph/bipartite.hpp` | Direction ignored | Two-colorability of endpoint constraints. |
