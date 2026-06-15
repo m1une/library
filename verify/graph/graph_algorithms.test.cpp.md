@@ -17,6 +17,12 @@ data:
     path: graph/bipartite.hpp
     title: Bipartite Graph
   - icon: ':heavy_check_mark:'
+    path: graph/bounded_flow.hpp
+    title: Bounded Flow
+  - icon: ':heavy_check_mark:'
+    path: graph/bounded_min_cost_flow.hpp
+    title: Bounded Min Cost Flow
+  - icon: ':heavy_check_mark:'
     path: graph/connected_components.hpp
     title: Connected Components
   - icon: ':heavy_check_mark:'
@@ -174,12 +180,14 @@ data:
     \ }\n        color[v] = 2;\n        return false;\n    };\n\n    for (int v =\
     \ 0; v < n; v++) {\n        if (color[v] == 0 && dfs(dfs, v, -1)) break;\n   \
     \ }\n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\
-    \n#line 1 \"graph/flow.hpp\"\n\n\n\n#line 1 \"graph/max_flow.hpp\"\n\n\n\n#line\
-    \ 6 \"graph/max_flow.hpp\"\n#include <limits>\n#include <queue>\n#line 10 \"graph/max_flow.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap>\nstruct MaxFlow\
-    \ {\n    struct Edge {\n        int from;\n        int to;\n        Cap cap;\n\
-    \        Cap flow;\n    };\n\n   private:\n    struct InternalEdge {\n       \
-    \ int to;\n        int rev;\n        Cap cap;\n    };\n\n    int _n;\n    std::vector<std::pair<int,\
+    \n#line 1 \"graph/flow.hpp\"\n\n\n\n#line 1 \"graph/bounded_flow.hpp\"\n\n\n\n\
+    #line 5 \"graph/bounded_flow.hpp\"\n#include <optional>\n#line 7 \"graph/bounded_flow.hpp\"\
+    \n\n#line 1 \"graph/max_flow.hpp\"\n\n\n\n#line 6 \"graph/max_flow.hpp\"\n#include\
+    \ <limits>\n#include <queue>\n#line 10 \"graph/max_flow.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace graph {\n\ntemplate <class Cap>\nstruct MaxFlow {\n    struct Edge\
+    \ {\n        int from;\n        int to;\n        Cap cap;\n        Cap flow;\n\
+    \    };\n\n   private:\n    struct InternalEdge {\n        int to;\n        int\
+    \ rev;\n        Cap cap;\n    };\n\n    int _n;\n    std::vector<std::pair<int,\
     \ int>> _pos;\n    std::vector<std::vector<InternalEdge>> _g;\n\n   public:\n\
     \    MaxFlow() : MaxFlow(0) {}\n\n    explicit MaxFlow(int n) : _n(n), _g(n) {\n\
     \        assert(0 <= n);\n    }\n\n    int size() const {\n        return _n;\n\
@@ -230,7 +238,61 @@ data:
     \  que.pop();\n            for (const auto& e : _g[v]) {\n                if (e.cap\
     \ == Cap(0) || visited[e.to]) continue;\n                visited[e.to] = true;\n\
     \                que.push(e.to);\n            }\n        }\n        return visited;\n\
-    \    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/min_cost_flow.hpp\"\
+    \    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 9 \"graph/bounded_flow.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap>\nstruct BoundedFlow\
+    \ {\n    struct Edge {\n        int from;\n        int to;\n        Cap lower;\n\
+    \        Cap upper;\n    };\n\n    struct ResultEdge {\n        int from;\n  \
+    \      int to;\n        Cap lower;\n        Cap upper;\n        Cap flow;\n  \
+    \  };\n\n    struct Result {\n        std::vector<ResultEdge> edges;\n       \
+    \ std::vector<Cap> balance;\n\n        ResultEdge get_edge(int i) const {\n  \
+    \          assert(0 <= i && i < int(edges.size()));\n            return edges[i];\n\
+    \        }\n\n        Cap flow(int i) const {\n            assert(0 <= i && i\
+    \ < int(edges.size()));\n            return edges[i].flow;\n        }\n    };\n\
+    \n   private:\n    int _n;\n    std::vector<Edge> _edges;\n    std::vector<Cap>\
+    \ _balance;\n\n   public:\n    BoundedFlow() : BoundedFlow(0) {}\n\n    explicit\
+    \ BoundedFlow(int n) : _n(n), _balance(n, Cap(0)) {\n        assert(0 <= n);\n\
+    \    }\n\n    int size() const {\n        return _n;\n    }\n\n    int edge_count()\
+    \ const {\n        return int(_edges.size());\n    }\n\n    int add_edge(int from,\
+    \ int to, Cap lower, Cap upper) {\n        assert(0 <= from && from < _n);\n \
+    \       assert(0 <= to && to < _n);\n        assert(lower <= upper);\n       \
+    \ int id = int(_edges.size());\n        _edges.push_back(Edge{from, to, lower,\
+    \ upper});\n        return id;\n    }\n\n    Edge get_edge(int i) const {\n  \
+    \      assert(0 <= i && i < int(_edges.size()));\n        return _edges[i];\n\
+    \    }\n\n    std::vector<Edge> edges() const {\n        return _edges;\n    }\n\
+    \n    void set_balance(int v, Cap b) {\n        assert(0 <= v && v < _n);\n  \
+    \      _balance[v] = b;\n    }\n\n    void add_balance(int v, Cap b) {\n     \
+    \   assert(0 <= v && v < _n);\n        _balance[v] += b;\n    }\n\n    void add_supply(int\
+    \ v, Cap supply) {\n        assert(Cap(0) <= supply);\n        add_balance(v,\
+    \ supply);\n    }\n\n    void add_demand(int v, Cap demand) {\n        assert(Cap(0)\
+    \ <= demand);\n        add_balance(v, -demand);\n    }\n\n    Cap balance(int\
+    \ v) const {\n        assert(0 <= v && v < _n);\n        return _balance[v];\n\
+    \    }\n\n    const std::vector<Cap>& balances() const {\n        return _balance;\n\
+    \    }\n\n    std::optional<Result> feasible_flow() const {\n        return feasible_flow(_balance);\n\
+    \    }\n\n    std::optional<Result> feasible_flow(const std::vector<Cap>& balance)\
+    \ const {\n        assert(int(balance.size()) == _n);\n        int ss = _n, tt\
+    \ = _n + 1;\n        MaxFlow<Cap> mf(_n + 2);\n        std::vector<int> edge_ids;\n\
+    \        edge_ids.reserve(_edges.size());\n\n        std::vector<Cap> need = balance;\n\
+    \        for (const auto& e : _edges) {\n            edge_ids.push_back(mf.add_edge(e.from,\
+    \ e.to, e.upper - e.lower));\n            need[e.from] -= e.lower;\n         \
+    \   need[e.to] += e.lower;\n        }\n\n        Cap positive_sum = Cap(0), negative_sum\
+    \ = Cap(0);\n        for (int v = 0; v < _n; v++) {\n            if (need[v] >\
+    \ Cap(0)) {\n                positive_sum += need[v];\n                mf.add_edge(ss,\
+    \ v, need[v]);\n            } else if (need[v] < Cap(0)) {\n                negative_sum\
+    \ += -need[v];\n                mf.add_edge(v, tt, -need[v]);\n            }\n\
+    \        }\n        if (positive_sum != negative_sum) return std::nullopt;\n \
+    \       if (mf.max_flow(ss, tt) != positive_sum) return std::nullopt;\n\n    \
+    \    Result result;\n        result.balance = balance;\n        result.edges.reserve(_edges.size());\n\
+    \        for (int i = 0; i < int(_edges.size()); i++) {\n            auto used\
+    \ = mf.get_edge(edge_ids[i]).flow;\n            const auto& e = _edges[i];\n \
+    \           result.edges.push_back(ResultEdge{e.from, e.to, e.lower, e.upper,\
+    \ e.lower + used});\n        }\n        return result;\n    }\n\n    std::optional<Result>\
+    \ feasible_st_flow(int s, int t, Cap flow_value) const {\n        assert(0 <=\
+    \ s && s < _n);\n        assert(0 <= t && t < _n);\n        assert(s != t);\n\
+    \        std::vector<Cap> balance = _balance;\n        balance[s] += flow_value;\n\
+    \        balance[t] -= flow_value;\n        return feasible_flow(balance);\n \
+    \   }\n};\n\ntemplate <class Cap>\nusing BFlow = BoundedFlow<Cap>;\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n\n#line 1 \"graph/bounded_min_cost_flow.hpp\"\
+    \n\n\n\n#line 7 \"graph/bounded_min_cost_flow.hpp\"\n\n#line 1 \"graph/min_cost_flow.hpp\"\
     \n\n\n\n#line 6 \"graph/min_cost_flow.hpp\"\n#include <functional>\n#line 11 \"\
     graph/min_cost_flow.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
     \ <class Cap, class Cost>\nstruct MinCostFlow {\n    struct Edge {\n        int\
@@ -298,21 +360,86 @@ data:
     \ -= add;\n                _g[e.to][e.rev].cap += add;\n            }\n\n    \
     \        flow += add;\n            cost += Cost(add) * path_cost;\n          \
     \  result.emplace_back(flow, cost);\n        }\n\n        return result;\n   \
-    \ }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 6 \"graph/flow.hpp\"\
-    \n\n\n#line 1 \"graph/scc.hpp\"\n\n\n\n#line 8 \"graph/scc.hpp\"\n\n#line 10 \"\
-    graph/scc.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct SccResult {\n\
-    \    int count;\n    std::vector<int> comp;\n    std::vector<std::vector<int>>\
-    \ groups;\n\n    bool same(int u, int v) const {\n        assert(0 <= u && u <\
-    \ int(comp.size()));\n        assert(0 <= v && v < int(comp.size()));\n      \
-    \  return comp[u] == comp[v];\n    }\n\n    template <class T>\n    Graph<int>\
-    \ dag(const Graph<T>& g) const {\n        std::vector<std::pair<int, int>> edges;\n\
-    \        for (int v = 0; v < g.size(); v++) {\n            for (const auto& e\
-    \ : g[v]) {\n                if (!e.alive) continue;\n                int a =\
-    \ comp[e.from], b = comp[e.to];\n                if (a != b) edges.emplace_back(a,\
-    \ b);\n            }\n        }\n        std::sort(edges.begin(), edges.end());\n\
-    \        edges.erase(std::unique(edges.begin(), edges.end()), edges.end());\n\n\
-    \        Graph<int> result(count);\n        for (auto [a, b] : edges) result.add_directed_edge(a,\
-    \ b);\n        return result;\n    }\n};\n\ntemplate <class T>\nSccResult strongly_connected_components(const\
+    \ }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 9 \"graph/bounded_min_cost_flow.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap, class Cost>\n\
+    struct BoundedMinCostFlow {\n    struct Edge {\n        int from;\n        int\
+    \ to;\n        Cap lower;\n        Cap upper;\n        Cost cost;\n    };\n\n\
+    \    struct ResultEdge {\n        int from;\n        int to;\n        Cap lower;\n\
+    \        Cap upper;\n        Cap flow;\n        Cost cost;\n    };\n\n    struct\
+    \ Result {\n        std::vector<ResultEdge> edges;\n        std::vector<Cap> balance;\n\
+    \        Cost cost;\n\n        ResultEdge get_edge(int i) const {\n          \
+    \  assert(0 <= i && i < int(edges.size()));\n            return edges[i];\n  \
+    \      }\n\n        Cap flow(int i) const {\n            assert(0 <= i && i <\
+    \ int(edges.size()));\n            return edges[i].flow;\n        }\n    };\n\n\
+    \   private:\n    int _n;\n    std::vector<Edge> _edges;\n    std::vector<Cap>\
+    \ _balance;\n\n   public:\n    BoundedMinCostFlow() : BoundedMinCostFlow(0) {}\n\
+    \n    explicit BoundedMinCostFlow(int n) : _n(n), _balance(n, Cap(0)) {\n    \
+    \    assert(0 <= n);\n    }\n\n    int size() const {\n        return _n;\n  \
+    \  }\n\n    int edge_count() const {\n        return int(_edges.size());\n   \
+    \ }\n\n    int add_edge(int from, int to, Cap lower, Cap upper, Cost cost) {\n\
+    \        assert(0 <= from && from < _n);\n        assert(0 <= to && to < _n);\n\
+    \        assert(lower <= upper);\n        int id = int(_edges.size());\n     \
+    \   _edges.push_back(Edge{from, to, lower, upper, cost});\n        return id;\n\
+    \    }\n\n    Edge get_edge(int i) const {\n        assert(0 <= i && i < int(_edges.size()));\n\
+    \        return _edges[i];\n    }\n\n    std::vector<Edge> edges() const {\n \
+    \       return _edges;\n    }\n\n    void set_balance(int v, Cap b) {\n      \
+    \  assert(0 <= v && v < _n);\n        _balance[v] = b;\n    }\n\n    void add_balance(int\
+    \ v, Cap b) {\n        assert(0 <= v && v < _n);\n        _balance[v] += b;\n\
+    \    }\n\n    void add_supply(int v, Cap supply) {\n        assert(Cap(0) <= supply);\n\
+    \        add_balance(v, supply);\n    }\n\n    void add_demand(int v, Cap demand)\
+    \ {\n        assert(Cap(0) <= demand);\n        add_balance(v, -demand);\n   \
+    \ }\n\n    Cap balance(int v) const {\n        assert(0 <= v && v < _n);\n   \
+    \     return _balance[v];\n    }\n\n    const std::vector<Cap>& balances() const\
+    \ {\n        return _balance;\n    }\n\n    std::optional<Result> min_cost_flow()\
+    \ const {\n        return min_cost_flow(_balance);\n    }\n\n    std::optional<Result>\
+    \ min_cost_flow(const std::vector<Cap>& balance) const {\n        assert(int(balance.size())\
+    \ == _n);\n        int ss = _n, tt = _n + 1;\n        MinCostFlow<Cap, Cost> mcf(_n\
+    \ + 2);\n\n        std::vector<Cap> need = balance;\n        std::vector<Cap>\
+    \ initial(_edges.size(), Cap(0));\n        std::vector<int> edge_ids(_edges.size(),\
+    \ -1);\n        std::vector<char> reversed(_edges.size(), false);\n\n        for\
+    \ (int i = 0; i < int(_edges.size()); i++) {\n            const auto& e = _edges[i];\n\
+    \            Cap cap = e.upper - e.lower;\n            need[e.from] -= e.lower;\n\
+    \            need[e.to] += e.lower;\n            if (e.cost < Cost(0)) {\n   \
+    \             initial[i] = cap;\n                need[e.from] -= cap;\n      \
+    \          need[e.to] += cap;\n                edge_ids[i] = mcf.add_edge(e.to,\
+    \ e.from, cap, -e.cost);\n                reversed[i] = true;\n            } else\
+    \ {\n                edge_ids[i] = mcf.add_edge(e.from, e.to, cap, e.cost);\n\
+    \            }\n        }\n\n        Cap positive_sum = Cap(0), negative_sum =\
+    \ Cap(0);\n        for (int v = 0; v < _n; v++) {\n            if (need[v] > Cap(0))\
+    \ {\n                positive_sum += need[v];\n                mcf.add_edge(ss,\
+    \ v, need[v], Cost(0));\n            } else if (need[v] < Cap(0)) {\n        \
+    \        negative_sum += -need[v];\n                mcf.add_edge(v, tt, -need[v],\
+    \ Cost(0));\n            }\n        }\n        if (positive_sum != negative_sum)\
+    \ return std::nullopt;\n\n        auto [sent, extra_cost] = mcf.flow(ss, tt, positive_sum);\n\
+    \        (void)extra_cost;\n        if (sent != positive_sum) return std::nullopt;\n\
+    \n        Result result;\n        result.balance = balance;\n        result.cost\
+    \ = Cost(0);\n        result.edges.reserve(_edges.size());\n        for (int i\
+    \ = 0; i < int(_edges.size()); i++) {\n            const auto& e = _edges[i];\n\
+    \            Cap used = mcf.get_edge(edge_ids[i]).flow;\n            Cap residual_flow\
+    \ = reversed[i] ? initial[i] - used : used;\n            Cap flow = e.lower +\
+    \ residual_flow;\n            result.cost += Cost(flow) * e.cost;\n          \
+    \  result.edges.push_back(ResultEdge{e.from, e.to, e.lower, e.upper, flow, e.cost});\n\
+    \        }\n        return result;\n    }\n\n    std::optional<Result> min_cost_st_flow(int\
+    \ s, int t, Cap flow_value) const {\n        assert(0 <= s && s < _n);\n     \
+    \   assert(0 <= t && t < _n);\n        assert(s != t);\n        std::vector<Cap>\
+    \ balance = _balance;\n        balance[s] += flow_value;\n        balance[t] -=\
+    \ flow_value;\n        return min_cost_flow(balance);\n    }\n};\n\ntemplate <class\
+    \ Cap, class Cost>\nusing BMinCostFlow = BoundedMinCostFlow<Cap, Cost>;\n\n} \
+    \ // namespace graph\n}  // namespace m1une\n\n\n#line 8 \"graph/flow.hpp\"\n\n\
+    \n#line 1 \"graph/scc.hpp\"\n\n\n\n#line 8 \"graph/scc.hpp\"\n\n#line 10 \"graph/scc.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\nstruct SccResult {\n    int count;\n\
+    \    std::vector<int> comp;\n    std::vector<std::vector<int>> groups;\n\n   \
+    \ bool same(int u, int v) const {\n        assert(0 <= u && u < int(comp.size()));\n\
+    \        assert(0 <= v && v < int(comp.size()));\n        return comp[u] == comp[v];\n\
+    \    }\n\n    template <class T>\n    Graph<int> dag(const Graph<T>& g) const\
+    \ {\n        std::vector<std::pair<int, int>> edges;\n        for (int v = 0;\
+    \ v < g.size(); v++) {\n            for (const auto& e : g[v]) {\n           \
+    \     if (!e.alive) continue;\n                int a = comp[e.from], b = comp[e.to];\n\
+    \                if (a != b) edges.emplace_back(a, b);\n            }\n      \
+    \  }\n        std::sort(edges.begin(), edges.end());\n        edges.erase(std::unique(edges.begin(),\
+    \ edges.end()), edges.end());\n\n        Graph<int> result(count);\n        for\
+    \ (auto [a, b] : edges) result.add_directed_edge(a, b);\n        return result;\n\
+    \    }\n};\n\ntemplate <class T>\nSccResult strongly_connected_components(const\
     \ Graph<T>& g) {\n    int n = g.size();\n    std::vector<int> ord(n, -1), low(n,\
     \ 0), comp(n, -1), stack;\n    std::vector<char> in_stack(n, false);\n    std::vector<std::vector<int>>\
     \ groups;\n    int now = 0;\n\n    auto dfs = [&](auto self, int v) -> void {\n\
@@ -389,9 +516,8 @@ data:
     \         que.push(e.to);\n        }\n    }\n\n    return result;\n}\n\ntemplate\
     \ <class T>\nBfsResult bfs(const Graph<T>& g, int s) {\n    return bfs(g, std::vector<int>{s});\n\
     }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/dag_shortest_path.hpp\"\
-    \n\n\n\n#line 7 \"graph/dag_shortest_path.hpp\"\n#include <optional>\n#line 9\
-    \ \"graph/dag_shortest_path.hpp\"\n\n#line 1 \"graph/topological_sort.hpp\"\n\n\
-    \n\n#line 7 \"graph/topological_sort.hpp\"\n\n#line 9 \"graph/topological_sort.hpp\"\
+    \n\n\n\n#line 9 \"graph/dag_shortest_path.hpp\"\n\n#line 1 \"graph/topological_sort.hpp\"\
+    \n\n\n\n#line 7 \"graph/topological_sort.hpp\"\n\n#line 9 \"graph/topological_sort.hpp\"\
     \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstd::optional<std::vector<int>>\
     \ topological_sort(const Graph<T>& g) {\n    int n = g.size();\n    std::vector<int>\
     \ indeg(n, 0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& e\
@@ -804,25 +930,80 @@ data:
     \ && e.flow <= e.cap);\n    }\n    assert(outgoing == 3);\n    assert(mf.get_edge(e0).cap\
     \ == 2);\n\n    auto cut = mf.min_cut(0);\n    assert(cut[0]);\n    assert(!cut[3]);\n\
     \n    mf.change_edge(e0, 3, 1);\n    auto changed = mf.get_edge(e0);\n    assert(changed.cap\
-    \ == 3);\n    assert(changed.flow == 1);\n}\n\nvoid test_min_cost_flow() {\n \
-    \   m1une::graph::MinCostFlow<long long, long long> mcf(4);\n    mcf.add_edge(0,\
-    \ 1, 2, 1);\n    mcf.add_edge(0, 2, 1, 2);\n    mcf.add_edge(1, 2, 1, 0);\n  \
-    \  mcf.add_edge(1, 3, 1, 3);\n    mcf.add_edge(2, 3, 2, 1);\n\n    auto result\
-    \ = mcf.flow(0, 3, 2);\n    assert(result.first == 2);\n    assert(result.second\
-    \ == 5);\n    auto edges = mcf.edges();\n    long long total_source_flow = 0;\n\
-    \    for (const auto& e : edges) {\n        if (e.from == 0) total_source_flow\
-    \ += e.flow;\n        assert(0 <= e.flow && e.flow <= e.cap);\n    }\n    assert(total_source_flow\
-    \ == 2);\n\n    m1une::graph::MinCostFlow<long long, long long> negative(3);\n\
-    \    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1, 2, 1, 2);\n   \
-    \ negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0, 2, 2);\n\
-    \    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1,\
-    \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_edge_alive();\n\
-    \    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n\
-    \    test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
-    \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
+    \ == 3);\n    assert(changed.flow == 1);\n}\n\nvoid test_bounded_flow() {\n  \
+    \  m1une::graph::BoundedFlow<long long> st(4);\n    int a = st.add_edge(0, 1,\
+    \ 1, 3);\n    int b = st.add_edge(0, 2, 0, 2);\n    int c = st.add_edge(1, 3,\
+    \ 1, 2);\n    int d = st.add_edge(2, 3, 0, 2);\n    int e = st.add_edge(1, 2,\
+    \ 0, 1);\n    (void)a;\n    (void)b;\n    (void)c;\n    (void)d;\n    (void)e;\n\
+    \n    auto exact = st.feasible_st_flow(0, 3, 3);\n    assert(exact.has_value());\n\
+    \    std::vector<long long> balance(4, 0);\n    for (const auto& edge : exact->edges)\
+    \ {\n        assert(edge.lower <= edge.flow && edge.flow <= edge.upper);\n   \
+    \     balance[edge.from] += edge.flow;\n        balance[edge.to] -= edge.flow;\n\
+    \    }\n    assert((balance == std::vector<long long>{3, 0, 0, -3}));\n\n    auto\
+    \ too_much = st.feasible_st_flow(0, 3, 6);\n    assert(!too_much.has_value());\n\
+    \n    m1une::graph::BoundedFlow<long long> bf(3);\n    int f01 = bf.add_edge(0,\
+    \ 1, 1, 3);\n    int f02 = bf.add_edge(0, 2, 0, 4);\n    bf.add_edge(1, 2, 0,\
+    \ 2);\n    bf.add_supply(0, 4);\n    bf.add_demand(1, 1);\n    bf.add_demand(2,\
+    \ 3);\n    assert(bf.balance(0) == 4);\n    auto bflow = bf.feasible_flow();\n\
+    \    assert(bflow.has_value());\n    assert(bflow->get_edge(f01).flow >= 1);\n\
+    \    assert(bflow->get_edge(f02).flow >= 0);\n    std::vector<long long> b_balance(3,\
+    \ 0);\n    for (const auto& edge : bflow->edges) {\n        assert(edge.lower\
+    \ <= edge.flow && edge.flow <= edge.upper);\n        b_balance[edge.from] += edge.flow;\n\
+    \        b_balance[edge.to] -= edge.flow;\n    }\n    assert((b_balance == std::vector<long\
+    \ long>{4, -1, -3}));\n\n    m1une::graph::BoundedFlow<long long> negative(2);\n\
+    \    int neg = negative.add_edge(0, 1, -5, 5);\n    negative.add_demand(0, 3);\n\
+    \    negative.add_supply(1, 3);\n    auto negative_flow = negative.feasible_flow();\n\
+    \    assert(negative_flow.has_value());\n    assert(negative_flow->flow(neg) ==\
+    \ -3);\n\n    m1une::graph::BoundedFlow<long long> impossible(2);\n    impossible.add_edge(0,\
+    \ 1, 0, 1);\n    impossible.add_supply(0, 2);\n    impossible.add_demand(1, 2);\n\
+    \    assert(!impossible.feasible_flow().has_value());\n\n    m1une::graph::BFlow<long\
+    \ long> alias(1);\n    assert(alias.size() == 1);\n}\n\nvoid test_bounded_min_cost_flow()\
+    \ {\n    m1une::graph::BoundedMinCostFlow<long long, long long> st(3);\n    int\
+    \ e01 = st.add_edge(0, 1, 1, 3, 2);\n    int e12 = st.add_edge(1, 2, 1, 3, 1);\n\
+    \    int e02 = st.add_edge(0, 2, 0, 3, 10);\n\n    auto exact = st.min_cost_st_flow(0,\
+    \ 2, 3);\n    assert(exact.has_value());\n    assert(exact->cost == 9);\n    assert(exact->flow(e01)\
+    \ == 3);\n    assert(exact->flow(e12) == 3);\n    assert(exact->flow(e02) == 0);\n\
+    \    std::vector<long long> balance(3, 0);\n    for (const auto& edge : exact->edges)\
+    \ {\n        assert(edge.lower <= edge.flow && edge.flow <= edge.upper);\n   \
+    \     balance[edge.from] += edge.flow;\n        balance[edge.to] -= edge.flow;\n\
+    \    }\n    assert((balance == std::vector<long long>{3, 0, -3}));\n\n    m1une::graph::BoundedMinCostFlow<long\
+    \ long, long long> bf(3);\n    int p01 = bf.add_edge(0, 1, 0, 2, 1);\n    int\
+    \ p12 = bf.add_edge(1, 2, 0, 2, 1);\n    int p02 = bf.add_edge(0, 2, 0, 2, 5);\n\
+    \    bf.add_supply(0, 2);\n    bf.add_demand(2, 2);\n    auto bflow = bf.min_cost_flow();\n\
+    \    assert(bflow.has_value());\n    assert(bflow->cost == 4);\n    assert(bflow->flow(p01)\
+    \ == 2);\n    assert(bflow->flow(p12) == 2);\n    assert(bflow->flow(p02) == 0);\n\
+    \n    m1une::graph::BoundedMinCostFlow<long long, long long> negative(2);\n  \
+    \  int neg = negative.add_edge(0, 1, -5, 5, 2);\n    negative.add_demand(0, 3);\n\
+    \    negative.add_supply(1, 3);\n    auto negative_flow = negative.min_cost_flow();\n\
+    \    assert(negative_flow.has_value());\n    assert(negative_flow->flow(neg) ==\
+    \ -3);\n    assert(negative_flow->cost == -6);\n\n    m1une::graph::BoundedMinCostFlow<long\
+    \ long, long long> cycle(2);\n    int c01 = cycle.add_edge(0, 1, 0, 1, -5);\n\
+    \    int c10 = cycle.add_edge(1, 0, 0, 1, 3);\n    auto circulation = cycle.min_cost_flow();\n\
+    \    assert(circulation.has_value());\n    assert(circulation->flow(c01) == 1);\n\
+    \    assert(circulation->flow(c10) == 1);\n    assert(circulation->cost == -2);\n\
+    \n    m1une::graph::BoundedMinCostFlow<long long, long long> impossible(2);\n\
+    \    impossible.add_edge(0, 1, 0, 1, 0);\n    impossible.add_supply(0, 2);\n \
+    \   impossible.add_demand(1, 2);\n    assert(!impossible.min_cost_flow().has_value());\n\
+    \n    m1une::graph::BMinCostFlow<long long, long long> alias(1);\n    assert(alias.size()\
+    \ == 1);\n}\n\nvoid test_min_cost_flow() {\n    m1une::graph::MinCostFlow<long\
+    \ long, long long> mcf(4);\n    mcf.add_edge(0, 1, 2, 1);\n    mcf.add_edge(0,\
+    \ 2, 1, 2);\n    mcf.add_edge(1, 2, 1, 0);\n    mcf.add_edge(1, 3, 1, 3);\n  \
+    \  mcf.add_edge(2, 3, 2, 1);\n\n    auto result = mcf.flow(0, 3, 2);\n    assert(result.first\
+    \ == 2);\n    assert(result.second == 5);\n    auto edges = mcf.edges();\n   \
+    \ long long total_source_flow = 0;\n    for (const auto& e : edges) {\n      \
+    \  if (e.from == 0) total_source_flow += e.flow;\n        assert(0 <= e.flow &&\
+    \ e.flow <= e.cap);\n    }\n    assert(total_source_flow == 2);\n\n    m1une::graph::MinCostFlow<long\
+    \ long, long long> negative(3);\n    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1,\
+    \ 2, 1, 2);\n    negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0,\
+    \ 2, 2);\n    assert((slope == std::vector<std::pair<long long, long long>>{{0,\
+    \ 0}, {1, -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n  \
+    \  test_edge_alive();\n    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n\
+    \    test_bellman_ford();\n    test_dag_shortest_path();\n    test_warshall_floyd();\n\
+    \    test_topological_sort();\n    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
     \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    test_max_flow();\n\
-    \    test_min_cost_flow();\n\n    long long a, b;\n    std::cin >> a >> b;\n \
-    \   std::cout << a + b << '\\n';\n}\n"
+    \    test_bounded_flow();\n    test_bounded_min_cost_flow();\n    test_min_cost_flow();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <set>\n#include <string>\n#include\
     \ <vector>\n\n#include \"graph/all.hpp\"\n\nusing m1une::graph::Graph;\n\nvoid\
@@ -954,32 +1135,89 @@ data:
     \ && e.flow <= e.cap);\n    }\n    assert(outgoing == 3);\n    assert(mf.get_edge(e0).cap\
     \ == 2);\n\n    auto cut = mf.min_cut(0);\n    assert(cut[0]);\n    assert(!cut[3]);\n\
     \n    mf.change_edge(e0, 3, 1);\n    auto changed = mf.get_edge(e0);\n    assert(changed.cap\
-    \ == 3);\n    assert(changed.flow == 1);\n}\n\nvoid test_min_cost_flow() {\n \
-    \   m1une::graph::MinCostFlow<long long, long long> mcf(4);\n    mcf.add_edge(0,\
-    \ 1, 2, 1);\n    mcf.add_edge(0, 2, 1, 2);\n    mcf.add_edge(1, 2, 1, 0);\n  \
-    \  mcf.add_edge(1, 3, 1, 3);\n    mcf.add_edge(2, 3, 2, 1);\n\n    auto result\
-    \ = mcf.flow(0, 3, 2);\n    assert(result.first == 2);\n    assert(result.second\
-    \ == 5);\n    auto edges = mcf.edges();\n    long long total_source_flow = 0;\n\
-    \    for (const auto& e : edges) {\n        if (e.from == 0) total_source_flow\
-    \ += e.flow;\n        assert(0 <= e.flow && e.flow <= e.cap);\n    }\n    assert(total_source_flow\
-    \ == 2);\n\n    m1une::graph::MinCostFlow<long long, long long> negative(3);\n\
-    \    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1, 2, 1, 2);\n   \
-    \ negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0, 2, 2);\n\
-    \    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1,\
-    \ -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n    test_edge_alive();\n\
-    \    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n\
-    \    test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
-    \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
+    \ == 3);\n    assert(changed.flow == 1);\n}\n\nvoid test_bounded_flow() {\n  \
+    \  m1une::graph::BoundedFlow<long long> st(4);\n    int a = st.add_edge(0, 1,\
+    \ 1, 3);\n    int b = st.add_edge(0, 2, 0, 2);\n    int c = st.add_edge(1, 3,\
+    \ 1, 2);\n    int d = st.add_edge(2, 3, 0, 2);\n    int e = st.add_edge(1, 2,\
+    \ 0, 1);\n    (void)a;\n    (void)b;\n    (void)c;\n    (void)d;\n    (void)e;\n\
+    \n    auto exact = st.feasible_st_flow(0, 3, 3);\n    assert(exact.has_value());\n\
+    \    std::vector<long long> balance(4, 0);\n    for (const auto& edge : exact->edges)\
+    \ {\n        assert(edge.lower <= edge.flow && edge.flow <= edge.upper);\n   \
+    \     balance[edge.from] += edge.flow;\n        balance[edge.to] -= edge.flow;\n\
+    \    }\n    assert((balance == std::vector<long long>{3, 0, 0, -3}));\n\n    auto\
+    \ too_much = st.feasible_st_flow(0, 3, 6);\n    assert(!too_much.has_value());\n\
+    \n    m1une::graph::BoundedFlow<long long> bf(3);\n    int f01 = bf.add_edge(0,\
+    \ 1, 1, 3);\n    int f02 = bf.add_edge(0, 2, 0, 4);\n    bf.add_edge(1, 2, 0,\
+    \ 2);\n    bf.add_supply(0, 4);\n    bf.add_demand(1, 1);\n    bf.add_demand(2,\
+    \ 3);\n    assert(bf.balance(0) == 4);\n    auto bflow = bf.feasible_flow();\n\
+    \    assert(bflow.has_value());\n    assert(bflow->get_edge(f01).flow >= 1);\n\
+    \    assert(bflow->get_edge(f02).flow >= 0);\n    std::vector<long long> b_balance(3,\
+    \ 0);\n    for (const auto& edge : bflow->edges) {\n        assert(edge.lower\
+    \ <= edge.flow && edge.flow <= edge.upper);\n        b_balance[edge.from] += edge.flow;\n\
+    \        b_balance[edge.to] -= edge.flow;\n    }\n    assert((b_balance == std::vector<long\
+    \ long>{4, -1, -3}));\n\n    m1une::graph::BoundedFlow<long long> negative(2);\n\
+    \    int neg = negative.add_edge(0, 1, -5, 5);\n    negative.add_demand(0, 3);\n\
+    \    negative.add_supply(1, 3);\n    auto negative_flow = negative.feasible_flow();\n\
+    \    assert(negative_flow.has_value());\n    assert(negative_flow->flow(neg) ==\
+    \ -3);\n\n    m1une::graph::BoundedFlow<long long> impossible(2);\n    impossible.add_edge(0,\
+    \ 1, 0, 1);\n    impossible.add_supply(0, 2);\n    impossible.add_demand(1, 2);\n\
+    \    assert(!impossible.feasible_flow().has_value());\n\n    m1une::graph::BFlow<long\
+    \ long> alias(1);\n    assert(alias.size() == 1);\n}\n\nvoid test_bounded_min_cost_flow()\
+    \ {\n    m1une::graph::BoundedMinCostFlow<long long, long long> st(3);\n    int\
+    \ e01 = st.add_edge(0, 1, 1, 3, 2);\n    int e12 = st.add_edge(1, 2, 1, 3, 1);\n\
+    \    int e02 = st.add_edge(0, 2, 0, 3, 10);\n\n    auto exact = st.min_cost_st_flow(0,\
+    \ 2, 3);\n    assert(exact.has_value());\n    assert(exact->cost == 9);\n    assert(exact->flow(e01)\
+    \ == 3);\n    assert(exact->flow(e12) == 3);\n    assert(exact->flow(e02) == 0);\n\
+    \    std::vector<long long> balance(3, 0);\n    for (const auto& edge : exact->edges)\
+    \ {\n        assert(edge.lower <= edge.flow && edge.flow <= edge.upper);\n   \
+    \     balance[edge.from] += edge.flow;\n        balance[edge.to] -= edge.flow;\n\
+    \    }\n    assert((balance == std::vector<long long>{3, 0, -3}));\n\n    m1une::graph::BoundedMinCostFlow<long\
+    \ long, long long> bf(3);\n    int p01 = bf.add_edge(0, 1, 0, 2, 1);\n    int\
+    \ p12 = bf.add_edge(1, 2, 0, 2, 1);\n    int p02 = bf.add_edge(0, 2, 0, 2, 5);\n\
+    \    bf.add_supply(0, 2);\n    bf.add_demand(2, 2);\n    auto bflow = bf.min_cost_flow();\n\
+    \    assert(bflow.has_value());\n    assert(bflow->cost == 4);\n    assert(bflow->flow(p01)\
+    \ == 2);\n    assert(bflow->flow(p12) == 2);\n    assert(bflow->flow(p02) == 0);\n\
+    \n    m1une::graph::BoundedMinCostFlow<long long, long long> negative(2);\n  \
+    \  int neg = negative.add_edge(0, 1, -5, 5, 2);\n    negative.add_demand(0, 3);\n\
+    \    negative.add_supply(1, 3);\n    auto negative_flow = negative.min_cost_flow();\n\
+    \    assert(negative_flow.has_value());\n    assert(negative_flow->flow(neg) ==\
+    \ -3);\n    assert(negative_flow->cost == -6);\n\n    m1une::graph::BoundedMinCostFlow<long\
+    \ long, long long> cycle(2);\n    int c01 = cycle.add_edge(0, 1, 0, 1, -5);\n\
+    \    int c10 = cycle.add_edge(1, 0, 0, 1, 3);\n    auto circulation = cycle.min_cost_flow();\n\
+    \    assert(circulation.has_value());\n    assert(circulation->flow(c01) == 1);\n\
+    \    assert(circulation->flow(c10) == 1);\n    assert(circulation->cost == -2);\n\
+    \n    m1une::graph::BoundedMinCostFlow<long long, long long> impossible(2);\n\
+    \    impossible.add_edge(0, 1, 0, 1, 0);\n    impossible.add_supply(0, 2);\n \
+    \   impossible.add_demand(1, 2);\n    assert(!impossible.min_cost_flow().has_value());\n\
+    \n    m1une::graph::BMinCostFlow<long long, long long> alias(1);\n    assert(alias.size()\
+    \ == 1);\n}\n\nvoid test_min_cost_flow() {\n    m1une::graph::MinCostFlow<long\
+    \ long, long long> mcf(4);\n    mcf.add_edge(0, 1, 2, 1);\n    mcf.add_edge(0,\
+    \ 2, 1, 2);\n    mcf.add_edge(1, 2, 1, 0);\n    mcf.add_edge(1, 3, 1, 3);\n  \
+    \  mcf.add_edge(2, 3, 2, 1);\n\n    auto result = mcf.flow(0, 3, 2);\n    assert(result.first\
+    \ == 2);\n    assert(result.second == 5);\n    auto edges = mcf.edges();\n   \
+    \ long long total_source_flow = 0;\n    for (const auto& e : edges) {\n      \
+    \  if (e.from == 0) total_source_flow += e.flow;\n        assert(0 <= e.flow &&\
+    \ e.flow <= e.cap);\n    }\n    assert(total_source_flow == 2);\n\n    m1une::graph::MinCostFlow<long\
+    \ long, long long> negative(3);\n    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1,\
+    \ 2, 1, 2);\n    negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0,\
+    \ 2, 2);\n    assert((slope == std::vector<std::pair<long long, long long>>{{0,\
+    \ 0}, {1, -3}, {2, 7}}));\n}\n\nint main() {\n    test_graph_container();\n  \
+    \  test_edge_alive();\n    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n\
+    \    test_bellman_ford();\n    test_dag_shortest_path();\n    test_warshall_floyd();\n\
+    \    test_topological_sort();\n    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
     \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    test_max_flow();\n\
-    \    test_min_cost_flow();\n\n    long long a, b;\n    std::cin >> a >> b;\n \
-    \   std::cout << a + b << '\\n';\n}\n"
+    \    test_bounded_flow();\n    test_bounded_min_cost_flow();\n    test_min_cost_flow();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   dependsOn:
   - graph/all.hpp
   - graph/directed.hpp
   - graph/cycle_detection.hpp
   - graph/graph.hpp
   - graph/flow.hpp
+  - graph/bounded_flow.hpp
   - graph/max_flow.hpp
+  - graph/bounded_min_cost_flow.hpp
   - graph/min_cost_flow.hpp
   - graph/scc.hpp
   - graph/shortest_path.hpp
@@ -1000,7 +1238,7 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-16 02:32:54+09:00'
+  timestamp: '2026-06-16 02:49:24+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp

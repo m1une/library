@@ -6,6 +6,9 @@ data:
     path: graph/all.hpp
     title: Graph All
   - icon: ':heavy_check_mark:'
+    path: graph/bounded_min_cost_flow.hpp
+    title: Bounded Min Cost Flow
+  - icon: ':heavy_check_mark:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
   - icon: ':heavy_check_mark:'
@@ -163,6 +166,7 @@ data:
   path: graph/min_cost_flow.hpp
   requiredBy:
   - graph/flow.hpp
+  - graph/bounded_min_cost_flow.hpp
   - graph/all.hpp
   - graph/directed.hpp
   timestamp: '2026-06-16 02:14:00+09:00'

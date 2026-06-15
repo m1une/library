@@ -6,6 +6,9 @@ data:
     path: graph/all.hpp
     title: Graph All
   - icon: ':heavy_check_mark:'
+    path: graph/bounded_flow.hpp
+    title: Bounded Flow
+  - icon: ':heavy_check_mark:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
   - icon: ':heavy_check_mark:'
@@ -143,6 +146,7 @@ data:
   - graph/flow.hpp
   - graph/all.hpp
   - graph/directed.hpp
+  - graph/bounded_flow.hpp
   timestamp: '2026-06-16 02:14:00+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

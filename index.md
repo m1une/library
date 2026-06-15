@@ -164,6 +164,12 @@ data:
       path: graph/bipartite.hpp
       title: Bipartite Graph
     - icon: ':heavy_check_mark:'
+      path: graph/bounded_flow.hpp
+      title: Bounded Flow
+    - icon: ':heavy_check_mark:'
+      path: graph/bounded_min_cost_flow.hpp
+      title: Bounded Min Cost Flow
+    - icon: ':heavy_check_mark:'
       path: graph/connected_components.hpp
       title: Connected Components
     - icon: ':heavy_check_mark:'
