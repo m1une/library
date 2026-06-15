@@ -60,7 +60,7 @@ data:
     title: Max Flow
   - icon: ':heavy_check_mark:'
     path: graph/maximum_clique.hpp
-    title: Maximum Clique and Independent Set
+    title: Maximum Clique, Independent Set, and Vertex Cover
   - icon: ':heavy_check_mark:'
     path: graph/min_cost_flow.hpp
     title: Min Cost Flow
@@ -1058,82 +1058,136 @@ data:
     \    }\n\n    bool empty() const {\n        return vertices.empty();\n    }\n\
     };\n\nstruct MaximumIndependentSetResult {\n    std::vector<int> vertices;\n\n\
     \    int size() const {\n        return int(vertices.size());\n    }\n\n    bool\
-    \ empty() const {\n        return vertices.empty();\n    }\n};\n\nnamespace detail\
-    \ {\n\nstruct MaximumCliqueBranchAndBound {\n    using Word = unsigned long long;\n\
-    \n    int n;\n    int word_count;\n    std::vector<std::vector<Word>> adjacent;\n\
-    \    std::vector<int> current;\n    std::vector<int> best;\n\n    explicit MaximumCliqueBranchAndBound(int\
-    \ n_)\n        : n(n_), word_count((n_ + 63) / 64), adjacent(n_, std::vector<Word>(word_count,\
-    \ Word(0))) {}\n\n    static int lowbit_index(Word x) {\n        return __builtin_ctzll(x);\n\
-    \    }\n\n    bool empty_bits(const std::vector<Word>& bits) const {\n       \
-    \ for (Word x : bits) {\n            if (x != Word(0)) return false;\n       \
-    \ }\n        return true;\n    }\n\n    int first_vertex(const std::vector<Word>&\
-    \ bits) const {\n        for (int i = 0; i < word_count; i++) {\n            if\
-    \ (bits[i] != Word(0)) return i * 64 + lowbit_index(bits[i]);\n        }\n   \
-    \     return -1;\n    }\n\n    void set_bit(std::vector<Word>& bits, int v) const\
-    \ {\n        bits[v >> 6] |= Word(1) << (v & 63);\n    }\n\n    void clear_bit(std::vector<Word>&\
-    \ bits, int v) const {\n        bits[v >> 6] &= ~(Word(1) << (v & 63));\n    }\n\
-    \n    bool test_bit(const std::vector<Word>& bits, int v) const {\n        return\
-    \ (bits[v >> 6] >> (v & 63)) & Word(1);\n    }\n\n    void add_edge(int u, int\
-    \ v) {\n        assert(0 <= u && u < n);\n        assert(0 <= v && v < n);\n \
-    \       assert(u != v);\n        adjacent[u][v >> 6] |= Word(1) << (v & 63);\n\
-    \        adjacent[v][u >> 6] |= Word(1) << (u & 63);\n    }\n\n    std::vector<Word>\
-    \ intersect(const std::vector<Word>& a, const std::vector<Word>& b) const {\n\
-    \        std::vector<Word> result(word_count);\n        for (int i = 0; i < word_count;\
-    \ i++) result[i] = a[i] & b[i];\n        return result;\n    }\n\n    void greedy_color(const\
-    \ std::vector<Word>& candidates, std::vector<int>& order, std::vector<int>& color)\
-    \ const {\n        order.clear();\n        color.clear();\n\n        std::vector<Word>\
-    \ remaining = candidates;\n        int color_count = 0;\n        while (!empty_bits(remaining))\
-    \ {\n            color_count++;\n            std::vector<Word> available = remaining;\n\
-    \            while (!empty_bits(available)) {\n                int v = first_vertex(available);\n\
-    \                order.push_back(v);\n                color.push_back(color_count);\n\
-    \n                clear_bit(remaining, v);\n                clear_bit(available,\
-    \ v);\n                for (int i = 0; i < word_count; i++) available[i] &= ~adjacent[v][i];\n\
-    \            }\n        }\n    }\n\n    void expand(std::vector<Word> candidates)\
-    \ {\n        if (empty_bits(candidates)) {\n            if (current.size() > best.size())\
-    \ best = current;\n            return;\n        }\n\n        std::vector<int>\
-    \ order, color;\n        greedy_color(candidates, order, color);\n\n        for\
-    \ (int i = int(order.size()) - 1; i >= 0; i--) {\n            if (int(current.size())\
-    \ + color[i] <= int(best.size())) return;\n\n            int v = order[i];\n \
-    \           if (!test_bit(candidates, v)) continue;\n\n            current.push_back(v);\n\
-    \            auto next = intersect(candidates, adjacent[v]);\n            expand(next);\n\
-    \            current.pop_back();\n\n            clear_bit(candidates, v);\n  \
-    \      }\n    }\n\n    std::vector<int> solve() {\n        std::vector<Word> candidates(word_count,\
-    \ Word(0));\n        for (int v = 0; v < n; v++) set_bit(candidates, v);\n   \
-    \     expand(candidates);\n        std::sort(best.begin(), best.end());\n    \
-    \    return best;\n    }\n};\n\ntemplate <class T>\nstd::vector<std::vector<char>>\
-    \ undirected_adjacency_matrix(const Graph<T>& g) {\n    int n = g.size();\n  \
-    \  std::vector<std::vector<char>> adjacent(n, std::vector<char>(n, false));\n\
-    \    for (const auto& e : g.edges()) {\n        if (e.from == e.to) continue;\n\
-    \        adjacent[e.from][e.to] = true;\n        adjacent[e.to][e.from] = true;\n\
-    \    }\n    return adjacent;\n}\n\n}  // namespace detail\n\ntemplate <class T>\n\
-    bool is_clique(const Graph<T>& g, const std::vector<int>& vertices) {\n    auto\
-    \ adjacent = detail::undirected_adjacency_matrix(g);\n    for (int v : vertices)\
-    \ {\n        assert(0 <= v && v < g.size());\n    }\n    for (int i = 0; i < int(vertices.size());\
-    \ i++) {\n        for (int j = i + 1; j < int(vertices.size()); j++) {\n     \
-    \       if (!adjacent[vertices[i]][vertices[j]]) return false;\n        }\n  \
-    \  }\n    return true;\n}\n\ntemplate <class T>\nbool is_independent_set(const\
+    \ empty() const {\n        return vertices.empty();\n    }\n};\n\nstruct MinimumVertexCoverResult\
+    \ {\n    std::vector<int> vertices;\n\n    int size() const {\n        return\
+    \ int(vertices.size());\n    }\n\n    bool empty() const {\n        return vertices.empty();\n\
+    \    }\n};\n\nnamespace detail {\n\nstruct MaximumIndependentSetBranching {\n\
+    \    int n;\n    std::vector<std::vector<char>> adjacent;\n    std::vector<std::vector<int>>\
+    \ graph;\n\n    explicit MaximumIndependentSetBranching(const std::vector<std::vector<char>>&\
+    \ adjacent_)\n        : n(int(adjacent_.size())), adjacent(adjacent_), graph(n)\
+    \ {\n        for (int v = 0; v < n; v++) {\n            for (int to = 0; to <\
+    \ n; to++) {\n                if (adjacent[v][to]) graph[v].push_back(to);\n \
+    \           }\n        }\n    }\n\n    std::vector<int> solve_path(const std::vector<int>&\
+    \ order) const {\n        int m = int(order.size());\n        if (m == 0) return\
+    \ {};\n\n        std::vector<int> dp0(m, 0), dp1(m, 0);\n        dp1[0] = 1;\n\
+    \        for (int i = 1; i < m; i++) {\n            dp0[i] = std::max(dp0[i -\
+    \ 1], dp1[i - 1]);\n            dp1[i] = dp0[i - 1] + 1;\n        }\n\n      \
+    \  std::vector<int> result;\n        int state = (dp1[m - 1] > dp0[m - 1] ? 1\
+    \ : 0);\n        for (int i = m - 1; i >= 0; i--) {\n            if (state ==\
+    \ 1) {\n                result.push_back(order[i]);\n                state = 0;\n\
+    \            } else if (i > 0) {\n                state = (dp1[i - 1] > dp0[i\
+    \ - 1] ? 1 : 0);\n            }\n        }\n        return result;\n    }\n\n\
+    \    std::vector<int> solve_cycle(const std::vector<int>& order) const {\n   \
+    \     int m = int(order.size());\n        if (m == 0) return {};\n        if (m\
+    \ == 1) return {order[0]};\n\n        std::vector<int> without_first(order.begin()\
+    \ + 1, order.end());\n        auto result_without = solve_path(without_first);\n\
+    \n        std::vector<int> result_with = {order[0]};\n        if (m >= 4) {\n\
+    \            std::vector<int> middle(order.begin() + 2, order.end() - 1);\n  \
+    \          auto middle_result = solve_path(middle);\n            result_with.insert(result_with.end(),\
+    \ middle_result.begin(), middle_result.end());\n        }\n\n        return (result_with.size()\
+    \ > result_without.size() ? result_with : result_without);\n    }\n\n    std::vector<int>\
+    \ solve_degree_at_most_two(const std::vector<char>& active,\n                \
+    \                              const std::vector<int>& degree) const {\n     \
+    \   std::vector<int> result;\n        std::vector<char> visited(n, false);\n\n\
+    \        for (int s = 0; s < n; s++) {\n            if (!active[s] || visited[s])\
+    \ continue;\n\n            std::vector<int> component;\n            std::vector<int>\
+    \ stack = {s};\n            visited[s] = true;\n            for (int it = 0; it\
+    \ < int(stack.size()); it++) {\n                int v = stack[it];\n         \
+    \       component.push_back(v);\n                for (int to : graph[v]) {\n \
+    \                   if (!active[to] || visited[to]) continue;\n              \
+    \      visited[to] = true;\n                    stack.push_back(to);\n       \
+    \         }\n            }\n\n            if (component.size() == 1) {\n     \
+    \           result.push_back(component[0]);\n                continue;\n     \
+    \       }\n\n            int endpoint = -1;\n            for (int v : component)\
+    \ {\n                if (degree[v] <= 1) {\n                    endpoint = v;\n\
+    \                    break;\n                }\n            }\n\n            std::vector<int>\
+    \ order;\n            if (endpoint != -1) {\n                int prev = -1, cur\
+    \ = endpoint;\n                while (cur != -1) {\n                    order.push_back(cur);\n\
+    \                    int next = -1;\n                    for (int to : graph[cur])\
+    \ {\n                        if (active[to] && to != prev) {\n               \
+    \             next = to;\n                            break;\n               \
+    \         }\n                    }\n                    prev = cur;\n        \
+    \            cur = next;\n                }\n                auto part = solve_path(order);\n\
+    \                result.insert(result.end(), part.begin(), part.end());\n    \
+    \        } else {\n                int start = component[0];\n               \
+    \ int first = -1;\n                for (int to : graph[start]) {\n           \
+    \         if (active[to]) {\n                        first = to;\n           \
+    \             break;\n                    }\n                }\n             \
+    \   assert(first != -1);\n\n                order.push_back(start);\n        \
+    \        int prev = start, cur = first;\n                while (cur != start)\
+    \ {\n                    order.push_back(cur);\n                    int next =\
+    \ -1;\n                    for (int to : graph[cur]) {\n                     \
+    \   if (active[to] && to != prev) {\n                            next = to;\n\
+    \                            break;\n                        }\n             \
+    \       }\n                    assert(next != -1);\n                    prev =\
+    \ cur;\n                    cur = next;\n                }\n                auto\
+    \ part = solve_cycle(order);\n                result.insert(result.end(), part.begin(),\
+    \ part.end());\n            }\n        }\n\n        return result;\n    }\n\n\
+    \    std::vector<int> solve(std::vector<char> active) const {\n        int active_count\
+    \ = 0;\n        int max_degree = -1;\n        int branch_vertex = -1;\n      \
+    \  std::vector<int> degree(n, 0);\n\n        for (int v = 0; v < n; v++) {\n \
+    \           if (!active[v]) continue;\n            active_count++;\n         \
+    \   for (int to : graph[v]) {\n                if (active[to]) degree[v]++;\n\
+    \            }\n            if (degree[v] > max_degree) {\n                max_degree\
+    \ = degree[v];\n                branch_vertex = v;\n            }\n        }\n\
+    \n        if (active_count == 0) return {};\n        if (max_degree <= 2) {\n\
+    \            auto result = solve_degree_at_most_two(active, degree);\n       \
+    \     std::sort(result.begin(), result.end());\n            return result;\n \
+    \       }\n\n        auto without = active;\n        without[branch_vertex] =\
+    \ false;\n        auto result_without = solve(without);\n\n        auto with =\
+    \ active;\n        with[branch_vertex] = false;\n        for (int to : graph[branch_vertex])\
+    \ with[to] = false;\n        auto result_with = solve(with);\n        result_with.push_back(branch_vertex);\n\
+    \n        auto result = (result_with.size() > result_without.size() ? result_with\
+    \ : result_without);\n        std::sort(result.begin(), result.end());\n     \
+    \   return result;\n    }\n\n    std::vector<int> solve() const {\n        std::vector<char>\
+    \ active(n, true);\n        return solve(active);\n    }\n};\n\ntemplate <class\
+    \ T>\nstd::vector<std::vector<char>> undirected_adjacency_matrix(const Graph<T>&\
+    \ g) {\n    int n = g.size();\n    std::vector<std::vector<char>> adjacent(n,\
+    \ std::vector<char>(n, false));\n    for (const auto& e : g.edges()) {\n     \
+    \   if (e.from == e.to) continue;\n        adjacent[e.from][e.to] = true;\n  \
+    \      adjacent[e.to][e.from] = true;\n    }\n    return adjacent;\n}\n\nstd::vector<std::vector<char>>\
+    \ complement_adjacency_matrix(const std::vector<std::vector<char>>& adjacent)\
+    \ {\n    int n = int(adjacent.size());\n    std::vector<std::vector<char>> complement(n,\
+    \ std::vector<char>(n, false));\n    for (int i = 0; i < n; i++) {\n        for\
+    \ (int j = i + 1; j < n; j++) {\n            if (adjacent[i][j]) continue;\n \
+    \           complement[i][j] = true;\n            complement[j][i] = true;\n \
+    \       }\n    }\n    return complement;\n}\n\n}  // namespace detail\n\ntemplate\
+    \ <class T>\nbool is_clique(const Graph<T>& g, const std::vector<int>& vertices)\
+    \ {\n    auto adjacent = detail::undirected_adjacency_matrix(g);\n    for (int\
+    \ v : vertices) {\n        assert(0 <= v && v < g.size());\n    }\n    for (int\
+    \ i = 0; i < int(vertices.size()); i++) {\n        for (int j = i + 1; j < int(vertices.size());\
+    \ j++) {\n            if (!adjacent[vertices[i]][vertices[j]]) return false;\n\
+    \        }\n    }\n    return true;\n}\n\ntemplate <class T>\nbool is_independent_set(const\
     \ Graph<T>& g, const std::vector<int>& vertices) {\n    auto adjacent = detail::undirected_adjacency_matrix(g);\n\
     \    for (int v : vertices) {\n        assert(0 <= v && v < g.size());\n    }\n\
     \    for (int i = 0; i < int(vertices.size()); i++) {\n        for (int j = i\
     \ + 1; j < int(vertices.size()); j++) {\n            if (adjacent[vertices[i]][vertices[j]])\
     \ return false;\n        }\n    }\n    return true;\n}\n\ntemplate <class T>\n\
-    MaximumCliqueResult maximum_clique(const Graph<T>& g) {\n    auto adjacent = detail::undirected_adjacency_matrix(g);\n\
-    \    detail::MaximumCliqueBranchAndBound solver(g.size());\n    for (int i = 0;\
-    \ i < g.size(); i++) {\n        for (int j = i + 1; j < g.size(); j++) {\n   \
-    \         if (adjacent[i][j]) solver.add_edge(i, j);\n        }\n    }\n    return\
-    \ MaximumCliqueResult{solver.solve()};\n}\n\ntemplate <class T>\nint maximum_clique_size(const\
-    \ Graph<T>& g) {\n    return maximum_clique(g).size();\n}\n\ntemplate <class T>\n\
-    MaximumIndependentSetResult maximum_independent_set(const Graph<T>& g) {\n   \
-    \ auto adjacent = detail::undirected_adjacency_matrix(g);\n    detail::MaximumCliqueBranchAndBound\
-    \ solver(g.size());\n    for (int i = 0; i < g.size(); i++) {\n        for (int\
-    \ j = i + 1; j < g.size(); j++) {\n            if (!adjacent[i][j]) solver.add_edge(i,\
-    \ j);\n        }\n    }\n    return MaximumIndependentSetResult{solver.solve()};\n\
+    bool is_vertex_cover(const Graph<T>& g, const std::vector<int>& vertices) {\n\
+    \    std::vector<char> selected(g.size(), false);\n    for (int v : vertices)\
+    \ {\n        assert(0 <= v && v < g.size());\n        selected[v] = true;\n  \
+    \  }\n    for (const auto& e : g.edges()) {\n        if (e.from == e.to) continue;\n\
+    \        if (!selected[e.from] && !selected[e.to]) return false;\n    }\n    return\
+    \ true;\n}\n\ntemplate <class T>\nMaximumCliqueResult maximum_clique(const Graph<T>&\
+    \ g) {\n    auto adjacent = detail::undirected_adjacency_matrix(g);\n    auto\
+    \ complement = detail::complement_adjacency_matrix(adjacent);\n    detail::MaximumIndependentSetBranching\
+    \ solver(complement);\n    return MaximumCliqueResult{solver.solve()};\n}\n\n\
+    template <class T>\nint maximum_clique_size(const Graph<T>& g) {\n    return maximum_clique(g).size();\n\
+    }\n\ntemplate <class T>\nMaximumIndependentSetResult maximum_independent_set(const\
+    \ Graph<T>& g) {\n    auto adjacent = detail::undirected_adjacency_matrix(g);\n\
+    \    detail::MaximumIndependentSetBranching solver(adjacent);\n    return MaximumIndependentSetResult{solver.solve()};\n\
     }\n\ntemplate <class T>\nint maximum_independent_set_size(const Graph<T>& g) {\n\
-    \    return maximum_independent_set(g).size();\n}\n\n}  // namespace graph\n}\
-    \  // namespace m1une\n\n\n#line 14 \"graph/undirected.hpp\"\n\n\n#line 10 \"\
-    graph/all.hpp\"\n\n\n#line 11 \"verify/graph/graph_algorithms.test.cpp\"\n\nusing\
-    \ m1une::graph::Graph;\n\nvoid test_graph_container() {\n    Graph<int> g(2);\n\
-    \    assert(g.size() == 2);\n    int added = g.add_vertex();\n    assert(added\
+    \    return maximum_independent_set(g).size();\n}\n\ntemplate <class T>\nMinimumVertexCoverResult\
+    \ minimum_vertex_cover(const Graph<T>& g) {\n    auto independent = maximum_independent_set(g);\n\
+    \    std::vector<char> in_independent(g.size(), false);\n    for (int v : independent.vertices)\
+    \ in_independent[v] = true;\n\n    MinimumVertexCoverResult result;\n    for (int\
+    \ v = 0; v < g.size(); v++) {\n        if (!in_independent[v]) result.vertices.push_back(v);\n\
+    \    }\n    return result;\n}\n\ntemplate <class T>\nint minimum_vertex_cover_size(const\
+    \ Graph<T>& g) {\n    return minimum_vertex_cover(g).size();\n}\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n\n#line 14 \"graph/undirected.hpp\"\n\n\n#line\
+    \ 10 \"graph/all.hpp\"\n\n\n#line 11 \"verify/graph/graph_algorithms.test.cpp\"\
+    \n\nusing m1une::graph::Graph;\n\nvoid test_graph_container() {\n    Graph<int>\
+    \ g(2);\n    assert(g.size() == 2);\n    int added = g.add_vertex();\n    assert(added\
     \ == 2);\n    int e0 = g.add_directed_edge(0, 1, 4);\n    int e1 = g.add_edge(1,\
     \ 2, 5);\n    assert(e0 == 0);\n    assert(e1 == 1);\n    assert(g.edge_count()\
     \ == 2);\n    assert(g[1].size() == 1);\n    assert(g.edges().size() == 2);\n\
@@ -1293,27 +1347,40 @@ data:
     \ == 4);\n\n    auto independent = m1une::graph::maximum_independent_set(g);\n\
     \    assert(independent.size() == 4);\n    assert((independent.vertices == std::vector<int>{3,\
     \ 4, 5, 6}));\n    assert(m1une::graph::is_independent_set(g, independent.vertices));\n\
-    \    assert(m1une::graph::maximum_independent_set_size(g) == 4);\n\n    assert(!m1une::graph::is_clique(g,\
-    \ std::vector<int>{0, 2, 4}));\n    assert(!m1une::graph::is_independent_set(g,\
-    \ std::vector<int>{4, 0}));\n\n    g.erase_edge(removed_clique_edge);\n    assert(m1une::graph::maximum_clique_size(g)\
+    \    assert(m1une::graph::maximum_independent_set_size(g) == 4);\n\n    auto cover\
+    \ = m1une::graph::minimum_vertex_cover(g);\n    assert(cover.size() == 3);\n \
+    \   assert((cover.vertices == std::vector<int>{0, 1, 2}));\n    assert(m1une::graph::is_vertex_cover(g,\
+    \ cover.vertices));\n    assert(m1une::graph::minimum_vertex_cover_size(g) ==\
+    \ 3);\n\n    assert(!m1une::graph::is_clique(g, std::vector<int>{0, 2, 4}));\n\
+    \    assert(!m1une::graph::is_independent_set(g, std::vector<int>{4, 0}));\n \
+    \   assert(!m1une::graph::is_vertex_cover(g, std::vector<int>{0, 1}));\n\n   \
+    \ g.erase_edge(removed_clique_edge);\n    assert(m1une::graph::maximum_clique_size(g)\
     \ == 3);\n    g.revive_edge(removed_clique_edge);\n    assert(m1une::graph::maximum_clique_size(g)\
     \ == 4);\n\n    Graph<int> directed(3);\n    directed.add_directed_edge(0, 1);\n\
     \    directed.add_directed_edge(1, 2);\n    auto directed_clique = m1une::graph::maximum_clique(directed);\n\
     \    auto directed_independent = m1une::graph::maximum_independent_set(directed);\n\
-    \    assert(directed_clique.size() == 2);\n    assert(directed_independent.size()\
+    \    auto directed_cover = m1une::graph::minimum_vertex_cover(directed);\n   \
+    \ assert(directed_clique.size() == 2);\n    assert(directed_independent.size()\
     \ == 2);\n    assert((directed_independent.vertices == std::vector<int>{0, 2}));\n\
-    \n    Graph<int> empty(4);\n    assert(m1une::graph::maximum_clique_size(empty)\
-    \ == 1);\n    assert(m1une::graph::maximum_independent_set_size(empty) == 4);\n\
-    \n    Graph<int> none(0);\n    assert(m1une::graph::maximum_clique(none).empty());\n\
-    \    assert(m1une::graph::maximum_independent_set(none).empty());\n}\n\nvoid test_cycle_detection()\
-    \ {\n    Graph<int> dg(3);\n    dg.add_directed_edge(0, 1);\n    dg.add_directed_edge(1,\
-    \ 2);\n    dg.add_directed_edge(2, 0);\n    auto directed = m1une::graph::find_directed_cycle(dg);\n\
-    \    assert(!directed.empty());\n    assert(directed.vertices.front() == directed.vertices.back());\n\
-    \    assert(directed.edge_ids.size() + 1 == directed.vertices.size());\n\n   \
-    \ Graph<int> ug(4);\n    ug.add_edge(0, 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2,\
-    \ 0);\n    ug.add_edge(2, 3);\n    auto undirected = m1une::graph::find_undirected_cycle(ug);\n\
-    \    assert(!undirected.empty());\n    assert(undirected.vertices.front() == undirected.vertices.back());\n\
-    }\n\nvoid test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
+    \    assert((directed_cover.vertices == std::vector<int>{1}));\n\n    Graph<int>\
+    \ empty(4);\n    assert(m1une::graph::maximum_clique_size(empty) == 1);\n    assert(m1une::graph::maximum_independent_set_size(empty)\
+    \ == 4);\n    assert(m1une::graph::minimum_vertex_cover(empty).empty());\n\n \
+    \   Graph<int> path(6);\n    for (int i = 0; i + 1 < 6; i++) path.add_edge(i,\
+    \ i + 1);\n    assert(m1une::graph::maximum_independent_set_size(path) == 3);\n\
+    \    assert(m1une::graph::minimum_vertex_cover_size(path) == 3);\n\n    Graph<int>\
+    \ cycle(5);\n    for (int i = 0; i < 5; i++) cycle.add_edge(i, (i + 1) % 5);\n\
+    \    assert(m1une::graph::maximum_independent_set_size(cycle) == 2);\n    assert(m1une::graph::minimum_vertex_cover_size(cycle)\
+    \ == 3);\n\n    Graph<int> none(0);\n    assert(m1une::graph::maximum_clique(none).empty());\n\
+    \    assert(m1une::graph::maximum_independent_set(none).empty());\n    assert(m1une::graph::minimum_vertex_cover(none).empty());\n\
+    }\n\nvoid test_cycle_detection() {\n    Graph<int> dg(3);\n    dg.add_directed_edge(0,\
+    \ 1);\n    dg.add_directed_edge(1, 2);\n    dg.add_directed_edge(2, 0);\n    auto\
+    \ directed = m1une::graph::find_directed_cycle(dg);\n    assert(!directed.empty());\n\
+    \    assert(directed.vertices.front() == directed.vertices.back());\n    assert(directed.edge_ids.size()\
+    \ + 1 == directed.vertices.size());\n\n    Graph<int> ug(4);\n    ug.add_edge(0,\
+    \ 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2, 0);\n    ug.add_edge(2, 3);\n\
+    \    auto undirected = m1une::graph::find_undirected_cycle(ug);\n    assert(!undirected.empty());\n\
+    \    assert(undirected.vertices.front() == undirected.vertices.back());\n}\n\n\
+    void test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
     \    g.add_edge(1, 2, 2);\n    g.add_edge(2, 3, 3);\n    g.add_edge(0, 3, 10);\n\
     \    g.add_edge(0, 2, 4);\n\n    auto mst = m1une::graph::kruskal(g);\n    assert(mst.cost\
     \ == 6);\n    assert(mst.edges.size() == 3);\n    assert(mst.components == 1);\n\
@@ -1582,27 +1649,40 @@ data:
     \ == 4);\n\n    auto independent = m1une::graph::maximum_independent_set(g);\n\
     \    assert(independent.size() == 4);\n    assert((independent.vertices == std::vector<int>{3,\
     \ 4, 5, 6}));\n    assert(m1une::graph::is_independent_set(g, independent.vertices));\n\
-    \    assert(m1une::graph::maximum_independent_set_size(g) == 4);\n\n    assert(!m1une::graph::is_clique(g,\
-    \ std::vector<int>{0, 2, 4}));\n    assert(!m1une::graph::is_independent_set(g,\
-    \ std::vector<int>{4, 0}));\n\n    g.erase_edge(removed_clique_edge);\n    assert(m1une::graph::maximum_clique_size(g)\
+    \    assert(m1une::graph::maximum_independent_set_size(g) == 4);\n\n    auto cover\
+    \ = m1une::graph::minimum_vertex_cover(g);\n    assert(cover.size() == 3);\n \
+    \   assert((cover.vertices == std::vector<int>{0, 1, 2}));\n    assert(m1une::graph::is_vertex_cover(g,\
+    \ cover.vertices));\n    assert(m1une::graph::minimum_vertex_cover_size(g) ==\
+    \ 3);\n\n    assert(!m1une::graph::is_clique(g, std::vector<int>{0, 2, 4}));\n\
+    \    assert(!m1une::graph::is_independent_set(g, std::vector<int>{4, 0}));\n \
+    \   assert(!m1une::graph::is_vertex_cover(g, std::vector<int>{0, 1}));\n\n   \
+    \ g.erase_edge(removed_clique_edge);\n    assert(m1une::graph::maximum_clique_size(g)\
     \ == 3);\n    g.revive_edge(removed_clique_edge);\n    assert(m1une::graph::maximum_clique_size(g)\
     \ == 4);\n\n    Graph<int> directed(3);\n    directed.add_directed_edge(0, 1);\n\
     \    directed.add_directed_edge(1, 2);\n    auto directed_clique = m1une::graph::maximum_clique(directed);\n\
     \    auto directed_independent = m1une::graph::maximum_independent_set(directed);\n\
-    \    assert(directed_clique.size() == 2);\n    assert(directed_independent.size()\
+    \    auto directed_cover = m1une::graph::minimum_vertex_cover(directed);\n   \
+    \ assert(directed_clique.size() == 2);\n    assert(directed_independent.size()\
     \ == 2);\n    assert((directed_independent.vertices == std::vector<int>{0, 2}));\n\
-    \n    Graph<int> empty(4);\n    assert(m1une::graph::maximum_clique_size(empty)\
-    \ == 1);\n    assert(m1une::graph::maximum_independent_set_size(empty) == 4);\n\
-    \n    Graph<int> none(0);\n    assert(m1une::graph::maximum_clique(none).empty());\n\
-    \    assert(m1une::graph::maximum_independent_set(none).empty());\n}\n\nvoid test_cycle_detection()\
-    \ {\n    Graph<int> dg(3);\n    dg.add_directed_edge(0, 1);\n    dg.add_directed_edge(1,\
-    \ 2);\n    dg.add_directed_edge(2, 0);\n    auto directed = m1une::graph::find_directed_cycle(dg);\n\
-    \    assert(!directed.empty());\n    assert(directed.vertices.front() == directed.vertices.back());\n\
-    \    assert(directed.edge_ids.size() + 1 == directed.vertices.size());\n\n   \
-    \ Graph<int> ug(4);\n    ug.add_edge(0, 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2,\
-    \ 0);\n    ug.add_edge(2, 3);\n    auto undirected = m1une::graph::find_undirected_cycle(ug);\n\
-    \    assert(!undirected.empty());\n    assert(undirected.vertices.front() == undirected.vertices.back());\n\
-    }\n\nvoid test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
+    \    assert((directed_cover.vertices == std::vector<int>{1}));\n\n    Graph<int>\
+    \ empty(4);\n    assert(m1une::graph::maximum_clique_size(empty) == 1);\n    assert(m1une::graph::maximum_independent_set_size(empty)\
+    \ == 4);\n    assert(m1une::graph::minimum_vertex_cover(empty).empty());\n\n \
+    \   Graph<int> path(6);\n    for (int i = 0; i + 1 < 6; i++) path.add_edge(i,\
+    \ i + 1);\n    assert(m1une::graph::maximum_independent_set_size(path) == 3);\n\
+    \    assert(m1une::graph::minimum_vertex_cover_size(path) == 3);\n\n    Graph<int>\
+    \ cycle(5);\n    for (int i = 0; i < 5; i++) cycle.add_edge(i, (i + 1) % 5);\n\
+    \    assert(m1une::graph::maximum_independent_set_size(cycle) == 2);\n    assert(m1une::graph::minimum_vertex_cover_size(cycle)\
+    \ == 3);\n\n    Graph<int> none(0);\n    assert(m1une::graph::maximum_clique(none).empty());\n\
+    \    assert(m1une::graph::maximum_independent_set(none).empty());\n    assert(m1une::graph::minimum_vertex_cover(none).empty());\n\
+    }\n\nvoid test_cycle_detection() {\n    Graph<int> dg(3);\n    dg.add_directed_edge(0,\
+    \ 1);\n    dg.add_directed_edge(1, 2);\n    dg.add_directed_edge(2, 0);\n    auto\
+    \ directed = m1une::graph::find_directed_cycle(dg);\n    assert(!directed.empty());\n\
+    \    assert(directed.vertices.front() == directed.vertices.back());\n    assert(directed.edge_ids.size()\
+    \ + 1 == directed.vertices.size());\n\n    Graph<int> ug(4);\n    ug.add_edge(0,\
+    \ 1);\n    ug.add_edge(1, 2);\n    ug.add_edge(2, 0);\n    ug.add_edge(2, 3);\n\
+    \    auto undirected = m1une::graph::find_undirected_cycle(ug);\n    assert(!undirected.empty());\n\
+    \    assert(undirected.vertices.front() == undirected.vertices.back());\n}\n\n\
+    void test_kruskal() {\n    Graph<long long> g(4);\n    g.add_edge(0, 1, 1);\n\
     \    g.add_edge(1, 2, 2);\n    g.add_edge(2, 3, 3);\n    g.add_edge(0, 3, 10);\n\
     \    g.add_edge(0, 2, 4);\n\n    auto mst = m1une::graph::kruskal(g);\n    assert(mst.cost\
     \ == 6);\n    assert(mst.edges.size() == 3);\n    assert(mst.components == 1);\n\
@@ -1739,7 +1819,7 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-16 03:14:40+09:00'
+  timestamp: '2026-06-16 03:28:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp

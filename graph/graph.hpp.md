@@ -43,7 +43,7 @@ data:
     title: LowLink
   - icon: ':heavy_check_mark:'
     path: graph/maximum_clique.hpp
-    title: Maximum Clique and Independent Set
+    title: Maximum Clique, Independent Set, and Vertex Cover
   - icon: ':heavy_check_mark:'
     path: graph/scc.hpp
     title: Strongly Connected Components

@@ -207,7 +207,7 @@ data:
       title: Max Flow
     - icon: ':heavy_check_mark:'
       path: graph/maximum_clique.hpp
-      title: Maximum Clique and Independent Set
+      title: Maximum Clique, Independent Set, and Vertex Cover
     - icon: ':heavy_check_mark:'
       path: graph/min_cost_flow.hpp
       title: Min Cost Flow
