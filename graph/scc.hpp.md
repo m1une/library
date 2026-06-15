@@ -8,6 +8,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -122,6 +125,7 @@ data:
   path: graph/scc.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/directed.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -143,6 +147,11 @@ Use SCC when you need to reason about mutual reachability, directed cycles,
 
 This implementation is based on Tarjan's DFS lowlink method and runs in linear
 time.
+
+## Graph Orientation
+
+Directed only. SCCs are about mutual reachability through directed edges. For
+ordinary undirected components, use `connected_components`.
 
 ## How to Use It
 

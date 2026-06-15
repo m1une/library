@@ -8,6 +8,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -88,6 +91,7 @@ data:
   path: graph/topological_sort.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/directed.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -109,6 +113,12 @@ indegree `0`, removes it from the graph conceptually, and decreases the
 indegree of its outgoing neighbors.
 
 If the graph has a directed cycle, no topological order exists.
+
+## Graph Orientation
+
+Directed only. Topological sort is defined for directed acyclic graphs. For
+undirected cycle checks, use `find_undirected_cycle` or LowLink-related tools
+instead.
 
 ## How to Use It
 

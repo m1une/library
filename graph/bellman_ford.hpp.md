@@ -8,6 +8,15 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
+  - icon: ':heavy_check_mark:'
+    path: graph/shortest_path.hpp
+    title: Shortest Path
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -135,6 +144,9 @@ data:
   path: graph/bellman_ford.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/undirected.hpp
+  - graph/directed.hpp
+  - graph/shortest_path.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -157,7 +169,10 @@ cycle. Every vertex reachable from such a cycle is marked as `negative`.
 Use Bellman-Ford when negative edge costs are possible. If all edge costs are
 non-negative, Dijkstra is much faster.
 
-The direction of edges is respected.
+## Graph Orientation
+
+Direction is respected. `bellman_ford` works on directed graphs as written, and
+also on undirected graphs built with `add_edge`.
 
 ## How to Use It
 

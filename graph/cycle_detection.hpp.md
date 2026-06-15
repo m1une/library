@@ -8,6 +8,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -134,6 +140,8 @@ data:
   path: graph/cycle_detection.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/undirected.hpp
+  - graph/directed.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -155,6 +163,14 @@ rules are different:
 * in a directed graph, an edge to a currently active DFS vertex forms a cycle;
 * in an undirected graph, the DFS must ignore only the exact edge used to enter
   the current vertex.
+
+## Graph Orientation
+
+This header has both variants:
+
+* `find_directed_cycle(g)` respects edge direction;
+* `find_undirected_cycle(g)` treats edges as undirected and should be used with
+  graphs built by `add_edge`.
 
 ## How to Use It
 

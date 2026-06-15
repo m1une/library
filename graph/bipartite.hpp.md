@@ -8,6 +8,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -96,6 +99,7 @@ data:
   path: graph/bipartite.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/undirected.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -118,6 +122,11 @@ where only the endpoint constraint matters.
 
 Use this for two-team assignments, parity constraints, grid checkerboard
 problems, and "does an odd cycle exist?" checks.
+
+## Graph Orientation
+
+Direction is ignored. Each edge is treated as an undirected constraint between
+its endpoints.
 
 ## How to Use It
 

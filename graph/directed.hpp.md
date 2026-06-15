@@ -2,20 +2,11 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: data_structure/dsu.hpp
-    title: Disjoint Set Union (DSU)
-  - icon: ':heavy_check_mark:'
     path: graph/bellman_ford.hpp
     title: Bellman-Ford
   - icon: ':heavy_check_mark:'
     path: graph/bfs.hpp
     title: BFS
-  - icon: ':heavy_check_mark:'
-    path: graph/bipartite.hpp
-    title: Bipartite Graph
-  - icon: ':heavy_check_mark:'
-    path: graph/connected_components.hpp
-    title: Connected Components
   - icon: ':heavy_check_mark:'
     path: graph/cycle_detection.hpp
     title: Cycle Detection
@@ -23,23 +14,11 @@ data:
     path: graph/dijkstra.hpp
     title: Dijkstra
   - icon: ':heavy_check_mark:'
-    path: graph/directed.hpp
-    title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
     path: graph/flow.hpp
     title: Flow
   - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
-    path: graph/grid.hpp
-    title: Grid
-  - icon: ':heavy_check_mark:'
-    path: graph/kruskal.hpp
-    title: Kruskal
-  - icon: ':heavy_check_mark:'
-    path: graph/lowlink.hpp
-    title: LowLink
   - icon: ':heavy_check_mark:'
     path: graph/max_flow.hpp
     title: Max Flow
@@ -56,12 +35,12 @@ data:
     path: graph/topological_sort.hpp
     title: Topological Sort
   - icon: ':heavy_check_mark:'
-    path: graph/undirected.hpp
-    title: Undirected Graph Algorithms
-  - icon: ':heavy_check_mark:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: graph/all.hpp
+    title: Graph All
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -71,31 +50,30 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"graph/all.hpp\"\n\n\n\n#line 1 \"graph/directed.hpp\"\n\n\
-    \n\n#line 1 \"graph/cycle_detection.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <vector>\n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#include <cassert>\n#line 6 \"\
-    graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T\
-    \ = int>\nstruct Edge {\n    using cost_type = T;\n\n    int from;\n    int to;\n\
-    \    T cost;\n    int id;\n\n    Edge() : from(-1), to(-1), cost(T()), id(-1)\
-    \ {}\n    Edge(int from_, int to_, T cost_ = T(1), int id_ = -1) : from(from_),\
-    \ to(to_), cost(cost_), id(id_) {}\n\n    int other(int v) const {\n        assert(v\
-    \ == from || v == to);\n        return from ^ to ^ v;\n    }\n};\n\ntemplate <class\
-    \ T = int>\nstruct Graph {\n    using edge_type = Edge<T>;\n    using cost_type\
-    \ = T;\n\n   private:\n    int _n;\n    int _edge_count;\n    std::vector<std::vector<edge_type>>\
-    \ _g;\n\n   public:\n    Graph() : _n(0), _edge_count(0) {}\n    explicit Graph(int\
-    \ n) : _n(n), _edge_count(0), _g(n) {\n        assert(0 <= n);\n    }\n\n    int\
-    \ size() const {\n        return _n;\n    }\n\n    bool empty() const {\n    \
-    \    return _n == 0;\n    }\n\n    int edge_count() const {\n        return _edge_count;\n\
-    \    }\n\n    int add_vertex() {\n        _g.emplace_back();\n        return _n++;\n\
-    \    }\n\n    int add_directed_edge(int from, int to, T cost = T(1)) {\n     \
-    \   assert(0 <= from && from < _n);\n        assert(0 <= to && to < _n);\n   \
-    \     int id = _edge_count++;\n        _g[from].push_back(edge_type(from, to,\
-    \ cost, id));\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost\
-    \ = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
-    \        int id = _edge_count++;\n        _g[u].push_back(edge_type(u, v, cost,\
-    \ id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        return id;\n\
-    \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
-    \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
+  bundledCode: "#line 1 \"graph/directed.hpp\"\n\n\n\n#line 1 \"graph/cycle_detection.hpp\"\
+    \n\n\n\n#include <algorithm>\n#include <vector>\n\n#line 1 \"graph/graph.hpp\"\
+    \n\n\n\n#include <cassert>\n#line 6 \"graph/graph.hpp\"\n\nnamespace m1une {\n\
+    namespace graph {\n\ntemplate <class T = int>\nstruct Edge {\n    using cost_type\
+    \ = T;\n\n    int from;\n    int to;\n    T cost;\n    int id;\n\n    Edge() :\
+    \ from(-1), to(-1), cost(T()), id(-1) {}\n    Edge(int from_, int to_, T cost_\
+    \ = T(1), int id_ = -1) : from(from_), to(to_), cost(cost_), id(id_) {}\n\n  \
+    \  int other(int v) const {\n        assert(v == from || v == to);\n        return\
+    \ from ^ to ^ v;\n    }\n};\n\ntemplate <class T = int>\nstruct Graph {\n    using\
+    \ edge_type = Edge<T>;\n    using cost_type = T;\n\n   private:\n    int _n;\n\
+    \    int _edge_count;\n    std::vector<std::vector<edge_type>> _g;\n\n   public:\n\
+    \    Graph() : _n(0), _edge_count(0) {}\n    explicit Graph(int n) : _n(n), _edge_count(0),\
+    \ _g(n) {\n        assert(0 <= n);\n    }\n\n    int size() const {\n        return\
+    \ _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n    }\n\n \
+    \   int edge_count() const {\n        return _edge_count;\n    }\n\n    int add_vertex()\
+    \ {\n        _g.emplace_back();\n        return _n++;\n    }\n\n    int add_directed_edge(int\
+    \ from, int to, T cost = T(1)) {\n        assert(0 <= from && from < _n);\n  \
+    \      assert(0 <= to && to < _n);\n        int id = _edge_count++;\n        _g[from].push_back(edge_type(from,\
+    \ to, cost, id));\n        return id;\n    }\n\n    int add_edge(int u, int v,\
+    \ T cost = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v &&\
+    \ v < _n);\n        int id = _edge_count++;\n        _g[u].push_back(edge_type(u,\
+    \ v, cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n      \
+    \  return id;\n    }\n\n    const std::vector<edge_type>& operator[](int v) const\
+    \ {\n        assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
     \    }\n\n    const std::vector<std::vector<edge_type>>& adjacency() const {\n\
     \        return _g;\n    }\n\n    std::vector<std::vector<edge_type>>& adjacency()\
@@ -442,175 +420,29 @@ data:
     \        }\n    }\n\n    if (int(order.size()) != n) return std::nullopt;\n  \
     \  return order;\n}\n\ntemplate <class T>\nbool is_dag(const Graph<T>& g) {\n\
     \    return topological_sort(g).has_value();\n}\n\n}  // namespace graph\n}  //\
-    \ namespace m1une\n\n\n#line 10 \"graph/directed.hpp\"\n\n\n#line 1 \"graph/grid.hpp\"\
-    \n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\n\n#line 10 \"graph/grid.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\nstruct Grid {\n   private:\n    int\
-    \ _h;\n    int _w;\n\n   public:\n    static constexpr std::array<int, 4> di4\
-    \ = {-1, 0, 1, 0};\n    static constexpr std::array<int, 4> dj4 = {0, 1, 0, -1};\n\
-    \    static constexpr std::array<int, 8> di8 = {-1, -1, -1, 0, 0, 1, 1, 1};\n\
-    \    static constexpr std::array<int, 8> dj8 = {-1, 0, 1, -1, 1, -1, 0, 1};\n\n\
-    \    Grid() : _h(0), _w(0) {}\n    Grid(int h, int w) : _h(h), _w(w) {\n     \
-    \   assert(0 <= h);\n        assert(0 <= w);\n    }\n\n    int height() const\
-    \ {\n        return _h;\n    }\n\n    int width() const {\n        return _w;\n\
-    \    }\n\n    int size() const {\n        return _h * _w;\n    }\n\n    bool empty()\
-    \ const {\n        return size() == 0;\n    }\n\n    bool inside(int i, int j)\
-    \ const {\n        return 0 <= i && i < _h && 0 <= j && j < _w;\n    }\n\n   \
-    \ int id(int i, int j) const {\n        assert(inside(i, j));\n        return\
-    \ i * _w + j;\n    }\n\n    std::pair<int, int> pos(int v) const {\n        assert(0\
-    \ <= v && v < size());\n        return {v / _w, v % _w};\n    }\n\n    std::vector<std::pair<int,\
-    \ int>> adj4(int i, int j) const {\n        assert(inside(i, j));\n        std::vector<std::pair<int,\
-    \ int>> result;\n        result.reserve(4);\n        for (int k = 0; k < 4; k++)\
-    \ {\n            int ni = i + di4[k], nj = j + dj4[k];\n            if (inside(ni,\
-    \ nj)) result.emplace_back(ni, nj);\n        }\n        return result;\n    }\n\
-    \n    std::vector<std::pair<int, int>> adj8(int i, int j) const {\n        assert(inside(i,\
-    \ j));\n        std::vector<std::pair<int, int>> result;\n        result.reserve(8);\n\
-    \        for (int k = 0; k < 8; k++) {\n            int ni = i + di8[k], nj =\
-    \ j + dj8[k];\n            if (inside(ni, nj)) result.emplace_back(ni, nj);\n\
-    \        }\n        return result;\n    }\n\n    std::vector<int> adj4_ids(int\
-    \ v) const {\n        auto [i, j] = pos(v);\n        std::vector<int> result;\n\
-    \        result.reserve(4);\n        for (auto [ni, nj] : adj4(i, j)) result.push_back(id(ni,\
-    \ nj));\n        return result;\n    }\n\n    std::vector<int> adj8_ids(int v)\
-    \ const {\n        auto [i, j] = pos(v);\n        std::vector<int> result;\n \
-    \       result.reserve(8);\n        for (auto [ni, nj] : adj8(i, j)) result.push_back(id(ni,\
-    \ nj));\n        return result;\n    }\n\n    Graph<int> graph4() const {\n  \
-    \      return graph4([](int, int) { return true; });\n    }\n\n    Graph<int>\
-    \ graph8() const {\n        return graph8([](int, int) { return true; });\n  \
-    \  }\n\n    template <class Passable>\n    Graph<int> graph4(Passable passable)\
-    \ const {\n        Graph<int> g(size());\n        for (int i = 0; i < _h; i++)\
-    \ {\n            for (int j = 0; j < _w; j++) {\n                if (!passable(i,\
-    \ j)) continue;\n                int v = id(i, j);\n                for (auto\
-    \ [ni, nj] : adj4(i, j)) {\n                    if (!passable(ni, nj)) continue;\n\
-    \                    int to = id(ni, nj);\n                    if (v < to) g.add_edge(v,\
-    \ to);\n                }\n            }\n        }\n        return g;\n    }\n\
-    \n    template <class Passable>\n    Graph<int> graph8(Passable passable) const\
-    \ {\n        Graph<int> g(size());\n        for (int i = 0; i < _h; i++) {\n \
-    \           for (int j = 0; j < _w; j++) {\n                if (!passable(i, j))\
-    \ continue;\n                int v = id(i, j);\n                for (auto [ni,\
-    \ nj] : adj8(i, j)) {\n                    if (!passable(ni, nj)) continue;\n\
-    \                    int to = id(ni, nj);\n                    if (v < to) g.add_edge(v,\
-    \ to);\n                }\n            }\n        }\n        return g;\n    }\n\
-    };\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/undirected.hpp\"\
-    \n\n\n\n#line 1 \"graph/bipartite.hpp\"\n\n\n\n#line 6 \"graph/bipartite.hpp\"\
-    \n\n#line 8 \"graph/bipartite.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\n\
-    struct BipartiteResult {\n    bool is_bipartite;\n    std::vector<int> color;\n\
-    };\n\ntemplate <class T>\nBipartiteResult bipartite(const Graph<T>& g) {\n   \
-    \ int n = g.size();\n    BipartiteResult result;\n    result.is_bipartite = true;\n\
-    \    result.color.assign(n, -1);\n\n    std::vector<std::vector<int>> adjacency(n);\n\
-    \    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
-    \        adjacency[e.to].push_back(e.from);\n    }\n\n    std::queue<int> que;\n\
-    \    for (int s = 0; s < n; s++) {\n        if (result.color[s] != -1) continue;\n\
-    \        result.color[s] = 0;\n        que.push(s);\n        while (!que.empty())\
-    \ {\n            int v = que.front();\n            que.pop();\n            for\
-    \ (int to : adjacency[v]) {\n                if (result.color[to] == -1) {\n \
-    \                   result.color[to] = result.color[v] ^ 1;\n                \
-    \    que.push(to);\n                } else if (result.color[to] == result.color[v])\
-    \ {\n                    result.is_bipartite = false;\n                    return\
-    \ result;\n                }\n            }\n        }\n    }\n\n    return result;\n\
-    }\n\ntemplate <class T>\nbool is_bipartite(const Graph<T>& g) {\n    return bipartite(g).is_bipartite;\n\
-    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/connected_components.hpp\"\
-    \n\n\n\n#line 6 \"graph/connected_components.hpp\"\n\n#line 1 \"data_structure/dsu.hpp\"\
-    \n\n\n\n#line 5 \"data_structure/dsu.hpp\"\n#include <numeric>\n#line 7 \"data_structure/dsu.hpp\"\
-    \n\nnamespace m1une {\nnamespace data_structure {\n\nstruct Dsu {\n   private:\n\
-    \    int _n;\n    // parent_or_size[i] is the parent of i if it's >= 0.\n    //\
-    \ If it's < 0, then i is a root and -parent_or_size[i] is the size of the group.\n\
-    \    std::vector<int> parent_or_size;\n\n   public:\n    Dsu() : _n(0) {}\n  \
-    \  explicit Dsu(int n) : _n(n), parent_or_size(n, -1) {}\n\n    // Merges the\
-    \ group containing 'a' with the group containing 'b'.\n    // Returns the leader\
-    \ of the merged group.\n    int merge(int a, int b) {\n        int x = leader(a),\
-    \ y = leader(b);\n        if (x == y) return x;\n        // Union by size\n  \
-    \      if (-parent_or_size[x] < -parent_or_size[y]) std::swap(x, y);\n       \
-    \ parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y] = x;\n  \
-    \      return x;\n    }\n\n    // Returns true if 'a' and 'b' belong to the same\
-    \ group.\n    bool same(int a, int b) {\n        return leader(a) == leader(b);\n\
-    \    }\n\n    // Returns the leader (representative) of the group containing 'a'.\n\
-    \    int leader(int a) {\n        if (parent_or_size[a] < 0) return a;\n     \
-    \   // Path compression\n        return parent_or_size[a] = leader(parent_or_size[a]);\n\
-    \    }\n\n    // Returns the size of the group containing 'a'.\n    int size(int\
-    \ a) {\n        return -parent_or_size[leader(a)];\n    }\n\n    // Returns a\
-    \ list of all groups, where each group is a vector of its elements.\n    std::vector<std::vector<int>>\
-    \ groups() {\n        std::vector<int> leader_buf(_n), group_size(_n);\n     \
-    \   for (int i = 0; i < _n; i++) {\n            leader_buf[i] = leader(i);\n \
-    \           group_size[leader_buf[i]]++;\n        }\n        std::vector<std::vector<int>>\
-    \ result(_n);\n        for (int i = 0; i < _n; i++) {\n            result[i].reserve(group_size[i]);\n\
-    \        }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
-    \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
-    \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
-    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace data_structure\n\
-    }  // namespace m1une\n\n\n#line 9 \"graph/connected_components.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace graph {\n\nstruct ConnectedComponents {\n    int count;\n\
-    \    std::vector<int> comp;\n    std::vector<std::vector<int>> groups;\n\n   \
-    \ bool same(int u, int v) const {\n        assert(0 <= u && u < int(comp.size()));\n\
-    \        assert(0 <= v && v < int(comp.size()));\n        return comp[u] == comp[v];\n\
-    \    }\n};\n\ntemplate <class T>\nConnectedComponents connected_components(const\
-    \ Graph<T>& g) {\n    int n = g.size();\n    m1une::data_structure::Dsu dsu(n);\n\
-    \    for (const auto& e : g.edges()) dsu.merge(e.from, e.to);\n\n    ConnectedComponents\
-    \ result;\n    result.comp.assign(n, 0);\n    std::vector<int> leader_to_comp(n,\
-    \ -1);\n    for (int v = 0; v < n; v++) {\n        int leader = dsu.leader(v);\n\
-    \        if (leader_to_comp[leader] == -1) {\n            leader_to_comp[leader]\
-    \ = int(result.groups.size());\n            result.groups.push_back({});\n   \
-    \     }\n        int c = leader_to_comp[leader];\n        result.comp[v] = c;\n\
-    \        result.groups[c].push_back(v);\n    }\n    result.count = int(result.groups.size());\n\
-    \n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n\
-    #line 1 \"graph/kruskal.hpp\"\n\n\n\n#line 6 \"graph/kruskal.hpp\"\n\n#line 9\
-    \ \"graph/kruskal.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class\
-    \ T>\nstruct MinimumSpanningForest {\n    T cost;\n    std::vector<Edge<T>> edges;\n\
-    \    int components;\n\n    bool is_spanning_tree(int n) const {\n        return\
-    \ components <= 1 && int(edges.size()) == std::max(0, n - 1);\n    }\n};\n\ntemplate\
-    \ <class T>\nMinimumSpanningForest<T> kruskal(const Graph<T>& g) {\n    int n\
-    \ = g.size();\n    auto edges = g.edges();\n    std::sort(edges.begin(), edges.end(),\
-    \ [](const auto& a, const auto& b) {\n        return a.cost < b.cost;\n    });\n\
-    \n    m1une::data_structure::Dsu dsu(n);\n    MinimumSpanningForest<T> result;\n\
-    \    result.cost = T(0);\n    result.components = n;\n\n    for (const auto& e\
-    \ : edges) {\n        if (dsu.same(e.from, e.to)) continue;\n        dsu.merge(e.from,\
-    \ e.to);\n        result.cost += e.cost;\n        result.edges.push_back(e);\n\
-    \        result.components--;\n    }\n\n    return result;\n}\n\n}  // namespace\
-    \ graph\n}  // namespace m1une\n\n\n#line 1 \"graph/lowlink.hpp\"\n\n\n\n#line\
-    \ 6 \"graph/lowlink.hpp\"\n\n#line 8 \"graph/lowlink.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace graph {\n\ntemplate <class T>\nstruct LowLinkResult {\n    std::vector<int>\
-    \ ord;\n    std::vector<int> low;\n    std::vector<int> articulation;\n    std::vector<Edge<T>>\
-    \ bridges;\n    std::vector<int> bridge_ids;\n};\n\ntemplate <class T>\nLowLinkResult<T>\
-    \ lowlink(const Graph<T>& g) {\n    int n = g.size();\n    LowLinkResult<T> result;\n\
-    \    result.ord.assign(n, -1);\n    result.low.assign(n, -1);\n    int now = 0;\n\
-    \n    auto dfs = [&](auto self, int v, int parent_edge) -> void {\n        result.ord[v]\
-    \ = result.low[v] = now++;\n        int child_count = 0;\n        bool is_articulation\
-    \ = false;\n\n        for (const auto& e : g[v]) {\n            if (e.id == parent_edge)\
-    \ continue;\n            int to = e.to;\n            if (result.ord[to] == -1)\
-    \ {\n                child_count++;\n                self(self, to, e.id);\n \
-    \               result.low[v] = std::min(result.low[v], result.low[to]);\n   \
-    \             if (parent_edge != -1 && result.ord[v] <= result.low[to]) is_articulation\
-    \ = true;\n                if (result.ord[v] < result.low[to]) {\n           \
-    \         result.bridges.push_back(e);\n                    result.bridge_ids.push_back(e.id);\n\
-    \                }\n            } else {\n                result.low[v] = std::min(result.low[v],\
-    \ result.ord[to]);\n            }\n        }\n\n        if (parent_edge == -1\
-    \ && child_count >= 2) is_articulation = true;\n        if (is_articulation) result.articulation.push_back(v);\n\
-    \    };\n\n    for (int v = 0; v < n; v++) {\n        if (result.ord[v] == -1)\
-    \ dfs(dfs, v, -1);\n    }\n    std::sort(result.articulation.begin(), result.articulation.end());\n\
-    \    std::sort(result.bridge_ids.begin(), result.bridge_ids.end());\n    return\
-    \ result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 12 \"\
-    graph/undirected.hpp\"\n\n\n#line 10 \"graph/all.hpp\"\n\n\n"
-  code: '#ifndef M1UNE_GRAPH_ALL_HPP
+    \ namespace m1une\n\n\n#line 10 \"graph/directed.hpp\"\n\n\n"
+  code: '#ifndef M1UNE_GRAPH_DIRECTED_HPP
 
-    #define M1UNE_GRAPH_ALL_HPP 1
+    #define M1UNE_GRAPH_DIRECTED_HPP 1
 
 
-    #include "graph/directed.hpp"
+    #include "graph/cycle_detection.hpp"
 
     #include "graph/flow.hpp"
 
     #include "graph/graph.hpp"
 
-    #include "graph/grid.hpp"
+    #include "graph/scc.hpp"
 
     #include "graph/shortest_path.hpp"
 
-    #include "graph/undirected.hpp"
+    #include "graph/topological_sort.hpp"
 
 
-    #endif  // M1UNE_GRAPH_ALL_HPP
+    #endif  // M1UNE_GRAPH_DIRECTED_HPP
 
     '
   dependsOn:
-  - graph/directed.hpp
   - graph/cycle_detection.hpp
   - graph/graph.hpp
   - graph/flow.hpp
@@ -623,65 +455,33 @@ data:
   - graph/dijkstra.hpp
   - graph/warshall_floyd.hpp
   - graph/topological_sort.hpp
-  - graph/grid.hpp
-  - graph/undirected.hpp
-  - graph/bipartite.hpp
-  - graph/connected_components.hpp
-  - data_structure/dsu.hpp
-  - graph/kruskal.hpp
-  - graph/lowlink.hpp
   isVerificationFile: false
-  path: graph/all.hpp
-  requiredBy: []
+  path: graph/directed.hpp
+  requiredBy:
+  - graph/all.hpp
   timestamp: '2026-06-16 02:16:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
-documentation_of: graph/all.hpp
+documentation_of: graph/directed.hpp
 layout: document
-title: Graph All
+title: Directed Graph Algorithms
 ---
 
 ## Overview
 
-`graph/all.hpp` includes every general graph header in this directory. It is
-convenient when writing quickly during a contest and you do not want to manage
-individual graph includes.
+`graph/directed.hpp` includes algorithms whose main interpretation is directed,
+plus direction-respecting shortest paths.
+
+Use this header when the input edges are one-way, or when reachability/order
+depends on edge direction.
 
 ## Included Headers
 
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
-| `graph/graph.hpp` | Container | `Graph<T>` and `Edge<T>` adjacency-list container. |
 | `graph/shortest_path.hpp` | Direction-respecting | BFS, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
-| `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths and flow. |
-| `graph/undirected.hpp` | Undirected-oriented bundle | Undirected algorithms plus shortest paths and grid helpers. |
-| `graph/flow.hpp` | Directed flow network | Max flow and min-cost flow. |
-| `graph/bfs.hpp` | Direction-respecting | Unweighted shortest paths. |
-| `graph/dijkstra.hpp` | Direction-respecting | Non-negative weighted shortest paths. |
-| `graph/bellman_ford.hpp` | Direction-respecting | Shortest paths with negative edges and negative-cycle marking. |
-| `graph/warshall_floyd.hpp` | Direction-respecting | All-pairs shortest paths. |
-| `graph/grid.hpp` | Undirected graph builder | Helper for converting 2D grid cells to graph vertex ids. |
-| `graph/topological_sort.hpp` | Directed only | DAG ordering and cycle check. |
+| `graph/topological_sort.hpp` | Directed only | DAG ordering and directed cycle check. |
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
-| `graph/lowlink.hpp` | Undirected only | Articulation points and bridges. |
-| `graph/bipartite.hpp` | Direction ignored | Two-colorability check. |
-| `graph/connected_components.hpp` | Direction ignored | Weak/ordinary connected components. |
-| `graph/cycle_detection.hpp` | Directed and undirected variants | Finds one cycle with the matching function. |
-| `graph/kruskal.hpp` | Undirected only | Minimum spanning forest. |
-| `graph/max_flow.hpp` | Directed flow network | Dinic maximum flow and minimum cut. |
-| `graph/min_cost_flow.hpp` | Directed flow network | Minimum-cost flow with potentials. |
-
-## Example
-
-```cpp
-#include "graph/all.hpp"
-#include <iostream>
-
-int main() {
-    m1une::graph::Graph<long long> g(3);
-    g.add_directed_edge(0, 1, 10);
-    auto dist = m1une::graph::dijkstra(g, 0).dist;
-    std::cout << dist[1] << "\n";
-}
-```
+| `graph/cycle_detection.hpp` | Directed and undirected variants | Use `find_directed_cycle(g)` for directed graphs. |
+| `graph/flow.hpp` | Directed flow network | Max flow and min-cost flow. |

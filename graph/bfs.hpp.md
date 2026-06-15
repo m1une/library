@@ -8,6 +8,15 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
+  - icon: ':heavy_check_mark:'
+    path: graph/shortest_path.hpp
+    title: Shortest Path
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -102,6 +111,9 @@ data:
   path: graph/bfs.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/undirected.hpp
+  - graph/directed.hpp
+  - graph/shortest_path.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -121,8 +133,10 @@ away, and so on.
 Use BFS when the answer is measured by the number of edges, not by edge
 weights. For weighted shortest paths, use Dijkstra or Bellman-Ford instead.
 
-The direction of edges is respected. If you want undirected movement, build the
-graph with `add_edge`.
+## Graph Orientation
+
+Direction is respected. `bfs` works on directed graphs as written, and also on
+undirected graphs built with `add_edge`.
 
 ## How to Use It
 

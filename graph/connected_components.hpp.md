@@ -11,6 +11,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -124,6 +127,7 @@ data:
   path: graph/connected_components.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/undirected.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -146,6 +150,11 @@ the endpoints of every logical edge.
 Use this when you need to split a graph into independent pieces, count
 components, check ordinary connectivity, or process each connected block
 separately.
+
+## Graph Orientation
+
+Direction is ignored. On a directed graph, this computes weakly connected
+components. For strongly connected components, use `strongly_connected_components`.
 
 ## How to Use It
 

@@ -11,6 +11,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -120,6 +123,7 @@ data:
   path: graph/kruskal.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/undirected.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -141,6 +145,11 @@ connects each connected component.
 Use it when you need a minimum spanning tree (connected graph) or minimum
 spanning forest (possibly disconnected graph). It is especially convenient when
 the input is an edge list or when $M\log M$ is acceptable.
+
+## Graph Orientation
+
+Undirected only. Build the graph with `add_edge`. A directed edge does not
+represent the usual MST problem.
 
 ## How to Use It
 

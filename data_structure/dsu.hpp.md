@@ -11,6 +11,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/kruskal.hpp
     title: Kruskal
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/dsu.test.cpp
@@ -86,6 +89,7 @@ data:
   - graph/kruskal.hpp
   - graph/connected_components.hpp
   - graph/all.hpp
+  - graph/undirected.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

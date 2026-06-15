@@ -8,6 +8,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -157,6 +160,7 @@ data:
   path: graph/grid.hpp
   requiredBy:
   - graph/all.hpp
+  - graph/undirected.hpp
   timestamp: '2026-06-16 02:03:40+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -183,6 +187,11 @@ Blocked cells are not compressed away by the graph builders. The generated
 graph always has `H * W` vertices, so `grid.id(i, j)` remains valid and stable
 for every cell. Blocked cells simply become isolated if you use a passable
 predicate.
+
+## Graph Orientation
+
+The graph builders create undirected grid graphs. Use `graph4` for four-way
+movement and `graph8` for eight-way movement.
 
 ## How to Use It
 

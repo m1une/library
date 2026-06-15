@@ -5,6 +5,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
+  - icon: ':heavy_check_mark:'
+    path: graph/flow.hpp
+    title: Flow
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -134,7 +140,9 @@ data:
   isVerificationFile: false
   path: graph/max_flow.hpp
   requiredBy:
+  - graph/flow.hpp
   - graph/all.hpp
+  - graph/directed.hpp
   timestamp: '2026-06-16 02:14:00+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -153,6 +161,11 @@ This implementation uses Dinic's algorithm. It repeatedly builds a level graph
 with BFS and sends blocking flow with DFS. It is the standard choice for many
 competitive programming max-flow tasks, including bipartite matching,
 edge-disjoint paths, and minimum `s-t` cut problems.
+
+## Graph Orientation
+
+Directed flow network. An edge added by `add_edge(from, to, cap)` can send flow
+only from `from` to `to`. For an undirected capacity, add both directions.
 
 The graph is stateful. Running `max_flow` changes residual capacities and
 stores the resulting flow. Use `get_edge` or `edges` after running it to inspect

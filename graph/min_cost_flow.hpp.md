@@ -5,6 +5,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/all.hpp
     title: Graph All
+  - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
+  - icon: ':heavy_check_mark:'
+    path: graph/flow.hpp
+    title: Flow
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -156,7 +162,9 @@ data:
   isVerificationFile: false
   path: graph/min_cost_flow.hpp
   requiredBy:
+  - graph/flow.hpp
   - graph/all.hpp
+  - graph/directed.hpp
   timestamp: '2026-06-16 02:14:00+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -175,6 +183,12 @@ This implementation uses the successive shortest augmenting path method with
 potentials. It first computes initial potentials with Bellman-Ford, so negative
 edge costs are allowed as long as there is no reachable negative-cost cycle
 with residual capacity.
+
+## Graph Orientation
+
+Directed flow network. An edge added by `add_edge(from, to, cap, cost)` can
+send flow only from `from` to `to`. For an undirected capacity, add both
+directions with the desired costs.
 
 The graph is stateful. Running `flow` or `slope` changes residual capacities and
 stores the chosen flow. Use `get_edge` or `edges` afterward to inspect the

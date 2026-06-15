@@ -24,6 +24,9 @@ data:
     path: graph/dijkstra.hpp
     title: Dijkstra
   - icon: ':heavy_check_mark:'
+    path: graph/directed.hpp
+    title: Directed Graph Algorithms
+  - icon: ':heavy_check_mark:'
     path: graph/grid.hpp
     title: Grid
   - icon: ':heavy_check_mark:'
@@ -36,8 +39,14 @@ data:
     path: graph/scc.hpp
     title: Strongly Connected Components
   - icon: ':heavy_check_mark:'
+    path: graph/shortest_path.hpp
+    title: Shortest Path
+  - icon: ':heavy_check_mark:'
     path: graph/topological_sort.hpp
     title: Topological Sort
+  - icon: ':heavy_check_mark:'
+    path: graph/undirected.hpp
+    title: Undirected Graph Algorithms
   - icon: ':heavy_check_mark:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
@@ -143,6 +152,9 @@ data:
   - graph/cycle_detection.hpp
   - graph/bfs.hpp
   - graph/warshall_floyd.hpp
+  - graph/undirected.hpp
+  - graph/directed.hpp
+  - graph/shortest_path.hpp
   timestamp: '2026-06-16 01:54:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -164,6 +176,16 @@ defaults to `1`.
 
 Undirected edges are stored as two adjacency entries with the same edge id, so
 algorithms can distinguish logical edges from adjacency arcs.
+
+## Graph Orientation
+
+`Graph<T>` itself supports both directed and undirected graphs.
+
+* `add_directed_edge(from, to, cost)` stores one directed arc.
+* `add_edge(u, v, cost)` stores two arcs with one shared logical edge id.
+
+Algorithm pages state whether they respect direction, require undirected edges,
+or ignore direction.
 
 ## How to Use It
 

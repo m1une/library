@@ -173,6 +173,12 @@ data:
       path: graph/dijkstra.hpp
       title: Dijkstra
     - icon: ':heavy_check_mark:'
+      path: graph/directed.hpp
+      title: Directed Graph Algorithms
+    - icon: ':heavy_check_mark:'
+      path: graph/flow.hpp
+      title: Flow
+    - icon: ':heavy_check_mark:'
       path: graph/graph.hpp
       title: Graph
     - icon: ':heavy_check_mark:'
@@ -194,8 +200,14 @@ data:
       path: graph/scc.hpp
       title: Strongly Connected Components
     - icon: ':heavy_check_mark:'
+      path: graph/shortest_path.hpp
+      title: Shortest Path
+    - icon: ':heavy_check_mark:'
       path: graph/topological_sort.hpp
       title: Topological Sort
+    - icon: ':heavy_check_mark:'
+      path: graph/undirected.hpp
+      title: Undirected Graph Algorithms
     - icon: ':heavy_check_mark:'
       path: graph/warshall_floyd.hpp
       title: Warshall-Floyd
