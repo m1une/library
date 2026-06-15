@@ -272,8 +272,17 @@ data:
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'
+      path: utilities/int128.hpp
+      title: Int128
+    - icon: ':heavy_check_mark:'
+      path: utilities/random.hpp
+      title: Random
+    - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
       title: Shifted Array
+    - icon: ':heavy_check_mark:'
+      path: utilities/timer.hpp
+      title: Timer
   verificationCategories:
   - name: verify/data_structure
     pages:
@@ -365,6 +374,9 @@ data:
       title: verify/string/yosupo_zalgorithm.test.cpp
   - name: verify/utilities
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/utilities/basic_utilities.test.cpp
+      title: verify/utilities/basic_utilities.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/utilities/shifted_array.test.cpp
       title: verify/utilities/shifted_array.test.cpp
