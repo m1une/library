@@ -18,6 +18,7 @@ individual graph includes.
 | `graph/dijkstra.hpp` | Non-negative weighted shortest paths. |
 | `graph/bellman_ford.hpp` | Shortest paths with negative edges and negative-cycle marking. |
 | `graph/warshall_floyd.hpp` | All-pairs shortest paths. |
+| `graph/grid.hpp` | Helper for converting 2D grid cells to graph vertex ids. |
 | `graph/topological_sort.hpp` | DAG ordering and cycle check. |
 | `graph/scc.hpp` | Strongly connected components and condensation DAG. |
 | `graph/lowlink.hpp` | Articulation points and bridges in undirected graphs. |

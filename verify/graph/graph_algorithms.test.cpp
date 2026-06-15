@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <set>
+#include <string>
 #include <vector>
 
 #include "graph/all.hpp"
@@ -225,6 +227,49 @@ void test_kruskal() {
     assert(mst.is_spanning_tree(g.size()));
 }
 
+void test_grid() {
+    m1une::graph::Grid grid(3, 4);
+    assert(grid.height() == 3);
+    assert(grid.width() == 4);
+    assert(grid.size() == 12);
+    assert(grid.inside(2, 3));
+    assert(!grid.inside(3, 0));
+    assert(grid.id(2, 3) == 11);
+    assert(grid.pos(6) == std::make_pair(1, 2));
+
+    auto adj4 = grid.adj4(0, 0);
+    assert((adj4 == std::vector<std::pair<int, int>>{{0, 1}, {1, 0}}));
+
+    auto adj8 = grid.adj8(1, 1);
+    assert(adj8.size() == 8);
+    auto adj4_ids = grid.adj4_ids(grid.id(1, 1));
+    std::set<int> expected_ids = {grid.id(0, 1), grid.id(1, 2), grid.id(2, 1), grid.id(1, 0)};
+    assert(std::set<int>(adj4_ids.begin(), adj4_ids.end()) == expected_ids);
+
+    std::vector<std::string> s = {
+        "....",
+        ".##.",
+        "....",
+    };
+    auto passable = [&](int i, int j) {
+        return s[i][j] != '#';
+    };
+
+    auto g4 = grid.graph4(passable);
+    assert(g4.size() == grid.size());
+    assert(g4[grid.id(1, 1)].empty());
+    auto res = m1une::graph::bfs(g4, grid.id(0, 0));
+    assert(res.dist[grid.id(2, 3)] == 5);
+    assert(res.dist[grid.id(1, 1)] == -1);
+
+    auto g8 = grid.graph8(passable);
+    auto res8 = m1une::graph::bfs(g8, grid.id(0, 0));
+    assert(res8.dist[grid.id(2, 3)] == 4);
+
+    auto all4 = grid.graph4();
+    assert(all4.edge_count() == 17);
+}
+
 int main() {
     test_graph_container();
     test_bfs();
@@ -237,6 +282,7 @@ int main() {
     test_bipartite_and_components();
     test_cycle_detection();
     test_kruskal();
+    test_grid();
 
     long long a, b;
     std::cin >> a >> b;

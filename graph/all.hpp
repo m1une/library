@@ -8,6 +8,7 @@
 #include "graph/cycle_detection.hpp"
 #include "graph/dijkstra.hpp"
 #include "graph/graph.hpp"
+#include "graph/grid.hpp"
 #include "graph/kruskal.hpp"
 #include "graph/lowlink.hpp"
 #include "graph/scc.hpp"
