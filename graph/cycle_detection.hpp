@@ -48,6 +48,7 @@ Cycle find_directed_cycle(const Graph<T>& g) {
     auto dfs = [&](auto self, int v) -> bool {
         color[v] = 1;
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             if (color[e.to] == 0) {
                 parent[e.to] = v;
                 parent_edge[e.to] = e.id;
@@ -76,6 +77,7 @@ Cycle find_undirected_cycle(const Graph<T>& g) {
     auto dfs = [&](auto self, int v, int pe) -> bool {
         color[v] = 1;
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             if (e.id == pe) continue;
             if (color[e.to] == 0) {
                 parent[e.to] = v;

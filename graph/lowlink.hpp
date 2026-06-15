@@ -32,6 +32,7 @@ LowLinkResult<T> lowlink(const Graph<T>& g) {
         bool is_articulation = false;
 
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             if (e.id == parent_edge) continue;
             int to = e.to;
             if (result.ord[to] == -1) {

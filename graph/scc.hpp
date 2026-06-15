@@ -27,6 +27,7 @@ struct SccResult {
         std::vector<std::pair<int, int>> edges;
         for (int v = 0; v < g.size(); v++) {
             for (const auto& e : g[v]) {
+                if (!e.alive) continue;
                 int a = comp[e.from], b = comp[e.to];
                 if (a != b) edges.emplace_back(a, b);
             }
@@ -54,6 +55,7 @@ SccResult strongly_connected_components(const Graph<T>& g) {
         in_stack[v] = true;
 
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             int to = e.to;
             if (ord[to] == -1) {
                 self(self, to);

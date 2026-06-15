@@ -58,6 +58,7 @@ std::optional<DagShortestPathResult<T>> dag_shortest_path(
     for (int v : *order) {
         if (result.dist[v] == inf) continue;
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             T nd = result.dist[v] + e.cost;
             if (result.dist[e.to] <= nd) continue;
             result.dist[e.to] = nd;

@@ -54,6 +54,7 @@ ZeroOneBfsResult zero_one_bfs(const Graph<T>& g, const std::vector<int>& sources
         int v = deq.front();
         deq.pop_front();
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             int w;
             if (e.cost == T(0)) {
                 w = 0;

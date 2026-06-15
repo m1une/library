@@ -27,6 +27,36 @@ void test_graph_container() {
     assert(rev[1][0].to == 0);
 }
 
+void test_edge_alive() {
+    Graph<int> g(4);
+    int e01 = g.add_edge(0, 1);
+    int e12 = g.add_edge(1, 2);
+    int e23 = g.add_edge(2, 3);
+    (void)e01;
+    (void)e23;
+
+    assert(g.edge_count() == 3);
+    assert(g.edges().size() == 3);
+    auto res = m1une::graph::bfs(g, 0);
+    assert(res.dist[3] == 3);
+
+    g.erase_edge(e12);
+    assert(!g.is_edge_alive(e12));
+    assert(g.edges().size() == 2);
+    assert(g.edges(true).size() == 3);
+    auto cut = m1une::graph::bfs(g, 0);
+    assert(!cut.reachable(3));
+
+    auto rev = g.reversed();
+    assert(!rev.is_edge_alive(e12));
+    assert(rev.edges().size() == 2);
+
+    g.revive_edge(e12);
+    assert(g.is_edge_alive(e12));
+    auto restored = m1une::graph::bfs(g, 0);
+    assert(restored.dist[3] == 3);
+}
+
 void test_bfs() {
     Graph<int> g(5);
     g.add_directed_edge(0, 1);
@@ -384,6 +414,7 @@ void test_min_cost_flow() {
 
 int main() {
     test_graph_container();
+    test_edge_alive();
     test_bfs();
     test_dijkstra();
     test_zero_one_bfs();

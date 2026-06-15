@@ -15,7 +15,10 @@ std::optional<std::vector<int>> topological_sort(const Graph<T>& g) {
     int n = g.size();
     std::vector<int> indeg(n, 0);
     for (int v = 0; v < n; v++) {
-        for (const auto& e : g[v]) indeg[e.to]++;
+        for (const auto& e : g[v]) {
+            if (!e.alive) continue;
+            indeg[e.to]++;
+        }
     }
 
     std::queue<int> que;
@@ -30,6 +33,7 @@ std::optional<std::vector<int>> topological_sort(const Graph<T>& g) {
         que.pop();
         order.push_back(v);
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             indeg[e.to]--;
             if (indeg[e.to] == 0) que.push(e.to);
         }

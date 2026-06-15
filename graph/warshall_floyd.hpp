@@ -35,6 +35,7 @@ std::vector<std::vector<T>> warshall_floyd(const Graph<T>& g, T inf = std::numer
     for (int i = 0; i < n; i++) dist[i][i] = T(0);
     for (int v = 0; v < n; v++) {
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             if (e.cost < dist[e.from][e.to]) dist[e.from][e.to] = e.cost;
         }
     }

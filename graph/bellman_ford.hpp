@@ -64,6 +64,7 @@ BellmanFordResult<T> bellman_ford(const Graph<T>& g, const std::vector<int>& sou
         for (int v = 0; v < n; v++) {
             if (result.dist[v] == inf) continue;
             for (const auto& e : g[v]) {
+                if (!e.alive) continue;
                 T nd = result.dist[v] + e.cost;
                 if (result.dist[e.to] <= nd) continue;
                 result.dist[e.to] = nd;
@@ -86,6 +87,7 @@ BellmanFordResult<T> bellman_ford(const Graph<T>& g, const std::vector<int>& sou
         int v = que.front();
         que.pop();
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             if (result.negative[e.to]) continue;
             result.negative[e.to] = true;
             que.push(e.to);

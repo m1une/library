@@ -59,6 +59,7 @@ DijkstraResult<T> dijkstra(const Graph<T>& g, const std::vector<int>& sources,
         que.pop();
         if (result.dist[v] != d) continue;
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             T nd = d + e.cost;
             if (result.dist[e.to] <= nd) continue;
             result.dist[e.to] = nd;

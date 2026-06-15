@@ -50,6 +50,7 @@ BfsResult bfs(const Graph<T>& g, const std::vector<int>& sources) {
         int v = que.front();
         que.pop();
         for (const auto& e : g[v]) {
+            if (!e.alive) continue;
             if (result.dist[e.to] != -1) continue;
             result.dist[e.to] = result.dist[v] + 1;
             result.parent[e.to] = v;
