@@ -271,6 +271,94 @@ void test_static_top_tree() {
     assert(root_distance_sum.all_prod().sum == 79);
 }
 
+void test_rerooting_static_top_tree() {
+    Graph<long long> g(3);
+    int e01 = g.add_edge(0, 1, 2);
+    int e12 = g.add_edge(1, 2, 5);
+    std::vector<long long> weights = {1, 1, 1};
+
+    auto stt = m1une::tree::RerootingStaticTopTree(
+        g,
+        weights,
+        DistancePoint{0, 0},
+        [](DistancePath upper, DistancePath lower, const auto& e) {
+            long long shift = upper.length + e.cost;
+            return DistancePath{upper.count + lower.count, upper.sum + lower.sum + lower.count * shift,
+                                upper.length + e.cost + lower.length};
+        },
+        [](DistancePath lower, DistancePath upper, const auto& e) {
+            long long shift = lower.length + e.cost;
+            return DistancePath{lower.count + upper.count, lower.sum + upper.sum + upper.count * shift,
+                                lower.length + e.cost + upper.length};
+        },
+        [](DistancePoint a, DistancePoint b) {
+            return DistancePoint{a.count + b.count, a.sum + b.sum};
+        },
+        [](DistancePath path, const auto& e) {
+            return DistancePoint{path.count, path.sum + path.count * e.cost};
+        },
+        [](DistancePath path, const auto& e) {
+            return DistancePoint{path.count, path.sum + path.count * e.cost};
+        },
+        [](DistancePoint side, long long weight, int) {
+            return DistancePath{side.count + weight, side.sum, 0};
+        });
+
+    assert(stt.size() == 3);
+    assert(stt.root() == 0);
+    assert(stt.node_count() >= 3);
+    assert(stt.height() > 0);
+    assert(stt.all_prod_down().count == 3);
+    assert(stt.all_prod_down().sum == 9);
+    assert(stt.all_prod_down().length == 7);
+    assert(stt.all_prod_up().count == 3);
+    assert(stt.all_prod_up().sum == 12);
+    assert(stt.all_prod_up().length == 7);
+
+    int root_node = stt.root_node();
+    assert(stt.path_down(root_node).sum == stt.all_prod_down().sum);
+    assert(stt.path_up(root_node).sum == stt.all_prod_up().sum);
+    int one_node = stt.vertex_node(1);
+    assert(stt.node(one_node).type == m1une::tree::internal::RerootingStaticTopTreeNodeType::AddVertex);
+    assert(stt.parent_node(root_node) == -1);
+    assert(stt.point_id().count == 0);
+
+    auto edge = m1une::graph::Edge<long long>(0, 1, 2, e01);
+    auto reversed = decltype(stt)::reverse_edge(edge);
+    assert(reversed.from == 1);
+    assert(reversed.to == 0);
+    DistancePath one = stt.add_vertex(stt.point_id(), 1LL, 0);
+    assert(one.count == 1);
+    assert(one.sum == 0);
+    auto down_point = stt.add_edge_down(one, edge);
+    auto up_point = stt.add_edge_up(one, reversed);
+    assert(down_point.sum == 2);
+    assert(up_point.sum == 2);
+    auto raked = stt.rake(down_point, up_point);
+    assert(raked.count == 2);
+    assert(raked.sum == 4);
+    assert(stt.compress_down(one, one, edge).sum == 2);
+    assert(stt.compress_up(one, one, reversed).sum == 2);
+
+    stt.set_edge_cost(e01, 10);
+    assert(stt.all_prod_down().count == 3);
+    assert(stt.all_prod_down().sum == 25);
+    assert(stt.all_prod_down().length == 15);
+    assert(stt.all_prod_up().sum == 20);
+    assert(stt.all_prod_up().length == 15);
+
+    stt.set(0, 3);
+    assert(stt[0] == 3);
+    assert(stt.all_prod_down().count == 5);
+    assert(stt.all_prod_down().sum == 25);
+    assert(stt.all_prod_up().count == 5);
+    assert(stt.all_prod_up().sum == 50);
+
+    stt.set_edge_cost(e12, 1);
+    assert(stt.all_prod_down().sum == 21);
+    assert(stt.all_prod_up().sum == 34);
+}
+
 void test_centroid_decomposition() {
     auto g = sample_tree();
     m1une::tree::CentroidDecomposition<long long> cd(g);
@@ -322,6 +410,7 @@ int main() {
     test_diameter();
     test_rerooting();
     test_static_top_tree();
+    test_rerooting_static_top_tree();
     test_centroid_decomposition();
     test_forest();
 

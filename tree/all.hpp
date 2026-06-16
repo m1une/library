@@ -5,6 +5,7 @@
 #include "tree/diameter.hpp"
 #include "tree/heavy_light_decomposition.hpp"
 #include "tree/rerooting_dp.hpp"
+#include "tree/rerooting_static_top_tree.hpp"
 #include "tree/rooted_tree.hpp"
 #include "tree/sparse_table_lca.hpp"
 #include "tree/static_top_tree.hpp"

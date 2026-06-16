@@ -20,6 +20,7 @@ existing graph library.
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
 | `tree/rerooting_dp.hpp` | Generic rerooting DP helper. |
 | `tree/static_top_tree.hpp` | Dynamic one-root tree DP on a fixed tree using static top-tree clusters. |
+| `tree/rerooting_static_top_tree.hpp` | Bidirectional static top-tree clusters for dynamic rerooting-DP solutions. |
 | `tree/centroid_decomposition.hpp` | Centroid decomposition for trees and forests. |
 
 ## Example
