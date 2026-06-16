@@ -396,12 +396,49 @@ void test_general_matching() {
     blossom.revive_edge(e15);
     assert(blossom.max_matching() == 3);
 
+    m1une::graph::GeneralMatching tricky(6);
+    tricky.add_edge(0, 1);
+    tricky.add_edge(0, 4);
+    tricky.add_edge(1, 2);
+    tricky.add_edge(3, 4);
+    tricky.add_edge(3, 5);
+    tricky.add_edge(4, 5);
+    assert(tricky.max_matching() == 3);
+    for (const auto& p : tricky.matching()) {
+        auto e = tricky.get_edge(p.edge_id);
+        assert((e.from == p.from && e.to == p.to) || (e.from == p.to && e.to == p.from));
+    }
+
+    m1une::graph::GeneralMatching parallel(4);
+    int p01_removed = parallel.add_edge(0, 1);
+    parallel.add_edge(0, 1);
+    parallel.add_edge(2, 3);
+    parallel.erase_edge(p01_removed);
+    assert(parallel.max_matching() == 2);
+    auto parallel_mate_edge = parallel.mate_edge();
+    for (int v = 0; v < 4; v++) assert(parallel.is_edge_alive(parallel_mate_edge[v]));
+
     m1une::graph::GeneralMatching path(3);
     path.add_edge(0, 1);
     path.add_edge(1, 2);
     auto path_cover = path.minimum_edge_cover();
     assert(path_cover.has_value());
     assert(path_cover->size() == 2);
+
+    m1une::graph::GeneralMatching bipartite_general(8);
+    int bg03 = bipartite_general.add_edge(0, 3);
+    bipartite_general.add_edge(0, 7);
+    bipartite_general.add_edge(1, 4);
+    bipartite_general.add_edge(2, 5);
+    bipartite_general.add_edge(6, 3);
+    bipartite_general.add_edge(2, 7);
+    bipartite_general.erase_edge(bg03);
+    assert(bipartite_general.max_matching() == 4);
+    auto bipartite_mate = bipartite_general.mate();
+    for (int v = 0; v < 8; v++) {
+        assert(bipartite_mate[v] != -1);
+        assert(bipartite_mate[bipartite_mate[v]] == v);
+    }
 
     m1une::graph::GeneralMatching isolated(1);
     assert(!isolated.minimum_edge_cover().has_value());

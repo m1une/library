@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <optional>
-#include <queue>
+#include <utility>
 #include <vector>
 
 #include "graph/graph.hpp"
@@ -47,83 +47,526 @@ struct GeneralMatching {
         if (!_calculated) max_matching();
     }
 
-    int lca(int a, int b, const std::vector<int>& base, const std::vector<int>& parent) const {
-        std::vector<char> used(_n, false);
-        while (true) {
-            a = base[a];
-            used[a] = true;
-            if (_mate[a] == -1) break;
-            a = parent[_mate[a]];
-        }
-        while (true) {
-            b = base[b];
-            if (used[b]) return b;
-            b = parent[_mate[b]];
-        }
+    bool is_matched_edge(int id) const {
+        const auto& e = _edges[id];
+        return _mate[e.from] == e.to && _mate_edge[e.from] == id;
     }
 
-    void mark_path(int v, int b, int child, int child_edge, std::vector<int>& base, std::vector<int>& parent,
-                   std::vector<int>& parent_edge, std::vector<char>& blossom) const {
-        while (base[v] != b) {
-            blossom[base[v]] = true;
-            blossom[base[_mate[v]]] = true;
-            parent[v] = child;
-            parent_edge[v] = child_edge;
+    enum MatchingLabel : char {
+        even_label,
+        odd_label,
+        unlabeled
+    };
 
-            int matched = _mate[v];
-            int next_v = parent[matched];
-            int next_edge = parent_edge[matched];
-            child = matched;
-            child_edge = next_edge;
-            v = next_v;
+    struct MutablePartition {
+        std::vector<int> parent;
+        std::vector<int> rank;
+        std::vector<int> representative;
+
+        MutablePartition() = default;
+
+        explicit MutablePartition(int n) {
+            reset(n);
         }
-    }
 
-    int find_augmenting_path(int root, std::vector<int>& parent, std::vector<int>& parent_edge) const {
-        std::vector<char> used(_n, false), blossom(_n, false);
-        std::vector<int> base(_n);
-        std::queue<int> que;
+        void reset(int n) {
+            parent.resize(n);
+            rank.assign(n, 0);
+            representative.resize(n);
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                representative[i] = i;
+            }
+        }
 
-        parent.assign(_n, -1);
-        parent_edge.assign(_n, -1);
-        for (int i = 0; i < _n; i++) base[i] = i;
+        int root(int v) {
+            if (parent[v] == v) return v;
+            return parent[v] = root(parent[v]);
+        }
 
-        used[root] = true;
-        que.push(root);
-        while (!que.empty()) {
-            int v = que.front();
-            que.pop();
-            for (int id : _adj[v]) {
-                const auto& e = _edges[id];
+        int operator()(int v) {
+            return representative[root(v)];
+        }
+
+        void unite(int a, int b) {
+            int ra = root(a);
+            int rb = root(b);
+            if (ra == rb) return;
+            if (rank[ra] < rank[rb]) std::swap(ra, rb);
+            parent[rb] = ra;
+            if (rank[ra] == rank[rb]) rank[ra]++;
+        }
+
+        void make_rep(int v) {
+            representative[root(v)] = v;
+        }
+    };
+
+    struct EdgeBucketQueue {
+        std::vector<std::vector<int>> bucket;
+        std::vector<int> head;
+
+        void reset(int n) {
+            bucket.assign(n + 3, {});
+            head.assign(n + 3, 0);
+        }
+
+        void insert(int edge_id, int key) {
+            if (key < 0 || int(bucket.size()) <= key) return;
+            bucket[key].push_back(edge_id);
+        }
+
+        int pop(int key) {
+            if (key < 0 || int(bucket.size()) <= key) return -1;
+            if (head[key] == int(bucket[key].size())) return -1;
+            return bucket[key][head[key]++];
+        }
+    };
+
+    struct NewMatchingPair {
+        int from;
+        int to;
+        int edge_id;
+    };
+
+    // General-graph shortest augmenting path phase solver.
+    struct MicaliVaziraniSolver {
+        GeneralMatching& graph;
+        int n;
+        int matching_size;
+        int delta;
+        int visit_token;
+        int even_time_token;
+        MutablePartition base;
+        MutablePartition delayed_base;
+        EdgeBucketQueue queue;
+        std::vector<MatchingLabel> label;
+        std::vector<MatchingLabel> h_label;
+        std::vector<int> parent;
+        std::vector<int> parent_edge;
+        std::vector<int> source_bridge;
+        std::vector<int> target_bridge;
+        std::vector<int> bridge_edge;
+        std::vector<int> lcp;
+        std::vector<int> path_mark_1;
+        std::vector<int> path_mark_2;
+        std::vector<int> restore_vertex;
+        std::vector<int> restore_value;
+        std::vector<int> rep;
+        std::vector<int> h_mate;
+        std::vector<char> is_h_edge;
+        std::vector<std::vector<int>> contracted_into;
+        std::vector<int> h_parent_edge;
+        std::vector<int> h_even_time;
+        std::vector<int> h_bridge_edge;
+        std::vector<int> h_bridge_dir;
+
+        explicit MicaliVaziraniSolver(GeneralMatching& graph_)
+            : graph(graph_),
+              n(graph_._n),
+              matching_size(0),
+              delta(0),
+              visit_token(0),
+              even_time_token(0),
+              base(n),
+              delayed_base(n),
+              label(n, unlabeled),
+              h_label(n, unlabeled),
+              parent(n, -1),
+              parent_edge(n, -1),
+              source_bridge(n, -1),
+              target_bridge(n, -1),
+              bridge_edge(n, -1),
+              lcp(n, 0),
+              path_mark_1(n, 0),
+              path_mark_2(n, 0),
+              rep(n, -1),
+              h_mate(n, -1),
+              is_h_edge(graph_._edges.size(), false),
+              contracted_into(n),
+              h_parent_edge(n, -1),
+              h_even_time(n, 0),
+              h_bridge_edge(n, -1),
+              h_bridge_dir(n, 0) {}
+
+        bool active(int edge_id) const {
+            return graph._edges[edge_id].alive;
+        }
+
+        int other(int edge_id, int v) const {
+            return graph._edges[edge_id].other(v);
+        }
+
+        int edge_weight(int edge_id) const {
+            return graph.is_matched_edge(edge_id) ? 2 : 0;
+        }
+
+        void set_match(int edge_id) {
+            const auto& e = graph._edges[edge_id];
+            graph._mate[e.from] = e.to;
+            graph._mate[e.to] = e.from;
+            graph._mate_edge[e.from] = edge_id;
+            graph._mate_edge[e.to] = edge_id;
+        }
+
+        void initialize_greedy_matching() {
+            graph._mate.assign(n, -1);
+            graph._mate_edge.assign(n, -1);
+            matching_size = 0;
+            for (const auto& e : graph._edges) {
                 if (!e.alive) continue;
-                int u = e.other(v);
-                if (base[v] == base[u] || _mate[v] == u) continue;
+                if (graph._mate[e.from] != -1 || graph._mate[e.to] != -1) continue;
+                set_match(e.id);
+                matching_size++;
+            }
+        }
 
-                if (u == root || (_mate[u] != -1 && parent[_mate[u]] != -1)) {
-                    int cur_base = lca(v, u, base, parent);
-                    std::fill(blossom.begin(), blossom.end(), false);
-                    mark_path(v, cur_base, u, id, base, parent, parent_edge, blossom);
-                    mark_path(u, cur_base, v, id, base, parent, parent_edge, blossom);
-                    for (int i = 0; i < _n; i++) {
-                        if (!blossom[base[i]]) continue;
-                        base[i] = cur_base;
-                        if (!used[i]) {
-                            used[i] = true;
-                            que.push(i);
-                        }
+        void scan_edge(int edge_id, int from) {
+            if (!active(edge_id)) return;
+            int to = other(edge_id, from);
+            if (to == from || graph._mate[to] == from || label[base(to)] == odd_label) return;
+            if (label[to] == unlabeled) {
+                queue.insert(edge_id, lcp[from] + 2);
+            } else {
+                queue.insert(edge_id, (lcp[from] + lcp[to]) / 2 + 1);
+            }
+        }
+
+        void shrink_path(int blossom_base, int x, int y, int edge_id,
+                         std::vector<std::pair<int, int>>& delayed_unions) {
+            int v = base(x);
+            while (v != blossom_base) {
+                base.unite(v, blossom_base);
+                delayed_unions.push_back({v, blossom_base});
+
+                v = graph._mate[v];
+                assert(v != -1);
+                base.unite(v, blossom_base);
+                delayed_unions.push_back({v, blossom_base});
+                base.make_rep(blossom_base);
+
+                source_bridge[v] = x;
+                target_bridge[v] = y;
+                bridge_edge[v] = edge_id;
+                restore_vertex.push_back(v);
+                restore_value.push_back(lcp[v]);
+                lcp[v] = lcp[x] + lcp[y] - lcp[graph._mate[v]] + 2;
+
+                for (int id : graph._adj[v]) scan_edge(id, v);
+                assert(parent[v] != -1);
+                v = base(parent[v]);
+            }
+            delayed_unions.push_back({blossom_base, blossom_base});
+        }
+
+        void build_phase_graph() {
+            std::fill(h_mate.begin(), h_mate.end(), -1);
+            std::fill(is_h_edge.begin(), is_h_edge.end(), false);
+            for (auto& vertices : contracted_into) vertices.clear();
+
+            for (int v = 0; v < n; v++) contracted_into[delayed_base(v)].push_back(v);
+
+            for (const auto& e : graph._edges) {
+                if (!e.alive) continue;
+                int u = e.from;
+                int v = e.to;
+                int uh = delayed_base(u);
+                int vh = delayed_base(v);
+                if (uh == vh) continue;
+                if (label[uh] == odd_label && label[vh] == odd_label) continue;
+
+                int w = edge_weight(e.id);
+                bool even_odd =
+                    (label[uh] == even_label && label[vh] == odd_label && lcp[v] == lcp[u] + 1 - w) ||
+                    (label[vh] == even_label && label[uh] == odd_label && lcp[u] == lcp[v] + 1 - w);
+                bool unlabeled_unlabeled = label[uh] == unlabeled && label[vh] == unlabeled && w == 2;
+                bool even_unlabeled =
+                    (label[uh] == even_label && label[vh] == unlabeled && lcp[u] == delta - 2) ||
+                    (label[vh] == even_label && label[uh] == unlabeled && lcp[v] == delta - 2);
+                bool even_even = label[uh] == even_label && label[vh] == even_label;
+                bool tight_even_even = even_even && lcp[u] + lcp[v] == 2 * delta + w - 2;
+
+                if (even_odd || unlabeled_unlabeled || even_unlabeled || tight_even_even) {
+                    is_h_edge[e.id] = true;
+                    if (w == 2) {
+                        h_mate[uh] = vh;
+                        h_mate[vh] = uh;
                     }
-                } else if (parent[u] == -1) {
-                    parent[u] = v;
-                    parent_edge[u] = id;
-                    if (_mate[u] == -1) return u;
-                    int next = _mate[u];
-                    used[next] = true;
-                    que.push(next);
                 }
             }
         }
-        return -1;
-    }
+
+        bool phase_one() {
+            delta = 0;
+            base.reset(n);
+            delayed_base.reset(n);
+            queue.reset(n);
+            std::fill(label.begin(), label.end(), unlabeled);
+            std::fill(parent.begin(), parent.end(), -1);
+            std::fill(parent_edge.begin(), parent_edge.end(), -1);
+            std::fill(source_bridge.begin(), source_bridge.end(), -1);
+            std::fill(target_bridge.begin(), target_bridge.end(), -1);
+            std::fill(bridge_edge.begin(), bridge_edge.end(), -1);
+            std::fill(lcp.begin(), lcp.end(), 0);
+
+            for (int v = 0; v < n; v++) {
+                if (graph._mate[v] == -1) label[v] = even_label;
+            }
+            for (int v = 0; v < n; v++) {
+                if (label[v] != even_label) continue;
+                for (int id : graph._adj[v]) scan_edge(id, v);
+            }
+
+            std::vector<std::pair<int, int>> delayed_unions;
+            while (delta <= n + 1) {
+                restore_vertex.clear();
+                restore_value.clear();
+
+                while (true) {
+                    int edge_id = queue.pop(delta);
+                    if (edge_id == -1) break;
+                    if (!active(edge_id)) continue;
+
+                    int x = graph._edges[edge_id].from;
+                    int y = graph._edges[edge_id].to;
+                    if (label[base(x)] != even_label) std::swap(x, y);
+                    if (label[base(x)] != even_label) continue;
+                    if (graph._mate[x] == y || base(x) == base(y) || label[base(y)] == odd_label) continue;
+
+                    if (label[base(y)] == unlabeled) {
+                        int z = graph._mate[y];
+                        assert(z != -1);
+                        lcp[y] = lcp[x] + 1;
+                        lcp[z] = lcp[x] + 2;
+                        parent[y] = x;
+                        parent_edge[y] = edge_id;
+                        parent[z] = y;
+                        parent_edge[z] = graph._mate_edge[z];
+                        label[y] = odd_label;
+                        label[z] = even_label;
+                        for (int id : graph._adj[z]) scan_edge(id, z);
+                        continue;
+                    }
+
+                    if (label[base(y)] != even_label || lcp[x] + lcp[y] != 2 * delta - 2) continue;
+
+                    ++visit_token;
+                    int hx = base(x);
+                    int hy = base(y);
+                    path_mark_1[hx] = visit_token;
+                    path_mark_2[hy] = visit_token;
+                    while (path_mark_1[hy] != visit_token && path_mark_2[hx] != visit_token &&
+                           (graph._mate[hx] != -1 || graph._mate[hy] != -1)) {
+                        if (graph._mate[hx] != -1) {
+                            assert(parent[graph._mate[hx]] != -1);
+                            hx = base(parent[graph._mate[hx]]);
+                            path_mark_1[hx] = visit_token;
+                        }
+                        if (graph._mate[hy] != -1) {
+                            assert(parent[graph._mate[hy]] != -1);
+                            hy = base(parent[graph._mate[hy]]);
+                            path_mark_2[hy] = visit_token;
+                        }
+                    }
+
+                    if (path_mark_1[hy] == visit_token || path_mark_2[hx] == visit_token) {
+                        int blossom_base = path_mark_1[hy] == visit_token ? hy : hx;
+                        shrink_path(blossom_base, x, y, edge_id, delayed_unions);
+                        shrink_path(blossom_base, y, x, edge_id, delayed_unions);
+                    } else {
+                        for (int i = int(restore_vertex.size()) - 1; i >= 0; i--) {
+                            lcp[restore_vertex[i]] = restore_value[i];
+                        }
+                        build_phase_graph();
+                        return true;
+                    }
+                }
+
+                for (auto [a, b] : delayed_unions) {
+                    if (a == b) {
+                        delayed_base.make_rep(a);
+                    } else {
+                        delayed_base.unite(a, b);
+                    }
+                }
+                delayed_unions.clear();
+                delta++;
+            }
+            return false;
+        }
+
+        int next_h_vertex_through_edge(int edge_id, int current_h) const {
+            const auto& e = graph._edges[edge_id];
+            return rep[rep[e.from] == current_h ? e.to : e.from];
+        }
+
+        int find_path_in_h(int h_vertex) {
+            for (int v : contracted_into[h_vertex]) {
+                for (int edge_id : graph._adj[v]) {
+                    if (!is_h_edge[edge_id]) continue;
+                    int uh = rep[other(edge_id, v)];
+                    if (h_mate[h_vertex] == uh) continue;
+
+                    if (h_label[uh] == unlabeled) {
+                        int mate_uh = h_mate[uh];
+                        h_label[uh] = odd_label;
+                        h_parent_edge[uh] = edge_id;
+                        if (mate_uh == -1) return uh;
+
+                        h_label[mate_uh] = even_label;
+                        h_even_time[mate_uh] = even_time_token++;
+                        int found = find_path_in_h(mate_uh);
+                        if (found != -1) return found;
+                    } else {
+                        int bh = delayed_base(h_vertex);
+                        int zh = delayed_base(uh);
+                        if (h_even_time[bh] >= h_even_time[zh]) continue;
+
+                        std::vector<int> blossom_path;
+                        std::vector<int> blossom_vertices;
+                        while (zh != bh) {
+                            blossom_vertices.push_back(zh);
+                            zh = h_mate[zh];
+                            assert(zh != -1);
+                            blossom_vertices.push_back(zh);
+                            blossom_path.push_back(zh);
+                            assert(h_parent_edge[zh] != -1);
+                            zh = delayed_base(next_h_vertex_through_edge(h_parent_edge[zh], zh));
+                        }
+
+                        for (int x : blossom_vertices) delayed_base.unite(x, bh);
+                        delayed_base.make_rep(bh);
+
+                        std::reverse(blossom_path.begin(), blossom_path.end());
+                        for (int x : blossom_path) {
+                            h_bridge_edge[x] = edge_id;
+                            h_bridge_dir[x] = graph._edges[edge_id].to == v ? 1 : -1;
+                        }
+                        for (int x : blossom_path) {
+                            int found = find_path_in_h(x);
+                            if (found != -1) return found;
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
+
+        void collect_path_in_h(std::vector<int>& path, int from_h, int to_h) {
+            if (from_h == to_h) return;
+            if (h_label[from_h] == even_label) {
+                int mate_from = h_mate[from_h];
+                assert(mate_from != -1);
+                int edge_id = h_parent_edge[mate_from];
+                assert(edge_id != -1);
+                path.push_back(edge_id);
+                collect_path_in_h(path, next_h_vertex_through_edge(edge_id, mate_from), to_h);
+            } else {
+                int edge_id = h_bridge_edge[from_h];
+                assert(edge_id != -1);
+                const auto& e = graph._edges[edge_id];
+                int first = rep[h_bridge_dir[from_h] == 1 ? e.from : e.to];
+                int second = rep[h_bridge_dir[from_h] == 1 ? e.to : e.from];
+                collect_path_in_h(path, first, rep[h_mate[from_h]]);
+                path.push_back(edge_id);
+                collect_path_in_h(path, second, to_h);
+            }
+        }
+
+        void add_new_pair(std::vector<NewMatchingPair>& pairs, int from, int to, int edge_id) const {
+            const auto& e = graph._edges[edge_id];
+            assert(e.alive);
+            assert((e.from == from && e.to == to) || (e.from == to && e.to == from));
+            pairs.push_back(NewMatchingPair{from, to, edge_id});
+        }
+
+        void collect_path_in_graph(std::vector<NewMatchingPair>& pairs, int from, int to) {
+            if (from == to) return;
+            if (label[from] == even_label) {
+                int mate_from = graph._mate[from];
+                assert(mate_from != -1);
+                int parent_of_mate = parent[mate_from];
+                int edge_id = parent_edge[mate_from];
+                assert(parent_of_mate != -1 && edge_id != -1);
+                add_new_pair(pairs, mate_from, parent_of_mate, edge_id);
+                collect_path_in_graph(pairs, parent_of_mate, to);
+            } else {
+                assert(source_bridge[from] != -1 && target_bridge[from] != -1 && bridge_edge[from] != -1);
+                collect_path_in_graph(pairs, source_bridge[from], graph._mate[from]);
+                add_new_pair(pairs, source_bridge[from], target_bridge[from], bridge_edge[from]);
+                collect_path_in_graph(pairs, target_bridge[from], to);
+            }
+        }
+
+        void augment_path(const std::vector<int>& h_path) {
+            std::vector<NewMatchingPair> pairs;
+            for (int edge_id : h_path) {
+                const auto& e = graph._edges[edge_id];
+                add_new_pair(pairs, e.from, e.to, edge_id);
+                collect_path_in_graph(pairs, e.from, rep[e.from]);
+                collect_path_in_graph(pairs, e.to, rep[e.to]);
+            }
+
+            for (const auto& p : pairs) {
+                if (graph._mate[p.from] != -1) {
+                    int old = graph._mate[p.from];
+                    graph._mate[old] = -1;
+                    graph._mate_edge[old] = -1;
+                }
+                if (graph._mate[p.to] != -1) {
+                    int old = graph._mate[p.to];
+                    graph._mate[old] = -1;
+                    graph._mate_edge[old] = -1;
+                }
+                graph._mate[p.from] = graph._mate[p.to] = -1;
+                graph._mate_edge[p.from] = graph._mate_edge[p.to] = -1;
+            }
+            for (const auto& p : pairs) {
+                assert(graph._mate[p.from] == -1 && graph._mate[p.to] == -1);
+                graph._mate[p.from] = p.to;
+                graph._mate[p.to] = p.from;
+                graph._mate_edge[p.from] = p.edge_id;
+                graph._mate_edge[p.to] = p.edge_id;
+            }
+            matching_size++;
+        }
+
+        void phase_two() {
+            std::fill(h_label.begin(), h_label.end(), unlabeled);
+            std::fill(h_parent_edge.begin(), h_parent_edge.end(), -1);
+            std::fill(h_bridge_edge.begin(), h_bridge_edge.end(), -1);
+            std::fill(h_bridge_dir.begin(), h_bridge_dir.end(), 0);
+            for (int v = 0; v < n; v++) rep[v] = delayed_base(v);
+
+            std::vector<std::vector<int>> paths;
+            for (int h_vertex = 0; h_vertex < n; h_vertex++) {
+                if (rep[h_vertex] != h_vertex) continue;
+                if (h_label[h_vertex] != unlabeled || h_mate[h_vertex] != -1) continue;
+
+                h_label[h_vertex] = even_label;
+                h_even_time[h_vertex] = even_time_token++;
+                int free_h = find_path_in_h(h_vertex);
+                if (free_h == -1) continue;
+
+                std::vector<int> path;
+                int edge_id = h_parent_edge[free_h];
+                assert(edge_id != -1);
+                path.push_back(edge_id);
+                collect_path_in_h(path, next_h_vertex_through_edge(edge_id, free_h), h_vertex);
+                paths.push_back(path);
+            }
+
+            assert(!paths.empty());
+            for (const auto& path : paths) augment_path(path);
+            for (auto& vertices : contracted_into) vertices.clear();
+        }
+
+        int solve() {
+            initialize_greedy_matching();
+            while (phase_one()) phase_two();
+            return matching_size;
+        }
+    };
 
    public:
     GeneralMatching() : GeneralMatching(0) {}
@@ -186,28 +629,8 @@ struct GeneralMatching {
     }
 
     int max_matching() {
-        _mate.assign(_n, -1);
-        _mate_edge.assign(_n, -1);
-
-        int result = 0;
-        std::vector<int> parent, parent_edge;
-        for (int root = 0; root < _n; root++) {
-            if (_mate[root] != -1) continue;
-            int finish = find_augmenting_path(root, parent, parent_edge);
-            if (finish == -1) continue;
-
-            result++;
-            while (finish != -1) {
-                int prev = parent[finish];
-                int next = _mate[prev];
-                int edge_id = parent_edge[finish];
-                _mate[finish] = prev;
-                _mate[prev] = finish;
-                _mate_edge[finish] = edge_id;
-                _mate_edge[prev] = edge_id;
-                finish = next;
-            }
-        }
+        MicaliVaziraniSolver solver(*this);
+        int result = solver.solve();
 
         _calculated = true;
         return result;

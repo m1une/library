@@ -13,11 +13,12 @@ A matching is a set of edges where no two selected edges share a vertex.
 Maximum-cardinality matching means the solver maximizes the number of selected
 edges. This is unweighted matching; edge costs are not used.
 
-The implementation uses Edmonds' blossom algorithm. The key idea is that an
-odd cycle can block a simple augmenting-path search. Blossom contraction treats
-such an odd cycle as one temporary super-vertex, searches for an augmenting
-path in the contracted graph, then expands the cycle when augmenting the
-matching.
+The implementation uses shortest-augmenting-path phases for general graphs
+(the Micali-Vazirani/Gabow framework). Each phase builds the admissible graph
+for the current shortest augmenting paths, finds a maximal vertex-disjoint set
+of those paths, lifts them through recorded blossom bridges, and augments all
+of them together. There are $O(\sqrt N)$ phases and each phase is linear in the
+active graph size.
 
 ## Graph Orientation
 
@@ -89,12 +90,12 @@ back to the original `Graph<T>` edge ids.
 | `erase_edge` | `void erase_edge(int id)` | Marks edge `id` unusable. | $O(1)$ |
 | `revive_edge` | `void revive_edge(int id)` | Marks edge `id` usable again. | $O(1)$ |
 | `is_edge_alive` | `bool is_edge_alive(int id) const` | Returns whether edge `id` is usable. | $O(1)$ |
-| `max_matching` | `int max_matching()` | Computes and stores a maximum matching. | $O(N^3)$ |
-| `matching_size` | `int matching_size()` | Returns the current maximum matching size, computing it if needed. | $O(N^3)$ if not computed |
-| `mate` | `std::vector<int> mate()` | Returns the matched vertex of each vertex, or `-1`. | $O(N^3)$ if not computed |
-| `mate_edge` | `std::vector<int> mate_edge()` | Returns the matched edge id of each vertex, or `-1`. | $O(N^3)$ if not computed |
-| `matching` | `std::vector<Pair> matching()` | Returns matched pairs and edge ids. | $O(N^3)$ if not computed |
-| `minimum_edge_cover` | `std::optional<std::vector<int>> minimum_edge_cover()` | Returns edge ids of a minimum edge cover, or `std::nullopt` if an isolated vertex exists. | $O(N^3)$ if not computed |
+| `max_matching` | `int max_matching()` | Computes and stores a maximum matching. | $O(M\sqrt N)$ |
+| `matching_size` | `int matching_size()` | Returns the current maximum matching size, computing it if needed. | Same as `max_matching` if not computed |
+| `mate` | `std::vector<int> mate()` | Returns the matched vertex of each vertex, or `-1`. | Same as `max_matching` if not computed |
+| `mate_edge` | `std::vector<int> mate_edge()` | Returns the matched edge id of each vertex, or `-1`. | Same as `max_matching` if not computed |
+| `matching` | `std::vector<Pair> matching()` | Returns matched pairs and edge ids. | Same as `max_matching` if not computed |
+| `minimum_edge_cover` | `std::optional<std::vector<int>> minimum_edge_cover()` | Returns edge ids of a minimum edge cover, or `std::nullopt` if an isolated vertex exists. | Same as `max_matching` if not computed |
 
 ## Functions
 
