@@ -81,6 +81,9 @@ data:
     path: tree/rooted_tree.hpp
     title: Rooted Tree
   - icon: ':heavy_check_mark:'
+    path: tree/sparse_table_lca.hpp
+    title: Sparse Table LCA
+  - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
@@ -211,6 +214,7 @@ data:
   path: graph/graph.hpp
   requiredBy:
   - tree/centroid_decomposition.hpp
+  - tree/sparse_table_lca.hpp
   - tree/rooted_tree.hpp
   - tree/rerooting_dp.hpp
   - tree/all.hpp

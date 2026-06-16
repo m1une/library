@@ -372,6 +372,9 @@ data:
       path: tree/rooted_tree.hpp
       title: Rooted Tree
     - icon: ':heavy_check_mark:'
+      path: tree/sparse_table_lca.hpp
+      title: Sparse Table LCA
+    - icon: ':heavy_check_mark:'
       path: tree/tree.hpp
       title: Tree
   - name: utilities

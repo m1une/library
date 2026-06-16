@@ -4,11 +4,23 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: tree/all.hpp
+    title: Tree All
+  - icon: ':heavy_check_mark:'
+    path: tree/sparse_table_lca.hpp
+    title: Sparse Table LCA
+  - icon: ':heavy_check_mark:'
+    path: tree/tree.hpp
+    title: Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/sparse_table.test.cpp
     title: verify/data_structure/sparse_table.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/tree/tree_algorithms.test.cpp
+    title: verify/tree/tree_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -131,10 +143,14 @@ data:
   - monoid/concept.hpp
   isVerificationFile: false
   path: data_structure/sparse_table.hpp
-  requiredBy: []
+  requiredBy:
+  - tree/sparse_table_lca.hpp
+  - tree/all.hpp
+  - tree/tree.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/tree/tree_algorithms.test.cpp
   - verify/data_structure/sparse_table.test.cpp
 documentation_of: data_structure/sparse_table.hpp
 layout: document

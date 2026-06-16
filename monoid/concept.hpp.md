@@ -29,6 +29,15 @@ data:
   - icon: ':warning:'
     path: monoid/power.hpp
     title: Monoid Power
+  - icon: ':heavy_check_mark:'
+    path: tree/all.hpp
+    title: Tree All
+  - icon: ':heavy_check_mark:'
+    path: tree/sparse_table_lca.hpp
+    title: Sparse Table LCA
+  - icon: ':heavy_check_mark:'
+    path: tree/tree.hpp
+    title: Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/disjoint_sparse_table.test.cpp
@@ -54,6 +63,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/sparse_table.test.cpp
     title: verify/data_structure/sparse_table.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/tree/tree_algorithms.test.cpp
+    title: verify/tree/tree_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -84,6 +96,9 @@ data:
   isVerificationFile: false
   path: monoid/concept.hpp
   requiredBy:
+  - tree/sparse_table_lca.hpp
+  - tree/all.hpp
+  - tree/tree.hpp
   - data_structure/segtree.hpp
   - data_structure/dynamic_monoid_array.hpp
   - data_structure/disjoint_sparse_table.hpp
@@ -96,6 +111,7 @@ data:
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/tree/tree_algorithms.test.cpp
   - verify/data_structure/persistent_dual_segtree.test.cpp
   - verify/data_structure/dual_segtree.test.cpp
   - verify/data_structure/persistent_segtree.test.cpp
