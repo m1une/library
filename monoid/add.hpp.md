@@ -10,6 +10,9 @@ data:
     path: verify/data_structure/dynamic_monoid_array.test.cpp
     title: verify/data_structure/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/data_structure/link_cut_tree.test.cpp
+    title: verify/data_structure/link_cut_tree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/persistent_dual_segtree.test.cpp
     title: verify/data_structure/persistent_dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
@@ -44,6 +47,7 @@ data:
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/data_structure/link_cut_tree.test.cpp
   - verify/data_structure/persistent_dual_segtree.test.cpp
   - verify/data_structure/persistent_segtree.test.cpp
   - verify/data_structure/dynamic_monoid_array.test.cpp

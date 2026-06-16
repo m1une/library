@@ -16,7 +16,7 @@ contest.
 | `graph/` | General graph container and algorithms for shortest paths, components, cycles, DAGs, lowlink, and MST. |
 | `tree/` | Rooted-tree metadata, LCA, HLD, diameter, rerooting DP, static top tree variants, and centroid decomposition. |
 | `flow/` | Flow-network algorithms such as max flow, min-cost flow, and bounded flow. |
-| `data_structure/` | Segment trees, sparse table, DSU, ordered sets, hash tables, and related containers. |
+| `data_structure/` | Segment trees, sparse table, DSU, link-cut tree variants, ordered sets, hash tables, and related containers. |
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
 | `math/`, `string/`, `utilities/` | Standalone helpers. |

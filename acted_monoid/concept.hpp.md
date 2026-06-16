@@ -6,6 +6,9 @@ data:
     path: data_structure/dynamic_lazy_monoid_array.hpp
     title: Dynamic Lazy Monoid Array
   - icon: ':heavy_check_mark:'
+    path: data_structure/lazy_link_cut_tree.hpp
+    title: Lazy Link-Cut Tree
+  - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
@@ -21,6 +24,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
     title: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/lazy_link_cut_tree.test.cpp
+    title: verify/data_structure/lazy_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
@@ -71,6 +77,7 @@ data:
   - data_structure/lazy_segtree.hpp
   - data_structure/persistent_lazy_segtree.hpp
   - data_structure/persistent_dynamic_lazy_monoid_array.hpp
+  - data_structure/lazy_link_cut_tree.hpp
   - data_structure/dynamic_lazy_monoid_array.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
@@ -81,6 +88,7 @@ data:
   - verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
   - verify/data_structure/persistent_lazy_segtree.test.cpp
+  - verify/data_structure/lazy_link_cut_tree.test.cpp
 documentation_of: acted_monoid/concept.hpp
 layout: document
 title: Acted Monoid Concept
