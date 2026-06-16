@@ -375,6 +375,9 @@ data:
       path: tree/sparse_table_lca.hpp
       title: Sparse Table LCA
     - icon: ':heavy_check_mark:'
+      path: tree/static_top_tree.hpp
+      title: Static Top Tree
+    - icon: ':heavy_check_mark:'
       path: tree/tree.hpp
       title: Tree
   - name: utilities

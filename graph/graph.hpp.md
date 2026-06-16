@@ -84,6 +84,9 @@ data:
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
   - icon: ':heavy_check_mark:'
+    path: tree/static_top_tree.hpp
+    title: Static Top Tree
+  - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
@@ -219,6 +222,7 @@ data:
   - tree/rerooting_dp.hpp
   - tree/all.hpp
   - tree/heavy_light_decomposition.hpp
+  - tree/static_top_tree.hpp
   - tree/tree.hpp
   - tree/diameter.hpp
   - graph/maximum_clique.hpp
