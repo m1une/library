@@ -15,6 +15,7 @@ existing graph library.
 | --- | --- |
 | `tree/tree.hpp` | Core rooted tree and diameter bundle. |
 | `tree/rooted_tree.hpp` | Rooted metadata, Euler intervals, LCA, jumps, paths, and distances. |
+| `tree/sparse_table_lca.hpp` | Euler-tour sparse-table LCA with $O(1)$ queries. |
 | `tree/heavy_light_decomposition.hpp` | HLD order, path segments, subtree ranges, LCA, and jumps. |
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
 | `tree/rerooting_dp.hpp` | Generic rerooting DP helper. |

@@ -5,8 +5,8 @@ documentation_of: ../../tree/tree.hpp
 
 ## Overview
 
-`tree/tree.hpp` is a small tree bundle containing the core rooted-tree helper
-and diameter routine.
+`tree/tree.hpp` is a small tree bundle containing the core rooted-tree helpers,
+the sparse-table LCA helper, and the diameter routine.
 
 For the full tree toolbox, include `tree/all.hpp`.
 
@@ -15,6 +15,7 @@ For the full tree toolbox, include `tree/all.hpp`.
 | Header | Contents |
 | --- | --- |
 | `tree/rooted_tree.hpp` | Rooted metadata, Euler intervals, LCA, jumps, paths, and distances. |
+| `tree/sparse_table_lca.hpp` | Euler-tour sparse-table LCA with $O(1)$ queries. |
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
 
 ## Example

@@ -80,6 +80,40 @@ void test_rooted_tree() {
     assert((sub == std::vector<int>{1, 3, 4}));
 }
 
+void test_sparse_table_lca() {
+    auto g = sample_tree();
+    m1une::tree::RootedTree<long long> tree(g, 0);
+    m1une::tree::SparseTableLca<long long> lca(g, 0);
+
+    assert(lca.size() == 7);
+    assert(!lca.empty());
+    assert(lca.root == 0);
+    assert(lca.parent[0] == -1);
+    assert(lca.parent[6] == 5);
+    assert(lca.depth[6] == 3);
+    assert(lca.dist[6] == 10);
+    assert(lca.euler.size() == 13);
+    assert(lca.first[0] == 0);
+    assert(lca.is_ancestor(2, 6));
+    assert(!lca.is_ancestor(1, 6));
+    assert(lca.in_subtree(6, 2));
+
+    for (int u = 0; u < 7; u++) {
+        for (int v = 0; v < 7; v++) {
+            assert(lca.lca(u, v) == tree.lca(u, v));
+            assert(lca.dist_edges(u, v) == tree.dist_edges(u, v));
+            assert(lca.dist_cost(u, v) == tree.dist_cost(u, v));
+        }
+    }
+
+    auto [l, r] = lca.subtree_range(2);
+    assert(r - l == 3);
+    std::vector<int> subtree;
+    for (int i = l; i < r; i++) subtree.push_back(lca.order[i]);
+    std::sort(subtree.begin(), subtree.end());
+    assert((subtree == std::vector<int>{2, 5, 6}));
+}
+
 void test_hld() {
     auto g = sample_tree();
     m1une::tree::HeavyLightDecomposition<long long> hld(g, 0);
@@ -214,6 +248,7 @@ void test_forest() {
 
 int main() {
     test_rooted_tree();
+    test_sparse_table_lca();
     test_hld();
     test_diameter();
     test_rerooting();
