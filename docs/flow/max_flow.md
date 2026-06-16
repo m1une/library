@@ -1,6 +1,6 @@
 ---
 title: Max Flow
-documentation_of: ../../graph/max_flow.hpp
+documentation_of: ../../flow/max_flow.hpp
 ---
 
 ## Overview
@@ -67,11 +67,11 @@ After running max flow, `min_cut(s)` returns the source side of a minimum
 ## Example
 
 ```cpp
-#include "graph/max_flow.hpp"
+#include "flow/max_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::MaxFlow<long long> mf(4);
+    m1une::flow::MaxFlow<long long> mf(4);
     mf.add_edge(0, 1, 2);
     mf.add_edge(0, 2, 1);
     mf.add_edge(1, 2, 1);

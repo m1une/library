@@ -1,5 +1,5 @@
-#ifndef M1UNE_GRAPH_MIN_COST_FLOW_HPP
-#define M1UNE_GRAPH_MIN_COST_FLOW_HPP 1
+#ifndef M1UNE_FLOW_MIN_COST_FLOW_HPP
+#define M1UNE_FLOW_MIN_COST_FLOW_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -10,7 +10,7 @@
 #include <vector>
 
 namespace m1une {
-namespace graph {
+namespace flow {
 
 template <class Cap, class Cost>
 struct MinCostFlow {
@@ -177,7 +177,7 @@ struct MinCostFlow {
     }
 };
 
-}  // namespace graph
+}  // namespace flow
 }  // namespace m1une
 
-#endif  // M1UNE_GRAPH_MIN_COST_FLOW_HPP
+#endif  // M1UNE_FLOW_MIN_COST_FLOW_HPP

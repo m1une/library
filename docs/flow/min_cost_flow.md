@@ -1,6 +1,6 @@
 ---
 title: Min Cost Flow
-documentation_of: ../../graph/min_cost_flow.hpp
+documentation_of: ../../flow/min_cost_flow.hpp
 ---
 
 ## Overview
@@ -76,11 +76,11 @@ state and sends additional flow.
 ## Example
 
 ```cpp
-#include "graph/min_cost_flow.hpp"
+#include "flow/min_cost_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::MinCostFlow<long long, long long> mcf(4);
+    m1une::flow::MinCostFlow<long long, long long> mcf(4);
     mcf.add_edge(0, 1, 2, 1);
     mcf.add_edge(0, 2, 1, 2);
     mcf.add_edge(1, 2, 1, 0);

@@ -7,7 +7,8 @@ documentation_of: ../../graph/all.hpp
 
 `graph/all.hpp` includes every general graph header in this directory. It is
 convenient when writing quickly during a contest and you do not want to manage
-individual graph includes.
+individual graph includes. Flow-network algorithms live separately under
+`flow/`.
 
 ## Included Headers
 
@@ -15,11 +16,8 @@ individual graph includes.
 | --- | --- | --- |
 | `graph/graph.hpp` | Container | `Graph<T>` and `Edge<T>` adjacency-list container. |
 | `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | BFS, 0-1 BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
-| `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths and flow. |
+| `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths. |
 | `graph/undirected.hpp` | Undirected-oriented bundle | Undirected algorithms plus shortest paths and grid helpers. |
-| `graph/flow.hpp` | Directed flow network | Bounded flow, bounded min-cost flow, max flow, and min-cost flow. |
-| `graph/bounded_flow.hpp` | Directed flow network | Feasible flow with lower/upper bounds, balances, and negative flow intervals. |
-| `graph/bounded_min_cost_flow.hpp` | Directed flow network | Minimum-cost feasible flow with lower/upper bounds, balances, and negative flow intervals. |
 | `graph/bfs.hpp` | Direction-respecting | Unweighted shortest paths. |
 | `graph/zero_one_bfs.hpp` | Direction-respecting | Shortest paths with edge costs `0` or `1`. |
 | `graph/dag_shortest_path.hpp` | Directed DAG only | Shortest paths in a DAG, including negative edge costs. |
@@ -36,8 +34,6 @@ individual graph includes.
 | `graph/connected_components.hpp` | Direction ignored | Weak/ordinary connected components. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Finds one cycle with the matching function. |
 | `graph/kruskal.hpp` | Undirected only | Minimum spanning forest. |
-| `graph/max_flow.hpp` | Directed flow network | Dinic maximum flow and minimum cut. |
-| `graph/min_cost_flow.hpp` | Directed flow network | Minimum-cost flow with potentials. |
 
 ## Example
 

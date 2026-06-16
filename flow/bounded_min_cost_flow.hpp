@@ -1,22 +1,23 @@
-#ifndef M1UNE_GRAPH_BOUNDED_FLOW_HPP
-#define M1UNE_GRAPH_BOUNDED_FLOW_HPP 1
+#ifndef M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP
+#define M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP 1
 
 #include <cassert>
 #include <optional>
 #include <vector>
 
-#include "graph/max_flow.hpp"
+#include "flow/min_cost_flow.hpp"
 
 namespace m1une {
-namespace graph {
+namespace flow {
 
-template <class Cap>
-struct BoundedFlow {
+template <class Cap, class Cost>
+struct BoundedMinCostFlow {
     struct Edge {
         int from;
         int to;
         Cap lower;
         Cap upper;
+        Cost cost;
     };
 
     struct ResultEdge {
@@ -25,11 +26,13 @@ struct BoundedFlow {
         Cap lower;
         Cap upper;
         Cap flow;
+        Cost cost;
     };
 
     struct Result {
         std::vector<ResultEdge> edges;
         std::vector<Cap> balance;
+        Cost cost;
 
         ResultEdge get_edge(int i) const {
             assert(0 <= i && i < int(edges.size()));
@@ -48,9 +51,9 @@ struct BoundedFlow {
     std::vector<Cap> _balance;
 
    public:
-    BoundedFlow() : BoundedFlow(0) {}
+    BoundedMinCostFlow() : BoundedMinCostFlow(0) {}
 
-    explicit BoundedFlow(int n) : _n(n), _balance(n, Cap(0)) {
+    explicit BoundedMinCostFlow(int n) : _n(n), _balance(n, Cap(0)) {
         assert(0 <= n);
     }
 
@@ -62,12 +65,12 @@ struct BoundedFlow {
         return int(_edges.size());
     }
 
-    int add_edge(int from, int to, Cap lower, Cap upper) {
+    int add_edge(int from, int to, Cap lower, Cap upper, Cost cost) {
         assert(0 <= from && from < _n);
         assert(0 <= to && to < _n);
         assert(lower <= upper);
         int id = int(_edges.size());
-        _edges.push_back(Edge{from, to, lower, upper});
+        _edges.push_back(Edge{from, to, lower, upper, cost});
         return id;
     }
 
@@ -109,63 +112,82 @@ struct BoundedFlow {
         return _balance;
     }
 
-    std::optional<Result> feasible_flow() const {
-        return feasible_flow(_balance);
+    std::optional<Result> min_cost_flow() const {
+        return min_cost_flow(_balance);
     }
 
-    std::optional<Result> feasible_flow(const std::vector<Cap>& balance) const {
+    std::optional<Result> min_cost_flow(const std::vector<Cap>& balance) const {
         assert(int(balance.size()) == _n);
         int ss = _n, tt = _n + 1;
-        MaxFlow<Cap> mf(_n + 2);
-        std::vector<int> edge_ids;
-        edge_ids.reserve(_edges.size());
+        MinCostFlow<Cap, Cost> mcf(_n + 2);
 
         std::vector<Cap> need = balance;
-        for (const auto& e : _edges) {
-            edge_ids.push_back(mf.add_edge(e.from, e.to, e.upper - e.lower));
+        std::vector<Cap> initial(_edges.size(), Cap(0));
+        std::vector<int> edge_ids(_edges.size(), -1);
+        std::vector<char> reversed(_edges.size(), false);
+
+        for (int i = 0; i < int(_edges.size()); i++) {
+            const auto& e = _edges[i];
+            Cap cap = e.upper - e.lower;
             need[e.from] -= e.lower;
             need[e.to] += e.lower;
+            if (e.cost < Cost(0)) {
+                initial[i] = cap;
+                need[e.from] -= cap;
+                need[e.to] += cap;
+                edge_ids[i] = mcf.add_edge(e.to, e.from, cap, -e.cost);
+                reversed[i] = true;
+            } else {
+                edge_ids[i] = mcf.add_edge(e.from, e.to, cap, e.cost);
+            }
         }
 
         Cap positive_sum = Cap(0), negative_sum = Cap(0);
         for (int v = 0; v < _n; v++) {
             if (need[v] > Cap(0)) {
                 positive_sum += need[v];
-                mf.add_edge(ss, v, need[v]);
+                mcf.add_edge(ss, v, need[v], Cost(0));
             } else if (need[v] < Cap(0)) {
                 negative_sum += -need[v];
-                mf.add_edge(v, tt, -need[v]);
+                mcf.add_edge(v, tt, -need[v], Cost(0));
             }
         }
         if (positive_sum != negative_sum) return std::nullopt;
-        if (mf.max_flow(ss, tt) != positive_sum) return std::nullopt;
+
+        auto [sent, extra_cost] = mcf.flow(ss, tt, positive_sum);
+        (void)extra_cost;
+        if (sent != positive_sum) return std::nullopt;
 
         Result result;
         result.balance = balance;
+        result.cost = Cost(0);
         result.edges.reserve(_edges.size());
         for (int i = 0; i < int(_edges.size()); i++) {
-            auto used = mf.get_edge(edge_ids[i]).flow;
             const auto& e = _edges[i];
-            result.edges.push_back(ResultEdge{e.from, e.to, e.lower, e.upper, e.lower + used});
+            Cap used = mcf.get_edge(edge_ids[i]).flow;
+            Cap residual_flow = reversed[i] ? initial[i] - used : used;
+            Cap flow = e.lower + residual_flow;
+            result.cost += Cost(flow) * e.cost;
+            result.edges.push_back(ResultEdge{e.from, e.to, e.lower, e.upper, flow, e.cost});
         }
         return result;
     }
 
-    std::optional<Result> feasible_st_flow(int s, int t, Cap flow_value) const {
+    std::optional<Result> min_cost_st_flow(int s, int t, Cap flow_value) const {
         assert(0 <= s && s < _n);
         assert(0 <= t && t < _n);
         assert(s != t);
         std::vector<Cap> balance = _balance;
         balance[s] += flow_value;
         balance[t] -= flow_value;
-        return feasible_flow(balance);
+        return min_cost_flow(balance);
     }
 };
 
-template <class Cap>
-using BFlow = BoundedFlow<Cap>;
+template <class Cap, class Cost>
+using BMinCostFlow = BoundedMinCostFlow<Cap, Cost>;
 
-}  // namespace graph
+}  // namespace flow
 }  // namespace m1une
 
-#endif  // M1UNE_GRAPH_BOUNDED_FLOW_HPP
+#endif  // M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP

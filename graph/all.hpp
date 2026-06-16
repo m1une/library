@@ -2,7 +2,6 @@
 #define M1UNE_GRAPH_ALL_HPP 1
 
 #include "graph/directed.hpp"
-#include "graph/flow.hpp"
 #include "graph/graph.hpp"
 #include "graph/grid.hpp"
 #include "graph/shortest_path.hpp"

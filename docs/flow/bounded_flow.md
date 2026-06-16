@@ -1,6 +1,6 @@
 ---
 title: Bounded Flow
-documentation_of: ../../graph/bounded_flow.hpp
+documentation_of: ../../flow/bounded_flow.hpp
 ---
 
 ## Overview
@@ -102,11 +102,11 @@ The result contains these members:
 ## Example
 
 ```cpp
-#include "graph/bounded_flow.hpp"
+#include "flow/bounded_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::BoundedFlow<long long> bf(3);
+    m1une::flow::BoundedFlow<long long> bf(3);
     int e0 = bf.add_edge(0, 1, 1, 3);
     int e1 = bf.add_edge(0, 2, 0, 2);
     int e2 = bf.add_edge(1, 2, -1, 2);  // negative flow is allowed

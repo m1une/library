@@ -1,6 +1,6 @@
 ---
 title: Bounded Min Cost Flow
-documentation_of: ../../graph/bounded_min_cost_flow.hpp
+documentation_of: ../../flow/bounded_min_cost_flow.hpp
 ---
 
 ## Overview
@@ -123,11 +123,11 @@ Here, `F` is the number of augmentations made by the internal
 ## Example
 
 ```cpp
-#include "graph/bounded_min_cost_flow.hpp"
+#include "flow/bounded_min_cost_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::BoundedMinCostFlow<long long, long long> mcf(3);
+    m1une::flow::BoundedMinCostFlow<long long, long long> mcf(3);
     int e0 = mcf.add_edge(0, 1, 1, 3, 2);
     int e1 = mcf.add_edge(1, 2, 1, 3, 1);
     int e2 = mcf.add_edge(0, 2, 0, 3, 10);

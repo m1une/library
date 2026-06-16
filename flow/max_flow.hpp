@@ -1,5 +1,5 @@
-#ifndef M1UNE_GRAPH_MAX_FLOW_HPP
-#define M1UNE_GRAPH_MAX_FLOW_HPP 1
+#ifndef M1UNE_FLOW_MAX_FLOW_HPP
+#define M1UNE_FLOW_MAX_FLOW_HPP 1
 
 #include <algorithm>
 #include <cassert>
@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace m1une {
-namespace graph {
+namespace flow {
 
 template <class Cap>
 struct MaxFlow {
@@ -158,7 +158,7 @@ struct MaxFlow {
     }
 };
 
-}  // namespace graph
+}  // namespace flow
 }  // namespace m1une
 
-#endif  // M1UNE_GRAPH_MAX_FLOW_HPP
+#endif  // M1UNE_FLOW_MAX_FLOW_HPP
