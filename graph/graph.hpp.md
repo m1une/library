@@ -66,6 +66,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/library_checker_general_matching.test.cpp
+    title: verify/graph/library_checker_general_matching.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -206,6 +209,7 @@ data:
   timestamp: '2026-06-16 02:32:54+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/graph.hpp
 layout: document

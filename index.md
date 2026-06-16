@@ -464,6 +464,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/graph/graph_algorithms.test.cpp
       title: verify/graph/graph_algorithms.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/graph/library_checker_general_matching.test.cpp
+      title: verify/graph/library_checker_general_matching.test.cpp
   - name: verify/string
     pages:
     - icon: ':heavy_check_mark:'
