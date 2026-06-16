@@ -369,6 +369,9 @@ data:
       path: tree/rerooting_dp.hpp
       title: Rerooting DP
     - icon: ':heavy_check_mark:'
+      path: tree/rerooting_static_top_tree.hpp
+      title: Rerooting Static Top Tree
+    - icon: ':heavy_check_mark:'
       path: tree/rooted_tree.hpp
       title: Rooted Tree
     - icon: ':heavy_check_mark:'

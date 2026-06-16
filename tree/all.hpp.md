@@ -23,6 +23,9 @@ data:
     path: tree/rerooting_dp.hpp
     title: Rerooting DP
   - icon: ':heavy_check_mark:'
+    path: tree/rerooting_static_top_tree.hpp
+    title: Rerooting Static Top Tree
+  - icon: ':heavy_check_mark:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
   - icon: ':heavy_check_mark:'
@@ -284,35 +287,206 @@ data:
     \ i = 0; i < d; i++) {\n            const auto& e = g[v][i];\n            if (!e.alive)\
     \ continue;\n            if (parent[e.to] != v) continue;\n            outside[e.to]\
     \ = add_vertex(merge(pref[i], suff[i + 1]), v);\n        }\n    }\n\n    return\
-    \ answer;\n}\n\n}  // namespace tree\n}  // namespace m1une\n\n\n#line 1 \"tree/rooted_tree.hpp\"\
-    \n\n\n\n#line 7 \"tree/rooted_tree.hpp\"\n\n#line 9 \"tree/rooted_tree.hpp\"\n\
-    \nnamespace m1une {\nnamespace tree {\n\ntemplate <class T = int>\nstruct RootedTree\
-    \ {\n    using cost_type = T;\n    using edge_type = m1une::graph::Edge<T>;\n\n\
-    \    int root;\n    std::vector<int> parent;\n    std::vector<int> parent_edge;\n\
-    \    std::vector<int> depth;\n    std::vector<T> dist;\n    std::vector<int> subtree_size;\n\
-    \    std::vector<int> tin;\n    std::vector<int> tout;\n    std::vector<int> order;\n\
-    \    std::vector<std::vector<int>> up;\n\n   private:\n    int _n;\n    int _log;\n\
-    \n    void check_vertex(int v) const {\n        assert(0 <= v && v < _n);\n  \
-    \      assert(tin[v] != -1);\n    }\n\n   public:\n    RootedTree() : root(-1),\
-    \ _n(0), _log(0) {}\n    explicit RootedTree(const m1une::graph::Graph<T>& g,\
-    \ int root_ = 0) {\n        build(g, root_);\n    }\n\n    void build(const m1une::graph::Graph<T>&\
-    \ g, int root_ = 0) {\n        _n = g.size();\n        root = _n == 0 ? -1 : root_;\n\
-    \        _log = 1;\n        while ((1U << _log) <= (unsigned int)(std::max(1,\
-    \ _n))) _log++;\n\n        parent.assign(_n, -1);\n        parent_edge.assign(_n,\
-    \ -1);\n        depth.assign(_n, 0);\n        dist.assign(_n, T(0));\n       \
-    \ subtree_size.assign(_n, 0);\n        tin.assign(_n, -1);\n        tout.assign(_n,\
-    \ -1);\n        order.clear();\n        order.reserve(_n);\n        up.assign(_log,\
-    \ std::vector<int>(_n, -1));\n\n        if (_n == 0) return;\n        assert(0\
-    \ <= root && root < _n);\n\n        struct Frame {\n            int v;\n     \
-    \       int state;\n        };\n\n        std::vector<char> visited(_n, false);\n\
-    \        std::vector<Frame> stack;\n        stack.push_back({root, 0});\n    \
-    \    visited[root] = true;\n        int timer = 0;\n\n        while (!stack.empty())\
-    \ {\n            Frame frame = stack.back();\n            stack.pop_back();\n\
-    \            int v = frame.v;\n            if (frame.state == 0) {\n         \
-    \       tin[v] = timer++;\n                order.push_back(v);\n             \
-    \   up[0][v] = parent[v];\n                for (int k = 1; k < _log; k++) {\n\
-    \                    int p = up[k - 1][v];\n                    up[k][v] = p ==\
-    \ -1 ? -1 : up[k - 1][p];\n                }\n\n                stack.push_back({v,\
+    \ answer;\n}\n\n}  // namespace tree\n}  // namespace m1une\n\n\n#line 1 \"tree/rerooting_static_top_tree.hpp\"\
+    \n\n\n\n#line 6 \"tree/rerooting_static_top_tree.hpp\"\n#include <optional>\n\
+    #include <type_traits>\n#line 10 \"tree/rerooting_static_top_tree.hpp\"\n\n#line\
+    \ 12 \"tree/rerooting_static_top_tree.hpp\"\n\nnamespace m1une {\nnamespace tree\
+    \ {\n\nnamespace internal {\n\nenum class RerootingStaticTopTreeNodeType {\n \
+    \   Compress,\n    Rake,\n    AddEdge,\n    AddVertex,\n};\n\n}  // namespace\
+    \ internal\n\ntemplate <class T, class Vertex, class Path, class Point, class\
+    \ CompressDown, class CompressUp, class Rake,\n          class AddEdgeDown, class\
+    \ AddEdgeUp, class AddVertex>\nstruct RerootingStaticTopTree {\n    using cost_type\
+    \ = T;\n    using vertex_type = Vertex;\n    using path_type = Path;\n    using\
+    \ point_type = Point;\n    using edge_type = m1une::graph::Edge<T>;\n    using\
+    \ node_type = internal::RerootingStaticTopTreeNodeType;\n\n    struct Node {\n\
+    \        node_type type;\n        int left = -1;\n        int right = -1;\n  \
+    \      int parent = -1;\n        int vertex = -1;\n        edge_type edge;\n \
+    \       int size = 0;\n        int height = 1;\n        std::optional<Path> path_down;\n\
+    \        std::optional<Path> path_up;\n        std::optional<Point> point;\n \
+    \   };\n\n   private:\n    int _n;\n    int _root;\n    int _root_node;\n    Point\
+    \ _point_id;\n    CompressDown _compress_down;\n    CompressUp _compress_up;\n\
+    \    Rake _rake;\n    AddEdgeDown _add_edge_down;\n    AddEdgeUp _add_edge_up;\n\
+    \    AddVertex _add_vertex;\n    std::vector<Vertex> _values;\n    std::vector<Node>\
+    \ _nodes;\n    std::vector<int> _vertex_node;\n    std::vector<int> _edge_node;\n\
+    \    std::vector<int> _parent;\n    std::vector<int> _subtree_size;\n    std::vector<int>\
+    \ _heavy;\n    std::vector<edge_type> _heavy_edge;\n    std::vector<std::vector<edge_type>>\
+    \ _children;\n\n    static edge_type reversed_edge(edge_type e) {\n        std::swap(e.from,\
+    \ e.to);\n        return e;\n    }\n\n    const Path& node_path_down(int node)\
+    \ const {\n        assert(0 <= node && node < int(_nodes.size()));\n        assert(_nodes[node].path_down.has_value());\n\
+    \        return *_nodes[node].path_down;\n    }\n\n    const Path& node_path_up(int\
+    \ node) const {\n        assert(0 <= node && node < int(_nodes.size()));\n   \
+    \     assert(_nodes[node].path_up.has_value());\n        return *_nodes[node].path_up;\n\
+    \    }\n\n    const Point& node_point(int node) const {\n        assert(0 <= node\
+    \ && node < int(_nodes.size()));\n        assert(_nodes[node].point.has_value());\n\
+    \        return *_nodes[node].point;\n    }\n\n    void set_parent(int child,\
+    \ int parent) {\n        if (child != -1) _nodes[child].parent = parent;\n   \
+    \ }\n\n    void recompute(int node) {\n        auto& x = _nodes[node];\n     \
+    \   if (x.type == node_type::Compress) {\n            x.path_down = _compress_down(node_path_down(x.left),\
+    \ node_path_down(x.right), x.edge);\n            x.path_up = _compress_up(node_path_up(x.right),\
+    \ node_path_up(x.left), reversed_edge(x.edge));\n        } else if (x.type ==\
+    \ node_type::Rake) {\n            x.point = _rake(node_point(x.left), node_point(x.right));\n\
+    \        } else if (x.type == node_type::AddEdge) {\n            x.point = _add_edge_down(node_path_down(x.left),\
+    \ x.edge);\n        } else {\n            const Point& side = x.left == -1 ? _point_id\
+    \ : node_point(x.left);\n            Path path = _add_vertex(side, _values[x.vertex],\
+    \ x.vertex);\n            x.path_down = path;\n            x.path_up = std::move(path);\n\
+    \        }\n    }\n\n    int new_node(Node node) {\n        int id = int(_nodes.size());\n\
+    \        _nodes.push_back(std::move(node));\n        set_parent(_nodes[id].left,\
+    \ id);\n        set_parent(_nodes[id].right, id);\n        recompute(id);\n  \
+    \      return id;\n    }\n\n    int new_compress(int left, int right, edge_type\
+    \ edge) {\n        Node node;\n        node.type = node_type::Compress;\n    \
+    \    node.left = left;\n        node.right = right;\n        node.edge = edge;\n\
+    \        node.size = _nodes[left].size + _nodes[right].size;\n        node.height\
+    \ = std::max(_nodes[left].height, _nodes[right].height) + 1;\n        int id =\
+    \ new_node(std::move(node));\n        if (0 <= edge.id && edge.id < int(_edge_node.size()))\
+    \ _edge_node[edge.id] = id;\n        return id;\n    }\n\n    int new_rake(int\
+    \ left, int right) {\n        Node node;\n        node.type = node_type::Rake;\n\
+    \        node.left = left;\n        node.right = right;\n        node.size = _nodes[left].size\
+    \ + _nodes[right].size;\n        node.height = std::max(_nodes[left].height, _nodes[right].height)\
+    \ + 1;\n        return new_node(std::move(node));\n    }\n\n    int new_add_edge(int\
+    \ child, edge_type edge) {\n        Node node;\n        node.type = node_type::AddEdge;\n\
+    \        node.left = child;\n        node.edge = edge;\n        node.size = _nodes[child].size;\n\
+    \        node.height = _nodes[child].height + 1;\n        int id = new_node(std::move(node));\n\
+    \        if (0 <= edge.id && edge.id < int(_edge_node.size())) _edge_node[edge.id]\
+    \ = id;\n        return id;\n    }\n\n    int new_add_vertex(int side, int vertex)\
+    \ {\n        Node node;\n        node.type = node_type::AddVertex;\n        node.left\
+    \ = side;\n        node.vertex = vertex;\n        node.size = 1 + (side == -1\
+    \ ? 0 : _nodes[side].size);\n        node.height = 1 + (side == -1 ? 0 : _nodes[side].height);\n\
+    \        int id = new_node(std::move(node));\n        _vertex_node[vertex] = id;\n\
+    \        return id;\n    }\n\n    int weighted_split(const std::vector<int>& nodes,\
+    \ int l, int r) const {\n        int total = 0;\n        for (int i = l; i < r;\
+    \ i++) total += _nodes[nodes[i]].size;\n        int left_sum = 0;\n        for\
+    \ (int i = l; i + 1 < r; i++) {\n            left_sum += _nodes[nodes[i]].size;\n\
+    \            if (2 * left_sum >= total) return i + 1;\n        }\n        return\
+    \ l + 1;\n    }\n\n    int build_rake(const std::vector<int>& nodes, int l, int\
+    \ r) {\n        if (l == r) return -1;\n        if (l + 1 == r) return nodes[l];\n\
+    \        int m = weighted_split(nodes, l, r);\n        return new_rake(build_rake(nodes,\
+    \ l, m), build_rake(nodes, m, r));\n    }\n\n    int build_compress(const std::vector<int>&\
+    \ nodes, const std::vector<edge_type>& edges, int l, int r) {\n        if (l +\
+    \ 1 == r) return nodes[l];\n        int m = weighted_split(nodes, l, r);\n   \
+    \     return new_compress(build_compress(nodes, edges, l, m), build_compress(nodes,\
+    \ edges, m, r), edges[m - 1]);\n    }\n\n    int build_vertex(int v) {\n     \
+    \   std::vector<int> side_nodes;\n        for (const auto& e : _children[v]) {\n\
+    \            if (e.to == _heavy[v]) continue;\n            int child_path = build_path(e.to);\n\
+    \            side_nodes.push_back(new_add_edge(child_path, e));\n        }\n \
+    \       return new_add_vertex(build_rake(side_nodes, 0, int(side_nodes.size())),\
+    \ v);\n    }\n\n    int build_path(int start) {\n        std::vector<int> path_nodes;\n\
+    \        std::vector<edge_type> path_edges;\n        for (int v = start; v !=\
+    \ -1; v = _heavy[v]) {\n            path_nodes.push_back(build_vertex(v));\n \
+    \           if (_heavy[v] != -1) path_edges.push_back(_heavy_edge[v]);\n     \
+    \   }\n        return build_compress(path_nodes, path_edges, 0, int(path_nodes.size()));\n\
+    \    }\n\n    void recompute_up(int node) {\n        while (node != -1) {\n  \
+    \          recompute(node);\n            node = _nodes[node].parent;\n       \
+    \ }\n    }\n\n   public:\n    RerootingStaticTopTree(const m1une::graph::Graph<T>&\
+    \ g, const std::vector<Vertex>& values, Point point_id,\n                    \
+    \       CompressDown compress_down, CompressUp compress_up, Rake rake,\n     \
+    \                      AddEdgeDown add_edge_down, AddEdgeUp add_edge_up, AddVertex\
+    \ add_vertex, int root = 0)\n        : _n(g.size()),\n          _root(_n == 0\
+    \ ? -1 : root),\n          _root_node(-1),\n          _point_id(std::move(point_id)),\n\
+    \          _compress_down(std::move(compress_down)),\n          _compress_up(std::move(compress_up)),\n\
+    \          _rake(std::move(rake)),\n          _add_edge_down(std::move(add_edge_down)),\n\
+    \          _add_edge_up(std::move(add_edge_up)),\n          _add_vertex(std::move(add_vertex)),\n\
+    \          _values(values) {\n        build(g, root);\n    }\n\n    void build(const\
+    \ m1une::graph::Graph<T>& g, int root = 0) {\n        _n = g.size();\n       \
+    \ _root = _n == 0 ? -1 : root;\n        assert(int(_values.size()) == _n);\n \
+    \       _nodes.clear();\n        _vertex_node.assign(_n, -1);\n        _edge_node.assign(g.edge_count(),\
+    \ -1);\n        _parent.assign(_n, -2);\n        _subtree_size.assign(_n, 1);\n\
+    \        _heavy.assign(_n, -1);\n        _heavy_edge.assign(_n, edge_type());\n\
+    \        _children.assign(_n, {});\n        _root_node = -1;\n\n        if (_n\
+    \ == 0) return;\n        assert(0 <= root && root < _n);\n        assert(int(g.edges().size())\
+    \ == _n - 1);\n\n        std::vector<int> order;\n        order.reserve(_n);\n\
+    \        std::vector<int> stack = {root};\n        _parent[root] = -1;\n     \
+    \   while (!stack.empty()) {\n            int v = stack.back();\n            stack.pop_back();\n\
+    \            order.push_back(v);\n            for (const auto& e : g[v]) {\n \
+    \               if (!e.alive) continue;\n                if (_parent[e.to] !=\
+    \ -2) continue;\n                _parent[e.to] = v;\n                _children[v].push_back(e);\n\
+    \                stack.push_back(e.to);\n            }\n        }\n        assert(int(order.size())\
+    \ == _n);\n\n        for (int i = int(order.size()) - 1; i >= 0; i--) {\n    \
+    \        int v = order[i];\n            for (const auto& e : _children[v]) {\n\
+    \                _subtree_size[v] += _subtree_size[e.to];\n                if\
+    \ (_heavy[v] == -1 || _subtree_size[_heavy[v]] < _subtree_size[e.to]) {\n    \
+    \                _heavy[v] = e.to;\n                    _heavy_edge[v] = e;\n\
+    \                }\n            }\n        }\n\n        _root_node = build_path(root);\n\
+    \    }\n\n    int size() const {\n        return _n;\n    }\n\n    bool empty()\
+    \ const {\n        return _n == 0;\n    }\n\n    int root() const {\n        return\
+    \ _root;\n    }\n\n    int root_node() const {\n        return _root_node;\n \
+    \   }\n\n    int node_count() const {\n        return int(_nodes.size());\n  \
+    \  }\n\n    int height() const {\n        return _root_node == -1 ? 0 : _nodes[_root_node].height;\n\
+    \    }\n\n    const std::vector<Node>& nodes() const {\n        return _nodes;\n\
+    \    }\n\n    const Node& node(int id) const {\n        assert(0 <= id && id <\
+    \ int(_nodes.size()));\n        return _nodes[id];\n    }\n\n    int parent_node(int\
+    \ id) const {\n        return node(id).parent;\n    }\n\n    int vertex_node(int\
+    \ v) const {\n        assert(0 <= v && v < _n);\n        return _vertex_node[v];\n\
+    \    }\n\n    const Vertex& get(int v) const {\n        assert(0 <= v && v < _n);\n\
+    \        return _values[v];\n    }\n\n    const Vertex& operator[](int v) const\
+    \ {\n        return get(v);\n    }\n\n    void set(int v, const Vertex& value)\
+    \ {\n        assert(0 <= v && v < _n);\n        assert(_vertex_node[v] != -1);\n\
+    \        _values[v] = value;\n        recompute_up(_vertex_node[v]);\n    }\n\n\
+    \    void set(int v, Vertex&& value) {\n        assert(0 <= v && v < _n);\n  \
+    \      assert(_vertex_node[v] != -1);\n        _values[v] = std::move(value);\n\
+    \        recompute_up(_vertex_node[v]);\n    }\n\n    void set_edge_cost(int edge_id,\
+    \ T cost) {\n        assert(0 <= edge_id && edge_id < int(_edge_node.size()));\n\
+    \        int node = _edge_node[edge_id];\n        assert(node != -1);\n      \
+    \  _nodes[node].edge.cost = cost;\n        recompute_up(node);\n    }\n\n    const\
+    \ Path& path_down(int node_id) const {\n        return node_path_down(node_id);\n\
+    \    }\n\n    const Path& path_up(int node_id) const {\n        return node_path_up(node_id);\n\
+    \    }\n\n    const Point& point(int node_id) const {\n        return node_point(node_id);\n\
+    \    }\n\n    const Path& all_prod_down() const {\n        assert(_root_node !=\
+    \ -1);\n        return path_down(_root_node);\n    }\n\n    const Path& all_prod_up()\
+    \ const {\n        assert(_root_node != -1);\n        return path_up(_root_node);\n\
+    \    }\n\n    const Point& point_id() const {\n        return _point_id;\n   \
+    \ }\n\n    Path compress_down(const Path& upper, const Path& lower, edge_type\
+    \ edge) const {\n        return _compress_down(upper, lower, edge);\n    }\n\n\
+    \    Path compress_up(const Path& lower, const Path& upper, edge_type edge) const\
+    \ {\n        return _compress_up(lower, upper, edge);\n    }\n\n    Point rake(const\
+    \ Point& left, const Point& right) const {\n        return _rake(left, right);\n\
+    \    }\n\n    Point add_edge_down(const Path& path, edge_type edge) const {\n\
+    \        return _add_edge_down(path, edge);\n    }\n\n    Point add_edge_up(const\
+    \ Path& path, edge_type edge) const {\n        return _add_edge_up(path, edge);\n\
+    \    }\n\n    Path add_vertex(const Point& side, const Vertex& value, int vertex)\
+    \ const {\n        return _add_vertex(side, value, vertex);\n    }\n\n    static\
+    \ edge_type reverse_edge(edge_type edge) {\n        return reversed_edge(edge);\n\
+    \    }\n};\n\ntemplate <class T, class Vertex, class Point, class CompressDown,\
+    \ class CompressUp, class Rake, class AddEdgeDown,\n          class AddEdgeUp,\
+    \ class AddVertex>\nRerootingStaticTopTree(const m1une::graph::Graph<T>&, const\
+    \ std::vector<Vertex>&, Point, CompressDown, CompressUp,\n                   \
+    \    Rake, AddEdgeDown, AddEdgeUp, AddVertex, int)\n    -> RerootingStaticTopTree<T,\
+    \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, CompressDown,\n\
+    \                              CompressUp, Rake, AddEdgeDown, AddEdgeUp, AddVertex>;\n\
+    \ntemplate <class T, class Vertex, class Point, class CompressDown, class CompressUp,\
+    \ class Rake, class AddEdgeDown,\n          class AddEdgeUp, class AddVertex>\n\
+    RerootingStaticTopTree(const m1une::graph::Graph<T>&, const std::vector<Vertex>&,\
+    \ Point, CompressDown, CompressUp,\n                       Rake, AddEdgeDown,\
+    \ AddEdgeUp, AddVertex)\n    -> RerootingStaticTopTree<T, Vertex, std::invoke_result_t<AddVertex,\
+    \ Point, Vertex, int>, Point, CompressDown,\n                              CompressUp,\
+    \ Rake, AddEdgeDown, AddEdgeUp, AddVertex>;\n\n}  // namespace tree\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"tree/rooted_tree.hpp\"\n\n\n\n#line 7 \"tree/rooted_tree.hpp\"\
+    \n\n#line 9 \"tree/rooted_tree.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\n\
+    template <class T = int>\nstruct RootedTree {\n    using cost_type = T;\n    using\
+    \ edge_type = m1une::graph::Edge<T>;\n\n    int root;\n    std::vector<int> parent;\n\
+    \    std::vector<int> parent_edge;\n    std::vector<int> depth;\n    std::vector<T>\
+    \ dist;\n    std::vector<int> subtree_size;\n    std::vector<int> tin;\n    std::vector<int>\
+    \ tout;\n    std::vector<int> order;\n    std::vector<std::vector<int>> up;\n\n\
+    \   private:\n    int _n;\n    int _log;\n\n    void check_vertex(int v) const\
+    \ {\n        assert(0 <= v && v < _n);\n        assert(tin[v] != -1);\n    }\n\
+    \n   public:\n    RootedTree() : root(-1), _n(0), _log(0) {}\n    explicit RootedTree(const\
+    \ m1une::graph::Graph<T>& g, int root_ = 0) {\n        build(g, root_);\n    }\n\
+    \n    void build(const m1une::graph::Graph<T>& g, int root_ = 0) {\n        _n\
+    \ = g.size();\n        root = _n == 0 ? -1 : root_;\n        _log = 1;\n     \
+    \   while ((1U << _log) <= (unsigned int)(std::max(1, _n))) _log++;\n\n      \
+    \  parent.assign(_n, -1);\n        parent_edge.assign(_n, -1);\n        depth.assign(_n,\
+    \ 0);\n        dist.assign(_n, T(0));\n        subtree_size.assign(_n, 0);\n \
+    \       tin.assign(_n, -1);\n        tout.assign(_n, -1);\n        order.clear();\n\
+    \        order.reserve(_n);\n        up.assign(_log, std::vector<int>(_n, -1));\n\
+    \n        if (_n == 0) return;\n        assert(0 <= root && root < _n);\n\n  \
+    \      struct Frame {\n            int v;\n            int state;\n        };\n\
+    \n        std::vector<char> visited(_n, false);\n        std::vector<Frame> stack;\n\
+    \        stack.push_back({root, 0});\n        visited[root] = true;\n        int\
+    \ timer = 0;\n\n        while (!stack.empty()) {\n            Frame frame = stack.back();\n\
+    \            stack.pop_back();\n            int v = frame.v;\n            if (frame.state\
+    \ == 0) {\n                tin[v] = timer++;\n                order.push_back(v);\n\
+    \                up[0][v] = parent[v];\n                for (int k = 1; k < _log;\
+    \ k++) {\n                    int p = up[k - 1][v];\n                    up[k][v]\
+    \ = p == -1 ? -1 : up[k - 1][p];\n                }\n\n                stack.push_back({v,\
     \ 1});\n                const auto& adj = g[v];\n                for (int i =\
     \ int(adj.size()) - 1; i >= 0; i--) {\n                    const auto& e = adj[i];\n\
     \                    if (!e.alive) continue;\n                    if (visited[e.to])\
@@ -479,8 +653,7 @@ data:
     \ = lca(u, v);\n        return dist[u] + dist[v] - dist[w] - dist[w];\n    }\n\
     \n    std::pair<int, int> subtree_range(int v) const {\n        check_vertex(v);\n\
     \        return {tin[v], tout[v]};\n    }\n};\n\n}  // namespace tree\n}  // namespace\
-    \ m1une\n\n\n#line 1 \"tree/static_top_tree.hpp\"\n\n\n\n#line 6 \"tree/static_top_tree.hpp\"\
-    \n#include <optional>\n#include <type_traits>\n#line 10 \"tree/static_top_tree.hpp\"\
+    \ m1une\n\n\n#line 1 \"tree/static_top_tree.hpp\"\n\n\n\n#line 10 \"tree/static_top_tree.hpp\"\
     \n\n#line 12 \"tree/static_top_tree.hpp\"\n\nnamespace m1une {\nnamespace tree\
     \ {\n\nnamespace internal {\n\nenum class StaticTopTreeNodeType {\n    Compress,\n\
     \    Rake,\n    AddEdge,\n    AddVertex,\n};\n\n}  // namespace internal\n\ntemplate\
@@ -616,7 +789,7 @@ data:
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, Compress,\
     \ Rake,\n                     AddEdge, AddVertex>;\n\n}  // namespace tree\n}\
     \  // namespace m1une\n\n\n#line 1 \"tree/tree.hpp\"\n\n\n\n#line 7 \"tree/tree.hpp\"\
-    \n\n\n#line 12 \"tree/all.hpp\"\n\n\n"
+    \n\n\n#line 13 \"tree/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_TREE_ALL_HPP
 
     #define M1UNE_TREE_ALL_HPP 1
@@ -629,6 +802,8 @@ data:
     #include "tree/heavy_light_decomposition.hpp"
 
     #include "tree/rerooting_dp.hpp"
+
+    #include "tree/rerooting_static_top_tree.hpp"
 
     #include "tree/rooted_tree.hpp"
 
@@ -648,6 +823,7 @@ data:
   - tree/diameter.hpp
   - tree/heavy_light_decomposition.hpp
   - tree/rerooting_dp.hpp
+  - tree/rerooting_static_top_tree.hpp
   - tree/rooted_tree.hpp
   - tree/sparse_table_lca.hpp
   - data_structure/sparse_table.hpp
@@ -657,7 +833,7 @@ data:
   isVerificationFile: false
   path: tree/all.hpp
   requiredBy: []
-  timestamp: '2026-06-17 02:47:46+09:00'
+  timestamp: '2026-06-17 03:31:44+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
@@ -683,6 +859,7 @@ existing graph library.
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
 | `tree/rerooting_dp.hpp` | Generic rerooting DP helper. |
 | `tree/static_top_tree.hpp` | Dynamic one-root tree DP on a fixed tree using static top-tree clusters. |
+| `tree/rerooting_static_top_tree.hpp` | Bidirectional static top-tree clusters for dynamic rerooting-DP solutions. |
 | `tree/centroid_decomposition.hpp` | Centroid decomposition for trees and forests. |
 
 ## Example
