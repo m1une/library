@@ -7,6 +7,7 @@
 #include "tree/rerooting_dp.hpp"
 #include "tree/rooted_tree.hpp"
 #include "tree/sparse_table_lca.hpp"
+#include "tree/static_top_tree.hpp"
 #include "tree/tree.hpp"
 
 #endif  // M1UNE_TREE_ALL_HPP

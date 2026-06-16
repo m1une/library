@@ -202,6 +202,75 @@ void test_rerooting() {
     assert(eccentricity_cost[6] == 17);
 }
 
+struct DistancePath {
+    long long count;
+    long long sum;
+    long long length;
+};
+
+struct DistancePoint {
+    long long count;
+    long long sum;
+};
+
+void test_static_top_tree() {
+    auto g = sample_tree();
+    std::vector<long long> values = {1, 2, 3, 4, 5, 6, 7};
+
+    auto vertex_sum = m1une::tree::StaticTopTree(
+        g,
+        values,
+        0LL,
+        [](long long top, long long bottom, const auto&) {
+            return top + bottom;
+        },
+        [](long long a, long long b) {
+            return a + b;
+        },
+        [](long long path, const auto&) {
+            return path;
+        },
+        [](long long side, long long value, int) {
+            return side + value;
+        });
+
+    assert(vertex_sum.size() == 7);
+    assert(vertex_sum.root() == 0);
+    assert(vertex_sum.all_prod() == 28);
+    assert(vertex_sum.query() == 28);
+    assert(vertex_sum.get(3) == 4);
+    assert(vertex_sum.height() > 0);
+    vertex_sum.set(3, 100);
+    assert(vertex_sum[3] == 100);
+    assert(vertex_sum.all_prod() == 124);
+
+    auto root_distance_sum = m1une::tree::StaticTopTree(
+        g,
+        std::vector<int>(7, 0),
+        DistancePoint{0, 0},
+        [](DistancePath top, DistancePath bottom, const auto& e) {
+            long long shift = top.length + e.cost;
+            return DistancePath{top.count + bottom.count, top.sum + bottom.sum + bottom.count * shift,
+                                top.length + e.cost + bottom.length};
+        },
+        [](DistancePoint a, DistancePoint b) {
+            return DistancePoint{a.count + b.count, a.sum + b.sum};
+        },
+        [](DistancePath path, const auto& e) {
+            return DistancePoint{path.count, path.sum + path.count * e.cost};
+        },
+        [](DistancePoint side, int, int) {
+            return DistancePath{side.count + 1, side.sum, 0};
+        });
+
+    assert(root_distance_sum.all_prod().count == 7);
+    assert(root_distance_sum.all_prod().sum == 34);
+    root_distance_sum.set_edge_cost(0, 10);
+    assert(root_distance_sum.all_prod().sum == 55);
+    root_distance_sum.set_edge_cost(1, 10);
+    assert(root_distance_sum.all_prod().sum == 79);
+}
+
 void test_centroid_decomposition() {
     auto g = sample_tree();
     m1une::tree::CentroidDecomposition<long long> cd(g);
@@ -252,6 +321,7 @@ int main() {
     test_hld();
     test_diameter();
     test_rerooting();
+    test_static_top_tree();
     test_centroid_decomposition();
     test_forest();
 

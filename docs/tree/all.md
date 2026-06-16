@@ -19,6 +19,7 @@ existing graph library.
 | `tree/heavy_light_decomposition.hpp` | HLD order, path segments, subtree ranges, LCA, and jumps. |
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
 | `tree/rerooting_dp.hpp` | Generic rerooting DP helper. |
+| `tree/static_top_tree.hpp` | Dynamic one-root tree DP on a fixed tree using static top-tree clusters. |
 | `tree/centroid_decomposition.hpp` | Centroid decomposition for trees and forests. |
 
 ## Example
