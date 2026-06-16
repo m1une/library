@@ -32,14 +32,73 @@ is excluded.
 
 ## Public Members
 
-| Member | Type | Description |
+The input graph is first rooted at `root`. Then vertices are reordered into the
+HLD base array. If you build a segment tree with HLD, position `tin[v]` is the
+position corresponding to original vertex `v`.
+
+For a connected tree, these arrays have size `N`, except `order`, which also
+has size `N`. The graph is expected to be a tree. If the graph is disconnected,
+only the component reachable from `root` gets valid HLD positions; vertices
+outside that component keep `tin[v] == -1`.
+
+| Member | Type | What is stored |
 | --- | --- | --- |
-| `parent`, `parent_edge` | `std::vector<int>` | Rooted parent and incoming edge id. |
-| `depth`, `dist` | `std::vector<int>`, `std::vector<T>` | Root depth and weighted root distance. |
-| `subtree_size` | `std::vector<int>` | Rooted subtree sizes. |
-| `heavy` | `std::vector<int>` | Heavy child, or `-1`. |
-| `head` | `std::vector<int>` | Head vertex of the heavy path. |
-| `tin`, `tout`, `order` | `std::vector<int>` | HLD order and subtree intervals. |
+| `root` | `int` | The root used to orient the tree. It is `-1` for an empty graph. |
+| `parent[v]` | `int` | The parent of `v` in the rooted original tree. `parent[root] == -1`. |
+| `parent_edge[v]` | `int` | The graph edge id connecting `parent[v]` to `v`. It is `-1` for the root. |
+| `depth[v]` | `int` | Number of edges from `root` to `v`. |
+| `dist[v]` | `T` | Sum of edge costs from `root` to `v`. For an unweighted tree, this is the same as `depth[v]` if all costs are `1`. |
+| `subtree_size[v]` | `int` | Number of vertices in the rooted subtree of `v`, including `v` itself. |
+| `heavy[v]` | `int` | The child of `v` with the largest subtree. This child continues the same heavy path. It is `-1` if `v` has no children. |
+| `head[v]` | `int` | The top vertex of the heavy path containing `v`. If `head[v] == head[u]`, then `u` and `v` are on the same heavy path. |
+| `tin[v]` | `int` | Position of original vertex `v` in the HLD base array. This is the index to use in segment trees. |
+| `tout[v]` | `int` | One past the end of the rooted subtree interval of `v` in HLD order. The subtree is `[tin[v], tout[v])`. |
+| `order[i]` | `int` | The original vertex stored at HLD base-array position `i`. This is the inverse of `tin`: `order[tin[v]] == v`. |
+
+Important relationships:
+
+* Vertex `v` is stored at base-array index `tin[v]`.
+* `order[i]` converts a base-array index back to the original vertex.
+* The rooted subtree of `v` occupies the contiguous interval
+  `[tin[v], tout[v])`.
+* If you store edge values instead of vertex values, store the edge
+  `(parent[v], v)` at `tin[v]`. The root has no parent edge.
+* Heavy paths are contiguous in the base array. That is why a path can be split
+  into only $O(\log N)$ intervals.
+
+For example, suppose the original tree is:
+
+```text
+0
+|- 1
+|  |- 3
+|  `- 4
+`- 2
+```
+
+If `1` is chosen as the heavy child of `0`, and `3` is chosen as the heavy child
+of `1`, one possible HLD order is:
+
+```text
+index: 0  1  2  3  4
+order: 0  1  3  4  2
+```
+
+Then:
+
+```text
+tin[0] = 0
+tin[1] = 1
+tin[3] = 2
+tin[4] = 3
+tin[2] = 4
+head[0] = head[1] = head[3] = 0
+head[4] = 4
+head[2] = 2
+```
+
+The subtree of vertex `1` is vertices `{1, 3, 4}`, and it is stored
+contiguously as `[tin[1], tout[1]) == [1, 4)`.
 
 ## Methods
 
