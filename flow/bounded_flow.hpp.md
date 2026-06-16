@@ -2,33 +2,27 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: graph/max_flow.hpp
+    path: flow/max_flow.hpp
     title: Max Flow
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: graph/all.hpp
-    title: Graph All
-  - icon: ':heavy_check_mark:'
-    path: graph/directed.hpp
-    title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
-    path: graph/flow.hpp
+    path: flow/flow.hpp
     title: Flow
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/graph/graph_algorithms.test.cpp
-    title: verify/graph/graph_algorithms.test.cpp
+    path: verify/flow/flow_algorithms.test.cpp
+    title: verify/flow/flow_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"graph/bounded_flow.hpp\"\n\n\n\n#include <cassert>\n#include\
-    \ <optional>\n#include <vector>\n\n#line 1 \"graph/max_flow.hpp\"\n\n\n\n#include\
-    \ <algorithm>\n#line 6 \"graph/max_flow.hpp\"\n#include <limits>\n#include <queue>\n\
-    #include <utility>\n#line 10 \"graph/max_flow.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ graph {\n\ntemplate <class Cap>\nstruct MaxFlow {\n    struct Edge {\n     \
-    \   int from;\n        int to;\n        Cap cap;\n        Cap flow;\n    };\n\n\
+  bundledCode: "#line 1 \"flow/bounded_flow.hpp\"\n\n\n\n#include <cassert>\n#include\
+    \ <optional>\n#include <vector>\n\n#line 1 \"flow/max_flow.hpp\"\n\n\n\n#include\
+    \ <algorithm>\n#line 6 \"flow/max_flow.hpp\"\n#include <limits>\n#include <queue>\n\
+    #include <utility>\n#line 10 \"flow/max_flow.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ flow {\n\ntemplate <class Cap>\nstruct MaxFlow {\n    struct Edge {\n      \
+    \  int from;\n        int to;\n        Cap cap;\n        Cap flow;\n    };\n\n\
     \   private:\n    struct InternalEdge {\n        int to;\n        int rev;\n \
     \       Cap cap;\n    };\n\n    int _n;\n    std::vector<std::pair<int, int>>\
     \ _pos;\n    std::vector<std::vector<InternalEdge>> _g;\n\n   public:\n    MaxFlow()\
@@ -81,8 +75,8 @@ data:
     \  que.pop();\n            for (const auto& e : _g[v]) {\n                if (e.cap\
     \ == Cap(0) || visited[e.to]) continue;\n                visited[e.to] = true;\n\
     \                que.push(e.to);\n            }\n        }\n        return visited;\n\
-    \    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 9 \"graph/bounded_flow.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap>\nstruct BoundedFlow\
+    \    }\n};\n\n}  // namespace flow\n}  // namespace m1une\n\n\n#line 9 \"flow/bounded_flow.hpp\"\
+    \n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class Cap>\nstruct BoundedFlow\
     \ {\n    struct Edge {\n        int from;\n        int to;\n        Cap lower;\n\
     \        Cap upper;\n    };\n\n    struct ResultEdge {\n        int from;\n  \
     \      int to;\n        Cap lower;\n        Cap upper;\n        Cap flow;\n  \
@@ -134,10 +128,10 @@ data:
     \        std::vector<Cap> balance = _balance;\n        balance[s] += flow_value;\n\
     \        balance[t] -= flow_value;\n        return feasible_flow(balance);\n \
     \   }\n};\n\ntemplate <class Cap>\nusing BFlow = BoundedFlow<Cap>;\n\n}  // namespace\
-    \ graph\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_GRAPH_BOUNDED_FLOW_HPP\n#define M1UNE_GRAPH_BOUNDED_FLOW_HPP\
+    \ flow\n}  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_FLOW_BOUNDED_FLOW_HPP\n#define M1UNE_FLOW_BOUNDED_FLOW_HPP\
     \ 1\n\n#include <cassert>\n#include <optional>\n#include <vector>\n\n#include\
-    \ \"graph/max_flow.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class\
+    \ \"flow/max_flow.hpp\"\n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class\
     \ Cap>\nstruct BoundedFlow {\n    struct Edge {\n        int from;\n        int\
     \ to;\n        Cap lower;\n        Cap upper;\n    };\n\n    struct ResultEdge\
     \ {\n        int from;\n        int to;\n        Cap lower;\n        Cap upper;\n\
@@ -189,20 +183,18 @@ data:
     \        std::vector<Cap> balance = _balance;\n        balance[s] += flow_value;\n\
     \        balance[t] -= flow_value;\n        return feasible_flow(balance);\n \
     \   }\n};\n\ntemplate <class Cap>\nusing BFlow = BoundedFlow<Cap>;\n\n}  // namespace\
-    \ graph\n}  // namespace m1une\n\n#endif  // M1UNE_GRAPH_BOUNDED_FLOW_HPP\n"
+    \ flow\n}  // namespace m1une\n\n#endif  // M1UNE_FLOW_BOUNDED_FLOW_HPP\n"
   dependsOn:
-  - graph/max_flow.hpp
+  - flow/max_flow.hpp
   isVerificationFile: false
-  path: graph/bounded_flow.hpp
+  path: flow/bounded_flow.hpp
   requiredBy:
-  - graph/flow.hpp
-  - graph/all.hpp
-  - graph/directed.hpp
-  timestamp: '2026-06-16 02:49:24+09:00'
+  - flow/flow.hpp
+  timestamp: '2026-06-17 01:33:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/graph/graph_algorithms.test.cpp
-documentation_of: graph/bounded_flow.hpp
+  - verify/flow/flow_algorithms.test.cpp
+documentation_of: flow/bounded_flow.hpp
 layout: document
 title: Bounded Flow
 ---
@@ -306,11 +298,11 @@ The result contains these members:
 ## Example
 
 ```cpp
-#include "graph/bounded_flow.hpp"
+#include "flow/bounded_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::BoundedFlow<long long> bf(3);
+    m1une::flow::BoundedFlow<long long> bf(3);
     int e0 = bf.add_edge(0, 1, 1, 3);
     int e1 = bf.add_edge(0, 2, 0, 2);
     int e2 = bf.add_edge(1, 2, -1, 2);  // negative flow is allowed

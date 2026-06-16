@@ -149,6 +149,23 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/sparse_table.hpp
       title: Sparse Table
+  - name: flow
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: flow/bounded_flow.hpp
+      title: Bounded Flow
+    - icon: ':heavy_check_mark:'
+      path: flow/bounded_min_cost_flow.hpp
+      title: Bounded Min Cost Flow
+    - icon: ':heavy_check_mark:'
+      path: flow/flow.hpp
+      title: Flow
+    - icon: ':heavy_check_mark:'
+      path: flow/max_flow.hpp
+      title: Max Flow
+    - icon: ':heavy_check_mark:'
+      path: flow/min_cost_flow.hpp
+      title: Min Cost Flow
   - name: graph
     pages:
     - icon: ':heavy_check_mark:'
@@ -163,12 +180,6 @@ data:
     - icon: ':heavy_check_mark:'
       path: graph/bipartite.hpp
       title: Bipartite Graph
-    - icon: ':heavy_check_mark:'
-      path: graph/bounded_flow.hpp
-      title: Bounded Flow
-    - icon: ':heavy_check_mark:'
-      path: graph/bounded_min_cost_flow.hpp
-      title: Bounded Min Cost Flow
     - icon: ':heavy_check_mark:'
       path: graph/connected_components.hpp
       title: Connected Components
@@ -185,9 +196,6 @@ data:
       path: graph/directed.hpp
       title: Directed Graph Algorithms
     - icon: ':heavy_check_mark:'
-      path: graph/flow.hpp
-      title: Flow
-    - icon: ':heavy_check_mark:'
       path: graph/general_matching.hpp
       title: General Matching
     - icon: ':heavy_check_mark:'
@@ -203,14 +211,8 @@ data:
       path: graph/lowlink.hpp
       title: LowLink
     - icon: ':heavy_check_mark:'
-      path: graph/max_flow.hpp
-      title: Max Flow
-    - icon: ':heavy_check_mark:'
       path: graph/maximum_clique.hpp
       title: Maximum Clique, Independent Set, and Vertex Cover
-    - icon: ':heavy_check_mark:'
-      path: graph/min_cost_flow.hpp
-      title: Min Cost Flow
     - icon: ':heavy_check_mark:'
       path: graph/scc.hpp
       title: Strongly Connected Components
@@ -459,6 +461,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/sparse_table.test.cpp
       title: verify/data_structure/sparse_table.test.cpp
+  - name: verify/flow
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/flow/flow_algorithms.test.cpp
+      title: verify/flow/flow_algorithms.test.cpp
   - name: verify/graph
     pages:
     - icon: ':heavy_check_mark:'

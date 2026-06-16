@@ -3,29 +3,23 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: graph/all.hpp
-    title: Graph All
-  - icon: ':heavy_check_mark:'
-    path: graph/bounded_flow.hpp
+    path: flow/bounded_flow.hpp
     title: Bounded Flow
   - icon: ':heavy_check_mark:'
-    path: graph/directed.hpp
-    title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
-    path: graph/flow.hpp
+    path: flow/flow.hpp
     title: Flow
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/graph/graph_algorithms.test.cpp
-    title: verify/graph/graph_algorithms.test.cpp
+    path: verify/flow/flow_algorithms.test.cpp
+    title: verify/flow/flow_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"graph/max_flow.hpp\"\n\n\n\n#include <algorithm>\n#include\
+  bundledCode: "#line 1 \"flow/max_flow.hpp\"\n\n\n\n#include <algorithm>\n#include\
     \ <cassert>\n#include <limits>\n#include <queue>\n#include <utility>\n#include\
-    \ <vector>\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap>\nstruct\
+    \ <vector>\n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class Cap>\nstruct\
     \ MaxFlow {\n    struct Edge {\n        int from;\n        int to;\n        Cap\
     \ cap;\n        Cap flow;\n    };\n\n   private:\n    struct InternalEdge {\n\
     \        int to;\n        int rev;\n        Cap cap;\n    };\n\n    int _n;\n\
@@ -80,14 +74,14 @@ data:
     \  que.pop();\n            for (const auto& e : _g[v]) {\n                if (e.cap\
     \ == Cap(0) || visited[e.to]) continue;\n                visited[e.to] = true;\n\
     \                que.push(e.to);\n            }\n        }\n        return visited;\n\
-    \    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_GRAPH_MAX_FLOW_HPP\n#define M1UNE_GRAPH_MAX_FLOW_HPP 1\n\n\
-    #include <algorithm>\n#include <cassert>\n#include <limits>\n#include <queue>\n\
-    #include <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace graph {\n\
-    \ntemplate <class Cap>\nstruct MaxFlow {\n    struct Edge {\n        int from;\n\
-    \        int to;\n        Cap cap;\n        Cap flow;\n    };\n\n   private:\n\
-    \    struct InternalEdge {\n        int to;\n        int rev;\n        Cap cap;\n\
-    \    };\n\n    int _n;\n    std::vector<std::pair<int, int>> _pos;\n    std::vector<std::vector<InternalEdge>>\
+    \    }\n};\n\n}  // namespace flow\n}  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_FLOW_MAX_FLOW_HPP\n#define M1UNE_FLOW_MAX_FLOW_HPP 1\n\n#include\
+    \ <algorithm>\n#include <cassert>\n#include <limits>\n#include <queue>\n#include\
+    \ <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace flow {\n\ntemplate\
+    \ <class Cap>\nstruct MaxFlow {\n    struct Edge {\n        int from;\n      \
+    \  int to;\n        Cap cap;\n        Cap flow;\n    };\n\n   private:\n    struct\
+    \ InternalEdge {\n        int to;\n        int rev;\n        Cap cap;\n    };\n\
+    \n    int _n;\n    std::vector<std::pair<int, int>> _pos;\n    std::vector<std::vector<InternalEdge>>\
     \ _g;\n\n   public:\n    MaxFlow() : MaxFlow(0) {}\n\n    explicit MaxFlow(int\
     \ n) : _n(n), _g(n) {\n        assert(0 <= n);\n    }\n\n    int size() const\
     \ {\n        return _n;\n    }\n\n    int edge_count() const {\n        return\
@@ -138,20 +132,18 @@ data:
     \  que.pop();\n            for (const auto& e : _g[v]) {\n                if (e.cap\
     \ == Cap(0) || visited[e.to]) continue;\n                visited[e.to] = true;\n\
     \                que.push(e.to);\n            }\n        }\n        return visited;\n\
-    \    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n#endif  // M1UNE_GRAPH_MAX_FLOW_HPP\n"
+    \    }\n};\n\n}  // namespace flow\n}  // namespace m1une\n\n#endif  // M1UNE_FLOW_MAX_FLOW_HPP\n"
   dependsOn: []
   isVerificationFile: false
-  path: graph/max_flow.hpp
+  path: flow/max_flow.hpp
   requiredBy:
-  - graph/flow.hpp
-  - graph/all.hpp
-  - graph/directed.hpp
-  - graph/bounded_flow.hpp
-  timestamp: '2026-06-16 02:14:00+09:00'
+  - flow/flow.hpp
+  - flow/bounded_flow.hpp
+  timestamp: '2026-06-17 01:33:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/graph/graph_algorithms.test.cpp
-documentation_of: graph/max_flow.hpp
+  - verify/flow/flow_algorithms.test.cpp
+documentation_of: flow/max_flow.hpp
 layout: document
 title: Max Flow
 ---
@@ -220,11 +212,11 @@ After running max flow, `min_cut(s)` returns the source side of a minimum
 ## Example
 
 ```cpp
-#include "graph/max_flow.hpp"
+#include "flow/max_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::MaxFlow<long long> mf(4);
+    m1une::flow::MaxFlow<long long> mf(4);
     mf.add_edge(0, 1, 2);
     mf.add_edge(0, 2, 1);
     mf.add_edge(1, 2, 1);

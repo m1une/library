@@ -3,60 +3,54 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: graph/all.hpp
-    title: Graph All
-  - icon: ':heavy_check_mark:'
-    path: graph/bounded_min_cost_flow.hpp
+    path: flow/bounded_min_cost_flow.hpp
     title: Bounded Min Cost Flow
   - icon: ':heavy_check_mark:'
-    path: graph/directed.hpp
-    title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
-    path: graph/flow.hpp
+    path: flow/flow.hpp
     title: Flow
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/graph/graph_algorithms.test.cpp
-    title: verify/graph/graph_algorithms.test.cpp
+    path: verify/flow/flow_algorithms.test.cpp
+    title: verify/flow/flow_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"graph/min_cost_flow.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <functional>\n#include <limits>\n#include <queue>\n\
-    #include <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace graph {\n\
-    \ntemplate <class Cap, class Cost>\nstruct MinCostFlow {\n    struct Edge {\n\
-    \        int from;\n        int to;\n        Cap cap;\n        Cap flow;\n   \
-    \     Cost cost;\n    };\n\n   private:\n    struct InternalEdge {\n        int\
-    \ to;\n        int rev;\n        Cap cap;\n        Cost cost;\n    };\n\n    int\
-    \ _n;\n    std::vector<std::pair<int, int>> _pos;\n    std::vector<std::vector<InternalEdge>>\
-    \ _g;\n\n    void init_potential(int s, std::vector<Cost>& potential, Cost cost_inf)\
-    \ const {\n        potential.assign(_n, cost_inf);\n        potential[s] = Cost(0);\n\
-    \        for (int iter = 0; iter < _n - 1; iter++) {\n            bool updated\
-    \ = false;\n            for (int v = 0; v < _n; v++) {\n                if (potential[v]\
-    \ == cost_inf) continue;\n                for (const auto& e : _g[v]) {\n    \
-    \                if (e.cap == Cap(0)) continue;\n                    Cost nd =\
-    \ potential[v] + e.cost;\n                    if (nd < potential[e.to]) {\n  \
-    \                      potential[e.to] = nd;\n                        updated\
-    \ = true;\n                    }\n                }\n            }\n         \
-    \   if (!updated) break;\n        }\n        for (int v = 0; v < _n; v++) {\n\
-    \            if (potential[v] == cost_inf) potential[v] = Cost(0);\n        }\n\
-    \    }\n\n   public:\n    MinCostFlow() : MinCostFlow(0) {}\n\n    explicit MinCostFlow(int\
-    \ n) : _n(n), _g(n) {\n        assert(0 <= n);\n    }\n\n    int size() const\
-    \ {\n        return _n;\n    }\n\n    int edge_count() const {\n        return\
-    \ int(_pos.size());\n    }\n\n    int add_edge(int from, int to, Cap cap, Cost\
-    \ cost) {\n        assert(0 <= from && from < _n);\n        assert(0 <= to &&\
-    \ to < _n);\n        assert(Cap(0) <= cap);\n        int id = int(_pos.size());\n\
-    \        int from_id = int(_g[from].size());\n        int to_id = int(_g[to].size());\n\
-    \        if (from == to) to_id++;\n        _pos.emplace_back(from, from_id);\n\
-    \        _g[from].push_back(InternalEdge{to, to_id, cap, cost});\n        _g[to].push_back(InternalEdge{from,\
-    \ from_id, Cap(0), -cost});\n        return id;\n    }\n\n    Edge get_edge(int\
-    \ i) const {\n        assert(0 <= i && i < int(_pos.size()));\n        auto [from,\
-    \ idx] = _pos[i];\n        const auto& e = _g[from][idx];\n        const auto&\
-    \ re = _g[e.to][e.rev];\n        return Edge{from, e.to, e.cap + re.cap, re.cap,\
-    \ e.cost};\n    }\n\n    std::vector<Edge> edges() const {\n        std::vector<Edge>\
-    \ result;\n        result.reserve(_pos.size());\n        for (int i = 0; i < int(_pos.size());\
+  bundledCode: "#line 1 \"flow/min_cost_flow.hpp\"\n\n\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <functional>\n#include <limits>\n#include <queue>\n#include\
+    \ <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace flow {\n\ntemplate\
+    \ <class Cap, class Cost>\nstruct MinCostFlow {\n    struct Edge {\n        int\
+    \ from;\n        int to;\n        Cap cap;\n        Cap flow;\n        Cost cost;\n\
+    \    };\n\n   private:\n    struct InternalEdge {\n        int to;\n        int\
+    \ rev;\n        Cap cap;\n        Cost cost;\n    };\n\n    int _n;\n    std::vector<std::pair<int,\
+    \ int>> _pos;\n    std::vector<std::vector<InternalEdge>> _g;\n\n    void init_potential(int\
+    \ s, std::vector<Cost>& potential, Cost cost_inf) const {\n        potential.assign(_n,\
+    \ cost_inf);\n        potential[s] = Cost(0);\n        for (int iter = 0; iter\
+    \ < _n - 1; iter++) {\n            bool updated = false;\n            for (int\
+    \ v = 0; v < _n; v++) {\n                if (potential[v] == cost_inf) continue;\n\
+    \                for (const auto& e : _g[v]) {\n                    if (e.cap\
+    \ == Cap(0)) continue;\n                    Cost nd = potential[v] + e.cost;\n\
+    \                    if (nd < potential[e.to]) {\n                        potential[e.to]\
+    \ = nd;\n                        updated = true;\n                    }\n    \
+    \            }\n            }\n            if (!updated) break;\n        }\n \
+    \       for (int v = 0; v < _n; v++) {\n            if (potential[v] == cost_inf)\
+    \ potential[v] = Cost(0);\n        }\n    }\n\n   public:\n    MinCostFlow() :\
+    \ MinCostFlow(0) {}\n\n    explicit MinCostFlow(int n) : _n(n), _g(n) {\n    \
+    \    assert(0 <= n);\n    }\n\n    int size() const {\n        return _n;\n  \
+    \  }\n\n    int edge_count() const {\n        return int(_pos.size());\n    }\n\
+    \n    int add_edge(int from, int to, Cap cap, Cost cost) {\n        assert(0 <=\
+    \ from && from < _n);\n        assert(0 <= to && to < _n);\n        assert(Cap(0)\
+    \ <= cap);\n        int id = int(_pos.size());\n        int from_id = int(_g[from].size());\n\
+    \        int to_id = int(_g[to].size());\n        if (from == to) to_id++;\n \
+    \       _pos.emplace_back(from, from_id);\n        _g[from].push_back(InternalEdge{to,\
+    \ to_id, cap, cost});\n        _g[to].push_back(InternalEdge{from, from_id, Cap(0),\
+    \ -cost});\n        return id;\n    }\n\n    Edge get_edge(int i) const {\n  \
+    \      assert(0 <= i && i < int(_pos.size()));\n        auto [from, idx] = _pos[i];\n\
+    \        const auto& e = _g[from][idx];\n        const auto& re = _g[e.to][e.rev];\n\
+    \        return Edge{from, e.to, e.cap + re.cap, re.cap, e.cost};\n    }\n\n \
+    \   std::vector<Edge> edges() const {\n        std::vector<Edge> result;\n   \
+    \     result.reserve(_pos.size());\n        for (int i = 0; i < int(_pos.size());\
     \ i++) result.push_back(get_edge(i));\n        return result;\n    }\n\n    std::pair<Cap,\
     \ Cost> flow(int s, int t) {\n        return flow(s, t, std::numeric_limits<Cap>::max());\n\
     \    }\n\n    std::pair<Cap, Cost> flow(int s, int t, Cap flow_limit) {\n    \
@@ -91,11 +85,11 @@ data:
     \ -= add;\n                _g[e.to][e.rev].cap += add;\n            }\n\n    \
     \        flow += add;\n            cost += Cost(add) * path_cost;\n          \
     \  result.emplace_back(flow, cost);\n        }\n\n        return result;\n   \
-    \ }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_GRAPH_MIN_COST_FLOW_HPP\n#define M1UNE_GRAPH_MIN_COST_FLOW_HPP\
+    \ }\n};\n\n}  // namespace flow\n}  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_FLOW_MIN_COST_FLOW_HPP\n#define M1UNE_FLOW_MIN_COST_FLOW_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <functional>\n#include\
     \ <limits>\n#include <queue>\n#include <utility>\n#include <vector>\n\nnamespace\
-    \ m1une {\nnamespace graph {\n\ntemplate <class Cap, class Cost>\nstruct MinCostFlow\
+    \ m1une {\nnamespace flow {\n\ntemplate <class Cap, class Cost>\nstruct MinCostFlow\
     \ {\n    struct Edge {\n        int from;\n        int to;\n        Cap cap;\n\
     \        Cap flow;\n        Cost cost;\n    };\n\n   private:\n    struct InternalEdge\
     \ {\n        int to;\n        int rev;\n        Cap cap;\n        Cost cost;\n\
@@ -160,20 +154,18 @@ data:
     \ -= add;\n                _g[e.to][e.rev].cap += add;\n            }\n\n    \
     \        flow += add;\n            cost += Cost(add) * path_cost;\n          \
     \  result.emplace_back(flow, cost);\n        }\n\n        return result;\n   \
-    \ }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n#endif  // M1UNE_GRAPH_MIN_COST_FLOW_HPP\n"
+    \ }\n};\n\n}  // namespace flow\n}  // namespace m1une\n\n#endif  // M1UNE_FLOW_MIN_COST_FLOW_HPP\n"
   dependsOn: []
   isVerificationFile: false
-  path: graph/min_cost_flow.hpp
+  path: flow/min_cost_flow.hpp
   requiredBy:
-  - graph/flow.hpp
-  - graph/bounded_min_cost_flow.hpp
-  - graph/all.hpp
-  - graph/directed.hpp
-  timestamp: '2026-06-16 02:14:00+09:00'
+  - flow/flow.hpp
+  - flow/bounded_min_cost_flow.hpp
+  timestamp: '2026-06-17 01:33:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/graph/graph_algorithms.test.cpp
-documentation_of: graph/min_cost_flow.hpp
+  - verify/flow/flow_algorithms.test.cpp
+documentation_of: flow/min_cost_flow.hpp
 layout: document
 title: Min Cost Flow
 ---
@@ -251,11 +243,11 @@ state and sends additional flow.
 ## Example
 
 ```cpp
-#include "graph/min_cost_flow.hpp"
+#include "flow/min_cost_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::MinCostFlow<long long, long long> mcf(4);
+    m1une::flow::MinCostFlow<long long, long long> mcf(4);
     mcf.add_edge(0, 1, 2, 1);
     mcf.add_edge(0, 2, 1, 2);
     mcf.add_edge(1, 2, 1, 0);

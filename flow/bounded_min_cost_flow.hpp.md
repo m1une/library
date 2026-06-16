@@ -2,32 +2,26 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: graph/min_cost_flow.hpp
+    path: flow/min_cost_flow.hpp
     title: Min Cost Flow
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: graph/all.hpp
-    title: Graph All
-  - icon: ':heavy_check_mark:'
-    path: graph/directed.hpp
-    title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
-    path: graph/flow.hpp
+    path: flow/flow.hpp
     title: Flow
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/graph/graph_algorithms.test.cpp
-    title: verify/graph/graph_algorithms.test.cpp
+    path: verify/flow/flow_algorithms.test.cpp
+    title: verify/flow/flow_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"graph/bounded_min_cost_flow.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <optional>\n#include <vector>\n\n#line 1 \"graph/min_cost_flow.hpp\"\n\
-    \n\n\n#include <algorithm>\n#line 6 \"graph/min_cost_flow.hpp\"\n#include <functional>\n\
-    #include <limits>\n#include <queue>\n#include <utility>\n#line 11 \"graph/min_cost_flow.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap, class Cost>\n\
+  bundledCode: "#line 1 \"flow/bounded_min_cost_flow.hpp\"\n\n\n\n#include <cassert>\n\
+    #include <optional>\n#include <vector>\n\n#line 1 \"flow/min_cost_flow.hpp\"\n\
+    \n\n\n#include <algorithm>\n#line 6 \"flow/min_cost_flow.hpp\"\n#include <functional>\n\
+    #include <limits>\n#include <queue>\n#include <utility>\n#line 11 \"flow/min_cost_flow.hpp\"\
+    \n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class Cap, class Cost>\n\
     struct MinCostFlow {\n    struct Edge {\n        int from;\n        int to;\n\
     \        Cap cap;\n        Cap flow;\n        Cost cost;\n    };\n\n   private:\n\
     \    struct InternalEdge {\n        int to;\n        int rev;\n        Cap cap;\n\
@@ -93,8 +87,8 @@ data:
     \ -= add;\n                _g[e.to][e.rev].cap += add;\n            }\n\n    \
     \        flow += add;\n            cost += Cost(add) * path_cost;\n          \
     \  result.emplace_back(flow, cost);\n        }\n\n        return result;\n   \
-    \ }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 9 \"graph/bounded_min_cost_flow.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class Cap, class Cost>\n\
+    \ }\n};\n\n}  // namespace flow\n}  // namespace m1une\n\n\n#line 9 \"flow/bounded_min_cost_flow.hpp\"\
+    \n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class Cap, class Cost>\n\
     struct BoundedMinCostFlow {\n    struct Edge {\n        int from;\n        int\
     \ to;\n        Cap lower;\n        Cap upper;\n        Cost cost;\n    };\n\n\
     \    struct ResultEdge {\n        int from;\n        int to;\n        Cap lower;\n\
@@ -158,10 +152,10 @@ data:
     \ balance = _balance;\n        balance[s] += flow_value;\n        balance[t] -=\
     \ flow_value;\n        return min_cost_flow(balance);\n    }\n};\n\ntemplate <class\
     \ Cap, class Cost>\nusing BMinCostFlow = BoundedMinCostFlow<Cap, Cost>;\n\n} \
-    \ // namespace graph\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_GRAPH_BOUNDED_MIN_COST_FLOW_HPP\n#define M1UNE_GRAPH_BOUNDED_MIN_COST_FLOW_HPP\
+    \ // namespace flow\n}  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP\n#define M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP\
     \ 1\n\n#include <cassert>\n#include <optional>\n#include <vector>\n\n#include\
-    \ \"graph/min_cost_flow.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
+    \ \"flow/min_cost_flow.hpp\"\n\nnamespace m1une {\nnamespace flow {\n\ntemplate\
     \ <class Cap, class Cost>\nstruct BoundedMinCostFlow {\n    struct Edge {\n  \
     \      int from;\n        int to;\n        Cap lower;\n        Cap upper;\n  \
     \      Cost cost;\n    };\n\n    struct ResultEdge {\n        int from;\n    \
@@ -225,20 +219,18 @@ data:
     \ balance = _balance;\n        balance[s] += flow_value;\n        balance[t] -=\
     \ flow_value;\n        return min_cost_flow(balance);\n    }\n};\n\ntemplate <class\
     \ Cap, class Cost>\nusing BMinCostFlow = BoundedMinCostFlow<Cap, Cost>;\n\n} \
-    \ // namespace graph\n}  // namespace m1une\n\n#endif  // M1UNE_GRAPH_BOUNDED_MIN_COST_FLOW_HPP\n"
+    \ // namespace flow\n}  // namespace m1une\n\n#endif  // M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP\n"
   dependsOn:
-  - graph/min_cost_flow.hpp
+  - flow/min_cost_flow.hpp
   isVerificationFile: false
-  path: graph/bounded_min_cost_flow.hpp
+  path: flow/bounded_min_cost_flow.hpp
   requiredBy:
-  - graph/flow.hpp
-  - graph/all.hpp
-  - graph/directed.hpp
-  timestamp: '2026-06-16 02:49:24+09:00'
+  - flow/flow.hpp
+  timestamp: '2026-06-17 01:33:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/graph/graph_algorithms.test.cpp
-documentation_of: graph/bounded_min_cost_flow.hpp
+  - verify/flow/flow_algorithms.test.cpp
+documentation_of: flow/bounded_min_cost_flow.hpp
 layout: document
 title: Bounded Min Cost Flow
 ---
@@ -363,11 +355,11 @@ Here, `F` is the number of augmentations made by the internal
 ## Example
 
 ```cpp
-#include "graph/bounded_min_cost_flow.hpp"
+#include "flow/bounded_min_cost_flow.hpp"
 #include <iostream>
 
 int main() {
-    m1une::graph::BoundedMinCostFlow<long long, long long> mcf(3);
+    m1une::flow::BoundedMinCostFlow<long long, long long> mcf(3);
     int e0 = mcf.add_edge(0, 1, 1, 3, 2);
     int e1 = mcf.add_edge(1, 2, 1, 3, 1);
     int e2 = mcf.add_edge(0, 2, 0, 3, 10);
