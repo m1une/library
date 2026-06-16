@@ -351,6 +351,29 @@ data:
     - icon: ':heavy_check_mark:'
       path: string/rolling_hash.hpp
       title: Static Rolling Hash
+  - name: tree
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: tree/all.hpp
+      title: Tree All
+    - icon: ':heavy_check_mark:'
+      path: tree/centroid_decomposition.hpp
+      title: Centroid Decomposition
+    - icon: ':heavy_check_mark:'
+      path: tree/diameter.hpp
+      title: Tree Diameter
+    - icon: ':heavy_check_mark:'
+      path: tree/heavy_light_decomposition.hpp
+      title: Heavy Light Decomposition
+    - icon: ':heavy_check_mark:'
+      path: tree/rerooting_dp.hpp
+      title: Rerooting DP
+    - icon: ':heavy_check_mark:'
+      path: tree/rooted_tree.hpp
+      title: Rooted Tree
+    - icon: ':heavy_check_mark:'
+      path: tree/tree.hpp
+      title: Tree
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'
@@ -482,6 +505,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/string/yosupo_zalgorithm.test.cpp
       title: verify/string/yosupo_zalgorithm.test.cpp
+  - name: verify/tree
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/tree/tree_algorithms.test.cpp
+      title: verify/tree/tree_algorithms.test.cpp
   - name: verify/utilities
     pages:
     - icon: ':heavy_check_mark:'

@@ -62,6 +62,27 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
+  - icon: ':heavy_check_mark:'
+    path: tree/all.hpp
+    title: Tree All
+  - icon: ':heavy_check_mark:'
+    path: tree/centroid_decomposition.hpp
+    title: Centroid Decomposition
+  - icon: ':heavy_check_mark:'
+    path: tree/diameter.hpp
+    title: Tree Diameter
+  - icon: ':heavy_check_mark:'
+    path: tree/heavy_light_decomposition.hpp
+    title: Heavy Light Decomposition
+  - icon: ':heavy_check_mark:'
+    path: tree/rerooting_dp.hpp
+    title: Rerooting DP
+  - icon: ':heavy_check_mark:'
+    path: tree/rooted_tree.hpp
+    title: Rooted Tree
+  - icon: ':heavy_check_mark:'
+    path: tree/tree.hpp
+    title: Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
@@ -69,6 +90,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_general_matching.test.cpp
     title: verify/graph/library_checker_general_matching.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/tree/tree_algorithms.test.cpp
+    title: verify/tree/tree_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -186,6 +210,13 @@ data:
   isVerificationFile: false
   path: graph/graph.hpp
   requiredBy:
+  - tree/centroid_decomposition.hpp
+  - tree/rooted_tree.hpp
+  - tree/rerooting_dp.hpp
+  - tree/all.hpp
+  - tree/heavy_light_decomposition.hpp
+  - tree/tree.hpp
+  - tree/diameter.hpp
   - graph/maximum_clique.hpp
   - graph/dijkstra.hpp
   - graph/scc.hpp
@@ -209,6 +240,7 @@ data:
   timestamp: '2026-06-16 02:32:54+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/tree/tree_algorithms.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/graph.hpp
