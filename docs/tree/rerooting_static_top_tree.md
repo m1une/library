@@ -206,18 +206,23 @@ clusters and keeping their order straight. The folder you write for a problem
 only needs to say what each step means for that DP.
 
 For ordinary use, prefer `fold_rerooting(v, folder)`. It performs this dispatch
-for you and passes already-oriented cluster values to the folder:
+for you and passes already-oriented cluster values to the folder. The effective
+folder method signatures are:
 
-| Folder method | Called when |
-| --- | --- |
-| `start(v, value, local_point)` | Before processing the walk from `v`. |
-| `compress_lower(path, edge)` | A lower path sibling is attached below the current path. |
-| `compress_upper(path, edge)` | An upper path sibling is attached above the current path. |
-| `add_edge(edge)` | The walk leaves a child path and moves toward its parent vertex. |
-| `rake_left(point)` | A point sibling appears before the current rake range. |
-| `rake_right(point)` | A point sibling appears after the current rake range. |
-| `add_vertex(vertex, value)` | The walk reaches a parent `AddVertex` node. |
-| `result()` | Returns the query answer after the walk. |
+| Folder method | Signature | Called when |
+| --- | --- | --- |
+| `start` | `void start(int v, const Vertex& value, const Point& local_point)` | Before processing the walk from `v`. |
+| `compress_lower` | `void compress_lower(const Path& path, Edge edge)` | A lower path sibling is attached below the current path. |
+| `compress_upper` | `void compress_upper(const Path& path, Edge edge)` | An upper path sibling is attached above the current path. |
+| `add_edge` | `void add_edge(Edge edge)` | The walk leaves a child path and moves toward its parent vertex. |
+| `rake_left` | `void rake_left(const Point& point)` | A point sibling appears before the current rake range. |
+| `rake_right` | `void rake_right(const Point& point)` | A point sibling appears after the current rake range. |
+| `add_vertex` | `void add_vertex(int vertex, const Vertex& value)` | The walk reaches a parent `AddVertex` node. |
+| `result` | `Answer result() const` | Returns the query answer after the walk. |
+
+Here `Edge` is the structure's `edge_type`, and `Answer` is the return type of
+`fold_rerooting`. The methods may take small arguments by value instead of by
+`const` reference if that is more convenient.
 
 Here `compress_upper` and `add_edge` receive reversed edges, so the edge is
 oriented in the direction the rerooting walk is moving.
