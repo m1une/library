@@ -143,7 +143,7 @@ data:
     \ i++) total += _nodes[nodes[i]].size;\n        int left_sum = 0;\n        for\
     \ (int i = l; i + 1 < r; i++) {\n            left_sum += _nodes[nodes[i]].size;\n\
     \            if (2 * left_sum >= total) return i + 1;\n        }\n        return\
-    \ l + 1;\n    }\n\n    int build_rake(const std::vector<int>& nodes, int l, int\
+    \ r - 1;\n    }\n\n    int build_rake(const std::vector<int>& nodes, int l, int\
     \ r) {\n        if (l == r) return -1;\n        if (l + 1 == r) return nodes[l];\n\
     \        int m = weighted_split(nodes, l, r);\n        return new_rake(build_rake(nodes,\
     \ l, m), build_rake(nodes, m, r));\n    }\n\n    int build_compress(const std::vector<int>&\
@@ -361,7 +361,7 @@ data:
     \ i++) total += _nodes[nodes[i]].size;\n        int left_sum = 0;\n        for\
     \ (int i = l; i + 1 < r; i++) {\n            left_sum += _nodes[nodes[i]].size;\n\
     \            if (2 * left_sum >= total) return i + 1;\n        }\n        return\
-    \ l + 1;\n    }\n\n    int build_rake(const std::vector<int>& nodes, int l, int\
+    \ r - 1;\n    }\n\n    int build_rake(const std::vector<int>& nodes, int l, int\
     \ r) {\n        if (l == r) return -1;\n        if (l + 1 == r) return nodes[l];\n\
     \        int m = weighted_split(nodes, l, r);\n        return new_rake(build_rake(nodes,\
     \ l, m), build_rake(nodes, m, r));\n    }\n\n    int build_compress(const std::vector<int>&\
@@ -511,7 +511,7 @@ data:
   path: tree/rerooting_static_top_tree.hpp
   requiredBy:
   - tree/all.hpp
-  timestamp: '2026-06-17 11:44:51+09:00'
+  timestamp: '2026-06-17 13:36:22+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
