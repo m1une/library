@@ -378,6 +378,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: optimization/simplex.hpp
       title: Simplex Algorithm
+  - name: sequence
+    pages:
+    - icon: ':warning:'
+      path: sequence/lis.hpp
+      title: Longest Increasing Subsequence (LIS)
   - name: string
     pages:
     - icon: ':heavy_check_mark:'
