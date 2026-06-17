@@ -668,7 +668,7 @@ Construction from `std::vector<U>` is supported when
 | `bool connected(u, v)` | Returns whether `u` and `v` are in the same component. | Amortized $O(\log N)$ |
 | `bool same(u, v)` | Alias for `connected(u, v)`. | Amortized $O(\log N)$ |
 | `bool link(u, v)` | Adds edge `(u, v)` if they are in different components. Returns whether it was added. | Amortized $O(\log N)$ |
-| `bool link_parent(child, parent)` | Rooted-tree spelling of `link(child, parent)`. | Amortized $O(\log N)$ |
+| `bool link_parent(child, parent)` | Rooted-tree spelling of `link(child, parent)`; after a successful link, the merged component keeps the original represented root of `parent`'s component. | Amortized $O(\log N)$ |
 | `int link_edge(u, v, value)` | Adds an edge-value node between `u` and `v`. Returns an edge id, or `-1` if already connected. | Amortized $O(\log N)$ |
 | `bool cut(u, v)` | Removes edge `(u, v)` if it exists. Returns whether it was removed. | Amortized $O(\log N)$ |
 | `bool cut_parent(v)` | Removes the current parent edge of `v` with respect to the represented root. | Amortized $O(\log N)$ |
@@ -770,8 +770,9 @@ The APIs `link`, `link_parent`, `cut`, `prod`, `path_prod`, `apply(u, v, f)`,
 represented-root orientation.
 
 `link_parent(child, parent)` internally performs the same operation as
-`link(child, parent)`, so it may evert `child` and change the represented root
-of the child's previous component.
+`link(child, parent)`. It reroots the child-side component at `child`, attaches
+it under `parent`, and preserves the original represented root of the parent-side
+component as the represented root of the merged component.
 
 `cut_parent(v)` is different from `cut(u, v)`: it cuts the parent edge of `v`
 with respect to the current represented-root orientation and does not call
