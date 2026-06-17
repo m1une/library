@@ -578,7 +578,11 @@ void test_grid() {
     assert(grid.pos(6) == std::make_pair(1, 2));
 
     auto adj4 = grid.adj4(0, 0);
-    assert((adj4 == std::vector<std::pair<int, int>>{{0, 1}, {1, 0}}));
+    std::vector<std::pair<int, int>> expected_adj4 = {
+        std::pair<int, int>{0, 1},
+        std::pair<int, int>{1, 0},
+    };
+    assert(adj4 == expected_adj4);
 
     auto adj8 = grid.adj8(1, 1);
     assert(adj8.size() == 8);

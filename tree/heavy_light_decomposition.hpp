@@ -98,7 +98,7 @@ struct HeavyLightDecomposition {
 
         order.assign(dfs_order.size(), -1);
         int timer = 0;
-        std::vector<std::pair<int, int>> starts = {{root, root}};
+        std::vector<std::pair<int, int>> starts = {std::pair<int, int>{root, root}};
         while (!starts.empty()) {
             auto [start, h] = starts.back();
             starts.pop_back();

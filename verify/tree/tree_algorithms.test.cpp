@@ -436,8 +436,10 @@ void test_rerooting_static_top_tree() {
 
 void test_rerooting_static_top_tree_vertex_component() {
     auto g = sample_tree();
-    std::vector<ColorVertex> values = {{1, 0}, {10, 0}, {100, 1}, {1000, 0},
-                                       {10000, 1}, {100000, 1}, {1000000, 1}};
+    std::vector<ColorVertex> values = {
+        ColorVertex{1, 0},      ColorVertex{10, 0},     ColorVertex{100, 1},    ColorVertex{1000, 0},
+        ColorVertex{10000, 1},  ColorVertex{100000, 1}, ColorVertex{1000000, 1},
+    };
 
     auto compress = [](ColorPath a, ColorPath b, const auto&) {
         bool join = a.last_color == b.first_color;
@@ -448,10 +450,10 @@ void test_rerooting_static_top_tree_vertex_component() {
         return res;
     };
     auto rake = [](ColorPoint a, ColorPoint b) {
-        return ColorPoint{{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]}};
+        return ColorPoint{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]};
     };
     auto add_edge = [](ColorPath path, const auto&) {
-        ColorPoint res{{0, 0}};
+        ColorPoint res{};
         res.sum[path.first_color] = path.first_sum;
         return res;
     };
@@ -461,7 +463,7 @@ void test_rerooting_static_top_tree_vertex_component() {
     };
 
     auto stt = m1une::tree::RerootingStaticTopTree(
-        g, values, ColorPoint{{0, 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);
+        g, values, ColorPoint{0, 0}, compress, compress, rake, add_edge, add_edge, add_vertex);
 
     using ColorStt = decltype(stt);
     struct QueryFolder {
@@ -472,7 +474,7 @@ void test_rerooting_static_top_tree_vertex_component() {
         bool touches_top = false;
         bool touches_bottom = false;
         bool pending_open = false;
-        ColorPoint pending{{0, 0}};
+        ColorPoint pending{};
 
         void start(int v, const ColorVertex& value, const ColorPoint& local) {
             color = value.color;

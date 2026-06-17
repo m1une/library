@@ -45,7 +45,7 @@ struct TopKCount {
 
     // Helper to securely create a leaf node from a single value.
     static constexpr value_type make(const T& val, int count = 1) {
-        return {{val, count}};
+        return value_type{std::pair<T, int>{val, count}};
     }
 };
 

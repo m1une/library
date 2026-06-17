@@ -19,7 +19,6 @@ This is highly useful for fast matrix exponentiation, string repetition, or find
 
 ## Example
 
-{% raw %}
 ```cpp
 #include "monoid/power.hpp"
 #include "monoid/matrix.hpp"
@@ -28,7 +27,9 @@ This is highly useful for fast matrix exponentiation, string repetition, or find
 using Mat = m1une::monoid::Matrix<long long, 2>;
 
 int main() {
-    Mat::value_type transition = {{{1, 1}, {1, 0}}};
+    Mat::value_type transition{};
+    transition[0] = {1, 1};
+    transition[1] = {1, 0};
     
     // Compute the 10th power of the Fibonacci transition matrix
     auto res = m1une::monoid::power<Mat>(transition, 10);
@@ -37,4 +38,3 @@ int main() {
     return 0;
 }
 ```
-{% endraw %}

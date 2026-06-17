@@ -11,7 +11,6 @@ Merging two matrices takes $O(N^3)$ time, so $N$ should be small (typically $N \
 
 ## Example
 
-{% raw %}
 ```cpp
 #include "data_structure/segtree.hpp"
 #include "monoid/matrix.hpp"
@@ -27,7 +26,8 @@ int main() {
     
     // Initialize matrices (e.g., Fibonacci transition matrices)
     for (int i = 0; i < N; ++i) {
-        init_data[i] = {{{1, 1}, {1, 0}}};
+        init_data[i][0] = {1, 1};
+        init_data[i][1] = {1, 0};
     }
 
     m1une::data_structure::Segtree<Mat> seg(init_data);
@@ -40,4 +40,3 @@ int main() {
     return 0;
 }
 ```
-{% endraw %}

@@ -190,7 +190,12 @@ void test_min_cost_flow() {
     negative.add_edge(1, 2, 1, 2);
     negative.add_edge(0, 2, 1, 10);
     auto slope = negative.slope(0, 2, 2);
-    assert((slope == std::vector<std::pair<long long, long long>>{{0, 0}, {1, -3}, {2, 7}}));
+    std::vector<std::pair<long long, long long>> expected_slope = {
+        std::pair<long long, long long>{0, 0},
+        std::pair<long long, long long>{1, -3},
+        std::pair<long long, long long>{2, 7},
+    };
+    assert(slope == expected_slope);
 }
 
 int main() {

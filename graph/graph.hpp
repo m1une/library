@@ -68,7 +68,8 @@ struct Graph {
         int id = _edge_count++;
         int idx = int(_g[from].size());
         _g[from].push_back(edge_type(from, to, cost, id));
-        _edge_positions.push_back({{from, idx}});
+        _edge_positions.emplace_back();
+        _edge_positions.back().push_back({from, idx});
         return id;
     }
 
@@ -80,7 +81,9 @@ struct Graph {
         int v_idx = int(_g[v].size());
         _g[u].push_back(edge_type(u, v, cost, id));
         _g[v].push_back(edge_type(v, u, cost, id));
-        _edge_positions.push_back({{u, u_idx}, {v, v_idx}});
+        _edge_positions.emplace_back();
+        _edge_positions.back().push_back({u, u_idx});
+        _edge_positions.back().push_back({v, v_idx});
         return id;
     }
 

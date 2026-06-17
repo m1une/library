@@ -75,8 +75,12 @@ int main() {
     assert(d.size(0) == 5);
     assert(a.group_size(0) == 2);
     assert(dsu.group_size(0) == 1);
-    assert(dsu.groups() == (std::vector<std::vector<int>>{{0}, {1}, {2}, {3}, {4}}));
-    assert(c.groups() == (std::vector<std::vector<int>>{{0, 1, 2, 3}, {4}}));
+    std::vector<std::vector<int>> singleton_groups = {
+        std::vector<int>{0}, std::vector<int>{1}, std::vector<int>{2}, std::vector<int>{3}, std::vector<int>{4},
+    };
+    std::vector<std::vector<int>> merged_groups = {std::vector<int>{0, 1, 2, 3}, std::vector<int>{4}};
+    assert(dsu.groups() == singleton_groups);
+    assert(c.groups() == merged_groups);
 
     Dsu empty;
     assert(empty.size() == 0);
