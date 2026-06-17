@@ -474,6 +474,16 @@ StaticTopTree(
 );
 ```
 
+The constructor arguments are:
+
+| Argument | Meaning |
+| --- | --- |
+| `g` | The fixed tree shape. It must be an undirected connected `m1une::graph::Graph<T>` with `g.size()` vertices and `g.size() - 1` edges. |
+| `values` | The initial value of each original vertex. It must have size `g.size()`, and `values[v]` is passed to `add_vertex(side, values[v], v)`. These are the values returned by `get(v)` and updated by `set(v, value)`. |
+| `point_id` | The identity value of the `Point` type for `rake`. It represents "no side subtrees" and is used for vertices with no light children. This is not a vertex id; it is a DP value such as `0`, `Point{0, 0}`, or any other neutral `Point` state. |
+| `compress`, `rake`, `add_edge`, `add_vertex` | The four DP callbacks described below. |
+| `root` | The original vertex used as the tree root. It defaults to `0`. |
+
 The callbacks are:
 
 | Callback | Signature | Meaning |
@@ -482,9 +492,6 @@ The callbacks are:
 | `rake` | `Point rake(Point a, Point b)` | Combines independent side-subtree clusters attached to the same path vertex. |
 | `add_edge` | `Point add_edge(Path child, Edge e)` | Converts a child path cluster into a side-subtree contribution viewed from its parent through edge `e`. |
 | `add_vertex` | `Path add_vertex(Point side, Vertex value, int v)` | Adds original vertex `v` and its raked side subtrees, producing a path cluster whose top and bottom are both `v`. |
-
-`point_id` is the identity value for `rake`. It is used when a vertex has no
-side children.
 
 Here `Edge` is `m1une::graph::Edge<T>`. For both `compress` and `add_edge`,
 `e.from` is the parent side and `e.to` is the child side in the rooted tree.
