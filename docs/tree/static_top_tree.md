@@ -6,13 +6,13 @@ documentation_of: ../../tree/static_top_tree.hpp
 ## Overview
 
 `m1une::tree::StaticTopTree` builds a fixed binary expression tree over a rooted
-tree. After preprocessing, changing one vertex value or one edge cost only
+tree. After preprocessing, changing one vertex payload or one edge cost only
 requires recomputing the clusters on the path to the expression root.
 
 Use it for dynamic tree DP problems where:
 
 * The tree shape is fixed.
-* Vertex values or edge costs change.
+* Vertex payloads or edge costs change.
 * After each update, you need the DP value for the whole tree rooted at `root`.
 
 This is the online-update counterpart of many one-root tree DPs. If the tree
@@ -55,7 +55,7 @@ a binary expression tree from four kinds of nodes:
 
 | Internal node kind | Output type | Meaning |
 | --- | --- | --- |
-| `AddVertex` | `Path` | Make a one-vertex path cluster from a vertex value and all raked side children. |
+| `AddVertex` | `Path` | Make a one-vertex path cluster from a vertex payload and all raked side children. |
 | `AddEdge` | `Point` | Attach a child path through one tree edge, turning it into a side contribution. |
 | `Rake` | `Point` | Merge two side contributions attached to the same path vertex. |
 | `Compress` | `Path` | Concatenate two adjacent path clusters along a heavy path. |
@@ -65,7 +65,7 @@ For every original vertex `v`:
 1. Each light child subtree is built recursively as a `Path`.
 2. That child path is converted to a side contribution with `AddEdge`.
 3. All side contributions of `v` are merged with `Rake`.
-4. The vertex value and merged side contribution are converted into a one-vertex
+4. The vertex payload and merged side contribution are converted into a one-vertex
    `Path` with `AddVertex`.
 
 For every heavy path, these one-vertex `Path` clusters are merged from top to
@@ -91,9 +91,9 @@ and the heavy path is `0 -> 1 -> 3`, then conceptually:
 Path(2) --AddEdge--> side contribution attached to 0
 Path(4) --AddEdge--> side contribution attached to 1
 
-AddVertex(0 side, value[0]) gives one-vertex Path(0)
-AddVertex(1 side, value[1]) gives one-vertex Path(1)
-AddVertex(3 side, value[3]) gives one-vertex Path(3)
+AddVertex(0 side, values[0]) gives one-vertex Path(0)
+AddVertex(1 side, values[1]) gives one-vertex Path(1)
+AddVertex(3 side, values[3]) gives one-vertex Path(3)
 
 Compress(Path(0), Path(1), edge 0-1)
 Compress(result, Path(3), edge 1-3)
@@ -124,10 +124,33 @@ The constructor arguments are:
 | Argument | Meaning |
 | --- | --- |
 | `g` | The fixed tree shape. It must be an undirected connected `m1une::graph::Graph<T>` with `g.size()` vertices and `g.size() - 1` edges. |
-| `values` | The initial value of each original vertex. It must have size `g.size()`, and `values[v]` is passed to `add_vertex(side, values[v], v)`. These are the values returned by `get(v)` and updated by `set(v, value)`. |
-| `point_id` | The identity value of the `Point` type for `rake`. It represents "no side subtrees" and is used for vertices with no light children. This is not a vertex id; it is a DP value such as `0`, `Point{0, 0}`, or any other neutral `Point` state. |
+| `values` | The initial payload of each original vertex. Its type is `std::vector<Vertex>`, it must have size `g.size()`, and `values[v]` is passed to `add_vertex(side, values[v], v)`. These payloads are returned by `get(v)` and updated by `set(v, value)`. |
+| `point_id` | The identity element of the `Point` type for `rake`. It represents "no side subtrees" and is used for vertices with no light children. This is not a vertex id; it is a DP value such as `0`, `Point{0, 0}`, or any other neutral `Point` state. |
 | `compress`, `rake`, `add_edge`, `add_vertex` | The four DP callbacks described below. |
 | `root` | The original vertex used as the tree root. It defaults to `0`. |
+
+`Vertex` is a user-defined payload type, independent of `Path` and `Point`.
+It is the type stored in the `values` vector, not the integer id of a graph
+vertex. The integer vertex id is the third argument `v` passed to
+`add_vertex`.
+
+For example:
+
+* If each vertex has a weight, `Vertex` can be `long long` and `values[v]` is
+  the weight of vertex `v`.
+* If each vertex has several attributes, `Vertex` can be your own struct, such
+  as `struct Vertex { int color; long long weight; };`.
+* If the DP does not need any vertex payload, pass a dummy vector such as
+  `std::vector<int>(g.size(), 0)` and ignore the `value` argument in
+  `add_vertex`.
+
+The three DP-related types are therefore:
+
+| Type | Where it comes from | Role |
+| --- | --- | --- |
+| `Vertex` | The element type of `values` | Original per-vertex input payload. |
+| `Point` | The type of `point_id` | Aggregate of side subtrees attached to one boundary vertex. |
+| `Path` | The return type of `add_vertex` | Aggregate for a vertical path cluster. |
 
 The callbacks are:
 
@@ -151,7 +174,7 @@ The expected algebraic behavior is:
   upper path cluster, and the second argument is always the lower path cluster.
 * `add_edge` sees a completed child `Path` and should shift it across `e.cost`
   or otherwise account for the edge from parent to child.
-* `add_vertex` is where the original vertex value is inserted.
+* `add_vertex` is where the original vertex payload is inserted.
 
 ## Designing a DP
 
@@ -172,7 +195,8 @@ For `Point`, ask:
 
 Then define the operations:
 
-* `add_vertex(side, value, v)`: add vertex `v` to the side contribution.
+* `add_vertex(side, value, v)`: add vertex `v` and its payload `value` to the
+  side contribution.
 * `add_edge(child_path, e)`: view a completed child path from its parent through
   edge `e`.
 * `rake(a, b)`: combine independent side subtrees.
@@ -184,7 +208,7 @@ from its top boundary, read it from `all_prod()`.
 
 ## Update Flow
 
-`set(v, value)` updates the stored value of one original vertex. The
+`set(v, value)` updates the stored payload of one original vertex. The
 corresponding `AddVertex` node is recomputed, then its parent expression node is
 recomputed, and so on until the expression root.
 
@@ -208,9 +232,9 @@ tree shapes.
 | `int root()` | Returns the root used to orient the tree. | $O(1)$ |
 | `int node_count()` | Returns the number of internal expression nodes. | $O(1)$ |
 | `int height()` | Returns the height of the expression tree. | $O(1)$ |
-| `const Vertex& get(v)` | Returns the stored vertex value. | $O(1)$ |
-| `const Vertex& operator[](v)` | Returns the stored vertex value. | $O(1)$ |
-| `void set(v, value)` | Updates vertex `v` and recomputes affected clusters. | $O(\text{height})$ |
+| `const Vertex& get(v)` | Returns the stored vertex payload. | $O(1)$ |
+| `const Vertex& operator[](v)` | Returns the stored vertex payload. | $O(1)$ |
+| `void set(v, value)` | Updates the payload of vertex `v` and recomputes affected clusters. | $O(\text{height})$ |
 | `void set_edge_cost(edge_id, cost)` | Updates one tree-edge cost and recomputes affected clusters. | $O(\text{height})$ |
 | `const Path& all_prod()` | Returns the `Path` cluster for the whole rooted tree. | $O(1)$ |
 | `const Path& query()` | Alias for `all_prod()`. | $O(1)$ |
@@ -327,5 +351,5 @@ long long answer = stt.all_prod().sum;
 rerooting helper. For all-roots static answers, use `rerooting_dp`.
 
 For edge values that are not stored in `Edge::cost`, store them in the child
-vertex value or in your own arrays captured by the callbacks, then call
+vertex payload or in your own arrays captured by the callbacks, then call
 `set(child, new_value)` when they change.
