@@ -100,6 +100,9 @@ data:
     path: verify/graph/library_checker_general_matching.test.cpp
     title: verify/graph/library_checker_general_matching.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/graph/library_checker_maximum_independent_set.test.cpp
+    title: verify/graph/library_checker_maximum_independent_set.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
   _isVerificationFailed: false
@@ -255,6 +258,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
+  - verify/graph/library_checker_maximum_independent_set.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/graph.hpp
