@@ -251,9 +251,6 @@ data:
       title: 0-1 BFS
   - name: math
     pages:
-    - icon: ':warning:'
-      path: math/affine.hpp
-      title: Affine Transformation
     - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
