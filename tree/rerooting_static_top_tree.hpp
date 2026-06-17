@@ -195,7 +195,7 @@ struct RerootingStaticTopTree {
             left_sum += _nodes[nodes[i]].size;
             if (2 * left_sum >= total) return i + 1;
         }
-        return l + 1;
+        return r - 1;
     }
 
     int build_rake(const std::vector<int>& nodes, int l, int r) {
