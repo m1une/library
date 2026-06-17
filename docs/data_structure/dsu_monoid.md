@@ -1,5 +1,5 @@
 ---
-title: DSU Monoid
+title: DSU with Monoid
 documentation_of: ../../data_structure/dsu_monoid.hpp
 ---
 

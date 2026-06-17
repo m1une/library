@@ -1,5 +1,5 @@
 ---
-title: Persistent Disjoint Set Union
+title: Persistent DSU
 documentation_of: ../../data_structure/persistent_dsu.hpp
 ---
 

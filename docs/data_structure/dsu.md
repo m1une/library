@@ -1,5 +1,5 @@
 ---
-title: Disjoint Set Union (DSU)
+title: DSU (Disjoint Set Union)
 documentation_of: ../../data_structure/dsu.hpp
 ---
 

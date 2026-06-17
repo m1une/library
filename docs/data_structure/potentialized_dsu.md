@@ -1,5 +1,5 @@
 ---
-title: Potentialized Disjoint Set Union
+title: Potentialized DSU
 documentation_of: ../../data_structure/potentialized_dsu.hpp
 ---
 
