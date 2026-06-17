@@ -34,6 +34,7 @@
 "verify/flow/flow_algorithms.test.cpp": "2026-06-17 14:06:24 +0900",
 "verify/graph/graph_algorithms.test.cpp": "2026-06-17 14:06:24 +0900",
 "verify/graph/library_checker_general_matching.test.cpp": "2026-06-17 14:06:24 +0900",
+"verify/graph/library_checker_maximum_independent_set.test.cpp": "2026-06-18 02:05:18 +0900",
 "verify/optimization/hungarian.test.cpp": "2026-06-17 10:25:58 +0900",
 "verify/optimization/integer_lp.test.cpp": "2026-06-18 01:38:25 +0900",
 "verify/optimization/simplex.test.cpp": "2026-06-18 01:38:25 +0900",
