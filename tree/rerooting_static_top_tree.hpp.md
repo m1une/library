@@ -759,7 +759,20 @@ and child side before the final `add_vertex`. In problems such as ABC460 G,
 the folder keeps the same-color component contribution around the query vertex
 and reads the component sum after applying the steps.
 
-For the same-color component-sum DP used by ABC460 G, one convenient state is:
+## Example: ABC460 G - Vertex Flip Query
+
+ABC460 G asks for dynamic updates on a colored, weighted tree:
+
+* flip one vertex color,
+* add to one vertex weight,
+* for a vertex `v`, output the sum of weights in the connected component of
+  `v` after deleting all vertices whose color differs from `color[v]`.
+
+This can be seen as a rerooting DP query. If the tree is rooted at `v`, the
+answer is the contribution of all neighbor-side components that can connect to
+`v` through vertices of the same color.
+
+One convenient state is:
 
 ```cpp
 struct Vertex {
@@ -768,29 +781,161 @@ struct Vertex {
 };
 
 struct Point {
-    long long sum[2]; // contribution if the boundary vertex has color 0/1
+    long long sum[2];
 };
 
 struct Path {
     int first_color, last_color;
     long long first_sum, last_sum;
-    bool connected; // whether the two boundaries are in one same-color component
+    bool connected;
 };
 ```
 
-`add_edge` puts `path.first_sum` into `Point::sum[path.first_color]`.
-`add_vertex` returns a one-vertex path whose component sum is
-`weight + side.sum[color]`. `compress_down` and `compress_up` use the same
-orientation-relative formula: if the adjacent boundary colors are equal, join
-the two boundary components; otherwise keep them separate.
+The meaning is:
 
-The query folder fixes `c = color[v]`, starts from
-`weight[v] + local_point(v).sum[c]`, and tracks whether that component touches
-the current top and bottom boundaries while processing `CompressLower` and
-`CompressUpper` steps. `AddEdge`, `RakeLeft`/`RakeRight`, and `AddVertex` steps
-handle moving through a non-heavy child edge into the parent vertex. The
-verification test `test_rerooting_static_top_tree_vertex_component` contains a
-small end-to-end version of this pattern.
+| State | Meaning |
+| --- | --- |
+| `Point::sum[c]` | For side components attached to a boundary vertex, total contribution reachable if the boundary vertex has color `c`. |
+| `Path::first_color` | Color of the first boundary in the current orientation. |
+| `Path::last_color` | Color of the last boundary in the current orientation. |
+| `Path::first_sum` | Same-color component sum containing the first boundary, inside this path cluster. |
+| `Path::last_sum` | Same-color component sum containing the last boundary, inside this path cluster. |
+| `Path::connected` | Whether the first and last boundaries are in the same same-color component. |
+
+The cluster operations are short:
+
+```cpp
+auto compress = [](Path a, Path b, const auto&) {
+    bool join = a.last_color == b.first_color;
+    Path res{a.first_color, b.last_color, a.first_sum, b.last_sum, false};
+    if (join && a.connected) res.first_sum += b.first_sum;
+    if (join && b.connected) res.last_sum += a.last_sum;
+    res.connected = a.connected && b.connected && join;
+    return res;
+};
+
+auto rake = [](Point a, Point b) {
+    return Point{{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]}};
+};
+
+auto add_edge = [](Path path, const auto&) {
+    Point res{{0, 0}};
+    res.sum[path.first_color] = path.first_sum;
+    return res;
+};
+
+auto add_vertex = [](Point side, Vertex value, int) {
+    long long sum = value.weight + side.sum[value.color];
+    return Path{value.color, value.color, sum, sum, true};
+};
+```
+
+Here `compress` is orientation-relative, so it can be used for both
+`compress_down` and `compress_up`. Likewise `add_edge` can be used for both
+edge directions because the graph edge itself does not change the component
+value; only endpoint colors decide whether the component can pass through the
+next vertex.
+
+Build the structure like this:
+
+```cpp
+auto stt = m1une::tree::RerootingStaticTopTree(
+    g,
+    values,
+    Point{{0, 0}},
+    compress,
+    compress,
+    rake,
+    add_edge,
+    add_edge,
+    add_vertex
+);
+```
+
+For query type `3 v`, use the rerooting step stream. The idea is to keep the
+component containing the original query vertex and grow it while climbing from
+`vertex_node(v)` to the expression root.
+
+```cpp
+auto query = [&](int v) {
+    using Step = decltype(stt)::step_type;
+
+    int color = values[v].color;
+    long long answer = values[v].weight + stt.local_point(v).sum[color];
+
+    bool touches_top = true;
+    bool touches_bottom = true;
+    bool pending_open = false;
+    Point pending = stt.point_id();
+
+    stt.for_each_rerooting_step(v, [&](const auto& step) {
+        if (step.type == Step::CompressLower) {
+            const Path& lower = stt.path_down(step.sibling);
+            bool connect = touches_bottom && lower.first_color == color;
+            if (connect) answer += lower.first_sum;
+            touches_bottom = connect && lower.connected;
+        } else if (step.type == Step::CompressUpper) {
+            const Path& upper = stt.path_up(step.sibling);
+            bool connect = touches_top && upper.first_color == color;
+            if (connect) answer += upper.first_sum;
+            touches_top = connect && upper.connected;
+        } else if (step.type == Step::AddEdge) {
+            pending_open = touches_top;
+            pending = stt.point_id();
+        } else if (step.type == Step::RakeLeft) {
+            if (pending_open) pending = stt.rake(stt.point(step.sibling), pending);
+        } else if (step.type == Step::RakeRight) {
+            if (pending_open) pending = stt.rake(pending, stt.point(step.sibling));
+        } else {
+            const auto& value = values[step.vertex];
+            if (pending_open && value.color == color) {
+                answer += value.weight + pending.sum[color];
+                touches_top = true;
+                touches_bottom = true;
+            } else {
+                touches_top = false;
+                touches_bottom = false;
+            }
+            pending_open = false;
+            pending = stt.point_id();
+        }
+    });
+
+    return answer;
+};
+```
+
+The flags have these roles:
+
+| Variable | Meaning |
+| --- | --- |
+| `touches_top` | The query component reaches the current path cluster's top boundary. |
+| `touches_bottom` | The query component reaches the current path cluster's bottom boundary. |
+| `pending_open` | We have moved from a child path into a parent-side point/rake cluster, and the component can still reach the parent vertex. |
+| `pending` | Other side components of that parent vertex collected while climbing through `Rake` nodes. |
+
+For updates, keep the external `values` array in sync and call `set`:
+
+```cpp
+// type 1: flip color
+values[v].color ^= 1;
+stt.set(v, values[v]);
+
+// type 2: add weight
+values[v].weight += x;
+stt.set(v, values[v]);
+
+// type 3: answer
+std::cout << query(v) << '\n';
+```
+
+The input vertices in ABC460 G are 1-indexed, so decrement `v` before using
+these snippets.
+
+The total complexity is `O(N log N)` construction callback work and
+`O(log N)` per update/query, assuming the static top tree height is logarithmic.
+The verification test `test_rerooting_static_top_tree_vertex_component`
+contains a small brute-force-checked version of this pattern.
 
 The library guarantees that the cluster values you read during that fold are
 kept up to date after `set` and `set_edge_cost`.
