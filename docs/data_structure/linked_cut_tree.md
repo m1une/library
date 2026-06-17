@@ -41,21 +41,30 @@ Construction and `add_vertex` follow `PathLinkCutTree`.
 
 ## Methods
 
-All `PathLinkCutTree` methods are available with the same meaning:
+Core methods:
 
 * vertex and edge-node value access: `get`, `set`, `get_edge`, `set_edge`
-* dynamic forest operations: `evert`, `link`, `link_edge`, `cut`, `cut_edge`
-* connectivity and roots: `connected`, `same`, `component_root`, `lca`
+* dynamic forest operations: `evert`, `reroot`, `link`, `link_parent`, `link_edge`,
+  `cut`, `cut_parent`, `cut_edge`
+* connectivity and roots: `connected`, `same`, `component_root`, `root`, `lca`
 * path queries: `prod`, `path_prod`, `path_size`, `kth_vertex`
 
 Additional subtree methods:
 
 | Method | Description | Complexity |
 | --- | --- | --- |
+| `T component_prod(v)` | Group product of the whole connected component containing `v`. | Amortized $O(\log N)$ |
+| `int component_size(v)` | Number of link-cut-tree vertices in the component containing `v`. | Amortized $O(\log N)$ |
+| `int child_toward(root, v)` | Child of `root` lying on the path from `root` to `v`; requires `root != v`. | Amortized $O(\log N)$ |
+| `T branch_prod(root, v)` | Group product of the entire branch of `root` that contains `v`. | Amortized $O(\log N)$ |
+| `int branch_size(root, v)` | Size of the entire branch of `root` that contains `v`. | Amortized $O(\log N)$ |
+| `int parent(root, v)` | Parent of `v` when rooted at `root`, or `-1` if `root == v`. | Amortized $O(\log N)$ |
 | `int subtree_size(root, v)` | Number of link-cut-tree vertices in the subtree of `v` when rooted at `root`. | Amortized $O(\log N)$ |
 | `int subtree_size(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
 | `T subtree_prod(root, v)` | Group product of the rooted subtree. | Amortized $O(\log N)$ |
 | `T subtree_prod(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
+| `T subtree_prod_excluding_child(root, v, child)` | Product of `v`'s rooted subtree excluding `child`'s subtree. | Amortized $O(\log N)$ |
+| `int subtree_size_excluding_child(root, v, child)` | Size of `v`'s rooted subtree excluding `child`'s subtree. | Amortized $O(\log N)$ |
 
 ## Example
 
@@ -84,6 +93,15 @@ int main() {
 `link_edge` creates helper vertices exactly like `PathLinkCutTree`; subtree sizes
 and products include those helper vertices. Initialize original vertices with
 the group identity when you want subtree products over edge values only.
+
+`evert(v)` and `reroot(v)` change the represented root of the component to `v`.
+The APIs `link`, `cut`, `prod`, `path_prod`, `path_size`, `kth_vertex`,
+`subtree_prod(root, v)`, and `subtree_size(root, v)` may internally call
+`evert`, so they may also change represented-root orientation.
+
+`cut_parent(v)` is different from `cut(u, v)`: it cuts the parent edge of `v`
+with respect to the current represented-root orientation and does not call
+`evert`.
 
 This structure does not support non-commutative subtree products. A represented
 subtree has no canonical linear order, and the virtual-child aggregate relies on

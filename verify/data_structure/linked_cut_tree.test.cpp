@@ -57,6 +57,61 @@ void test_edge_nodes_subtree() {
     assert(!lct.connected(0, 2));
 }
 
+void test_rooted_tree_utility_apis() {
+    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1, 2, 3, 4, 5});
+
+    assert(lct.link_parent(1, 0));
+    assert(lct.link_parent(2, 0));
+    assert(lct.link_parent(3, 2));
+    assert(lct.link_parent(4, 2));
+
+    assert(lct.root(4) == 0);
+    lct.reroot(0);
+
+    assert(lct.component_prod(0) == 15);
+    assert(lct.component_size(0) == 5);
+
+    assert(lct.child_toward(0, 4) == 2);
+    assert(lct.child_toward(2, 4) == 4);
+    assert(lct.child_toward(4, 0) == 2);
+
+    assert(lct.branch_prod(0, 4) == 12);
+    assert(lct.branch_size(0, 4) == 3);
+
+    assert(lct.parent(0, 4) == 2);
+    assert(lct.parent(0, 2) == 0);
+    assert(lct.parent(0, 0) == -1);
+
+    assert(lct.subtree_prod(0, 2) == 12);
+    assert(lct.subtree_size(0, 2) == 3);
+
+    assert(lct.subtree_prod_excluding_child(0, 2, 4) == 7);
+    assert(lct.subtree_size_excluding_child(0, 2, 4) == 2);
+
+    lct.reroot(0);
+    assert(lct.cut_parent(4));
+
+    assert(!lct.connected(4, 0));
+    assert(lct.component_prod(0) == 10);
+    assert(lct.component_size(0) == 4);
+    assert(lct.component_prod(4) == 5);
+    assert(lct.component_size(4) == 1);
+
+    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct2(std::vector<int>{1, 2, 3, 4, 5});
+    assert(lct2.link_parent(1, 0));
+    assert(lct2.link_parent(2, 0));
+    assert(lct2.link_parent(3, 2));
+    assert(lct2.link_parent(4, 2));
+    lct2.reroot(0);
+
+    assert(lct2.cut_parent(2));
+    assert(!lct2.connected(2, 0));
+    assert(lct2.component_prod(0) == 3);
+    assert(lct2.component_size(0) == 2);
+    assert(lct2.component_prod(2) == 12);
+    assert(lct2.component_size(2) == 3);
+}
+
 bool naive_connected(const std::vector<std::vector<int>>& adj, int s, int t) {
     std::vector<int> parent(adj.size(), -1);
     std::vector<int> stack;
@@ -186,6 +241,7 @@ void test_random_vertex_sum() {
 int main() {
     test_vertex_subtree_sum();
     test_edge_nodes_subtree();
+    test_rooted_tree_utility_apis();
     test_random_vertex_sum();
 
     long long a, b;
