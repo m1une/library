@@ -9,6 +9,9 @@ data:
     path: data_structure/lazy_link_cut_tree.hpp
     title: Lazy Link-Cut Tree
   - icon: ':heavy_check_mark:'
+    path: data_structure/lazy_link_cut_tree_with_subtree.hpp
+    title: Lazy Link-Cut Tree With Subtree
+  - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
@@ -27,6 +30,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_link_cut_tree.test.cpp
     title: verify/data_structure/lazy_link_cut_tree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
+    title: verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
@@ -76,6 +82,7 @@ data:
   requiredBy:
   - data_structure/lazy_segtree.hpp
   - data_structure/persistent_lazy_segtree.hpp
+  - data_structure/lazy_link_cut_tree_with_subtree.hpp
   - data_structure/persistent_dynamic_lazy_monoid_array.hpp
   - data_structure/lazy_link_cut_tree.hpp
   - data_structure/dynamic_lazy_monoid_array.hpp
@@ -85,6 +92,7 @@ data:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
   - verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+  - verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
   - verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
   - verify/data_structure/persistent_lazy_segtree.test.cpp

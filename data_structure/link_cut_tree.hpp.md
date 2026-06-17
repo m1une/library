@@ -4,11 +4,17 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: data_structure/link_cut_tree_with_subtree.hpp
+    title: Link-Cut Tree With Subtree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/link_cut_tree.test.cpp
     title: verify/data_structure/link_cut_tree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/link_cut_tree_with_subtree.test.cpp
+    title: verify/data_structure/link_cut_tree_with_subtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -356,11 +362,13 @@ data:
   - monoid/concept.hpp
   isVerificationFile: false
   path: data_structure/link_cut_tree.hpp
-  requiredBy: []
+  requiredBy:
+  - data_structure/link_cut_tree_with_subtree.hpp
   timestamp: '2026-06-17 03:51:56+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/link_cut_tree.test.cpp
+  - verify/data_structure/link_cut_tree_with_subtree.test.cpp
 documentation_of: data_structure/link_cut_tree.hpp
 layout: document
 title: Link-Cut Tree
@@ -533,6 +541,7 @@ All complexities are amortized. The represented forest must remain a forest:
 ids remain unchanged.
 
 This implementation maintains path aggregates only. It does not maintain
-subtree aggregates of the represented tree.
+subtree aggregates of the represented tree. For a variant with subtree-query
+helpers, use `LinkCutTreeWithSubtree`.
 
 For path updates with lazy propagation, use `LazyLinkCutTree`.
