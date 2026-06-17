@@ -164,7 +164,7 @@ data:
   - verify/data_structure/dsu_monoid.test.cpp
 documentation_of: data_structure/dsu_monoid.hpp
 layout: document
-title: DSU Monoid
+title: DSU with Monoid
 ---
 
 ## Overview

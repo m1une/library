@@ -97,7 +97,7 @@ data:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: data_structure/dsu.hpp
 layout: document
-title: Disjoint Set Union (DSU)
+title: DSU (Disjoint Set Union)
 ---
 
 ## Overview

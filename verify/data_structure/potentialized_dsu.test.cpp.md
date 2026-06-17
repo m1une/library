@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: data_structure/potentialized_dsu.hpp
-    title: Potentialized Disjoint Set Union
+    title: Potentialized DSU
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid

@@ -152,7 +152,7 @@ data:
   - verify/data_structure/potentialized_dsu.test.cpp
 documentation_of: data_structure/potentialized_dsu.hpp
 layout: document
-title: Potentialized Disjoint Set Union
+title: Potentialized DSU
 ---
 
 ## Overview

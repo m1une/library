@@ -85,10 +85,10 @@ data:
       title: Disjoint Sparse Table
     - icon: ':heavy_check_mark:'
       path: data_structure/dsu.hpp
-      title: Disjoint Set Union (DSU)
+      title: DSU (Disjoint Set Union)
     - icon: ':heavy_check_mark:'
       path: data_structure/dsu_monoid.hpp
-      title: DSU Monoid
+      title: DSU with Monoid
     - icon: ':heavy_check_mark:'
       path: data_structure/dual_segtree.hpp
       title: Dual Segment Tree
@@ -133,7 +133,7 @@ data:
       title: Path Link-Cut Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/persistent_dsu.hpp
-      title: Persistent Disjoint Set Union
+      title: Persistent DSU
     - icon: ':heavy_check_mark:'
       path: data_structure/persistent_dual_segtree.hpp
       title: Persistent Dual Segment Tree
@@ -160,7 +160,7 @@ data:
       title: Persistent Segment Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/potentialized_dsu.hpp
-      title: Potentialized Disjoint Set Union
+      title: Potentialized DSU
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree

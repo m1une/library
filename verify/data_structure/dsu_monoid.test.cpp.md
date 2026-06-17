@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: data_structure/dsu_monoid.hpp
-    title: DSU Monoid
+    title: DSU with Monoid
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid

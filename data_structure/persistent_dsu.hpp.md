@@ -135,7 +135,7 @@ data:
   - verify/data_structure/persistent_dsu_library_checker.test.cpp
 documentation_of: data_structure/persistent_dsu.hpp
 layout: document
-title: Persistent Disjoint Set Union
+title: Persistent DSU
 ---
 
 ## Overview
