@@ -25,6 +25,9 @@ data:
     path: verify/data_structure/persistent_segtree.test.cpp
     title: verify/data_structure/persistent_segtree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/data_structure/potentialized_dsu.test.cpp
+    title: verify/data_structure/potentialized_dsu.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/segtree.test.cpp
     title: verify/data_structure/segtree.test.cpp
   _isVerificationFailed: false
@@ -60,6 +63,7 @@ data:
   - verify/data_structure/persistent_segtree.test.cpp
   - verify/data_structure/dsu_monoid.test.cpp
   - verify/data_structure/dynamic_monoid_array.test.cpp
+  - verify/data_structure/potentialized_dsu.test.cpp
   - verify/data_structure/segtree.test.cpp
   - verify/data_structure/path_link_cut_tree.test.cpp
   - verify/data_structure/disjoint_sparse_table.test.cpp

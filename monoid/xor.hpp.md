@@ -2,10 +2,13 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/potentialized_dsu.test.cpp
+    title: verify/data_structure/potentialized_dsu.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/xor.hpp\"\n\n\n\nnamespace m1une {\nnamespace monoid\
@@ -29,8 +32,9 @@ data:
   path: monoid/xor.hpp
   requiredBy: []
   timestamp: '2026-06-17 21:06:48+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/data_structure/potentialized_dsu.test.cpp
 documentation_of: monoid/xor.hpp
 layout: document
 title: Bitwise XOR Monoid

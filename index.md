@@ -159,6 +159,9 @@ data:
       path: data_structure/persistent_segtree.hpp
       title: Persistent Segment Tree
     - icon: ':heavy_check_mark:'
+      path: data_structure/potentialized_dsu.hpp
+      title: Potentialized Disjoint Set Union
+    - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree
     - icon: ':heavy_check_mark:'
@@ -358,7 +361,7 @@ data:
     - icon: ':warning:'
       path: monoid/wrapper.hpp
       title: Monoid Wrapper
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/xor.hpp
       title: Bitwise XOR Monoid
   - name: optimization
@@ -525,6 +528,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/persistent_segtree.test.cpp
       title: verify/data_structure/persistent_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/potentialized_dsu.test.cpp
+      title: verify/data_structure/potentialized_dsu.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/segtree.test.cpp
       title: verify/data_structure/segtree.test.cpp

@@ -30,6 +30,9 @@ data:
     path: data_structure/persistent_segtree.hpp
     title: Persistent Segment Tree
   - icon: ':heavy_check_mark:'
+    path: data_structure/potentialized_dsu.hpp
+    title: Potentialized Disjoint Set Union
+  - icon: ':heavy_check_mark:'
     path: data_structure/segtree.hpp
     title: Segment Tree
   - icon: ':heavy_check_mark:'
@@ -75,6 +78,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/persistent_segtree.test.cpp
     title: verify/data_structure/persistent_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/data_structure/potentialized_dsu.test.cpp
+    title: verify/data_structure/potentialized_dsu.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/segtree.test.cpp
     title: verify/data_structure/segtree.test.cpp
@@ -132,6 +138,7 @@ data:
   - data_structure/disjoint_sparse_table.hpp
   - data_structure/persistent_segtree.hpp
   - data_structure/dual_segtree.hpp
+  - data_structure/potentialized_dsu.hpp
   - data_structure/persistent_dual_segtree.hpp
   - data_structure/sparse_table.hpp
   - data_structure/persistent_dynamic_monoid_array.hpp
@@ -147,6 +154,7 @@ data:
   - verify/data_structure/persistent_dynamic_monoid_array.test.cpp
   - verify/data_structure/dsu_monoid.test.cpp
   - verify/data_structure/dynamic_monoid_array.test.cpp
+  - verify/data_structure/potentialized_dsu.test.cpp
   - verify/data_structure/sparse_table.test.cpp
   - verify/data_structure/segtree.test.cpp
   - verify/data_structure/path_link_cut_tree.test.cpp
