@@ -463,49 +463,72 @@ void test_rerooting_static_top_tree_vertex_component() {
     auto stt = m1une::tree::RerootingStaticTopTree(
         g, values, ColorPoint{{0, 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);
 
-    auto query = [&](int v) {
-        using Step = decltype(stt)::step_type;
-        int color = values[v].color;
-        long long answer = values[v].weight + stt.local_point(v).sum[color];
-        bool touches_top = true;
-        bool touches_bottom = true;
+    using ColorStt = decltype(stt);
+    struct QueryFolder {
+        const ColorStt& stt;
+        const std::vector<ColorVertex>& values;
+        int color = 0;
+        long long answer = 0;
+        bool touches_top = false;
+        bool touches_bottom = false;
         bool pending_open = false;
-        ColorPoint pending = stt.point_id();
+        ColorPoint pending{{0, 0}};
 
-        stt.for_each_rerooting_step(v, [&](const auto& step) {
-            if (step.type == Step::CompressLower) {
-                const ColorPath& lower = stt.path_down(step.sibling);
-                bool connect = touches_bottom && lower.first_color == color;
-                if (connect) answer += lower.first_sum;
-                touches_bottom = connect && lower.connected;
-            } else if (step.type == Step::CompressUpper) {
-                const ColorPath& upper = stt.path_up(step.sibling);
-                bool connect = touches_top && upper.first_color == color;
-                if (connect) answer += upper.first_sum;
-                touches_top = connect && upper.connected;
-            } else if (step.type == Step::AddEdge) {
-                pending_open = touches_top;
-                pending = stt.point_id();
-            } else if (step.type == Step::RakeLeft) {
-                if (pending_open) pending = stt.rake(stt.point(step.sibling), pending);
-            } else if (step.type == Step::RakeRight) {
-                if (pending_open) pending = stt.rake(pending, stt.point(step.sibling));
+        void start(int v, const ColorVertex& value, const ColorPoint& local) {
+            color = value.color;
+            answer = value.weight + local.sum[color];
+            touches_top = true;
+            touches_bottom = true;
+            pending_open = false;
+            pending = stt.point_id();
+            assert(values[v].color == color);
+        }
+
+        void compress_lower(const ColorPath& lower, ColorStt::edge_type) {
+            bool connect = touches_bottom && lower.first_color == color;
+            if (connect) answer += lower.first_sum;
+            touches_bottom = connect && lower.connected;
+        }
+
+        void compress_upper(const ColorPath& upper, ColorStt::edge_type) {
+            bool connect = touches_top && upper.first_color == color;
+            if (connect) answer += upper.first_sum;
+            touches_top = connect && upper.connected;
+        }
+
+        void add_edge(ColorStt::edge_type) {
+            pending_open = touches_top;
+            pending = stt.point_id();
+        }
+
+        void rake_left(const ColorPoint& point) {
+            if (pending_open) pending = stt.rake(point, pending);
+        }
+
+        void rake_right(const ColorPoint& point) {
+            if (pending_open) pending = stt.rake(pending, point);
+        }
+
+        void add_vertex(int, const ColorVertex& value) {
+            if (pending_open && value.color == color) {
+                answer += value.weight + pending.sum[color];
+                touches_top = true;
+                touches_bottom = true;
             } else {
-                const auto& value = values[step.vertex];
-                if (pending_open && value.color == color) {
-                    answer += value.weight + pending.sum[color];
-                    touches_top = true;
-                    touches_bottom = true;
-                } else {
-                    touches_top = false;
-                    touches_bottom = false;
-                }
-                pending_open = false;
-                pending = stt.point_id();
+                touches_top = false;
+                touches_bottom = false;
             }
-        });
+            pending_open = false;
+            pending = stt.point_id();
+        }
 
-        return answer;
+        long long result() const {
+            return answer;
+        }
+    };
+
+    auto query = [&](int v) {
+        return stt.fold_rerooting(v, QueryFolder{stt, values});
     };
 
     auto brute = [&](int start) {

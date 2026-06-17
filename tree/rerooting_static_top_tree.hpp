@@ -475,6 +475,27 @@ struct RerootingStaticTopTree {
         return result;
     }
 
+    template <class Folder>
+    auto fold_rerooting(int v, Folder folder) const {
+        folder.start(v, _values[v], local_point(v));
+        for_each_rerooting_step(v, [&](const RerootingStep& step) {
+            if (step.type == step_type::CompressLower) {
+                folder.compress_lower(path_down(step.sibling), step.edge);
+            } else if (step.type == step_type::CompressUpper) {
+                folder.compress_upper(path_up(step.sibling), reversed_edge(step.edge));
+            } else if (step.type == step_type::AddEdge) {
+                folder.add_edge(reversed_edge(step.edge));
+            } else if (step.type == step_type::RakeLeft) {
+                folder.rake_left(point(step.sibling));
+            } else if (step.type == step_type::RakeRight) {
+                folder.rake_right(point(step.sibling));
+            } else {
+                folder.add_vertex(step.vertex, _values[step.vertex]);
+            }
+        });
+        return folder.result();
+    }
+
     Path compress_down(const Path& upper, const Path& lower, edge_type edge) const {
         return _compress_down(upper, lower, edge);
     }

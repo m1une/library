@@ -162,7 +162,7 @@ Point side = stt.local_point(v);
 already stored inside the `AddVertex` node of `v`. If there are no such
 components, it returns `point_id()`.
 
-Then process the step stream:
+For low-level access, you can process the raw step stream:
 
 ```cpp
 stt.for_each_rerooting_step(v, [&](const auto& step) {
@@ -205,6 +205,23 @@ This removes the error-prone part of rerooting queries: finding the sibling
 clusters and keeping their order straight. The folder you write for a problem
 only needs to say what each step means for that DP.
 
+For ordinary use, prefer `fold_rerooting(v, folder)`. It performs this dispatch
+for you and passes already-oriented cluster values to the folder:
+
+| Folder method | Called when |
+| --- | --- |
+| `start(v, value, local_point)` | Before processing the walk from `v`. |
+| `compress_lower(path, edge)` | A lower path sibling is attached below the current path. |
+| `compress_upper(path, edge)` | An upper path sibling is attached above the current path. |
+| `add_edge(edge)` | The walk leaves a child path and moves toward its parent vertex. |
+| `rake_left(point)` | A point sibling appears before the current rake range. |
+| `rake_right(point)` | A point sibling appears after the current rake range. |
+| `add_vertex(vertex, value)` | The walk reaches a parent `AddVertex` node. |
+| `result()` | Returns the query answer after the walk. |
+
+Here `compress_upper` and `add_edge` receive reversed edges, so the edge is
+oriented in the direction the rerooting walk is moving.
+
 ## Public Members
 
 | Method | Description | Complexity |
@@ -233,6 +250,7 @@ only needs to say what each step means for that DP.
 | `const Point& point_id()` | Identity point value for `rake`. | `O(1)` |
 | `for_each_rerooting_step(v, f)` | Visits rerooting steps from `vertex_node(v)` to `root_node()`. | `O(height)` |
 | `std::vector<RerootingStep> rerooting_steps(v)` | Returns the same rerooting steps as a vector. | `O(height)` |
+| `fold_rerooting(v, folder)` | Runs the rerooting walk and calls the folder methods above. | `O(height)` |
 | `compress_down(...)`, `compress_up(...)` | Public wrappers around the directional path callbacks. | Callback cost |
 | `rake(...)` | Public wrapper around the point merge callback. | Callback cost |
 | `add_edge_down(...)`, `add_edge_up(...)` | Public wrappers around the directional edge callbacks. | Callback cost |
@@ -357,56 +375,76 @@ auto stt = m1une::tree::RerootingStaticTopTree(
 );
 ```
 
-For query type `3 v`, use the rerooting step stream. The idea is to keep the
-component containing the original query vertex and grow it while climbing from
-`vertex_node(v)` to the expression root.
+For query type `3 v`, define a folder and pass it to `fold_rerooting`. The
+folder keeps the component containing the original query vertex and grows it
+while the library climbs from `vertex_node(v)` to the expression root.
 
 ```cpp
-auto query = [&](int v) {
-    using Step = decltype(stt)::step_type;
+using Stt = decltype(stt);
 
-    int color = values[v].color;
-    long long answer = values[v].weight + stt.local_point(v).sum[color];
-
-    bool touches_top = true;
-    bool touches_bottom = true;
+struct QueryFolder {
+    const Stt& stt;
+    int color = 0;
+    long long answer = 0;
+    bool touches_top = false;
+    bool touches_bottom = false;
     bool pending_open = false;
-    Point pending = stt.point_id();
+    Point pending{{0, 0}};
 
-    stt.for_each_rerooting_step(v, [&](const auto& step) {
-        if (step.type == Step::CompressLower) {
-            const Path& lower = stt.path_down(step.sibling);
-            bool connect = touches_bottom && lower.first_color == color;
-            if (connect) answer += lower.first_sum;
-            touches_bottom = connect && lower.connected;
-        } else if (step.type == Step::CompressUpper) {
-            const Path& upper = stt.path_up(step.sibling);
-            bool connect = touches_top && upper.first_color == color;
-            if (connect) answer += upper.first_sum;
-            touches_top = connect && upper.connected;
-        } else if (step.type == Step::AddEdge) {
-            pending_open = touches_top;
-            pending = stt.point_id();
-        } else if (step.type == Step::RakeLeft) {
-            if (pending_open) pending = stt.rake(stt.point(step.sibling), pending);
-        } else if (step.type == Step::RakeRight) {
-            if (pending_open) pending = stt.rake(pending, stt.point(step.sibling));
+    void start(int, const Vertex& value, const Point& local) {
+        color = value.color;
+        answer = value.weight + local.sum[color];
+        touches_top = true;
+        touches_bottom = true;
+        pending_open = false;
+        pending = stt.point_id();
+    }
+
+    void compress_lower(const Path& lower, Stt::edge_type) {
+        bool connect = touches_bottom && lower.first_color == color;
+        if (connect) answer += lower.first_sum;
+        touches_bottom = connect && lower.connected;
+    }
+
+    void compress_upper(const Path& upper, Stt::edge_type) {
+        bool connect = touches_top && upper.first_color == color;
+        if (connect) answer += upper.first_sum;
+        touches_top = connect && upper.connected;
+    }
+
+    void add_edge(Stt::edge_type) {
+        pending_open = touches_top;
+        pending = stt.point_id();
+    }
+
+    void rake_left(const Point& point) {
+        if (pending_open) pending = stt.rake(point, pending);
+    }
+
+    void rake_right(const Point& point) {
+        if (pending_open) pending = stt.rake(pending, point);
+    }
+
+    void add_vertex(int, const Vertex& value) {
+        if (pending_open && value.color == color) {
+            answer += value.weight + pending.sum[color];
+            touches_top = true;
+            touches_bottom = true;
         } else {
-            const auto& value = values[step.vertex];
-            if (pending_open && value.color == color) {
-                answer += value.weight + pending.sum[color];
-                touches_top = true;
-                touches_bottom = true;
-            } else {
-                touches_top = false;
-                touches_bottom = false;
-            }
-            pending_open = false;
-            pending = stt.point_id();
+            touches_top = false;
+            touches_bottom = false;
         }
-    });
+        pending_open = false;
+        pending = stt.point_id();
+    }
 
-    return answer;
+    long long result() const {
+        return answer;
+    }
+};
+
+auto query = [&](int v) {
+    return stt.fold_rerooting(v, QueryFolder{stt});
 };
 ```
 
