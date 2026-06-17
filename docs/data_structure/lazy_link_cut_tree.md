@@ -1,55 +1,65 @@
 ---
-title: Linked-Cut Tree
-documentation_of: ../../data_structure/linked_cut_tree.hpp
+title: Lazy Link-Cut Tree
+documentation_of: ../../data_structure/lazy_link_cut_tree.hpp
 ---
 
 ## Overview
 
-`m1une::data_structure::LinkedCutTree<Monoid>` maintains a dynamic forest. It
-supports linking two trees, cutting edges, rerooting represented trees, querying
-path products, and querying rooted subtree products and sizes.
+`m1une::data_structure::LazyLinkCutTree<ActedMonoid>` maintains a dynamic
+forest. It supports linking two trees, cutting edges, rerooting represented
+trees, querying path products, applying lazy updates on paths, and querying
+rooted subtree products and sizes.
 
 The value is stored on link-cut-tree vertices. If you need edge values, create
 one extra link-cut-tree vertex for each original edge and connect it between the
 two endpoints. The `link_edge` helper does this for you.
 
-The monoid operation must be commutative and must provide an inverse. This lets
-the structure maintain aggregates of virtual child subtrees and update them in
-constant time whenever `access` changes the preferred path. Path and subtree
-queries are both amortized $O(\log N)$.
+The value monoid must be commutative and must provide an inverse. The structure
+keeps a cached aggregate of virtual child subtrees, while path lazy propagation
+updates only preferred-path vertices. Path operations and subtree queries are
+amortized $O(\log N)$.
 
 ## Template Parameter
 
-`Monoid` must satisfy `m1une::monoid::IsCommutativeGroup`:
+`ActedMonoid` must satisfy
+`m1une::acted_monoid::IsCommutativeActedGroup`:
 
 ```cpp
-struct M {
+struct AM {
     using value_type = T;
+    using operator_type = F;
+
     static T id();
     static T op(const T& a, const T& b);
     static T inv(const T& x);
+
+    static F op_id();
+    static F op_comp(const F& f, const F& g);
+
+    static T mapping(const F& f, const T& x);
 };
 ```
 
 `op` must be associative and commutative, `id()` must be its identity, and
-`inv(x)` must satisfy `op(x, inv(x)) == id()`.
+`inv(x)` must satisfy `op(x, inv(x)) == id()`. As with
+`LazyPathLinkCutTree`, `mapping` must distribute over `op`.
 
 ## Construction
 
 ```cpp
-LinkedCutTree<Monoid> lct;
-LinkedCutTree<Monoid> lct(n);
-LinkedCutTree<Monoid> lct(values);
+LazyLinkCutTree<ActedMonoid> lct;
+LazyLinkCutTree<ActedMonoid> lct(n);
+LazyLinkCutTree<ActedMonoid> lct(values);
 ```
 
-* `LinkedCutTree(n)` creates `n` isolated vertices initialized with
-  `Monoid::id()`.
-* `LinkedCutTree(values)` creates one isolated vertex for each value.
+* `LazyLinkCutTree(n)` creates `n` isolated vertices initialized with
+  `ActedMonoid::id()`.
+* `LazyLinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
-As with `Segtree`, construction from `std::vector<U>` is supported when
-`Monoid::make(value)`, `Monoid::make(value, index)`, or `static_cast<T>(value)`
-is available.
+Construction from `std::vector<U>` is supported when
+`ActedMonoid::make(value)`, `ActedMonoid::make(value, index)`, or
+`static_cast<T>(value)` is available.
 
 ## Methods
 
@@ -62,9 +72,11 @@ is available.
 | `bool edge_alive(edge_id)` | Whether the helper edge is currently linked. | `O(1)` |
 | `int edge_node(edge_id)` | Link-cut-tree vertex id storing this edge's value. | `O(1)` |
 | `std::pair<int, int> edge_endpoints(edge_id)` | Original endpoints passed to `link_edge`. | `O(1)` |
-| `const T& get(v)` | Returns the stored value of vertex `v`. | `O(1)` |
-| `const T& operator[](v)` | Alias for `get(v)`. | `O(1)` |
+| `T get(v)` | Pushes pending updates and returns the stored value of vertex `v`. | Amortized $O(\log N)$ |
+| `T operator[](v)` | Alias for `get(v)`. | Amortized $O(\log N)$ |
 | `void set(v, value)` | Updates the value of vertex `v`. | Amortized $O(\log N)$ |
+| `void apply(v, f)` | Applies operator `f` to one vertex. | Amortized $O(\log N)$ |
+| `void apply(u, v, f)` | Applies operator `f` to every link-cut-tree vertex on the path from `u` to `v`. | Amortized $O(\log N)$ |
 | `void evert(v)` | Makes `v` the represented root of its component. | Amortized $O(\log N)$ |
 | `void reroot(v)` | Alias for `evert(v)`. | Amortized $O(\log N)$ |
 | `int component_root(v)` | Returns the represented root of `v`'s component. | Amortized $O(\log N)$ |
@@ -77,20 +89,21 @@ is available.
 | `bool cut(u, v)` | Removes edge `(u, v)` if it exists. On success, the resulting components are rooted at `u` and `v`. | Amortized $O(\log N)$ |
 | `bool cut_parent(v)` | Removes the current parent edge of `v` with respect to the represented root. On success, `v` becomes the root of the detached child-side component. | Amortized $O(\log N)$ |
 | `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. On success, the endpoint components are rooted at the stored endpoints. | Amortized $O(\log N)$ |
-| `const T& get_edge(edge_id)` | Returns the value stored in the helper edge node. | `O(1)` |
+| `T get_edge(edge_id)` | Pushes pending updates and returns the value stored in the helper edge node. | Amortized $O(\log N)$ |
 | `void set_edge(edge_id, value)` | Updates the value stored in the helper edge node. | Amortized $O(\log N)$ |
-| `T prod(u, v)` | Group product on the path from `u` to `v`. | Amortized $O(\log N)$ |
+| `void apply_edge(edge_id, f)` | Applies operator `f` to one helper edge node. | Amortized $O(\log N)$ |
+| `T prod(u, v)` | Value product on the path from `u` to `v`. | Amortized $O(\log N)$ |
 | `T path_prod(u, v)` | Alias for `prod(u, v)`. | Amortized $O(\log N)$ |
 | `int path_size(u, v)` | Number of link-cut-tree vertices on the path from `u` to `v`. | Amortized $O(\log N)$ |
 | `int kth_vertex(u, v, k)` | Returns the `k`-th vertex on the path from `u` to `v`, zero-indexed. | Amortized $O(\log N)$ |
 | `int lca(u, v)` | Returns the LCA with respect to the current represented root, or `-1` if disconnected. | Amortized $O(\log N)$ |
-| `T component_prod(v)` | Group product of the whole connected component containing `v`. | Amortized $O(\log N)$ |
+| `T component_prod(v)` | Value product of the whole connected component containing `v`. | Amortized $O(\log N)$ |
 | `int component_size(v)` | Number of link-cut-tree vertices in the component containing `v`. | Amortized $O(\log N)$ |
 | `int child_toward(root, v)` | Child of `root` lying on the path from `root` to `v`; requires `root != v`. | Amortized $O(\log N)$ |
-| `T branch_prod(root, v)` | Group product of the entire branch of `root` that contains `v`. | Amortized $O(\log N)$ |
+| `T branch_prod(root, v)` | Value product of the entire branch of `root` that contains `v`. | Amortized $O(\log N)$ |
 | `int branch_size(root, v)` | Size of the entire branch of `root` that contains `v`. | Amortized $O(\log N)$ |
 | `int parent(root, v)` | Parent of `v` when rooted at `root`, or `-1` if `root == v`. | Amortized $O(\log N)$ |
-| `T subtree_prod(root, v)` | Group product of the rooted subtree. | Amortized $O(\log N)$ |
+| `T subtree_prod(root, v)` | Value product of the rooted subtree. | Amortized $O(\log N)$ |
 | `T subtree_prod(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
 | `int subtree_size(root, v)` | Number of link-cut-tree vertices in the subtree of `v` when rooted at `root`. | Amortized $O(\log N)$ |
 | `int subtree_size(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
@@ -102,33 +115,40 @@ Path and rooted-subtree queries assert that the queried vertices are connected.
 also assert `root != v`. The excluding-child helpers assert that `child` is a
 child of `v` when the represented tree is rooted at `root`.
 
+Unlike non-lazy `LinkCutTree::get`, `LazyLinkCutTree::get` is not `const`,
+because it must expose the vertex and push pending lazy operations first.
+
 ## Example
 
 ```cpp
-#include "data_structure/linked_cut_tree.hpp"
-#include "monoid/add.hpp"
+#include "acted_monoid/range_add_range_sum.hpp"
+#include "data_structure/lazy_link_cut_tree.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
-    using Sum = m1une::monoid::Add<long long>;
-    m1une::data_structure::LinkedCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
+    m1une::data_structure::LazyLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     lct.link(0, 1);
     lct.link(1, 2);
     lct.link(1, 3);
     lct.link(3, 4);
 
-    std::cout << lct.path_prod(2, 4) << "\n";     // 3 + 2 + 4 + 5 = 14
-    std::cout << lct.subtree_prod(0, 1) << "\n";  // 2 + 3 + 4 + 5 = 14
+    lct.apply(2, 4, 10);
+    std::cout << lct.path_prod(2, 4).sum << "\n";     // 54
+    std::cout << lct.subtree_prod(0, 1).sum << "\n";  // 54
+
+    lct.apply(0, 3, 5);
+    std::cout << lct.subtree_prod(0, 1).sum << "\n";  // 64
 }
 ```
 
 ## Example: Rooted Tree Helpers
 
 ```cpp
-using Sum = m1une::monoid::Add<long long>;
-m1une::data_structure::LinkedCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
+m1une::data_structure::LazyLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
 // Rooted shape:
 // 0
@@ -142,11 +162,13 @@ lct.link_parent(3, 2);
 lct.link_parent(4, 2);
 lct.reroot(0);
 
-long long whole = lct.component_prod(0);       // 1 + 2 + 3 + 4 + 5 = 15
-long long branch = lct.branch_prod(0, 4);      // 3 + 4 + 5 = 12
-int p = lct.parent(0, 4);                      // 2
-int c = lct.child_toward(0, 4);                // 2
-long long without_4 = lct.subtree_prod_excluding_child(0, 2, 4);  // 3 + 4 = 7
+lct.apply(3, 4, 10);  // adds 10 to vertices 3, 2, and 4
+
+long long whole = lct.component_prod(0).sum;       // 45
+long long branch = lct.branch_prod(0, 4).sum;      // 42
+int p = lct.parent(0, 4);                          // 2
+int c = lct.child_toward(0, 4);                    // 2
+long long without_4 = lct.subtree_prod_excluding_child(0, 2, 4).sum;  // 27
 
 lct.cut_parent(4);  // cuts edge 2-4 without changing the represented root first
 ```
@@ -154,8 +176,8 @@ lct.cut_parent(4);  // cuts edge 2-4 without changing the represented root first
 ## Notes
 
 `link_edge` creates helper vertices for edge values. Subtree sizes and products
-include those helper vertices. Initialize original vertices with the group
-identity when you want subtree products over edge values only.
+include those helper vertices. Initialize original vertices with
+`ActedMonoid::id()` when you want subtree products over edge values only.
 
 `evert(v)` and `reroot(v)` change the represented root of the component to `v`.
 
@@ -182,7 +204,7 @@ The following public methods reroot internally:
   component is rooted at the stored `u` endpoint, the original `v`-side
   component is rooted at the stored `v` endpoint, and the helper edge node is
   isolated.
-* `prod(u, v)`, `path_prod(u, v)`, `path_size(u, v)`, and
+* `prod(u, v)`, `path_prod(u, v)`, `apply(u, v, f)`, `path_size(u, v)`, and
   `kth_vertex(u, v, k)` reroot at `u`, so the represented root becomes `u`.
 * `subtree_prod(root, v)`, `subtree_size(root, v)`, `child_toward(root, v)`,
   `branch_prod(root, v)`, `branch_size(root, v)`, `parent(root, v)`,
@@ -193,6 +215,11 @@ The following public methods reroot internally:
 Other public methods may expose or splay vertices, but they do not change the
 represented root. In particular, `lca(u, v)` uses the current represented root,
 and `subtree_prod(v)` and `subtree_size(v)` use the current represented root.
+
+This structure supports lazy path updates, but it does not provide subtree
+updates. A path update must not touch virtual side subtrees, so the
+implementation keeps preferred-path values and virtual-subtree aggregates as
+separate cached values.
 
 This structure does not support non-commutative subtree products. A represented
 subtree has no canonical linear order, and the virtual-child aggregate relies on

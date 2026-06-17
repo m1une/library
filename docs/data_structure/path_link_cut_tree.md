@@ -186,6 +186,6 @@ ids remain unchanged.
 
 This implementation maintains path aggregates only. It does not maintain
 subtree aggregates of the represented tree. For a variant with subtree-query
-helpers, use `LinkedCutTree`.
+helpers, use `LinkCutTree`.
 
 For path updates with lazy propagation, use `LazyPathLinkCutTree`.
