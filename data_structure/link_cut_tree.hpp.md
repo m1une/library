@@ -7,14 +7,14 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/linked_cut_tree.test.cpp
-    title: verify/data_structure/linked_cut_tree.test.cpp
+    path: verify/data_structure/link_cut_tree.test.cpp
+    title: verify/data_structure/link_cut_tree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/linked_cut_tree.hpp\"\n\n\n\n#include <cassert>\n\
+  bundledCode: "#line 1 \"data_structure/link_cut_tree.hpp\"\n\n\n\n#include <cassert>\n\
     #include <concepts>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\
     \n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
     \ m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies the requirements\
@@ -29,19 +29,19 @@ data:
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/linked_cut_tree.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/link_cut_tree.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
-    \ Monoid>\nstruct LinkedCutTree {\n    using T = typename Monoid::value_type;\n\
-    \n   private:\n    struct Node {\n        int left = -1;\n        int right =\
-    \ -1;\n        int parent = -1;\n        bool rev = false;\n        int size =\
-    \ 1;\n        int virtual_size = 0;\n        int all_size = 1;\n        T value\
-    \ = Monoid::id();\n        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n\
-    \        T virtual_prod = Monoid::id();\n        T all_prod = Monoid::id();\n\
-    \    };\n\n    struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n \
-    \       int node = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node>\
-    \ _nodes;\n    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\
-    \n    static T make_node_value(const T& value, int) {\n        return value;\n\
-    \    }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
+    \ Monoid>\nstruct LinkCutTree {\n    using T = typename Monoid::value_type;\n\n\
+    \   private:\n    struct Node {\n        int left = -1;\n        int right = -1;\n\
+    \        int parent = -1;\n        bool rev = false;\n        int size = 1;\n\
+    \        int virtual_size = 0;\n        int all_size = 1;\n        T value = Monoid::id();\n\
+    \        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n        T\
+    \ virtual_prod = Monoid::id();\n        T all_prod = Monoid::id();\n    };\n\n\
+    \    struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n        int\
+    \ node = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n\
+    \    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\n   \
+    \ static T make_node_value(const T& value, int) {\n        return value;\n   \
+    \ }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
     \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    static T make_node_value(const\
@@ -107,17 +107,16 @@ data:
     \            last = cur;\n        }\n        splay(node);\n        return last;\n\
     \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
     \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkedCutTree()\
-    \ = default;\n\n    explicit LinkedCutTree(int n) {\n        assert(0 <= n);\n\
-    \        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
-    \    }\n\n    explicit LinkedCutTree(const std::vector<T>& values) {\n       \
-    \ _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
-    \ i++) add_vertex(values[i]);\n    }\n\n    explicit LinkedCutTree(std::vector<T>&&\
-    \ values) {\n        _nodes.reserve(values.size());\n        for (int i = 0; i\
-    \ < int(values.size()); i++) add_vertex(std::move(values[i]));\n    }\n\n    template\
-    \ <class U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) {\
-    \ Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x, i); }\
-    \ ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkedCutTree(const\
+    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkCutTree() =\
+    \ default;\n\n    explicit LinkCutTree(int n) {\n        assert(0 <= n);\n   \
+    \     _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
+    \    }\n\n    explicit LinkCutTree(const std::vector<T>& values) {\n        _nodes.reserve(values.size());\n\
+    \        for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n\
+    \    }\n\n    explicit LinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
+    \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
+    \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
+    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
+    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
@@ -276,12 +275,12 @@ data:
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        return subtree_size(root, v) - subtree_size(root, child);\n\
     \    }\n};\n\n}  // namespace data_structure\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_LINKED_CUT_TREE_HPP\n#define M1UNE_LINKED_CUT_TREE_HPP 1\n\n\
-    #include <cassert>\n#include <concepts>\n#include <type_traits>\n#include <utility>\n\
+  code: "#ifndef M1UNE_LINK_CUT_TREE_HPP\n#define M1UNE_LINK_CUT_TREE_HPP 1\n\n#include\
+    \ <cassert>\n#include <concepts>\n#include <type_traits>\n#include <utility>\n\
     #include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
     \ data_structure {\n\ntemplate <m1une::monoid::IsCommutativeGroup Monoid>\nstruct\
-    \ LinkedCutTree {\n    using T = typename Monoid::value_type;\n\n   private:\n\
-    \    struct Node {\n        int left = -1;\n        int right = -1;\n        int\
+    \ LinkCutTree {\n    using T = typename Monoid::value_type;\n\n   private:\n \
+    \   struct Node {\n        int left = -1;\n        int right = -1;\n        int\
     \ parent = -1;\n        bool rev = false;\n        int size = 1;\n        int\
     \ virtual_size = 0;\n        int all_size = 1;\n        T value = Monoid::id();\n\
     \        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n        T\
@@ -356,17 +355,16 @@ data:
     \            last = cur;\n        }\n        splay(node);\n        return last;\n\
     \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
     \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkedCutTree()\
-    \ = default;\n\n    explicit LinkedCutTree(int n) {\n        assert(0 <= n);\n\
-    \        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
-    \    }\n\n    explicit LinkedCutTree(const std::vector<T>& values) {\n       \
-    \ _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
-    \ i++) add_vertex(values[i]);\n    }\n\n    explicit LinkedCutTree(std::vector<T>&&\
-    \ values) {\n        _nodes.reserve(values.size());\n        for (int i = 0; i\
-    \ < int(values.size()); i++) add_vertex(std::move(values[i]));\n    }\n\n    template\
-    \ <class U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) {\
-    \ Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x, i); }\
-    \ ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkedCutTree(const\
+    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkCutTree() =\
+    \ default;\n\n    explicit LinkCutTree(int n) {\n        assert(0 <= n);\n   \
+    \     _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
+    \    }\n\n    explicit LinkCutTree(const std::vector<T>& values) {\n        _nodes.reserve(values.size());\n\
+    \        for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n\
+    \    }\n\n    explicit LinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
+    \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
+    \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
+    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
+    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
@@ -525,24 +523,24 @@ data:
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        return subtree_size(root, v) - subtree_size(root, child);\n\
     \    }\n};\n\n}  // namespace data_structure\n}  // namespace m1une\n\n#endif\
-    \  // M1UNE_LINKED_CUT_TREE_HPP\n"
+    \  // M1UNE_LINK_CUT_TREE_HPP\n"
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
-  path: data_structure/linked_cut_tree.hpp
+  path: data_structure/link_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-17 22:52:23+09:00'
+  timestamp: '2026-06-18 00:12:25+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/linked_cut_tree.test.cpp
-documentation_of: data_structure/linked_cut_tree.hpp
+  - verify/data_structure/link_cut_tree.test.cpp
+documentation_of: data_structure/link_cut_tree.hpp
 layout: document
-title: Linked-Cut Tree
+title: Link-Cut Tree
 ---
 
 ## Overview
 
-`m1une::data_structure::LinkedCutTree<Monoid>` maintains a dynamic forest. It
+`m1une::data_structure::LinkCutTree<Monoid>` maintains a dynamic forest. It
 supports linking two trees, cutting edges, rerooting represented trees, querying
 path products, and querying rooted subtree products and sizes.
 
@@ -574,14 +572,14 @@ struct M {
 ## Construction
 
 ```cpp
-LinkedCutTree<Monoid> lct;
-LinkedCutTree<Monoid> lct(n);
-LinkedCutTree<Monoid> lct(values);
+LinkCutTree<Monoid> lct;
+LinkCutTree<Monoid> lct(n);
+LinkCutTree<Monoid> lct(values);
 ```
 
-* `LinkedCutTree(n)` creates `n` isolated vertices initialized with
+* `LinkCutTree(n)` creates `n` isolated vertices initialized with
   `Monoid::id()`.
-* `LinkedCutTree(values)` creates one isolated vertex for each value.
+* `LinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
 As with `Segtree`, construction from `std::vector<U>` is supported when
@@ -642,14 +640,14 @@ child of `v` when the represented tree is rooted at `root`.
 ## Example
 
 ```cpp
-#include "data_structure/linked_cut_tree.hpp"
+#include "data_structure/link_cut_tree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using Sum = m1une::monoid::Add<long long>;
-    m1une::data_structure::LinkedCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::LinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     lct.link(0, 1);
     lct.link(1, 2);
@@ -665,7 +663,7 @@ int main() {
 
 ```cpp
 using Sum = m1une::monoid::Add<long long>;
-m1une::data_structure::LinkedCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+m1une::data_structure::LinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
 // Rooted shape:
 // 0

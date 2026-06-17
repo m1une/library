@@ -12,8 +12,8 @@ data:
     path: data_structure/dynamic_monoid_array.hpp
     title: Dynamic Monoid Array
   - icon: ':heavy_check_mark:'
-    path: data_structure/linked_cut_tree.hpp
-    title: Linked-Cut Tree
+    path: data_structure/link_cut_tree.hpp
+    title: Link-Cut Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/path_link_cut_tree.hpp
     title: Path Link-Cut Tree
@@ -55,8 +55,8 @@ data:
     path: verify/data_structure/dynamic_monoid_array.test.cpp
     title: verify/data_structure/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/linked_cut_tree.test.cpp
-    title: verify/data_structure/linked_cut_tree.test.cpp
+    path: verify/data_structure/link_cut_tree.test.cpp
+    title: verify/data_structure/link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/path_link_cut_tree.test.cpp
     title: verify/data_structure/path_link_cut_tree.test.cpp
@@ -118,6 +118,7 @@ data:
   - tree/sparse_table_lca.hpp
   - tree/all.hpp
   - tree/tree.hpp
+  - data_structure/link_cut_tree.hpp
   - data_structure/segtree.hpp
   - data_structure/path_link_cut_tree.hpp
   - data_structure/dynamic_monoid_array.hpp
@@ -127,12 +128,12 @@ data:
   - data_structure/persistent_dual_segtree.hpp
   - data_structure/sparse_table.hpp
   - data_structure/persistent_dynamic_monoid_array.hpp
-  - data_structure/linked_cut_tree.hpp
   - monoid/power.hpp
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
+  - verify/data_structure/link_cut_tree.test.cpp
   - verify/data_structure/persistent_dual_segtree.test.cpp
   - verify/data_structure/dual_segtree.test.cpp
   - verify/data_structure/persistent_segtree.test.cpp
@@ -140,7 +141,6 @@ data:
   - verify/data_structure/dynamic_monoid_array.test.cpp
   - verify/data_structure/sparse_table.test.cpp
   - verify/data_structure/segtree.test.cpp
-  - verify/data_structure/linked_cut_tree.test.cpp
   - verify/data_structure/path_link_cut_tree.test.cpp
   - verify/data_structure/disjoint_sparse_table.test.cpp
 documentation_of: monoid/concept.hpp

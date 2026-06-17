@@ -108,8 +108,8 @@ data:
       path: data_structure/hash_set.hpp
       title: Hash Set
     - icon: ':heavy_check_mark:'
-      path: data_structure/lazy_linked_cut_tree.hpp
-      title: Lazy Linked-Cut Tree
+      path: data_structure/lazy_link_cut_tree.hpp
+      title: Lazy Link-Cut Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/lazy_path_link_cut_tree.hpp
       title: Lazy Path Link-Cut Tree
@@ -117,8 +117,8 @@ data:
       path: data_structure/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
-      path: data_structure/linked_cut_tree.hpp
-      title: Linked-Cut Tree
+      path: data_structure/link_cut_tree.hpp
+      title: Link-Cut Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/ordered_multiset.hpp
       title: Ordered Multiset
@@ -466,8 +466,8 @@ data:
       path: verify/data_structure/hash_set.test.cpp
       title: verify/data_structure/hash_set.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/lazy_linked_cut_tree.test.cpp
-      title: verify/data_structure/lazy_linked_cut_tree.test.cpp
+      path: verify/data_structure/lazy_link_cut_tree.test.cpp
+      title: verify/data_structure/lazy_link_cut_tree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/lazy_path_link_cut_tree.test.cpp
       title: verify/data_structure/lazy_path_link_cut_tree.test.cpp
@@ -475,8 +475,8 @@ data:
       path: verify/data_structure/lazy_segtree.test.cpp
       title: verify/data_structure/lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/linked_cut_tree.test.cpp
-      title: verify/data_structure/linked_cut_tree.test.cpp
+      path: verify/data_structure/link_cut_tree.test.cpp
+      title: verify/data_structure/link_cut_tree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/ordered_multiset.test.cpp
       title: verify/data_structure/ordered_multiset.test.cpp

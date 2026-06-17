@@ -7,14 +7,14 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/lazy_linked_cut_tree.test.cpp
-    title: verify/data_structure/lazy_linked_cut_tree.test.cpp
+    path: verify/data_structure/lazy_link_cut_tree.test.cpp
+    title: verify/data_structure/lazy_link_cut_tree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/lazy_linked_cut_tree.hpp\"\n\n\n\n#include\
+  bundledCode: "#line 1 \"data_structure/lazy_link_cut_tree.hpp\"\n\n\n\n#include\
     \ <cassert>\n#include <concepts>\n#include <type_traits>\n#include <utility>\n\
     #include <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
@@ -32,9 +32,9 @@ data:
     \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
     \ && requires(typename AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
-    \n\n#line 11 \"data_structure/lazy_linked_cut_tree.hpp\"\n\nnamespace m1une {\n\
+    \n\n#line 11 \"data_structure/lazy_link_cut_tree.hpp\"\n\nnamespace m1une {\n\
     namespace data_structure {\n\ntemplate <m1une::acted_monoid::IsCommutativeActedGroup\
-    \ ActedMonoid>\nstruct LazyLinkedCutTree {\n    using T = typename ActedMonoid::value_type;\n\
+    \ ActedMonoid>\nstruct LazyLinkCutTree {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
     \ Node {\n        int left = -1;\n        int right = -1;\n        int parent\
     \ = -1;\n        bool rev = false;\n        int size = 1;\n        int virtual_size\
@@ -124,17 +124,17 @@ data:
     \   splay(node);\n        return last;\n    }\n\n    void check_vertex(int v)\
     \ const {\n        assert(0 <= v && v < int(_nodes.size()));\n    }\n\n    void\
     \ check_edge(int edge_id) const {\n        assert(0 <= edge_id && edge_id < int(_edges.size()));\n\
-    \    }\n\n   public:\n    LazyLinkedCutTree() = default;\n\n    explicit LazyLinkedCutTree(int\
+    \    }\n\n   public:\n    LazyLinkCutTree() = default;\n\n    explicit LazyLinkCutTree(int\
     \ n) {\n        assert(0 <= n);\n        _nodes.reserve(n);\n        for (int\
-    \ i = 0; i < n; i++) add_vertex();\n    }\n\n    explicit LazyLinkedCutTree(const\
+    \ i = 0; i < n; i++) add_vertex();\n    }\n\n    explicit LazyLinkCutTree(const\
     \ std::vector<T>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n    }\n\n \
-    \   explicit LazyLinkedCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
+    \   explicit LazyLinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
     \      requires(U x) { ActedMonoid::make(x); } ||\n        requires(U x, int i)\
     \ { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
-    \    explicit LazyLinkedCutTree(const std::vector<U>& values) {\n        _nodes.reserve(values.size());\n\
+    \    explicit LazyLinkCutTree(const std::vector<U>& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
     \    }\n\n    bool empty() const {\n        return _nodes.empty();\n    }\n\n\
@@ -301,11 +301,11 @@ data:
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        return subtree_size(root, v) - subtree_size(root, child);\n\
     \    }\n};\n\n}  // namespace data_structure\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_LAZY_LINKED_CUT_TREE_HPP\n#define M1UNE_LAZY_LINKED_CUT_TREE_HPP\
+  code: "#ifndef M1UNE_LAZY_LINK_CUT_TREE_HPP\n#define M1UNE_LAZY_LINK_CUT_TREE_HPP\
     \ 1\n\n#include <cassert>\n#include <concepts>\n#include <type_traits>\n#include\
     \ <utility>\n#include <vector>\n\n#include \"acted_monoid/concept.hpp\"\n\nnamespace\
     \ m1une {\nnamespace data_structure {\n\ntemplate <m1une::acted_monoid::IsCommutativeActedGroup\
-    \ ActedMonoid>\nstruct LazyLinkedCutTree {\n    using T = typename ActedMonoid::value_type;\n\
+    \ ActedMonoid>\nstruct LazyLinkCutTree {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
     \ Node {\n        int left = -1;\n        int right = -1;\n        int parent\
     \ = -1;\n        bool rev = false;\n        int size = 1;\n        int virtual_size\
@@ -395,17 +395,17 @@ data:
     \   splay(node);\n        return last;\n    }\n\n    void check_vertex(int v)\
     \ const {\n        assert(0 <= v && v < int(_nodes.size()));\n    }\n\n    void\
     \ check_edge(int edge_id) const {\n        assert(0 <= edge_id && edge_id < int(_edges.size()));\n\
-    \    }\n\n   public:\n    LazyLinkedCutTree() = default;\n\n    explicit LazyLinkedCutTree(int\
+    \    }\n\n   public:\n    LazyLinkCutTree() = default;\n\n    explicit LazyLinkCutTree(int\
     \ n) {\n        assert(0 <= n);\n        _nodes.reserve(n);\n        for (int\
-    \ i = 0; i < n; i++) add_vertex();\n    }\n\n    explicit LazyLinkedCutTree(const\
+    \ i = 0; i < n; i++) add_vertex();\n    }\n\n    explicit LazyLinkCutTree(const\
     \ std::vector<T>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n    }\n\n \
-    \   explicit LazyLinkedCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
+    \   explicit LazyLinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
     \      requires(U x) { ActedMonoid::make(x); } ||\n        requires(U x, int i)\
     \ { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
-    \    explicit LazyLinkedCutTree(const std::vector<U>& values) {\n        _nodes.reserve(values.size());\n\
+    \    explicit LazyLinkCutTree(const std::vector<U>& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
     \    }\n\n    bool empty() const {\n        return _nodes.empty();\n    }\n\n\
@@ -572,24 +572,24 @@ data:
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        return subtree_size(root, v) - subtree_size(root, child);\n\
     \    }\n};\n\n}  // namespace data_structure\n}  // namespace m1une\n\n#endif\
-    \  // M1UNE_LAZY_LINKED_CUT_TREE_HPP\n"
+    \  // M1UNE_LAZY_LINK_CUT_TREE_HPP\n"
   dependsOn:
   - acted_monoid/concept.hpp
   isVerificationFile: false
-  path: data_structure/lazy_linked_cut_tree.hpp
+  path: data_structure/lazy_link_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-17 23:04:24+09:00'
+  timestamp: '2026-06-18 00:12:25+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/lazy_linked_cut_tree.test.cpp
-documentation_of: data_structure/lazy_linked_cut_tree.hpp
+  - verify/data_structure/lazy_link_cut_tree.test.cpp
+documentation_of: data_structure/lazy_link_cut_tree.hpp
 layout: document
-title: Lazy Linked-Cut Tree
+title: Lazy Link-Cut Tree
 ---
 
 ## Overview
 
-`m1une::data_structure::LazyLinkedCutTree<ActedMonoid>` maintains a dynamic
+`m1une::data_structure::LazyLinkCutTree<ActedMonoid>` maintains a dynamic
 forest. It supports linking two trees, cutting edges, rerooting represented
 trees, querying path products, applying lazy updates on paths, and querying
 rooted subtree products and sizes.
@@ -631,14 +631,14 @@ struct AM {
 ## Construction
 
 ```cpp
-LazyLinkedCutTree<ActedMonoid> lct;
-LazyLinkedCutTree<ActedMonoid> lct(n);
-LazyLinkedCutTree<ActedMonoid> lct(values);
+LazyLinkCutTree<ActedMonoid> lct;
+LazyLinkCutTree<ActedMonoid> lct(n);
+LazyLinkCutTree<ActedMonoid> lct(values);
 ```
 
-* `LazyLinkedCutTree(n)` creates `n` isolated vertices initialized with
+* `LazyLinkCutTree(n)` creates `n` isolated vertices initialized with
   `ActedMonoid::id()`.
-* `LazyLinkedCutTree(values)` creates one isolated vertex for each value.
+* `LazyLinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
 Construction from `std::vector<U>` is supported when
@@ -699,20 +699,20 @@ Path and rooted-subtree queries assert that the queried vertices are connected.
 also assert `root != v`. The excluding-child helpers assert that `child` is a
 child of `v` when the represented tree is rooted at `root`.
 
-Unlike non-lazy `LinkedCutTree::get`, `LazyLinkedCutTree::get` is not `const`,
+Unlike non-lazy `LinkCutTree::get`, `LazyLinkCutTree::get` is not `const`,
 because it must expose the vertex and push pending lazy operations first.
 
 ## Example
 
 ```cpp
 #include "acted_monoid/range_add_range_sum.hpp"
-#include "data_structure/lazy_linked_cut_tree.hpp"
+#include "data_structure/lazy_link_cut_tree.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
-    m1une::data_structure::LazyLinkedCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::LazyLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     lct.link(0, 1);
     lct.link(1, 2);
@@ -732,7 +732,7 @@ int main() {
 
 ```cpp
 using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
-m1une::data_structure::LazyLinkedCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
+m1une::data_structure::LazyLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
 // Rooted shape:
 // 0
