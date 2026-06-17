@@ -5,7 +5,13 @@ data:
   - icon: ':heavy_check_mark:'
     path: optimization/all.hpp
     title: Optimization All
+  - icon: ':heavy_check_mark:'
+    path: optimization/integer_lp.hpp
+    title: Integer Linear Programming
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/optimization/integer_lp.test.cpp
+    title: verify/optimization/integer_lp.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/optimization/simplex.test.cpp
     title: verify/optimization/simplex.test.cpp
@@ -219,10 +225,12 @@ data:
   isVerificationFile: false
   path: optimization/simplex.hpp
   requiredBy:
+  - optimization/integer_lp.hpp
   - optimization/all.hpp
   timestamp: '2026-06-18 01:30:22+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/optimization/integer_lp.test.cpp
   - verify/optimization/simplex.test.cpp
 documentation_of: optimization/simplex.hpp
 layout: document

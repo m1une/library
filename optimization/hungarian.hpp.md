@@ -10,6 +10,9 @@ data:
     path: verify/optimization/hungarian.test.cpp
     title: verify/optimization/hungarian.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/optimization/integer_lp.test.cpp
+    title: verify/optimization/integer_lp.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/optimization/simplex.test.cpp
     title: verify/optimization/simplex.test.cpp
   _isVerificationFailed: false
@@ -135,6 +138,7 @@ data:
   timestamp: '2026-06-17 10:25:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/optimization/integer_lp.test.cpp
   - verify/optimization/simplex.test.cpp
   - verify/optimization/hungarian.test.cpp
 documentation_of: optimization/hungarian.hpp

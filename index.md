@@ -373,6 +373,9 @@ data:
       path: optimization/hungarian.hpp
       title: Hungarian Algorithm
     - icon: ':heavy_check_mark:'
+      path: optimization/integer_lp.hpp
+      title: Integer Linear Programming
+    - icon: ':heavy_check_mark:'
       path: optimization/simplex.hpp
       title: Simplex Algorithm
   - name: string
@@ -558,6 +561,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/optimization/hungarian.test.cpp
       title: verify/optimization/hungarian.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/optimization/integer_lp.test.cpp
+      title: verify/optimization/integer_lp.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/optimization/simplex.test.cpp
       title: verify/optimization/simplex.test.cpp

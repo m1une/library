@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: optimization/all.hpp
+    title: Optimization All
+  - icon: ':heavy_check_mark:'
     path: optimization/hungarian.hpp
     title: Hungarian Algorithm
   - icon: ':heavy_check_mark:'
@@ -11,36 +14,36 @@ data:
     path: optimization/simplex.hpp
     title: Simplex Algorithm
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: verify/optimization/integer_lp.test.cpp
-    title: verify/optimization/integer_lp.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/optimization/simplex.test.cpp
-    title: verify/optimization/simplex.test.cpp
+  _extendedVerifiedWith: []
   _isVerificationFailed: false
-  _pathExtension: hpp
+  _pathExtension: cpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    links: []
-  bundledCode: "#line 1 \"optimization/all.hpp\"\n\n\n\n#line 1 \"optimization/hungarian.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <limits>\n#include\
-    \ <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace optimization {\n\
-    \ntemplate <class T>\nstruct HungarianResult {\n    T cost;\n    std::vector<int>\
-    \ row_to_col;\n    std::vector<int> col_to_row;\n\n    int matching_size() const\
-    \ {\n        int result = 0;\n        for (int col : row_to_col) {\n         \
-    \   if (col != -1) result++;\n        }\n        return result;\n    }\n\n   \
-    \ std::vector<std::pair<int, int>> matching() const {\n        std::vector<std::pair<int,\
-    \ int>> result;\n        for (int row = 0; row < int(row_to_col.size()); row++)\
-    \ {\n            if (row_to_col[row] != -1) result.push_back({row, row_to_col[row]});\n\
-    \        }\n        return result;\n    }\n};\n\nnamespace detail {\n\ntemplate\
-    \ <class T>\nT assignment_cost(const std::vector<std::vector<T>>& cost, const\
-    \ std::vector<int>& row_to_col) {\n    T result = T();\n    for (int row = 0;\
-    \ row < int(row_to_col.size()); row++) {\n        if (row_to_col[row] != -1) result\
-    \ += cost[row][row_to_col[row]];\n    }\n    return result;\n}\n\n}  // namespace\
-    \ detail\n\ntemplate <class T>\nHungarianResult<T> hungarian_min(const std::vector<std::vector<T>>&\
-    \ cost) {\n    int row_count = int(cost.size());\n    int col_count = row_count\
-    \ == 0 ? 0 : int(cost[0].size());\n    for (const auto& row : cost) assert(int(row.size())\
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    links:
+    - https://judge.yosupo.jp/problem/aplusb
+  bundledCode: "#line 1 \"verify/optimization/integer_lp.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n#include <iostream>\n\
+    #include <limits>\n#include <vector>\n\n#line 1 \"optimization/all.hpp\"\n\n\n\
+    \n#line 1 \"optimization/hungarian.hpp\"\n\n\n\n#include <algorithm>\n#line 7\
+    \ \"optimization/hungarian.hpp\"\n#include <utility>\n#line 9 \"optimization/hungarian.hpp\"\
+    \n\nnamespace m1une {\nnamespace optimization {\n\ntemplate <class T>\nstruct\
+    \ HungarianResult {\n    T cost;\n    std::vector<int> row_to_col;\n    std::vector<int>\
+    \ col_to_row;\n\n    int matching_size() const {\n        int result = 0;\n  \
+    \      for (int col : row_to_col) {\n            if (col != -1) result++;\n  \
+    \      }\n        return result;\n    }\n\n    std::vector<std::pair<int, int>>\
+    \ matching() const {\n        std::vector<std::pair<int, int>> result;\n     \
+    \   for (int row = 0; row < int(row_to_col.size()); row++) {\n            if (row_to_col[row]\
+    \ != -1) result.push_back({row, row_to_col[row]});\n        }\n        return\
+    \ result;\n    }\n};\n\nnamespace detail {\n\ntemplate <class T>\nT assignment_cost(const\
+    \ std::vector<std::vector<T>>& cost, const std::vector<int>& row_to_col) {\n \
+    \   T result = T();\n    for (int row = 0; row < int(row_to_col.size()); row++)\
+    \ {\n        if (row_to_col[row] != -1) result += cost[row][row_to_col[row]];\n\
+    \    }\n    return result;\n}\n\n}  // namespace detail\n\ntemplate <class T>\n\
+    HungarianResult<T> hungarian_min(const std::vector<std::vector<T>>& cost) {\n\
+    \    int row_count = int(cost.size());\n    int col_count = row_count == 0 ? 0\
+    \ : int(cost[0].size());\n    for (const auto& row : cost) assert(int(row.size())\
     \ == col_count);\n\n    HungarianResult<T> result;\n    result.cost = T();\n \
     \   result.row_to_col.assign(row_count, -1);\n    result.col_to_row.assign(col_count,\
     \ -1);\n    if (row_count == 0 || col_count == 0) return result;\n\n    bool transposed\
@@ -304,48 +307,184 @@ data:
     \ integer_lp(const std::vector<std::vector<T>>& a, const std::vector<T>& b,\n\
     \                              const std::vector<T>& c, long double eps = 1e-10L)\
     \ {\n    return integer_lp_maximize(a, b, c, eps);\n}\n\n}  // namespace optimization\n\
-    }  // namespace m1une\n\n\n#line 7 \"optimization/all.hpp\"\n\n\n"
-  code: '#ifndef M1UNE_OPTIMIZATION_ALL_HPP
-
-    #define M1UNE_OPTIMIZATION_ALL_HPP 1
-
-
-    #include "optimization/hungarian.hpp"
-
-    #include "optimization/integer_lp.hpp"
-
-    #include "optimization/simplex.hpp"
-
-
-    #endif  // M1UNE_OPTIMIZATION_ALL_HPP
-
-    '
+    }  // namespace m1une\n\n\n#line 7 \"optimization/all.hpp\"\n\n\n#line 9 \"verify/optimization/integer_lp.test.cpp\"\
+    \n\nlong long evaluate(const std::vector<long long>& c, const std::vector<long\
+    \ long>& x) {\n    long long result = 0;\n    for (int i = 0; i < int(c.size());\
+    \ i++) result += c[i] * x[i];\n    return result;\n}\n\nbool feasible(const std::vector<std::vector<long\
+    \ long>>& a, const std::vector<long long>& b,\n              const std::vector<long\
+    \ long>& x) {\n    for (long long value : x) {\n        if (value < 0) return\
+    \ false;\n    }\n    for (int i = 0; i < int(a.size()); i++) {\n        long long\
+    \ lhs = 0;\n        for (int j = 0; j < int(x.size()); j++) lhs += a[i][j] * x[j];\n\
+    \        if (lhs > b[i]) return false;\n    }\n    return true;\n}\n\nvoid brute_dfs(const\
+    \ std::vector<std::vector<long long>>& a, const std::vector<long long>& b,\n \
+    \              const std::vector<long long>& c, const std::vector<long long>&\
+    \ limits, int index,\n               std::vector<long long>& current, bool maximize,\
+    \ bool& found, long long& best) {\n    if (index == int(c.size())) {\n       \
+    \ if (!feasible(a, b, current)) return;\n        long long value = evaluate(c,\
+    \ current);\n        if (!found || (maximize ? value > best : value < best)) {\n\
+    \            found = true;\n            best = value;\n        }\n        return;\n\
+    \    }\n    for (long long value = 0; value <= limits[index]; value++) {\n   \
+    \     current[index] = value;\n        brute_dfs(a, b, c, limits, index + 1, current,\
+    \ maximize, found, best);\n    }\n}\n\nlong long brute_solve(const std::vector<std::vector<long\
+    \ long>>& a,\n                      const std::vector<long long>& b, const std::vector<long\
+    \ long>& c,\n                      const std::vector<long long>& limits, bool\
+    \ maximize) {\n    bool found = false;\n    long long best = 0;\n    std::vector<long\
+    \ long> current(c.size(), 0);\n    brute_dfs(a, b, c, limits, 0, current, maximize,\
+    \ found, best);\n    assert(found);\n    return best;\n}\n\nvoid check_optimal(const\
+    \ std::vector<std::vector<long long>>& a,\n                   const std::vector<long\
+    \ long>& b, const std::vector<long long>& c,\n                   const m1une::optimization::IntegerLpResult<long\
+    \ long>& result,\n                   long long expected) {\n    assert(result.is_optimal());\n\
+    \    assert(feasible(a, b, result.variables));\n    assert(result.objective_value\
+    \ == expected);\n    assert(evaluate(c, result.variables) == expected);\n}\n\n\
+    void test_basic_maximize() {\n    std::vector<std::vector<long long>> a;\n   \
+    \ a.emplace_back(std::vector<long long>{2, 1});\n    a.emplace_back(std::vector<long\
+    \ long>{1, 2});\n    std::vector<long long> b = {4, 4};\n    std::vector<long\
+    \ long> c = {3, 2};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    check_optimal(a, b, c, result, 6);\n\n    auto alias_result = m1une::optimization::integer_lp(a,\
+    \ b, c);\n    check_optimal(a, b, c, alias_result, 6);\n}\n\nvoid test_minimize()\
+    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
+    \ long>{-1, -1});\n    a.emplace_back(std::vector<long long>{1, 0});\n    a.emplace_back(std::vector<long\
+    \ long>{0, 1});\n    std::vector<long long> b = {-3, 5, 5};\n    std::vector<long\
+    \ long> c = {1, 1};\n\n    auto result = m1une::optimization::integer_lp_minimize(a,\
+    \ b, c);\n    check_optimal(a, b, c, result, 3);\n}\n\nvoid test_integer_infeasible_fractional_relaxation()\
+    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
+    \ long>{2});\n    a.emplace_back(std::vector<long long>{-2});\n    std::vector<long\
+    \ long> b = {1, -1};\n    std::vector<long long> c = {1};\n\n    auto result =\
+    \ m1une::optimization::integer_lp_maximize(a, b, c);\n    assert(result.is_infeasible());\n\
+    }\n\nvoid test_unbounded() {\n    std::vector<std::vector<long long>> a;\n   \
+    \ a.emplace_back(std::vector<long long>{-1});\n    std::vector<long long> b =\
+    \ {-1};\n    std::vector<long long> c = {1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    assert(result.is_unbounded());\n    assert(feasible(a, b, result.variables));\n\
+    }\n\nvoid test_unbounded_relaxation_but_integer_infeasible() {\n    std::vector<std::vector<long\
+    \ long>> a;\n    a.emplace_back(std::vector<long long>{2, 0});\n    a.emplace_back(std::vector<long\
+    \ long>{-2, 0});\n    std::vector<long long> b = {1, -1};\n    std::vector<long\
+    \ long> c = {0, 1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    assert(result.is_infeasible());\n}\n\nvoid test_no_variables() {\n\
+    \    std::vector<std::vector<long long>> a(2);\n    std::vector<long long> b =\
+    \ {0, 3};\n    std::vector<long long> c;\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    assert(result.is_optimal());\n    assert(result.variables.empty());\n\
+    \    assert(result.objective_value == 0);\n\n    std::vector<std::vector<long\
+    \ long>> bad_a(1);\n    std::vector<long long> bad_b = {-1};\n    auto bad_result\
+    \ = m1une::optimization::integer_lp_maximize(bad_a, bad_b, c);\n    assert(bad_result.is_infeasible());\n\
+    }\n\nvoid test_against_bruteforce() {\n    for (int t = 0; t < 20; t++) {\n  \
+    \      std::vector<std::vector<long long>> a;\n        std::vector<long long>\
+    \ b;\n        std::vector<long long> limits;\n        int variable_count = 3;\n\
+    \n        for (int j = 0; j < variable_count; j++) {\n            long long limit\
+    \ = 2 + (t + j * 2) % 4;\n            limits.push_back(limit);\n            std::vector<long\
+    \ long> row(variable_count, 0);\n            row[j] = 1;\n            a.push_back(row);\n\
+    \            b.push_back(limit);\n        }\n\n        for (int i = 0; i < 4;\
+    \ i++) {\n            std::vector<long long> row(variable_count, 0);\n       \
+    \     for (int j = 0; j < variable_count; j++) {\n                row[j] = (t\
+    \ * 3 + i * 5 + j * 7) % 7 - 3;\n            }\n            long long rhs = 3\
+    \ + (t * 2 + i * 4) % 9;\n            a.push_back(row);\n            b.push_back(rhs);\n\
+    \        }\n\n        std::vector<long long> c(variable_count, 0);\n        for\
+    \ (int j = 0; j < variable_count; j++) c[j] = (t * 5 + j * 3) % 11 - 5;\n\n  \
+    \      long long expected_max = brute_solve(a, b, c, limits, true);\n        auto\
+    \ max_result = m1une::optimization::integer_lp_maximize(a, b, c);\n        check_optimal(a,\
+    \ b, c, max_result, expected_max);\n\n        long long expected_min = brute_solve(a,\
+    \ b, c, limits, false);\n        auto min_result = m1une::optimization::integer_lp_minimize(a,\
+    \ b, c);\n        check_optimal(a, b, c, min_result, expected_min);\n    }\n}\n\
+    \nint main() {\n    test_basic_maximize();\n    test_minimize();\n    test_integer_infeasible_fractional_relaxation();\n\
+    \    test_unbounded();\n    test_unbounded_relaxation_but_integer_infeasible();\n\
+    \    test_no_variables();\n    test_against_bruteforce();\n\n    long long a,\
+    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
+    #include <iostream>\n#include <limits>\n#include <vector>\n\n#include \"optimization/all.hpp\"\
+    \n\nlong long evaluate(const std::vector<long long>& c, const std::vector<long\
+    \ long>& x) {\n    long long result = 0;\n    for (int i = 0; i < int(c.size());\
+    \ i++) result += c[i] * x[i];\n    return result;\n}\n\nbool feasible(const std::vector<std::vector<long\
+    \ long>>& a, const std::vector<long long>& b,\n              const std::vector<long\
+    \ long>& x) {\n    for (long long value : x) {\n        if (value < 0) return\
+    \ false;\n    }\n    for (int i = 0; i < int(a.size()); i++) {\n        long long\
+    \ lhs = 0;\n        for (int j = 0; j < int(x.size()); j++) lhs += a[i][j] * x[j];\n\
+    \        if (lhs > b[i]) return false;\n    }\n    return true;\n}\n\nvoid brute_dfs(const\
+    \ std::vector<std::vector<long long>>& a, const std::vector<long long>& b,\n \
+    \              const std::vector<long long>& c, const std::vector<long long>&\
+    \ limits, int index,\n               std::vector<long long>& current, bool maximize,\
+    \ bool& found, long long& best) {\n    if (index == int(c.size())) {\n       \
+    \ if (!feasible(a, b, current)) return;\n        long long value = evaluate(c,\
+    \ current);\n        if (!found || (maximize ? value > best : value < best)) {\n\
+    \            found = true;\n            best = value;\n        }\n        return;\n\
+    \    }\n    for (long long value = 0; value <= limits[index]; value++) {\n   \
+    \     current[index] = value;\n        brute_dfs(a, b, c, limits, index + 1, current,\
+    \ maximize, found, best);\n    }\n}\n\nlong long brute_solve(const std::vector<std::vector<long\
+    \ long>>& a,\n                      const std::vector<long long>& b, const std::vector<long\
+    \ long>& c,\n                      const std::vector<long long>& limits, bool\
+    \ maximize) {\n    bool found = false;\n    long long best = 0;\n    std::vector<long\
+    \ long> current(c.size(), 0);\n    brute_dfs(a, b, c, limits, 0, current, maximize,\
+    \ found, best);\n    assert(found);\n    return best;\n}\n\nvoid check_optimal(const\
+    \ std::vector<std::vector<long long>>& a,\n                   const std::vector<long\
+    \ long>& b, const std::vector<long long>& c,\n                   const m1une::optimization::IntegerLpResult<long\
+    \ long>& result,\n                   long long expected) {\n    assert(result.is_optimal());\n\
+    \    assert(feasible(a, b, result.variables));\n    assert(result.objective_value\
+    \ == expected);\n    assert(evaluate(c, result.variables) == expected);\n}\n\n\
+    void test_basic_maximize() {\n    std::vector<std::vector<long long>> a;\n   \
+    \ a.emplace_back(std::vector<long long>{2, 1});\n    a.emplace_back(std::vector<long\
+    \ long>{1, 2});\n    std::vector<long long> b = {4, 4};\n    std::vector<long\
+    \ long> c = {3, 2};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    check_optimal(a, b, c, result, 6);\n\n    auto alias_result = m1une::optimization::integer_lp(a,\
+    \ b, c);\n    check_optimal(a, b, c, alias_result, 6);\n}\n\nvoid test_minimize()\
+    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
+    \ long>{-1, -1});\n    a.emplace_back(std::vector<long long>{1, 0});\n    a.emplace_back(std::vector<long\
+    \ long>{0, 1});\n    std::vector<long long> b = {-3, 5, 5};\n    std::vector<long\
+    \ long> c = {1, 1};\n\n    auto result = m1une::optimization::integer_lp_minimize(a,\
+    \ b, c);\n    check_optimal(a, b, c, result, 3);\n}\n\nvoid test_integer_infeasible_fractional_relaxation()\
+    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
+    \ long>{2});\n    a.emplace_back(std::vector<long long>{-2});\n    std::vector<long\
+    \ long> b = {1, -1};\n    std::vector<long long> c = {1};\n\n    auto result =\
+    \ m1une::optimization::integer_lp_maximize(a, b, c);\n    assert(result.is_infeasible());\n\
+    }\n\nvoid test_unbounded() {\n    std::vector<std::vector<long long>> a;\n   \
+    \ a.emplace_back(std::vector<long long>{-1});\n    std::vector<long long> b =\
+    \ {-1};\n    std::vector<long long> c = {1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    assert(result.is_unbounded());\n    assert(feasible(a, b, result.variables));\n\
+    }\n\nvoid test_unbounded_relaxation_but_integer_infeasible() {\n    std::vector<std::vector<long\
+    \ long>> a;\n    a.emplace_back(std::vector<long long>{2, 0});\n    a.emplace_back(std::vector<long\
+    \ long>{-2, 0});\n    std::vector<long long> b = {1, -1};\n    std::vector<long\
+    \ long> c = {0, 1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    assert(result.is_infeasible());\n}\n\nvoid test_no_variables() {\n\
+    \    std::vector<std::vector<long long>> a(2);\n    std::vector<long long> b =\
+    \ {0, 3};\n    std::vector<long long> c;\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
+    \ b, c);\n    assert(result.is_optimal());\n    assert(result.variables.empty());\n\
+    \    assert(result.objective_value == 0);\n\n    std::vector<std::vector<long\
+    \ long>> bad_a(1);\n    std::vector<long long> bad_b = {-1};\n    auto bad_result\
+    \ = m1une::optimization::integer_lp_maximize(bad_a, bad_b, c);\n    assert(bad_result.is_infeasible());\n\
+    }\n\nvoid test_against_bruteforce() {\n    for (int t = 0; t < 20; t++) {\n  \
+    \      std::vector<std::vector<long long>> a;\n        std::vector<long long>\
+    \ b;\n        std::vector<long long> limits;\n        int variable_count = 3;\n\
+    \n        for (int j = 0; j < variable_count; j++) {\n            long long limit\
+    \ = 2 + (t + j * 2) % 4;\n            limits.push_back(limit);\n            std::vector<long\
+    \ long> row(variable_count, 0);\n            row[j] = 1;\n            a.push_back(row);\n\
+    \            b.push_back(limit);\n        }\n\n        for (int i = 0; i < 4;\
+    \ i++) {\n            std::vector<long long> row(variable_count, 0);\n       \
+    \     for (int j = 0; j < variable_count; j++) {\n                row[j] = (t\
+    \ * 3 + i * 5 + j * 7) % 7 - 3;\n            }\n            long long rhs = 3\
+    \ + (t * 2 + i * 4) % 9;\n            a.push_back(row);\n            b.push_back(rhs);\n\
+    \        }\n\n        std::vector<long long> c(variable_count, 0);\n        for\
+    \ (int j = 0; j < variable_count; j++) c[j] = (t * 5 + j * 3) % 11 - 5;\n\n  \
+    \      long long expected_max = brute_solve(a, b, c, limits, true);\n        auto\
+    \ max_result = m1une::optimization::integer_lp_maximize(a, b, c);\n        check_optimal(a,\
+    \ b, c, max_result, expected_max);\n\n        long long expected_min = brute_solve(a,\
+    \ b, c, limits, false);\n        auto min_result = m1une::optimization::integer_lp_minimize(a,\
+    \ b, c);\n        check_optimal(a, b, c, min_result, expected_min);\n    }\n}\n\
+    \nint main() {\n    test_basic_maximize();\n    test_minimize();\n    test_integer_infeasible_fractional_relaxation();\n\
+    \    test_unbounded();\n    test_unbounded_relaxation_but_integer_infeasible();\n\
+    \    test_no_variables();\n    test_against_bruteforce();\n\n    long long a,\
+    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
+  - optimization/all.hpp
   - optimization/hungarian.hpp
   - optimization/integer_lp.hpp
   - optimization/simplex.hpp
-  isVerificationFile: false
-  path: optimization/all.hpp
+  isVerificationFile: true
+  path: verify/optimization/integer_lp.test.cpp
   requiredBy: []
   timestamp: '2026-06-18 01:38:25+09:00'
-  verificationStatus: LIBRARY_ALL_AC
-  verifiedWith:
-  - verify/optimization/integer_lp.test.cpp
-  - verify/optimization/simplex.test.cpp
-documentation_of: optimization/all.hpp
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: verify/optimization/integer_lp.test.cpp
 layout: document
-title: Optimization All
+redirect_from:
+- /verify/verify/optimization/integer_lp.test.cpp
+- /verify/verify/optimization/integer_lp.test.cpp.html
+title: verify/optimization/integer_lp.test.cpp
 ---
-
-## Overview
-
-`optimization/all.hpp` includes optimization algorithms whose public interface
-is not naturally a graph, data structure, or algebraic object.
-
-## Included Headers
-
-| Header | Contents |
-| --- | --- |
-| `optimization/hungarian.hpp` | Hungarian algorithm for minimum-cost and maximum-cost rectangular assignment. |
-| `optimization/integer_lp.hpp` | Branch-and-bound solver for integer linear programming in standard inequality form. |
-| `optimization/simplex.hpp` | Two-phase simplex algorithm for linear programming in standard inequality form. |

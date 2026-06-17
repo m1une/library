@@ -8,6 +8,9 @@ data:
     path: optimization/hungarian.hpp
     title: Hungarian Algorithm
   - icon: ':heavy_check_mark:'
+    path: optimization/integer_lp.hpp
+    title: Integer Linear Programming
+  - icon: ':heavy_check_mark:'
     path: optimization/simplex.hpp
     title: Simplex Algorithm
   _extendedRequiredBy: []
@@ -77,21 +80,22 @@ data:
     \ hungarian_min(negated);\n    result.cost = detail::assignment_cost(cost, result.row_to_col);\n\
     \    return result;\n}\n\ntemplate <class T>\nHungarianResult<T> hungarian(const\
     \ std::vector<std::vector<T>>& cost) {\n    return hungarian_min(cost);\n}\n\n\
-    }  // namespace optimization\n}  // namespace m1une\n\n\n#line 1 \"optimization/simplex.hpp\"\
-    \n\n\n\n#line 6 \"optimization/simplex.hpp\"\n#include <type_traits>\n#line 9\
-    \ \"optimization/simplex.hpp\"\n\nnamespace m1une {\nnamespace optimization {\n\
-    \nenum class SimplexStatus {\n    Optimal,\n    Infeasible,\n    Unbounded,\n\
-    };\n\ntemplate <class T>\nstruct SimplexResult {\n    SimplexStatus status;\n\
-    \    T objective_value;\n    std::vector<T> variables;\n\n    bool is_optimal()\
-    \ const { return status == SimplexStatus::Optimal; }\n    bool is_infeasible()\
-    \ const { return status == SimplexStatus::Infeasible; }\n    bool is_unbounded()\
-    \ const { return status == SimplexStatus::Unbounded; }\n};\n\nnamespace detail\
-    \ {\n\ntemplate <class T>\nT simplex_abs(T x) {\n    return x < T() ? -x : x;\n\
-    }\n\ntemplate <class T>\nstruct SimplexTableau {\n    int constraint_count;\n\
-    \    int variable_count;\n    T eps;\n    std::vector<int> basis;\n    std::vector<int>\
-    \ nonbasis;\n    std::vector<std::vector<T>> table;\n\n    SimplexTableau(const\
-    \ std::vector<std::vector<T>>& a, const std::vector<T>& b,\n                 \
-    \  const std::vector<T>& c, T epsilon)\n        : constraint_count(int(b.size())),\n\
+    }  // namespace optimization\n}  // namespace m1une\n\n\n#line 1 \"optimization/integer_lp.hpp\"\
+    \n\n\n\n#line 6 \"optimization/integer_lp.hpp\"\n#include <cmath>\n#line 8 \"\
+    optimization/integer_lp.hpp\"\n#include <type_traits>\n#line 10 \"optimization/integer_lp.hpp\"\
+    \n\n#line 1 \"optimization/simplex.hpp\"\n\n\n\n#line 9 \"optimization/simplex.hpp\"\
+    \n\nnamespace m1une {\nnamespace optimization {\n\nenum class SimplexStatus {\n\
+    \    Optimal,\n    Infeasible,\n    Unbounded,\n};\n\ntemplate <class T>\nstruct\
+    \ SimplexResult {\n    SimplexStatus status;\n    T objective_value;\n    std::vector<T>\
+    \ variables;\n\n    bool is_optimal() const { return status == SimplexStatus::Optimal;\
+    \ }\n    bool is_infeasible() const { return status == SimplexStatus::Infeasible;\
+    \ }\n    bool is_unbounded() const { return status == SimplexStatus::Unbounded;\
+    \ }\n};\n\nnamespace detail {\n\ntemplate <class T>\nT simplex_abs(T x) {\n  \
+    \  return x < T() ? -x : x;\n}\n\ntemplate <class T>\nstruct SimplexTableau {\n\
+    \    int constraint_count;\n    int variable_count;\n    T eps;\n    std::vector<int>\
+    \ basis;\n    std::vector<int> nonbasis;\n    std::vector<std::vector<T>> table;\n\
+    \n    SimplexTableau(const std::vector<std::vector<T>>& a, const std::vector<T>&\
+    \ b,\n                   const std::vector<T>& c, T epsilon)\n        : constraint_count(int(b.size())),\n\
     \          variable_count(int(c.size())),\n          eps(epsilon),\n         \
     \ basis(constraint_count),\n          nonbasis(variable_count + 1),\n        \
     \  table(constraint_count + 2, std::vector<T>(variable_count + 2, T())) {\n  \
@@ -177,12 +181,137 @@ data:
     \ <class T>\nSimplexResult<T> simplex(const std::vector<std::vector<T>>& a, const\
     \ std::vector<T>& b,\n                         const std::vector<T>& c, T eps\
     \ = T(1e-10)) {\n    return simplex_maximize(a, b, c, eps);\n}\n\n}  // namespace\
-    \ optimization\n}  // namespace m1une\n\n\n#line 6 \"optimization/all.hpp\"\n\n\
-    \n#line 9 \"verify/optimization/simplex.test.cpp\"\n\nconstexpr long double EPS\
-    \ = 1e-8L;\n\nlong double abs_ld(long double x) {\n    return x < 0 ? -x : x;\n\
-    }\n\nbool approx(long double a, long double b) {\n    return abs_ld(a - b) <=\
-    \ EPS;\n}\n\nvoid check_feasible(const std::vector<std::vector<long double>>&\
-    \ a,\n                    const std::vector<long double>& b, const std::vector<long\
+    \ optimization\n}  // namespace m1une\n\n\n#line 12 \"optimization/integer_lp.hpp\"\
+    \n\nnamespace m1une {\nnamespace optimization {\n\nenum class IntegerLpStatus\
+    \ {\n    Optimal,\n    Infeasible,\n    Unbounded,\n};\n\ntemplate <class T>\n\
+    struct IntegerLpResult {\n    IntegerLpStatus status;\n    T objective_value;\n\
+    \    std::vector<T> variables;\n\n    bool is_optimal() const { return status\
+    \ == IntegerLpStatus::Optimal; }\n    bool is_infeasible() const { return status\
+    \ == IntegerLpStatus::Infeasible; }\n    bool is_unbounded() const { return status\
+    \ == IntegerLpStatus::Unbounded; }\n};\n\nnamespace detail {\n\ntemplate <class\
+    \ T>\nstruct IntegerLpSolver {\n    using Real = long double;\n\n    struct Node\
+    \ {\n        std::vector<std::vector<Real>> a;\n        std::vector<Real> b;\n\
+    \    };\n\n    int variable_count;\n    bool maximize;\n    Real eps;\n    std::vector<T>\
+    \ objective;\n    std::vector<Real> relaxation_objective;\n    Node initial_node;\n\
+    \n    bool has_incumbent = false;\n    T best_value = T();\n    std::vector<T>\
+    \ best_variables;\n\n    IntegerLpSolver(const std::vector<std::vector<T>>& a,\
+    \ const std::vector<T>& b,\n                    const std::vector<T>& c, bool\
+    \ is_maximize, Real epsilon)\n        : variable_count(int(c.size())),\n     \
+    \     maximize(is_maximize),\n          eps(epsilon),\n          objective(c),\n\
+    \          relaxation_objective(c.size(), Real()),\n          initial_node() {\n\
+    \        initial_node.a.assign(a.size(), std::vector<Real>(variable_count, Real()));\n\
+    \        initial_node.b.assign(b.size(), Real());\n        for (int i = 0; i <\
+    \ int(a.size()); i++) {\n            for (int j = 0; j < variable_count; j++)\
+    \ initial_node.a[i][j] = Real(a[i][j]);\n            initial_node.b[i] = Real(b[i]);\n\
+    \        }\n        Real sign = maximize ? Real(1) : Real(-1);\n        for (int\
+    \ j = 0; j < variable_count; j++) relaxation_objective[j] = sign * Real(c[j]);\n\
+    \    }\n\n    Real abs_value(Real x) const {\n        return x < Real() ? -x :\
+    \ x;\n    }\n\n    bool better_value(T lhs, T rhs) const {\n        return maximize\
+    \ ? lhs > rhs : lhs < rhs;\n    }\n\n    bool can_prune_by_bound(Real relaxation_value)\
+    \ const {\n        if (!has_incumbent) return false;\n        Real signed_best\
+    \ = maximize ? Real(best_value) : -Real(best_value);\n        return relaxation_value\
+    \ <= signed_best + eps;\n    }\n\n    T evaluate(const std::vector<T>& variables)\
+    \ const {\n        T result = T();\n        for (int i = 0; i < variable_count;\
+    \ i++) result += objective[i] * variables[i];\n        return result;\n    }\n\
+    \n    bool round_solution(const std::vector<Real>& real_variables, std::vector<T>&\
+    \ variables) const {\n        variables.assign(variable_count, T());\n       \
+    \ for (int i = 0; i < variable_count; i++) {\n            Real value = real_variables[i];\n\
+    \            if (value < -eps) return false;\n            Real rounded = std::round(value);\n\
+    \            if (abs_value(value - rounded) > eps) return false;\n           \
+    \ variables[i] = static_cast<T>(rounded);\n        }\n        return true;\n \
+    \   }\n\n    int find_fractional_variable(const std::vector<Real>& real_variables)\
+    \ const {\n        int result = -1;\n        Real best_distance = eps;\n     \
+    \   for (int i = 0; i < variable_count; i++) {\n            Real value = real_variables[i];\n\
+    \            Real rounded = std::round(value);\n            Real distance = abs_value(value\
+    \ - rounded);\n            if (distance > best_distance) {\n                best_distance\
+    \ = distance;\n                result = i;\n            }\n        }\n       \
+    \ return result;\n    }\n\n    Node with_upper_bound(const Node& node, int variable,\
+    \ T bound) const {\n        Node result = node;\n        result.a.emplace_back(variable_count,\
+    \ Real());\n        result.a.back()[variable] = Real(1);\n        result.b.push_back(Real(bound));\n\
+    \        return result;\n    }\n\n    Node with_lower_bound(const Node& node,\
+    \ int variable, T bound) const {\n        Node result = node;\n        result.a.emplace_back(variable_count,\
+    \ Real());\n        result.a.back()[variable] = Real(-1);\n        result.b.push_back(-Real(bound));\n\
+    \        return result;\n    }\n\n    void push_branches(std::vector<Node>& stack,\
+    \ const Node& node, int variable, Real value) const {\n        Real floor_value\
+    \ = std::floor(value);\n        Real ceil_value = std::ceil(value);\n        T\
+    \ upper_bound = static_cast<T>(floor_value);\n        T lower_bound = static_cast<T>(ceil_value);\n\
+    \n        bool has_upper_branch = upper_bound >= T();\n        bool prefer_lower_branch\
+    \ = relaxation_objective[variable] >= -eps;\n\n        if (prefer_lower_branch)\
+    \ {\n            if (has_upper_branch) stack.push_back(with_upper_bound(node,\
+    \ variable, upper_bound));\n            stack.push_back(with_lower_bound(node,\
+    \ variable, lower_bound));\n        } else {\n            stack.push_back(with_lower_bound(node,\
+    \ variable, lower_bound));\n            if (has_upper_branch) stack.push_back(with_upper_bound(node,\
+    \ variable, upper_bound));\n        }\n    }\n\n    bool has_positive_direction(const\
+    \ Node& node) const {\n        std::vector<std::vector<Real>> direction_a = node.a;\n\
+    \        std::vector<Real> direction_b(node.b.size(), Real());\n\n        std::vector<Real>\
+    \ objective_row(variable_count, Real());\n        for (int i = 0; i < variable_count;\
+    \ i++) objective_row[i] = -relaxation_objective[i];\n        direction_a.push_back(objective_row);\n\
+    \        direction_b.push_back(Real(-1));\n\n        std::vector<Real> zero_objective(variable_count,\
+    \ Real());\n        auto result = simplex_maximize(direction_a, direction_b, zero_objective,\
+    \ eps);\n        return result.is_optimal();\n    }\n\n    bool find_integer_feasible(const\
+    \ Node& start, std::vector<T>& feasible_variables) const {\n        std::vector<Node>\
+    \ stack;\n        stack.push_back(start);\n        std::vector<Real> zero_objective(variable_count,\
+    \ Real());\n\n        while (!stack.empty()) {\n            Node node = stack.back();\n\
+    \            stack.pop_back();\n\n            auto relaxation = simplex_maximize(node.a,\
+    \ node.b, zero_objective, eps);\n            if (relaxation.is_infeasible()) continue;\n\
+    \            if (relaxation.is_unbounded()) continue;\n\n            if (round_solution(relaxation.variables,\
+    \ feasible_variables)) return true;\n\n            int variable = find_fractional_variable(relaxation.variables);\n\
+    \            if (variable == -1) continue;\n            push_branches(stack, node,\
+    \ variable, relaxation.variables[variable]);\n        }\n        return false;\n\
+    \    }\n\n    void update_incumbent(const std::vector<T>& variables) {\n     \
+    \   T value = evaluate(variables);\n        if (!has_incumbent || better_value(value,\
+    \ best_value)) {\n            has_incumbent = true;\n            best_value =\
+    \ value;\n            best_variables = variables;\n        }\n    }\n\n    IntegerLpResult<T>\
+    \ make_infeasible_result() const {\n        IntegerLpResult<T> result;\n     \
+    \   result.status = IntegerLpStatus::Infeasible;\n        result.objective_value\
+    \ = T();\n        result.variables.assign(variable_count, T());\n        return\
+    \ result;\n    }\n\n    IntegerLpResult<T> make_unbounded_result(const std::vector<T>&\
+    \ variables) const {\n        IntegerLpResult<T> result;\n        result.status\
+    \ = IntegerLpStatus::Unbounded;\n        result.objective_value =\n          \
+    \  maximize ? std::numeric_limits<T>::max() : std::numeric_limits<T>::lowest();\n\
+    \        result.variables = variables;\n        return result;\n    }\n\n    IntegerLpResult<T>\
+    \ make_optimal_result() const {\n        IntegerLpResult<T> result;\n        result.status\
+    \ = IntegerLpStatus::Optimal;\n        result.objective_value = best_value;\n\
+    \        result.variables = best_variables;\n        return result;\n    }\n\n\
+    \    IntegerLpResult<T> solve() {\n        std::vector<Node> stack;\n        stack.push_back(initial_node);\n\
+    \n        while (!stack.empty()) {\n            Node node = stack.back();\n  \
+    \          stack.pop_back();\n\n            auto relaxation = simplex_maximize(node.a,\
+    \ node.b, relaxation_objective, eps);\n            if (relaxation.is_infeasible())\
+    \ continue;\n\n            if (relaxation.is_unbounded()) {\n                std::vector<T>\
+    \ feasible_variables;\n                if (has_positive_direction(node) && find_integer_feasible(node,\
+    \ feasible_variables)) {\n                    return make_unbounded_result(feasible_variables);\n\
+    \                }\n                continue;\n            }\n\n            if\
+    \ (can_prune_by_bound(relaxation.objective_value)) continue;\n\n            std::vector<T>\
+    \ integer_variables;\n            if (round_solution(relaxation.variables, integer_variables))\
+    \ {\n                update_incumbent(integer_variables);\n                continue;\n\
+    \            }\n\n            int variable = find_fractional_variable(relaxation.variables);\n\
+    \            if (variable == -1) continue;\n            push_branches(stack, node,\
+    \ variable, relaxation.variables[variable]);\n        }\n\n        if (!has_incumbent)\
+    \ return make_infeasible_result();\n        return make_optimal_result();\n  \
+    \  }\n};\n\n}  // namespace detail\n\ntemplate <class T>\nIntegerLpResult<T> integer_lp_maximize(const\
+    \ std::vector<std::vector<T>>& a,\n                                       const\
+    \ std::vector<T>& b, const std::vector<T>& c,\n                              \
+    \         long double eps = 1e-10L) {\n    static_assert(std::is_integral_v<T>\
+    \ && std::is_signed_v<T>,\n                  \"integer_lp requires a signed integer\
+    \ type\");\n    assert(int(a.size()) == int(b.size()));\n    for (const auto&\
+    \ row : a) assert(int(row.size()) == int(c.size()));\n    assert(eps > 0);\n\n\
+    \    detail::IntegerLpSolver<T> solver(a, b, c, true, eps);\n    return solver.solve();\n\
+    }\n\ntemplate <class T>\nIntegerLpResult<T> integer_lp_minimize(const std::vector<std::vector<T>>&\
+    \ a,\n                                       const std::vector<T>& b, const std::vector<T>&\
+    \ c,\n                                       long double eps = 1e-10L) {\n   \
+    \ static_assert(std::is_integral_v<T> && std::is_signed_v<T>,\n              \
+    \    \"integer_lp requires a signed integer type\");\n    assert(int(a.size())\
+    \ == int(b.size()));\n    for (const auto& row : a) assert(int(row.size()) ==\
+    \ int(c.size()));\n    assert(eps > 0);\n\n    detail::IntegerLpSolver<T> solver(a,\
+    \ b, c, false, eps);\n    return solver.solve();\n}\n\ntemplate <class T>\nIntegerLpResult<T>\
+    \ integer_lp(const std::vector<std::vector<T>>& a, const std::vector<T>& b,\n\
+    \                              const std::vector<T>& c, long double eps = 1e-10L)\
+    \ {\n    return integer_lp_maximize(a, b, c, eps);\n}\n\n}  // namespace optimization\n\
+    }  // namespace m1une\n\n\n#line 7 \"optimization/all.hpp\"\n\n\n#line 9 \"verify/optimization/simplex.test.cpp\"\
+    \n\nconstexpr long double EPS = 1e-8L;\n\nlong double abs_ld(long double x) {\n\
+    \    return x < 0 ? -x : x;\n}\n\nbool approx(long double a, long double b) {\n\
+    \    return abs_ld(a - b) <= EPS;\n}\n\nvoid check_feasible(const std::vector<std::vector<long\
+    \ double>>& a,\n                    const std::vector<long double>& b, const std::vector<long\
     \ double>& x) {\n    assert(x.size() == (a.empty() ? x.size() : a[0].size()));\n\
     \    for (long double value : x) assert(value >= -EPS);\n    for (int i = 0; i\
     \ < int(a.size()); i++) {\n        long double lhs = 0;\n        for (int j =\
@@ -358,11 +487,12 @@ data:
   dependsOn:
   - optimization/all.hpp
   - optimization/hungarian.hpp
+  - optimization/integer_lp.hpp
   - optimization/simplex.hpp
   isVerificationFile: true
   path: verify/optimization/simplex.test.cpp
   requiredBy: []
-  timestamp: '2026-06-18 01:30:22+09:00'
+  timestamp: '2026-06-18 01:38:25+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/optimization/simplex.test.cpp
