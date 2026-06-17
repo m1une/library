@@ -1,6 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <iostream>
 #include <numeric>
@@ -213,6 +214,23 @@ struct DistancePoint {
     long long sum;
 };
 
+struct ColorVertex {
+    long long weight;
+    int color;
+};
+
+struct ColorPath {
+    int first_color;
+    int last_color;
+    long long first_sum;
+    long long last_sum;
+    bool connected;
+};
+
+struct ColorPoint {
+    std::array<long long, 2> sum;
+};
+
 void test_static_top_tree() {
     auto g = sample_tree();
     std::vector<long long> values = {1, 2, 3, 4, 5, 6, 7};
@@ -322,6 +340,63 @@ void test_rerooting_static_top_tree() {
     assert(stt.node(one_node).type == m1une::tree::internal::RerootingStaticTopTreeNodeType::AddVertex);
     assert(stt.parent_node(root_node) == -1);
     assert(stt.point_id().count == 0);
+    assert(stt.local_point_node(1) == -1);
+    assert(stt.local_point(1).count == 0);
+
+    using RerootingStepType = decltype(stt)::step_type;
+    using RerootingNodeType = decltype(stt)::node_type;
+    auto steps = stt.rerooting_steps(1);
+    std::vector<decltype(stt)::RerootingStep> streamed_steps;
+    stt.for_each_rerooting_step(1, [&](const auto& step) {
+        streamed_steps.push_back(step);
+    });
+    assert(streamed_steps.size() == steps.size());
+    int cur = one_node;
+    for (int i = 0; i < int(steps.size()); i++) {
+        const auto& step = steps[i];
+        const auto& streamed = streamed_steps[i];
+        assert(streamed.type == step.type);
+        assert(streamed.node == step.node);
+        assert(streamed.sibling == step.sibling);
+        assert(streamed.vertex == step.vertex);
+        assert(streamed.edge.from == step.edge.from);
+        assert(streamed.edge.to == step.edge.to);
+        assert(streamed.edge.id == step.edge.id);
+
+        assert(stt.parent_node(cur) == step.node);
+        const auto& parent = stt.node(step.node);
+        if (step.type == RerootingStepType::CompressLower) {
+            assert(parent.type == RerootingNodeType::Compress);
+            assert(parent.left == cur);
+            assert(parent.right == step.sibling);
+            assert(stt.node(step.sibling).path_down.has_value());
+        } else if (step.type == RerootingStepType::CompressUpper) {
+            assert(parent.type == RerootingNodeType::Compress);
+            assert(parent.right == cur);
+            assert(parent.left == step.sibling);
+            assert(stt.node(step.sibling).path_up.has_value());
+        } else if (step.type == RerootingStepType::RakeLeft) {
+            assert(parent.type == RerootingNodeType::Rake);
+            assert(parent.right == cur);
+            assert(parent.left == step.sibling);
+            assert(stt.node(step.sibling).point.has_value());
+        } else if (step.type == RerootingStepType::RakeRight) {
+            assert(parent.type == RerootingNodeType::Rake);
+            assert(parent.left == cur);
+            assert(parent.right == step.sibling);
+            assert(stt.node(step.sibling).point.has_value());
+        } else if (step.type == RerootingStepType::AddEdge) {
+            assert(parent.type == RerootingNodeType::AddEdge);
+            assert(parent.left == cur);
+        } else {
+            assert(step.type == RerootingStepType::AddVertex);
+            assert(parent.type == RerootingNodeType::AddVertex);
+            assert(parent.left == cur);
+            assert(parent.vertex == step.vertex);
+        }
+        cur = step.node;
+    }
+    assert(cur == stt.root_node());
 
     auto edge = m1une::graph::Edge<long long>(0, 1, 2, e01);
     auto reversed = decltype(stt)::reverse_edge(edge);
@@ -357,6 +432,118 @@ void test_rerooting_static_top_tree() {
     stt.set_edge_cost(e12, 1);
     assert(stt.all_prod_down().sum == 21);
     assert(stt.all_prod_up().sum == 34);
+}
+
+void test_rerooting_static_top_tree_vertex_component() {
+    auto g = sample_tree();
+    std::vector<ColorVertex> values = {{1, 0}, {10, 0}, {100, 1}, {1000, 0},
+                                       {10000, 1}, {100000, 1}, {1000000, 1}};
+
+    auto compress = [](ColorPath a, ColorPath b, const auto&) {
+        bool join = a.last_color == b.first_color;
+        ColorPath res{a.first_color, b.last_color, a.first_sum, b.last_sum, false};
+        if (join && a.connected) res.first_sum += b.first_sum;
+        if (join && b.connected) res.last_sum += a.last_sum;
+        res.connected = a.connected && b.connected && join;
+        return res;
+    };
+    auto rake = [](ColorPoint a, ColorPoint b) {
+        return ColorPoint{{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]}};
+    };
+    auto add_edge = [](ColorPath path, const auto&) {
+        ColorPoint res{{0, 0}};
+        res.sum[path.first_color] = path.first_sum;
+        return res;
+    };
+    auto add_vertex = [](ColorPoint side, ColorVertex value, int) {
+        long long sum = value.weight + side.sum[value.color];
+        return ColorPath{value.color, value.color, sum, sum, true};
+    };
+
+    auto stt = m1une::tree::RerootingStaticTopTree(
+        g, values, ColorPoint{{0, 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);
+
+    auto query = [&](int v) {
+        using Step = decltype(stt)::step_type;
+        int color = values[v].color;
+        long long answer = values[v].weight + stt.local_point(v).sum[color];
+        bool touches_top = true;
+        bool touches_bottom = true;
+        bool pending_open = false;
+        ColorPoint pending = stt.point_id();
+
+        stt.for_each_rerooting_step(v, [&](const auto& step) {
+            if (step.type == Step::CompressLower) {
+                const ColorPath& lower = stt.path_down(step.sibling);
+                bool connect = touches_bottom && lower.first_color == color;
+                if (connect) answer += lower.first_sum;
+                touches_bottom = connect && lower.connected;
+            } else if (step.type == Step::CompressUpper) {
+                const ColorPath& upper = stt.path_up(step.sibling);
+                bool connect = touches_top && upper.first_color == color;
+                if (connect) answer += upper.first_sum;
+                touches_top = connect && upper.connected;
+            } else if (step.type == Step::AddEdge) {
+                pending_open = touches_top;
+                pending = stt.point_id();
+            } else if (step.type == Step::RakeLeft) {
+                if (pending_open) pending = stt.rake(stt.point(step.sibling), pending);
+            } else if (step.type == Step::RakeRight) {
+                if (pending_open) pending = stt.rake(pending, stt.point(step.sibling));
+            } else {
+                const auto& value = values[step.vertex];
+                if (pending_open && value.color == color) {
+                    answer += value.weight + pending.sum[color];
+                    touches_top = true;
+                    touches_bottom = true;
+                } else {
+                    touches_top = false;
+                    touches_bottom = false;
+                }
+                pending_open = false;
+                pending = stt.point_id();
+            }
+        });
+
+        return answer;
+    };
+
+    auto brute = [&](int start) {
+        int color = values[start].color;
+        long long answer = 0;
+        std::vector<char> seen(g.size(), false);
+        std::vector<int> stack = {start};
+        seen[start] = true;
+        while (!stack.empty()) {
+            int v = stack.back();
+            stack.pop_back();
+            answer += values[v].weight;
+            for (const auto& e : g[v]) {
+                if (seen[e.to] || values[e.to].color != color) continue;
+                seen[e.to] = true;
+                stack.push_back(e.to);
+            }
+        }
+        return answer;
+    };
+
+    auto check_all = [&]() {
+        for (int v = 0; v < g.size(); v++) assert(query(v) == brute(v));
+    };
+
+    check_all();
+    values[2].color ^= 1;
+    stt.set(2, values[2]);
+    check_all();
+    values[5].weight += 7;
+    stt.set(5, values[5]);
+    check_all();
+    values[1].color ^= 1;
+    stt.set(1, values[1]);
+    check_all();
+    values[4].weight += 11;
+    stt.set(4, values[4]);
+    check_all();
 }
 
 void test_centroid_decomposition() {
@@ -411,6 +598,7 @@ int main() {
     test_rerooting();
     test_static_top_tree();
     test_rerooting_static_top_tree();
+    test_rerooting_static_top_tree_vertex_component();
     test_centroid_decomposition();
     test_forest();
 

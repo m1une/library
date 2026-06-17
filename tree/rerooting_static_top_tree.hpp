@@ -22,6 +22,15 @@ enum class RerootingStaticTopTreeNodeType {
     AddVertex,
 };
 
+enum class RerootingStaticTopTreeStepType {
+    CompressLower,
+    CompressUpper,
+    AddEdge,
+    RakeLeft,
+    RakeRight,
+    AddVertex,
+};
+
 }  // namespace internal
 
 template <class T, class Vertex, class Path, class Point, class CompressDown, class CompressUp, class Rake,
@@ -33,6 +42,7 @@ struct RerootingStaticTopTree {
     using point_type = Point;
     using edge_type = m1une::graph::Edge<T>;
     using node_type = internal::RerootingStaticTopTreeNodeType;
+    using step_type = internal::RerootingStaticTopTreeStepType;
 
     struct Node {
         node_type type;
@@ -46,6 +56,14 @@ struct RerootingStaticTopTree {
         std::optional<Path> path_down;
         std::optional<Path> path_up;
         std::optional<Point> point;
+    };
+
+    struct RerootingStep {
+        step_type type;
+        int node = -1;
+        int sibling = -1;
+        int vertex = -1;
+        edge_type edge;
     };
 
    private:
@@ -330,6 +348,17 @@ struct RerootingStaticTopTree {
         return _vertex_node[v];
     }
 
+    int local_point_node(int v) const {
+        int id = vertex_node(v);
+        assert(_nodes[id].type == node_type::AddVertex);
+        return _nodes[id].left;
+    }
+
+    const Point& local_point(int v) const {
+        int point_node = local_point_node(v);
+        return point_node == -1 ? _point_id : node_point(point_node);
+    }
+
     const Vertex& get(int v) const {
         assert(0 <= v && v < _n);
         return _values[v];
@@ -385,6 +414,65 @@ struct RerootingStaticTopTree {
 
     const Point& point_id() const {
         return _point_id;
+    }
+
+    template <class F>
+    void for_each_rerooting_step(int v, F&& f) const {
+        assert(0 <= v && v < _n);
+        int cur = _vertex_node[v];
+        assert(cur != -1);
+        while (_nodes[cur].parent != -1) {
+            int par = _nodes[cur].parent;
+            const auto& p = _nodes[par];
+            RerootingStep step;
+            step.node = par;
+            if (p.type == node_type::Compress) {
+                step.edge = p.edge;
+                if (p.left == cur) {
+                    step.type = step_type::CompressLower;
+                    step.sibling = p.right;
+                } else {
+                    assert(p.right == cur);
+                    step.type = step_type::CompressUpper;
+                    step.sibling = p.left;
+                }
+            } else if (p.type == node_type::Rake) {
+                if (p.left == cur) {
+                    step.type = step_type::RakeRight;
+                    step.sibling = p.right;
+                } else {
+                    assert(p.right == cur);
+                    step.type = step_type::RakeLeft;
+                    step.sibling = p.left;
+                }
+            } else if (p.type == node_type::AddEdge) {
+                assert(p.left == cur);
+                step.type = step_type::AddEdge;
+                step.edge = p.edge;
+            } else {
+                assert(p.type == node_type::AddVertex);
+                assert(p.left == cur);
+                step.type = step_type::AddVertex;
+                step.vertex = p.vertex;
+            }
+            f(step);
+            cur = par;
+        }
+    }
+
+    std::vector<RerootingStep> rerooting_steps(int v) const {
+        std::vector<RerootingStep> result;
+        int cur = vertex_node(v);
+        int depth = 0;
+        while (_nodes[cur].parent != -1) {
+            cur = _nodes[cur].parent;
+            depth++;
+        }
+        result.reserve(depth);
+        for_each_rerooting_step(v, [&](const RerootingStep& step) {
+            result.push_back(step);
+        });
+        return result;
     }
 
     Path compress_down(const Path& upper, const Path& lower, edge_type edge) const {

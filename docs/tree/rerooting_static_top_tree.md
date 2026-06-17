@@ -23,11 +23,16 @@ in the reverse direction. Therefore forward and backward transitions are kept
 separate.
 
 This header maintains the decomposition and the cached directional cluster
-values under vertex-value and edge-cost updates. The final `query(v)` fold is
-problem-specific: in an actual problem, collect the `O(log N)` clusters around
-`v` using the exposed node tree and compose them with the same callbacks. This
-is intentional because different DPs need different final states and answer
-extraction.
+values under vertex-value and edge-cost updates. It also exposes the
+`O(log N)` rerooting walk around a query vertex with
+`for_each_rerooting_step(v, f)` and `rerooting_steps(v)`.
+
+There is deliberately no universal `prod(v)` member. For many static-top-tree
+applications, `Path` is not just a plain subtree DP value; it may be a
+directional transformation, a small automaton, or another problem-specific
+object. The library therefore supplies the ordered clusters needed to reroot at
+`v`, while your DP code decides how those clusters are folded and how the final
+answer is read.
 
 ## Cluster Types
 
@@ -144,6 +149,62 @@ root heavy path. `all_prod_up()` is the same whole-tree cluster viewed from that
 bottom boundary back toward `root`. The bottom boundary is determined by the
 heavy paths chosen during construction; it is not an arbitrary query vertex.
 
+## Rerooting Steps
+
+For a query vertex `v`, start with the original vertex node:
+
+```cpp
+int cur = stt.vertex_node(v);
+Point side = stt.local_point(v);
+```
+
+`local_point(v)` is the raked contribution of the non-heavy child components
+already stored inside the `AddVertex` node of `v`. If there are no such
+components, it returns `point_id()`.
+
+Then process the step stream:
+
+```cpp
+stt.for_each_rerooting_step(v, [&](const auto& step) {
+    using Step = decltype(stt)::step_type;
+    if (step.type == Step::CompressLower) {
+        // The current path cluster was the upper/left child.
+        // step.sibling is the lower/right path cluster.
+        // stt.path_down(step.sibling) is viewed from the current side.
+    } else if (step.type == Step::CompressUpper) {
+        // The current path cluster was the lower/right child.
+        // step.sibling is the upper/left path cluster.
+        // stt.path_up(step.sibling) is viewed from the current side.
+    } else if (step.type == Step::AddEdge) {
+        // Leaving a child path through step.edge.
+        // step.edge is oriented parent -> child; reverse it when viewing upward.
+    } else if (step.type == Step::RakeLeft) {
+        // A point sibling before the current rake range.
+    } else if (step.type == Step::RakeRight) {
+        // A point sibling after the current rake range.
+    } else {
+        // Reached an AddVertex node. step.vertex is that original vertex.
+    }
+});
+```
+
+The same data can be materialized with `rerooting_steps(v)` if storing the walk
+is more convenient than visiting it online.
+
+Each step has these fields:
+
+| Field | Meaning |
+| --- | --- |
+| `type` | One of `CompressLower`, `CompressUpper`, `AddEdge`, `RakeLeft`, `RakeRight`, `AddVertex`. |
+| `node` | The expression-tree parent node reached by this step. |
+| `sibling` | The sibling cluster for compress/rake steps, otherwise `-1`. |
+| `vertex` | The original vertex for an `AddVertex` step, otherwise `-1`. |
+| `edge` | The rooted tree edge for compress/add-edge steps. |
+
+This removes the error-prone part of rerooting queries: finding the sibling
+clusters and keeping their order straight. The folder you write for a problem
+only needs to say what each step means for that DP.
+
 ## Public Members
 
 | Method | Description | Complexity |
@@ -159,6 +220,8 @@ heavy paths chosen during construction; it is not an arbitrary query vertex.
 | `const Node& node(id)` | One expression-tree node. | `O(1)` |
 | `int parent_node(id)` | Parent expression node, or `-1` at the root. | `O(1)` |
 | `int vertex_node(v)` | The `AddVertex` node corresponding to original vertex `v`. | `O(1)` |
+| `int local_point_node(v)` | Rake node stored inside `AddVertex(v)`, or `-1`. | `O(1)` |
+| `const Point& local_point(v)` | Raked non-heavy child contribution stored at `v`, or `point_id()`. | `O(1)` |
 | `const Vertex& get(v)` | Stored value of original vertex `v`. | `O(1)` |
 | `void set(v, value)` | Update one vertex value and recompute ancestors. | `O(height)` |
 | `void set_edge_cost(edge_id, cost)` | Update one edge cost and recompute ancestors. | `O(height)` |
@@ -168,6 +231,8 @@ heavy paths chosen during construction; it is not an arbitrary query vertex.
 | `const Path& all_prod_down()` | Whole-tree downward path value. | `O(1)` |
 | `const Path& all_prod_up()` | Whole-tree upward path value. | `O(1)` |
 | `const Point& point_id()` | Identity point value for `rake`. | `O(1)` |
+| `for_each_rerooting_step(v, f)` | Visits rerooting steps from `vertex_node(v)` to `root_node()`. | `O(height)` |
+| `std::vector<RerootingStep> rerooting_steps(v)` | Returns the same rerooting steps as a vector. | `O(height)` |
 | `compress_down(...)`, `compress_up(...)` | Public wrappers around the directional path callbacks. | Callback cost |
 | `rake(...)` | Public wrapper around the point merge callback. | Callback cost |
 | `add_edge_down(...)`, `add_edge_up(...)` | Public wrappers around the directional edge callbacks. | Callback cost |
@@ -188,15 +253,49 @@ For a rerooting-style static top tree solution:
 3. Implement the downward operations exactly as in an ordinary static top tree.
 4. Implement the upward operations with the reverse argument order and reversed
    edge direction.
-5. For a query vertex `v`, use `vertex_node(v)` and `parent_node(id)` to walk the
-   expression tree. The siblings encountered on this walk form `O(log N)`
-   clusters. Fold those clusters into the DP state for root `v` using the public
-   callback wrappers.
+5. For a query vertex `v`, initialize the query state from `local_point(v)`,
+   then process `for_each_rerooting_step(v, f)`. The siblings encountered on
+   this walk form the `O(log N)` clusters needed for the rerooted answer.
 
-The last step depends on the DP. For example, a DP that stores path clusters as
-functions usually applies the collected functions to a point state; a DP that
-stores endpoint states may need to keep separate accumulators for the parent
-side and child side before the final `add_vertex`.
+The final fold depends on the DP. For example, a DP that stores path clusters
+as functions usually applies the collected functions to a point state; a DP
+that stores endpoint states may keep separate accumulators for the parent side
+and child side before the final `add_vertex`. In problems such as ABC460 G,
+the folder keeps the same-color component contribution around the query vertex
+and reads the component sum after applying the steps.
+
+For the same-color component-sum DP used by ABC460 G, one convenient state is:
+
+```cpp
+struct Vertex {
+    long long weight;
+    int color;
+};
+
+struct Point {
+    long long sum[2]; // contribution if the boundary vertex has color 0/1
+};
+
+struct Path {
+    int first_color, last_color;
+    long long first_sum, last_sum;
+    bool connected; // whether the two boundaries are in one same-color component
+};
+```
+
+`add_edge` puts `path.first_sum` into `Point::sum[path.first_color]`.
+`add_vertex` returns a one-vertex path whose component sum is
+`weight + side.sum[color]`. `compress_down` and `compress_up` use the same
+orientation-relative formula: if the adjacent boundary colors are equal, join
+the two boundary components; otherwise keep them separate.
+
+The query folder fixes `c = color[v]`, starts from
+`weight[v] + local_point(v).sum[c]`, and tracks whether that component touches
+the current top and bottom boundaries while processing `CompressLower` and
+`CompressUpper` steps. `AddEdge`, `RakeLeft`/`RakeRight`, and `AddVertex` steps
+handle moving through a non-heavy child edge into the parent vertex. The
+verification test `test_rerooting_static_top_tree_vertex_component` contains a
+small end-to-end version of this pattern.
 
 The library guarantees that the cluster values you read during that fold are
 kept up to date after `set` and `set_edge_cost`.
