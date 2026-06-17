@@ -28,6 +28,7 @@
 "verify/data_structure/persistent_ordered_multiset.test.cpp": "2026-06-14 14:10:32 +0900",
 "verify/data_structure/persistent_ordered_set.test.cpp": "2026-06-14 14:10:32 +0900",
 "verify/data_structure/persistent_segtree.test.cpp": "2026-06-17 21:06:48 +0900",
+"verify/data_structure/potentialized_dsu.test.cpp": "2026-06-18 01:12:46 +0900",
 "verify/data_structure/segtree.test.cpp": "2026-06-17 21:06:48 +0900",
 "verify/data_structure/sparse_table.test.cpp": "2026-06-17 21:06:48 +0900",
 "verify/flow/flow_algorithms.test.cpp": "2026-06-17 14:06:24 +0900",
