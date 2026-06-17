@@ -13,3 +13,4 @@ is not naturally a graph, data structure, or algebraic object.
 | Header | Contents |
 | --- | --- |
 | `optimization/hungarian.hpp` | Hungarian algorithm for minimum-cost and maximum-cost rectangular assignment. |
+| `optimization/simplex.hpp` | Two-phase simplex algorithm for linear programming in standard inequality form. |
