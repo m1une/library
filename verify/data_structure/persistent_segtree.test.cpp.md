@@ -32,18 +32,22 @@ data:
     \  // 2. Must have a static method `id()` returning `value_type`\n    { M::id()\
     \ } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"data_structure/persistent_segtree.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ data_structure {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct PersistentSegtree\
-    \ {\n    using T = typename Monoid::value_type;\n\n   private:\n    struct Node\
-    \ {\n        T val;\n        int l, r;\n\n        Node() : val(Monoid::id()),\
-    \ l(0), r(0) {}\n        explicit Node(T value) : val(std::move(value)), l(0),\
-    \ r(0) {}\n        Node(T value, int left, int right) : val(std::move(value)),\
-    \ l(left), r(right) {}\n    };\n\n    int _n;\n    int _root;\n    std::shared_ptr<std::vector<Node>>\
-    \ _pool;\n\n    explicit PersistentSegtree(int n, int root, std::shared_ptr<std::vector<Node>>\
-    \ pool)\n        : _n(n), _root(root), _pool(std::move(pool)) {}\n\n    int new_node(const\
-    \ Node& node) const {\n        _pool->push_back(node);\n        return int(_pool->size())\
-    \ - 1;\n    }\n\n    int new_node(Node&& node) const {\n        _pool->push_back(std::move(node));\n\
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/persistent_segtree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsMonoid\
+    \ Monoid>\nstruct PersistentSegtree {\n    using T = typename Monoid::value_type;\n\
+    \n   private:\n    struct Node {\n        T val;\n        int l, r;\n\n      \
+    \  Node() : val(Monoid::id()), l(0), r(0) {}\n        explicit Node(T value) :\
+    \ val(std::move(value)), l(0), r(0) {}\n        Node(T value, int left, int right)\
+    \ : val(std::move(value)), l(left), r(right) {}\n    };\n\n    int _n;\n    int\
+    \ _root;\n    std::shared_ptr<std::vector<Node>> _pool;\n\n    explicit PersistentSegtree(int\
+    \ n, int root, std::shared_ptr<std::vector<Node>> pool)\n        : _n(n), _root(root),\
+    \ _pool(std::move(pool)) {}\n\n    int new_node(const Node& node) const {\n  \
+    \      _pool->push_back(node);\n        return int(_pool->size()) - 1;\n    }\n\
+    \n    int new_node(Node&& node) const {\n        _pool->push_back(std::move(node));\n\
     \        return int(_pool->size()) - 1;\n    }\n\n    template <typename U>\n\
     \    static T make_value(const U& value, int index) {\n        if constexpr (requires(U\
     \ x) { Monoid::make(x); }) {\n            return Monoid::make(value);\n      \
@@ -195,7 +199,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 16:15:56+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_segtree.test.cpp

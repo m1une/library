@@ -2,8 +2,8 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: data_structure/link_cut_tree_with_subtree.hpp
-    title: Link-Cut Tree With Subtree
+    path: data_structure/linked_cut_tree.hpp
+    title: Linked-Cut Tree
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
@@ -20,13 +20,12 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/data_structure/link_cut_tree_with_subtree.test.cpp\"\
-    \n#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \n#line 1 \"data_structure/link_cut_tree_with_subtree.hpp\"\n\n\n\n#line 5 \"\
-    data_structure/link_cut_tree_with_subtree.hpp\"\n#include <concepts>\n#include\
-    \ <type_traits>\n#line 9 \"data_structure/link_cut_tree_with_subtree.hpp\"\n\n\
-    #line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
+  bundledCode: "#line 1 \"verify/data_structure/linked_cut_tree.test.cpp\"\n#define\
+    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n#include\
+    \ <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\n#line\
+    \ 1 \"data_structure/linked_cut_tree.hpp\"\n\n\n\n#line 5 \"data_structure/linked_cut_tree.hpp\"\
+    \n#include <concepts>\n#include <type_traits>\n#line 9 \"data_structure/linked_cut_tree.hpp\"\
+    \n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
     \ m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies the requirements\
     \ of a Monoid.\n// A Monoid must have a `value_type`, an identity element `id()`,\
     \ and an associative binary operation `op()`.\ntemplate <typename M>\nconcept\
@@ -35,12 +34,13 @@ data:
     \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
     \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"data_structure/link_cut_tree_with_subtree.hpp\"\n\nnamespace m1une {\n\
-    namespace data_structure {\n\ntemplate <typename M>\nconcept IsCommutativeGroupMonoid\
-    \ = m1une::monoid::IsMonoid<M> && requires(typename M::value_type a) {\n    {\
-    \ M::inverse(a) } -> std::same_as<typename M::value_type>;\n};\n\ntemplate <IsCommutativeGroupMonoid\
-    \ Monoid>\nstruct LinkCutTreeWithSubtree {\n    using T = typename Monoid::value_type;\n\
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/linked_cut_tree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
+    \ Monoid>\nstruct LinkedCutTree {\n    using T = typename Monoid::value_type;\n\
     \n   private:\n    struct Node {\n        int left = -1;\n        int right =\
     \ -1;\n        int parent = -1;\n        bool rev = false;\n        int size =\
     \ 1;\n        int virtual_size = 0;\n        int all_size = 1;\n        T value\
@@ -116,17 +116,17 @@ data:
     \            last = cur;\n        }\n        splay(node);\n        return last;\n\
     \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
     \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkCutTreeWithSubtree()\
-    \ = default;\n\n    explicit LinkCutTreeWithSubtree(int n) {\n        assert(0\
-    \ <= n);\n        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
-    \    }\n\n    explicit LinkCutTreeWithSubtree(const std::vector<T>& values) {\n\
-    \        _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
-    \ i++) add_vertex(values[i]);\n    }\n\n    explicit LinkCutTreeWithSubtree(std::vector<T>&&\
+    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkedCutTree()\
+    \ = default;\n\n    explicit LinkedCutTree(int n) {\n        assert(0 <= n);\n\
+    \        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
+    \    }\n\n    explicit LinkedCutTree(const std::vector<T>& values) {\n       \
+    \ _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
+    \ i++) add_vertex(values[i]);\n    }\n\n    explicit LinkedCutTree(std::vector<T>&&\
     \ values) {\n        _nodes.reserve(values.size());\n        for (int i = 0; i\
     \ < int(values.size()); i++) add_vertex(std::move(values[i]));\n    }\n\n    template\
     \ <class U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) {\
     \ Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x, i); }\
-    \ ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTreeWithSubtree(const\
+    \ ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkedCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
@@ -235,18 +235,17 @@ data:
     \ a and b.\n    static constexpr T op(const T& a, const T& b) {\n        return\
     \ a + b;\n    }\n\n    static constexpr T inverse(const T& x) {\n        return\
     \ -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11\
-    \ \"verify/data_structure/link_cut_tree_with_subtree.test.cpp\"\n\nvoid test_vertex_subtree_sum()\
-    \ {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
-    \ long>> lct(std::vector<int>{1, 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n\
-    \    assert(lct.link(1, 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3,\
-    \ 4));\n\n    assert(lct.path_prod(2, 4) == 14);\n    assert(lct.subtree_prod(0,\
-    \ 1) == 14);\n    assert(lct.subtree_size(0, 1) == 4);\n    assert(lct.subtree_prod(1,\
-    \ 3) == 9);\n\n    lct.set(3, 40);\n    assert(lct.path_prod(2, 4) == 50);\n \
-    \   assert(lct.subtree_prod(0, 1) == 50);\n    assert(lct.subtree_prod(1, 3) ==\
-    \ 45);\n\n    assert(lct.cut(1, 3));\n    assert(lct.subtree_prod(0, 1) == 5);\n\
-    \    assert(!lct.connected(2, 4));\n    assert(lct.link(2, 4));\n    assert(lct.subtree_prod(0,\
-    \ 1) == 50);\n    assert(lct.subtree_prod(0, 2) == 48);\n}\n\nvoid test_edge_nodes_subtree()\
-    \ {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \ \"verify/data_structure/linked_cut_tree.test.cpp\"\n\nvoid test_vertex_subtree_sum()\
+    \ {\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1,\
+    \ 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n    assert(lct.link(1, 2));\n\
+    \    assert(lct.link(1, 3));\n    assert(lct.link(3, 4));\n\n    assert(lct.path_prod(2,\
+    \ 4) == 14);\n    assert(lct.subtree_prod(0, 1) == 14);\n    assert(lct.subtree_size(0,\
+    \ 1) == 4);\n    assert(lct.subtree_prod(1, 3) == 9);\n\n    lct.set(3, 40);\n\
+    \    assert(lct.path_prod(2, 4) == 50);\n    assert(lct.subtree_prod(0, 1) ==\
+    \ 50);\n    assert(lct.subtree_prod(1, 3) == 45);\n\n    assert(lct.cut(1, 3));\n\
+    \    assert(lct.subtree_prod(0, 1) == 5);\n    assert(!lct.connected(2, 4));\n\
+    \    assert(lct.link(2, 4));\n    assert(lct.subtree_prod(0, 1) == 50);\n    assert(lct.subtree_prod(0,\
+    \ 2) == 48);\n}\n\nvoid test_edge_nodes_subtree() {\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long\
     \ long>> lct(3);\n\n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1,\
     \ 2, 7);\n    assert(e01 == 0);\n    assert(e12 == 1);\n\n    assert(lct.path_prod(0,\
     \ 2) == 12);\n    assert(lct.subtree_prod(0, 0) == 12);\n    assert(lct.subtree_prod(0,\
@@ -280,7 +279,7 @@ data:
     \ {\n            if (to == parent[x]) continue;\n            stack.push_back(to);\n\
     \        }\n    }\n    return res;\n}\n\nvoid test_random_vertex_sum() {\n   \
     \ constexpr int n = 8;\n    std::vector<long long> value;\n    for (int i = 0;\
-    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long\
     \ long>> lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
     \ int>> edges;\n    std::mt19937 rng(1);\n\n    for (int step = 0; step < 600;\
     \ step++) {\n        int op = int(rng() % 5);\n        int u = int(rng() % n);\n\
@@ -310,8 +309,8 @@ data:
     \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \n#include \"data_structure/link_cut_tree_with_subtree.hpp\"\n#include \"monoid/add.hpp\"\
-    \n\nvoid test_vertex_subtree_sum() {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \n#include \"data_structure/linked_cut_tree.hpp\"\n#include \"monoid/add.hpp\"\
+    \n\nvoid test_vertex_subtree_sum() {\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long\
     \ long>> lct(std::vector<int>{1, 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n\
     \    assert(lct.link(1, 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3,\
     \ 4));\n\n    assert(lct.path_prod(2, 4) == 14);\n    assert(lct.subtree_prod(0,\
@@ -321,10 +320,10 @@ data:
     \ 45);\n\n    assert(lct.cut(1, 3));\n    assert(lct.subtree_prod(0, 1) == 5);\n\
     \    assert(!lct.connected(2, 4));\n    assert(lct.link(2, 4));\n    assert(lct.subtree_prod(0,\
     \ 1) == 50);\n    assert(lct.subtree_prod(0, 2) == 48);\n}\n\nvoid test_edge_nodes_subtree()\
-    \ {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
-    \ long>> lct(3);\n\n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1,\
-    \ 2, 7);\n    assert(e01 == 0);\n    assert(e12 == 1);\n\n    assert(lct.path_prod(0,\
-    \ 2) == 12);\n    assert(lct.subtree_prod(0, 0) == 12);\n    assert(lct.subtree_prod(0,\
+    \ {\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(3);\n\
+    \n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1, 2, 7);\n\
+    \    assert(e01 == 0);\n    assert(e12 == 1);\n\n    assert(lct.path_prod(0, 2)\
+    \ == 12);\n    assert(lct.subtree_prod(0, 0) == 12);\n    assert(lct.subtree_prod(0,\
     \ 1) == 7);\n    assert(lct.subtree_size(0, 1) == 3);\n    assert(lct.subtree_size(0,\
     \ lct.edge_node(e12)) == 2);\n\n    lct.set_edge(e12, 20);\n    assert(lct.path_prod(0,\
     \ 2) == 25);\n    assert(lct.subtree_prod(0, 1) == 20);\n\n    assert(lct.cut_edge(e01));\n\
@@ -355,7 +354,7 @@ data:
     \ {\n            if (to == parent[x]) continue;\n            stack.push_back(to);\n\
     \        }\n    }\n    return res;\n}\n\nvoid test_random_vertex_sum() {\n   \
     \ constexpr int n = 8;\n    std::vector<long long> value;\n    for (int i = 0;\
-    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long\
     \ long>> lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
     \ int>> edges;\n    std::mt19937 rng(1);\n\n    for (int step = 0; step < 600;\
     \ step++) {\n        int op = int(rng() % 5);\n        int u = int(rng() % n);\n\
@@ -384,19 +383,19 @@ data:
     \    test_edge_nodes_subtree();\n    test_random_vertex_sum();\n\n    long long\
     \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
-  - data_structure/link_cut_tree_with_subtree.hpp
+  - data_structure/linked_cut_tree.hpp
   - monoid/concept.hpp
   - monoid/add.hpp
   isVerificationFile: true
-  path: verify/data_structure/link_cut_tree_with_subtree.test.cpp
+  path: verify/data_structure/linked_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 16:15:56+09:00'
+  timestamp: '2026-06-17 21:02:28+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/data_structure/link_cut_tree_with_subtree.test.cpp
+documentation_of: verify/data_structure/linked_cut_tree.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/data_structure/link_cut_tree_with_subtree.test.cpp
-- /verify/verify/data_structure/link_cut_tree_with_subtree.test.cpp.html
-title: verify/data_structure/link_cut_tree_with_subtree.test.cpp
+- /verify/verify/data_structure/linked_cut_tree.test.cpp
+- /verify/verify/data_structure/linked_cut_tree.test.cpp.html
+title: verify/data_structure/linked_cut_tree.test.cpp
 ---

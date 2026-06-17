@@ -37,19 +37,23 @@ data:
     \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
     \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"data_structure/sparse_table.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\n// A Sparse Table utilizing C++20 Concepts for type safety.\n// It requires\
-    \ a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\n// [IMPORTANT] For\
-    \ O(1) range queries to work correctly, the monoid operation MUST be idempotent.\n\
-    // i.e., Monoid::op(x, x) == x must hold (e.g., Min, Max, GCD, Bitwise AND/OR).\n\
-    template <m1une::monoid::IsMonoid Monoid>\nstruct SparseTable {\n    using T =\
-    \ typename Monoid::value_type;\n\n   private:\n    int _n;\n    std::vector<std::vector<T>>\
-    \ _st;\n\n   public:\n    // Constructs an empty sparse table.\n    SparseTable()\
-    \ : _n(0) {}\n\n    // Constructs a sparse table from an existing vector in O(N\
-    \ log N) time.\n    explicit SparseTable(const std::vector<T>& v) : _n(int(v.size()))\
-    \ {\n        if (_n == 0) return;\n\n        // Compute the maximum power of 2\
-    \ needed\n        int max_log = std::bit_width((unsigned int)_n);\n        _st.assign(max_log,\
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/sparse_table.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\n// A Sparse Table utilizing\
+    \ C++20 Concepts for type safety.\n// It requires a Monoid struct that satisfies\
+    \ `m1une::monoid::IsMonoid`.\n// [IMPORTANT] For O(1) range queries to work correctly,\
+    \ the monoid operation MUST be idempotent.\n// i.e., Monoid::op(x, x) == x must\
+    \ hold (e.g., Min, Max, GCD, Bitwise AND/OR).\ntemplate <m1une::monoid::IsMonoid\
+    \ Monoid>\nstruct SparseTable {\n    using T = typename Monoid::value_type;\n\n\
+    \   private:\n    int _n;\n    std::vector<std::vector<T>> _st;\n\n   public:\n\
+    \    // Constructs an empty sparse table.\n    SparseTable() : _n(0) {}\n\n  \
+    \  // Constructs a sparse table from an existing vector in O(N log N) time.\n\
+    \    explicit SparseTable(const std::vector<T>& v) : _n(int(v.size())) {\n   \
+    \     if (_n == 0) return;\n\n        // Compute the maximum power of 2 needed\n\
+    \        int max_log = std::bit_width((unsigned int)_n);\n        _st.assign(max_log,\
     \ std::vector<T>(_n));\n\n        // Initialize the base level\n        for (int\
     \ i = 0; i < _n; i++) {\n            _st[0][i] = v[i];\n        }\n\n        //\
     \ Build the sparse table\n        for (int k = 1; k < max_log; k++) {\n      \
@@ -147,7 +151,7 @@ data:
   - tree/sparse_table_lca.hpp
   - tree/all.hpp
   - tree/tree.hpp
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp

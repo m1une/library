@@ -30,10 +30,13 @@ data:
     \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
     \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 14 \"data_structure/persistent_dynamic_monoid_array.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
-    struct PersistentDynamicMonoidArray {\n    using T = typename Monoid::value_type;\n\
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 14 \"data_structure/persistent_dynamic_monoid_array.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsMonoid\
+    \ Monoid>\nstruct PersistentDynamicMonoidArray {\n    using T = typename Monoid::value_type;\n\
     \n   private:\n    struct Node;\n    using NodePtr = std::shared_ptr<const Node>;\n\
     \n    struct Node {\n        T val, prod, rprod;\n        int priority;\n    \
     \    int count;\n        bool rev;\n        NodePtr l, r;\n\n        Node(T value,\
@@ -381,7 +384,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_dynamic_monoid_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-15 02:04:13+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_dynamic_monoid_array.test.cpp

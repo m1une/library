@@ -6,11 +6,11 @@ data:
     path: data_structure/dynamic_lazy_monoid_array.hpp
     title: Dynamic Lazy Monoid Array
   - icon: ':heavy_check_mark:'
-    path: data_structure/lazy_link_cut_tree.hpp
-    title: Lazy Link-Cut Tree
+    path: data_structure/lazy_linked_cut_tree.hpp
+    title: Lazy Linked-Cut Tree
   - icon: ':heavy_check_mark:'
-    path: data_structure/lazy_link_cut_tree_with_subtree.hpp
-    title: Lazy Link-Cut Tree With Subtree
+    path: data_structure/lazy_path_link_cut_tree.hpp
+    title: Lazy Path Link-Cut Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/lazy_segtree.hpp
     title: Lazy Segment Tree
@@ -28,11 +28,11 @@ data:
     path: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
     title: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/lazy_link_cut_tree.test.cpp
-    title: verify/data_structure/lazy_link_cut_tree.test.cpp
+    path: verify/data_structure/lazy_linked_cut_tree.test.cpp
+    title: verify/data_structure/lazy_linked_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
-    title: verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
+    path: verify/data_structure/lazy_path_link_cut_tree.test.cpp
+    title: verify/data_structure/lazy_path_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
@@ -61,6 +61,10 @@ data:
     \ } -> std::same_as<typename AM::operator_type>;\n    { AM::op_comp(f, g) } ->\
     \ std::same_as<typename AM::operator_type>;  // Composition order: f(g(x))\n\n\
     \    // 3. Mapping: Operator x Value -> Value\n    { AM::mapping(f, a) } -> std::same_as<typename\
+    \ AM::value_type>;\n};\n\n// Concept for acted monoids whose value monoid is a\
+    \ commutative group.\n// The value operation must obey commutativity and inverse\
+    \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
+    \ && requires(typename AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
     \n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_CONCEPT_HPP\n#define M1UNE_ACTED_MONOID_CONCEPT_HPP\
@@ -74,29 +78,33 @@ data:
     \   typename AM::operator_type;\n    { AM::op_id() } -> std::same_as<typename\
     \ AM::operator_type>;\n    { AM::op_comp(f, g) } -> std::same_as<typename AM::operator_type>;\
     \  // Composition order: f(g(x))\n\n    // 3. Mapping: Operator x Value -> Value\n\
-    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n}\
-    \  // namespace acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_CONCEPT_HPP\n"
+    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n//\
+    \ Concept for acted monoids whose value monoid is a commutative group.\n// The\
+    \ value operation must obey commutativity and inverse laws.\ntemplate <typename\
+    \ AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM> && requires(typename\
+    \ AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename AM::value_type>;\n\
+    };\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_CONCEPT_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: acted_monoid/concept.hpp
   requiredBy:
   - data_structure/lazy_segtree.hpp
   - data_structure/persistent_lazy_segtree.hpp
-  - data_structure/lazy_link_cut_tree_with_subtree.hpp
   - data_structure/persistent_dynamic_lazy_monoid_array.hpp
-  - data_structure/lazy_link_cut_tree.hpp
+  - data_structure/lazy_path_link_cut_tree.hpp
+  - data_structure/lazy_linked_cut_tree.hpp
   - data_structure/dynamic_lazy_monoid_array.hpp
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
   - verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
-  - verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
+  - verify/data_structure/lazy_linked_cut_tree.test.cpp
   - verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
+  - verify/data_structure/lazy_path_link_cut_tree.test.cpp
   - verify/data_structure/persistent_lazy_segtree.test.cpp
-  - verify/data_structure/lazy_link_cut_tree.test.cpp
 documentation_of: acted_monoid/concept.hpp
 layout: document
 title: Acted Monoid Concept
@@ -146,3 +154,14 @@ The concept requires the type to implement these members:
 
 The concept checks the interface only. Associativity, identity laws, and the
 interaction between `mapping` and `op` must be satisfied by the implementation.
+
+## Commutative Acted Group
+
+`m1une::acted_monoid::IsCommutativeActedGroup` extends `IsActedMonoid` with an
+inverse for the value monoid:
+
+* `static constexpr value_type inverse(const value_type& x)`
+  Returns the inverse of `x` with respect to the value operation `op`.
+
+The concept checks only the interface. The value operation should satisfy the
+commutative group laws, and `mapping` should still distribute over `op`.

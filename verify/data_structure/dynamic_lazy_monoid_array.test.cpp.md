@@ -58,8 +58,12 @@ data:
     \   typename AM::operator_type;\n    { AM::op_id() } -> std::same_as<typename\
     \ AM::operator_type>;\n    { AM::op_comp(f, g) } -> std::same_as<typename AM::operator_type>;\
     \  // Composition order: f(g(x))\n\n    // 3. Mapping: Operator x Value -> Value\n\
-    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n}\
-    \  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 13 \"data_structure/dynamic_lazy_monoid_array.hpp\"\
+    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n//\
+    \ Concept for acted monoids whose value monoid is a commutative group.\n// The\
+    \ value operation must obey commutativity and inverse laws.\ntemplate <typename\
+    \ AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM> && requires(typename\
+    \ AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename AM::value_type>;\n\
+    };\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 13 \"data_structure/dynamic_lazy_monoid_array.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::acted_monoid::IsActedMonoid\
     \ ActedMonoid>\nstruct DynamicLazyMonoidArray {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
@@ -375,7 +379,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-15 02:20:43+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/dynamic_lazy_monoid_array.test.cpp

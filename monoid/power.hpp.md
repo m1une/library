@@ -20,16 +20,19 @@ data:
     \ M::value_type;\n\n    // 2. Must have a static method `id()` returning `value_type`\n\
     \    { M::id() } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have\
     \ a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 5 \"monoid/power.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Computes\
-    \ a^n (a * a * ... * a, n times) for an element 'a' in Monoid 'M'.\n// Uses binary\
-    \ exponentiation to achieve O(log n) time complexity.\n// The template parameter\
-    \ 'M' is constrained by the 'IsMonoid' concept.\ntemplate <IsMonoid M>\nconstexpr\
-    \ typename M::value_type power(typename M::value_type a, long long n) {\n    typename\
-    \ M::value_type res = M::id();\n    while (n > 0) {\n        if (n & 1) {\n  \
-    \          res = M::op(res, a);\n        }\n        a = M::op(a, a);\n       \
-    \ n >>= 1;\n    }\n    return res;\n}\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n\n"
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 5 \"monoid/power.hpp\"\
+    \n\nnamespace m1une {\nnamespace monoid {\n\n// Computes a^n (a * a * ... * a,\
+    \ n times) for an element 'a' in Monoid 'M'.\n// Uses binary exponentiation to\
+    \ achieve O(log n) time complexity.\n// The template parameter 'M' is constrained\
+    \ by the 'IsMonoid' concept.\ntemplate <IsMonoid M>\nconstexpr typename M::value_type\
+    \ power(typename M::value_type a, long long n) {\n    typename M::value_type res\
+    \ = M::id();\n    while (n > 0) {\n        if (n & 1) {\n            res = M::op(res,\
+    \ a);\n        }\n        a = M::op(a, a);\n        n >>= 1;\n    }\n    return\
+    \ res;\n}\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_POWER_HPP\n#define M1UNE_MONOID_POWER_HPP 1\n\n#include\
     \ \"concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Computes a^n\
     \ (a * a * ... * a, n times) for an element 'a' in Monoid 'M'.\n// Uses binary\
@@ -45,7 +48,7 @@ data:
   isVerificationFile: false
   path: monoid/power.hpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/power.hpp

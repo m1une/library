@@ -8,8 +8,8 @@ data:
     path: acted_monoid/range_add_range_sum.hpp
     title: Range Add Range Sum
   - icon: ':heavy_check_mark:'
-    path: data_structure/lazy_link_cut_tree_with_subtree.hpp
-    title: Lazy Link-Cut Tree With Subtree
+    path: data_structure/lazy_linked_cut_tree.hpp
+    title: Lazy Linked-Cut Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -20,8 +20,8 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp\"\
-    \n#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
+  bundledCode: "#line 1 \"verify/data_structure/lazy_linked_cut_tree.test.cpp\"\n\
+    #define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
     \n#line 1 \"acted_monoid/range_add_range_sum.hpp\"\n\n\n\nnamespace m1une {\n\
     namespace acted_monoid {\n\ntemplate <typename T>\nstruct RangeAddRangeSumNode\
@@ -39,9 +39,8 @@ data:
     \ {x.sum + f * x.size, x.size};\n    }\n\n    // Helper for initializing a leaf\
     \ node\n    static constexpr value_type make(const T& val) {\n        return {val,\
     \ 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n\
-    #line 1 \"data_structure/lazy_link_cut_tree_with_subtree.hpp\"\n\n\n\n#line 5\
-    \ \"data_structure/lazy_link_cut_tree_with_subtree.hpp\"\n#include <concepts>\n\
-    #include <type_traits>\n#line 9 \"data_structure/lazy_link_cut_tree_with_subtree.hpp\"\
+    #line 1 \"data_structure/lazy_linked_cut_tree.hpp\"\n\n\n\n#line 5 \"data_structure/lazy_linked_cut_tree.hpp\"\
+    \n#include <concepts>\n#include <type_traits>\n#line 9 \"data_structure/lazy_linked_cut_tree.hpp\"\
     \n\n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
     \ for an Acted Monoid.\ntemplate <typename AM>\nconcept IsActedMonoid = requires(typename\
@@ -53,21 +52,23 @@ data:
     \ } -> std::same_as<typename AM::operator_type>;\n    { AM::op_comp(f, g) } ->\
     \ std::same_as<typename AM::operator_type>;  // Composition order: f(g(x))\n\n\
     \    // 3. Mapping: Operator x Value -> Value\n    { AM::mapping(f, a) } -> std::same_as<typename\
+    \ AM::value_type>;\n};\n\n// Concept for acted monoids whose value monoid is a\
+    \ commutative group.\n// The value operation must obey commutativity and inverse\
+    \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
+    \ && requires(typename AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
-    \n\n#line 11 \"data_structure/lazy_link_cut_tree_with_subtree.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace data_structure {\n\ntemplate <typename AM>\nconcept IsCommutativeGroupActedMonoid\
-    \ = m1une::acted_monoid::IsActedMonoid<AM> &&\n    requires(typename AM::value_type\
-    \ a) {\n        { AM::inverse(a) } -> std::same_as<typename AM::value_type>;\n\
-    \    };\n\ntemplate <IsCommutativeGroupActedMonoid ActedMonoid>\nstruct LazyLinkCutTreeWithSubtree\
-    \ {\n    using T = typename ActedMonoid::value_type;\n    using F = typename ActedMonoid::operator_type;\n\
-    \n   private:\n    struct Node {\n        int left = -1;\n        int right =\
-    \ -1;\n        int parent = -1;\n        bool rev = false;\n        int size =\
-    \ 1;\n        int virtual_size = 0;\n        int rake_size = 0;\n        int all_size\
-    \ = 1;\n        T value = ActedMonoid::id();\n        T prod = ActedMonoid::id();\n\
-    \        T rev_prod = ActedMonoid::id();\n        T virtual_prod = ActedMonoid::id();\n\
-    \        T rake_prod = ActedMonoid::id();\n        T all_prod = ActedMonoid::id();\n\
-    \        F lazy = ActedMonoid::op_id();\n    };\n\n    struct EdgeInfo {\n   \
-    \     int u = -1;\n        int v = -1;\n        int node = -1;\n        bool alive\
+    \n\n#line 11 \"data_structure/lazy_linked_cut_tree.hpp\"\n\nnamespace m1une {\n\
+    namespace data_structure {\n\ntemplate <m1une::acted_monoid::IsCommutativeActedGroup\
+    \ ActedMonoid>\nstruct LazyLinkedCutTree {\n    using T = typename ActedMonoid::value_type;\n\
+    \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
+    \ Node {\n        int left = -1;\n        int right = -1;\n        int parent\
+    \ = -1;\n        bool rev = false;\n        int size = 1;\n        int virtual_size\
+    \ = 0;\n        int rake_size = 0;\n        int all_size = 1;\n        T value\
+    \ = ActedMonoid::id();\n        T prod = ActedMonoid::id();\n        T rev_prod\
+    \ = ActedMonoid::id();\n        T virtual_prod = ActedMonoid::id();\n        T\
+    \ rake_prod = ActedMonoid::id();\n        T all_prod = ActedMonoid::id();\n  \
+    \      F lazy = ActedMonoid::op_id();\n    };\n\n    struct EdgeInfo {\n     \
+    \   int u = -1;\n        int v = -1;\n        int node = -1;\n        bool alive\
     \ = false;\n    };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo>\
     \ _edges;\n    std::vector<int> _path_buffer;\n\n    static T make_node_value(const\
     \ T& value, int) {\n        return value;\n    }\n\n    static T make_node_value(T&&\
@@ -148,23 +149,23 @@ data:
     \   splay(node);\n        return last;\n    }\n\n    void check_vertex(int v)\
     \ const {\n        assert(0 <= v && v < int(_nodes.size()));\n    }\n\n    void\
     \ check_edge(int edge_id) const {\n        assert(0 <= edge_id && edge_id < int(_edges.size()));\n\
-    \    }\n\n   public:\n    LazyLinkCutTreeWithSubtree() = default;\n\n    explicit\
-    \ LazyLinkCutTreeWithSubtree(int n) {\n        assert(0 <= n);\n        _nodes.reserve(n);\n\
-    \        for (int i = 0; i < n; i++) add_vertex();\n    }\n\n    explicit LazyLinkCutTreeWithSubtree(const\
+    \    }\n\n   public:\n    LazyLinkedCutTree() = default;\n\n    explicit LazyLinkedCutTree(int\
+    \ n) {\n        assert(0 <= n);\n        _nodes.reserve(n);\n        for (int\
+    \ i = 0; i < n; i++) add_vertex();\n    }\n\n    explicit LazyLinkedCutTree(const\
     \ std::vector<T>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n    }\n\n \
-    \   explicit LazyLinkCutTreeWithSubtree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
+    \   explicit LazyLinkedCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
     \      requires(U x) { ActedMonoid::make(x); } ||\n        requires(U x, int i)\
     \ { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
-    \    explicit LazyLinkCutTreeWithSubtree(const std::vector<U>& values) {\n   \
-    \     _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
-    \ i++) add_vertex(make_node_value(values[i], i));\n    }\n\n    int size() const\
-    \ {\n        return int(_nodes.size());\n    }\n\n    bool empty() const {\n \
-    \       return _nodes.empty();\n    }\n\n    int add_vertex(const T& value = ActedMonoid::id())\
-    \ {\n        Node node;\n        node.value = value;\n        node.prod = value;\n\
-    \        node.rev_prod = value;\n        node.all_prod = value;\n        _nodes.push_back(std::move(node));\n\
+    \    explicit LazyLinkedCutTree(const std::vector<U>& values) {\n        _nodes.reserve(values.size());\n\
+    \        for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
+    \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
+    \    }\n\n    bool empty() const {\n        return _nodes.empty();\n    }\n\n\
+    \    int add_vertex(const T& value = ActedMonoid::id()) {\n        Node node;\n\
+    \        node.value = value;\n        node.prod = value;\n        node.rev_prod\
+    \ = value;\n        node.all_prod = value;\n        _nodes.push_back(std::move(node));\n\
     \        return int(_nodes.size()) - 1;\n    }\n\n    int add_vertex(T&& value)\
     \ {\n        Node node;\n        node.value = std::move(value);\n        node.prod\
     \ = node.value;\n        node.rev_prod = node.value;\n        node.all_prod =\
@@ -265,12 +266,12 @@ data:
     \ v));\n        evert(root);\n        access(v);\n        return node_subtree_size(v);\n\
     \    }\n\n    int subtree_size(int v) {\n        check_vertex(v);\n        access(v);\n\
     \        return node_subtree_size(v);\n    }\n};\n\n}  // namespace data_structure\n\
-    }  // namespace m1une\n\n\n#line 11 \"verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp\"\
+    }  // namespace m1une\n\n\n#line 11 \"verify/data_structure/lazy_linked_cut_tree.test.cpp\"\
     \n\nusing AddSum = m1une::acted_monoid::RangeAddRangeSum<long long>;\nusing Node\
     \ = AddSum::value_type;\n\nvoid test_vertex_path_and_subtree_updates() {\n   \
-    \ m1une::data_structure::LazyLinkCutTreeWithSubtree<AddSum> lct(std::vector<long\
-    \ long>{1, 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n    assert(lct.link(1,\
-    \ 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3, 4));\n\n    Node subtree\
+    \ m1une::data_structure::LazyLinkedCutTree<AddSum> lct(std::vector<long long>{1,\
+    \ 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n    assert(lct.link(1, 2));\n\
+    \    assert(lct.link(1, 3));\n    assert(lct.link(3, 4));\n\n    Node subtree\
     \ = lct.subtree_prod(0, 1);\n    assert(subtree.sum == 14);\n    assert(subtree.size\
     \ == 4);\n    assert(lct.subtree_size(0, 1) == 4);\n\n    lct.apply(2, 4, 10);\n\
     \    Node path = lct.path_prod(2, 4);\n    assert(path.sum == 54);\n    assert(path.size\
@@ -280,31 +281,30 @@ data:
     \ 1);\n    assert(subtree.sum == 64);\n    assert(subtree.size == 4);\n    assert(lct.path_prod(2,\
     \ 4).sum == 64);\n\n    subtree = lct.subtree_prod(2, 1);\n    assert(subtree.sum\
     \ == 57);\n    assert(subtree.size == 4);\n}\n\nvoid test_edge_path_and_subtree_updates()\
-    \ {\n    m1une::data_structure::LazyLinkCutTreeWithSubtree<AddSum> lct(3);\n\n\
-    \    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1, 2, 7);\n\
-    \    assert(e01 == 0);\n    assert(e12 == 1);\n\n    Node full = lct.subtree_prod(0,\
-    \ 0);\n    assert(full.sum == 12);\n    assert(full.size == 2);\n    Node child\
-    \ = lct.subtree_prod(0, 1);\n    assert(child.sum == 7);\n    assert(child.size\
-    \ == 1);\n    assert(lct.subtree_size(0, 1) == 3);\n\n    lct.apply(0, 2, 3);\n\
-    \    assert(lct.path_prod(0, 2).sum == 18);\n    assert(lct.subtree_prod(0, 1).sum\
-    \ == 10);\n\n    lct.apply(1, 2, 2);\n    assert(lct.get_edge(e01).sum == 8);\n\
-    \    assert(lct.get_edge(e12).sum == 12);\n    assert(lct.subtree_prod(0, 0).sum\
-    \ == 20);\n\n    assert(lct.cut_edge(e01));\n    assert(!lct.connected(0, 2));\n\
-    }\n\nbool naive_connected(const std::vector<std::vector<int>>& adj, int s, int\
-    \ t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int> stack;\n\
-    \    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it < int(stack.size());\
-    \ it++) {\n        int v = stack[it];\n        if (v == t) return true;\n    \
-    \    for (int to : adj[v]) {\n            if (parent[to] != -1) continue;\n  \
-    \          parent[to] = v;\n            stack.push_back(to);\n        }\n    }\n\
-    \    return false;\n}\n\nstd::vector<int> naive_path_vertices(const std::vector<std::vector<int>>&\
+    \ {\n    m1une::data_structure::LazyLinkedCutTree<AddSum> lct(3);\n\n    int e01\
+    \ = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1, 2, 7);\n    assert(e01\
+    \ == 0);\n    assert(e12 == 1);\n\n    Node full = lct.subtree_prod(0, 0);\n \
+    \   assert(full.sum == 12);\n    assert(full.size == 2);\n    Node child = lct.subtree_prod(0,\
+    \ 1);\n    assert(child.sum == 7);\n    assert(child.size == 1);\n    assert(lct.subtree_size(0,\
+    \ 1) == 3);\n\n    lct.apply(0, 2, 3);\n    assert(lct.path_prod(0, 2).sum ==\
+    \ 18);\n    assert(lct.subtree_prod(0, 1).sum == 10);\n\n    lct.apply(1, 2, 2);\n\
+    \    assert(lct.get_edge(e01).sum == 8);\n    assert(lct.get_edge(e12).sum ==\
+    \ 12);\n    assert(lct.subtree_prod(0, 0).sum == 20);\n\n    assert(lct.cut_edge(e01));\n\
+    \    assert(!lct.connected(0, 2));\n}\n\nbool naive_connected(const std::vector<std::vector<int>>&\
     \ adj, int s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
     \ stack;\n    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it\
     \ < int(stack.size()); it++) {\n        int v = stack[it];\n        if (v == t)\
-    \ break;\n        for (int to : adj[v]) {\n            if (parent[to] != -1) continue;\n\
-    \            parent[to] = v;\n            stack.push_back(to);\n        }\n  \
-    \  }\n    assert(parent[t] != -1);\n    std::vector<int> path;\n    for (int v\
-    \ = t; v != s; v = parent[v]) path.push_back(v);\n    path.push_back(s);\n   \
-    \ return path;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
+    \ return true;\n        for (int to : adj[v]) {\n            if (parent[to] !=\
+    \ -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
+    \        }\n    }\n    return false;\n}\n\nstd::vector<int> naive_path_vertices(const\
+    \ std::vector<std::vector<int>>& adj, int s, int t) {\n    std::vector<int> parent(adj.size(),\
+    \ -1);\n    std::vector<int> stack;\n    parent[s] = s;\n    stack.push_back(s);\n\
+    \    for (int it = 0; it < int(stack.size()); it++) {\n        int v = stack[it];\n\
+    \        if (v == t) break;\n        for (int to : adj[v]) {\n            if (parent[to]\
+    \ != -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
+    \        }\n    }\n    assert(parent[t] != -1);\n    std::vector<int> path;\n\
+    \    for (int v = t; v != s; v = parent[v]) path.push_back(v);\n    path.push_back(s);\n\
+    \    return path;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
     \ adj, const std::vector<long long>& value, int s, int t) {\n    long long res\
     \ = 0;\n    for (int v : naive_path_vertices(adj, s, t)) res += value[v];\n  \
     \  return res;\n}\n\nlong long naive_subtree_sum(const std::vector<std::vector<int>>&\
@@ -321,7 +321,7 @@ data:
     \    return res;\n}\n\nvoid test_random_vertex_path_updates() {\n    constexpr\
     \ int n = 8;\n    std::vector<long long> initial;\n    std::vector<long long>\
     \ value;\n    for (int i = 0; i < n; i++) {\n        initial.push_back(i + 1);\n\
-    \        value.push_back(i + 1);\n    }\n    m1une::data_structure::LazyLinkCutTreeWithSubtree<AddSum>\
+    \        value.push_back(i + 1);\n    }\n    m1une::data_structure::LazyLinkedCutTree<AddSum>\
     \ lct(initial);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
     \ int>> edges;\n    std::mt19937 rng(2);\n\n    for (int step = 0; step < 700;\
     \ step++) {\n        int op = int(rng() % 6);\n        int u = int(rng() % n);\n\
@@ -354,12 +354,12 @@ data:
     \ a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \n#include \"acted_monoid/range_add_range_sum.hpp\"\n#include \"data_structure/lazy_link_cut_tree_with_subtree.hpp\"\
+    \n#include \"acted_monoid/range_add_range_sum.hpp\"\n#include \"data_structure/lazy_linked_cut_tree.hpp\"\
     \n\nusing AddSum = m1une::acted_monoid::RangeAddRangeSum<long long>;\nusing Node\
     \ = AddSum::value_type;\n\nvoid test_vertex_path_and_subtree_updates() {\n   \
-    \ m1une::data_structure::LazyLinkCutTreeWithSubtree<AddSum> lct(std::vector<long\
-    \ long>{1, 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n    assert(lct.link(1,\
-    \ 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3, 4));\n\n    Node subtree\
+    \ m1une::data_structure::LazyLinkedCutTree<AddSum> lct(std::vector<long long>{1,\
+    \ 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n    assert(lct.link(1, 2));\n\
+    \    assert(lct.link(1, 3));\n    assert(lct.link(3, 4));\n\n    Node subtree\
     \ = lct.subtree_prod(0, 1);\n    assert(subtree.sum == 14);\n    assert(subtree.size\
     \ == 4);\n    assert(lct.subtree_size(0, 1) == 4);\n\n    lct.apply(2, 4, 10);\n\
     \    Node path = lct.path_prod(2, 4);\n    assert(path.sum == 54);\n    assert(path.size\
@@ -369,31 +369,30 @@ data:
     \ 1);\n    assert(subtree.sum == 64);\n    assert(subtree.size == 4);\n    assert(lct.path_prod(2,\
     \ 4).sum == 64);\n\n    subtree = lct.subtree_prod(2, 1);\n    assert(subtree.sum\
     \ == 57);\n    assert(subtree.size == 4);\n}\n\nvoid test_edge_path_and_subtree_updates()\
-    \ {\n    m1une::data_structure::LazyLinkCutTreeWithSubtree<AddSum> lct(3);\n\n\
-    \    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1, 2, 7);\n\
-    \    assert(e01 == 0);\n    assert(e12 == 1);\n\n    Node full = lct.subtree_prod(0,\
-    \ 0);\n    assert(full.sum == 12);\n    assert(full.size == 2);\n    Node child\
-    \ = lct.subtree_prod(0, 1);\n    assert(child.sum == 7);\n    assert(child.size\
-    \ == 1);\n    assert(lct.subtree_size(0, 1) == 3);\n\n    lct.apply(0, 2, 3);\n\
-    \    assert(lct.path_prod(0, 2).sum == 18);\n    assert(lct.subtree_prod(0, 1).sum\
-    \ == 10);\n\n    lct.apply(1, 2, 2);\n    assert(lct.get_edge(e01).sum == 8);\n\
-    \    assert(lct.get_edge(e12).sum == 12);\n    assert(lct.subtree_prod(0, 0).sum\
-    \ == 20);\n\n    assert(lct.cut_edge(e01));\n    assert(!lct.connected(0, 2));\n\
-    }\n\nbool naive_connected(const std::vector<std::vector<int>>& adj, int s, int\
-    \ t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int> stack;\n\
-    \    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it < int(stack.size());\
-    \ it++) {\n        int v = stack[it];\n        if (v == t) return true;\n    \
-    \    for (int to : adj[v]) {\n            if (parent[to] != -1) continue;\n  \
-    \          parent[to] = v;\n            stack.push_back(to);\n        }\n    }\n\
-    \    return false;\n}\n\nstd::vector<int> naive_path_vertices(const std::vector<std::vector<int>>&\
+    \ {\n    m1une::data_structure::LazyLinkedCutTree<AddSum> lct(3);\n\n    int e01\
+    \ = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1, 2, 7);\n    assert(e01\
+    \ == 0);\n    assert(e12 == 1);\n\n    Node full = lct.subtree_prod(0, 0);\n \
+    \   assert(full.sum == 12);\n    assert(full.size == 2);\n    Node child = lct.subtree_prod(0,\
+    \ 1);\n    assert(child.sum == 7);\n    assert(child.size == 1);\n    assert(lct.subtree_size(0,\
+    \ 1) == 3);\n\n    lct.apply(0, 2, 3);\n    assert(lct.path_prod(0, 2).sum ==\
+    \ 18);\n    assert(lct.subtree_prod(0, 1).sum == 10);\n\n    lct.apply(1, 2, 2);\n\
+    \    assert(lct.get_edge(e01).sum == 8);\n    assert(lct.get_edge(e12).sum ==\
+    \ 12);\n    assert(lct.subtree_prod(0, 0).sum == 20);\n\n    assert(lct.cut_edge(e01));\n\
+    \    assert(!lct.connected(0, 2));\n}\n\nbool naive_connected(const std::vector<std::vector<int>>&\
     \ adj, int s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
     \ stack;\n    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it\
     \ < int(stack.size()); it++) {\n        int v = stack[it];\n        if (v == t)\
-    \ break;\n        for (int to : adj[v]) {\n            if (parent[to] != -1) continue;\n\
-    \            parent[to] = v;\n            stack.push_back(to);\n        }\n  \
-    \  }\n    assert(parent[t] != -1);\n    std::vector<int> path;\n    for (int v\
-    \ = t; v != s; v = parent[v]) path.push_back(v);\n    path.push_back(s);\n   \
-    \ return path;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
+    \ return true;\n        for (int to : adj[v]) {\n            if (parent[to] !=\
+    \ -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
+    \        }\n    }\n    return false;\n}\n\nstd::vector<int> naive_path_vertices(const\
+    \ std::vector<std::vector<int>>& adj, int s, int t) {\n    std::vector<int> parent(adj.size(),\
+    \ -1);\n    std::vector<int> stack;\n    parent[s] = s;\n    stack.push_back(s);\n\
+    \    for (int it = 0; it < int(stack.size()); it++) {\n        int v = stack[it];\n\
+    \        if (v == t) break;\n        for (int to : adj[v]) {\n            if (parent[to]\
+    \ != -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
+    \        }\n    }\n    assert(parent[t] != -1);\n    std::vector<int> path;\n\
+    \    for (int v = t; v != s; v = parent[v]) path.push_back(v);\n    path.push_back(s);\n\
+    \    return path;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
     \ adj, const std::vector<long long>& value, int s, int t) {\n    long long res\
     \ = 0;\n    for (int v : naive_path_vertices(adj, s, t)) res += value[v];\n  \
     \  return res;\n}\n\nlong long naive_subtree_sum(const std::vector<std::vector<int>>&\
@@ -410,7 +409,7 @@ data:
     \    return res;\n}\n\nvoid test_random_vertex_path_updates() {\n    constexpr\
     \ int n = 8;\n    std::vector<long long> initial;\n    std::vector<long long>\
     \ value;\n    for (int i = 0; i < n; i++) {\n        initial.push_back(i + 1);\n\
-    \        value.push_back(i + 1);\n    }\n    m1une::data_structure::LazyLinkCutTreeWithSubtree<AddSum>\
+    \        value.push_back(i + 1);\n    }\n    m1une::data_structure::LazyLinkedCutTree<AddSum>\
     \ lct(initial);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
     \ int>> edges;\n    std::mt19937 rng(2);\n\n    for (int step = 0; step < 700;\
     \ step++) {\n        int op = int(rng() % 6);\n        int u = int(rng() % n);\n\
@@ -443,18 +442,18 @@ data:
     \ a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - acted_monoid/range_add_range_sum.hpp
-  - data_structure/lazy_link_cut_tree_with_subtree.hpp
+  - data_structure/lazy_linked_cut_tree.hpp
   - acted_monoid/concept.hpp
   isVerificationFile: true
-  path: verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
+  path: verify/data_structure/lazy_linked_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 16:15:56+09:00'
+  timestamp: '2026-06-17 21:02:28+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
+documentation_of: verify/data_structure/lazy_linked_cut_tree.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
-- /verify/verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp.html
-title: verify/data_structure/lazy_link_cut_tree_with_subtree.test.cpp
+- /verify/verify/data_structure/lazy_linked_cut_tree.test.cpp
+- /verify/verify/data_structure/lazy_linked_cut_tree.test.cpp.html
+title: verify/data_structure/lazy_linked_cut_tree.test.cpp
 ---

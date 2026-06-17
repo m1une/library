@@ -12,11 +12,11 @@ data:
     path: data_structure/dynamic_monoid_array.hpp
     title: Dynamic Monoid Array
   - icon: ':heavy_check_mark:'
-    path: data_structure/link_cut_tree.hpp
-    title: Link-Cut Tree
+    path: data_structure/linked_cut_tree.hpp
+    title: Linked-Cut Tree
   - icon: ':heavy_check_mark:'
-    path: data_structure/link_cut_tree_with_subtree.hpp
-    title: Link-Cut Tree With Subtree
+    path: data_structure/path_link_cut_tree.hpp
+    title: Path Link-Cut Tree
   - icon: ':heavy_check_mark:'
     path: data_structure/persistent_dual_segtree.hpp
     title: Persistent Dual Segment Tree
@@ -55,11 +55,11 @@ data:
     path: verify/data_structure/dynamic_monoid_array.test.cpp
     title: verify/data_structure/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/link_cut_tree.test.cpp
-    title: verify/data_structure/link_cut_tree.test.cpp
+    path: verify/data_structure/linked_cut_tree.test.cpp
+    title: verify/data_structure/linked_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/link_cut_tree_with_subtree.test.cpp
-    title: verify/data_structure/link_cut_tree_with_subtree.test.cpp
+    path: verify/data_structure/path_link_cut_tree.test.cpp
+    title: verify/data_structure/path_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/persistent_dual_segtree.test.cpp
     title: verify/data_structure/persistent_dual_segtree.test.cpp
@@ -92,7 +92,11 @@ data:
     \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
     \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_CONCEPT_HPP\n#define M1UNE_MONOID_CONCEPT_HPP 1\n\n\
     #include <concepts>\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to\
     \ check if a type satisfies the requirements of a Monoid.\n// A Monoid must have\
@@ -102,8 +106,11 @@ data:
     \ M::value_type;\n\n    // 2. Must have a static method `id()` returning `value_type`\n\
     \    { M::id() } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have\
     \ a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n#endif\
-    \  // M1UNE_MONOID_CONCEPT_HPP\n"
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_CONCEPT_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/concept.hpp
@@ -111,30 +118,30 @@ data:
   - tree/sparse_table_lca.hpp
   - tree/all.hpp
   - tree/tree.hpp
-  - data_structure/link_cut_tree.hpp
   - data_structure/segtree.hpp
+  - data_structure/path_link_cut_tree.hpp
   - data_structure/dynamic_monoid_array.hpp
   - data_structure/disjoint_sparse_table.hpp
   - data_structure/persistent_segtree.hpp
   - data_structure/dual_segtree.hpp
-  - data_structure/link_cut_tree_with_subtree.hpp
   - data_structure/persistent_dual_segtree.hpp
   - data_structure/sparse_table.hpp
   - data_structure/persistent_dynamic_monoid_array.hpp
+  - data_structure/linked_cut_tree.hpp
   - monoid/power.hpp
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
-  - verify/data_structure/link_cut_tree.test.cpp
   - verify/data_structure/persistent_dual_segtree.test.cpp
   - verify/data_structure/dual_segtree.test.cpp
   - verify/data_structure/persistent_segtree.test.cpp
   - verify/data_structure/persistent_dynamic_monoid_array.test.cpp
-  - verify/data_structure/link_cut_tree_with_subtree.test.cpp
   - verify/data_structure/dynamic_monoid_array.test.cpp
   - verify/data_structure/sparse_table.test.cpp
   - verify/data_structure/segtree.test.cpp
+  - verify/data_structure/linked_cut_tree.test.cpp
+  - verify/data_structure/path_link_cut_tree.test.cpp
   - verify/data_structure/disjoint_sparse_table.test.cpp
 documentation_of: monoid/concept.hpp
 layout: document
@@ -165,6 +172,16 @@ To satisfy `m1une::monoid::IsMonoid`, a type `M` must implement:
 
 * `static constexpr T op(const T& a, const T& b);`
   Combines two values.
+
+## Commutative Group
+
+`m1une::monoid::IsCommutativeGroup` extends `IsMonoid` with an inverse:
+
+* `static constexpr T inverse(const T& x);`
+  Returns the inverse of `x` with respect to `op`.
+
+The concept checks only that `inverse` exists. The type should satisfy the
+group laws, and `op` should be commutative.
 
 ## Example
 

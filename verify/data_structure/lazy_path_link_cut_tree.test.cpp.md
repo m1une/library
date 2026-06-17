@@ -8,8 +8,8 @@ data:
     path: acted_monoid/range_add_range_sum.hpp
     title: Range Add Range Sum
   - icon: ':heavy_check_mark:'
-    path: data_structure/lazy_link_cut_tree.hpp
-    title: Lazy Link-Cut Tree
+    path: data_structure/lazy_path_link_cut_tree.hpp
+    title: Lazy Path Link-Cut Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -20,9 +20,9 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/data_structure/lazy_link_cut_tree.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n#include\
-    \ <iostream>\n#include <vector>\n\n#line 1 \"acted_monoid/range_add_range_sum.hpp\"\
+  bundledCode: "#line 1 \"verify/data_structure/lazy_path_link_cut_tree.test.cpp\"\
+    \n#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
+    #include <iostream>\n#include <vector>\n\n#line 1 \"acted_monoid/range_add_range_sum.hpp\"\
     \n\n\n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename T>\n\
     struct RangeAddRangeSumNode {\n    T sum;\n    long long size;\n};\n\ntemplate\
     \ <typename T>\nstruct RangeAddRangeSum {\n    using value_type = RangeAddRangeSumNode<T>;\n\
@@ -38,9 +38,9 @@ data:
     \        return {x.sum + f * x.size, x.size};\n    }\n\n    // Helper for initializing\
     \ a leaf node\n    static constexpr value_type make(const T& val) {\n        return\
     \ {val, 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
-    \n\n#line 1 \"data_structure/lazy_link_cut_tree.hpp\"\n\n\n\n#line 5 \"data_structure/lazy_link_cut_tree.hpp\"\
+    \n\n#line 1 \"data_structure/lazy_path_link_cut_tree.hpp\"\n\n\n\n#line 5 \"data_structure/lazy_path_link_cut_tree.hpp\"\
     \n#include <concepts>\n#include <type_traits>\n#include <utility>\n#line 9 \"\
-    data_structure/lazy_link_cut_tree.hpp\"\n\n#line 1 \"acted_monoid/concept.hpp\"\
+    data_structure/lazy_path_link_cut_tree.hpp\"\n\n#line 1 \"acted_monoid/concept.hpp\"\
     \n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace acted_monoid\
     \ {\n\n// Concept defining the requirements for an Acted Monoid.\ntemplate <typename\
     \ AM>\nconcept IsActedMonoid = requires(typename AM::value_type a, typename AM::value_type\
@@ -51,10 +51,14 @@ data:
     \   typename AM::operator_type;\n    { AM::op_id() } -> std::same_as<typename\
     \ AM::operator_type>;\n    { AM::op_comp(f, g) } -> std::same_as<typename AM::operator_type>;\
     \  // Composition order: f(g(x))\n\n    // 3. Mapping: Operator x Value -> Value\n\
-    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n}\
-    \  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/lazy_link_cut_tree.hpp\"\
+    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n//\
+    \ Concept for acted monoids whose value monoid is a commutative group.\n// The\
+    \ value operation must obey commutativity and inverse laws.\ntemplate <typename\
+    \ AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM> && requires(typename\
+    \ AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename AM::value_type>;\n\
+    };\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/lazy_path_link_cut_tree.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::acted_monoid::IsActedMonoid\
-    \ ActedMonoid>\nstruct LazyLinkCutTree {\n    using T = typename ActedMonoid::value_type;\n\
+    \ ActedMonoid>\nstruct LazyPathLinkCutTree {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
     \ Node {\n        int left = -1;\n        int right = -1;\n        int parent\
     \ = -1;\n        bool rev = false;\n        int size = 1;\n        T value = ActedMonoid::id();\n\
@@ -121,17 +125,17 @@ data:
     \          last = cur;\n        }\n        splay(node);\n        return last;\n\
     \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
     \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LazyLinkCutTree()\
-    \ = default;\n\n    explicit LazyLinkCutTree(int n) {\n        assert(0 <= n);\n\
-    \        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
-    \    }\n\n    explicit LazyLinkCutTree(const std::vector<T>& values) {\n     \
-    \   _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
-    \ i++) add_vertex(values[i]);\n    }\n\n    explicit LazyLinkCutTree(std::vector<T>&&\
+    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LazyPathLinkCutTree()\
+    \ = default;\n\n    explicit LazyPathLinkCutTree(int n) {\n        assert(0 <=\
+    \ n);\n        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
+    \    }\n\n    explicit LazyPathLinkCutTree(const std::vector<T>& values) {\n \
+    \       _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
+    \ i++) add_vertex(values[i]);\n    }\n\n    explicit LazyPathLinkCutTree(std::vector<T>&&\
     \ values) {\n        _nodes.reserve(values.size());\n        for (int i = 0; i\
     \ < int(values.size()); i++) add_vertex(std::move(values[i]));\n    }\n\n    template\
     \ <class U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) {\
     \ ActedMonoid::make(x); } ||\n        requires(U x, int i) { ActedMonoid::make(x,\
-    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LazyLinkCutTree(const\
+    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LazyPathLinkCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
@@ -229,9 +233,9 @@ data:
     \ }\n\n    int lca(int u, int v) {\n        check_vertex(u);\n        check_vertex(v);\n\
     \        if (!connected(u, v)) return -1;\n        if (u == v) return u;\n   \
     \     access(u);\n        return access(v);\n    }\n};\n\n}  // namespace data_structure\n\
-    }  // namespace m1une\n\n\n#line 9 \"verify/data_structure/lazy_link_cut_tree.test.cpp\"\
+    }  // namespace m1une\n\n\n#line 9 \"verify/data_structure/lazy_path_link_cut_tree.test.cpp\"\
     \n\nusing AddSum = m1une::acted_monoid::RangeAddRangeSum<long long>;\nusing Node\
-    \ = AddSum::value_type;\n\nvoid test_vertex_path_updates() {\n    m1une::data_structure::LazyLinkCutTree<AddSum>\
+    \ = AddSum::value_type;\n\nvoid test_vertex_path_updates() {\n    m1une::data_structure::LazyPathLinkCutTree<AddSum>\
     \ lct(std::vector<long long>{1, 2, 3, 4, 5});\n\n    assert(lct.size() == 5);\n\
     \    assert(!lct.empty());\n    assert(lct.link(0, 1));\n    assert(lct.link(1,\
     \ 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3, 4));\n\n    Node path\
@@ -242,7 +246,7 @@ data:
     \  assert(lct.get(0).sum == 1);\n\n    lct.apply(0, 3);\n    assert(lct[0].sum\
     \ == 4);\n    lct.set(3, 100);\n    path = lct.path_prod(2, 4);\n    assert(path.sum\
     \ == 140);\n\n    assert(lct.cut(1, 3));\n    assert(!lct.connected(2, 4));\n\
-    }\n\nvoid test_edge_path_updates() {\n    m1une::data_structure::LazyLinkCutTree<AddSum>\
+    }\n\nvoid test_edge_path_updates() {\n    m1une::data_structure::LazyPathLinkCutTree<AddSum>\
     \ lct(3);\n\n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1,\
     \ 2, 7);\n    assert(e01 == 0);\n    assert(e12 == 1);\n    assert(lct.edge_count()\
     \ == 2);\n    assert(lct.edge_alive(e01));\n    assert(lct.edge_node(e01) >= 3);\n\
@@ -260,11 +264,11 @@ data:
     }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <vector>\n\n#include \"acted_monoid/range_add_range_sum.hpp\"\
-    \n#include \"data_structure/lazy_link_cut_tree.hpp\"\n\nusing AddSum = m1une::acted_monoid::RangeAddRangeSum<long\
+    \n#include \"data_structure/lazy_path_link_cut_tree.hpp\"\n\nusing AddSum = m1une::acted_monoid::RangeAddRangeSum<long\
     \ long>;\nusing Node = AddSum::value_type;\n\nvoid test_vertex_path_updates()\
-    \ {\n    m1une::data_structure::LazyLinkCutTree<AddSum> lct(std::vector<long long>{1,\
-    \ 2, 3, 4, 5});\n\n    assert(lct.size() == 5);\n    assert(!lct.empty());\n \
-    \   assert(lct.link(0, 1));\n    assert(lct.link(1, 2));\n    assert(lct.link(1,\
+    \ {\n    m1une::data_structure::LazyPathLinkCutTree<AddSum> lct(std::vector<long\
+    \ long>{1, 2, 3, 4, 5});\n\n    assert(lct.size() == 5);\n    assert(!lct.empty());\n\
+    \    assert(lct.link(0, 1));\n    assert(lct.link(1, 2));\n    assert(lct.link(1,\
     \ 3));\n    assert(lct.link(3, 4));\n\n    Node path = lct.prod(2, 4);\n    assert(path.sum\
     \ == 14);\n    assert(path.size == 4);\n    assert(lct.path_size(2, 4) == 4);\n\
     \    assert(lct.kth_vertex(2, 4, 2) == 3);\n\n    lct.apply(2, 4, 10);\n    path\
@@ -272,7 +276,7 @@ data:
     \    assert(lct.get(1).sum == 12);\n    assert(lct.get(0).sum == 1);\n\n    lct.apply(0,\
     \ 3);\n    assert(lct[0].sum == 4);\n    lct.set(3, 100);\n    path = lct.path_prod(2,\
     \ 4);\n    assert(path.sum == 140);\n\n    assert(lct.cut(1, 3));\n    assert(!lct.connected(2,\
-    \ 4));\n}\n\nvoid test_edge_path_updates() {\n    m1une::data_structure::LazyLinkCutTree<AddSum>\
+    \ 4));\n}\n\nvoid test_edge_path_updates() {\n    m1une::data_structure::LazyPathLinkCutTree<AddSum>\
     \ lct(3);\n\n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1,\
     \ 2, 7);\n    assert(e01 == 0);\n    assert(e12 == 1);\n    assert(lct.edge_count()\
     \ == 2);\n    assert(lct.edge_alive(e01));\n    assert(lct.edge_node(e01) >= 3);\n\
@@ -290,18 +294,18 @@ data:
     }\n"
   dependsOn:
   - acted_monoid/range_add_range_sum.hpp
-  - data_structure/lazy_link_cut_tree.hpp
+  - data_structure/lazy_path_link_cut_tree.hpp
   - acted_monoid/concept.hpp
   isVerificationFile: true
-  path: verify/data_structure/lazy_link_cut_tree.test.cpp
+  path: verify/data_structure/lazy_path_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 16:15:56+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/data_structure/lazy_link_cut_tree.test.cpp
+documentation_of: verify/data_structure/lazy_path_link_cut_tree.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/data_structure/lazy_link_cut_tree.test.cpp
-- /verify/verify/data_structure/lazy_link_cut_tree.test.cpp.html
-title: verify/data_structure/lazy_link_cut_tree.test.cpp
+- /verify/verify/data_structure/lazy_path_link_cut_tree.test.cpp
+- /verify/verify/data_structure/lazy_path_link_cut_tree.test.cpp.html
+title: verify/data_structure/lazy_path_link_cut_tree.test.cpp
 ---

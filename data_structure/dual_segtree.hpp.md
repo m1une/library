@@ -31,40 +31,44 @@ data:
     \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
     \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"data_structure/dual_segtree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\n// A generic Dual Segment Tree for range monoid updates and point queries.\n\
-    template <m1une::monoid::IsMonoid Monoid>\nstruct DualSegtree {\n    using T =\
-    \ typename Monoid::value_type;\n\n   private:\n    int _n, _size, _log;\n    std::vector<T>\
-    \ _d;\n\n    void all_apply(int k, const T& x) {\n        _d[k] = Monoid::op(x,\
-    \ _d[k]);\n    }\n\n    void push(int k) {\n        all_apply(2 * k, _d[k]);\n\
-    \        all_apply(2 * k + 1, _d[k]);\n        _d[k] = Monoid::id();\n    }\n\n\
-    \   public:\n    // Constructs an empty dual segment tree.\n    DualSegtree()\
-    \ : DualSegtree(0) {}\n\n    // Constructs a dual segment tree of size `n`, initialized\
-    \ with the identity element.\n    explicit DualSegtree(int n) : DualSegtree(std::vector<T>(n,\
-    \ Monoid::id())) {}\n\n    // Constructs a dual segment tree from an existing\
-    \ vector.\n    explicit DualSegtree(const std::vector<T>& v) : _n(int(v.size()))\
-    \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
-    \ = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n       \
-    \ _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) _d[_size\
-    \ + i] = v[i];\n    }\n    explicit DualSegtree(std::vector<T>&& v) : _n(int(v.size()))\
-    \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
-    \ = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n       \
-    \ _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) _d[_size\
-    \ + i] = std::move(v[i]);\n    }\n\n    // Constructs a dual segment tree from\
-    \ a vector of a different type U.\n    // It automatically adapts to the Monoid's\
-    \ initialization requirements:\n    // 1. Monoid::make(val) if it exists.\n  \
-    \  // 2. Monoid::make(val, index) if the monoid requires global indices.\n   \
-    \ // 3. static_cast<T>(val) as a fallback for simple monoids.\n    template <typename\
-    \ U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) { Monoid::make(x);\
-    \ } ||\n        requires(U x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U,\
-    \ T>\n    )\n    explicit DualSegtree(const std::vector<U>& v) : _n(int(v.size()))\
-    \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
-    \ = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n       \
-    \ _d.assign(2 * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) {\n\
-    \            if constexpr (requires(U x) { Monoid::make(x); }) {\n           \
-    \     _d[_size + i] = Monoid::make(v[i]);\n            } else if constexpr (requires(U\
-    \ x, int idx) { Monoid::make(x, idx); }) {\n                _d[_size + i] = Monoid::make(v[i],\
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/dual_segtree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\n// A generic Dual Segment\
+    \ Tree for range monoid updates and point queries.\ntemplate <m1une::monoid::IsMonoid\
+    \ Monoid>\nstruct DualSegtree {\n    using T = typename Monoid::value_type;\n\n\
+    \   private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n\n    void all_apply(int\
+    \ k, const T& x) {\n        _d[k] = Monoid::op(x, _d[k]);\n    }\n\n    void push(int\
+    \ k) {\n        all_apply(2 * k, _d[k]);\n        all_apply(2 * k + 1, _d[k]);\n\
+    \        _d[k] = Monoid::id();\n    }\n\n   public:\n    // Constructs an empty\
+    \ dual segment tree.\n    DualSegtree() : DualSegtree(0) {}\n\n    // Constructs\
+    \ a dual segment tree of size `n`, initialized with the identity element.\n  \
+    \  explicit DualSegtree(int n) : DualSegtree(std::vector<T>(n, Monoid::id()))\
+    \ {}\n\n    // Constructs a dual segment tree from an existing vector.\n    explicit\
+    \ DualSegtree(const std::vector<T>& v) : _n(int(v.size())) {\n        _size =\
+    \ m1une::math::bit_ceil((unsigned int)(_n));\n        _log = 0;\n        while\
+    \ ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2 * _size,\
+    \ Monoid::id());\n        for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n\
+    \    }\n    explicit DualSegtree(std::vector<T>&& v) : _n(int(v.size())) {\n \
+    \       _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log = 0;\n\
+    \        while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2\
+    \ * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) _d[_size + i]\
+    \ = std::move(v[i]);\n    }\n\n    // Constructs a dual segment tree from a vector\
+    \ of a different type U.\n    // It automatically adapts to the Monoid's initialization\
+    \ requirements:\n    // 1. Monoid::make(val) if it exists.\n    // 2. Monoid::make(val,\
+    \ index) if the monoid requires global indices.\n    // 3. static_cast<T>(val)\
+    \ as a fallback for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
+    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
+    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
+    \  )\n    explicit DualSegtree(const std::vector<U>& v) : _n(int(v.size())) {\n\
+    \        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log = 0;\n\
+    \        while ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2\
+    \ * _size, Monoid::id());\n        for (int i = 0; i < _n; i++) {\n          \
+    \  if constexpr (requires(U x) { Monoid::make(x); }) {\n                _d[_size\
+    \ + i] = Monoid::make(v[i]);\n            } else if constexpr (requires(U x, int\
+    \ idx) { Monoid::make(x, idx); }) {\n                _d[_size + i] = Monoid::make(v[i],\
     \ i);\n            } else {\n                _d[_size + i] = static_cast<T>(v[i]);\n\
     \            }\n        }\n    }\n\n    // Returns the number of elements.\n \
     \   int size() const {\n        return _n;\n    }\n\n    // Returns whether the\
@@ -169,7 +173,7 @@ data:
   isVerificationFile: false
   path: data_structure/dual_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-15 23:28:01+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dual_segtree.test.cpp

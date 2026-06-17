@@ -7,96 +7,100 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/link_cut_tree.test.cpp
-    title: verify/data_structure/link_cut_tree.test.cpp
+    path: verify/data_structure/path_link_cut_tree.test.cpp
+    title: verify/data_structure/path_link_cut_tree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/link_cut_tree.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <concepts>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\
-    \n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies the requirements\
-    \ of a Monoid.\n// A Monoid must have a `value_type`, an identity element `id()`,\
-    \ and an associative binary operation `op()`.\ntemplate <typename M>\nconcept\
-    \ IsMonoid = requires(typename M::value_type a, typename M::value_type b) {\n\
-    \    // 1. Must define `value_type`\n    typename M::value_type;\n\n    // 2.\
-    \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
-    \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
+  bundledCode: "#line 1 \"data_structure/path_link_cut_tree.hpp\"\n\n\n\n#include\
+    \ <cassert>\n#include <concepts>\n#include <type_traits>\n#include <utility>\n\
+    #include <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
+    \ the requirements of a Monoid.\n// A Monoid must have a `value_type`, an identity\
+    \ element `id()`, and an associative binary operation `op()`.\ntemplate <typename\
+    \ M>\nconcept IsMonoid = requires(typename M::value_type a, typename M::value_type\
+    \ b) {\n    // 1. Must define `value_type`\n    typename M::value_type;\n\n  \
+    \  // 2. Must have a static method `id()` returning `value_type`\n    { M::id()\
+    \ } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"data_structure/link_cut_tree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct LinkCutTree {\n    using\
-    \ T = typename Monoid::value_type;\n\n   private:\n    struct Node {\n       \
-    \ int left = -1;\n        int right = -1;\n        int parent = -1;\n        bool\
-    \ rev = false;\n        int size = 1;\n        T value = Monoid::id();\n     \
-    \   T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n    };\n\n   \
-    \ struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n        int node\
-    \ = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n\
-    \    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\n   \
-    \ static T make_node_value(const T& value, int) {\n        return value;\n   \
-    \ }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
-    \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
-    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    static T make_node_value(const\
-    \ U& value, int index) {\n        if constexpr (requires(U x) { Monoid::make(x);\
-    \ }) {\n            return Monoid::make(value);\n        } else if constexpr (requires(U\
-    \ x, int i) { Monoid::make(x, i); }) {\n            return Monoid::make(value,\
-    \ index);\n        } else {\n            return static_cast<T>(value);\n     \
-    \   }\n    }\n\n    int child_size(int node) const {\n        return node == -1\
-    \ ? 0 : _nodes[node].size;\n    }\n\n    bool is_splay_root(int node) const {\n\
-    \        int parent = _nodes[node].parent;\n        return parent == -1 || (_nodes[parent].left\
-    \ != node && _nodes[parent].right != node);\n    }\n\n    void update(int node)\
-    \ {\n        Node& x = _nodes[node];\n        x.size = 1 + child_size(x.left)\
-    \ + child_size(x.right);\n        T left_prod = x.left == -1 ? Monoid::id() :\
-    \ _nodes[x.left].prod;\n        T right_prod = x.right == -1 ? Monoid::id() :\
-    \ _nodes[x.right].prod;\n        T left_rev_prod = x.left == -1 ? Monoid::id()\
-    \ : _nodes[x.left].rev_prod;\n        T right_rev_prod = x.right == -1 ? Monoid::id()\
-    \ : _nodes[x.right].rev_prod;\n        x.prod = Monoid::op(Monoid::op(left_prod,\
-    \ x.value), right_prod);\n        x.rev_prod = Monoid::op(Monoid::op(right_rev_prod,\
-    \ x.value), left_rev_prod);\n    }\n\n    void apply_reverse(int node) {\n   \
-    \     if (node == -1) return;\n        Node& x = _nodes[node];\n        std::swap(x.left,\
-    \ x.right);\n        std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n\
-    \    }\n\n    void push(int node) {\n        if (node == -1 || !_nodes[node].rev)\
-    \ return;\n        apply_reverse(_nodes[node].left);\n        apply_reverse(_nodes[node].right);\n\
-    \        _nodes[node].rev = false;\n    }\n\n    void push_to(int node) {\n  \
-    \      _path_buffer.clear();\n        int cur = node;\n        _path_buffer.push_back(cur);\n\
-    \        while (!is_splay_root(cur)) {\n            cur = _nodes[cur].parent;\n\
-    \            _path_buffer.push_back(cur);\n        }\n        for (int i = int(_path_buffer.size())\
-    \ - 1; i >= 0; i--) push(_path_buffer[i]);\n    }\n\n    void rotate(int node)\
-    \ {\n        int parent = _nodes[node].parent;\n        int grand = _nodes[parent].parent;\n\
-    \        bool is_right = _nodes[parent].right == node;\n        int middle = is_right\
-    \ ? _nodes[node].left : _nodes[node].right;\n\n        if (!is_splay_root(parent))\
-    \ {\n            if (_nodes[grand].left == parent) {\n                _nodes[grand].left\
-    \ = node;\n            } else {\n                _nodes[grand].right = node;\n\
-    \            }\n        }\n        _nodes[node].parent = grand;\n\n        if\
-    \ (is_right) {\n            _nodes[node].left = parent;\n            _nodes[parent].right\
-    \ = middle;\n        } else {\n            _nodes[node].right = parent;\n    \
-    \        _nodes[parent].left = middle;\n        }\n        if (middle != -1) _nodes[middle].parent\
-    \ = parent;\n        _nodes[parent].parent = node;\n\n        update(parent);\n\
-    \        update(node);\n    }\n\n    void splay(int node) {\n        push_to(node);\n\
-    \        while (!is_splay_root(node)) {\n            int parent = _nodes[node].parent;\n\
-    \            int grand = _nodes[parent].parent;\n            if (!is_splay_root(parent))\
-    \ {\n                bool zig_zig = (_nodes[parent].left == node) == (_nodes[grand].left\
-    \ == parent);\n                rotate(zig_zig ? parent : node);\n            }\n\
-    \            rotate(node);\n        }\n    }\n\n    int access(int node) {\n \
-    \       int last = -1;\n        for (int cur = node; cur != -1; cur = _nodes[cur].parent)\
-    \ {\n            splay(cur);\n            _nodes[cur].right = last;\n        \
-    \    if (last != -1) _nodes[last].parent = cur;\n            update(cur);\n  \
-    \          last = cur;\n        }\n        splay(node);\n        return last;\n\
-    \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
-    \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkCutTree() =\
-    \ default;\n\n    explicit LinkCutTree(int n) {\n        assert(0 <= n);\n   \
-    \     _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
-    \    }\n\n    explicit LinkCutTree(const std::vector<T>& values) {\n        _nodes.reserve(values.size());\n\
-    \        for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n\
-    \    }\n\n    explicit LinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/path_link_cut_tree.hpp\"\
+    \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsMonoid\
+    \ Monoid>\nstruct PathLinkCutTree {\n    using T = typename Monoid::value_type;\n\
+    \n   private:\n    struct Node {\n        int left = -1;\n        int right =\
+    \ -1;\n        int parent = -1;\n        bool rev = false;\n        int size =\
+    \ 1;\n        T value = Monoid::id();\n        T prod = Monoid::id();\n      \
+    \  T rev_prod = Monoid::id();\n    };\n\n    struct EdgeInfo {\n        int u\
+    \ = -1;\n        int v = -1;\n        int node = -1;\n        bool alive = false;\n\
+    \    };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo> _edges;\n\
+    \    std::vector<int> _path_buffer;\n\n    static T make_node_value(const T& value,\
+    \ int) {\n        return value;\n    }\n\n    static T make_node_value(T&& value,\
+    \ int) {\n        return std::move(value);\n    }\n\n    template <class U>\n\
+    \    requires (!std::same_as<U, T>) && (\n        requires(U x) { Monoid::make(x);\
+    \ } ||\n        requires(U x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U,\
+    \ T>\n    )\n    static T make_node_value(const U& value, int index) {\n     \
+    \   if constexpr (requires(U x) { Monoid::make(x); }) {\n            return Monoid::make(value);\n\
+    \        } else if constexpr (requires(U x, int i) { Monoid::make(x, i); }) {\n\
+    \            return Monoid::make(value, index);\n        } else {\n          \
+    \  return static_cast<T>(value);\n        }\n    }\n\n    int child_size(int node)\
+    \ const {\n        return node == -1 ? 0 : _nodes[node].size;\n    }\n\n    bool\
+    \ is_splay_root(int node) const {\n        int parent = _nodes[node].parent;\n\
+    \        return parent == -1 || (_nodes[parent].left != node && _nodes[parent].right\
+    \ != node);\n    }\n\n    void update(int node) {\n        Node& x = _nodes[node];\n\
+    \        x.size = 1 + child_size(x.left) + child_size(x.right);\n        T left_prod\
+    \ = x.left == -1 ? Monoid::id() : _nodes[x.left].prod;\n        T right_prod =\
+    \ x.right == -1 ? Monoid::id() : _nodes[x.right].prod;\n        T left_rev_prod\
+    \ = x.left == -1 ? Monoid::id() : _nodes[x.left].rev_prod;\n        T right_rev_prod\
+    \ = x.right == -1 ? Monoid::id() : _nodes[x.right].rev_prod;\n        x.prod =\
+    \ Monoid::op(Monoid::op(left_prod, x.value), right_prod);\n        x.rev_prod\
+    \ = Monoid::op(Monoid::op(right_rev_prod, x.value), left_rev_prod);\n    }\n\n\
+    \    void apply_reverse(int node) {\n        if (node == -1) return;\n       \
+    \ Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n        std::swap(x.prod,\
+    \ x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void push(int node) {\n\
+    \        if (node == -1 || !_nodes[node].rev) return;\n        apply_reverse(_nodes[node].left);\n\
+    \        apply_reverse(_nodes[node].right);\n        _nodes[node].rev = false;\n\
+    \    }\n\n    void push_to(int node) {\n        _path_buffer.clear();\n      \
+    \  int cur = node;\n        _path_buffer.push_back(cur);\n        while (!is_splay_root(cur))\
+    \ {\n            cur = _nodes[cur].parent;\n            _path_buffer.push_back(cur);\n\
+    \        }\n        for (int i = int(_path_buffer.size()) - 1; i >= 0; i--) push(_path_buffer[i]);\n\
+    \    }\n\n    void rotate(int node) {\n        int parent = _nodes[node].parent;\n\
+    \        int grand = _nodes[parent].parent;\n        bool is_right = _nodes[parent].right\
+    \ == node;\n        int middle = is_right ? _nodes[node].left : _nodes[node].right;\n\
+    \n        if (!is_splay_root(parent)) {\n            if (_nodes[grand].left ==\
+    \ parent) {\n                _nodes[grand].left = node;\n            } else {\n\
+    \                _nodes[grand].right = node;\n            }\n        }\n     \
+    \   _nodes[node].parent = grand;\n\n        if (is_right) {\n            _nodes[node].left\
+    \ = parent;\n            _nodes[parent].right = middle;\n        } else {\n  \
+    \          _nodes[node].right = parent;\n            _nodes[parent].left = middle;\n\
+    \        }\n        if (middle != -1) _nodes[middle].parent = parent;\n      \
+    \  _nodes[parent].parent = node;\n\n        update(parent);\n        update(node);\n\
+    \    }\n\n    void splay(int node) {\n        push_to(node);\n        while (!is_splay_root(node))\
+    \ {\n            int parent = _nodes[node].parent;\n            int grand = _nodes[parent].parent;\n\
+    \            if (!is_splay_root(parent)) {\n                bool zig_zig = (_nodes[parent].left\
+    \ == node) == (_nodes[grand].left == parent);\n                rotate(zig_zig\
+    \ ? parent : node);\n            }\n            rotate(node);\n        }\n   \
+    \ }\n\n    int access(int node) {\n        int last = -1;\n        for (int cur\
+    \ = node; cur != -1; cur = _nodes[cur].parent) {\n            splay(cur);\n  \
+    \          _nodes[cur].right = last;\n            if (last != -1) _nodes[last].parent\
+    \ = cur;\n            update(cur);\n            last = cur;\n        }\n     \
+    \   splay(node);\n        return last;\n    }\n\n    void check_vertex(int v)\
+    \ const {\n        assert(0 <= v && v < int(_nodes.size()));\n    }\n\n    void\
+    \ check_edge(int edge_id) const {\n        assert(0 <= edge_id && edge_id < int(_edges.size()));\n\
+    \    }\n\n   public:\n    PathLinkCutTree() = default;\n\n    explicit PathLinkCutTree(int\
+    \ n) {\n        assert(0 <= n);\n        _nodes.reserve(n);\n        for (int\
+    \ i = 0; i < n; i++) add_vertex();\n    }\n\n    explicit PathLinkCutTree(const\
+    \ std::vector<T>& values) {\n        _nodes.reserve(values.size());\n        for\
+    \ (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n    }\n\n \
+    \   explicit PathLinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
     \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
-    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTree(const\
+    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit PathLinkCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
@@ -188,19 +192,19 @@ data:
     \        check_vertex(v);\n        if (!connected(u, v)) return -1;\n        if\
     \ (u == v) return u;\n        access(u);\n        return access(v);\n    }\n};\n\
     \n}  // namespace data_structure\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_LINK_CUT_TREE_HPP\n#define M1UNE_LINK_CUT_TREE_HPP 1\n\n#include\
-    \ <cassert>\n#include <concepts>\n#include <type_traits>\n#include <utility>\n\
-    #include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ data_structure {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct LinkCutTree\
-    \ {\n    using T = typename Monoid::value_type;\n\n   private:\n    struct Node\
-    \ {\n        int left = -1;\n        int right = -1;\n        int parent = -1;\n\
-    \        bool rev = false;\n        int size = 1;\n        T value = Monoid::id();\n\
-    \        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n    };\n\n\
-    \    struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n        int\
-    \ node = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n\
-    \    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\n   \
-    \ static T make_node_value(const T& value, int) {\n        return value;\n   \
-    \ }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
+  code: "#ifndef M1UNE_PATH_LINK_CUT_TREE_HPP\n#define M1UNE_PATH_LINK_CUT_TREE_HPP\
+    \ 1\n\n#include <cassert>\n#include <concepts>\n#include <type_traits>\n#include\
+    \ <utility>\n#include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
+    struct PathLinkCutTree {\n    using T = typename Monoid::value_type;\n\n   private:\n\
+    \    struct Node {\n        int left = -1;\n        int right = -1;\n        int\
+    \ parent = -1;\n        bool rev = false;\n        int size = 1;\n        T value\
+    \ = Monoid::id();\n        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n\
+    \    };\n\n    struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n \
+    \       int node = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node>\
+    \ _nodes;\n    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\
+    \n    static T make_node_value(const T& value, int) {\n        return value;\n\
+    \    }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
     \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    static T make_node_value(const\
@@ -251,16 +255,17 @@ data:
     \          last = cur;\n        }\n        splay(node);\n        return last;\n\
     \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
     \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkCutTree() =\
-    \ default;\n\n    explicit LinkCutTree(int n) {\n        assert(0 <= n);\n   \
-    \     _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
-    \    }\n\n    explicit LinkCutTree(const std::vector<T>& values) {\n        _nodes.reserve(values.size());\n\
-    \        for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n\
-    \    }\n\n    explicit LinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
-    \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
-    \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
-    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTree(const\
+    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    PathLinkCutTree()\
+    \ = default;\n\n    explicit PathLinkCutTree(int n) {\n        assert(0 <= n);\n\
+    \        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
+    \    }\n\n    explicit PathLinkCutTree(const std::vector<T>& values) {\n     \
+    \   _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
+    \ i++) add_vertex(values[i]);\n    }\n\n    explicit PathLinkCutTree(std::vector<T>&&\
+    \ values) {\n        _nodes.reserve(values.size());\n        for (int i = 0; i\
+    \ < int(values.size()); i++) add_vertex(std::move(values[i]));\n    }\n\n    template\
+    \ <class U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) {\
+    \ Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x, i); }\
+    \ ||\n        std::convertible_to<U, T>\n    )\n    explicit PathLinkCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
@@ -351,24 +356,24 @@ data:
     \            }\n        }\n    }\n\n    int lca(int u, int v) {\n        check_vertex(u);\n\
     \        check_vertex(v);\n        if (!connected(u, v)) return -1;\n        if\
     \ (u == v) return u;\n        access(u);\n        return access(v);\n    }\n};\n\
-    \n}  // namespace data_structure\n}  // namespace m1une\n\n#endif  // M1UNE_LINK_CUT_TREE_HPP\n"
+    \n}  // namespace data_structure\n}  // namespace m1une\n\n#endif  // M1UNE_PATH_LINK_CUT_TREE_HPP\n"
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
-  path: data_structure/link_cut_tree.hpp
+  path: data_structure/path_link_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-17 03:51:56+09:00'
+  timestamp: '2026-06-17 20:59:27+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/link_cut_tree.test.cpp
-documentation_of: data_structure/link_cut_tree.hpp
+  - verify/data_structure/path_link_cut_tree.test.cpp
+documentation_of: data_structure/path_link_cut_tree.hpp
 layout: document
-title: Link-Cut Tree
+title: Path Link-Cut Tree
 ---
 
 ## Overview
 
-`m1une::data_structure::LinkCutTree<Monoid>` maintains a dynamic forest. It
+`m1une::data_structure::PathLinkCutTree<Monoid>` maintains a dynamic forest. It
 supports linking two trees, cutting an existing edge, rerooting a represented
 tree, and querying a monoid product on a path.
 
@@ -396,14 +401,14 @@ struct M {
 ## Construction
 
 ```cpp
-LinkCutTree<Monoid> lct;
-LinkCutTree<Monoid> lct(n);
-LinkCutTree<Monoid> lct(values);
+PathLinkCutTree<Monoid> lct;
+PathLinkCutTree<Monoid> lct(n);
+PathLinkCutTree<Monoid> lct(values);
 ```
 
-* `LinkCutTree(n)` creates `n` isolated vertices initialized with
+* `PathLinkCutTree(n)` creates `n` isolated vertices initialized with
   `Monoid::id()`.
-* `LinkCutTree(values)` creates one isolated vertex for each value.
+* `PathLinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
 As with `Segtree`, construction from `std::vector<U>` is supported when
@@ -481,14 +486,14 @@ int x = lct.lca(u, v);
 ## Example: Vertex Path Sum
 
 ```cpp
-#include "data_structure/link_cut_tree.hpp"
+#include "data_structure/path_link_cut_tree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using Sum = m1une::monoid::Add<long long>;
-    m1une::data_structure::LinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4});
+    m1une::data_structure::PathLinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4});
 
     lct.link(0, 1);
     lct.link(1, 2);
@@ -508,7 +513,7 @@ link-cut-tree vertex for the edge value and links it between the two endpoints.
 
 ```cpp
 using Sum = m1une::monoid::Add<long long>;
-m1une::data_structure::LinkCutTree<Sum> lct(n);
+m1une::data_structure::PathLinkCutTree<Sum> lct(n);
 
 int edge_id = lct.link_edge(u, v, weight);
 
@@ -534,6 +539,6 @@ ids remain unchanged.
 
 This implementation maintains path aggregates only. It does not maintain
 subtree aggregates of the represented tree. For a variant with subtree-query
-helpers, use `LinkCutTreeWithSubtree`.
+helpers, use `LinkedCutTree`.
 
-For path updates with lazy propagation, use `LazyLinkCutTree`.
+For path updates with lazy propagation, use `LazyPathLinkCutTree`.
