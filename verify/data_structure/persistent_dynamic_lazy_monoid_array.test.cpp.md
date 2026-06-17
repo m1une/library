@@ -300,14 +300,16 @@ data:
     \ = T;\n\n    // Value Monoid (Sum)\n    static constexpr value_type id() {\n\
     \        return {T(0), 0};\n    }\n    static constexpr value_type op(const value_type&\
     \ a, const value_type& b) {\n        return {a.sum + b.sum, a.size + b.size};\n\
-    \    }\n\n    // Operator Monoid (Add)\n    static constexpr operator_type op_id()\
-    \ {\n        return 0;\n    }\n    static constexpr operator_type op_comp(const\
-    \ operator_type& f, const operator_type& g) {\n        return f + g;\n    }\n\n\
-    \    // Mapping (sum + f * size)\n    static constexpr value_type mapping(const\
-    \ operator_type& f, const value_type& x) {\n        return {x.sum + f * x.size,\
-    \ x.size};\n    }\n\n    // Helper for initializing a leaf node\n    static constexpr\
-    \ value_type make(const T& val) {\n        return {val, 1};\n    }\n};\n\n}  //\
-    \ namespace acted_monoid\n}  // namespace m1une\n\n\n#line 15 \"verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp\"\
+    \    }\n    static constexpr value_type inverse(const value_type& x) {\n     \
+    \   return {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n    static\
+    \ constexpr operator_type op_id() {\n        return 0;\n    }\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f + g;\n    }\n\n    // Mapping (sum + f * size)\n    static constexpr\
+    \ value_type mapping(const operator_type& f, const value_type& x) {\n        return\
+    \ {x.sum + f * x.size, x.size};\n    }\n\n    // Helper for initializing a leaf\
+    \ node\n    static constexpr value_type make(const T& val) {\n        return {val,\
+    \ 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n\
+    #line 15 \"verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp\"\
     \n\nusing AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\nusing Node =\
     \ AM::value_type;\nusing Array = m1une::data_structure::PersistentDynamicLazyMonoidArray<AM>;\n\
     \nstruct StringNoopActedMonoid {\n    using value_type = std::string;\n    using\
@@ -493,7 +495,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-15 02:20:43+09:00'
+  timestamp: '2026-06-17 16:15:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp

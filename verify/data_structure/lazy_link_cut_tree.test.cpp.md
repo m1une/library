@@ -29,15 +29,16 @@ data:
     \    using operator_type = T;\n\n    // Value Monoid (Sum)\n    static constexpr\
     \ value_type id() {\n        return {T(0), 0};\n    }\n    static constexpr value_type\
     \ op(const value_type& a, const value_type& b) {\n        return {a.sum + b.sum,\
-    \ a.size + b.size};\n    }\n\n    // Operator Monoid (Add)\n    static constexpr\
-    \ operator_type op_id() {\n        return 0;\n    }\n    static constexpr operator_type\
-    \ op_comp(const operator_type& f, const operator_type& g) {\n        return f\
-    \ + g;\n    }\n\n    // Mapping (sum + f * size)\n    static constexpr value_type\
-    \ mapping(const operator_type& f, const value_type& x) {\n        return {x.sum\
-    \ + f * x.size, x.size};\n    }\n\n    // Helper for initializing a leaf node\n\
-    \    static constexpr value_type make(const T& val) {\n        return {val, 1};\n\
-    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 1\
-    \ \"data_structure/lazy_link_cut_tree.hpp\"\n\n\n\n#line 5 \"data_structure/lazy_link_cut_tree.hpp\"\
+    \ a.size + b.size};\n    }\n    static constexpr value_type inverse(const value_type&\
+    \ x) {\n        return {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n\
+    \    static constexpr operator_type op_id() {\n        return 0;\n    }\n    static\
+    \ constexpr operator_type op_comp(const operator_type& f, const operator_type&\
+    \ g) {\n        return f + g;\n    }\n\n    // Mapping (sum + f * size)\n    static\
+    \ constexpr value_type mapping(const operator_type& f, const value_type& x) {\n\
+    \        return {x.sum + f * x.size, x.size};\n    }\n\n    // Helper for initializing\
+    \ a leaf node\n    static constexpr value_type make(const T& val) {\n        return\
+    \ {val, 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
+    \n\n#line 1 \"data_structure/lazy_link_cut_tree.hpp\"\n\n\n\n#line 5 \"data_structure/lazy_link_cut_tree.hpp\"\
     \n#include <concepts>\n#include <type_traits>\n#include <utility>\n#line 9 \"\
     data_structure/lazy_link_cut_tree.hpp\"\n\n#line 1 \"acted_monoid/concept.hpp\"\
     \n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace acted_monoid\
@@ -294,7 +295,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/lazy_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 03:51:56+09:00'
+  timestamp: '2026-06-17 16:15:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_link_cut_tree.test.cpp

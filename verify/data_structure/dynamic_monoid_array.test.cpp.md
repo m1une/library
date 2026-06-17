@@ -244,7 +244,8 @@ data:
     \ using value_type = T;\n\n    // Returns the identity element for addition, which\
     \ is 0.\n    static constexpr T id() {\n        return T(0);\n    }\n\n    //\
     \ Returns the sum of a and b.\n    static constexpr T op(const T& a, const T&\
-    \ b) {\n        return a + b;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
+    \ b) {\n        return a + b;\n    }\n\n    static constexpr T inverse(const T&\
+    \ x) {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
     \ m1une\n\n\n#line 8 \"verify/data_structure/dynamic_monoid_array.test.cpp\"\n\
     \nint main() {\n    int n, q;\n    cin >> n >> q;\n    using Monoid = m1une::monoid::Add<int>;\n\
     \    using Array = m1une::data_structure::DynamicMonoidArray<Monoid>;\n    Array\
@@ -267,7 +268,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/dynamic_monoid_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-14 04:44:05+09:00'
+  timestamp: '2026-06-17 16:15:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/dynamic_monoid_array.test.cpp

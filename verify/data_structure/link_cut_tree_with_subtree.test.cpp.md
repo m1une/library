@@ -2,9 +2,6 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: data_structure/link_cut_tree.hpp
-    title: Link-Cut Tree
-  - icon: ':heavy_check_mark:'
     path: data_structure/link_cut_tree_with_subtree.hpp
     title: Link-Cut Tree With Subtree
   - icon: ':heavy_check_mark:'
@@ -25,11 +22,11 @@ data:
     - https://judge.yosupo.jp/problem/aplusb
   bundledCode: "#line 1 \"verify/data_structure/link_cut_tree_with_subtree.test.cpp\"\
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <string>\n#include <vector>\n\n#line 1 \"data_structure/link_cut_tree_with_subtree.hpp\"\
-    \n\n\n\n#line 5 \"data_structure/link_cut_tree_with_subtree.hpp\"\n#include <concepts>\n\
-    #include <type_traits>\n#include <utility>\n#line 9 \"data_structure/link_cut_tree_with_subtree.hpp\"\
-    \n\n#line 1 \"data_structure/link_cut_tree.hpp\"\n\n\n\n#line 9 \"data_structure/link_cut_tree.hpp\"\
-    \n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
+    #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
+    \n#line 1 \"data_structure/link_cut_tree_with_subtree.hpp\"\n\n\n\n#line 5 \"\
+    data_structure/link_cut_tree_with_subtree.hpp\"\n#include <concepts>\n#include\
+    \ <type_traits>\n#line 9 \"data_structure/link_cut_tree_with_subtree.hpp\"\n\n\
+    #line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
     \ m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies the requirements\
     \ of a Monoid.\n// A Monoid must have a `value_type`, an identity element `id()`,\
     \ and an associative binary operation `op()`.\ntemplate <typename M>\nconcept\
@@ -39,17 +36,21 @@ data:
     \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"data_structure/link_cut_tree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct LinkCutTree {\n    using\
-    \ T = typename Monoid::value_type;\n\n   private:\n    struct Node {\n       \
-    \ int left = -1;\n        int right = -1;\n        int parent = -1;\n        bool\
-    \ rev = false;\n        int size = 1;\n        T value = Monoid::id();\n     \
-    \   T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n    };\n\n   \
-    \ struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n        int node\
-    \ = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n\
-    \    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\n   \
-    \ static T make_node_value(const T& value, int) {\n        return value;\n   \
-    \ }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
+    \ 11 \"data_structure/link_cut_tree_with_subtree.hpp\"\n\nnamespace m1une {\n\
+    namespace data_structure {\n\ntemplate <typename M>\nconcept IsCommutativeGroupMonoid\
+    \ = m1une::monoid::IsMonoid<M> && requires(typename M::value_type a) {\n    {\
+    \ M::inverse(a) } -> std::same_as<typename M::value_type>;\n};\n\ntemplate <IsCommutativeGroupMonoid\
+    \ Monoid>\nstruct LinkCutTreeWithSubtree {\n    using T = typename Monoid::value_type;\n\
+    \n   private:\n    struct Node {\n        int left = -1;\n        int right =\
+    \ -1;\n        int parent = -1;\n        bool rev = false;\n        int size =\
+    \ 1;\n        int virtual_size = 0;\n        int all_size = 1;\n        T value\
+    \ = Monoid::id();\n        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n\
+    \        T virtual_prod = Monoid::id();\n        T all_prod = Monoid::id();\n\
+    \    };\n\n    struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n \
+    \       int node = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node>\
+    \ _nodes;\n    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\
+    \n    static T make_node_value(const T& value, int) {\n        return value;\n\
+    \    }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
     \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    static T make_node_value(const\
@@ -58,21 +59,35 @@ data:
     \ x, int i) { Monoid::make(x, i); }) {\n            return Monoid::make(value,\
     \ index);\n        } else {\n            return static_cast<T>(value);\n     \
     \   }\n    }\n\n    int child_size(int node) const {\n        return node == -1\
-    \ ? 0 : _nodes[node].size;\n    }\n\n    bool is_splay_root(int node) const {\n\
-    \        int parent = _nodes[node].parent;\n        return parent == -1 || (_nodes[parent].left\
-    \ != node && _nodes[parent].right != node);\n    }\n\n    void update(int node)\
-    \ {\n        Node& x = _nodes[node];\n        x.size = 1 + child_size(x.left)\
-    \ + child_size(x.right);\n        T left_prod = x.left == -1 ? Monoid::id() :\
-    \ _nodes[x.left].prod;\n        T right_prod = x.right == -1 ? Monoid::id() :\
-    \ _nodes[x.right].prod;\n        T left_rev_prod = x.left == -1 ? Monoid::id()\
-    \ : _nodes[x.left].rev_prod;\n        T right_rev_prod = x.right == -1 ? Monoid::id()\
-    \ : _nodes[x.right].rev_prod;\n        x.prod = Monoid::op(Monoid::op(left_prod,\
-    \ x.value), right_prod);\n        x.rev_prod = Monoid::op(Monoid::op(right_rev_prod,\
-    \ x.value), left_rev_prod);\n    }\n\n    void apply_reverse(int node) {\n   \
-    \     if (node == -1) return;\n        Node& x = _nodes[node];\n        std::swap(x.left,\
-    \ x.right);\n        std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n\
-    \    }\n\n    void push(int node) {\n        if (node == -1 || !_nodes[node].rev)\
-    \ return;\n        apply_reverse(_nodes[node].left);\n        apply_reverse(_nodes[node].right);\n\
+    \ ? 0 : _nodes[node].size;\n    }\n\n    int child_all_size(int node) const {\n\
+    \        return node == -1 ? 0 : _nodes[node].all_size;\n    }\n\n    T child_prod(int\
+    \ node) const {\n        return node == -1 ? Monoid::id() : _nodes[node].prod;\n\
+    \    }\n\n    T child_rev_prod(int node) const {\n        return node == -1 ?\
+    \ Monoid::id() : _nodes[node].rev_prod;\n    }\n\n    T child_all_prod(int node)\
+    \ const {\n        return node == -1 ? Monoid::id() : _nodes[node].all_prod;\n\
+    \    }\n\n    T node_subtree_prod(int node) const {\n        const Node& x = _nodes[node];\n\
+    \        return Monoid::op(x.value, x.virtual_prod);\n    }\n\n    int node_subtree_size(int\
+    \ node) const {\n        return 1 + _nodes[node].virtual_size;\n    }\n\n    bool\
+    \ is_splay_root(int node) const {\n        int parent = _nodes[node].parent;\n\
+    \        return parent == -1 || (_nodes[parent].left != node && _nodes[parent].right\
+    \ != node);\n    }\n\n    void update(int node) {\n        Node& x = _nodes[node];\n\
+    \        x.size = 1 + child_size(x.left) + child_size(x.right);\n        x.all_size\
+    \ = 1 + x.virtual_size + child_all_size(x.left) + child_all_size(x.right);\n \
+    \       x.prod = Monoid::op(Monoid::op(child_prod(x.left), x.value), child_prod(x.right));\n\
+    \        x.rev_prod = Monoid::op(Monoid::op(child_rev_prod(x.right), x.value),\
+    \ child_rev_prod(x.left));\n        x.all_prod = Monoid::op(Monoid::op(child_all_prod(x.left),\
+    \ x.value),\n                                Monoid::op(x.virtual_prod, child_all_prod(x.right)));\n\
+    \    }\n\n    void add_virtual_child(int node, int child) {\n        if (child\
+    \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size += _nodes[child].all_size;\n\
+    \        x.virtual_prod = Monoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
+    \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
+    \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
+    \        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inverse(_nodes[child].all_prod));\n\
+    \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
+    \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
+    \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
+    \ push(int node) {\n        if (node == -1 || !_nodes[node].rev) return;\n   \
+    \     apply_reverse(_nodes[node].left);\n        apply_reverse(_nodes[node].right);\n\
     \        _nodes[node].rev = false;\n    }\n\n    void push_to(int node) {\n  \
     \      _path_buffer.clear();\n        int cur = node;\n        _path_buffer.push_back(cur);\n\
     \        while (!is_splay_root(cur)) {\n            cur = _nodes[cur].parent;\n\
@@ -95,31 +110,34 @@ data:
     \ == parent);\n                rotate(zig_zig ? parent : node);\n            }\n\
     \            rotate(node);\n        }\n    }\n\n    int access(int node) {\n \
     \       int last = -1;\n        for (int cur = node; cur != -1; cur = _nodes[cur].parent)\
-    \ {\n            splay(cur);\n            _nodes[cur].right = last;\n        \
-    \    if (last != -1) _nodes[last].parent = cur;\n            update(cur);\n  \
-    \          last = cur;\n        }\n        splay(node);\n        return last;\n\
+    \ {\n            splay(cur);\n            add_virtual_child(cur, _nodes[cur].right);\n\
+    \            remove_virtual_child(cur, last);\n            _nodes[cur].right =\
+    \ last;\n            if (last != -1) _nodes[last].parent = cur;\n            update(cur);\n\
+    \            last = cur;\n        }\n        splay(node);\n        return last;\n\
     \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
     \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkCutTree() =\
-    \ default;\n\n    explicit LinkCutTree(int n) {\n        assert(0 <= n);\n   \
-    \     _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
-    \    }\n\n    explicit LinkCutTree(const std::vector<T>& values) {\n        _nodes.reserve(values.size());\n\
-    \        for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);\n\
-    \    }\n\n    explicit LinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
-    \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
-    \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
-    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTree(const\
+    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    LinkCutTreeWithSubtree()\
+    \ = default;\n\n    explicit LinkCutTreeWithSubtree(int n) {\n        assert(0\
+    \ <= n);\n        _nodes.reserve(n);\n        for (int i = 0; i < n; i++) add_vertex();\n\
+    \    }\n\n    explicit LinkCutTreeWithSubtree(const std::vector<T>& values) {\n\
+    \        _nodes.reserve(values.size());\n        for (int i = 0; i < int(values.size());\
+    \ i++) add_vertex(values[i]);\n    }\n\n    explicit LinkCutTreeWithSubtree(std::vector<T>&&\
+    \ values) {\n        _nodes.reserve(values.size());\n        for (int i = 0; i\
+    \ < int(values.size()); i++) add_vertex(std::move(values[i]));\n    }\n\n    template\
+    \ <class U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) {\
+    \ Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x, i); }\
+    \ ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTreeWithSubtree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
     \    }\n\n    bool empty() const {\n        return _nodes.empty();\n    }\n\n\
     \    int add_vertex(const T& value = Monoid::id()) {\n        Node node;\n   \
     \     node.value = value;\n        node.prod = value;\n        node.rev_prod =\
-    \ value;\n        _nodes.push_back(std::move(node));\n        return int(_nodes.size())\
-    \ - 1;\n    }\n\n    int add_vertex(T&& value) {\n        Node node;\n       \
-    \ node.value = std::move(value);\n        node.prod = node.value;\n        node.rev_prod\
-    \ = node.value;\n        _nodes.push_back(std::move(node));\n        return int(_nodes.size())\
+    \ value;\n        node.all_prod = value;\n        _nodes.push_back(std::move(node));\n\
+    \        return int(_nodes.size()) - 1;\n    }\n\n    int add_vertex(T&& value)\
+    \ {\n        Node node;\n        node.value = std::move(value);\n        node.prod\
+    \ = node.value;\n        node.rev_prod = node.value;\n        node.all_prod =\
+    \ node.value;\n        _nodes.push_back(std::move(node));\n        return int(_nodes.size())\
     \ - 1;\n    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
     \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
     \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
@@ -150,10 +168,11 @@ data:
     \ == component_root(v);\n    }\n\n    bool same(int u, int v) {\n        return\
     \ connected(u, v);\n    }\n\n    bool link(int u, int v) {\n        check_vertex(u);\n\
     \        check_vertex(v);\n        if (u == v) return false;\n        evert(u);\n\
-    \        if (component_root(v) == u) return false;\n        _nodes[u].parent =\
-    \ v;\n        return true;\n    }\n\n    int link_edge(int u, int v, const T&\
-    \ value = Monoid::id()) {\n        check_vertex(u);\n        check_vertex(v);\n\
-    \        if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
+    \        if (component_root(v) == u) return false;\n        access(v);\n     \
+    \   _nodes[u].parent = v;\n        add_virtual_child(v, u);\n        update(v);\n\
+    \        return true;\n    }\n\n    int link_edge(int u, int v, const T& value\
+    \ = Monoid::id()) {\n        check_vertex(u);\n        check_vertex(v);\n    \
+    \    if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
     \        int node = add_vertex(value);\n        _edges.push_back(EdgeInfo{u, v,\
     \ node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
     \ v);\n        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    int\
@@ -199,196 +218,179 @@ data:
     \ {\n                k -= left_size + 1;\n                cur = _nodes[cur].right;\n\
     \            }\n        }\n    }\n\n    int lca(int u, int v) {\n        check_vertex(u);\n\
     \        check_vertex(v);\n        if (!connected(u, v)) return -1;\n        if\
-    \ (u == v) return u;\n        access(u);\n        return access(v);\n    }\n};\n\
-    \n}  // namespace data_structure\n}  // namespace m1une\n\n\n#line 11 \"data_structure/link_cut_tree_with_subtree.hpp\"\
-    \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsMonoid\
-    \ Monoid>\nstruct LinkCutTreeWithSubtree {\n    using T = typename Monoid::value_type;\n\
-    \n   private:\n    struct ForestEdge {\n        int u = -1;\n        int v = -1;\n\
-    \        bool alive = false;\n    };\n\n    LinkCutTree<Monoid> _lct;\n    std::vector<ForestEdge>\
-    \ _forest_edges;\n    std::vector<std::vector<int>> _adj;\n\n    void ensure_forest_size()\
-    \ {\n        if (int(_adj.size()) < _lct.size()) _adj.resize(_lct.size());\n \
-    \   }\n\n    void add_forest_edge(int u, int v) {\n        ensure_forest_size();\n\
-    \        int edge_id = int(_forest_edges.size());\n        _forest_edges.push_back(ForestEdge{u,\
-    \ v, true});\n        _adj[u].push_back(edge_id);\n        _adj[v].push_back(edge_id);\n\
-    \    }\n\n    bool remove_forest_edge(int u, int v) {\n        for (int edge_id\
-    \ : _adj[u]) {\n            ForestEdge& edge = _forest_edges[edge_id];\n     \
-    \       if (!edge.alive) continue;\n            if ((edge.u == u && edge.v ==\
-    \ v) || (edge.u == v && edge.v == u)) {\n                edge.alive = false;\n\
-    \                return true;\n            }\n        }\n        return false;\n\
-    \    }\n\n    int other_endpoint(int edge_id, int v) const {\n        const ForestEdge&\
-    \ edge = _forest_edges[edge_id];\n        return edge.u == v ? edge.v : edge.u;\n\
-    \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < _lct.size());\n\
-    \    }\n\n    int parent_in_rooted_tree(int root, int v) {\n        check_vertex(root);\n\
-    \        check_vertex(v);\n        assert(_lct.connected(root, v));\n        if\
-    \ (root == v) return -1;\n\n        std::vector<int> parent(_lct.size(), -1);\n\
-    \        std::vector<int> stack;\n        parent[root] = root;\n        stack.push_back(root);\n\
-    \n        for (int it = 0; it < int(stack.size()); it++) {\n            int x\
-    \ = stack[it];\n            for (int edge_id : _adj[x]) {\n                const\
-    \ ForestEdge& edge = _forest_edges[edge_id];\n                if (!edge.alive)\
-    \ continue;\n                int to = other_endpoint(edge_id, x);\n          \
-    \      if (parent[to] != -1) continue;\n                parent[to] = x;\n    \
-    \            if (to == v) return x;\n                stack.push_back(to);\n  \
-    \          }\n        }\n\n        assert(false);\n        return -1;\n    }\n\
-    \n   public:\n    LinkCutTreeWithSubtree() = default;\n\n    explicit LinkCutTreeWithSubtree(int\
-    \ n) : _lct(n), _adj(n) {\n        assert(0 <= n);\n    }\n\n    explicit LinkCutTreeWithSubtree(const\
-    \ std::vector<T>& values) : _lct(values), _adj(values.size()) {}\n\n    explicit\
-    \ LinkCutTreeWithSubtree(std::vector<T>&& values) : _lct(std::move(values)) {\n\
-    \        _adj.resize(_lct.size());\n    }\n\n    template <class U>\n    requires\
-    \ (!std::same_as<U, T>) && (\n        requires(U x) { Monoid::make(x); } ||\n\
-    \        requires(U x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U,\
-    \ T>\n    )\n    explicit LinkCutTreeWithSubtree(const std::vector<U>& values)\
-    \ : _lct(values), _adj(values.size()) {}\n\n    int size() const {\n        return\
-    \ _lct.size();\n    }\n\n    bool empty() const {\n        return _lct.empty();\n\
-    \    }\n\n    int add_vertex(const T& value = Monoid::id()) {\n        int v =\
-    \ _lct.add_vertex(value);\n        ensure_forest_size();\n        return v;\n\
-    \    }\n\n    int add_vertex(T&& value) {\n        int v = _lct.add_vertex(std::move(value));\n\
-    \        ensure_forest_size();\n        return v;\n    }\n\n    template <class\
-    \ U>\n    requires (!std::same_as<std::remove_cvref_t<U>, T>) && (\n        requires(U\
-    \ x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x, i);\
-    \ } ||\n        std::convertible_to<U, T>\n    )\n    int add_vertex(const U&\
-    \ value) {\n        int v = _lct.add_vertex(value);\n        ensure_forest_size();\n\
-    \        return v;\n    }\n\n    int edge_count() const {\n        return _lct.edge_count();\n\
-    \    }\n\n    bool edge_alive(int edge_id) const {\n        return _lct.edge_alive(edge_id);\n\
-    \    }\n\n    int edge_node(int edge_id) const {\n        return _lct.edge_node(edge_id);\n\
-    \    }\n\n    std::pair<int, int> edge_endpoints(int edge_id) const {\n      \
-    \  return _lct.edge_endpoints(edge_id);\n    }\n\n    const T& get(int v) const\
-    \ {\n        return _lct.get(v);\n    }\n\n    const T& operator[](int v) const\
-    \ {\n        return get(v);\n    }\n\n    void set(int v, const T& value) {\n\
-    \        _lct.set(v, value);\n    }\n\n    void set(int v, T&& value) {\n    \
-    \    _lct.set(v, std::move(value));\n    }\n\n    template <class U>\n    requires\
-    \ (!std::same_as<std::remove_cvref_t<U>, T>) && (\n        requires(U x) { Monoid::make(x);\
-    \ } ||\n        requires(U x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U,\
-    \ T>\n    )\n    void set(int v, const U& value) {\n        _lct.set(v, value);\n\
-    \    }\n\n    void evert(int v) {\n        _lct.evert(v);\n    }\n\n    int component_root(int\
-    \ v) {\n        return _lct.component_root(v);\n    }\n\n    bool connected(int\
-    \ u, int v) {\n        return _lct.connected(u, v);\n    }\n\n    bool same(int\
-    \ u, int v) {\n        return connected(u, v);\n    }\n\n    bool link(int u,\
-    \ int v) {\n        bool ok = _lct.link(u, v);\n        if (ok) add_forest_edge(u,\
-    \ v);\n        return ok;\n    }\n\n    int link_edge(int u, int v, const T& value\
-    \ = Monoid::id()) {\n        int edge_id = _lct.link_edge(u, v, value);\n    \
-    \    if (edge_id == -1) return -1;\n        int node = _lct.edge_node(edge_id);\n\
-    \        ensure_forest_size();\n        add_forest_edge(u, node);\n        add_forest_edge(node,\
-    \ v);\n        return edge_id;\n    }\n\n    int link_edge(int u, int v, T&& value)\
-    \ {\n        int edge_id = _lct.link_edge(u, v, std::move(value));\n        if\
-    \ (edge_id == -1) return -1;\n        int node = _lct.edge_node(edge_id);\n  \
-    \      ensure_forest_size();\n        add_forest_edge(u, node);\n        add_forest_edge(node,\
-    \ v);\n        return edge_id;\n    }\n\n    template <class U>\n    requires\
-    \ (!std::same_as<std::remove_cvref_t<U>, T>) && (\n        requires(U x) { Monoid::make(x);\
-    \ } ||\n        requires(U x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U,\
-    \ T>\n    )\n    int link_edge(int u, int v, const U& value) {\n        int edge_id\
-    \ = _lct.link_edge(u, v, value);\n        if (edge_id == -1) return -1;\n    \
-    \    int node = _lct.edge_node(edge_id);\n        ensure_forest_size();\n    \
-    \    add_forest_edge(u, node);\n        add_forest_edge(node, v);\n        return\
-    \ edge_id;\n    }\n\n    bool cut(int u, int v) {\n        bool ok = _lct.cut(u,\
-    \ v);\n        if (ok) remove_forest_edge(u, v);\n        return ok;\n    }\n\n\
-    \    bool cut_edge(int edge_id) {\n        int node = _lct.edge_node(edge_id);\n\
-    \        auto [u, v] = _lct.edge_endpoints(edge_id);\n        bool ok = _lct.cut_edge(edge_id);\n\
-    \        if (ok) {\n            remove_forest_edge(u, node);\n            remove_forest_edge(node,\
-    \ v);\n        }\n        return ok;\n    }\n\n    const T& get_edge(int edge_id)\
-    \ const {\n        return _lct.get_edge(edge_id);\n    }\n\n    void set_edge(int\
-    \ edge_id, const T& value) {\n        _lct.set_edge(edge_id, value);\n    }\n\n\
-    \    void set_edge(int edge_id, T&& value) {\n        _lct.set_edge(edge_id, std::move(value));\n\
-    \    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
-    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
-    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
-    \  )\n    void set_edge(int edge_id, const U& value) {\n        _lct.set_edge(edge_id,\
-    \ value);\n    }\n\n    T prod(int u, int v) {\n        return _lct.prod(u, v);\n\
-    \    }\n\n    T path_prod(int u, int v) {\n        return prod(u, v);\n    }\n\
-    \n    int path_size(int u, int v) {\n        return _lct.path_size(u, v);\n  \
-    \  }\n\n    int kth_vertex(int u, int v, int k) {\n        return _lct.kth_vertex(u,\
-    \ v, k);\n    }\n\n    int lca(int u, int v) {\n        return _lct.lca(u, v);\n\
-    \    }\n\n    std::vector<int> subtree_vertices(int root, int v) {\n        int\
-    \ blocked_parent = parent_in_rooted_tree(root, v);\n        std::vector<int> res;\n\
-    \        std::vector<std::pair<int, int>> stack;\n        stack.emplace_back(v,\
-    \ blocked_parent);\n\n        while (!stack.empty()) {\n            auto [x, parent]\
-    \ = stack.back();\n            stack.pop_back();\n            res.push_back(x);\n\
-    \n            const std::vector<int>& edges = _adj[x];\n            for (int i\
-    \ = int(edges.size()) - 1; i >= 0; i--) {\n                int edge_id = edges[i];\n\
-    \                const ForestEdge& edge = _forest_edges[edge_id];\n          \
-    \      if (!edge.alive) continue;\n                int to = other_endpoint(edge_id,\
-    \ x);\n                if (to == parent) continue;\n                stack.emplace_back(to,\
-    \ x);\n            }\n        }\n\n        return res;\n    }\n\n    std::vector<int>\
-    \ subtree_vertices(int v) {\n        return subtree_vertices(component_root(v),\
-    \ v);\n    }\n\n    int subtree_size(int root, int v) {\n        return int(subtree_vertices(root,\
-    \ v).size());\n    }\n\n    int subtree_size(int v) {\n        return int(subtree_vertices(v).size());\n\
-    \    }\n\n    T subtree_prod(int root, int v) {\n        T res = Monoid::id();\n\
-    \        for (int x : subtree_vertices(root, v)) {\n            res = Monoid::op(res,\
-    \ _lct.get(x));\n        }\n        return res;\n    }\n\n    T subtree_prod(int\
-    \ v) {\n        return subtree_prod(component_root(v), v);\n    }\n};\n\n}  //\
-    \ namespace data_structure\n}  // namespace m1une\n\n\n#line 1 \"monoid/add.hpp\"\
-    \n\n\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for addition (Range\
-    \ Sum).\ntemplate <typename T>\nstruct Add {\n    using value_type = T;\n\n  \
-    \  // Returns the identity element for addition, which is 0.\n    static constexpr\
-    \ T id() {\n        return T(0);\n    }\n\n    // Returns the sum of a and b.\n\
-    \    static constexpr T op(const T& a, const T& b) {\n        return a + b;\n\
-    \    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 10 \"verify/data_structure/link_cut_tree_with_subtree.test.cpp\"\
-    \n\nstruct StringConcat {\n    using value_type = std::string;\n\n    static std::string\
-    \ id() {\n        return \"\";\n    }\n\n    static std::string op(const std::string&\
-    \ a, const std::string& b) {\n        return a + b;\n    }\n};\n\nvoid test_vertex_subtree_sum()\
+    \ (u == v) return u;\n        access(u);\n        return access(v);\n    }\n\n\
+    \    T subtree_prod(int root, int v) {\n        check_vertex(root);\n        check_vertex(v);\n\
+    \        assert(connected(root, v));\n        evert(root);\n        access(v);\n\
+    \        return node_subtree_prod(v);\n    }\n\n    T subtree_prod(int v) {\n\
+    \        check_vertex(v);\n        access(v);\n        return node_subtree_prod(v);\n\
+    \    }\n\n    int subtree_size(int root, int v) {\n        check_vertex(root);\n\
+    \        check_vertex(v);\n        assert(connected(root, v));\n        evert(root);\n\
+    \        access(v);\n        return node_subtree_size(v);\n    }\n\n    int subtree_size(int\
+    \ v) {\n        check_vertex(v);\n        access(v);\n        return node_subtree_size(v);\n\
+    \    }\n};\n\n}  // namespace data_structure\n}  // namespace m1une\n\n\n#line\
+    \ 1 \"monoid/add.hpp\"\n\n\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid\
+    \ for addition (Range Sum).\ntemplate <typename T>\nstruct Add {\n    using value_type\
+    \ = T;\n\n    // Returns the identity element for addition, which is 0.\n    static\
+    \ constexpr T id() {\n        return T(0);\n    }\n\n    // Returns the sum of\
+    \ a and b.\n    static constexpr T op(const T& a, const T& b) {\n        return\
+    \ a + b;\n    }\n\n    static constexpr T inverse(const T& x) {\n        return\
+    \ -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11\
+    \ \"verify/data_structure/link_cut_tree_with_subtree.test.cpp\"\n\nvoid test_vertex_subtree_sum()\
     \ {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
     \ long>> lct(std::vector<int>{1, 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n\
     \    assert(lct.link(1, 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3,\
     \ 4));\n\n    assert(lct.path_prod(2, 4) == 14);\n    assert(lct.subtree_prod(0,\
-    \ 1) == 14);\n    assert(lct.subtree_size(0, 1) == 4);\n\n    lct.set(3, 40);\n\
-    \    assert(lct.path_prod(2, 4) == 50);\n    assert(lct.subtree_prod(0, 1) ==\
-    \ 50);\n\n    assert(lct.cut(1, 3));\n    assert(lct.subtree_prod(0, 1) == 5);\n\
+    \ 1) == 14);\n    assert(lct.subtree_size(0, 1) == 4);\n    assert(lct.subtree_prod(1,\
+    \ 3) == 9);\n\n    lct.set(3, 40);\n    assert(lct.path_prod(2, 4) == 50);\n \
+    \   assert(lct.subtree_prod(0, 1) == 50);\n    assert(lct.subtree_prod(1, 3) ==\
+    \ 45);\n\n    assert(lct.cut(1, 3));\n    assert(lct.subtree_prod(0, 1) == 5);\n\
     \    assert(!lct.connected(2, 4));\n    assert(lct.link(2, 4));\n    assert(lct.subtree_prod(0,\
-    \ 1) == 50);\n}\n\nvoid test_non_commutative_subtree_order() {\n    m1une::data_structure::LinkCutTreeWithSubtree<StringConcat>\
-    \ lct(std::vector<std::string>{\"a\", \"b\", \"c\", \"d\", \"e\"});\n\n    assert(lct.link(0,\
-    \ 1));\n    assert(lct.link(1, 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3,\
-    \ 4));\n\n    assert(lct.subtree_prod(0, 1) == \"bcde\");\n    assert((lct.subtree_vertices(0,\
-    \ 1) == std::vector<int>{1, 2, 3, 4}));\n    assert(lct.path_prod(2, 4) == \"\
-    cbde\");\n    assert(lct.subtree_prod(1) == \"bade\");\n    assert(lct.subtree_prod(0,\
-    \ 1) == \"bcde\");\n\n    lct.set(3, \"D\");\n    assert(lct.subtree_prod(0, 1)\
-    \ == \"bcDe\");\n}\n\nvoid test_edge_nodes_subtree() {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \ 1) == 50);\n    assert(lct.subtree_prod(0, 2) == 48);\n}\n\nvoid test_edge_nodes_subtree()\
+    \ {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
     \ long>> lct(3);\n\n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1,\
     \ 2, 7);\n    assert(e01 == 0);\n    assert(e12 == 1);\n\n    assert(lct.path_prod(0,\
     \ 2) == 12);\n    assert(lct.subtree_prod(0, 0) == 12);\n    assert(lct.subtree_prod(0,\
-    \ 1) == 7);\n    assert(lct.subtree_size(0, 1) == 3);\n\n    lct.set_edge(e12,\
-    \ 20);\n    assert(lct.path_prod(0, 2) == 25);\n    assert(lct.subtree_prod(0,\
-    \ 1) == 20);\n\n    assert(lct.cut_edge(e01));\n    assert(!lct.connected(0, 2));\n\
-    }\n\nint main() {\n    test_vertex_subtree_sum();\n    test_non_commutative_subtree_order();\n\
-    \    test_edge_nodes_subtree();\n\n    long long a, b;\n    std::cin >> a >> b;\n\
-    \    std::cout << a + b << '\\n';\n}\n"
+    \ 1) == 7);\n    assert(lct.subtree_size(0, 1) == 3);\n    assert(lct.subtree_size(0,\
+    \ lct.edge_node(e12)) == 2);\n\n    lct.set_edge(e12, 20);\n    assert(lct.path_prod(0,\
+    \ 2) == 25);\n    assert(lct.subtree_prod(0, 1) == 20);\n\n    assert(lct.cut_edge(e01));\n\
+    \    assert(!lct.connected(0, 2));\n}\n\nbool naive_connected(const std::vector<std::vector<int>>&\
+    \ adj, int s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
+    \ stack;\n    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it\
+    \ < int(stack.size()); it++) {\n        int v = stack[it];\n        if (v == t)\
+    \ return true;\n        for (int to : adj[v]) {\n            if (parent[to] !=\
+    \ -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
+    \        }\n    }\n    return false;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
+    \ adj, const std::vector<long long>& value, int s, int t) {\n    std::vector<int>\
+    \ parent(adj.size(), -1);\n    std::vector<int> stack;\n    parent[s] = s;\n \
+    \   stack.push_back(s);\n    for (int it = 0; it < int(stack.size()); it++) {\n\
+    \        int v = stack[it];\n        if (v == t) break;\n        for (int to :\
+    \ adj[v]) {\n            if (parent[to] != -1) continue;\n            parent[to]\
+    \ = v;\n            stack.push_back(to);\n        }\n    }\n    assert(parent[t]\
+    \ != -1);\n    long long res = 0;\n    for (int v = t; v != s; v = parent[v])\
+    \ res += value[v];\n    res += value[s];\n    return res;\n}\n\nlong long naive_subtree_sum(const\
+    \ std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int\
+    \ root,\n                            int v) {\n    std::vector<int> parent(adj.size(),\
+    \ -1);\n    std::vector<int> stack;\n    parent[root] = root;\n    stack.push_back(root);\n\
+    \    for (int it = 0; it < int(stack.size()); it++) {\n        int x = stack[it];\n\
+    \        for (int to : adj[x]) {\n            if (parent[to] != -1) continue;\n\
+    \            parent[to] = x;\n            stack.push_back(to);\n        }\n  \
+    \  }\n    assert(parent[v] != -1);\n\n    long long res = 0;\n    stack.clear();\n\
+    \    stack.push_back(v);\n    while (!stack.empty()) {\n        int x = stack.back();\n\
+    \        stack.pop_back();\n        res += value[x];\n        for (int to : adj[x])\
+    \ {\n            if (to == parent[x]) continue;\n            stack.push_back(to);\n\
+    \        }\n    }\n    return res;\n}\n\nvoid test_random_vertex_sum() {\n   \
+    \ constexpr int n = 8;\n    std::vector<long long> value;\n    for (int i = 0;\
+    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \ long>> lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
+    \ int>> edges;\n    std::mt19937 rng(1);\n\n    for (int step = 0; step < 600;\
+    \ step++) {\n        int op = int(rng() % 5);\n        int u = int(rng() % n);\n\
+    \        int v = int(rng() % n);\n        if (op == 0) {\n            if (u !=\
+    \ v && !naive_connected(adj, u, v)) {\n                assert(lct.link(u, v));\n\
+    \                adj[u].push_back(v);\n                adj[v].push_back(u);\n\
+    \                edges.emplace_back(u, v);\n            }\n        } else if (op\
+    \ == 1) {\n            if (!edges.empty()) {\n                int id = int(rng()\
+    \ % edges.size());\n                auto [a, b] = edges[id];\n               \
+    \ assert(lct.cut(a, b));\n                for (int i = 0; i < int(adj[a].size());\
+    \ i++) {\n                    if (adj[a][i] == b) {\n                        adj[a][i]\
+    \ = adj[a].back();\n                        adj[a].pop_back();\n             \
+    \           break;\n                    }\n                }\n               \
+    \ for (int i = 0; i < int(adj[b].size()); i++) {\n                    if (adj[b][i]\
+    \ == a) {\n                        adj[b][i] = adj[b].back();\n              \
+    \          adj[b].pop_back();\n                        break;\n              \
+    \      }\n                }\n                edges[id] = edges.back();\n     \
+    \           edges.pop_back();\n            }\n        } else if (op == 2) {\n\
+    \            long long x = int(rng() % 200) - 100;\n            value[u] = x;\n\
+    \            lct.set(u, x);\n        } else if (u != v && naive_connected(adj,\
+    \ u, v)) {\n            if (op == 3) {\n                assert(lct.path_prod(u,\
+    \ v) == naive_path_sum(adj, value, u, v));\n            } else {\n           \
+    \     assert(lct.subtree_prod(u, v) == naive_subtree_sum(adj, value, u, v));\n\
+    \                assert(lct.subtree_prod(v, u) == naive_subtree_sum(adj, value,\
+    \ v, u));\n            }\n        }\n    }\n}\n\nint main() {\n    test_vertex_subtree_sum();\n\
+    \    test_edge_nodes_subtree();\n    test_random_vertex_sum();\n\n    long long\
+    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <string>\n#include <vector>\n\n#include \"data_structure/link_cut_tree_with_subtree.hpp\"\
-    \n#include \"monoid/add.hpp\"\n\nstruct StringConcat {\n    using value_type =\
-    \ std::string;\n\n    static std::string id() {\n        return \"\";\n    }\n\
-    \n    static std::string op(const std::string& a, const std::string& b) {\n  \
-    \      return a + b;\n    }\n};\n\nvoid test_vertex_subtree_sum() {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
+    \n#include \"data_structure/link_cut_tree_with_subtree.hpp\"\n#include \"monoid/add.hpp\"\
+    \n\nvoid test_vertex_subtree_sum() {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
     \ long>> lct(std::vector<int>{1, 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n\
     \    assert(lct.link(1, 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3,\
     \ 4));\n\n    assert(lct.path_prod(2, 4) == 14);\n    assert(lct.subtree_prod(0,\
-    \ 1) == 14);\n    assert(lct.subtree_size(0, 1) == 4);\n\n    lct.set(3, 40);\n\
-    \    assert(lct.path_prod(2, 4) == 50);\n    assert(lct.subtree_prod(0, 1) ==\
-    \ 50);\n\n    assert(lct.cut(1, 3));\n    assert(lct.subtree_prod(0, 1) == 5);\n\
+    \ 1) == 14);\n    assert(lct.subtree_size(0, 1) == 4);\n    assert(lct.subtree_prod(1,\
+    \ 3) == 9);\n\n    lct.set(3, 40);\n    assert(lct.path_prod(2, 4) == 50);\n \
+    \   assert(lct.subtree_prod(0, 1) == 50);\n    assert(lct.subtree_prod(1, 3) ==\
+    \ 45);\n\n    assert(lct.cut(1, 3));\n    assert(lct.subtree_prod(0, 1) == 5);\n\
     \    assert(!lct.connected(2, 4));\n    assert(lct.link(2, 4));\n    assert(lct.subtree_prod(0,\
-    \ 1) == 50);\n}\n\nvoid test_non_commutative_subtree_order() {\n    m1une::data_structure::LinkCutTreeWithSubtree<StringConcat>\
-    \ lct(std::vector<std::string>{\"a\", \"b\", \"c\", \"d\", \"e\"});\n\n    assert(lct.link(0,\
-    \ 1));\n    assert(lct.link(1, 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3,\
-    \ 4));\n\n    assert(lct.subtree_prod(0, 1) == \"bcde\");\n    assert((lct.subtree_vertices(0,\
-    \ 1) == std::vector<int>{1, 2, 3, 4}));\n    assert(lct.path_prod(2, 4) == \"\
-    cbde\");\n    assert(lct.subtree_prod(1) == \"bade\");\n    assert(lct.subtree_prod(0,\
-    \ 1) == \"bcde\");\n\n    lct.set(3, \"D\");\n    assert(lct.subtree_prod(0, 1)\
-    \ == \"bcDe\");\n}\n\nvoid test_edge_nodes_subtree() {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \ 1) == 50);\n    assert(lct.subtree_prod(0, 2) == 48);\n}\n\nvoid test_edge_nodes_subtree()\
+    \ {\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
     \ long>> lct(3);\n\n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1,\
     \ 2, 7);\n    assert(e01 == 0);\n    assert(e12 == 1);\n\n    assert(lct.path_prod(0,\
     \ 2) == 12);\n    assert(lct.subtree_prod(0, 0) == 12);\n    assert(lct.subtree_prod(0,\
-    \ 1) == 7);\n    assert(lct.subtree_size(0, 1) == 3);\n\n    lct.set_edge(e12,\
-    \ 20);\n    assert(lct.path_prod(0, 2) == 25);\n    assert(lct.subtree_prod(0,\
-    \ 1) == 20);\n\n    assert(lct.cut_edge(e01));\n    assert(!lct.connected(0, 2));\n\
-    }\n\nint main() {\n    test_vertex_subtree_sum();\n    test_non_commutative_subtree_order();\n\
-    \    test_edge_nodes_subtree();\n\n    long long a, b;\n    std::cin >> a >> b;\n\
-    \    std::cout << a + b << '\\n';\n}\n"
+    \ 1) == 7);\n    assert(lct.subtree_size(0, 1) == 3);\n    assert(lct.subtree_size(0,\
+    \ lct.edge_node(e12)) == 2);\n\n    lct.set_edge(e12, 20);\n    assert(lct.path_prod(0,\
+    \ 2) == 25);\n    assert(lct.subtree_prod(0, 1) == 20);\n\n    assert(lct.cut_edge(e01));\n\
+    \    assert(!lct.connected(0, 2));\n}\n\nbool naive_connected(const std::vector<std::vector<int>>&\
+    \ adj, int s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
+    \ stack;\n    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it\
+    \ < int(stack.size()); it++) {\n        int v = stack[it];\n        if (v == t)\
+    \ return true;\n        for (int to : adj[v]) {\n            if (parent[to] !=\
+    \ -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
+    \        }\n    }\n    return false;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
+    \ adj, const std::vector<long long>& value, int s, int t) {\n    std::vector<int>\
+    \ parent(adj.size(), -1);\n    std::vector<int> stack;\n    parent[s] = s;\n \
+    \   stack.push_back(s);\n    for (int it = 0; it < int(stack.size()); it++) {\n\
+    \        int v = stack[it];\n        if (v == t) break;\n        for (int to :\
+    \ adj[v]) {\n            if (parent[to] != -1) continue;\n            parent[to]\
+    \ = v;\n            stack.push_back(to);\n        }\n    }\n    assert(parent[t]\
+    \ != -1);\n    long long res = 0;\n    for (int v = t; v != s; v = parent[v])\
+    \ res += value[v];\n    res += value[s];\n    return res;\n}\n\nlong long naive_subtree_sum(const\
+    \ std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int\
+    \ root,\n                            int v) {\n    std::vector<int> parent(adj.size(),\
+    \ -1);\n    std::vector<int> stack;\n    parent[root] = root;\n    stack.push_back(root);\n\
+    \    for (int it = 0; it < int(stack.size()); it++) {\n        int x = stack[it];\n\
+    \        for (int to : adj[x]) {\n            if (parent[to] != -1) continue;\n\
+    \            parent[to] = x;\n            stack.push_back(to);\n        }\n  \
+    \  }\n    assert(parent[v] != -1);\n\n    long long res = 0;\n    stack.clear();\n\
+    \    stack.push_back(v);\n    while (!stack.empty()) {\n        int x = stack.back();\n\
+    \        stack.pop_back();\n        res += value[x];\n        for (int to : adj[x])\
+    \ {\n            if (to == parent[x]) continue;\n            stack.push_back(to);\n\
+    \        }\n    }\n    return res;\n}\n\nvoid test_random_vertex_sum() {\n   \
+    \ constexpr int n = 8;\n    std::vector<long long> value;\n    for (int i = 0;\
+    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkCutTreeWithSubtree<m1une::monoid::Add<long\
+    \ long>> lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
+    \ int>> edges;\n    std::mt19937 rng(1);\n\n    for (int step = 0; step < 600;\
+    \ step++) {\n        int op = int(rng() % 5);\n        int u = int(rng() % n);\n\
+    \        int v = int(rng() % n);\n        if (op == 0) {\n            if (u !=\
+    \ v && !naive_connected(adj, u, v)) {\n                assert(lct.link(u, v));\n\
+    \                adj[u].push_back(v);\n                adj[v].push_back(u);\n\
+    \                edges.emplace_back(u, v);\n            }\n        } else if (op\
+    \ == 1) {\n            if (!edges.empty()) {\n                int id = int(rng()\
+    \ % edges.size());\n                auto [a, b] = edges[id];\n               \
+    \ assert(lct.cut(a, b));\n                for (int i = 0; i < int(adj[a].size());\
+    \ i++) {\n                    if (adj[a][i] == b) {\n                        adj[a][i]\
+    \ = adj[a].back();\n                        adj[a].pop_back();\n             \
+    \           break;\n                    }\n                }\n               \
+    \ for (int i = 0; i < int(adj[b].size()); i++) {\n                    if (adj[b][i]\
+    \ == a) {\n                        adj[b][i] = adj[b].back();\n              \
+    \          adj[b].pop_back();\n                        break;\n              \
+    \      }\n                }\n                edges[id] = edges.back();\n     \
+    \           edges.pop_back();\n            }\n        } else if (op == 2) {\n\
+    \            long long x = int(rng() % 200) - 100;\n            value[u] = x;\n\
+    \            lct.set(u, x);\n        } else if (u != v && naive_connected(adj,\
+    \ u, v)) {\n            if (op == 3) {\n                assert(lct.path_prod(u,\
+    \ v) == naive_path_sum(adj, value, u, v));\n            } else {\n           \
+    \     assert(lct.subtree_prod(u, v) == naive_subtree_sum(adj, value, u, v));\n\
+    \                assert(lct.subtree_prod(v, u) == naive_subtree_sum(adj, value,\
+    \ v, u));\n            }\n        }\n    }\n}\n\nint main() {\n    test_vertex_subtree_sum();\n\
+    \    test_edge_nodes_subtree();\n    test_random_vertex_sum();\n\n    long long\
+    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - data_structure/link_cut_tree_with_subtree.hpp
-  - data_structure/link_cut_tree.hpp
   - monoid/concept.hpp
   - monoid/add.hpp
   isVerificationFile: true
   path: verify/data_structure/link_cut_tree_with_subtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 15:56:12+09:00'
+  timestamp: '2026-06-17 16:15:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/link_cut_tree_with_subtree.test.cpp

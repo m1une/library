@@ -190,22 +190,24 @@ data:
     \ = T;\n\n    // Value Monoid (Sum)\n    static constexpr value_type id() {\n\
     \        return {T(0), 0};\n    }\n    static constexpr value_type op(const value_type&\
     \ a, const value_type& b) {\n        return {a.sum + b.sum, a.size + b.size};\n\
-    \    }\n\n    // Operator Monoid (Add)\n    static constexpr operator_type op_id()\
-    \ {\n        return 0;\n    }\n    static constexpr operator_type op_comp(const\
-    \ operator_type& f, const operator_type& g) {\n        return f + g;\n    }\n\n\
-    \    // Mapping (sum + f * size)\n    static constexpr value_type mapping(const\
-    \ operator_type& f, const value_type& x) {\n        return {x.sum + f * x.size,\
-    \ x.size};\n    }\n\n    // Helper for initializing a leaf node\n    static constexpr\
-    \ value_type make(const T& val) {\n        return {val, 1};\n    }\n};\n\n}  //\
-    \ namespace acted_monoid\n}  // namespace m1une\n\n\n#line 10 \"verify/data_structure/persistent_lazy_segtree.test.cpp\"\
-    \n\nint main() {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n\
-    \    using Seg = m1une::data_structure::PersistentLazySegtree<AM>;\n\n    Seg\
-    \ seg(std::vector<long long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1, 4,\
-    \ 10);\n    Seg seg2 = seg1.set(2, AM::make(100));\n    Seg seg3 = seg2.apply(0,\
-    \ 5, -1);\n\n    auto check = [](const Seg& tree, const std::vector<long long>&\
-    \ a) {\n        assert(tree.size() == int(a.size()));\n        assert(tree.empty()\
-    \ == a.empty());\n        auto values = tree.to_vector();\n        assert(int(values.size())\
-    \ == int(a.size()));\n        auto middle = tree.to_vector(1, 4);\n        assert(int(middle.size())\
+    \    }\n    static constexpr value_type inverse(const value_type& x) {\n     \
+    \   return {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n    static\
+    \ constexpr operator_type op_id() {\n        return 0;\n    }\n    static constexpr\
+    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
+    \      return f + g;\n    }\n\n    // Mapping (sum + f * size)\n    static constexpr\
+    \ value_type mapping(const operator_type& f, const value_type& x) {\n        return\
+    \ {x.sum + f * x.size, x.size};\n    }\n\n    // Helper for initializing a leaf\
+    \ node\n    static constexpr value_type make(const T& val) {\n        return {val,\
+    \ 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n\
+    #line 10 \"verify/data_structure/persistent_lazy_segtree.test.cpp\"\n\nint main()\
+    \ {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n    using\
+    \ Seg = m1une::data_structure::PersistentLazySegtree<AM>;\n\n    Seg seg(std::vector<long\
+    \ long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1, 4, 10);\n    Seg seg2 =\
+    \ seg1.set(2, AM::make(100));\n    Seg seg3 = seg2.apply(0, 5, -1);\n\n    auto\
+    \ check = [](const Seg& tree, const std::vector<long long>& a) {\n        assert(tree.size()\
+    \ == int(a.size()));\n        assert(tree.empty() == a.empty());\n        auto\
+    \ values = tree.to_vector();\n        assert(int(values.size()) == int(a.size()));\n\
+    \        auto middle = tree.to_vector(1, 4);\n        assert(int(middle.size())\
     \ == 3);\n        long long total = 0;\n        for (long long x : a) total +=\
     \ x;\n        assert(tree.all_prod().sum == total);\n        for (int l = 0; l\
     \ <= int(a.size()); l++) {\n            long long sum = 0;\n            for (int\
@@ -260,7 +262,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-15 02:20:43+09:00'
+  timestamp: '2026-06-17 16:15:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_lazy_segtree.test.cpp

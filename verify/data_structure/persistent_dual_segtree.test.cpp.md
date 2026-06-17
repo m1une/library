@@ -141,7 +141,8 @@ data:
     \ using value_type = T;\n\n    // Returns the identity element for addition, which\
     \ is 0.\n    static constexpr T id() {\n        return T(0);\n    }\n\n    //\
     \ Returns the sum of a and b.\n    static constexpr T op(const T& a, const T&\
-    \ b) {\n        return a + b;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
+    \ b) {\n        return a + b;\n    }\n\n    static constexpr T inverse(const T&\
+    \ x) {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
     \ m1une\n\n\n#line 10 \"verify/data_structure/persistent_dual_segtree.test.cpp\"\
     \n\nint main() {\n    using Add = m1une::monoid::Add<long long>;\n    using Seg\
     \ = m1une::data_structure::PersistentDualSegtree<Add>;\n\n    Seg seg(std::vector<long\
@@ -187,7 +188,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_dual_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-15 23:28:01+09:00'
+  timestamp: '2026-06-17 16:15:56+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_dual_segtree.test.cpp
