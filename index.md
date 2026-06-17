@@ -557,6 +557,9 @@ data:
       path: verify/graph/library_checker_general_matching.test.cpp
       title: verify/graph/library_checker_general_matching.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+      title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/graph/library_checker_maximum_independent_set.test.cpp
       title: verify/graph/library_checker_maximum_independent_set.test.cpp
   - name: verify/optimization

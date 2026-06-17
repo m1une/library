@@ -19,6 +19,9 @@ data:
     path: verify/data_structure/sparse_table.test.cpp
     title: verify/data_structure/sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+    title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
   _isVerificationFailed: false
@@ -156,6 +159,7 @@ data:
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
   - verify/data_structure/sparse_table.test.cpp
+  - verify/graph/library_checker_lowest_common_ancestor.test.cpp
 documentation_of: data_structure/sparse_table.hpp
 layout: document
 title: Sparse Table

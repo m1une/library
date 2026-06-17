@@ -88,6 +88,9 @@ data:
     path: verify/data_structure/sparse_table.test.cpp
     title: verify/data_structure/sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+    title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
   _isVerificationFailed: false
@@ -159,6 +162,7 @@ data:
   - verify/data_structure/segtree.test.cpp
   - verify/data_structure/path_link_cut_tree.test.cpp
   - verify/data_structure/disjoint_sparse_table.test.cpp
+  - verify/graph/library_checker_lowest_common_ancestor.test.cpp
 documentation_of: monoid/concept.hpp
 layout: document
 title: Monoid Concept
