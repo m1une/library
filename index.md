@@ -352,6 +352,14 @@ data:
     - icon: ':warning:'
       path: monoid/xor.hpp
       title: Bitwise XOR Monoid
+  - name: optimization
+    pages:
+    - icon: ':warning:'
+      path: optimization/all.hpp
+      title: Optimization All
+    - icon: ':heavy_check_mark:'
+      path: optimization/hungarian.hpp
+      title: Hungarian Algorithm
   - name: string
     pages:
     - icon: ':heavy_check_mark:'
@@ -518,6 +526,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/graph/library_checker_general_matching.test.cpp
       title: verify/graph/library_checker_general_matching.test.cpp
+  - name: verify/optimization
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/optimization/hungarian.test.cpp
+      title: verify/optimization/hungarian.test.cpp
   - name: verify/string
     pages:
     - icon: ':heavy_check_mark:'
