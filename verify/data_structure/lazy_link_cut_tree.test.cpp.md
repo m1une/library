@@ -59,68 +59,68 @@ data:
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
     \n\n#line 11 \"data_structure/lazy_link_cut_tree.hpp\"\n\nnamespace m1une {\n\
     namespace data_structure {\n\ntemplate <m1une::acted_monoid::IsCommutativeActedGroup\
-    \ ActedMonoid>\nstruct LazyLinkCutTree {\n    using T = typename ActedMonoid::value_type;\n\
-    \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
+    \ ActedGroup>\nstruct LazyLinkCutTree {\n    using T = typename ActedGroup::value_type;\n\
+    \    using F = typename ActedGroup::operator_type;\n\n   private:\n    struct\
     \ Node {\n        int left = -1;\n        int right = -1;\n        int parent\
     \ = -1;\n        bool rev = false;\n        int size = 1;\n        int virtual_size\
     \ = 0;\n        int rake_size = 0;\n        int all_size = 1;\n        T value\
-    \ = ActedMonoid::id();\n        T prod = ActedMonoid::id();\n        T rev_prod\
-    \ = ActedMonoid::id();\n        T virtual_prod = ActedMonoid::id();\n        T\
-    \ rake_prod = ActedMonoid::id();\n        T all_prod = ActedMonoid::id();\n  \
-    \      F lazy = ActedMonoid::op_id();\n    };\n\n    struct EdgeInfo {\n     \
-    \   int u = -1;\n        int v = -1;\n        int node = -1;\n        bool alive\
-    \ = false;\n    };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo>\
-    \ _edges;\n    std::vector<int> _path_buffer;\n\n    static T make_node_value(const\
-    \ T& value, int) {\n        return value;\n    }\n\n    static T make_node_value(T&&\
-    \ value, int) {\n        return std::move(value);\n    }\n\n    template <class\
-    \ U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) { ActedMonoid::make(x);\
-    \ } ||\n        requires(U x, int i) { ActedMonoid::make(x, i); } ||\n       \
-    \ std::convertible_to<U, T>\n    )\n    static T make_node_value(const U& value,\
-    \ int index) {\n        if constexpr (requires(U x) { ActedMonoid::make(x); })\
-    \ {\n            return ActedMonoid::make(value);\n        } else if constexpr\
-    \ (requires(U x, int i) { ActedMonoid::make(x, i); }) {\n            return ActedMonoid::make(value,\
-    \ index);\n        } else {\n            return static_cast<T>(value);\n     \
-    \   }\n    }\n\n    int child_size(int node) const {\n        return node == -1\
-    \ ? 0 : _nodes[node].size;\n    }\n\n    int child_all_size(int node) const {\n\
-    \        return node == -1 ? 0 : _nodes[node].all_size;\n    }\n\n    int child_rake_size(int\
-    \ node) const {\n        return node == -1 ? 0 : _nodes[node].rake_size;\n   \
-    \ }\n\n    T child_prod(int node) const {\n        return node == -1 ? ActedMonoid::id()\
-    \ : _nodes[node].prod;\n    }\n\n    T child_rev_prod(int node) const {\n    \
-    \    return node == -1 ? ActedMonoid::id() : _nodes[node].rev_prod;\n    }\n\n\
-    \    T child_all_prod(int node) const {\n        return node == -1 ? ActedMonoid::id()\
-    \ : _nodes[node].all_prod;\n    }\n\n    T child_rake_prod(int node) const {\n\
-    \        return node == -1 ? ActedMonoid::id() : _nodes[node].rake_prod;\n   \
-    \ }\n\n    T node_subtree_prod(int node) const {\n        const Node& x = _nodes[node];\n\
-    \        return ActedMonoid::op(x.value, x.virtual_prod);\n    }\n\n    int node_subtree_size(int\
-    \ node) const {\n        return 1 + _nodes[node].virtual_size;\n    }\n\n    bool\
-    \ is_splay_root(int node) const {\n        int parent = _nodes[node].parent;\n\
-    \        return parent == -1 || (_nodes[parent].left != node && _nodes[parent].right\
-    \ != node);\n    }\n\n    void update(int node) {\n        Node& x = _nodes[node];\n\
-    \        x.size = 1 + child_size(x.left) + child_size(x.right);\n        x.rake_size\
+    \ = ActedGroup::id();\n        T prod = ActedGroup::id();\n        T rev_prod\
+    \ = ActedGroup::id();\n        T virtual_prod = ActedGroup::id();\n        T rake_prod\
+    \ = ActedGroup::id();\n        T all_prod = ActedGroup::id();\n        F lazy\
+    \ = ActedGroup::op_id();\n    };\n\n    struct EdgeInfo {\n        int u = -1;\n\
+    \        int v = -1;\n        int node = -1;\n        bool alive = false;\n  \
+    \  };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo> _edges;\n  \
+    \  std::vector<int> _path_buffer;\n\n    static T make_node_value(const T& value,\
+    \ int) {\n        return value;\n    }\n\n    static T make_node_value(T&& value,\
+    \ int) {\n        return std::move(value);\n    }\n\n    template <class U>\n\
+    \    requires (!std::same_as<U, T>) && (\n        requires(U x) { ActedGroup::make(x);\
+    \ } ||\n        requires(U x, int i) { ActedGroup::make(x, i); } ||\n        std::convertible_to<U,\
+    \ T>\n    )\n    static T make_node_value(const U& value, int index) {\n     \
+    \   if constexpr (requires(U x) { ActedGroup::make(x); }) {\n            return\
+    \ ActedGroup::make(value);\n        } else if constexpr (requires(U x, int i)\
+    \ { ActedGroup::make(x, i); }) {\n            return ActedGroup::make(value, index);\n\
+    \        } else {\n            return static_cast<T>(value);\n        }\n    }\n\
+    \n    int child_size(int node) const {\n        return node == -1 ? 0 : _nodes[node].size;\n\
+    \    }\n\n    int child_all_size(int node) const {\n        return node == -1\
+    \ ? 0 : _nodes[node].all_size;\n    }\n\n    int child_rake_size(int node) const\
+    \ {\n        return node == -1 ? 0 : _nodes[node].rake_size;\n    }\n\n    T child_prod(int\
+    \ node) const {\n        return node == -1 ? ActedGroup::id() : _nodes[node].prod;\n\
+    \    }\n\n    T child_rev_prod(int node) const {\n        return node == -1 ?\
+    \ ActedGroup::id() : _nodes[node].rev_prod;\n    }\n\n    T child_all_prod(int\
+    \ node) const {\n        return node == -1 ? ActedGroup::id() : _nodes[node].all_prod;\n\
+    \    }\n\n    T child_rake_prod(int node) const {\n        return node == -1 ?\
+    \ ActedGroup::id() : _nodes[node].rake_prod;\n    }\n\n    T node_subtree_prod(int\
+    \ node) const {\n        const Node& x = _nodes[node];\n        return ActedGroup::op(x.value,\
+    \ x.virtual_prod);\n    }\n\n    int node_subtree_size(int node) const {\n   \
+    \     return 1 + _nodes[node].virtual_size;\n    }\n\n    bool is_splay_root(int\
+    \ node) const {\n        int parent = _nodes[node].parent;\n        return parent\
+    \ == -1 || (_nodes[parent].left != node && _nodes[parent].right != node);\n  \
+    \  }\n\n    void update(int node) {\n        Node& x = _nodes[node];\n       \
+    \ x.size = 1 + child_size(x.left) + child_size(x.right);\n        x.rake_size\
     \ = x.virtual_size + child_rake_size(x.left) + child_rake_size(x.right);\n   \
-    \     x.all_size = x.size + x.rake_size;\n        x.prod = ActedMonoid::op(ActedMonoid::op(child_prod(x.left),\
-    \ x.value), child_prod(x.right));\n        x.rev_prod = ActedMonoid::op(ActedMonoid::op(child_rev_prod(x.right),\
-    \ x.value), child_rev_prod(x.left));\n        x.rake_prod = ActedMonoid::op(ActedMonoid::op(child_rake_prod(x.left),\
+    \     x.all_size = x.size + x.rake_size;\n        x.prod = ActedGroup::op(ActedGroup::op(child_prod(x.left),\
+    \ x.value), child_prod(x.right));\n        x.rev_prod = ActedGroup::op(ActedGroup::op(child_rev_prod(x.right),\
+    \ x.value), child_rev_prod(x.left));\n        x.rake_prod = ActedGroup::op(ActedGroup::op(child_rake_prod(x.left),\
     \ x.virtual_prod),\n                                      child_rake_prod(x.right));\n\
-    \        x.all_prod = ActedMonoid::op(x.prod, x.rake_prod);\n    }\n\n    void\
+    \        x.all_prod = ActedGroup::op(x.prod, x.rake_prod);\n    }\n\n    void\
     \ add_virtual_child(int node, int child) {\n        if (child == -1) return;\n\
     \        Node& x = _nodes[node];\n        x.virtual_size += _nodes[child].all_size;\n\
-    \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
+    \        x.virtual_prod = ActedGroup::op(x.virtual_prod, _nodes[child].all_prod);\n\
     \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
-    \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, ActedMonoid::inv(_nodes[child].all_prod));\n\
+    \        x.virtual_prod = ActedGroup::op(x.virtual_prod, ActedGroup::inv(_nodes[child].all_prod));\n\
     \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
     \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
     \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
     \ apply_operator(int node, const F& f) {\n        if (node == -1) return;\n  \
-    \      Node& x = _nodes[node];\n        x.value = ActedMonoid::mapping(f, x.value);\n\
-    \        x.prod = ActedMonoid::mapping(f, x.prod);\n        x.rev_prod = ActedMonoid::mapping(f,\
-    \ x.rev_prod);\n        x.all_prod = ActedMonoid::op(x.prod, x.rake_prod);\n \
-    \       x.lazy = ActedMonoid::op_comp(f, x.lazy);\n    }\n\n    void push(int\
-    \ node) {\n        if (node == -1) return;\n        Node& x = _nodes[node];\n\
-    \        if (x.rev) {\n            apply_reverse(x.left);\n            apply_reverse(x.right);\n\
+    \      Node& x = _nodes[node];\n        x.value = ActedGroup::mapping(f, x.value);\n\
+    \        x.prod = ActedGroup::mapping(f, x.prod);\n        x.rev_prod = ActedGroup::mapping(f,\
+    \ x.rev_prod);\n        x.all_prod = ActedGroup::op(x.prod, x.rake_prod);\n  \
+    \      x.lazy = ActedGroup::op_comp(f, x.lazy);\n    }\n\n    void push(int node)\
+    \ {\n        if (node == -1) return;\n        Node& x = _nodes[node];\n      \
+    \  if (x.rev) {\n            apply_reverse(x.left);\n            apply_reverse(x.right);\n\
     \            x.rev = false;\n        }\n        apply_operator(x.left, x.lazy);\n\
-    \        apply_operator(x.right, x.lazy);\n        x.lazy = ActedMonoid::op_id();\n\
+    \        apply_operator(x.right, x.lazy);\n        x.lazy = ActedGroup::op_id();\n\
     \    }\n\n    void push_to(int node) {\n        _path_buffer.clear();\n      \
     \  int cur = node;\n        _path_buffer.push_back(cur);\n        while (!is_splay_root(cur))\
     \ {\n            cur = _nodes[cur].parent;\n            _path_buffer.push_back(cur);\n\
@@ -157,13 +157,13 @@ data:
     \   explicit LazyLinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { ActedMonoid::make(x); } ||\n        requires(U x, int i)\
-    \ { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
-    \    explicit LazyLinkCutTree(const std::vector<U>& values) {\n        _nodes.reserve(values.size());\n\
+    \      requires(U x) { ActedGroup::make(x); } ||\n        requires(U x, int i)\
+    \ { ActedGroup::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n \
+    \   explicit LazyLinkCutTree(const std::vector<U>& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
     \    }\n\n    bool empty() const {\n        return _nodes.empty();\n    }\n\n\
-    \    int add_vertex(const T& value = ActedMonoid::id()) {\n        Node node;\n\
+    \    int add_vertex(const T& value = ActedGroup::id()) {\n        Node node;\n\
     \        node.value = value;\n        node.prod = value;\n        node.rev_prod\
     \ = value;\n        node.all_prod = value;\n        _nodes.push_back(std::move(node));\n\
     \        return int(_nodes.size()) - 1;\n    }\n\n    int add_vertex(T&& value)\
@@ -171,8 +171,8 @@ data:
     \ = node.value;\n        node.rev_prod = node.value;\n        node.all_prod =\
     \ node.value;\n        _nodes.push_back(std::move(node));\n        return int(_nodes.size())\
     \ - 1;\n    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
-    \ T>) && (\n        requires(U x) { ActedMonoid::make(x); } ||\n        requires(U\
-    \ x, int i) { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n\
+    \ T>) && (\n        requires(U x) { ActedGroup::make(x); } ||\n        requires(U\
+    \ x, int i) { ActedGroup::make(x, i); } ||\n        std::convertible_to<U, T>\n\
     \    )\n    int add_vertex(const U& value) {\n        return add_vertex(make_node_value(value,\
     \ size()));\n    }\n\n    int edge_count() const {\n        return int(_edges.size());\n\
     \    }\n\n    bool edge_alive(int edge_id) const {\n        check_edge(edge_id);\n\
@@ -187,13 +187,13 @@ data:
     \  }\n\n    void set(int v, T&& value) {\n        check_vertex(v);\n        access(v);\n\
     \        _nodes[v].value = std::move(value);\n        update(v);\n    }\n\n  \
     \  template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>, T>)\
-    \ && (\n        requires(U x) { ActedMonoid::make(x); } ||\n        requires(U\
-    \ x, int i) { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n\
+    \ && (\n        requires(U x) { ActedGroup::make(x); } ||\n        requires(U\
+    \ x, int i) { ActedGroup::make(x, i); } ||\n        std::convertible_to<U, T>\n\
     \    )\n    void set(int v, const U& value) {\n        set(v, make_node_value(value,\
     \ v));\n    }\n\n    // Applies `f` to one vertex.\n    void apply(int v, const\
     \ F& f) {\n        check_vertex(v);\n        access(v);\n        _nodes[v].value\
-    \ = ActedMonoid::mapping(f, _nodes[v].value);\n        update(v);\n    }\n\n \
-    \   // Applies `f` to the path from `u` to `v`. Internally calls `evert(u)`,\n\
+    \ = ActedGroup::mapping(f, _nodes[v].value);\n        update(v);\n    }\n\n  \
+    \  // Applies `f` to the path from `u` to `v`. Internally calls `evert(u)`,\n\
     \    // so the represented root may change.\n    void apply(int u, int v, const\
     \ F& f) {\n        check_vertex(u);\n        check_vertex(v);\n        assert(connected(u,\
     \ v));\n        evert(u);\n        access(v);\n        apply_operator(v, f);\n\
@@ -219,7 +219,7 @@ data:
     \ parent)`;\n    // it internally calls `evert(child)`, so that side's represented\
     \ root may change.\n    bool link_parent(int child, int parent) {\n        return\
     \ link(child, parent);\n    }\n\n    int link_edge(int u, int v, const T& value\
-    \ = ActedMonoid::id()) {\n        check_vertex(u);\n        check_vertex(v);\n\
+    \ = ActedGroup::id()) {\n        check_vertex(u);\n        check_vertex(v);\n\
     \        if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
     \        int node = add_vertex(value);\n        _edges.push_back(EdgeInfo{u, v,\
     \ node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
@@ -230,9 +230,9 @@ data:
     \ v, node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
     \ v);\n        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    template\
     \ <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>, T>) && (\n  \
-    \      requires(U x) { ActedMonoid::make(x); } ||\n        requires(U x, int i)\
-    \ { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
-    \    int link_edge(int u, int v, const U& value) {\n        check_vertex(u);\n\
+    \      requires(U x) { ActedGroup::make(x); } ||\n        requires(U x, int i)\
+    \ { ActedGroup::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n \
+    \   int link_edge(int u, int v, const U& value) {\n        check_vertex(u);\n\
     \        check_vertex(v);\n        if (u == v || connected(u, v)) return -1;\n\
     \        return link_edge(u, v, make_node_value(value, size()));\n    }\n\n  \
     \  // Cuts edge `(u, v)`. Internally calls `evert(u)`, so the represented root\
@@ -254,8 +254,8 @@ data:
     \ const T& value) {\n        set(edge_node(edge_id), value);\n    }\n\n    void\
     \ set_edge(int edge_id, T&& value) {\n        set(edge_node(edge_id), std::move(value));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
-    \ T>) && (\n        requires(U x) { ActedMonoid::make(x); } ||\n        requires(U\
-    \ x, int i) { ActedMonoid::make(x, i); } ||\n        std::convertible_to<U, T>\n\
+    \ T>) && (\n        requires(U x) { ActedGroup::make(x); } ||\n        requires(U\
+    \ x, int i) { ActedGroup::make(x, i); } ||\n        std::convertible_to<U, T>\n\
     \    )\n    void set_edge(int edge_id, const U& value) {\n        set(edge_node(edge_id),\
     \ make_node_value(value, edge_node(edge_id)));\n    }\n\n    void apply_edge(int\
     \ edge_id, const F& f) {\n        apply(edge_node(edge_id), f);\n    }\n\n   \
@@ -320,8 +320,8 @@ data:
     \    T subtree_prod_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        T whole = subtree_prod(root, v);\n        T sub = subtree_prod(root,\
-    \ child);\n        return ActedMonoid::op(whole, ActedMonoid::inv(sub));\n   \
-    \ }\n\n    // Returns `v`'s rooted subtree size excluding the child-side subtree.\n\
+    \ child);\n        return ActedGroup::op(whole, ActedGroup::inv(sub));\n    }\n\
+    \n    // Returns `v`'s rooted subtree size excluding the child-side subtree.\n\
     \    int subtree_size_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        return subtree_size(root, v) - subtree_size(root, child);\n\
@@ -560,7 +560,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/lazy_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-18 00:12:25+09:00'
+  timestamp: '2026-06-18 03:38:12+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_link_cut_tree.test.cpp

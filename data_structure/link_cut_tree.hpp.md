@@ -31,49 +31,48 @@ data:
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/link_cut_tree.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
-    \ Monoid>\nstruct LinkCutTree {\n    using T = typename Monoid::value_type;\n\n\
+    \ Group>\nstruct LinkCutTree {\n    using T = typename Group::value_type;\n\n\
     \   private:\n    struct Node {\n        int left = -1;\n        int right = -1;\n\
     \        int parent = -1;\n        bool rev = false;\n        int size = 1;\n\
-    \        int virtual_size = 0;\n        int all_size = 1;\n        T value = Monoid::id();\n\
-    \        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n        T\
-    \ virtual_prod = Monoid::id();\n        T all_prod = Monoid::id();\n    };\n\n\
-    \    struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n        int\
-    \ node = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n\
-    \    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\n   \
-    \ static T make_node_value(const T& value, int) {\n        return value;\n   \
-    \ }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
-    \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
-    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    static T make_node_value(const\
-    \ U& value, int index) {\n        if constexpr (requires(U x) { Monoid::make(x);\
-    \ }) {\n            return Monoid::make(value);\n        } else if constexpr (requires(U\
-    \ x, int i) { Monoid::make(x, i); }) {\n            return Monoid::make(value,\
-    \ index);\n        } else {\n            return static_cast<T>(value);\n     \
-    \   }\n    }\n\n    int child_size(int node) const {\n        return node == -1\
-    \ ? 0 : _nodes[node].size;\n    }\n\n    int child_all_size(int node) const {\n\
-    \        return node == -1 ? 0 : _nodes[node].all_size;\n    }\n\n    T child_prod(int\
-    \ node) const {\n        return node == -1 ? Monoid::id() : _nodes[node].prod;\n\
-    \    }\n\n    T child_rev_prod(int node) const {\n        return node == -1 ?\
-    \ Monoid::id() : _nodes[node].rev_prod;\n    }\n\n    T child_all_prod(int node)\
-    \ const {\n        return node == -1 ? Monoid::id() : _nodes[node].all_prod;\n\
-    \    }\n\n    T node_subtree_prod(int node) const {\n        const Node& x = _nodes[node];\n\
-    \        return Monoid::op(x.value, x.virtual_prod);\n    }\n\n    int node_subtree_size(int\
-    \ node) const {\n        return 1 + _nodes[node].virtual_size;\n    }\n\n    bool\
-    \ is_splay_root(int node) const {\n        int parent = _nodes[node].parent;\n\
+    \        int virtual_size = 0;\n        int all_size = 1;\n        T value = Group::id();\n\
+    \        T prod = Group::id();\n        T rev_prod = Group::id();\n        T virtual_prod\
+    \ = Group::id();\n        T all_prod = Group::id();\n    };\n\n    struct EdgeInfo\
+    \ {\n        int u = -1;\n        int v = -1;\n        int node = -1;\n      \
+    \  bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo>\
+    \ _edges;\n    std::vector<int> _path_buffer;\n\n    static T make_node_value(const\
+    \ T& value, int) {\n        return value;\n    }\n\n    static T make_node_value(T&&\
+    \ value, int) {\n        return std::move(value);\n    }\n\n    template <class\
+    \ U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) { Group::make(x);\
+    \ } ||\n        requires(U x, int i) { Group::make(x, i); } ||\n        std::convertible_to<U,\
+    \ T>\n    )\n    static T make_node_value(const U& value, int index) {\n     \
+    \   if constexpr (requires(U x) { Group::make(x); }) {\n            return Group::make(value);\n\
+    \        } else if constexpr (requires(U x, int i) { Group::make(x, i); }) {\n\
+    \            return Group::make(value, index);\n        } else {\n           \
+    \ return static_cast<T>(value);\n        }\n    }\n\n    int child_size(int node)\
+    \ const {\n        return node == -1 ? 0 : _nodes[node].size;\n    }\n\n    int\
+    \ child_all_size(int node) const {\n        return node == -1 ? 0 : _nodes[node].all_size;\n\
+    \    }\n\n    T child_prod(int node) const {\n        return node == -1 ? Group::id()\
+    \ : _nodes[node].prod;\n    }\n\n    T child_rev_prod(int node) const {\n    \
+    \    return node == -1 ? Group::id() : _nodes[node].rev_prod;\n    }\n\n    T\
+    \ child_all_prod(int node) const {\n        return node == -1 ? Group::id() :\
+    \ _nodes[node].all_prod;\n    }\n\n    T node_subtree_prod(int node) const {\n\
+    \        const Node& x = _nodes[node];\n        return Group::op(x.value, x.virtual_prod);\n\
+    \    }\n\n    int node_subtree_size(int node) const {\n        return 1 + _nodes[node].virtual_size;\n\
+    \    }\n\n    bool is_splay_root(int node) const {\n        int parent = _nodes[node].parent;\n\
     \        return parent == -1 || (_nodes[parent].left != node && _nodes[parent].right\
     \ != node);\n    }\n\n    void update(int node) {\n        Node& x = _nodes[node];\n\
     \        x.size = 1 + child_size(x.left) + child_size(x.right);\n        x.all_size\
     \ = 1 + x.virtual_size + child_all_size(x.left) + child_all_size(x.right);\n \
-    \       x.prod = Monoid::op(Monoid::op(child_prod(x.left), x.value), child_prod(x.right));\n\
-    \        x.rev_prod = Monoid::op(Monoid::op(child_rev_prod(x.right), x.value),\
-    \ child_rev_prod(x.left));\n        x.all_prod = Monoid::op(Monoid::op(child_all_prod(x.left),\
-    \ x.value),\n                                Monoid::op(x.virtual_prod, child_all_prod(x.right)));\n\
+    \       x.prod = Group::op(Group::op(child_prod(x.left), x.value), child_prod(x.right));\n\
+    \        x.rev_prod = Group::op(Group::op(child_rev_prod(x.right), x.value), child_rev_prod(x.left));\n\
+    \        x.all_prod = Group::op(Group::op(child_all_prod(x.left), x.value),\n\
+    \                                Group::op(x.virtual_prod, child_all_prod(x.right)));\n\
     \    }\n\n    void add_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size += _nodes[child].all_size;\n\
-    \        x.virtual_prod = Monoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
+    \        x.virtual_prod = Group::op(x.virtual_prod, _nodes[child].all_prod);\n\
     \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
-    \        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inv(_nodes[child].all_prod));\n\
+    \        x.virtual_prod = Group::op(x.virtual_prod, Group::inv(_nodes[child].all_prod));\n\
     \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
     \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
     \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
@@ -115,23 +114,23 @@ data:
     \    }\n\n    explicit LinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
+    \      requires(U x) { Group::make(x); } ||\n        requires(U x, int i) { Group::make(x,\
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
     \    }\n\n    bool empty() const {\n        return _nodes.empty();\n    }\n\n\
-    \    int add_vertex(const T& value = Monoid::id()) {\n        Node node;\n   \
-    \     node.value = value;\n        node.prod = value;\n        node.rev_prod =\
+    \    int add_vertex(const T& value = Group::id()) {\n        Node node;\n    \
+    \    node.value = value;\n        node.prod = value;\n        node.rev_prod =\
     \ value;\n        node.all_prod = value;\n        _nodes.push_back(std::move(node));\n\
     \        return int(_nodes.size()) - 1;\n    }\n\n    int add_vertex(T&& value)\
     \ {\n        Node node;\n        node.value = std::move(value);\n        node.prod\
     \ = node.value;\n        node.rev_prod = node.value;\n        node.all_prod =\
     \ node.value;\n        _nodes.push_back(std::move(node));\n        return int(_nodes.size())\
     \ - 1;\n    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
-    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
-    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
-    \  )\n    int add_vertex(const U& value) {\n        return add_vertex(make_node_value(value,\
+    \ T>) && (\n        requires(U x) { Group::make(x); } ||\n        requires(U x,\
+    \ int i) { Group::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
+    \    int add_vertex(const U& value) {\n        return add_vertex(make_node_value(value,\
     \ size()));\n    }\n\n    int edge_count() const {\n        return int(_edges.size());\n\
     \    }\n\n    bool edge_alive(int edge_id) const {\n        check_edge(edge_id);\n\
     \        return _edges[edge_id].alive;\n    }\n\n    int edge_node(int edge_id)\
@@ -145,9 +144,9 @@ data:
     \  }\n\n    void set(int v, T&& value) {\n        check_vertex(v);\n        access(v);\n\
     \        _nodes[v].value = std::move(value);\n        update(v);\n    }\n\n  \
     \  template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>, T>)\
-    \ && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U x, int\
-    \ i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n  \
-    \  void set(int v, const U& value) {\n        set(v, make_node_value(value, v));\n\
+    \ && (\n        requires(U x) { Group::make(x); } ||\n        requires(U x, int\
+    \ i) { Group::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n   \
+    \ void set(int v, const U& value) {\n        set(v, make_node_value(value, v));\n\
     \    }\n\n    // Makes `v` the represented root of its component.\n    void evert(int\
     \ v) {\n        check_vertex(v);\n        access(v);\n        apply_reverse(v);\n\
     \    }\n\n    // Alias for `evert(v)`; changes the represented root to `v`.\n\
@@ -170,8 +169,8 @@ data:
     \ parent)`;\n    // it internally calls `evert(child)`, so that side's represented\
     \ root may change.\n    bool link_parent(int child, int parent) {\n        return\
     \ link(child, parent);\n    }\n\n    int link_edge(int u, int v, const T& value\
-    \ = Monoid::id()) {\n        check_vertex(u);\n        check_vertex(v);\n    \
-    \    if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
+    \ = Group::id()) {\n        check_vertex(u);\n        check_vertex(v);\n     \
+    \   if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
     \        int node = add_vertex(value);\n        _edges.push_back(EdgeInfo{u, v,\
     \ node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
     \ v);\n        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    int\
@@ -181,7 +180,7 @@ data:
     \ v, node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
     \ v);\n        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    template\
     \ <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
+    \      requires(U x) { Group::make(x); } ||\n        requires(U x, int i) { Group::make(x,\
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    int link_edge(int u,\
     \ int v, const U& value) {\n        check_vertex(u);\n        check_vertex(v);\n\
     \        if (u == v || connected(u, v)) return -1;\n        return link_edge(u,\
@@ -204,9 +203,9 @@ data:
     \    }\n\n    void set_edge(int edge_id, const T& value) {\n        set(edge_node(edge_id),\
     \ value);\n    }\n\n    void set_edge(int edge_id, T&& value) {\n        set(edge_node(edge_id),\
     \ std::move(value));\n    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
-    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
-    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
-    \  )\n    void set_edge(int edge_id, const U& value) {\n        set(edge_node(edge_id),\
+    \ T>) && (\n        requires(U x) { Group::make(x); } ||\n        requires(U x,\
+    \ int i) { Group::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
+    \    void set_edge(int edge_id, const U& value) {\n        set(edge_node(edge_id),\
     \ make_node_value(value, edge_node(edge_id)));\n    }\n\n    // Returns the path\
     \ product from `u` to `v`. Internally calls `evert(u)`,\n    // so the represented\
     \ root may change.\n    T prod(int u, int v) {\n        check_vertex(u);\n   \
@@ -269,7 +268,7 @@ data:
     \    T subtree_prod_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        T whole = subtree_prod(root, v);\n        T sub = subtree_prod(root,\
-    \ child);\n        return Monoid::op(whole, Monoid::inv(sub));\n    }\n\n    //\
+    \ child);\n        return Group::op(whole, Group::inv(sub));\n    }\n\n    //\
     \ Returns `v`'s rooted subtree size excluding the child-side subtree.\n    int\
     \ subtree_size_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
@@ -278,50 +277,49 @@ data:
   code: "#ifndef M1UNE_LINK_CUT_TREE_HPP\n#define M1UNE_LINK_CUT_TREE_HPP 1\n\n#include\
     \ <cassert>\n#include <concepts>\n#include <type_traits>\n#include <utility>\n\
     #include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ data_structure {\n\ntemplate <m1une::monoid::IsCommutativeGroup Monoid>\nstruct\
-    \ LinkCutTree {\n    using T = typename Monoid::value_type;\n\n   private:\n \
-    \   struct Node {\n        int left = -1;\n        int right = -1;\n        int\
+    \ data_structure {\n\ntemplate <m1une::monoid::IsCommutativeGroup Group>\nstruct\
+    \ LinkCutTree {\n    using T = typename Group::value_type;\n\n   private:\n  \
+    \  struct Node {\n        int left = -1;\n        int right = -1;\n        int\
     \ parent = -1;\n        bool rev = false;\n        int size = 1;\n        int\
-    \ virtual_size = 0;\n        int all_size = 1;\n        T value = Monoid::id();\n\
-    \        T prod = Monoid::id();\n        T rev_prod = Monoid::id();\n        T\
-    \ virtual_prod = Monoid::id();\n        T all_prod = Monoid::id();\n    };\n\n\
-    \    struct EdgeInfo {\n        int u = -1;\n        int v = -1;\n        int\
-    \ node = -1;\n        bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n\
-    \    std::vector<EdgeInfo> _edges;\n    std::vector<int> _path_buffer;\n\n   \
-    \ static T make_node_value(const T& value, int) {\n        return value;\n   \
-    \ }\n\n    static T make_node_value(T&& value, int) {\n        return std::move(value);\n\
-    \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
-    \ i); } ||\n        std::convertible_to<U, T>\n    )\n    static T make_node_value(const\
-    \ U& value, int index) {\n        if constexpr (requires(U x) { Monoid::make(x);\
-    \ }) {\n            return Monoid::make(value);\n        } else if constexpr (requires(U\
-    \ x, int i) { Monoid::make(x, i); }) {\n            return Monoid::make(value,\
-    \ index);\n        } else {\n            return static_cast<T>(value);\n     \
-    \   }\n    }\n\n    int child_size(int node) const {\n        return node == -1\
-    \ ? 0 : _nodes[node].size;\n    }\n\n    int child_all_size(int node) const {\n\
-    \        return node == -1 ? 0 : _nodes[node].all_size;\n    }\n\n    T child_prod(int\
-    \ node) const {\n        return node == -1 ? Monoid::id() : _nodes[node].prod;\n\
-    \    }\n\n    T child_rev_prod(int node) const {\n        return node == -1 ?\
-    \ Monoid::id() : _nodes[node].rev_prod;\n    }\n\n    T child_all_prod(int node)\
-    \ const {\n        return node == -1 ? Monoid::id() : _nodes[node].all_prod;\n\
-    \    }\n\n    T node_subtree_prod(int node) const {\n        const Node& x = _nodes[node];\n\
-    \        return Monoid::op(x.value, x.virtual_prod);\n    }\n\n    int node_subtree_size(int\
-    \ node) const {\n        return 1 + _nodes[node].virtual_size;\n    }\n\n    bool\
-    \ is_splay_root(int node) const {\n        int parent = _nodes[node].parent;\n\
+    \ virtual_size = 0;\n        int all_size = 1;\n        T value = Group::id();\n\
+    \        T prod = Group::id();\n        T rev_prod = Group::id();\n        T virtual_prod\
+    \ = Group::id();\n        T all_prod = Group::id();\n    };\n\n    struct EdgeInfo\
+    \ {\n        int u = -1;\n        int v = -1;\n        int node = -1;\n      \
+    \  bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo>\
+    \ _edges;\n    std::vector<int> _path_buffer;\n\n    static T make_node_value(const\
+    \ T& value, int) {\n        return value;\n    }\n\n    static T make_node_value(T&&\
+    \ value, int) {\n        return std::move(value);\n    }\n\n    template <class\
+    \ U>\n    requires (!std::same_as<U, T>) && (\n        requires(U x) { Group::make(x);\
+    \ } ||\n        requires(U x, int i) { Group::make(x, i); } ||\n        std::convertible_to<U,\
+    \ T>\n    )\n    static T make_node_value(const U& value, int index) {\n     \
+    \   if constexpr (requires(U x) { Group::make(x); }) {\n            return Group::make(value);\n\
+    \        } else if constexpr (requires(U x, int i) { Group::make(x, i); }) {\n\
+    \            return Group::make(value, index);\n        } else {\n           \
+    \ return static_cast<T>(value);\n        }\n    }\n\n    int child_size(int node)\
+    \ const {\n        return node == -1 ? 0 : _nodes[node].size;\n    }\n\n    int\
+    \ child_all_size(int node) const {\n        return node == -1 ? 0 : _nodes[node].all_size;\n\
+    \    }\n\n    T child_prod(int node) const {\n        return node == -1 ? Group::id()\
+    \ : _nodes[node].prod;\n    }\n\n    T child_rev_prod(int node) const {\n    \
+    \    return node == -1 ? Group::id() : _nodes[node].rev_prod;\n    }\n\n    T\
+    \ child_all_prod(int node) const {\n        return node == -1 ? Group::id() :\
+    \ _nodes[node].all_prod;\n    }\n\n    T node_subtree_prod(int node) const {\n\
+    \        const Node& x = _nodes[node];\n        return Group::op(x.value, x.virtual_prod);\n\
+    \    }\n\n    int node_subtree_size(int node) const {\n        return 1 + _nodes[node].virtual_size;\n\
+    \    }\n\n    bool is_splay_root(int node) const {\n        int parent = _nodes[node].parent;\n\
     \        return parent == -1 || (_nodes[parent].left != node && _nodes[parent].right\
     \ != node);\n    }\n\n    void update(int node) {\n        Node& x = _nodes[node];\n\
     \        x.size = 1 + child_size(x.left) + child_size(x.right);\n        x.all_size\
     \ = 1 + x.virtual_size + child_all_size(x.left) + child_all_size(x.right);\n \
-    \       x.prod = Monoid::op(Monoid::op(child_prod(x.left), x.value), child_prod(x.right));\n\
-    \        x.rev_prod = Monoid::op(Monoid::op(child_rev_prod(x.right), x.value),\
-    \ child_rev_prod(x.left));\n        x.all_prod = Monoid::op(Monoid::op(child_all_prod(x.left),\
-    \ x.value),\n                                Monoid::op(x.virtual_prod, child_all_prod(x.right)));\n\
+    \       x.prod = Group::op(Group::op(child_prod(x.left), x.value), child_prod(x.right));\n\
+    \        x.rev_prod = Group::op(Group::op(child_rev_prod(x.right), x.value), child_rev_prod(x.left));\n\
+    \        x.all_prod = Group::op(Group::op(child_all_prod(x.left), x.value),\n\
+    \                                Group::op(x.virtual_prod, child_all_prod(x.right)));\n\
     \    }\n\n    void add_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size += _nodes[child].all_size;\n\
-    \        x.virtual_prod = Monoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
+    \        x.virtual_prod = Group::op(x.virtual_prod, _nodes[child].all_prod);\n\
     \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
-    \        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inv(_nodes[child].all_prod));\n\
+    \        x.virtual_prod = Group::op(x.virtual_prod, Group::inv(_nodes[child].all_prod));\n\
     \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
     \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
     \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
@@ -363,23 +361,23 @@ data:
     \    }\n\n    explicit LinkCutTree(std::vector<T>&& values) {\n        _nodes.reserve(values.size());\n\
     \        for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));\n\
     \    }\n\n    template <class U>\n    requires (!std::same_as<U, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
+    \      requires(U x) { Group::make(x); } ||\n        requires(U x, int i) { Group::make(x,\
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    explicit LinkCutTree(const\
     \ std::vector<U>& values) {\n        _nodes.reserve(values.size());\n        for\
     \ (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i],\
     \ i));\n    }\n\n    int size() const {\n        return int(_nodes.size());\n\
     \    }\n\n    bool empty() const {\n        return _nodes.empty();\n    }\n\n\
-    \    int add_vertex(const T& value = Monoid::id()) {\n        Node node;\n   \
-    \     node.value = value;\n        node.prod = value;\n        node.rev_prod =\
+    \    int add_vertex(const T& value = Group::id()) {\n        Node node;\n    \
+    \    node.value = value;\n        node.prod = value;\n        node.rev_prod =\
     \ value;\n        node.all_prod = value;\n        _nodes.push_back(std::move(node));\n\
     \        return int(_nodes.size()) - 1;\n    }\n\n    int add_vertex(T&& value)\
     \ {\n        Node node;\n        node.value = std::move(value);\n        node.prod\
     \ = node.value;\n        node.rev_prod = node.value;\n        node.all_prod =\
     \ node.value;\n        _nodes.push_back(std::move(node));\n        return int(_nodes.size())\
     \ - 1;\n    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
-    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
-    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
-    \  )\n    int add_vertex(const U& value) {\n        return add_vertex(make_node_value(value,\
+    \ T>) && (\n        requires(U x) { Group::make(x); } ||\n        requires(U x,\
+    \ int i) { Group::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
+    \    int add_vertex(const U& value) {\n        return add_vertex(make_node_value(value,\
     \ size()));\n    }\n\n    int edge_count() const {\n        return int(_edges.size());\n\
     \    }\n\n    bool edge_alive(int edge_id) const {\n        check_edge(edge_id);\n\
     \        return _edges[edge_id].alive;\n    }\n\n    int edge_node(int edge_id)\
@@ -393,9 +391,9 @@ data:
     \  }\n\n    void set(int v, T&& value) {\n        check_vertex(v);\n        access(v);\n\
     \        _nodes[v].value = std::move(value);\n        update(v);\n    }\n\n  \
     \  template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>, T>)\
-    \ && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U x, int\
-    \ i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n  \
-    \  void set(int v, const U& value) {\n        set(v, make_node_value(value, v));\n\
+    \ && (\n        requires(U x) { Group::make(x); } ||\n        requires(U x, int\
+    \ i) { Group::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n   \
+    \ void set(int v, const U& value) {\n        set(v, make_node_value(value, v));\n\
     \    }\n\n    // Makes `v` the represented root of its component.\n    void evert(int\
     \ v) {\n        check_vertex(v);\n        access(v);\n        apply_reverse(v);\n\
     \    }\n\n    // Alias for `evert(v)`; changes the represented root to `v`.\n\
@@ -418,8 +416,8 @@ data:
     \ parent)`;\n    // it internally calls `evert(child)`, so that side's represented\
     \ root may change.\n    bool link_parent(int child, int parent) {\n        return\
     \ link(child, parent);\n    }\n\n    int link_edge(int u, int v, const T& value\
-    \ = Monoid::id()) {\n        check_vertex(u);\n        check_vertex(v);\n    \
-    \    if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
+    \ = Group::id()) {\n        check_vertex(u);\n        check_vertex(v);\n     \
+    \   if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
     \        int node = add_vertex(value);\n        _edges.push_back(EdgeInfo{u, v,\
     \ node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
     \ v);\n        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    int\
@@ -429,7 +427,7 @@ data:
     \ v, node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
     \ v);\n        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    template\
     \ <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>, T>) && (\n  \
-    \      requires(U x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x,\
+    \      requires(U x) { Group::make(x); } ||\n        requires(U x, int i) { Group::make(x,\
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    int link_edge(int u,\
     \ int v, const U& value) {\n        check_vertex(u);\n        check_vertex(v);\n\
     \        if (u == v || connected(u, v)) return -1;\n        return link_edge(u,\
@@ -452,9 +450,9 @@ data:
     \    }\n\n    void set_edge(int edge_id, const T& value) {\n        set(edge_node(edge_id),\
     \ value);\n    }\n\n    void set_edge(int edge_id, T&& value) {\n        set(edge_node(edge_id),\
     \ std::move(value));\n    }\n\n    template <class U>\n    requires (!std::same_as<std::remove_cvref_t<U>,\
-    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
-    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
-    \  )\n    void set_edge(int edge_id, const U& value) {\n        set(edge_node(edge_id),\
+    \ T>) && (\n        requires(U x) { Group::make(x); } ||\n        requires(U x,\
+    \ int i) { Group::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n\
+    \    void set_edge(int edge_id, const U& value) {\n        set(edge_node(edge_id),\
     \ make_node_value(value, edge_node(edge_id)));\n    }\n\n    // Returns the path\
     \ product from `u` to `v`. Internally calls `evert(u)`,\n    // so the represented\
     \ root may change.\n    T prod(int u, int v) {\n        check_vertex(u);\n   \
@@ -517,7 +515,7 @@ data:
     \    T subtree_prod_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
     \ child) == v);\n        T whole = subtree_prod(root, v);\n        T sub = subtree_prod(root,\
-    \ child);\n        return Monoid::op(whole, Monoid::inv(sub));\n    }\n\n    //\
+    \ child);\n        return Group::op(whole, Group::inv(sub));\n    }\n\n    //\
     \ Returns `v`'s rooted subtree size excluding the child-side subtree.\n    int\
     \ subtree_size_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
     \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
@@ -529,7 +527,7 @@ data:
   isVerificationFile: false
   path: data_structure/link_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-18 00:12:25+09:00'
+  timestamp: '2026-06-18 03:37:28+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/link_cut_tree.test.cpp
