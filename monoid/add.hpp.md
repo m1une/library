@@ -7,6 +7,9 @@ data:
     path: verify/data_structure/disjoint_sparse_table.test.cpp
     title: verify/data_structure/disjoint_sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/data_structure/dsu_monoid.test.cpp
+    title: verify/data_structure/dsu_monoid.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/data_structure/dynamic_monoid_array.test.cpp
     title: verify/data_structure/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
@@ -55,6 +58,7 @@ data:
   - verify/data_structure/link_cut_tree.test.cpp
   - verify/data_structure/persistent_dual_segtree.test.cpp
   - verify/data_structure/persistent_segtree.test.cpp
+  - verify/data_structure/dsu_monoid.test.cpp
   - verify/data_structure/dynamic_monoid_array.test.cpp
   - verify/data_structure/segtree.test.cpp
   - verify/data_structure/path_link_cut_tree.test.cpp

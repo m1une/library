@@ -87,6 +87,9 @@ data:
       path: data_structure/dsu.hpp
       title: Disjoint Set Union (DSU)
     - icon: ':heavy_check_mark:'
+      path: data_structure/dsu_monoid.hpp
+      title: DSU Monoid
+    - icon: ':heavy_check_mark:'
       path: data_structure/dual_segtree.hpp
       title: Dual Segment Tree
     - icon: ':heavy_check_mark:'
@@ -441,6 +444,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/dsu.test.cpp
       title: verify/data_structure/dsu.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/dsu_monoid.test.cpp
+      title: verify/data_structure/dsu_monoid.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/dual_segtree.test.cpp
       title: verify/data_structure/dual_segtree.test.cpp
