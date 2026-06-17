@@ -28,7 +28,7 @@ data:
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 12 \"data_structure/disjoint_sparse_table.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\n// A Disjoint Sparse Table\
     \ for static range queries.\n// It supports any associative monoid, including\
@@ -134,7 +134,7 @@ data:
   isVerificationFile: false
   path: data_structure/disjoint_sparse_table.hpp
   requiredBy: []
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/disjoint_sparse_table.test.cpp

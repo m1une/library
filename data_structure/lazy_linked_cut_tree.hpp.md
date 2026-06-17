@@ -30,7 +30,7 @@ data:
     \ AM::value_type>;\n};\n\n// Concept for acted monoids whose value monoid is a\
     \ commutative group.\n// The value operation must obey commutativity and inverse\
     \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
-    \ && requires(typename AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename\
+    \ && requires(typename AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
     \n\n#line 11 \"data_structure/lazy_linked_cut_tree.hpp\"\n\nnamespace m1une {\n\
     namespace data_structure {\n\ntemplate <m1une::acted_monoid::IsCommutativeActedGroup\
@@ -83,7 +83,7 @@ data:
     \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
     \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
-    \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, ActedMonoid::inverse(_nodes[child].all_prod));\n\
+    \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, ActedMonoid::inv(_nodes[child].all_prod));\n\
     \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
     \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
     \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
@@ -295,7 +295,7 @@ data:
     \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
     \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
-    \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, ActedMonoid::inverse(_nodes[child].all_prod));\n\
+    \        x.virtual_prod = ActedMonoid::op(x.virtual_prod, ActedMonoid::inv(_nodes[child].all_prod));\n\
     \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
     \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
     \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
@@ -459,7 +459,7 @@ data:
   isVerificationFile: false
   path: data_structure/lazy_linked_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-17 21:02:28+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/lazy_linked_cut_tree.test.cpp
@@ -491,7 +491,7 @@ struct AM {
 
     static T id();
     static T op(const T& a, const T& b);
-    static T inverse(const T& x);
+    static T inv(const T& x);
 
     static F op_id();
     static F op_comp(const F& f, const F& g);
@@ -501,7 +501,7 @@ struct AM {
 ```
 
 `op` must be associative and commutative, `id()` must be its identity, and
-`inverse(x)` must satisfy `op(x, inverse(x)) == id()`. As with
+`inv(x)` must satisfy `op(x, inv(x)) == id()`. As with
 `LazyPathLinkCutTree`, `mapping` must distribute over `op`.
 
 ## Construction

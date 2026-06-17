@@ -34,8 +34,8 @@ data:
     \ {\n    using value_type = T;\n\n    // Returns the identity element for addition,\
     \ which is 0.\n    static constexpr T id() {\n        return T(0);\n    }\n\n\
     \    // Returns the sum of a and b.\n    static constexpr T op(const T& a, const\
-    \ T& b) {\n        return a + b;\n    }\n\n    static constexpr T inverse(const\
-    \ T& x) {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
+    \ T& b) {\n        return a + b;\n    }\n\n    static constexpr T inv(const T&\
+    \ x) {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
     \ m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_ADD_HPP\n#define M1UNE_MONOID_ADD_HPP 1\n\nnamespace\
     \ m1une {\nnamespace monoid {\n\n// Monoid for addition (Range Sum).\ntemplate\
@@ -43,13 +43,13 @@ data:
     \ identity element for addition, which is 0.\n    static constexpr T id() {\n\
     \        return T(0);\n    }\n\n    // Returns the sum of a and b.\n    static\
     \ constexpr T op(const T& a, const T& b) {\n        return a + b;\n    }\n\n \
-    \   static constexpr T inverse(const T& x) {\n        return -x;\n    }\n};\n\n\
-    }  // namespace monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_ADD_HPP\n"
+    \   static constexpr T inv(const T& x) {\n        return -x;\n    }\n};\n\n} \
+    \ // namespace monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_ADD_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/add.hpp
   requiredBy: []
-  timestamp: '2026-06-17 16:15:56+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/persistent_dual_segtree.test.cpp

@@ -95,7 +95,7 @@ data:
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_CONCEPT_HPP\n#define M1UNE_MONOID_CONCEPT_HPP 1\n\n\
     #include <concepts>\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to\
@@ -109,7 +109,7 @@ data:
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_CONCEPT_HPP\n"
   dependsOn: []
   isVerificationFile: false
@@ -129,7 +129,7 @@ data:
   - data_structure/persistent_dynamic_monoid_array.hpp
   - data_structure/linked_cut_tree.hpp
   - monoid/power.hpp
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
@@ -177,10 +177,10 @@ To satisfy `m1une::monoid::IsMonoid`, a type `M` must implement:
 
 `m1une::monoid::IsCommutativeGroup` extends `IsMonoid` with an inverse:
 
-* `static constexpr T inverse(const T& x);`
+* `static constexpr T inv(const T& x);`
   Returns the inverse of `x` with respect to `op`.
 
-The concept checks only that `inverse` exists. The type should satisfy the
+The concept checks only that `inv` exists. The type should satisfy the
 group laws, and `op` should be commutative.
 
 ## Example

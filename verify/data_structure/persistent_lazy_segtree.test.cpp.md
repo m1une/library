@@ -37,7 +37,7 @@ data:
     \ AM::value_type>;\n};\n\n// Concept for acted monoids whose value monoid is a\
     \ commutative group.\n// The value operation must obey commutativity and inverse\
     \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
-    \ && requires(typename AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename\
+    \ && requires(typename AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
     \n\n#line 11 \"data_structure/persistent_lazy_segtree.hpp\"\n\nnamespace m1une\
     \ {\nnamespace data_structure {\n\ntemplate <m1une::acted_monoid::IsActedMonoid\
@@ -194,18 +194,18 @@ data:
     \ = T;\n\n    // Value Monoid (Sum)\n    static constexpr value_type id() {\n\
     \        return {T(0), 0};\n    }\n    static constexpr value_type op(const value_type&\
     \ a, const value_type& b) {\n        return {a.sum + b.sum, a.size + b.size};\n\
-    \    }\n    static constexpr value_type inverse(const value_type& x) {\n     \
-    \   return {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n    static\
-    \ constexpr operator_type op_id() {\n        return 0;\n    }\n    static constexpr\
-    \ operator_type op_comp(const operator_type& f, const operator_type& g) {\n  \
-    \      return f + g;\n    }\n\n    // Mapping (sum + f * size)\n    static constexpr\
-    \ value_type mapping(const operator_type& f, const value_type& x) {\n        return\
-    \ {x.sum + f * x.size, x.size};\n    }\n\n    // Helper for initializing a leaf\
-    \ node\n    static constexpr value_type make(const T& val) {\n        return {val,\
-    \ 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n\
-    #line 10 \"verify/data_structure/persistent_lazy_segtree.test.cpp\"\n\nint main()\
-    \ {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n    using\
-    \ Seg = m1une::data_structure::PersistentLazySegtree<AM>;\n\n    Seg seg(std::vector<long\
+    \    }\n    static constexpr value_type inv(const value_type& x) {\n        return\
+    \ {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n    static constexpr\
+    \ operator_type op_id() {\n        return 0;\n    }\n    static constexpr operator_type\
+    \ op_comp(const operator_type& f, const operator_type& g) {\n        return f\
+    \ + g;\n    }\n\n    // Mapping (sum + f * size)\n    static constexpr value_type\
+    \ mapping(const operator_type& f, const value_type& x) {\n        return {x.sum\
+    \ + f * x.size, x.size};\n    }\n\n    // Helper for initializing a leaf node\n\
+    \    static constexpr value_type make(const T& val) {\n        return {val, 1};\n\
+    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 10\
+    \ \"verify/data_structure/persistent_lazy_segtree.test.cpp\"\n\nint main() {\n\
+    \    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n    using Seg\
+    \ = m1une::data_structure::PersistentLazySegtree<AM>;\n\n    Seg seg(std::vector<long\
     \ long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1, 4, 10);\n    Seg seg2 =\
     \ seg1.set(2, AM::make(100));\n    Seg seg3 = seg2.apply(0, 5, -1);\n\n    auto\
     \ check = [](const Seg& tree, const std::vector<long long>& a) {\n        assert(tree.size()\
@@ -266,7 +266,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_lazy_segtree.test.cpp

@@ -15,9 +15,9 @@ data:
     \ = T;\n\n    static constexpr value_type id() {\n        return {T(0), 0};\n\
     \    }\n    static constexpr value_type op(const value_type& a, const value_type&\
     \ b) {\n        return {a.val ^ b.val, a.size + b.size};\n    }\n    static constexpr\
-    \ value_type inverse(const value_type& x) {\n        return {x.val, -x.size};\n\
-    \    }\n\n    static constexpr operator_type op_id() {\n        return T(0);\n\
-    \    }\n    static constexpr operator_type op_comp(const operator_type& f, const\
+    \ value_type inv(const value_type& x) {\n        return {x.val, -x.size};\n  \
+    \  }\n\n    static constexpr operator_type op_id() {\n        return T(0);\n \
+    \   }\n    static constexpr operator_type op_comp(const operator_type& f, const\
     \ operator_type& g) {\n        return f ^ g;\n    }\n\n    static constexpr value_type\
     \ mapping(const operator_type& f, const value_type& x) {\n        if (x.size %\
     \ 2 != 0) {\n            return {x.val ^ f, x.size};\n        }\n        return\
@@ -31,9 +31,9 @@ data:
     \    using operator_type = T;\n\n    static constexpr value_type id() {\n    \
     \    return {T(0), 0};\n    }\n    static constexpr value_type op(const value_type&\
     \ a, const value_type& b) {\n        return {a.val ^ b.val, a.size + b.size};\n\
-    \    }\n    static constexpr value_type inverse(const value_type& x) {\n     \
-    \   return {x.val, -x.size};\n    }\n\n    static constexpr operator_type op_id()\
-    \ {\n        return T(0);\n    }\n    static constexpr operator_type op_comp(const\
+    \    }\n    static constexpr value_type inv(const value_type& x) {\n        return\
+    \ {x.val, -x.size};\n    }\n\n    static constexpr operator_type op_id() {\n \
+    \       return T(0);\n    }\n    static constexpr operator_type op_comp(const\
     \ operator_type& f, const operator_type& g) {\n        return f ^ g;\n    }\n\n\
     \    static constexpr value_type mapping(const operator_type& f, const value_type&\
     \ x) {\n        if (x.size % 2 != 0) {\n            return {x.val ^ f, x.size};\n\
@@ -44,7 +44,7 @@ data:
   isVerificationFile: false
   path: acted_monoid/range_xor_range_xor.hpp
   requiredBy: []
-  timestamp: '2026-06-17 16:15:56+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: acted_monoid/range_xor_range_xor.hpp

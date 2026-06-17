@@ -64,7 +64,7 @@ data:
     \ AM::value_type>;\n};\n\n// Concept for acted monoids whose value monoid is a\
     \ commutative group.\n// The value operation must obey commutativity and inverse\
     \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
-    \ && requires(typename AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename\
+    \ && requires(typename AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
     \n\n"
   code: "#ifndef M1UNE_ACTED_MONOID_CONCEPT_HPP\n#define M1UNE_ACTED_MONOID_CONCEPT_HPP\
@@ -82,7 +82,7 @@ data:
     \ Concept for acted monoids whose value monoid is a commutative group.\n// The\
     \ value operation must obey commutativity and inverse laws.\ntemplate <typename\
     \ AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM> && requires(typename\
-    \ AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename AM::value_type>;\n\
+    \ AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename AM::value_type>;\n\
     };\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n#endif  // M1UNE_ACTED_MONOID_CONCEPT_HPP\n"
   dependsOn: []
   isVerificationFile: false
@@ -94,7 +94,7 @@ data:
   - data_structure/lazy_path_link_cut_tree.hpp
   - data_structure/lazy_linked_cut_tree.hpp
   - data_structure/dynamic_lazy_monoid_array.hpp
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
@@ -160,7 +160,7 @@ interaction between `mapping` and `op` must be satisfied by the implementation.
 `m1une::acted_monoid::IsCommutativeActedGroup` extends `IsActedMonoid` with an
 inverse for the value monoid:
 
-* `static constexpr value_type inverse(const value_type& x)`
+* `static constexpr value_type inv(const value_type& x)`
   Returns the inverse of `x` with respect to the value operation `op`.
 
 The concept checks only the interface. The value operation should satisfy the

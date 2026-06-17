@@ -37,7 +37,7 @@ data:
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/path_link_cut_tree.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsMonoid\
     \ Monoid>\nstruct PathLinkCutTree {\n    using T = typename Monoid::value_type;\n\
@@ -206,8 +206,8 @@ data:
     \  // Returns the identity element for addition, which is 0.\n    static constexpr\
     \ T id() {\n        return T(0);\n    }\n\n    // Returns the sum of a and b.\n\
     \    static constexpr T op(const T& a, const T& b) {\n        return a + b;\n\
-    \    }\n\n    static constexpr T inverse(const T& x) {\n        return -x;\n \
-    \   }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 10 \"verify/data_structure/path_link_cut_tree.test.cpp\"\
+    \    }\n\n    static constexpr T inv(const T& x) {\n        return -x;\n    }\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 10 \"verify/data_structure/path_link_cut_tree.test.cpp\"\
     \n\nstruct StringConcat {\n    using value_type = std::string;\n\n    static std::string\
     \ id() {\n        return \"\";\n    }\n\n    static std::string op(const std::string&\
     \ a, const std::string& b) {\n        return a + b;\n    }\n};\n\nvoid test_vertex_sum()\
@@ -284,7 +284,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/path_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/path_link_cut_tree.test.cpp

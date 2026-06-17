@@ -44,7 +44,7 @@ data:
     \ b) } -> std::same_as<typename M::value_type>;\n};\n\n// Concept for commutative\
     \ group monoids.\n// A type satisfying this concept must also obey commutativity\
     \ and inverse laws.\ntemplate <typename M>\nconcept IsCommutativeGroup = IsMonoid<M>\
-    \ && requires(typename M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename\
+    \ && requires(typename M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
     \ 11 \"data_structure/dual_segtree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
     \ {\n\n// A generic Dual Segment Tree for range monoid updates and point queries.\n\
@@ -213,7 +213,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/dual_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/dual_segtree.test.cpp

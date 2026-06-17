@@ -36,7 +36,7 @@ data:
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 12 \"data_structure/disjoint_sparse_table.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\n// A Disjoint Sparse Table\
     \ for static range queries.\n// It supports any associative monoid, including\
@@ -90,8 +90,8 @@ data:
     \ using value_type = T;\n\n    // Returns the identity element for addition, which\
     \ is 0.\n    static constexpr T id() {\n        return T(0);\n    }\n\n    //\
     \ Returns the sum of a and b.\n    static constexpr T op(const T& a, const T&\
-    \ b) {\n        return a + b;\n    }\n\n    static constexpr T inverse(const T&\
-    \ x) {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
+    \ b) {\n        return a + b;\n    }\n\n    static constexpr T inv(const T& x)\
+    \ {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
     \ m1une\n\n\n#line 5 \"verify/data_structure/disjoint_sparse_table.test.cpp\"\n\
     \n#include <iostream>\n#line 8 \"verify/data_structure/disjoint_sparse_table.test.cpp\"\
     \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
@@ -117,7 +117,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/disjoint_sparse_table.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/disjoint_sparse_table.test.cpp

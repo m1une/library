@@ -23,7 +23,7 @@ data:
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 5 \"monoid/power.hpp\"\
     \n\nnamespace m1une {\nnamespace monoid {\n\n// Computes a^n (a * a * ... * a,\
     \ n times) for an element 'a' in Monoid 'M'.\n// Uses binary exponentiation to\
@@ -48,7 +48,7 @@ data:
   isVerificationFile: false
   path: monoid/power.hpp
   requiredBy: []
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/power.hpp

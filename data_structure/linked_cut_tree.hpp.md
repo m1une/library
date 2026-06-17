@@ -28,7 +28,7 @@ data:
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inverse(a) } -> std::same_as<typename M::value_type>;\n\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
     };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/linked_cut_tree.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
     \ Monoid>\nstruct LinkedCutTree {\n    using T = typename Monoid::value_type;\n\
@@ -73,7 +73,7 @@ data:
     \        x.virtual_prod = Monoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
     \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
-    \        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inverse(_nodes[child].all_prod));\n\
+    \        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inv(_nodes[child].all_prod));\n\
     \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
     \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
     \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
@@ -265,7 +265,7 @@ data:
     \        x.virtual_prod = Monoid::op(x.virtual_prod, _nodes[child].all_prod);\n\
     \    }\n\n    void remove_virtual_child(int node, int child) {\n        if (child\
     \ == -1) return;\n        Node& x = _nodes[node];\n        x.virtual_size -= _nodes[child].all_size;\n\
-    \        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inverse(_nodes[child].all_prod));\n\
+    \        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inv(_nodes[child].all_prod));\n\
     \    }\n\n    void apply_reverse(int node) {\n        if (node == -1) return;\n\
     \        Node& x = _nodes[node];\n        std::swap(x.left, x.right);\n      \
     \  std::swap(x.prod, x.rev_prod);\n        x.rev = !x.rev;\n    }\n\n    void\
@@ -417,7 +417,7 @@ data:
   isVerificationFile: false
   path: data_structure/linked_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-17 21:02:28+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/linked_cut_tree.test.cpp
@@ -445,12 +445,12 @@ struct M {
     using value_type = T;
     static T id();
     static T op(const T& a, const T& b);
-    static T inverse(const T& x);
+    static T inv(const T& x);
 };
 ```
 
 `op` must be associative and commutative, `id()` must be its identity, and
-`inverse(x)` must satisfy `op(x, inverse(x)) == id()`.
+`inv(x)` must satisfy `op(x, inv(x)) == id()`.
 
 ## Construction
 
@@ -510,4 +510,4 @@ the group identity when you want subtree products over edge values only.
 
 This structure does not support non-commutative subtree products. A represented
 subtree has no canonical linear order, and the virtual-child aggregate relies on
-commutativity and `inverse`.
+commutativity and `inv`.

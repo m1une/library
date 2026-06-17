@@ -29,7 +29,7 @@ data:
     \    using operator_type = T;\n\n    // Value Monoid (Sum)\n    static constexpr\
     \ value_type id() {\n        return {T(0), 0};\n    }\n    static constexpr value_type\
     \ op(const value_type& a, const value_type& b) {\n        return {a.sum + b.sum,\
-    \ a.size + b.size};\n    }\n    static constexpr value_type inverse(const value_type&\
+    \ a.size + b.size};\n    }\n    static constexpr value_type inv(const value_type&\
     \ x) {\n        return {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n\
     \    static constexpr operator_type op_id() {\n        return 0;\n    }\n    static\
     \ constexpr operator_type op_comp(const operator_type& f, const operator_type&\
@@ -55,7 +55,7 @@ data:
     \ Concept for acted monoids whose value monoid is a commutative group.\n// The\
     \ value operation must obey commutativity and inverse laws.\ntemplate <typename\
     \ AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM> && requires(typename\
-    \ AM::value_type a) {\n    { AM::inverse(a) } -> std::same_as<typename AM::value_type>;\n\
+    \ AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename AM::value_type>;\n\
     };\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 11 \"data_structure/lazy_path_link_cut_tree.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\ntemplate <m1une::acted_monoid::IsActedMonoid\
     \ ActedMonoid>\nstruct LazyPathLinkCutTree {\n    using T = typename ActedMonoid::value_type;\n\
@@ -299,7 +299,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/lazy_path_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 20:59:27+09:00'
+  timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_path_link_cut_tree.test.cpp
