@@ -426,6 +426,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: utilities/compressor.hpp
       title: Compressor
+    - icon: ':warning:'
+      path: utilities/dynamic_bitset.hpp
+      title: Dynamic Bitset
     - icon: ':heavy_check_mark:'
       path: utilities/int128.hpp
       title: Int128
