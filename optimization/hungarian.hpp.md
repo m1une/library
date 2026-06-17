@@ -2,13 +2,16 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: optimization/all.hpp
     title: Optimization All
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/optimization/hungarian.test.cpp
     title: verify/optimization/hungarian.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/optimization/simplex.test.cpp
+    title: verify/optimization/simplex.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -132,6 +135,7 @@ data:
   timestamp: '2026-06-17 10:25:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/optimization/simplex.test.cpp
   - verify/optimization/hungarian.test.cpp
 documentation_of: optimization/hungarian.hpp
 layout: document

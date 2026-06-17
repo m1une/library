@@ -366,12 +366,15 @@ data:
       title: Bitwise XOR Monoid
   - name: optimization
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: optimization/all.hpp
       title: Optimization All
     - icon: ':heavy_check_mark:'
       path: optimization/hungarian.hpp
       title: Hungarian Algorithm
+    - icon: ':heavy_check_mark:'
+      path: optimization/simplex.hpp
+      title: Simplex Algorithm
   - name: string
     pages:
     - icon: ':heavy_check_mark:'
@@ -555,6 +558,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/optimization/hungarian.test.cpp
       title: verify/optimization/hungarian.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/optimization/simplex.test.cpp
+      title: verify/optimization/simplex.test.cpp
   - name: verify/string
     pages:
     - icon: ':heavy_check_mark:'
