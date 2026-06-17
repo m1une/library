@@ -417,6 +417,9 @@ data:
       title: Tree
   - name: utilities
     pages:
+    - icon: ':warning:'
+      path: utilities/bigint.hpp
+      title: BigInt
     - icon: ':heavy_check_mark:'
       path: utilities/bisect.hpp
       title: Bisect
