@@ -8,26 +8,26 @@ documentation_of: ../../data_structure/link_cut_tree_with_subtree.hpp
 `m1une::data_structure::LinkCutTreeWithSubtree<Monoid>` is a link-cut tree with
 the same path-query interface as `LinkCutTree`, plus rooted subtree queries.
 
-Path operations are delegated to `LinkCutTree`, so non-commutative monoids are
-supported on paths in the usual path order. Subtree operations are folded over
-an explicit copy of the represented forest. This keeps subtree products correct
-for arbitrary monoids, including non-commutative and non-invertible monoids.
-
-For non-commutative subtree products, the order is deterministic preorder in
-the represented forest: visit the subtree root first, then visit active incident
-edges in the order they were linked.
+The monoid operation must be commutative and must provide an inverse. This lets
+the structure maintain aggregates of virtual child subtrees and update them in
+constant time whenever `access` changes the preferred path. Path and subtree
+queries are both amortized $O(\log N)$.
 
 ## Template Parameter
 
-`Monoid` must satisfy `m1une::monoid::IsMonoid`:
+`Monoid` must satisfy `m1une::data_structure::IsCommutativeGroupMonoid`:
 
 ```cpp
 struct M {
     using value_type = T;
     static T id();
     static T op(const T& a, const T& b);
+    static T inverse(const T& x);
 };
 ```
+
+`op` must be associative and commutative, `id()` must be its identity, and
+`inverse(x)` must satisfy `op(x, inverse(x)) == id()`.
 
 ## Construction
 
@@ -52,16 +52,10 @@ Additional subtree methods:
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `std::vector<int> subtree_vertices(root, v)` | Vertices in the subtree of `v` when the represented tree is rooted at `root`. | `O(C)` |
-| `std::vector<int> subtree_vertices(v)` | Uses the current represented root of `v`'s component. | `O(C)` |
-| `int subtree_size(root, v)` | Number of link-cut-tree vertices in the rooted subtree. | `O(C)` |
-| `int subtree_size(v)` | Uses the current represented root of `v`'s component. | `O(C)` |
-| `T subtree_prod(root, v)` | Monoid product of the rooted subtree. | `O(C)` |
-| `T subtree_prod(v)` | Uses the current represented root of `v`'s component. | `O(C)` |
-
-Here `C` is the number of link-cut-tree vertices in the connected component.
-The product itself folds only the reported subtree, but finding the parent of
-`v` with respect to `root` may scan the component.
+| `int subtree_size(root, v)` | Number of link-cut-tree vertices in the subtree of `v` when rooted at `root`. | Amortized $O(\log N)$ |
+| `int subtree_size(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
+| `T subtree_prod(root, v)` | Group product of the rooted subtree. | Amortized $O(\log N)$ |
+| `T subtree_prod(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
 
 ## Example
 
@@ -87,12 +81,10 @@ int main() {
 
 ## Notes
 
-`link_edge` creates helper vertices exactly like `LinkCutTree`; subtree methods
-therefore include those helper vertices. Initialize original vertices with the
-monoid identity when you want subtree products over edge values only.
+`link_edge` creates helper vertices exactly like `LinkCutTree`; subtree sizes
+and products include those helper vertices. Initialize original vertices with
+the group identity when you want subtree products over edge values only.
 
-The traversal-based subtree layer is intentional. A fully logarithmic generic
-subtree aggregate on top of a link-cut tree needs additional algebraic structure
-or a richer top-tree style interface; otherwise path rerooting and lazy
-preferred-path changes do not preserve a well-defined non-commutative subtree
-order.
+This structure does not support non-commutative subtree products. A represented
+subtree has no canonical linear order, and the virtual-child aggregate relies on
+commutativity and `inverse`.

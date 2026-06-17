@@ -2,6 +2,8 @@
 
 #include <cassert>
 #include <iostream>
+#include <random>
+#include <utility>
 #include <vector>
 
 #include "acted_monoid/range_add_range_sum.hpp"
@@ -31,12 +33,13 @@ void test_vertex_path_and_subtree_updates() {
     assert(subtree.sum == 54);
     assert(subtree.size == 4);
     assert(lct.get(0).sum == 1);
+    assert(lct.subtree_prod(1, 3).sum == 29);
 
-    lct.apply_subtree(0, 1, 5);
+    lct.apply(0, 3, 5);
     subtree = lct.subtree_prod(0, 1);
-    assert(subtree.sum == 74);
+    assert(subtree.sum == 64);
     assert(subtree.size == 4);
-    assert(lct.path_prod(2, 4).sum == 74);
+    assert(lct.path_prod(2, 4).sum == 64);
 
     subtree = lct.subtree_prod(2, 1);
     assert(subtree.sum == 57);
@@ -63,7 +66,7 @@ void test_edge_path_and_subtree_updates() {
     assert(lct.path_prod(0, 2).sum == 18);
     assert(lct.subtree_prod(0, 1).sum == 10);
 
-    lct.apply_subtree(0, 1, 2);
+    lct.apply(1, 2, 2);
     assert(lct.get_edge(e01).sum == 8);
     assert(lct.get_edge(e12).sum == 12);
     assert(lct.subtree_prod(0, 0).sum == 20);
@@ -72,9 +75,150 @@ void test_edge_path_and_subtree_updates() {
     assert(!lct.connected(0, 2));
 }
 
+bool naive_connected(const std::vector<std::vector<int>>& adj, int s, int t) {
+    std::vector<int> parent(adj.size(), -1);
+    std::vector<int> stack;
+    parent[s] = s;
+    stack.push_back(s);
+    for (int it = 0; it < int(stack.size()); it++) {
+        int v = stack[it];
+        if (v == t) return true;
+        for (int to : adj[v]) {
+            if (parent[to] != -1) continue;
+            parent[to] = v;
+            stack.push_back(to);
+        }
+    }
+    return false;
+}
+
+std::vector<int> naive_path_vertices(const std::vector<std::vector<int>>& adj, int s, int t) {
+    std::vector<int> parent(adj.size(), -1);
+    std::vector<int> stack;
+    parent[s] = s;
+    stack.push_back(s);
+    for (int it = 0; it < int(stack.size()); it++) {
+        int v = stack[it];
+        if (v == t) break;
+        for (int to : adj[v]) {
+            if (parent[to] != -1) continue;
+            parent[to] = v;
+            stack.push_back(to);
+        }
+    }
+    assert(parent[t] != -1);
+    std::vector<int> path;
+    for (int v = t; v != s; v = parent[v]) path.push_back(v);
+    path.push_back(s);
+    return path;
+}
+
+long long naive_path_sum(const std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int s, int t) {
+    long long res = 0;
+    for (int v : naive_path_vertices(adj, s, t)) res += value[v];
+    return res;
+}
+
+long long naive_subtree_sum(const std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int root,
+                            int v) {
+    std::vector<int> parent(adj.size(), -1);
+    std::vector<int> stack;
+    parent[root] = root;
+    stack.push_back(root);
+    for (int it = 0; it < int(stack.size()); it++) {
+        int x = stack[it];
+        for (int to : adj[x]) {
+            if (parent[to] != -1) continue;
+            parent[to] = x;
+            stack.push_back(to);
+        }
+    }
+    assert(parent[v] != -1);
+
+    long long res = 0;
+    stack.clear();
+    stack.push_back(v);
+    while (!stack.empty()) {
+        int x = stack.back();
+        stack.pop_back();
+        res += value[x];
+        for (int to : adj[x]) {
+            if (to == parent[x]) continue;
+            stack.push_back(to);
+        }
+    }
+    return res;
+}
+
+void test_random_vertex_path_updates() {
+    constexpr int n = 8;
+    std::vector<long long> initial;
+    std::vector<long long> value;
+    for (int i = 0; i < n; i++) {
+        initial.push_back(i + 1);
+        value.push_back(i + 1);
+    }
+    m1une::data_structure::LazyLinkCutTreeWithSubtree<AddSum> lct(initial);
+    std::vector<std::vector<int>> adj(n);
+    std::vector<std::pair<int, int>> edges;
+    std::mt19937 rng(2);
+
+    for (int step = 0; step < 700; step++) {
+        int op = int(rng() % 6);
+        int u = int(rng() % n);
+        int v = int(rng() % n);
+        if (op == 0) {
+            if (u != v && !naive_connected(adj, u, v)) {
+                assert(lct.link(u, v));
+                adj[u].push_back(v);
+                adj[v].push_back(u);
+                edges.emplace_back(u, v);
+            }
+        } else if (op == 1) {
+            if (!edges.empty()) {
+                int id = int(rng() % edges.size());
+                auto [a, b] = edges[id];
+                assert(lct.cut(a, b));
+                for (int i = 0; i < int(adj[a].size()); i++) {
+                    if (adj[a][i] == b) {
+                        adj[a][i] = adj[a].back();
+                        adj[a].pop_back();
+                        break;
+                    }
+                }
+                for (int i = 0; i < int(adj[b].size()); i++) {
+                    if (adj[b][i] == a) {
+                        adj[b][i] = adj[b].back();
+                        adj[b].pop_back();
+                        break;
+                    }
+                }
+                edges[id] = edges.back();
+                edges.pop_back();
+            }
+        } else if (op == 2) {
+            long long x = int(rng() % 200) - 100;
+            value[u] = x;
+            lct.set(u, x);
+        } else if (u != v && naive_connected(adj, u, v)) {
+            if (op == 3) {
+                long long add = int(rng() % 21) - 10;
+                lct.apply(u, v, add);
+                for (int x : naive_path_vertices(adj, u, v)) value[x] += add;
+            } else if (op == 4) {
+                assert(lct.path_prod(u, v).sum == naive_path_sum(adj, value, u, v));
+            } else {
+                assert(lct.subtree_prod(u, v).sum == naive_subtree_sum(adj, value, u, v));
+                assert(lct.subtree_prod(v, u).sum == naive_subtree_sum(adj, value, v, u));
+            }
+        }
+    }
+}
+
 int main() {
     test_vertex_path_and_subtree_updates();
     test_edge_path_and_subtree_updates();
+    test_random_vertex_path_updates();
 
     long long a, b;
     std::cin >> a >> b;

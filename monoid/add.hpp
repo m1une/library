@@ -18,6 +18,10 @@ struct Add {
     static constexpr T op(const T& a, const T& b) {
         return a + b;
     }
+
+    static constexpr T inverse(const T& x) {
+        return -x;
+    }
 };
 
 }  // namespace monoid

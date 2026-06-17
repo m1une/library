@@ -7,17 +7,17 @@ documentation_of: ../../data_structure/lazy_link_cut_tree_with_subtree.hpp
 
 `m1une::data_structure::LazyLinkCutTreeWithSubtree<ActedMonoid>` is the subtree
 query companion to `LazyLinkCutTree`. It keeps the same dynamic path query and
-path update interface, and adds rooted subtree queries and subtree updates.
+path update interface, and adds rooted subtree queries.
 
-Path operations are delegated to `LazyLinkCutTree`. Subtree operations use an
-explicit copy of the represented forest and visit vertices in deterministic
-preorder, so they remain correct for arbitrary acted monoids. Pending path lazy
-updates are pushed by reading each visited vertex before it is folded into a
-subtree product.
+The value monoid must be commutative and must provide an inverse. The structure
+keeps a cached aggregate of virtual child subtrees, while path lazy propagation
+updates only preferred-path vertices. Path operations and subtree queries are
+amortized $O(\log N)$.
 
 ## Template Parameter
 
-`ActedMonoid` must satisfy `m1une::acted_monoid::IsActedMonoid`:
+`ActedMonoid` must satisfy
+`m1une::data_structure::IsCommutativeGroupActedMonoid`:
 
 ```cpp
 struct AM {
@@ -26,6 +26,7 @@ struct AM {
 
     static T id();
     static T op(const T& a, const T& b);
+    static T inverse(const T& x);
 
     static F op_id();
     static F op_comp(const F& f, const F& g);
@@ -33,6 +34,10 @@ struct AM {
     static T mapping(const F& f, const T& x);
 };
 ```
+
+`op` must be associative and commutative, `id()` must be its identity, and
+`inverse(x)` must satisfy `op(x, inverse(x)) == id()`. As with
+`LazyLinkCutTree`, `mapping` must distribute over `op`.
 
 ## Construction
 
@@ -58,17 +63,10 @@ Additional subtree methods:
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `std::vector<int> subtree_vertices(root, v)` | Vertices in the subtree of `v` when the represented tree is rooted at `root`. | `O(C)` |
-| `std::vector<int> subtree_vertices(v)` | Uses the current represented root of `v`'s component. | `O(C)` |
-| `int subtree_size(root, v)` | Number of link-cut-tree vertices in the rooted subtree. | `O(C)` |
-| `int subtree_size(v)` | Uses the current represented root of `v`'s component. | `O(C)` |
-| `T subtree_prod(root, v)` | Acted-monoid value product of the rooted subtree. | `O(C + S log N)` |
-| `T subtree_prod(v)` | Uses the current represented root of `v`'s component. | `O(C + S log N)` |
-| `void apply_subtree(root, v, f)` | Applies `f` to every link-cut-tree vertex in the rooted subtree. | `O(C + S log N)` |
-| `void apply_subtree(v, f)` | Uses the current represented root of `v`'s component. | `O(C + S log N)` |
-
-Here `C` is the number of link-cut-tree vertices in the connected component and
-`S` is the number of vertices in the requested subtree.
+| `int subtree_size(root, v)` | Number of link-cut-tree vertices in the subtree of `v` when rooted at `root`. | Amortized $O(\log N)$ |
+| `int subtree_size(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
+| `T subtree_prod(root, v)` | Acted-monoid value product of the rooted subtree. | Amortized $O(\log N)$ |
+| `T subtree_prod(v)` | Uses the current represented root of `v`'s component. | Amortized $O(\log N)$ |
 
 ## Example
 
@@ -91,18 +89,14 @@ int main() {
     std::cout << lct.path_prod(2, 4).sum << "\n";     // 54
     std::cout << lct.subtree_prod(0, 1).sum << "\n";  // 54
 
-    lct.apply_subtree(0, 1, 5);
-    std::cout << lct.subtree_prod(0, 1).sum << "\n";  // 74
+    lct.apply(0, 3, 5);
+    std::cout << lct.subtree_prod(0, 1).sum << "\n";  // 64
 }
 ```
 
 ## Notes
 
-For non-commutative value monoids, subtree products use deterministic preorder:
-visit the subtree root first, then active incident edges in link order.
-
-The subtree layer is traversal-based by design. With the current acted-monoid
-interface, a path lazy update cannot be applied to a cached subtree aggregate
-without also updating virtual side subtrees that are not on the path. Visiting
-the requested subtree keeps the semantics simple and correct for general acted
-monoids.
+This structure supports lazy path updates, but it does not provide subtree
+updates. A path update must not touch virtual side subtrees, so the
+implementation keeps preferred-path values and virtual-subtree aggregates as
+separate cached values.
