@@ -611,9 +611,9 @@ is available.
 | `bool link(u, v)` | Adds edge `(u, v)` if they are in different components. Returns whether it was added. | Amortized $O(\log N)$ |
 | `bool link_parent(child, parent)` | Rooted-tree spelling of `link(child, parent)`; after a successful link, the merged component keeps the original represented root of `parent`'s component. | Amortized $O(\log N)$ |
 | `int link_edge(u, v, value)` | Adds an edge-value node between `u` and `v`. Returns an edge id, or `-1` if already connected. | Amortized $O(\log N)$ |
-| `bool cut(u, v)` | Removes edge `(u, v)` if it exists. Returns whether it was removed. | Amortized $O(\log N)$ |
-| `bool cut_parent(v)` | Removes the current parent edge of `v` with respect to the represented root. | Amortized $O(\log N)$ |
-| `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. Returns whether it was removed. | Amortized $O(\log N)$ |
+| `bool cut(u, v)` | Removes edge `(u, v)` if it exists. On success, the resulting components are rooted at `u` and `v`. | Amortized $O(\log N)$ |
+| `bool cut_parent(v)` | Removes the current parent edge of `v` with respect to the represented root. On success, `v` becomes the root of the detached child-side component. | Amortized $O(\log N)$ |
+| `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. On success, the endpoint components are rooted at the stored endpoints. | Amortized $O(\log N)$ |
 | `const T& get_edge(edge_id)` | Returns the value stored in the helper edge node. | `O(1)` |
 | `void set_edge(edge_id, value)` | Updates the value stored in the helper edge node. | Amortized $O(\log N)$ |
 | `T prod(u, v)` | Group product on the path from `u` to `v`. | Amortized $O(\log N)$ |
@@ -695,18 +695,41 @@ include those helper vertices. Initialize original vertices with the group
 identity when you want subtree products over edge values only.
 
 `evert(v)` and `reroot(v)` change the represented root of the component to `v`.
-The APIs `link`, `link_parent`, `cut`, `prod`, `path_prod`, `path_size`,
-`kth_vertex`, `subtree_prod(root, v)`, and `subtree_size(root, v)` may
-internally call `evert`, so they may also change represented-root orientation.
 
-`link_parent(child, parent)` internally performs the same operation as
-`link(child, parent)`. It reroots the child-side component at `child`, attaches
-it under `parent`, and preserves the original represented root of the parent-side
-component as the represented root of the merged component.
+The following public methods reroot internally:
 
-`cut_parent(v)` is different from `cut(u, v)`: it cuts the parent edge of `v`
-with respect to the current represented-root orientation and does not call
-`evert`.
+* `link(u, v)` first reroots `u`'s component at `u`. If it succeeds, the merged
+  component keeps the original represented root of `v`'s component. If it
+  returns `false` because `u` and `v` were already connected, that component may
+  be left rooted at `u`.
+* `link_parent(child, parent)` is the same operation as `link(child, parent)`.
+  If it succeeds, it reroots the child-side component at `child`, attaches it
+  under `parent`, and preserves the original represented root of the parent-side
+  component.
+* `link_edge(u, v, value)` uses `link` twice. If it succeeds, the merged
+  component keeps the original represented root of `v`'s component.
+* `cut(u, v)` first reroots at `u`. If it succeeds, the component containing
+  `u` is rooted at `u`, and the component containing `v` is rooted at `v`. If it
+  returns `false` after `u != v`, `u`'s component may still be left rooted at
+  `u`.
+* `cut_parent(v)` does not call `evert`. If it succeeds, the old represented
+  root remains the root of the parent-side component, and `v` becomes the
+  represented root of the detached child-side component.
+* `cut_edge(edge_id)` uses `cut` twice. If it succeeds, the original `u`-side
+  component is rooted at the stored `u` endpoint, the original `v`-side
+  component is rooted at the stored `v` endpoint, and the helper edge node is
+  isolated.
+* `prod(u, v)`, `path_prod(u, v)`, `path_size(u, v)`, and
+  `kth_vertex(u, v, k)` reroot at `u`, so the represented root becomes `u`.
+* `subtree_prod(root, v)`, `subtree_size(root, v)`, `child_toward(root, v)`,
+  `branch_prod(root, v)`, `branch_size(root, v)`, `parent(root, v)`,
+  `subtree_prod_excluding_child(root, v, child)`, and
+  `subtree_size_excluding_child(root, v, child)` reroot at `root`, so the
+  represented root becomes `root`.
+
+Other public methods may expose or splay vertices, but they do not change the
+represented root. In particular, `lca(u, v)` uses the current represented root,
+and `subtree_prod(v)` and `subtree_size(v)` use the current represented root.
 
 This structure does not support non-commutative subtree products. A represented
 subtree has no canonical linear order, and the virtual-child aggregate relies on
