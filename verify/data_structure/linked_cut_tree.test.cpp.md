@@ -158,19 +158,28 @@ data:
     \ && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U x, int\
     \ i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n    )\n  \
     \  void set(int v, const U& value) {\n        set(v, make_node_value(value, v));\n\
-    \    }\n\n    void evert(int v) {\n        check_vertex(v);\n        access(v);\n\
-    \        apply_reverse(v);\n    }\n\n    int component_root(int v) {\n       \
-    \ check_vertex(v);\n        access(v);\n        int cur = v;\n        push(cur);\n\
+    \    }\n\n    // Makes `v` the represented root of its component.\n    void evert(int\
+    \ v) {\n        check_vertex(v);\n        access(v);\n        apply_reverse(v);\n\
+    \    }\n\n    // Alias for `evert(v)`; changes the represented root to `v`.\n\
+    \    void reroot(int v) {\n        evert(v);\n    }\n\n    // Returns the current\
+    \ represented root of `v`'s component.\n    int component_root(int v) {\n    \
+    \    check_vertex(v);\n        access(v);\n        int cur = v;\n        push(cur);\n\
     \        while (_nodes[cur].left != -1) {\n            cur = _nodes[cur].left;\n\
     \            push(cur);\n        }\n        splay(cur);\n        return cur;\n\
-    \    }\n\n    bool connected(int u, int v) {\n        check_vertex(u);\n     \
-    \   check_vertex(v);\n        if (u == v) return true;\n        return component_root(u)\
-    \ == component_root(v);\n    }\n\n    bool same(int u, int v) {\n        return\
-    \ connected(u, v);\n    }\n\n    bool link(int u, int v) {\n        check_vertex(u);\n\
-    \        check_vertex(v);\n        if (u == v) return false;\n        evert(u);\n\
-    \        if (component_root(v) == u) return false;\n        access(v);\n     \
-    \   _nodes[u].parent = v;\n        add_virtual_child(v, u);\n        update(v);\n\
-    \        return true;\n    }\n\n    int link_edge(int u, int v, const T& value\
+    \    }\n\n    // Alias for `component_root(v)`.\n    int root(int v) {\n     \
+    \   return component_root(v);\n    }\n\n    bool connected(int u, int v) {\n \
+    \       check_vertex(u);\n        check_vertex(v);\n        if (u == v) return\
+    \ true;\n        return component_root(u) == component_root(v);\n    }\n\n   \
+    \ bool same(int u, int v) {\n        return connected(u, v);\n    }\n\n    //\
+    \ Links two components. Internally calls `evert(u)`, so the represented root may\
+    \ change.\n    bool link(int u, int v) {\n        check_vertex(u);\n        check_vertex(v);\n\
+    \        if (u == v) return false;\n        evert(u);\n        if (component_root(v)\
+    \ == u) return false;\n        access(v);\n        _nodes[u].parent = v;\n   \
+    \     add_virtual_child(v, u);\n        update(v);\n        return true;\n   \
+    \ }\n\n    // Links `child` under `parent`. This is the same operation as `link(child,\
+    \ parent)`;\n    // it internally calls `evert(child)`, so that side's represented\
+    \ root may change.\n    bool link_parent(int child, int parent) {\n        return\
+    \ link(child, parent);\n    }\n\n    int link_edge(int u, int v, const T& value\
     \ = Monoid::id()) {\n        check_vertex(u);\n        check_vertex(v);\n    \
     \    if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
     \        int node = add_vertex(value);\n        _edges.push_back(EdgeInfo{u, v,\
@@ -186,11 +195,17 @@ data:
     \ i); } ||\n        std::convertible_to<U, T>\n    )\n    int link_edge(int u,\
     \ int v, const U& value) {\n        check_vertex(u);\n        check_vertex(v);\n\
     \        if (u == v || connected(u, v)) return -1;\n        return link_edge(u,\
-    \ v, make_node_value(value, size()));\n    }\n\n    bool cut(int u, int v) {\n\
-    \        check_vertex(u);\n        check_vertex(v);\n        if (u == v) return\
-    \ false;\n        evert(u);\n        access(v);\n        if (_nodes[v].left !=\
-    \ u || _nodes[u].right != -1) return false;\n        _nodes[v].left = -1;\n  \
-    \      _nodes[u].parent = -1;\n        update(v);\n        return true;\n    }\n\
+    \ v, make_node_value(value, size()));\n    }\n\n    // Cuts edge `(u, v)`. Internally\
+    \ calls `evert(u)`, so the represented root may change.\n    bool cut(int u, int\
+    \ v) {\n        check_vertex(u);\n        check_vertex(v);\n        if (u == v)\
+    \ return false;\n        evert(u);\n        access(v);\n        if (_nodes[v].left\
+    \ != u || _nodes[u].right != -1) return false;\n        _nodes[v].left = -1;\n\
+    \        _nodes[u].parent = -1;\n        update(v);\n        return true;\n  \
+    \  }\n\n    // Cuts the parent edge of `v` in the current represented-root orientation.\n\
+    \    // Unlike `cut(u, v)`, this does not call `evert`.\n    bool cut_parent(int\
+    \ v) {\n        check_vertex(v);\n        access(v);\n        int left = _nodes[v].left;\n\
+    \        if (left == -1) return false;\n        _nodes[v].left = -1;\n       \
+    \ _nodes[left].parent = -1;\n        update(v);\n        return true;\n    }\n\
     \n    bool cut_edge(int edge_id) {\n        check_edge(edge_id);\n        EdgeInfo&\
     \ edge = _edges[edge_id];\n        if (!edge.alive) return false;\n        bool\
     \ ok1 = cut(edge.u, edge.node);\n        bool ok2 = cut(edge.node, edge.v);\n\
@@ -202,14 +217,20 @@ data:
     \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
     \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
     \  )\n    void set_edge(int edge_id, const U& value) {\n        set(edge_node(edge_id),\
-    \ make_node_value(value, edge_node(edge_id)));\n    }\n\n    T prod(int u, int\
-    \ v) {\n        check_vertex(u);\n        check_vertex(v);\n        assert(connected(u,\
-    \ v));\n        evert(u);\n        access(v);\n        return _nodes[v].prod;\n\
-    \    }\n\n    T path_prod(int u, int v) {\n        return prod(u, v);\n    }\n\
-    \n    int path_size(int u, int v) {\n        check_vertex(u);\n        check_vertex(v);\n\
-    \        assert(connected(u, v));\n        evert(u);\n        access(v);\n   \
-    \     return _nodes[v].size;\n    }\n\n    int kth_vertex(int u, int v, int k)\
-    \ {\n        check_vertex(u);\n        check_vertex(v);\n        assert(connected(u,\
+    \ make_node_value(value, edge_node(edge_id)));\n    }\n\n    // Returns the path\
+    \ product from `u` to `v`. Internally calls `evert(u)`,\n    // so the represented\
+    \ root may change.\n    T prod(int u, int v) {\n        check_vertex(u);\n   \
+    \     check_vertex(v);\n        assert(connected(u, v));\n        evert(u);\n\
+    \        access(v);\n        return _nodes[v].prod;\n    }\n\n    // Alias for\
+    \ `prod(u, v)`. Internally calls `evert(u)`,\n    // so the represented root may\
+    \ change.\n    T path_prod(int u, int v) {\n        return prod(u, v);\n    }\n\
+    \n    // Returns the number of vertices on path `u`-`v`. Internally calls `evert(u)`,\n\
+    \    // so the represented root may change.\n    int path_size(int u, int v) {\n\
+    \        check_vertex(u);\n        check_vertex(v);\n        assert(connected(u,\
+    \ v));\n        evert(u);\n        access(v);\n        return _nodes[v].size;\n\
+    \    }\n\n    // Returns the `k`-th vertex on path `u`-`v`. Internally calls `evert(u)`,\n\
+    \    // so the represented root may change.\n    int kth_vertex(int u, int v,\
+    \ int k) {\n        check_vertex(u);\n        check_vertex(v);\n        assert(connected(u,\
     \ v));\n        evert(u);\n        access(v);\n        assert(0 <= k && k < _nodes[v].size);\n\
     \n        int cur = v;\n        while (true) {\n            push(cur);\n     \
     \       int left_size = child_size(_nodes[cur].left);\n            if (k < left_size)\
@@ -219,14 +240,50 @@ data:
     \            }\n        }\n    }\n\n    int lca(int u, int v) {\n        check_vertex(u);\n\
     \        check_vertex(v);\n        if (!connected(u, v)) return -1;\n        if\
     \ (u == v) return u;\n        access(u);\n        return access(v);\n    }\n\n\
-    \    T subtree_prod(int root, int v) {\n        check_vertex(root);\n        check_vertex(v);\n\
-    \        assert(connected(root, v));\n        evert(root);\n        access(v);\n\
-    \        return node_subtree_prod(v);\n    }\n\n    T subtree_prod(int v) {\n\
-    \        check_vertex(v);\n        access(v);\n        return node_subtree_prod(v);\n\
-    \    }\n\n    int subtree_size(int root, int v) {\n        check_vertex(root);\n\
+    \    // Returns the aggregate of `v`'s subtree when the represented tree is rooted\
+    \ at `root`.\n    // Internally calls `evert(root)`, so the represented root may\
+    \ change.\n    T subtree_prod(int root, int v) {\n        check_vertex(root);\n\
     \        check_vertex(v);\n        assert(connected(root, v));\n        evert(root);\n\
-    \        access(v);\n        return node_subtree_size(v);\n    }\n\n    int subtree_size(int\
+    \        access(v);\n        return node_subtree_prod(v);\n    }\n\n    // Returns\
+    \ the aggregate of `v`'s subtree with respect to the current represented root.\n\
+    \    T subtree_prod(int v) {\n        check_vertex(v);\n        access(v);\n \
+    \       return node_subtree_prod(v);\n    }\n\n    // Returns the size of `v`'s\
+    \ subtree when the represented tree is rooted at `root`.\n    // Internally calls\
+    \ `evert(root)`, so the represented root may change.\n    int subtree_size(int\
+    \ root, int v) {\n        check_vertex(root);\n        check_vertex(v);\n    \
+    \    assert(connected(root, v));\n        evert(root);\n        access(v);\n \
+    \       return node_subtree_size(v);\n    }\n\n    // Returns the size of `v`'s\
+    \ subtree with respect to the current represented root.\n    int subtree_size(int\
     \ v) {\n        check_vertex(v);\n        access(v);\n        return node_subtree_size(v);\n\
+    \    }\n\n    // Returns the aggregate of the whole connected component containing\
+    \ `v`.\n    T component_prod(int v) {\n        int r = root(v);\n        return\
+    \ subtree_prod(r, r);\n    }\n\n    // Returns the number of vertices in the connected\
+    \ component containing `v`.\n    int component_size(int v) {\n        int r =\
+    \ root(v);\n        return subtree_size(r, r);\n    }\n\n    // Returns the child\
+    \ of `root` that lies on path `root`-`v`.\n    int child_toward(int root, int\
+    \ v) {\n        check_vertex(root);\n        check_vertex(v);\n        assert(root\
+    \ != v);\n        assert(connected(root, v));\n        return kth_vertex(root,\
+    \ v, 1);\n    }\n\n    // Returns the aggregate of the entire branch of `root`\
+    \ that contains `v`.\n    T branch_prod(int root, int v) {\n        check_vertex(root);\n\
+    \        check_vertex(v);\n        assert(root != v);\n        int child = child_toward(root,\
+    \ v);\n        return subtree_prod(root, child);\n    }\n\n    // Returns the\
+    \ size of the entire branch of `root` that contains `v`.\n    int branch_size(int\
+    \ root, int v) {\n        check_vertex(root);\n        check_vertex(v);\n    \
+    \    assert(root != v);\n        int child = child_toward(root, v);\n        return\
+    \ subtree_size(root, child);\n    }\n\n    // Returns the parent of `v` when rooted\
+    \ at `root`, or `-1` if `v == root`.\n    int parent(int root, int v) {\n    \
+    \    check_vertex(root);\n        check_vertex(v);\n        if (root == v) return\
+    \ -1;\n        assert(connected(root, v));\n        int d = path_size(root, v);\n\
+    \        assert(2 <= d);\n        return kth_vertex(root, v, d - 2);\n    }\n\n\
+    \    // Returns `v`'s rooted subtree aggregate excluding the child-side subtree.\n\
+    \    T subtree_prod_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
+    \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
+    \ child) == v);\n        T whole = subtree_prod(root, v);\n        T sub = subtree_prod(root,\
+    \ child);\n        return Monoid::op(whole, Monoid::inv(sub));\n    }\n\n    //\
+    \ Returns `v`'s rooted subtree size excluding the child-side subtree.\n    int\
+    \ subtree_size_excluding_child(int root, int v, int child) {\n        check_vertex(root);\n\
+    \        check_vertex(v);\n        check_vertex(child);\n        assert(parent(root,\
+    \ child) == v);\n        return subtree_size(root, v) - subtree_size(root, child);\n\
     \    }\n};\n\n}  // namespace data_structure\n}  // namespace m1une\n\n\n#line\
     \ 1 \"monoid/add.hpp\"\n\n\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid\
     \ for addition (Range Sum).\ntemplate <typename T>\nstruct Add {\n    using value_type\
@@ -252,35 +309,57 @@ data:
     \ 1) == 7);\n    assert(lct.subtree_size(0, 1) == 3);\n    assert(lct.subtree_size(0,\
     \ lct.edge_node(e12)) == 2);\n\n    lct.set_edge(e12, 20);\n    assert(lct.path_prod(0,\
     \ 2) == 25);\n    assert(lct.subtree_prod(0, 1) == 20);\n\n    assert(lct.cut_edge(e01));\n\
-    \    assert(!lct.connected(0, 2));\n}\n\nbool naive_connected(const std::vector<std::vector<int>>&\
-    \ adj, int s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
+    \    assert(!lct.connected(0, 2));\n}\n\nvoid test_rooted_tree_utility_apis()\
+    \ {\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1,\
+    \ 2, 3, 4, 5});\n\n    assert(lct.link_parent(1, 0));\n    assert(lct.link_parent(2,\
+    \ 0));\n    assert(lct.link_parent(3, 2));\n    assert(lct.link_parent(4, 2));\n\
+    \n    assert(lct.root(4) == 0);\n    lct.reroot(0);\n\n    assert(lct.component_prod(0)\
+    \ == 15);\n    assert(lct.component_size(0) == 5);\n\n    assert(lct.child_toward(0,\
+    \ 4) == 2);\n    assert(lct.child_toward(2, 4) == 4);\n    assert(lct.child_toward(4,\
+    \ 0) == 2);\n\n    assert(lct.branch_prod(0, 4) == 12);\n    assert(lct.branch_size(0,\
+    \ 4) == 3);\n\n    assert(lct.parent(0, 4) == 2);\n    assert(lct.parent(0, 2)\
+    \ == 0);\n    assert(lct.parent(0, 0) == -1);\n\n    assert(lct.subtree_prod(0,\
+    \ 2) == 12);\n    assert(lct.subtree_size(0, 2) == 3);\n\n    assert(lct.subtree_prod_excluding_child(0,\
+    \ 2, 4) == 7);\n    assert(lct.subtree_size_excluding_child(0, 2, 4) == 2);\n\n\
+    \    lct.reroot(0);\n    assert(lct.cut_parent(4));\n\n    assert(!lct.connected(4,\
+    \ 0));\n    assert(lct.component_prod(0) == 10);\n    assert(lct.component_size(0)\
+    \ == 4);\n    assert(lct.component_prod(4) == 5);\n    assert(lct.component_size(4)\
+    \ == 1);\n\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>>\
+    \ lct2(std::vector<int>{1, 2, 3, 4, 5});\n    assert(lct2.link_parent(1, 0));\n\
+    \    assert(lct2.link_parent(2, 0));\n    assert(lct2.link_parent(3, 2));\n  \
+    \  assert(lct2.link_parent(4, 2));\n    lct2.reroot(0);\n\n    assert(lct2.cut_parent(2));\n\
+    \    assert(!lct2.connected(2, 0));\n    assert(lct2.component_prod(0) == 3);\n\
+    \    assert(lct2.component_size(0) == 2);\n    assert(lct2.component_prod(2) ==\
+    \ 12);\n    assert(lct2.component_size(2) == 3);\n}\n\nbool naive_connected(const\
+    \ std::vector<std::vector<int>>& adj, int s, int t) {\n    std::vector<int> parent(adj.size(),\
+    \ -1);\n    std::vector<int> stack;\n    parent[s] = s;\n    stack.push_back(s);\n\
+    \    for (int it = 0; it < int(stack.size()); it++) {\n        int v = stack[it];\n\
+    \        if (v == t) return true;\n        for (int to : adj[v]) {\n         \
+    \   if (parent[to] != -1) continue;\n            parent[to] = v;\n           \
+    \ stack.push_back(to);\n        }\n    }\n    return false;\n}\n\nlong long naive_path_sum(const\
+    \ std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int\
+    \ s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
     \ stack;\n    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it\
     \ < int(stack.size()); it++) {\n        int v = stack[it];\n        if (v == t)\
-    \ return true;\n        for (int to : adj[v]) {\n            if (parent[to] !=\
-    \ -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
-    \        }\n    }\n    return false;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
-    \ adj, const std::vector<long long>& value, int s, int t) {\n    std::vector<int>\
-    \ parent(adj.size(), -1);\n    std::vector<int> stack;\n    parent[s] = s;\n \
-    \   stack.push_back(s);\n    for (int it = 0; it < int(stack.size()); it++) {\n\
-    \        int v = stack[it];\n        if (v == t) break;\n        for (int to :\
-    \ adj[v]) {\n            if (parent[to] != -1) continue;\n            parent[to]\
-    \ = v;\n            stack.push_back(to);\n        }\n    }\n    assert(parent[t]\
-    \ != -1);\n    long long res = 0;\n    for (int v = t; v != s; v = parent[v])\
-    \ res += value[v];\n    res += value[s];\n    return res;\n}\n\nlong long naive_subtree_sum(const\
-    \ std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int\
-    \ root,\n                            int v) {\n    std::vector<int> parent(adj.size(),\
-    \ -1);\n    std::vector<int> stack;\n    parent[root] = root;\n    stack.push_back(root);\n\
-    \    for (int it = 0; it < int(stack.size()); it++) {\n        int x = stack[it];\n\
-    \        for (int to : adj[x]) {\n            if (parent[to] != -1) continue;\n\
-    \            parent[to] = x;\n            stack.push_back(to);\n        }\n  \
-    \  }\n    assert(parent[v] != -1);\n\n    long long res = 0;\n    stack.clear();\n\
-    \    stack.push_back(v);\n    while (!stack.empty()) {\n        int x = stack.back();\n\
-    \        stack.pop_back();\n        res += value[x];\n        for (int to : adj[x])\
-    \ {\n            if (to == parent[x]) continue;\n            stack.push_back(to);\n\
-    \        }\n    }\n    return res;\n}\n\nvoid test_random_vertex_sum() {\n   \
-    \ constexpr int n = 8;\n    std::vector<long long> value;\n    for (int i = 0;\
-    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long\
-    \ long>> lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
+    \ break;\n        for (int to : adj[v]) {\n            if (parent[to] != -1) continue;\n\
+    \            parent[to] = v;\n            stack.push_back(to);\n        }\n  \
+    \  }\n    assert(parent[t] != -1);\n    long long res = 0;\n    for (int v = t;\
+    \ v != s; v = parent[v]) res += value[v];\n    res += value[s];\n    return res;\n\
+    }\n\nlong long naive_subtree_sum(const std::vector<std::vector<int>>& adj, const\
+    \ std::vector<long long>& value, int root,\n                            int v)\
+    \ {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int> stack;\n\
+    \    parent[root] = root;\n    stack.push_back(root);\n    for (int it = 0; it\
+    \ < int(stack.size()); it++) {\n        int x = stack[it];\n        for (int to\
+    \ : adj[x]) {\n            if (parent[to] != -1) continue;\n            parent[to]\
+    \ = x;\n            stack.push_back(to);\n        }\n    }\n    assert(parent[v]\
+    \ != -1);\n\n    long long res = 0;\n    stack.clear();\n    stack.push_back(v);\n\
+    \    while (!stack.empty()) {\n        int x = stack.back();\n        stack.pop_back();\n\
+    \        res += value[x];\n        for (int to : adj[x]) {\n            if (to\
+    \ == parent[x]) continue;\n            stack.push_back(to);\n        }\n    }\n\
+    \    return res;\n}\n\nvoid test_random_vertex_sum() {\n    constexpr int n =\
+    \ 8;\n    std::vector<long long> value;\n    for (int i = 0; i < n; i++) value.push_back(i\
+    \ + 1);\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>>\
+    \ lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
     \ int>> edges;\n    std::mt19937 rng(1);\n\n    for (int step = 0; step < 600;\
     \ step++) {\n        int op = int(rng() % 5);\n        int u = int(rng() % n);\n\
     \        int v = int(rng() % n);\n        if (op == 0) {\n            if (u !=\
@@ -305,8 +384,9 @@ data:
     \     assert(lct.subtree_prod(u, v) == naive_subtree_sum(adj, value, u, v));\n\
     \                assert(lct.subtree_prod(v, u) == naive_subtree_sum(adj, value,\
     \ v, u));\n            }\n        }\n    }\n}\n\nint main() {\n    test_vertex_subtree_sum();\n\
-    \    test_edge_nodes_subtree();\n    test_random_vertex_sum();\n\n    long long\
-    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \    test_edge_nodes_subtree();\n    test_rooted_tree_utility_apis();\n    test_random_vertex_sum();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
     \n#include \"data_structure/linked_cut_tree.hpp\"\n#include \"monoid/add.hpp\"\
@@ -327,35 +407,57 @@ data:
     \ 1) == 7);\n    assert(lct.subtree_size(0, 1) == 3);\n    assert(lct.subtree_size(0,\
     \ lct.edge_node(e12)) == 2);\n\n    lct.set_edge(e12, 20);\n    assert(lct.path_prod(0,\
     \ 2) == 25);\n    assert(lct.subtree_prod(0, 1) == 20);\n\n    assert(lct.cut_edge(e01));\n\
-    \    assert(!lct.connected(0, 2));\n}\n\nbool naive_connected(const std::vector<std::vector<int>>&\
-    \ adj, int s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
+    \    assert(!lct.connected(0, 2));\n}\n\nvoid test_rooted_tree_utility_apis()\
+    \ {\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1,\
+    \ 2, 3, 4, 5});\n\n    assert(lct.link_parent(1, 0));\n    assert(lct.link_parent(2,\
+    \ 0));\n    assert(lct.link_parent(3, 2));\n    assert(lct.link_parent(4, 2));\n\
+    \n    assert(lct.root(4) == 0);\n    lct.reroot(0);\n\n    assert(lct.component_prod(0)\
+    \ == 15);\n    assert(lct.component_size(0) == 5);\n\n    assert(lct.child_toward(0,\
+    \ 4) == 2);\n    assert(lct.child_toward(2, 4) == 4);\n    assert(lct.child_toward(4,\
+    \ 0) == 2);\n\n    assert(lct.branch_prod(0, 4) == 12);\n    assert(lct.branch_size(0,\
+    \ 4) == 3);\n\n    assert(lct.parent(0, 4) == 2);\n    assert(lct.parent(0, 2)\
+    \ == 0);\n    assert(lct.parent(0, 0) == -1);\n\n    assert(lct.subtree_prod(0,\
+    \ 2) == 12);\n    assert(lct.subtree_size(0, 2) == 3);\n\n    assert(lct.subtree_prod_excluding_child(0,\
+    \ 2, 4) == 7);\n    assert(lct.subtree_size_excluding_child(0, 2, 4) == 2);\n\n\
+    \    lct.reroot(0);\n    assert(lct.cut_parent(4));\n\n    assert(!lct.connected(4,\
+    \ 0));\n    assert(lct.component_prod(0) == 10);\n    assert(lct.component_size(0)\
+    \ == 4);\n    assert(lct.component_prod(4) == 5);\n    assert(lct.component_size(4)\
+    \ == 1);\n\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>>\
+    \ lct2(std::vector<int>{1, 2, 3, 4, 5});\n    assert(lct2.link_parent(1, 0));\n\
+    \    assert(lct2.link_parent(2, 0));\n    assert(lct2.link_parent(3, 2));\n  \
+    \  assert(lct2.link_parent(4, 2));\n    lct2.reroot(0);\n\n    assert(lct2.cut_parent(2));\n\
+    \    assert(!lct2.connected(2, 0));\n    assert(lct2.component_prod(0) == 3);\n\
+    \    assert(lct2.component_size(0) == 2);\n    assert(lct2.component_prod(2) ==\
+    \ 12);\n    assert(lct2.component_size(2) == 3);\n}\n\nbool naive_connected(const\
+    \ std::vector<std::vector<int>>& adj, int s, int t) {\n    std::vector<int> parent(adj.size(),\
+    \ -1);\n    std::vector<int> stack;\n    parent[s] = s;\n    stack.push_back(s);\n\
+    \    for (int it = 0; it < int(stack.size()); it++) {\n        int v = stack[it];\n\
+    \        if (v == t) return true;\n        for (int to : adj[v]) {\n         \
+    \   if (parent[to] != -1) continue;\n            parent[to] = v;\n           \
+    \ stack.push_back(to);\n        }\n    }\n    return false;\n}\n\nlong long naive_path_sum(const\
+    \ std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int\
+    \ s, int t) {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int>\
     \ stack;\n    parent[s] = s;\n    stack.push_back(s);\n    for (int it = 0; it\
     \ < int(stack.size()); it++) {\n        int v = stack[it];\n        if (v == t)\
-    \ return true;\n        for (int to : adj[v]) {\n            if (parent[to] !=\
-    \ -1) continue;\n            parent[to] = v;\n            stack.push_back(to);\n\
-    \        }\n    }\n    return false;\n}\n\nlong long naive_path_sum(const std::vector<std::vector<int>>&\
-    \ adj, const std::vector<long long>& value, int s, int t) {\n    std::vector<int>\
-    \ parent(adj.size(), -1);\n    std::vector<int> stack;\n    parent[s] = s;\n \
-    \   stack.push_back(s);\n    for (int it = 0; it < int(stack.size()); it++) {\n\
-    \        int v = stack[it];\n        if (v == t) break;\n        for (int to :\
-    \ adj[v]) {\n            if (parent[to] != -1) continue;\n            parent[to]\
-    \ = v;\n            stack.push_back(to);\n        }\n    }\n    assert(parent[t]\
-    \ != -1);\n    long long res = 0;\n    for (int v = t; v != s; v = parent[v])\
-    \ res += value[v];\n    res += value[s];\n    return res;\n}\n\nlong long naive_subtree_sum(const\
-    \ std::vector<std::vector<int>>& adj, const std::vector<long long>& value, int\
-    \ root,\n                            int v) {\n    std::vector<int> parent(adj.size(),\
-    \ -1);\n    std::vector<int> stack;\n    parent[root] = root;\n    stack.push_back(root);\n\
-    \    for (int it = 0; it < int(stack.size()); it++) {\n        int x = stack[it];\n\
-    \        for (int to : adj[x]) {\n            if (parent[to] != -1) continue;\n\
-    \            parent[to] = x;\n            stack.push_back(to);\n        }\n  \
-    \  }\n    assert(parent[v] != -1);\n\n    long long res = 0;\n    stack.clear();\n\
-    \    stack.push_back(v);\n    while (!stack.empty()) {\n        int x = stack.back();\n\
-    \        stack.pop_back();\n        res += value[x];\n        for (int to : adj[x])\
-    \ {\n            if (to == parent[x]) continue;\n            stack.push_back(to);\n\
-    \        }\n    }\n    return res;\n}\n\nvoid test_random_vertex_sum() {\n   \
-    \ constexpr int n = 8;\n    std::vector<long long> value;\n    for (int i = 0;\
-    \ i < n; i++) value.push_back(i + 1);\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long\
-    \ long>> lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
+    \ break;\n        for (int to : adj[v]) {\n            if (parent[to] != -1) continue;\n\
+    \            parent[to] = v;\n            stack.push_back(to);\n        }\n  \
+    \  }\n    assert(parent[t] != -1);\n    long long res = 0;\n    for (int v = t;\
+    \ v != s; v = parent[v]) res += value[v];\n    res += value[s];\n    return res;\n\
+    }\n\nlong long naive_subtree_sum(const std::vector<std::vector<int>>& adj, const\
+    \ std::vector<long long>& value, int root,\n                            int v)\
+    \ {\n    std::vector<int> parent(adj.size(), -1);\n    std::vector<int> stack;\n\
+    \    parent[root] = root;\n    stack.push_back(root);\n    for (int it = 0; it\
+    \ < int(stack.size()); it++) {\n        int x = stack[it];\n        for (int to\
+    \ : adj[x]) {\n            if (parent[to] != -1) continue;\n            parent[to]\
+    \ = x;\n            stack.push_back(to);\n        }\n    }\n    assert(parent[v]\
+    \ != -1);\n\n    long long res = 0;\n    stack.clear();\n    stack.push_back(v);\n\
+    \    while (!stack.empty()) {\n        int x = stack.back();\n        stack.pop_back();\n\
+    \        res += value[x];\n        for (int to : adj[x]) {\n            if (to\
+    \ == parent[x]) continue;\n            stack.push_back(to);\n        }\n    }\n\
+    \    return res;\n}\n\nvoid test_random_vertex_sum() {\n    constexpr int n =\
+    \ 8;\n    std::vector<long long> value;\n    for (int i = 0; i < n; i++) value.push_back(i\
+    \ + 1);\n    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>>\
+    \ lct(value);\n    std::vector<std::vector<int>> adj(n);\n    std::vector<std::pair<int,\
     \ int>> edges;\n    std::mt19937 rng(1);\n\n    for (int step = 0; step < 600;\
     \ step++) {\n        int op = int(rng() % 5);\n        int u = int(rng() % n);\n\
     \        int v = int(rng() % n);\n        if (op == 0) {\n            if (u !=\
@@ -380,8 +482,9 @@ data:
     \     assert(lct.subtree_prod(u, v) == naive_subtree_sum(adj, value, u, v));\n\
     \                assert(lct.subtree_prod(v, u) == naive_subtree_sum(adj, value,\
     \ v, u));\n            }\n        }\n    }\n}\n\nint main() {\n    test_vertex_subtree_sum();\n\
-    \    test_edge_nodes_subtree();\n    test_random_vertex_sum();\n\n    long long\
-    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \    test_edge_nodes_subtree();\n    test_rooted_tree_utility_apis();\n    test_random_vertex_sum();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   dependsOn:
   - data_structure/linked_cut_tree.hpp
   - monoid/concept.hpp
@@ -389,7 +492,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/linked_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 21:06:48+09:00'
+  timestamp: '2026-06-17 22:52:23+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/linked_cut_tree.test.cpp
