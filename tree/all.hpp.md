@@ -68,21 +68,23 @@ data:
     \ from, int to, T cost = T(1)) {\n        assert(0 <= from && from < _n);\n  \
     \      assert(0 <= to && to < _n);\n        int id = _edge_count++;\n        int\
     \ idx = int(_g[from].size());\n        _g[from].push_back(edge_type(from, to,\
-    \ cost, id));\n        _edge_positions.push_back({{from, idx}});\n        return\
-    \ id;\n    }\n\n    int add_edge(int u, int v, T cost = T(1)) {\n        assert(0\
-    \ <= u && u < _n);\n        assert(0 <= v && v < _n);\n        int id = _edge_count++;\n\
-    \        int u_idx = int(_g[u].size());\n        int v_idx = int(_g[v].size());\n\
-    \        _g[u].push_back(edge_type(u, v, cost, id));\n        _g[v].push_back(edge_type(v,\
-    \ u, cost, id));\n        _edge_positions.push_back({{u, u_idx}, {v, v_idx}});\n\
-    \        return id;\n    }\n\n    void set_edge_alive(int id, bool alive) {\n\
-    \        assert(0 <= id && id < _edge_count);\n        for (auto [v, idx] : _edge_positions[id])\
-    \ {\n            _g[v][idx].alive = alive;\n        }\n    }\n\n    void erase_edge(int\
-    \ id) {\n        set_edge_alive(id, false);\n    }\n\n    void revive_edge(int\
-    \ id) {\n        set_edge_alive(id, true);\n    }\n\n    bool is_edge_alive(int\
-    \ id) const {\n        assert(0 <= id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n\
-    \        auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
-    \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
-    \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
+    \ cost, id));\n        _edge_positions.emplace_back();\n        _edge_positions.back().push_back({from,\
+    \ idx});\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost =\
+    \ T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
+    \        int id = _edge_count++;\n        int u_idx = int(_g[u].size());\n   \
+    \     int v_idx = int(_g[v].size());\n        _g[u].push_back(edge_type(u, v,\
+    \ cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        _edge_positions.emplace_back();\n\
+    \        _edge_positions.back().push_back({u, u_idx});\n        _edge_positions.back().push_back({v,\
+    \ v_idx});\n        return id;\n    }\n\n    void set_edge_alive(int id, bool\
+    \ alive) {\n        assert(0 <= id && id < _edge_count);\n        for (auto [v,\
+    \ idx] : _edge_positions[id]) {\n            _g[v][idx].alive = alive;\n     \
+    \   }\n    }\n\n    void erase_edge(int id) {\n        set_edge_alive(id, false);\n\
+    \    }\n\n    void revive_edge(int id) {\n        set_edge_alive(id, true);\n\
+    \    }\n\n    bool is_edge_alive(int id) const {\n        assert(0 <= id && id\
+    \ < _edge_count);\n        assert(!_edge_positions[id].empty());\n        auto\
+    \ [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n    }\n\
+    \n    const std::vector<edge_type>& operator[](int v) const {\n        assert(0\
+    \ <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
     \    }\n\n    const std::vector<std::vector<edge_type>>& adjacency() const {\n\
     \        return _g;\n    }\n\n    std::vector<std::vector<edge_type>>& adjacency()\
@@ -210,44 +212,45 @@ data:
     \            int p = parent[v];\n            subtree_size[p] += subtree_size[v];\n\
     \            if (heavy[p] == -1 || subtree_size[heavy[p]] < subtree_size[v]) heavy[p]\
     \ = v;\n        }\n\n        order.assign(dfs_order.size(), -1);\n        int\
-    \ timer = 0;\n        std::vector<std::pair<int, int>> starts = {{root, root}};\n\
-    \        while (!starts.empty()) {\n            auto [start, h] = starts.back();\n\
-    \            starts.pop_back();\n            for (int v = start; v != -1; v =\
-    \ heavy[v]) {\n                head[v] = h;\n                tin[v] = timer;\n\
-    \                order[timer++] = v;\n                for (auto it = g[v].rbegin();\
-    \ it != g[v].rend(); ++it) {\n                    if (!it->alive) continue;\n\
-    \                    int to = it->to;\n                    if (parent[to] != v\
-    \ || to == heavy[v]) continue;\n                    starts.push_back({to, to});\n\
-    \                }\n            }\n        }\n        for (int i = int(dfs_order.size())\
-    \ - 1; i >= 0; i--) {\n            int v = dfs_order[i];\n            tout[v]\
-    \ = tin[v] + subtree_size[v];\n        }\n    }\n\n    int size() const {\n  \
-    \      return _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n\
-    \    }\n\n    bool is_ancestor(int u, int v) const {\n        check_vertex(u);\n\
-    \        check_vertex(v);\n        return tin[u] <= tin[v] && tout[v] <= tout[u];\n\
-    \    }\n\n    int lca(int u, int v) const {\n        check_vertex(u);\n      \
-    \  check_vertex(v);\n        while (head[u] != head[v]) {\n            if (depth[head[u]]\
-    \ < depth[head[v]]) std::swap(u, v);\n            u = parent[head[u]];\n     \
-    \   }\n        return depth[u] < depth[v] ? u : v;\n    }\n\n    int dist_edges(int\
-    \ u, int v) const {\n        int w = lca(u, v);\n        return depth[u] + depth[v]\
-    \ - 2 * depth[w];\n    }\n\n    T dist_cost(int u, int v) const {\n        int\
-    \ w = lca(u, v);\n        return dist[u] + dist[v] - dist[w] - dist[w];\n    }\n\
-    \n    int kth_ancestor(int v, int k) const {\n        check_vertex(v);\n     \
-    \   assert(0 <= k);\n        while (v != -1) {\n            int h = head[v];\n\
-    \            int len = depth[v] - depth[h];\n            if (k <= len) return\
-    \ order[tin[v] - k];\n            k -= len + 1;\n            v = parent[h];\n\
-    \        }\n        return -1;\n    }\n\n    int jump(int from, int to, int k)\
-    \ const {\n        check_vertex(from);\n        check_vertex(to);\n        assert(0\
-    \ <= k);\n        int w = lca(from, to);\n        int up_len = depth[from] - depth[w];\n\
-    \        int down_len = depth[to] - depth[w];\n        if (up_len + down_len <\
-    \ k) return -1;\n        if (k <= up_len) return kth_ancestor(from, k);\n    \
-    \    return kth_ancestor(to, down_len - (k - up_len));\n    }\n\n    std::pair<int,\
-    \ int> subtree_range(int v, bool edge = false) const {\n        check_vertex(v);\n\
-    \        return {tin[v] + (edge ? 1 : 0), tout[v]};\n    }\n\n    std::vector<HldPathSegment>\
-    \ path_segments(int u, int v, bool edge = false) const {\n        check_vertex(u);\n\
-    \        check_vertex(v);\n        std::vector<HldPathSegment> result, down;\n\
-    \        while (head[u] != head[v]) {\n            if (depth[head[u]] >= depth[head[v]])\
-    \ {\n                add_segment(result, tin[head[u]], tin[u] + 1, true);\n  \
-    \              u = parent[head[u]];\n            } else {\n                add_segment(down,\
+    \ timer = 0;\n        std::vector<std::pair<int, int>> starts = {std::pair<int,\
+    \ int>{root, root}};\n        while (!starts.empty()) {\n            auto [start,\
+    \ h] = starts.back();\n            starts.pop_back();\n            for (int v\
+    \ = start; v != -1; v = heavy[v]) {\n                head[v] = h;\n          \
+    \      tin[v] = timer;\n                order[timer++] = v;\n                for\
+    \ (auto it = g[v].rbegin(); it != g[v].rend(); ++it) {\n                    if\
+    \ (!it->alive) continue;\n                    int to = it->to;\n             \
+    \       if (parent[to] != v || to == heavy[v]) continue;\n                   \
+    \ starts.push_back({to, to});\n                }\n            }\n        }\n \
+    \       for (int i = int(dfs_order.size()) - 1; i >= 0; i--) {\n            int\
+    \ v = dfs_order[i];\n            tout[v] = tin[v] + subtree_size[v];\n       \
+    \ }\n    }\n\n    int size() const {\n        return _n;\n    }\n\n    bool empty()\
+    \ const {\n        return _n == 0;\n    }\n\n    bool is_ancestor(int u, int v)\
+    \ const {\n        check_vertex(u);\n        check_vertex(v);\n        return\
+    \ tin[u] <= tin[v] && tout[v] <= tout[u];\n    }\n\n    int lca(int u, int v)\
+    \ const {\n        check_vertex(u);\n        check_vertex(v);\n        while (head[u]\
+    \ != head[v]) {\n            if (depth[head[u]] < depth[head[v]]) std::swap(u,\
+    \ v);\n            u = parent[head[u]];\n        }\n        return depth[u] <\
+    \ depth[v] ? u : v;\n    }\n\n    int dist_edges(int u, int v) const {\n     \
+    \   int w = lca(u, v);\n        return depth[u] + depth[v] - 2 * depth[w];\n \
+    \   }\n\n    T dist_cost(int u, int v) const {\n        int w = lca(u, v);\n \
+    \       return dist[u] + dist[v] - dist[w] - dist[w];\n    }\n\n    int kth_ancestor(int\
+    \ v, int k) const {\n        check_vertex(v);\n        assert(0 <= k);\n     \
+    \   while (v != -1) {\n            int h = head[v];\n            int len = depth[v]\
+    \ - depth[h];\n            if (k <= len) return order[tin[v] - k];\n         \
+    \   k -= len + 1;\n            v = parent[h];\n        }\n        return -1;\n\
+    \    }\n\n    int jump(int from, int to, int k) const {\n        check_vertex(from);\n\
+    \        check_vertex(to);\n        assert(0 <= k);\n        int w = lca(from,\
+    \ to);\n        int up_len = depth[from] - depth[w];\n        int down_len = depth[to]\
+    \ - depth[w];\n        if (up_len + down_len < k) return -1;\n        if (k <=\
+    \ up_len) return kth_ancestor(from, k);\n        return kth_ancestor(to, down_len\
+    \ - (k - up_len));\n    }\n\n    std::pair<int, int> subtree_range(int v, bool\
+    \ edge = false) const {\n        check_vertex(v);\n        return {tin[v] + (edge\
+    \ ? 1 : 0), tout[v]};\n    }\n\n    std::vector<HldPathSegment> path_segments(int\
+    \ u, int v, bool edge = false) const {\n        check_vertex(u);\n        check_vertex(v);\n\
+    \        std::vector<HldPathSegment> result, down;\n        while (head[u] !=\
+    \ head[v]) {\n            if (depth[head[u]] >= depth[head[v]]) {\n          \
+    \      add_segment(result, tin[head[u]], tin[u] + 1, true);\n                u\
+    \ = parent[head[u]];\n            } else {\n                add_segment(down,\
     \ tin[head[v]], tin[v] + 1, false);\n                v = parent[head[v]];\n  \
     \          }\n        }\n\n        if (depth[u] >= depth[v]) {\n            add_segment(result,\
     \ tin[v] + (edge ? 1 : 0), tin[u] + 1, true);\n        } else {\n            add_segment(down,\
@@ -879,7 +882,7 @@ data:
   isVerificationFile: false
   path: tree/all.hpp
   requiredBy: []
-  timestamp: '2026-06-17 13:36:22+09:00'
+  timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp

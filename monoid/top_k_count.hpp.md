@@ -28,8 +28,8 @@ data:
     \                res.push_back(b[j++]);\n            }\n        }\n        return\
     \ res;\n    }\n\n    // Helper to securely create a leaf node from a single value.\n\
     \    static constexpr value_type make(const T& val, int count = 1) {\n       \
-    \ return {{val, count}};\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
-    \ m1une\n\n\n"
+    \ return value_type{std::pair<T, int>{val, count}};\n    }\n};\n\n}  // namespace\
+    \ monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_TOP_K_COUNT_HPP\n#define M1UNE_MONOID_TOP_K_COUNT_HPP\
     \ 1\n\n#include <algorithm>\n#include <functional>\n#include <utility>\n#include\
     \ <vector>\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for finding the\
@@ -50,13 +50,13 @@ data:
     \            } else {\n                res.push_back(b[j++]);\n            }\n\
     \        }\n        return res;\n    }\n\n    // Helper to securely create a leaf\
     \ node from a single value.\n    static constexpr value_type make(const T& val,\
-    \ int count = 1) {\n        return {{val, count}};\n    }\n};\n\n}  // namespace\
-    \ monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_TOP_K_COUNT_HPP\n"
+    \ int count = 1) {\n        return value_type{std::pair<T, int>{val, count}};\n\
+    \    }\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n#endif  // M1UNE_MONOID_TOP_K_COUNT_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: monoid/top_k_count.hpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/top_k_count.hpp

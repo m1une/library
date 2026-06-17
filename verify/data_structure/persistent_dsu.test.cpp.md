@@ -98,9 +98,11 @@ data:
     \ assert(a.same(0, 2) == false);\n    assert(b.same(2, 3) == true);\n    assert(c.same(0,\
     \ 3) == true);\n    assert(c.same(0, 4) == false);\n    assert(d.same(0, 4) ==\
     \ true);\n    assert(d.group_size(0) == 5);\n    assert(d.size(0) == 5);\n   \
-    \ assert(a.group_size(0) == 2);\n    assert(dsu.group_size(0) == 1);\n    assert(dsu.groups()\
-    \ == (std::vector<std::vector<int>>{{0}, {1}, {2}, {3}, {4}}));\n    assert(c.groups()\
-    \ == (std::vector<std::vector<int>>{{0, 1, 2, 3}, {4}}));\n\n    Dsu empty;\n\
+    \ assert(a.group_size(0) == 2);\n    assert(dsu.group_size(0) == 1);\n    std::vector<std::vector<int>>\
+    \ singleton_groups = {\n        std::vector<int>{0}, std::vector<int>{1}, std::vector<int>{2},\
+    \ std::vector<int>{3}, std::vector<int>{4},\n    };\n    std::vector<std::vector<int>>\
+    \ merged_groups = {std::vector<int>{0, 1, 2, 3}, std::vector<int>{4}};\n    assert(dsu.groups()\
+    \ == singleton_groups);\n    assert(c.groups() == merged_groups);\n\n    Dsu empty;\n\
     \    assert(empty.size() == 0);\n    assert(empty.empty());\n\n    std::mt19937\
     \ rng(0);\n    constexpr int N = 30;\n    std::vector<std::pair<Dsu, NaiveDsu>>\
     \ versions;\n    versions.push_back({Dsu(N), NaiveDsu(N)});\n\n    for (int step\
@@ -146,9 +148,11 @@ data:
     \ assert(a.same(0, 2) == false);\n    assert(b.same(2, 3) == true);\n    assert(c.same(0,\
     \ 3) == true);\n    assert(c.same(0, 4) == false);\n    assert(d.same(0, 4) ==\
     \ true);\n    assert(d.group_size(0) == 5);\n    assert(d.size(0) == 5);\n   \
-    \ assert(a.group_size(0) == 2);\n    assert(dsu.group_size(0) == 1);\n    assert(dsu.groups()\
-    \ == (std::vector<std::vector<int>>{{0}, {1}, {2}, {3}, {4}}));\n    assert(c.groups()\
-    \ == (std::vector<std::vector<int>>{{0, 1, 2, 3}, {4}}));\n\n    Dsu empty;\n\
+    \ assert(a.group_size(0) == 2);\n    assert(dsu.group_size(0) == 1);\n    std::vector<std::vector<int>>\
+    \ singleton_groups = {\n        std::vector<int>{0}, std::vector<int>{1}, std::vector<int>{2},\
+    \ std::vector<int>{3}, std::vector<int>{4},\n    };\n    std::vector<std::vector<int>>\
+    \ merged_groups = {std::vector<int>{0, 1, 2, 3}, std::vector<int>{4}};\n    assert(dsu.groups()\
+    \ == singleton_groups);\n    assert(c.groups() == merged_groups);\n\n    Dsu empty;\n\
     \    assert(empty.size() == 0);\n    assert(empty.empty());\n\n    std::mt19937\
     \ rng(0);\n    constexpr int N = 30;\n    std::vector<std::pair<Dsu, NaiveDsu>>\
     \ versions;\n    versions.push_back({Dsu(N), NaiveDsu(N)});\n\n    for (int step\
@@ -171,7 +175,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-15 03:38:29+09:00'
+  timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_dsu.test.cpp

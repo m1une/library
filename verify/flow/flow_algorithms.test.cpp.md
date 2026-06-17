@@ -351,10 +351,13 @@ data:
     \ e.flow <= e.cap);\n    }\n    assert(total_source_flow == 2);\n\n    m1une::flow::MinCostFlow<long\
     \ long, long long> negative(3);\n    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1,\
     \ 2, 1, 2);\n    negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0,\
-    \ 2, 2);\n    assert((slope == std::vector<std::pair<long long, long long>>{{0,\
-    \ 0}, {1, -3}, {2, 7}}));\n}\n\nint main() {\n    test_max_flow();\n    test_bounded_flow();\n\
-    \    test_bounded_min_cost_flow();\n    test_min_cost_flow();\n\n    long long\
-    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \ 2, 2);\n    std::vector<std::pair<long long, long long>> expected_slope = {\n\
+    \        std::pair<long long, long long>{0, 0},\n        std::pair<long long,\
+    \ long long>{1, -3},\n        std::pair<long long, long long>{2, 7},\n    };\n\
+    \    assert(slope == expected_slope);\n}\n\nint main() {\n    test_max_flow();\n\
+    \    test_bounded_flow();\n    test_bounded_min_cost_flow();\n    test_min_cost_flow();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <utility>\n#include <vector>\n\n#include \"flow/flow.hpp\"\
     \n\nvoid test_max_flow() {\n    m1une::flow::MaxFlow<long long> mf(4);\n    int\
@@ -432,10 +435,13 @@ data:
     \ e.flow <= e.cap);\n    }\n    assert(total_source_flow == 2);\n\n    m1une::flow::MinCostFlow<long\
     \ long, long long> negative(3);\n    negative.add_edge(0, 1, 1, -5);\n    negative.add_edge(1,\
     \ 2, 1, 2);\n    negative.add_edge(0, 2, 1, 10);\n    auto slope = negative.slope(0,\
-    \ 2, 2);\n    assert((slope == std::vector<std::pair<long long, long long>>{{0,\
-    \ 0}, {1, -3}, {2, 7}}));\n}\n\nint main() {\n    test_max_flow();\n    test_bounded_flow();\n\
-    \    test_bounded_min_cost_flow();\n    test_min_cost_flow();\n\n    long long\
-    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \ 2, 2);\n    std::vector<std::pair<long long, long long>> expected_slope = {\n\
+    \        std::pair<long long, long long>{0, 0},\n        std::pair<long long,\
+    \ long long>{1, -3},\n        std::pair<long long, long long>{2, 7},\n    };\n\
+    \    assert(slope == expected_slope);\n}\n\nint main() {\n    test_max_flow();\n\
+    \    test_bounded_flow();\n    test_bounded_min_cost_flow();\n    test_min_cost_flow();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   dependsOn:
   - flow/flow.hpp
   - flow/bounded_flow.hpp
@@ -445,7 +451,7 @@ data:
   isVerificationFile: true
   path: verify/flow/flow_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 01:33:20+09:00'
+  timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/flow/flow_algorithms.test.cpp

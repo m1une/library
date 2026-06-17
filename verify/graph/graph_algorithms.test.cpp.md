@@ -101,20 +101,21 @@ data:
     \    }\n\n    int add_directed_edge(int from, int to, T cost = T(1)) {\n     \
     \   assert(0 <= from && from < _n);\n        assert(0 <= to && to < _n);\n   \
     \     int id = _edge_count++;\n        int idx = int(_g[from].size());\n     \
-    \   _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.push_back({{from,\
-    \ idx}});\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost\
-    \ = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
-    \        int id = _edge_count++;\n        int u_idx = int(_g[u].size());\n   \
-    \     int v_idx = int(_g[v].size());\n        _g[u].push_back(edge_type(u, v,\
-    \ cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        _edge_positions.push_back({{u,\
-    \ u_idx}, {v, v_idx}});\n        return id;\n    }\n\n    void set_edge_alive(int\
-    \ id, bool alive) {\n        assert(0 <= id && id < _edge_count);\n        for\
-    \ (auto [v, idx] : _edge_positions[id]) {\n            _g[v][idx].alive = alive;\n\
-    \        }\n    }\n\n    void erase_edge(int id) {\n        set_edge_alive(id,\
-    \ false);\n    }\n\n    void revive_edge(int id) {\n        set_edge_alive(id,\
-    \ true);\n    }\n\n    bool is_edge_alive(int id) const {\n        assert(0 <=\
-    \ id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n  \
-    \      auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
+    \   _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.emplace_back();\n\
+    \        _edge_positions.back().push_back({from, idx});\n        return id;\n\
+    \    }\n\n    int add_edge(int u, int v, T cost = T(1)) {\n        assert(0 <=\
+    \ u && u < _n);\n        assert(0 <= v && v < _n);\n        int id = _edge_count++;\n\
+    \        int u_idx = int(_g[u].size());\n        int v_idx = int(_g[v].size());\n\
+    \        _g[u].push_back(edge_type(u, v, cost, id));\n        _g[v].push_back(edge_type(v,\
+    \ u, cost, id));\n        _edge_positions.emplace_back();\n        _edge_positions.back().push_back({u,\
+    \ u_idx});\n        _edge_positions.back().push_back({v, v_idx});\n        return\
+    \ id;\n    }\n\n    void set_edge_alive(int id, bool alive) {\n        assert(0\
+    \ <= id && id < _edge_count);\n        for (auto [v, idx] : _edge_positions[id])\
+    \ {\n            _g[v][idx].alive = alive;\n        }\n    }\n\n    void erase_edge(int\
+    \ id) {\n        set_edge_alive(id, false);\n    }\n\n    void revive_edge(int\
+    \ id) {\n        set_edge_alive(id, true);\n    }\n\n    bool is_edge_alive(int\
+    \ id) const {\n        assert(0 <= id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n\
+    \        auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
     \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
     \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
@@ -1359,26 +1360,27 @@ data:
     \ grid(3, 4);\n    assert(grid.height() == 3);\n    assert(grid.width() == 4);\n\
     \    assert(grid.size() == 12);\n    assert(grid.inside(2, 3));\n    assert(!grid.inside(3,\
     \ 0));\n    assert(grid.id(2, 3) == 11);\n    assert(grid.pos(6) == std::make_pair(1,\
-    \ 2));\n\n    auto adj4 = grid.adj4(0, 0);\n    assert((adj4 == std::vector<std::pair<int,\
-    \ int>>{{0, 1}, {1, 0}}));\n\n    auto adj8 = grid.adj8(1, 1);\n    assert(adj8.size()\
-    \ == 8);\n    auto adj4_ids = grid.adj4_ids(grid.id(1, 1));\n    std::set<int>\
-    \ expected_ids = {grid.id(0, 1), grid.id(1, 2), grid.id(2, 1), grid.id(1, 0)};\n\
-    \    assert(std::set<int>(adj4_ids.begin(), adj4_ids.end()) == expected_ids);\n\
-    \n    std::vector<std::string> s = {\n        \"....\",\n        \".##.\",\n \
-    \       \"....\",\n    };\n    auto passable = [&](int i, int j) {\n        return\
-    \ s[i][j] != '#';\n    };\n\n    auto g4 = grid.graph4(passable);\n    assert(g4.size()\
-    \ == grid.size());\n    assert(g4[grid.id(1, 1)].empty());\n    auto res = m1une::graph::bfs(g4,\
-    \ grid.id(0, 0));\n    assert(res.dist[grid.id(2, 3)] == 5);\n    assert(res.dist[grid.id(1,\
-    \ 1)] == -1);\n\n    auto g8 = grid.graph8(passable);\n    auto res8 = m1une::graph::bfs(g8,\
-    \ grid.id(0, 0));\n    assert(res8.dist[grid.id(2, 3)] == 4);\n\n    auto all4\
-    \ = grid.graph4();\n    assert(all4.edge_count() == 17);\n}\n\nint main() {\n\
-    \    test_graph_container();\n    test_edge_alive();\n    test_bfs();\n    test_dijkstra();\n\
-    \    test_zero_one_bfs();\n    test_bellman_ford();\n    test_dag_shortest_path();\n\
-    \    test_warshall_floyd();\n    test_topological_sort();\n    test_scc();\n \
-    \   test_lowlink();\n    test_bipartite_and_components();\n    test_general_matching();\n\
-    \    test_maximum_clique_and_independent_set();\n    test_cycle_detection();\n\
-    \    test_kruskal();\n    test_grid();\n    long long a, b;\n    std::cin >> a\
-    \ >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \ 2));\n\n    auto adj4 = grid.adj4(0, 0);\n    std::vector<std::pair<int, int>>\
+    \ expected_adj4 = {\n        std::pair<int, int>{0, 1},\n        std::pair<int,\
+    \ int>{1, 0},\n    };\n    assert(adj4 == expected_adj4);\n\n    auto adj8 = grid.adj8(1,\
+    \ 1);\n    assert(adj8.size() == 8);\n    auto adj4_ids = grid.adj4_ids(grid.id(1,\
+    \ 1));\n    std::set<int> expected_ids = {grid.id(0, 1), grid.id(1, 2), grid.id(2,\
+    \ 1), grid.id(1, 0)};\n    assert(std::set<int>(adj4_ids.begin(), adj4_ids.end())\
+    \ == expected_ids);\n\n    std::vector<std::string> s = {\n        \"....\",\n\
+    \        \".##.\",\n        \"....\",\n    };\n    auto passable = [&](int i,\
+    \ int j) {\n        return s[i][j] != '#';\n    };\n\n    auto g4 = grid.graph4(passable);\n\
+    \    assert(g4.size() == grid.size());\n    assert(g4[grid.id(1, 1)].empty());\n\
+    \    auto res = m1une::graph::bfs(g4, grid.id(0, 0));\n    assert(res.dist[grid.id(2,\
+    \ 3)] == 5);\n    assert(res.dist[grid.id(1, 1)] == -1);\n\n    auto g8 = grid.graph8(passable);\n\
+    \    auto res8 = m1une::graph::bfs(g8, grid.id(0, 0));\n    assert(res8.dist[grid.id(2,\
+    \ 3)] == 4);\n\n    auto all4 = grid.graph4();\n    assert(all4.edge_count() ==\
+    \ 17);\n}\n\nint main() {\n    test_graph_container();\n    test_edge_alive();\n\
+    \    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n\
+    \    test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
+    \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
+    \    test_general_matching();\n    test_maximum_clique_and_independent_set();\n\
+    \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    long\
+    \ long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <set>\n#include <string>\n#include\
     \ <vector>\n\n#include \"graph/all.hpp\"\n\nusing m1une::graph::Graph;\n\nvoid\
@@ -1599,26 +1601,27 @@ data:
     \ grid(3, 4);\n    assert(grid.height() == 3);\n    assert(grid.width() == 4);\n\
     \    assert(grid.size() == 12);\n    assert(grid.inside(2, 3));\n    assert(!grid.inside(3,\
     \ 0));\n    assert(grid.id(2, 3) == 11);\n    assert(grid.pos(6) == std::make_pair(1,\
-    \ 2));\n\n    auto adj4 = grid.adj4(0, 0);\n    assert((adj4 == std::vector<std::pair<int,\
-    \ int>>{{0, 1}, {1, 0}}));\n\n    auto adj8 = grid.adj8(1, 1);\n    assert(adj8.size()\
-    \ == 8);\n    auto adj4_ids = grid.adj4_ids(grid.id(1, 1));\n    std::set<int>\
-    \ expected_ids = {grid.id(0, 1), grid.id(1, 2), grid.id(2, 1), grid.id(1, 0)};\n\
-    \    assert(std::set<int>(adj4_ids.begin(), adj4_ids.end()) == expected_ids);\n\
-    \n    std::vector<std::string> s = {\n        \"....\",\n        \".##.\",\n \
-    \       \"....\",\n    };\n    auto passable = [&](int i, int j) {\n        return\
-    \ s[i][j] != '#';\n    };\n\n    auto g4 = grid.graph4(passable);\n    assert(g4.size()\
-    \ == grid.size());\n    assert(g4[grid.id(1, 1)].empty());\n    auto res = m1une::graph::bfs(g4,\
-    \ grid.id(0, 0));\n    assert(res.dist[grid.id(2, 3)] == 5);\n    assert(res.dist[grid.id(1,\
-    \ 1)] == -1);\n\n    auto g8 = grid.graph8(passable);\n    auto res8 = m1une::graph::bfs(g8,\
-    \ grid.id(0, 0));\n    assert(res8.dist[grid.id(2, 3)] == 4);\n\n    auto all4\
-    \ = grid.graph4();\n    assert(all4.edge_count() == 17);\n}\n\nint main() {\n\
-    \    test_graph_container();\n    test_edge_alive();\n    test_bfs();\n    test_dijkstra();\n\
-    \    test_zero_one_bfs();\n    test_bellman_ford();\n    test_dag_shortest_path();\n\
-    \    test_warshall_floyd();\n    test_topological_sort();\n    test_scc();\n \
-    \   test_lowlink();\n    test_bipartite_and_components();\n    test_general_matching();\n\
-    \    test_maximum_clique_and_independent_set();\n    test_cycle_detection();\n\
-    \    test_kruskal();\n    test_grid();\n    long long a, b;\n    std::cin >> a\
-    \ >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \ 2));\n\n    auto adj4 = grid.adj4(0, 0);\n    std::vector<std::pair<int, int>>\
+    \ expected_adj4 = {\n        std::pair<int, int>{0, 1},\n        std::pair<int,\
+    \ int>{1, 0},\n    };\n    assert(adj4 == expected_adj4);\n\n    auto adj8 = grid.adj8(1,\
+    \ 1);\n    assert(adj8.size() == 8);\n    auto adj4_ids = grid.adj4_ids(grid.id(1,\
+    \ 1));\n    std::set<int> expected_ids = {grid.id(0, 1), grid.id(1, 2), grid.id(2,\
+    \ 1), grid.id(1, 0)};\n    assert(std::set<int>(adj4_ids.begin(), adj4_ids.end())\
+    \ == expected_ids);\n\n    std::vector<std::string> s = {\n        \"....\",\n\
+    \        \".##.\",\n        \"....\",\n    };\n    auto passable = [&](int i,\
+    \ int j) {\n        return s[i][j] != '#';\n    };\n\n    auto g4 = grid.graph4(passable);\n\
+    \    assert(g4.size() == grid.size());\n    assert(g4[grid.id(1, 1)].empty());\n\
+    \    auto res = m1une::graph::bfs(g4, grid.id(0, 0));\n    assert(res.dist[grid.id(2,\
+    \ 3)] == 5);\n    assert(res.dist[grid.id(1, 1)] == -1);\n\n    auto g8 = grid.graph8(passable);\n\
+    \    auto res8 = m1une::graph::bfs(g8, grid.id(0, 0));\n    assert(res8.dist[grid.id(2,\
+    \ 3)] == 4);\n\n    auto all4 = grid.graph4();\n    assert(all4.edge_count() ==\
+    \ 17);\n}\n\nint main() {\n    test_graph_container();\n    test_edge_alive();\n\
+    \    test_bfs();\n    test_dijkstra();\n    test_zero_one_bfs();\n    test_bellman_ford();\n\
+    \    test_dag_shortest_path();\n    test_warshall_floyd();\n    test_topological_sort();\n\
+    \    test_scc();\n    test_lowlink();\n    test_bipartite_and_components();\n\
+    \    test_general_matching();\n    test_maximum_clique_and_independent_set();\n\
+    \    test_cycle_detection();\n    test_kruskal();\n    test_grid();\n    long\
+    \ long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - graph/all.hpp
   - graph/directed.hpp
@@ -1645,7 +1648,7 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 01:33:20+09:00'
+  timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp

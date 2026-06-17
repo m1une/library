@@ -70,20 +70,21 @@ data:
     \        return _n++;\n    }\n\n    int add_directed_edge(int from, int to, T\
     \ cost = T(1)) {\n        assert(0 <= from && from < _n);\n        assert(0 <=\
     \ to && to < _n);\n        int id = _edge_count++;\n        int idx = int(_g[from].size());\n\
-    \        _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.push_back({{from,\
-    \ idx}});\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost\
-    \ = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
-    \        int id = _edge_count++;\n        int u_idx = int(_g[u].size());\n   \
-    \     int v_idx = int(_g[v].size());\n        _g[u].push_back(edge_type(u, v,\
-    \ cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        _edge_positions.push_back({{u,\
-    \ u_idx}, {v, v_idx}});\n        return id;\n    }\n\n    void set_edge_alive(int\
-    \ id, bool alive) {\n        assert(0 <= id && id < _edge_count);\n        for\
-    \ (auto [v, idx] : _edge_positions[id]) {\n            _g[v][idx].alive = alive;\n\
-    \        }\n    }\n\n    void erase_edge(int id) {\n        set_edge_alive(id,\
-    \ false);\n    }\n\n    void revive_edge(int id) {\n        set_edge_alive(id,\
-    \ true);\n    }\n\n    bool is_edge_alive(int id) const {\n        assert(0 <=\
-    \ id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n  \
-    \      auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
+    \        _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.emplace_back();\n\
+    \        _edge_positions.back().push_back({from, idx});\n        return id;\n\
+    \    }\n\n    int add_edge(int u, int v, T cost = T(1)) {\n        assert(0 <=\
+    \ u && u < _n);\n        assert(0 <= v && v < _n);\n        int id = _edge_count++;\n\
+    \        int u_idx = int(_g[u].size());\n        int v_idx = int(_g[v].size());\n\
+    \        _g[u].push_back(edge_type(u, v, cost, id));\n        _g[v].push_back(edge_type(v,\
+    \ u, cost, id));\n        _edge_positions.emplace_back();\n        _edge_positions.back().push_back({u,\
+    \ u_idx});\n        _edge_positions.back().push_back({v, v_idx});\n        return\
+    \ id;\n    }\n\n    void set_edge_alive(int id, bool alive) {\n        assert(0\
+    \ <= id && id < _edge_count);\n        for (auto [v, idx] : _edge_positions[id])\
+    \ {\n            _g[v][idx].alive = alive;\n        }\n    }\n\n    void erase_edge(int\
+    \ id) {\n        set_edge_alive(id, false);\n    }\n\n    void revive_edge(int\
+    \ id) {\n        set_edge_alive(id, true);\n    }\n\n    bool is_edge_alive(int\
+    \ id) const {\n        assert(0 <= id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n\
+    \        auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
     \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
     \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
@@ -140,7 +141,7 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-16 02:32:54+09:00'
+  timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp

@@ -72,20 +72,21 @@ data:
     \        return _n++;\n    }\n\n    int add_directed_edge(int from, int to, T\
     \ cost = T(1)) {\n        assert(0 <= from && from < _n);\n        assert(0 <=\
     \ to && to < _n);\n        int id = _edge_count++;\n        int idx = int(_g[from].size());\n\
-    \        _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.push_back({{from,\
-    \ idx}});\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost\
-    \ = T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
-    \        int id = _edge_count++;\n        int u_idx = int(_g[u].size());\n   \
-    \     int v_idx = int(_g[v].size());\n        _g[u].push_back(edge_type(u, v,\
-    \ cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        _edge_positions.push_back({{u,\
-    \ u_idx}, {v, v_idx}});\n        return id;\n    }\n\n    void set_edge_alive(int\
-    \ id, bool alive) {\n        assert(0 <= id && id < _edge_count);\n        for\
-    \ (auto [v, idx] : _edge_positions[id]) {\n            _g[v][idx].alive = alive;\n\
-    \        }\n    }\n\n    void erase_edge(int id) {\n        set_edge_alive(id,\
-    \ false);\n    }\n\n    void revive_edge(int id) {\n        set_edge_alive(id,\
-    \ true);\n    }\n\n    bool is_edge_alive(int id) const {\n        assert(0 <=\
-    \ id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n  \
-    \      auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
+    \        _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.emplace_back();\n\
+    \        _edge_positions.back().push_back({from, idx});\n        return id;\n\
+    \    }\n\n    int add_edge(int u, int v, T cost = T(1)) {\n        assert(0 <=\
+    \ u && u < _n);\n        assert(0 <= v && v < _n);\n        int id = _edge_count++;\n\
+    \        int u_idx = int(_g[u].size());\n        int v_idx = int(_g[v].size());\n\
+    \        _g[u].push_back(edge_type(u, v, cost, id));\n        _g[v].push_back(edge_type(v,\
+    \ u, cost, id));\n        _edge_positions.emplace_back();\n        _edge_positions.back().push_back({u,\
+    \ u_idx});\n        _edge_positions.back().push_back({v, v_idx});\n        return\
+    \ id;\n    }\n\n    void set_edge_alive(int id, bool alive) {\n        assert(0\
+    \ <= id && id < _edge_count);\n        for (auto [v, idx] : _edge_positions[id])\
+    \ {\n            _g[v][idx].alive = alive;\n        }\n    }\n\n    void erase_edge(int\
+    \ id) {\n        set_edge_alive(id, false);\n    }\n\n    void revive_edge(int\
+    \ id) {\n        set_edge_alive(id, true);\n    }\n\n    bool is_edge_alive(int\
+    \ id) const {\n        assert(0 <= id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n\
+    \        auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
     \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
     \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
@@ -216,44 +217,45 @@ data:
     \            int p = parent[v];\n            subtree_size[p] += subtree_size[v];\n\
     \            if (heavy[p] == -1 || subtree_size[heavy[p]] < subtree_size[v]) heavy[p]\
     \ = v;\n        }\n\n        order.assign(dfs_order.size(), -1);\n        int\
-    \ timer = 0;\n        std::vector<std::pair<int, int>> starts = {{root, root}};\n\
-    \        while (!starts.empty()) {\n            auto [start, h] = starts.back();\n\
-    \            starts.pop_back();\n            for (int v = start; v != -1; v =\
-    \ heavy[v]) {\n                head[v] = h;\n                tin[v] = timer;\n\
-    \                order[timer++] = v;\n                for (auto it = g[v].rbegin();\
-    \ it != g[v].rend(); ++it) {\n                    if (!it->alive) continue;\n\
-    \                    int to = it->to;\n                    if (parent[to] != v\
-    \ || to == heavy[v]) continue;\n                    starts.push_back({to, to});\n\
-    \                }\n            }\n        }\n        for (int i = int(dfs_order.size())\
-    \ - 1; i >= 0; i--) {\n            int v = dfs_order[i];\n            tout[v]\
-    \ = tin[v] + subtree_size[v];\n        }\n    }\n\n    int size() const {\n  \
-    \      return _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n\
-    \    }\n\n    bool is_ancestor(int u, int v) const {\n        check_vertex(u);\n\
-    \        check_vertex(v);\n        return tin[u] <= tin[v] && tout[v] <= tout[u];\n\
-    \    }\n\n    int lca(int u, int v) const {\n        check_vertex(u);\n      \
-    \  check_vertex(v);\n        while (head[u] != head[v]) {\n            if (depth[head[u]]\
-    \ < depth[head[v]]) std::swap(u, v);\n            u = parent[head[u]];\n     \
-    \   }\n        return depth[u] < depth[v] ? u : v;\n    }\n\n    int dist_edges(int\
-    \ u, int v) const {\n        int w = lca(u, v);\n        return depth[u] + depth[v]\
-    \ - 2 * depth[w];\n    }\n\n    T dist_cost(int u, int v) const {\n        int\
-    \ w = lca(u, v);\n        return dist[u] + dist[v] - dist[w] - dist[w];\n    }\n\
-    \n    int kth_ancestor(int v, int k) const {\n        check_vertex(v);\n     \
-    \   assert(0 <= k);\n        while (v != -1) {\n            int h = head[v];\n\
-    \            int len = depth[v] - depth[h];\n            if (k <= len) return\
-    \ order[tin[v] - k];\n            k -= len + 1;\n            v = parent[h];\n\
-    \        }\n        return -1;\n    }\n\n    int jump(int from, int to, int k)\
-    \ const {\n        check_vertex(from);\n        check_vertex(to);\n        assert(0\
-    \ <= k);\n        int w = lca(from, to);\n        int up_len = depth[from] - depth[w];\n\
-    \        int down_len = depth[to] - depth[w];\n        if (up_len + down_len <\
-    \ k) return -1;\n        if (k <= up_len) return kth_ancestor(from, k);\n    \
-    \    return kth_ancestor(to, down_len - (k - up_len));\n    }\n\n    std::pair<int,\
-    \ int> subtree_range(int v, bool edge = false) const {\n        check_vertex(v);\n\
-    \        return {tin[v] + (edge ? 1 : 0), tout[v]};\n    }\n\n    std::vector<HldPathSegment>\
-    \ path_segments(int u, int v, bool edge = false) const {\n        check_vertex(u);\n\
-    \        check_vertex(v);\n        std::vector<HldPathSegment> result, down;\n\
-    \        while (head[u] != head[v]) {\n            if (depth[head[u]] >= depth[head[v]])\
-    \ {\n                add_segment(result, tin[head[u]], tin[u] + 1, true);\n  \
-    \              u = parent[head[u]];\n            } else {\n                add_segment(down,\
+    \ timer = 0;\n        std::vector<std::pair<int, int>> starts = {std::pair<int,\
+    \ int>{root, root}};\n        while (!starts.empty()) {\n            auto [start,\
+    \ h] = starts.back();\n            starts.pop_back();\n            for (int v\
+    \ = start; v != -1; v = heavy[v]) {\n                head[v] = h;\n          \
+    \      tin[v] = timer;\n                order[timer++] = v;\n                for\
+    \ (auto it = g[v].rbegin(); it != g[v].rend(); ++it) {\n                    if\
+    \ (!it->alive) continue;\n                    int to = it->to;\n             \
+    \       if (parent[to] != v || to == heavy[v]) continue;\n                   \
+    \ starts.push_back({to, to});\n                }\n            }\n        }\n \
+    \       for (int i = int(dfs_order.size()) - 1; i >= 0; i--) {\n            int\
+    \ v = dfs_order[i];\n            tout[v] = tin[v] + subtree_size[v];\n       \
+    \ }\n    }\n\n    int size() const {\n        return _n;\n    }\n\n    bool empty()\
+    \ const {\n        return _n == 0;\n    }\n\n    bool is_ancestor(int u, int v)\
+    \ const {\n        check_vertex(u);\n        check_vertex(v);\n        return\
+    \ tin[u] <= tin[v] && tout[v] <= tout[u];\n    }\n\n    int lca(int u, int v)\
+    \ const {\n        check_vertex(u);\n        check_vertex(v);\n        while (head[u]\
+    \ != head[v]) {\n            if (depth[head[u]] < depth[head[v]]) std::swap(u,\
+    \ v);\n            u = parent[head[u]];\n        }\n        return depth[u] <\
+    \ depth[v] ? u : v;\n    }\n\n    int dist_edges(int u, int v) const {\n     \
+    \   int w = lca(u, v);\n        return depth[u] + depth[v] - 2 * depth[w];\n \
+    \   }\n\n    T dist_cost(int u, int v) const {\n        int w = lca(u, v);\n \
+    \       return dist[u] + dist[v] - dist[w] - dist[w];\n    }\n\n    int kth_ancestor(int\
+    \ v, int k) const {\n        check_vertex(v);\n        assert(0 <= k);\n     \
+    \   while (v != -1) {\n            int h = head[v];\n            int len = depth[v]\
+    \ - depth[h];\n            if (k <= len) return order[tin[v] - k];\n         \
+    \   k -= len + 1;\n            v = parent[h];\n        }\n        return -1;\n\
+    \    }\n\n    int jump(int from, int to, int k) const {\n        check_vertex(from);\n\
+    \        check_vertex(to);\n        assert(0 <= k);\n        int w = lca(from,\
+    \ to);\n        int up_len = depth[from] - depth[w];\n        int down_len = depth[to]\
+    \ - depth[w];\n        if (up_len + down_len < k) return -1;\n        if (k <=\
+    \ up_len) return kth_ancestor(from, k);\n        return kth_ancestor(to, down_len\
+    \ - (k - up_len));\n    }\n\n    std::pair<int, int> subtree_range(int v, bool\
+    \ edge = false) const {\n        check_vertex(v);\n        return {tin[v] + (edge\
+    \ ? 1 : 0), tout[v]};\n    }\n\n    std::vector<HldPathSegment> path_segments(int\
+    \ u, int v, bool edge = false) const {\n        check_vertex(u);\n        check_vertex(v);\n\
+    \        std::vector<HldPathSegment> result, down;\n        while (head[u] !=\
+    \ head[v]) {\n            if (depth[head[u]] >= depth[head[v]]) {\n          \
+    \      add_segment(result, tin[head[u]], tin[u] + 1, true);\n                u\
+    \ = parent[head[u]];\n            } else {\n                add_segment(down,\
     \ tin[head[v]], tin[v] + 1, false);\n                v = parent[head[v]];\n  \
     \          }\n        }\n\n        if (depth[u] >= depth[v]) {\n            add_segment(result,\
     \ tin[v] + (edge ? 1 : 0), tin[u] + 1, true);\n        } else {\n            add_segment(down,\
@@ -1025,47 +1027,48 @@ data:
     \ == 5);\n    assert(stt.all_prod_up().sum == 50);\n\n    stt.set_edge_cost(e12,\
     \ 1);\n    assert(stt.all_prod_down().sum == 21);\n    assert(stt.all_prod_up().sum\
     \ == 34);\n}\n\nvoid test_rerooting_static_top_tree_vertex_component() {\n   \
-    \ auto g = sample_tree();\n    std::vector<ColorVertex> values = {{1, 0}, {10,\
-    \ 0}, {100, 1}, {1000, 0},\n                                       {10000, 1},\
-    \ {100000, 1}, {1000000, 1}};\n\n    auto compress = [](ColorPath a, ColorPath\
-    \ b, const auto&) {\n        bool join = a.last_color == b.first_color;\n    \
-    \    ColorPath res{a.first_color, b.last_color, a.first_sum, b.last_sum, false};\n\
-    \        if (join && a.connected) res.first_sum += b.first_sum;\n        if (join\
-    \ && b.connected) res.last_sum += a.last_sum;\n        res.connected = a.connected\
-    \ && b.connected && join;\n        return res;\n    };\n    auto rake = [](ColorPoint\
-    \ a, ColorPoint b) {\n        return ColorPoint{{a.sum[0] + b.sum[0], a.sum[1]\
-    \ + b.sum[1]}};\n    };\n    auto add_edge = [](ColorPath path, const auto&) {\n\
-    \        ColorPoint res{{0, 0}};\n        res.sum[path.first_color] = path.first_sum;\n\
-    \        return res;\n    };\n    auto add_vertex = [](ColorPoint side, ColorVertex\
-    \ value, int) {\n        long long sum = value.weight + side.sum[value.color];\n\
-    \        return ColorPath{value.color, value.color, sum, sum, true};\n    };\n\
-    \n    auto stt = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{{0,\
-    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    using\
-    \ ColorStt = decltype(stt);\n    struct QueryFolder {\n        const ColorStt&\
-    \ stt;\n        const std::vector<ColorVertex>& values;\n        int color = 0;\n\
-    \        long long answer = 0;\n        bool touches_top = false;\n        bool\
-    \ touches_bottom = false;\n        bool pending_open = false;\n        ColorPoint\
-    \ pending{{0, 0}};\n\n        void start(int v, const ColorVertex& value, const\
-    \ ColorPoint& local) {\n            color = value.color;\n            answer =\
-    \ value.weight + local.sum[color];\n            touches_top = true;\n        \
-    \    touches_bottom = true;\n            pending_open = false;\n            pending\
-    \ = stt.point_id();\n            assert(values[v].color == color);\n        }\n\
-    \n        void compress_lower(const ColorPath& lower, ColorStt::edge_type) {\n\
-    \            bool connect = touches_bottom && lower.first_color == color;\n  \
-    \          if (connect) answer += lower.first_sum;\n            touches_bottom\
-    \ = connect && lower.connected;\n        }\n\n        void compress_upper(const\
-    \ ColorPath& upper, ColorStt::edge_type) {\n            bool connect = touches_top\
-    \ && upper.first_color == color;\n            if (connect) answer += upper.first_sum;\n\
-    \            touches_top = connect && upper.connected;\n        }\n\n        void\
-    \ add_edge(ColorStt::edge_type) {\n            pending_open = touches_top;\n \
-    \           pending = stt.point_id();\n        }\n\n        void rake_left(const\
-    \ ColorPoint& point) {\n            if (pending_open) pending = stt.rake(point,\
-    \ pending);\n        }\n\n        void rake_right(const ColorPoint& point) {\n\
-    \            if (pending_open) pending = stt.rake(pending, point);\n        }\n\
-    \n        void add_vertex(int, const ColorVertex& value) {\n            if (pending_open\
-    \ && value.color == color) {\n                answer += value.weight + pending.sum[color];\n\
-    \                touches_top = true;\n                touches_bottom = true;\n\
-    \            } else {\n                touches_top = false;\n                touches_bottom\
+    \ auto g = sample_tree();\n    std::vector<ColorVertex> values = {\n        ColorVertex{1,\
+    \ 0},      ColorVertex{10, 0},     ColorVertex{100, 1},    ColorVertex{1000, 0},\n\
+    \        ColorVertex{10000, 1},  ColorVertex{100000, 1}, ColorVertex{1000000,\
+    \ 1},\n    };\n\n    auto compress = [](ColorPath a, ColorPath b, const auto&)\
+    \ {\n        bool join = a.last_color == b.first_color;\n        ColorPath res{a.first_color,\
+    \ b.last_color, a.first_sum, b.last_sum, false};\n        if (join && a.connected)\
+    \ res.first_sum += b.first_sum;\n        if (join && b.connected) res.last_sum\
+    \ += a.last_sum;\n        res.connected = a.connected && b.connected && join;\n\
+    \        return res;\n    };\n    auto rake = [](ColorPoint a, ColorPoint b) {\n\
+    \        return ColorPoint{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]};\n    };\n\
+    \    auto add_edge = [](ColorPath path, const auto&) {\n        ColorPoint res{};\n\
+    \        res.sum[path.first_color] = path.first_sum;\n        return res;\n  \
+    \  };\n    auto add_vertex = [](ColorPoint side, ColorVertex value, int) {\n \
+    \       long long sum = value.weight + side.sum[value.color];\n        return\
+    \ ColorPath{value.color, value.color, sum, sum, true};\n    };\n\n    auto stt\
+    \ = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{0, 0},\
+    \ compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    using ColorStt\
+    \ = decltype(stt);\n    struct QueryFolder {\n        const ColorStt& stt;\n \
+    \       const std::vector<ColorVertex>& values;\n        int color = 0;\n    \
+    \    long long answer = 0;\n        bool touches_top = false;\n        bool touches_bottom\
+    \ = false;\n        bool pending_open = false;\n        ColorPoint pending{};\n\
+    \n        void start(int v, const ColorVertex& value, const ColorPoint& local)\
+    \ {\n            color = value.color;\n            answer = value.weight + local.sum[color];\n\
+    \            touches_top = true;\n            touches_bottom = true;\n       \
+    \     pending_open = false;\n            pending = stt.point_id();\n         \
+    \   assert(values[v].color == color);\n        }\n\n        void compress_lower(const\
+    \ ColorPath& lower, ColorStt::edge_type) {\n            bool connect = touches_bottom\
+    \ && lower.first_color == color;\n            if (connect) answer += lower.first_sum;\n\
+    \            touches_bottom = connect && lower.connected;\n        }\n\n     \
+    \   void compress_upper(const ColorPath& upper, ColorStt::edge_type) {\n     \
+    \       bool connect = touches_top && upper.first_color == color;\n          \
+    \  if (connect) answer += upper.first_sum;\n            touches_top = connect\
+    \ && upper.connected;\n        }\n\n        void add_edge(ColorStt::edge_type)\
+    \ {\n            pending_open = touches_top;\n            pending = stt.point_id();\n\
+    \        }\n\n        void rake_left(const ColorPoint& point) {\n            if\
+    \ (pending_open) pending = stt.rake(point, pending);\n        }\n\n        void\
+    \ rake_right(const ColorPoint& point) {\n            if (pending_open) pending\
+    \ = stt.rake(pending, point);\n        }\n\n        void add_vertex(int, const\
+    \ ColorVertex& value) {\n            if (pending_open && value.color == color)\
+    \ {\n                answer += value.weight + pending.sum[color];\n          \
+    \      touches_top = true;\n                touches_bottom = true;\n         \
+    \   } else {\n                touches_top = false;\n                touches_bottom\
     \ = false;\n            }\n            pending_open = false;\n            pending\
     \ = stt.point_id();\n        }\n\n        long long result() const {\n       \
     \     return answer;\n        }\n    };\n\n    auto query = [&](int v) {\n   \
@@ -1290,47 +1293,48 @@ data:
     \ == 5);\n    assert(stt.all_prod_up().sum == 50);\n\n    stt.set_edge_cost(e12,\
     \ 1);\n    assert(stt.all_prod_down().sum == 21);\n    assert(stt.all_prod_up().sum\
     \ == 34);\n}\n\nvoid test_rerooting_static_top_tree_vertex_component() {\n   \
-    \ auto g = sample_tree();\n    std::vector<ColorVertex> values = {{1, 0}, {10,\
-    \ 0}, {100, 1}, {1000, 0},\n                                       {10000, 1},\
-    \ {100000, 1}, {1000000, 1}};\n\n    auto compress = [](ColorPath a, ColorPath\
-    \ b, const auto&) {\n        bool join = a.last_color == b.first_color;\n    \
-    \    ColorPath res{a.first_color, b.last_color, a.first_sum, b.last_sum, false};\n\
-    \        if (join && a.connected) res.first_sum += b.first_sum;\n        if (join\
-    \ && b.connected) res.last_sum += a.last_sum;\n        res.connected = a.connected\
-    \ && b.connected && join;\n        return res;\n    };\n    auto rake = [](ColorPoint\
-    \ a, ColorPoint b) {\n        return ColorPoint{{a.sum[0] + b.sum[0], a.sum[1]\
-    \ + b.sum[1]}};\n    };\n    auto add_edge = [](ColorPath path, const auto&) {\n\
-    \        ColorPoint res{{0, 0}};\n        res.sum[path.first_color] = path.first_sum;\n\
-    \        return res;\n    };\n    auto add_vertex = [](ColorPoint side, ColorVertex\
-    \ value, int) {\n        long long sum = value.weight + side.sum[value.color];\n\
-    \        return ColorPath{value.color, value.color, sum, sum, true};\n    };\n\
-    \n    auto stt = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{{0,\
-    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    using\
-    \ ColorStt = decltype(stt);\n    struct QueryFolder {\n        const ColorStt&\
-    \ stt;\n        const std::vector<ColorVertex>& values;\n        int color = 0;\n\
-    \        long long answer = 0;\n        bool touches_top = false;\n        bool\
-    \ touches_bottom = false;\n        bool pending_open = false;\n        ColorPoint\
-    \ pending{{0, 0}};\n\n        void start(int v, const ColorVertex& value, const\
-    \ ColorPoint& local) {\n            color = value.color;\n            answer =\
-    \ value.weight + local.sum[color];\n            touches_top = true;\n        \
-    \    touches_bottom = true;\n            pending_open = false;\n            pending\
-    \ = stt.point_id();\n            assert(values[v].color == color);\n        }\n\
-    \n        void compress_lower(const ColorPath& lower, ColorStt::edge_type) {\n\
-    \            bool connect = touches_bottom && lower.first_color == color;\n  \
-    \          if (connect) answer += lower.first_sum;\n            touches_bottom\
-    \ = connect && lower.connected;\n        }\n\n        void compress_upper(const\
-    \ ColorPath& upper, ColorStt::edge_type) {\n            bool connect = touches_top\
-    \ && upper.first_color == color;\n            if (connect) answer += upper.first_sum;\n\
-    \            touches_top = connect && upper.connected;\n        }\n\n        void\
-    \ add_edge(ColorStt::edge_type) {\n            pending_open = touches_top;\n \
-    \           pending = stt.point_id();\n        }\n\n        void rake_left(const\
-    \ ColorPoint& point) {\n            if (pending_open) pending = stt.rake(point,\
-    \ pending);\n        }\n\n        void rake_right(const ColorPoint& point) {\n\
-    \            if (pending_open) pending = stt.rake(pending, point);\n        }\n\
-    \n        void add_vertex(int, const ColorVertex& value) {\n            if (pending_open\
-    \ && value.color == color) {\n                answer += value.weight + pending.sum[color];\n\
-    \                touches_top = true;\n                touches_bottom = true;\n\
-    \            } else {\n                touches_top = false;\n                touches_bottom\
+    \ auto g = sample_tree();\n    std::vector<ColorVertex> values = {\n        ColorVertex{1,\
+    \ 0},      ColorVertex{10, 0},     ColorVertex{100, 1},    ColorVertex{1000, 0},\n\
+    \        ColorVertex{10000, 1},  ColorVertex{100000, 1}, ColorVertex{1000000,\
+    \ 1},\n    };\n\n    auto compress = [](ColorPath a, ColorPath b, const auto&)\
+    \ {\n        bool join = a.last_color == b.first_color;\n        ColorPath res{a.first_color,\
+    \ b.last_color, a.first_sum, b.last_sum, false};\n        if (join && a.connected)\
+    \ res.first_sum += b.first_sum;\n        if (join && b.connected) res.last_sum\
+    \ += a.last_sum;\n        res.connected = a.connected && b.connected && join;\n\
+    \        return res;\n    };\n    auto rake = [](ColorPoint a, ColorPoint b) {\n\
+    \        return ColorPoint{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]};\n    };\n\
+    \    auto add_edge = [](ColorPath path, const auto&) {\n        ColorPoint res{};\n\
+    \        res.sum[path.first_color] = path.first_sum;\n        return res;\n  \
+    \  };\n    auto add_vertex = [](ColorPoint side, ColorVertex value, int) {\n \
+    \       long long sum = value.weight + side.sum[value.color];\n        return\
+    \ ColorPath{value.color, value.color, sum, sum, true};\n    };\n\n    auto stt\
+    \ = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{0, 0},\
+    \ compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    using ColorStt\
+    \ = decltype(stt);\n    struct QueryFolder {\n        const ColorStt& stt;\n \
+    \       const std::vector<ColorVertex>& values;\n        int color = 0;\n    \
+    \    long long answer = 0;\n        bool touches_top = false;\n        bool touches_bottom\
+    \ = false;\n        bool pending_open = false;\n        ColorPoint pending{};\n\
+    \n        void start(int v, const ColorVertex& value, const ColorPoint& local)\
+    \ {\n            color = value.color;\n            answer = value.weight + local.sum[color];\n\
+    \            touches_top = true;\n            touches_bottom = true;\n       \
+    \     pending_open = false;\n            pending = stt.point_id();\n         \
+    \   assert(values[v].color == color);\n        }\n\n        void compress_lower(const\
+    \ ColorPath& lower, ColorStt::edge_type) {\n            bool connect = touches_bottom\
+    \ && lower.first_color == color;\n            if (connect) answer += lower.first_sum;\n\
+    \            touches_bottom = connect && lower.connected;\n        }\n\n     \
+    \   void compress_upper(const ColorPath& upper, ColorStt::edge_type) {\n     \
+    \       bool connect = touches_top && upper.first_color == color;\n          \
+    \  if (connect) answer += upper.first_sum;\n            touches_top = connect\
+    \ && upper.connected;\n        }\n\n        void add_edge(ColorStt::edge_type)\
+    \ {\n            pending_open = touches_top;\n            pending = stt.point_id();\n\
+    \        }\n\n        void rake_left(const ColorPoint& point) {\n            if\
+    \ (pending_open) pending = stt.rake(point, pending);\n        }\n\n        void\
+    \ rake_right(const ColorPoint& point) {\n            if (pending_open) pending\
+    \ = stt.rake(pending, point);\n        }\n\n        void add_vertex(int, const\
+    \ ColorVertex& value) {\n            if (pending_open && value.color == color)\
+    \ {\n                answer += value.weight + pending.sum[color];\n          \
+    \      touches_top = true;\n                touches_bottom = true;\n         \
+    \   } else {\n                touches_top = false;\n                touches_bottom\
     \ = false;\n            }\n            pending_open = false;\n            pending\
     \ = stt.point_id();\n        }\n\n        long long result() const {\n       \
     \     return answer;\n        }\n    };\n\n    auto query = [&](int v) {\n   \
@@ -1385,7 +1389,7 @@ data:
   isVerificationFile: true
   path: verify/tree/tree_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 13:36:22+09:00'
+  timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/tree/tree_algorithms.test.cpp
