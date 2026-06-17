@@ -173,4 +173,5 @@ All complexities are amortized. `size()` includes helper edge nodes created by
 `link_edge`; original vertex ids remain unchanged.
 
 This implementation maintains path aggregates only. It does not maintain
-subtree aggregates of the represented tree.
+subtree aggregates of the represented tree. For a variant with subtree-query
+helpers, use `LazyLinkCutTreeWithSubtree`.
