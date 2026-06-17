@@ -52,9 +52,9 @@ data:
     - https://judge.yosupo.jp/problem/aplusb
   bundledCode: "#line 1 \"verify/tree/tree_algorithms.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#include <iostream>\n#include <numeric>\n#include <set>\n#include\
-    \ <vector>\n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\n\
-    #include <utility>\n#line 7 \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ <array>\n#include <cassert>\n#include <iostream>\n#include <numeric>\n#include\
+    \ <set>\n#include <vector>\n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\
+    \n#include <utility>\n#line 7 \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace\
     \ graph {\n\ntemplate <class T = int>\nstruct Edge {\n    using cost_type = T;\n\
     \n    int from;\n    int to;\n    T cost;\n    int id;\n    bool alive;\n\n  \
     \  Edge() : from(-1), to(-1), cost(T()), id(-1), alive(true) {}\n    Edge(int\
@@ -298,19 +298,23 @@ data:
     #include <type_traits>\n#line 10 \"tree/rerooting_static_top_tree.hpp\"\n\n#line\
     \ 12 \"tree/rerooting_static_top_tree.hpp\"\n\nnamespace m1une {\nnamespace tree\
     \ {\n\nnamespace internal {\n\nenum class RerootingStaticTopTreeNodeType {\n \
-    \   Compress,\n    Rake,\n    AddEdge,\n    AddVertex,\n};\n\n}  // namespace\
-    \ internal\n\ntemplate <class T, class Vertex, class Path, class Point, class\
-    \ CompressDown, class CompressUp, class Rake,\n          class AddEdgeDown, class\
-    \ AddEdgeUp, class AddVertex>\nstruct RerootingStaticTopTree {\n    using cost_type\
-    \ = T;\n    using vertex_type = Vertex;\n    using path_type = Path;\n    using\
-    \ point_type = Point;\n    using edge_type = m1une::graph::Edge<T>;\n    using\
-    \ node_type = internal::RerootingStaticTopTreeNodeType;\n\n    struct Node {\n\
-    \        node_type type;\n        int left = -1;\n        int right = -1;\n  \
-    \      int parent = -1;\n        int vertex = -1;\n        edge_type edge;\n \
-    \       int size = 0;\n        int height = 1;\n        std::optional<Path> path_down;\n\
+    \   Compress,\n    Rake,\n    AddEdge,\n    AddVertex,\n};\n\nenum class RerootingStaticTopTreeStepType\
+    \ {\n    CompressLower,\n    CompressUpper,\n    AddEdge,\n    RakeLeft,\n   \
+    \ RakeRight,\n    AddVertex,\n};\n\n}  // namespace internal\n\ntemplate <class\
+    \ T, class Vertex, class Path, class Point, class CompressDown, class CompressUp,\
+    \ class Rake,\n          class AddEdgeDown, class AddEdgeUp, class AddVertex>\n\
+    struct RerootingStaticTopTree {\n    using cost_type = T;\n    using vertex_type\
+    \ = Vertex;\n    using path_type = Path;\n    using point_type = Point;\n    using\
+    \ edge_type = m1une::graph::Edge<T>;\n    using node_type = internal::RerootingStaticTopTreeNodeType;\n\
+    \    using step_type = internal::RerootingStaticTopTreeStepType;\n\n    struct\
+    \ Node {\n        node_type type;\n        int left = -1;\n        int right =\
+    \ -1;\n        int parent = -1;\n        int vertex = -1;\n        edge_type edge;\n\
+    \        int size = 0;\n        int height = 1;\n        std::optional<Path> path_down;\n\
     \        std::optional<Path> path_up;\n        std::optional<Point> point;\n \
-    \   };\n\n   private:\n    int _n;\n    int _root;\n    int _root_node;\n    Point\
-    \ _point_id;\n    CompressDown _compress_down;\n    CompressUp _compress_up;\n\
+    \   };\n\n    struct RerootingStep {\n        step_type type;\n        int node\
+    \ = -1;\n        int sibling = -1;\n        int vertex = -1;\n        edge_type\
+    \ edge;\n    };\n\n   private:\n    int _n;\n    int _root;\n    int _root_node;\n\
+    \    Point _point_id;\n    CompressDown _compress_down;\n    CompressUp _compress_up;\n\
     \    Rake _rake;\n    AddEdgeDown _add_edge_down;\n    AddEdgeUp _add_edge_up;\n\
     \    AddVertex _add_vertex;\n    std::vector<Vertex> _values;\n    std::vector<Node>\
     \ _nodes;\n    std::vector<int> _vertex_node;\n    std::vector<int> _edge_node;\n\
@@ -422,6 +426,10 @@ data:
     \ int(_nodes.size()));\n        return _nodes[id];\n    }\n\n    int parent_node(int\
     \ id) const {\n        return node(id).parent;\n    }\n\n    int vertex_node(int\
     \ v) const {\n        assert(0 <= v && v < _n);\n        return _vertex_node[v];\n\
+    \    }\n\n    int local_point_node(int v) const {\n        int id = vertex_node(v);\n\
+    \        assert(_nodes[id].type == node_type::AddVertex);\n        return _nodes[id].left;\n\
+    \    }\n\n    const Point& local_point(int v) const {\n        int point_node\
+    \ = local_point_node(v);\n        return point_node == -1 ? _point_id : node_point(point_node);\n\
     \    }\n\n    const Vertex& get(int v) const {\n        assert(0 <= v && v < _n);\n\
     \        return _values[v];\n    }\n\n    const Vertex& operator[](int v) const\
     \ {\n        return get(v);\n    }\n\n    void set(int v, const Vertex& value)\
@@ -440,10 +448,36 @@ data:
     \ -1);\n        return path_down(_root_node);\n    }\n\n    const Path& all_prod_up()\
     \ const {\n        assert(_root_node != -1);\n        return path_up(_root_node);\n\
     \    }\n\n    const Point& point_id() const {\n        return _point_id;\n   \
-    \ }\n\n    Path compress_down(const Path& upper, const Path& lower, edge_type\
-    \ edge) const {\n        return _compress_down(upper, lower, edge);\n    }\n\n\
-    \    Path compress_up(const Path& lower, const Path& upper, edge_type edge) const\
-    \ {\n        return _compress_up(lower, upper, edge);\n    }\n\n    Point rake(const\
+    \ }\n\n    template <class F>\n    void for_each_rerooting_step(int v, F&& f)\
+    \ const {\n        assert(0 <= v && v < _n);\n        int cur = _vertex_node[v];\n\
+    \        assert(cur != -1);\n        while (_nodes[cur].parent != -1) {\n    \
+    \        int par = _nodes[cur].parent;\n            const auto& p = _nodes[par];\n\
+    \            RerootingStep step;\n            step.node = par;\n            if\
+    \ (p.type == node_type::Compress) {\n                step.edge = p.edge;\n   \
+    \             if (p.left == cur) {\n                    step.type = step_type::CompressLower;\n\
+    \                    step.sibling = p.right;\n                } else {\n     \
+    \               assert(p.right == cur);\n                    step.type = step_type::CompressUpper;\n\
+    \                    step.sibling = p.left;\n                }\n            }\
+    \ else if (p.type == node_type::Rake) {\n                if (p.left == cur) {\n\
+    \                    step.type = step_type::RakeRight;\n                    step.sibling\
+    \ = p.right;\n                } else {\n                    assert(p.right ==\
+    \ cur);\n                    step.type = step_type::RakeLeft;\n              \
+    \      step.sibling = p.left;\n                }\n            } else if (p.type\
+    \ == node_type::AddEdge) {\n                assert(p.left == cur);\n         \
+    \       step.type = step_type::AddEdge;\n                step.edge = p.edge;\n\
+    \            } else {\n                assert(p.type == node_type::AddVertex);\n\
+    \                assert(p.left == cur);\n                step.type = step_type::AddVertex;\n\
+    \                step.vertex = p.vertex;\n            }\n            f(step);\n\
+    \            cur = par;\n        }\n    }\n\n    std::vector<RerootingStep> rerooting_steps(int\
+    \ v) const {\n        std::vector<RerootingStep> result;\n        int cur = vertex_node(v);\n\
+    \        int depth = 0;\n        while (_nodes[cur].parent != -1) {\n        \
+    \    cur = _nodes[cur].parent;\n            depth++;\n        }\n        result.reserve(depth);\n\
+    \        for_each_rerooting_step(v, [&](const RerootingStep& step) {\n       \
+    \     result.push_back(step);\n        });\n        return result;\n    }\n\n\
+    \    Path compress_down(const Path& upper, const Path& lower, edge_type edge)\
+    \ const {\n        return _compress_down(upper, lower, edge);\n    }\n\n    Path\
+    \ compress_up(const Path& lower, const Path& upper, edge_type edge) const {\n\
+    \        return _compress_up(lower, upper, edge);\n    }\n\n    Point rake(const\
     \ Point& left, const Point& right) const {\n        return _rake(left, right);\n\
     \    }\n\n    Point add_edge_down(const Path& path, edge_type edge) const {\n\
     \        return _add_edge_down(path, edge);\n    }\n\n    Point add_edge_up(const\
@@ -795,7 +829,7 @@ data:
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, Compress,\
     \ Rake,\n                     AddEdge, AddVertex>;\n\n}  // namespace tree\n}\
     \  // namespace m1une\n\n\n#line 1 \"tree/tree.hpp\"\n\n\n\n#line 7 \"tree/tree.hpp\"\
-    \n\n\n#line 13 \"tree/all.hpp\"\n\n\n#line 12 \"verify/tree/tree_algorithms.test.cpp\"\
+    \n\n\n#line 13 \"tree/all.hpp\"\n\n\n#line 13 \"verify/tree/tree_algorithms.test.cpp\"\
     \n\nusing m1une::graph::Graph;\n\ntemplate <class Hld>\nstd::vector<int> expand_segments(const\
     \ Hld& hld, const std::vector<m1une::tree::HldPathSegment>& segments) {\n    std::vector<int>\
     \ result;\n    for (auto seg : segments) {\n        if (seg.reversed) {\n    \
@@ -876,29 +910,32 @@ data:
     \    assert(eccentricity_cost[3] == 17);\n    assert(eccentricity_cost[6] == 17);\n\
     }\n\nstruct DistancePath {\n    long long count;\n    long long sum;\n    long\
     \ long length;\n};\n\nstruct DistancePoint {\n    long long count;\n    long long\
-    \ sum;\n};\n\nvoid test_static_top_tree() {\n    auto g = sample_tree();\n   \
-    \ std::vector<long long> values = {1, 2, 3, 4, 5, 6, 7};\n\n    auto vertex_sum\
-    \ = m1une::tree::StaticTopTree(\n        g,\n        values,\n        0LL,\n \
-    \       [](long long top, long long bottom, const auto&) {\n            return\
-    \ top + bottom;\n        },\n        [](long long a, long long b) {\n        \
-    \    return a + b;\n        },\n        [](long long path, const auto&) {\n  \
-    \          return path;\n        },\n        [](long long side, long long value,\
-    \ int) {\n            return side + value;\n        });\n\n    assert(vertex_sum.size()\
-    \ == 7);\n    assert(vertex_sum.root() == 0);\n    assert(vertex_sum.all_prod()\
-    \ == 28);\n    assert(vertex_sum.query() == 28);\n    assert(vertex_sum.get(3)\
-    \ == 4);\n    assert(vertex_sum.height() > 0);\n    vertex_sum.set(3, 100);\n\
-    \    assert(vertex_sum[3] == 100);\n    assert(vertex_sum.all_prod() == 124);\n\
-    \n    auto root_distance_sum = m1une::tree::StaticTopTree(\n        g,\n     \
-    \   std::vector<int>(7, 0),\n        DistancePoint{0, 0},\n        [](DistancePath\
-    \ top, DistancePath bottom, const auto& e) {\n            long long shift = top.length\
-    \ + e.cost;\n            return DistancePath{top.count + bottom.count, top.sum\
-    \ + bottom.sum + bottom.count * shift,\n                                top.length\
-    \ + e.cost + bottom.length};\n        },\n        [](DistancePoint a, DistancePoint\
-    \ b) {\n            return DistancePoint{a.count + b.count, a.sum + b.sum};\n\
-    \        },\n        [](DistancePath path, const auto& e) {\n            return\
-    \ DistancePoint{path.count, path.sum + path.count * e.cost};\n        },\n   \
-    \     [](DistancePoint side, int, int) {\n            return DistancePath{side.count\
-    \ + 1, side.sum, 0};\n        });\n\n    assert(root_distance_sum.all_prod().count\
+    \ sum;\n};\n\nstruct ColorVertex {\n    long long weight;\n    int color;\n};\n\
+    \nstruct ColorPath {\n    int first_color;\n    int last_color;\n    long long\
+    \ first_sum;\n    long long last_sum;\n    bool connected;\n};\n\nstruct ColorPoint\
+    \ {\n    std::array<long long, 2> sum;\n};\n\nvoid test_static_top_tree() {\n\
+    \    auto g = sample_tree();\n    std::vector<long long> values = {1, 2, 3, 4,\
+    \ 5, 6, 7};\n\n    auto vertex_sum = m1une::tree::StaticTopTree(\n        g,\n\
+    \        values,\n        0LL,\n        [](long long top, long long bottom, const\
+    \ auto&) {\n            return top + bottom;\n        },\n        [](long long\
+    \ a, long long b) {\n            return a + b;\n        },\n        [](long long\
+    \ path, const auto&) {\n            return path;\n        },\n        [](long\
+    \ long side, long long value, int) {\n            return side + value;\n     \
+    \   });\n\n    assert(vertex_sum.size() == 7);\n    assert(vertex_sum.root() ==\
+    \ 0);\n    assert(vertex_sum.all_prod() == 28);\n    assert(vertex_sum.query()\
+    \ == 28);\n    assert(vertex_sum.get(3) == 4);\n    assert(vertex_sum.height()\
+    \ > 0);\n    vertex_sum.set(3, 100);\n    assert(vertex_sum[3] == 100);\n    assert(vertex_sum.all_prod()\
+    \ == 124);\n\n    auto root_distance_sum = m1une::tree::StaticTopTree(\n     \
+    \   g,\n        std::vector<int>(7, 0),\n        DistancePoint{0, 0},\n      \
+    \  [](DistancePath top, DistancePath bottom, const auto& e) {\n            long\
+    \ long shift = top.length + e.cost;\n            return DistancePath{top.count\
+    \ + bottom.count, top.sum + bottom.sum + bottom.count * shift,\n             \
+    \                   top.length + e.cost + bottom.length};\n        },\n      \
+    \  [](DistancePoint a, DistancePoint b) {\n            return DistancePoint{a.count\
+    \ + b.count, a.sum + b.sum};\n        },\n        [](DistancePath path, const\
+    \ auto& e) {\n            return DistancePoint{path.count, path.sum + path.count\
+    \ * e.cost};\n        },\n        [](DistancePoint side, int, int) {\n       \
+    \     return DistancePath{side.count + 1, side.sum, 0};\n        });\n\n    assert(root_distance_sum.all_prod().count\
     \ == 7);\n    assert(root_distance_sum.all_prod().sum == 34);\n    root_distance_sum.set_edge_cost(0,\
     \ 10);\n    assert(root_distance_sum.all_prod().sum == 55);\n    root_distance_sum.set_edge_cost(1,\
     \ 10);\n    assert(root_distance_sum.all_prod().sum == 79);\n}\n\nvoid test_rerooting_static_top_tree()\
@@ -928,12 +965,43 @@ data:
     \    assert(stt.path_down(root_node).sum == stt.all_prod_down().sum);\n    assert(stt.path_up(root_node).sum\
     \ == stt.all_prod_up().sum);\n    int one_node = stt.vertex_node(1);\n    assert(stt.node(one_node).type\
     \ == m1une::tree::internal::RerootingStaticTopTreeNodeType::AddVertex);\n    assert(stt.parent_node(root_node)\
-    \ == -1);\n    assert(stt.point_id().count == 0);\n\n    auto edge = m1une::graph::Edge<long\
-    \ long>(0, 1, 2, e01);\n    auto reversed = decltype(stt)::reverse_edge(edge);\n\
-    \    assert(reversed.from == 1);\n    assert(reversed.to == 0);\n    DistancePath\
-    \ one = stt.add_vertex(stt.point_id(), 1LL, 0);\n    assert(one.count == 1);\n\
-    \    assert(one.sum == 0);\n    auto down_point = stt.add_edge_down(one, edge);\n\
-    \    auto up_point = stt.add_edge_up(one, reversed);\n    assert(down_point.sum\
+    \ == -1);\n    assert(stt.point_id().count == 0);\n    assert(stt.local_point_node(1)\
+    \ == -1);\n    assert(stt.local_point(1).count == 0);\n\n    using RerootingStepType\
+    \ = decltype(stt)::step_type;\n    using RerootingNodeType = decltype(stt)::node_type;\n\
+    \    auto steps = stt.rerooting_steps(1);\n    std::vector<decltype(stt)::RerootingStep>\
+    \ streamed_steps;\n    stt.for_each_rerooting_step(1, [&](const auto& step) {\n\
+    \        streamed_steps.push_back(step);\n    });\n    assert(streamed_steps.size()\
+    \ == steps.size());\n    int cur = one_node;\n    for (int i = 0; i < int(steps.size());\
+    \ i++) {\n        const auto& step = steps[i];\n        const auto& streamed =\
+    \ streamed_steps[i];\n        assert(streamed.type == step.type);\n        assert(streamed.node\
+    \ == step.node);\n        assert(streamed.sibling == step.sibling);\n        assert(streamed.vertex\
+    \ == step.vertex);\n        assert(streamed.edge.from == step.edge.from);\n  \
+    \      assert(streamed.edge.to == step.edge.to);\n        assert(streamed.edge.id\
+    \ == step.edge.id);\n\n        assert(stt.parent_node(cur) == step.node);\n  \
+    \      const auto& parent = stt.node(step.node);\n        if (step.type == RerootingStepType::CompressLower)\
+    \ {\n            assert(parent.type == RerootingNodeType::Compress);\n       \
+    \     assert(parent.left == cur);\n            assert(parent.right == step.sibling);\n\
+    \            assert(stt.node(step.sibling).path_down.has_value());\n        }\
+    \ else if (step.type == RerootingStepType::CompressUpper) {\n            assert(parent.type\
+    \ == RerootingNodeType::Compress);\n            assert(parent.right == cur);\n\
+    \            assert(parent.left == step.sibling);\n            assert(stt.node(step.sibling).path_up.has_value());\n\
+    \        } else if (step.type == RerootingStepType::RakeLeft) {\n            assert(parent.type\
+    \ == RerootingNodeType::Rake);\n            assert(parent.right == cur);\n   \
+    \         assert(parent.left == step.sibling);\n            assert(stt.node(step.sibling).point.has_value());\n\
+    \        } else if (step.type == RerootingStepType::RakeRight) {\n           \
+    \ assert(parent.type == RerootingNodeType::Rake);\n            assert(parent.left\
+    \ == cur);\n            assert(parent.right == step.sibling);\n            assert(stt.node(step.sibling).point.has_value());\n\
+    \        } else if (step.type == RerootingStepType::AddEdge) {\n            assert(parent.type\
+    \ == RerootingNodeType::AddEdge);\n            assert(parent.left == cur);\n \
+    \       } else {\n            assert(step.type == RerootingStepType::AddVertex);\n\
+    \            assert(parent.type == RerootingNodeType::AddVertex);\n          \
+    \  assert(parent.left == cur);\n            assert(parent.vertex == step.vertex);\n\
+    \        }\n        cur = step.node;\n    }\n    assert(cur == stt.root_node());\n\
+    \n    auto edge = m1une::graph::Edge<long long>(0, 1, 2, e01);\n    auto reversed\
+    \ = decltype(stt)::reverse_edge(edge);\n    assert(reversed.from == 1);\n    assert(reversed.to\
+    \ == 0);\n    DistancePath one = stt.add_vertex(stt.point_id(), 1LL, 0);\n   \
+    \ assert(one.count == 1);\n    assert(one.sum == 0);\n    auto down_point = stt.add_edge_down(one,\
+    \ edge);\n    auto up_point = stt.add_edge_up(one, reversed);\n    assert(down_point.sum\
     \ == 2);\n    assert(up_point.sum == 2);\n    auto raked = stt.rake(down_point,\
     \ up_point);\n    assert(raked.count == 2);\n    assert(raked.sum == 4);\n   \
     \ assert(stt.compress_down(one, one, edge).sum == 2);\n    assert(stt.compress_up(one,\
@@ -944,47 +1012,103 @@ data:
     \ == 5);\n    assert(stt.all_prod_down().sum == 25);\n    assert(stt.all_prod_up().count\
     \ == 5);\n    assert(stt.all_prod_up().sum == 50);\n\n    stt.set_edge_cost(e12,\
     \ 1);\n    assert(stt.all_prod_down().sum == 21);\n    assert(stt.all_prod_up().sum\
-    \ == 34);\n}\n\nvoid test_centroid_decomposition() {\n    auto g = sample_tree();\n\
-    \    m1une::tree::CentroidDecomposition<long long> cd(g);\n\n    assert(cd.size()\
-    \ == 7);\n    assert(!cd.empty());\n    assert(cd.root() == 0);\n    assert(cd.roots\
-    \ == std::vector<int>{0});\n    assert(cd.parent[cd.root()] == -1);\n    assert(cd.depth[cd.root()]\
-    \ == 0);\n    assert(cd.order.size() == 7);\n\n    int child_count = 0;\n    for\
-    \ (const auto& ch : cd.children) child_count += int(ch.size());\n    assert(child_count\
-    \ == 6);\n    for (int v = 0; v < 7; v++) {\n        if (v == cd.root()) continue;\n\
-    \        assert(cd.parent[v] != -1);\n        assert(cd.depth[v] == cd.depth[cd.parent[v]]\
-    \ + 1);\n    }\n}\n\nvoid test_forest() {\n    Graph<int> g(4);\n    g.add_edge(0,\
-    \ 1, 5);\n    g.add_edge(2, 3, 7);\n\n    auto diameter = m1une::tree::tree_diameter(g);\n\
-    \    assert(diameter.cost == 7);\n    assert(diameter.edge_count == 1);\n\n  \
-    \  auto component_size = m1une::tree::rerooting_dp(\n        g,\n        0,\n\
-    \        [](int a, int b) { return a + b; },\n        [](int acc, int) { return\
-    \ acc + 1; },\n        [](int dp, const auto&) { return dp; });\n    assert(component_size\
-    \ == std::vector<int>(4, 2));\n\n    m1une::tree::CentroidDecomposition<int> cd(g);\n\
-    \    assert(cd.roots.size() == 2);\n    assert(cd.order.size() == 4);\n}\n\nint\
-    \ main() {\n    test_rooted_tree();\n    test_sparse_table_lca();\n    test_hld();\n\
-    \    test_diameter();\n    test_rerooting();\n    test_static_top_tree();\n  \
-    \  test_rerooting_static_top_tree();\n    test_centroid_decomposition();\n   \
-    \ test_forest();\n\n    long long a = 0, b = 0;\n    std::cin >> a >> b;\n   \
-    \ std::cout << a + b << '\\n';\n}\n"
+    \ == 34);\n}\n\nvoid test_rerooting_static_top_tree_vertex_component() {\n   \
+    \ auto g = sample_tree();\n    std::vector<ColorVertex> values = {{1, 0}, {10,\
+    \ 0}, {100, 1}, {1000, 0},\n                                       {10000, 1},\
+    \ {100000, 1}, {1000000, 1}};\n\n    auto compress = [](ColorPath a, ColorPath\
+    \ b, const auto&) {\n        bool join = a.last_color == b.first_color;\n    \
+    \    ColorPath res{a.first_color, b.last_color, a.first_sum, b.last_sum, false};\n\
+    \        if (join && a.connected) res.first_sum += b.first_sum;\n        if (join\
+    \ && b.connected) res.last_sum += a.last_sum;\n        res.connected = a.connected\
+    \ && b.connected && join;\n        return res;\n    };\n    auto rake = [](ColorPoint\
+    \ a, ColorPoint b) {\n        return ColorPoint{{a.sum[0] + b.sum[0], a.sum[1]\
+    \ + b.sum[1]}};\n    };\n    auto add_edge = [](ColorPath path, const auto&) {\n\
+    \        ColorPoint res{{0, 0}};\n        res.sum[path.first_color] = path.first_sum;\n\
+    \        return res;\n    };\n    auto add_vertex = [](ColorPoint side, ColorVertex\
+    \ value, int) {\n        long long sum = value.weight + side.sum[value.color];\n\
+    \        return ColorPath{value.color, value.color, sum, sum, true};\n    };\n\
+    \n    auto stt = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{{0,\
+    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    auto\
+    \ query = [&](int v) {\n        using Step = decltype(stt)::step_type;\n     \
+    \   int color = values[v].color;\n        long long answer = values[v].weight\
+    \ + stt.local_point(v).sum[color];\n        bool touches_top = true;\n       \
+    \ bool touches_bottom = true;\n        bool pending_open = false;\n        ColorPoint\
+    \ pending = stt.point_id();\n\n        stt.for_each_rerooting_step(v, [&](const\
+    \ auto& step) {\n            if (step.type == Step::CompressLower) {\n       \
+    \         const ColorPath& lower = stt.path_down(step.sibling);\n            \
+    \    bool connect = touches_bottom && lower.first_color == color;\n          \
+    \      if (connect) answer += lower.first_sum;\n                touches_bottom\
+    \ = connect && lower.connected;\n            } else if (step.type == Step::CompressUpper)\
+    \ {\n                const ColorPath& upper = stt.path_up(step.sibling);\n   \
+    \             bool connect = touches_top && upper.first_color == color;\n    \
+    \            if (connect) answer += upper.first_sum;\n                touches_top\
+    \ = connect && upper.connected;\n            } else if (step.type == Step::AddEdge)\
+    \ {\n                pending_open = touches_top;\n                pending = stt.point_id();\n\
+    \            } else if (step.type == Step::RakeLeft) {\n                if (pending_open)\
+    \ pending = stt.rake(stt.point(step.sibling), pending);\n            } else if\
+    \ (step.type == Step::RakeRight) {\n                if (pending_open) pending\
+    \ = stt.rake(pending, stt.point(step.sibling));\n            } else {\n      \
+    \          const auto& value = values[step.vertex];\n                if (pending_open\
+    \ && value.color == color) {\n                    answer += value.weight + pending.sum[color];\n\
+    \                    touches_top = true;\n                    touches_bottom =\
+    \ true;\n                } else {\n                    touches_top = false;\n\
+    \                    touches_bottom = false;\n                }\n            \
+    \    pending_open = false;\n                pending = stt.point_id();\n      \
+    \      }\n        });\n\n        return answer;\n    };\n\n    auto brute = [&](int\
+    \ start) {\n        int color = values[start].color;\n        long long answer\
+    \ = 0;\n        std::vector<char> seen(g.size(), false);\n        std::vector<int>\
+    \ stack = {start};\n        seen[start] = true;\n        while (!stack.empty())\
+    \ {\n            int v = stack.back();\n            stack.pop_back();\n      \
+    \      answer += values[v].weight;\n            for (const auto& e : g[v]) {\n\
+    \                if (seen[e.to] || values[e.to].color != color) continue;\n  \
+    \              seen[e.to] = true;\n                stack.push_back(e.to);\n  \
+    \          }\n        }\n        return answer;\n    };\n\n    auto check_all\
+    \ = [&]() {\n        for (int v = 0; v < g.size(); v++) assert(query(v) == brute(v));\n\
+    \    };\n\n    check_all();\n    values[2].color ^= 1;\n    stt.set(2, values[2]);\n\
+    \    check_all();\n    values[5].weight += 7;\n    stt.set(5, values[5]);\n  \
+    \  check_all();\n    values[1].color ^= 1;\n    stt.set(1, values[1]);\n    check_all();\n\
+    \    values[4].weight += 11;\n    stt.set(4, values[4]);\n    check_all();\n}\n\
+    \nvoid test_centroid_decomposition() {\n    auto g = sample_tree();\n    m1une::tree::CentroidDecomposition<long\
+    \ long> cd(g);\n\n    assert(cd.size() == 7);\n    assert(!cd.empty());\n    assert(cd.root()\
+    \ == 0);\n    assert(cd.roots == std::vector<int>{0});\n    assert(cd.parent[cd.root()]\
+    \ == -1);\n    assert(cd.depth[cd.root()] == 0);\n    assert(cd.order.size() ==\
+    \ 7);\n\n    int child_count = 0;\n    for (const auto& ch : cd.children) child_count\
+    \ += int(ch.size());\n    assert(child_count == 6);\n    for (int v = 0; v < 7;\
+    \ v++) {\n        if (v == cd.root()) continue;\n        assert(cd.parent[v] !=\
+    \ -1);\n        assert(cd.depth[v] == cd.depth[cd.parent[v]] + 1);\n    }\n}\n\
+    \nvoid test_forest() {\n    Graph<int> g(4);\n    g.add_edge(0, 1, 5);\n    g.add_edge(2,\
+    \ 3, 7);\n\n    auto diameter = m1une::tree::tree_diameter(g);\n    assert(diameter.cost\
+    \ == 7);\n    assert(diameter.edge_count == 1);\n\n    auto component_size = m1une::tree::rerooting_dp(\n\
+    \        g,\n        0,\n        [](int a, int b) { return a + b; },\n       \
+    \ [](int acc, int) { return acc + 1; },\n        [](int dp, const auto&) { return\
+    \ dp; });\n    assert(component_size == std::vector<int>(4, 2));\n\n    m1une::tree::CentroidDecomposition<int>\
+    \ cd(g);\n    assert(cd.roots.size() == 2);\n    assert(cd.order.size() == 4);\n\
+    }\n\nint main() {\n    test_rooted_tree();\n    test_sparse_table_lca();\n   \
+    \ test_hld();\n    test_diameter();\n    test_rerooting();\n    test_static_top_tree();\n\
+    \    test_rerooting_static_top_tree();\n    test_rerooting_static_top_tree_vertex_component();\n\
+    \    test_centroid_decomposition();\n    test_forest();\n\n    long long a = 0,\
+    \ b = 0;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <iostream>\n#include <numeric>\n#include <set>\n\
-    #include <vector>\n\n#include \"graph/graph.hpp\"\n#include \"tree/all.hpp\"\n\
-    \nusing m1une::graph::Graph;\n\ntemplate <class Hld>\nstd::vector<int> expand_segments(const\
-    \ Hld& hld, const std::vector<m1une::tree::HldPathSegment>& segments) {\n    std::vector<int>\
-    \ result;\n    for (auto seg : segments) {\n        if (seg.reversed) {\n    \
-    \        for (int i = seg.r - 1; i >= seg.l; i--) result.push_back(hld.order[i]);\n\
-    \        } else {\n            for (int i = seg.l; i < seg.r; i++) result.push_back(hld.order[i]);\n\
-    \        }\n    }\n    return result;\n}\n\nGraph<long long> sample_tree() {\n\
-    \    Graph<long long> g(7);\n    g.add_edge(0, 1, 3);\n    g.add_edge(0, 2, 2);\n\
-    \    g.add_edge(1, 3, 4);\n    g.add_edge(1, 4, 1);\n    g.add_edge(2, 5, 6);\n\
-    \    g.add_edge(5, 6, 2);\n    return g;\n}\n\nvoid test_rooted_tree() {\n   \
-    \ auto g = sample_tree();\n    m1une::tree::RootedTree<long long> tree(g, 0);\n\
-    \n    assert(tree.size() == 7);\n    assert(!tree.empty());\n    assert(tree.root\
-    \ == 0);\n    assert(tree.parent[0] == -1);\n    assert(tree.parent[3] == 1);\n\
-    \    assert(tree.depth[6] == 3);\n    assert(tree.dist[6] == 10);\n    assert(tree.subtree_size[0]\
-    \ == 7);\n    assert(tree.subtree_size[1] == 3);\n    assert(tree.is_ancestor(1,\
-    \ 4));\n    assert(!tree.is_ancestor(2, 4));\n    assert(tree.in_subtree(4, 1));\n\
-    \n    assert(tree.kth_ancestor(6, 0) == 6);\n    assert(tree.kth_ancestor(6, 1)\
-    \ == 5);\n    assert(tree.kth_ancestor(6, 3) == 0);\n    assert(tree.kth_ancestor(6,\
+    #include <array>\n#include <cassert>\n#include <iostream>\n#include <numeric>\n\
+    #include <set>\n#include <vector>\n\n#include \"graph/graph.hpp\"\n#include \"\
+    tree/all.hpp\"\n\nusing m1une::graph::Graph;\n\ntemplate <class Hld>\nstd::vector<int>\
+    \ expand_segments(const Hld& hld, const std::vector<m1une::tree::HldPathSegment>&\
+    \ segments) {\n    std::vector<int> result;\n    for (auto seg : segments) {\n\
+    \        if (seg.reversed) {\n            for (int i = seg.r - 1; i >= seg.l;\
+    \ i--) result.push_back(hld.order[i]);\n        } else {\n            for (int\
+    \ i = seg.l; i < seg.r; i++) result.push_back(hld.order[i]);\n        }\n    }\n\
+    \    return result;\n}\n\nGraph<long long> sample_tree() {\n    Graph<long long>\
+    \ g(7);\n    g.add_edge(0, 1, 3);\n    g.add_edge(0, 2, 2);\n    g.add_edge(1,\
+    \ 3, 4);\n    g.add_edge(1, 4, 1);\n    g.add_edge(2, 5, 6);\n    g.add_edge(5,\
+    \ 6, 2);\n    return g;\n}\n\nvoid test_rooted_tree() {\n    auto g = sample_tree();\n\
+    \    m1une::tree::RootedTree<long long> tree(g, 0);\n\n    assert(tree.size()\
+    \ == 7);\n    assert(!tree.empty());\n    assert(tree.root == 0);\n    assert(tree.parent[0]\
+    \ == -1);\n    assert(tree.parent[3] == 1);\n    assert(tree.depth[6] == 3);\n\
+    \    assert(tree.dist[6] == 10);\n    assert(tree.subtree_size[0] == 7);\n   \
+    \ assert(tree.subtree_size[1] == 3);\n    assert(tree.is_ancestor(1, 4));\n  \
+    \  assert(!tree.is_ancestor(2, 4));\n    assert(tree.in_subtree(4, 1));\n\n  \
+    \  assert(tree.kth_ancestor(6, 0) == 6);\n    assert(tree.kth_ancestor(6, 1) ==\
+    \ 5);\n    assert(tree.kth_ancestor(6, 3) == 0);\n    assert(tree.kth_ancestor(6,\
     \ 4) == -1);\n    assert(tree.lca(3, 4) == 1);\n    assert(tree.lca(3, 6) == 0);\n\
     \    assert(tree.dist_edges(3, 6) == 5);\n    assert(tree.dist_cost(3, 6) == 17);\n\
     \    assert(tree.jump(3, 6, 0) == 3);\n    assert(tree.jump(3, 6, 1) == 1);\n\
@@ -1048,29 +1172,32 @@ data:
     \    assert(eccentricity_cost[3] == 17);\n    assert(eccentricity_cost[6] == 17);\n\
     }\n\nstruct DistancePath {\n    long long count;\n    long long sum;\n    long\
     \ long length;\n};\n\nstruct DistancePoint {\n    long long count;\n    long long\
-    \ sum;\n};\n\nvoid test_static_top_tree() {\n    auto g = sample_tree();\n   \
-    \ std::vector<long long> values = {1, 2, 3, 4, 5, 6, 7};\n\n    auto vertex_sum\
-    \ = m1une::tree::StaticTopTree(\n        g,\n        values,\n        0LL,\n \
-    \       [](long long top, long long bottom, const auto&) {\n            return\
-    \ top + bottom;\n        },\n        [](long long a, long long b) {\n        \
-    \    return a + b;\n        },\n        [](long long path, const auto&) {\n  \
-    \          return path;\n        },\n        [](long long side, long long value,\
-    \ int) {\n            return side + value;\n        });\n\n    assert(vertex_sum.size()\
-    \ == 7);\n    assert(vertex_sum.root() == 0);\n    assert(vertex_sum.all_prod()\
-    \ == 28);\n    assert(vertex_sum.query() == 28);\n    assert(vertex_sum.get(3)\
-    \ == 4);\n    assert(vertex_sum.height() > 0);\n    vertex_sum.set(3, 100);\n\
-    \    assert(vertex_sum[3] == 100);\n    assert(vertex_sum.all_prod() == 124);\n\
-    \n    auto root_distance_sum = m1une::tree::StaticTopTree(\n        g,\n     \
-    \   std::vector<int>(7, 0),\n        DistancePoint{0, 0},\n        [](DistancePath\
-    \ top, DistancePath bottom, const auto& e) {\n            long long shift = top.length\
-    \ + e.cost;\n            return DistancePath{top.count + bottom.count, top.sum\
-    \ + bottom.sum + bottom.count * shift,\n                                top.length\
-    \ + e.cost + bottom.length};\n        },\n        [](DistancePoint a, DistancePoint\
-    \ b) {\n            return DistancePoint{a.count + b.count, a.sum + b.sum};\n\
-    \        },\n        [](DistancePath path, const auto& e) {\n            return\
-    \ DistancePoint{path.count, path.sum + path.count * e.cost};\n        },\n   \
-    \     [](DistancePoint side, int, int) {\n            return DistancePath{side.count\
-    \ + 1, side.sum, 0};\n        });\n\n    assert(root_distance_sum.all_prod().count\
+    \ sum;\n};\n\nstruct ColorVertex {\n    long long weight;\n    int color;\n};\n\
+    \nstruct ColorPath {\n    int first_color;\n    int last_color;\n    long long\
+    \ first_sum;\n    long long last_sum;\n    bool connected;\n};\n\nstruct ColorPoint\
+    \ {\n    std::array<long long, 2> sum;\n};\n\nvoid test_static_top_tree() {\n\
+    \    auto g = sample_tree();\n    std::vector<long long> values = {1, 2, 3, 4,\
+    \ 5, 6, 7};\n\n    auto vertex_sum = m1une::tree::StaticTopTree(\n        g,\n\
+    \        values,\n        0LL,\n        [](long long top, long long bottom, const\
+    \ auto&) {\n            return top + bottom;\n        },\n        [](long long\
+    \ a, long long b) {\n            return a + b;\n        },\n        [](long long\
+    \ path, const auto&) {\n            return path;\n        },\n        [](long\
+    \ long side, long long value, int) {\n            return side + value;\n     \
+    \   });\n\n    assert(vertex_sum.size() == 7);\n    assert(vertex_sum.root() ==\
+    \ 0);\n    assert(vertex_sum.all_prod() == 28);\n    assert(vertex_sum.query()\
+    \ == 28);\n    assert(vertex_sum.get(3) == 4);\n    assert(vertex_sum.height()\
+    \ > 0);\n    vertex_sum.set(3, 100);\n    assert(vertex_sum[3] == 100);\n    assert(vertex_sum.all_prod()\
+    \ == 124);\n\n    auto root_distance_sum = m1une::tree::StaticTopTree(\n     \
+    \   g,\n        std::vector<int>(7, 0),\n        DistancePoint{0, 0},\n      \
+    \  [](DistancePath top, DistancePath bottom, const auto& e) {\n            long\
+    \ long shift = top.length + e.cost;\n            return DistancePath{top.count\
+    \ + bottom.count, top.sum + bottom.sum + bottom.count * shift,\n             \
+    \                   top.length + e.cost + bottom.length};\n        },\n      \
+    \  [](DistancePoint a, DistancePoint b) {\n            return DistancePoint{a.count\
+    \ + b.count, a.sum + b.sum};\n        },\n        [](DistancePath path, const\
+    \ auto& e) {\n            return DistancePoint{path.count, path.sum + path.count\
+    \ * e.cost};\n        },\n        [](DistancePoint side, int, int) {\n       \
+    \     return DistancePath{side.count + 1, side.sum, 0};\n        });\n\n    assert(root_distance_sum.all_prod().count\
     \ == 7);\n    assert(root_distance_sum.all_prod().sum == 34);\n    root_distance_sum.set_edge_cost(0,\
     \ 10);\n    assert(root_distance_sum.all_prod().sum == 55);\n    root_distance_sum.set_edge_cost(1,\
     \ 10);\n    assert(root_distance_sum.all_prod().sum == 79);\n}\n\nvoid test_rerooting_static_top_tree()\
@@ -1100,12 +1227,43 @@ data:
     \    assert(stt.path_down(root_node).sum == stt.all_prod_down().sum);\n    assert(stt.path_up(root_node).sum\
     \ == stt.all_prod_up().sum);\n    int one_node = stt.vertex_node(1);\n    assert(stt.node(one_node).type\
     \ == m1une::tree::internal::RerootingStaticTopTreeNodeType::AddVertex);\n    assert(stt.parent_node(root_node)\
-    \ == -1);\n    assert(stt.point_id().count == 0);\n\n    auto edge = m1une::graph::Edge<long\
-    \ long>(0, 1, 2, e01);\n    auto reversed = decltype(stt)::reverse_edge(edge);\n\
-    \    assert(reversed.from == 1);\n    assert(reversed.to == 0);\n    DistancePath\
-    \ one = stt.add_vertex(stt.point_id(), 1LL, 0);\n    assert(one.count == 1);\n\
-    \    assert(one.sum == 0);\n    auto down_point = stt.add_edge_down(one, edge);\n\
-    \    auto up_point = stt.add_edge_up(one, reversed);\n    assert(down_point.sum\
+    \ == -1);\n    assert(stt.point_id().count == 0);\n    assert(stt.local_point_node(1)\
+    \ == -1);\n    assert(stt.local_point(1).count == 0);\n\n    using RerootingStepType\
+    \ = decltype(stt)::step_type;\n    using RerootingNodeType = decltype(stt)::node_type;\n\
+    \    auto steps = stt.rerooting_steps(1);\n    std::vector<decltype(stt)::RerootingStep>\
+    \ streamed_steps;\n    stt.for_each_rerooting_step(1, [&](const auto& step) {\n\
+    \        streamed_steps.push_back(step);\n    });\n    assert(streamed_steps.size()\
+    \ == steps.size());\n    int cur = one_node;\n    for (int i = 0; i < int(steps.size());\
+    \ i++) {\n        const auto& step = steps[i];\n        const auto& streamed =\
+    \ streamed_steps[i];\n        assert(streamed.type == step.type);\n        assert(streamed.node\
+    \ == step.node);\n        assert(streamed.sibling == step.sibling);\n        assert(streamed.vertex\
+    \ == step.vertex);\n        assert(streamed.edge.from == step.edge.from);\n  \
+    \      assert(streamed.edge.to == step.edge.to);\n        assert(streamed.edge.id\
+    \ == step.edge.id);\n\n        assert(stt.parent_node(cur) == step.node);\n  \
+    \      const auto& parent = stt.node(step.node);\n        if (step.type == RerootingStepType::CompressLower)\
+    \ {\n            assert(parent.type == RerootingNodeType::Compress);\n       \
+    \     assert(parent.left == cur);\n            assert(parent.right == step.sibling);\n\
+    \            assert(stt.node(step.sibling).path_down.has_value());\n        }\
+    \ else if (step.type == RerootingStepType::CompressUpper) {\n            assert(parent.type\
+    \ == RerootingNodeType::Compress);\n            assert(parent.right == cur);\n\
+    \            assert(parent.left == step.sibling);\n            assert(stt.node(step.sibling).path_up.has_value());\n\
+    \        } else if (step.type == RerootingStepType::RakeLeft) {\n            assert(parent.type\
+    \ == RerootingNodeType::Rake);\n            assert(parent.right == cur);\n   \
+    \         assert(parent.left == step.sibling);\n            assert(stt.node(step.sibling).point.has_value());\n\
+    \        } else if (step.type == RerootingStepType::RakeRight) {\n           \
+    \ assert(parent.type == RerootingNodeType::Rake);\n            assert(parent.left\
+    \ == cur);\n            assert(parent.right == step.sibling);\n            assert(stt.node(step.sibling).point.has_value());\n\
+    \        } else if (step.type == RerootingStepType::AddEdge) {\n            assert(parent.type\
+    \ == RerootingNodeType::AddEdge);\n            assert(parent.left == cur);\n \
+    \       } else {\n            assert(step.type == RerootingStepType::AddVertex);\n\
+    \            assert(parent.type == RerootingNodeType::AddVertex);\n          \
+    \  assert(parent.left == cur);\n            assert(parent.vertex == step.vertex);\n\
+    \        }\n        cur = step.node;\n    }\n    assert(cur == stt.root_node());\n\
+    \n    auto edge = m1une::graph::Edge<long long>(0, 1, 2, e01);\n    auto reversed\
+    \ = decltype(stt)::reverse_edge(edge);\n    assert(reversed.from == 1);\n    assert(reversed.to\
+    \ == 0);\n    DistancePath one = stt.add_vertex(stt.point_id(), 1LL, 0);\n   \
+    \ assert(one.count == 1);\n    assert(one.sum == 0);\n    auto down_point = stt.add_edge_down(one,\
+    \ edge);\n    auto up_point = stt.add_edge_up(one, reversed);\n    assert(down_point.sum\
     \ == 2);\n    assert(up_point.sum == 2);\n    auto raked = stt.rake(down_point,\
     \ up_point);\n    assert(raked.count == 2);\n    assert(raked.sum == 4);\n   \
     \ assert(stt.compress_down(one, one, edge).sum == 2);\n    assert(stt.compress_up(one,\
@@ -1116,27 +1274,82 @@ data:
     \ == 5);\n    assert(stt.all_prod_down().sum == 25);\n    assert(stt.all_prod_up().count\
     \ == 5);\n    assert(stt.all_prod_up().sum == 50);\n\n    stt.set_edge_cost(e12,\
     \ 1);\n    assert(stt.all_prod_down().sum == 21);\n    assert(stt.all_prod_up().sum\
-    \ == 34);\n}\n\nvoid test_centroid_decomposition() {\n    auto g = sample_tree();\n\
-    \    m1une::tree::CentroidDecomposition<long long> cd(g);\n\n    assert(cd.size()\
-    \ == 7);\n    assert(!cd.empty());\n    assert(cd.root() == 0);\n    assert(cd.roots\
-    \ == std::vector<int>{0});\n    assert(cd.parent[cd.root()] == -1);\n    assert(cd.depth[cd.root()]\
-    \ == 0);\n    assert(cd.order.size() == 7);\n\n    int child_count = 0;\n    for\
-    \ (const auto& ch : cd.children) child_count += int(ch.size());\n    assert(child_count\
-    \ == 6);\n    for (int v = 0; v < 7; v++) {\n        if (v == cd.root()) continue;\n\
-    \        assert(cd.parent[v] != -1);\n        assert(cd.depth[v] == cd.depth[cd.parent[v]]\
-    \ + 1);\n    }\n}\n\nvoid test_forest() {\n    Graph<int> g(4);\n    g.add_edge(0,\
-    \ 1, 5);\n    g.add_edge(2, 3, 7);\n\n    auto diameter = m1une::tree::tree_diameter(g);\n\
-    \    assert(diameter.cost == 7);\n    assert(diameter.edge_count == 1);\n\n  \
-    \  auto component_size = m1une::tree::rerooting_dp(\n        g,\n        0,\n\
-    \        [](int a, int b) { return a + b; },\n        [](int acc, int) { return\
-    \ acc + 1; },\n        [](int dp, const auto&) { return dp; });\n    assert(component_size\
-    \ == std::vector<int>(4, 2));\n\n    m1une::tree::CentroidDecomposition<int> cd(g);\n\
-    \    assert(cd.roots.size() == 2);\n    assert(cd.order.size() == 4);\n}\n\nint\
-    \ main() {\n    test_rooted_tree();\n    test_sparse_table_lca();\n    test_hld();\n\
-    \    test_diameter();\n    test_rerooting();\n    test_static_top_tree();\n  \
-    \  test_rerooting_static_top_tree();\n    test_centroid_decomposition();\n   \
-    \ test_forest();\n\n    long long a = 0, b = 0;\n    std::cin >> a >> b;\n   \
-    \ std::cout << a + b << '\\n';\n}\n"
+    \ == 34);\n}\n\nvoid test_rerooting_static_top_tree_vertex_component() {\n   \
+    \ auto g = sample_tree();\n    std::vector<ColorVertex> values = {{1, 0}, {10,\
+    \ 0}, {100, 1}, {1000, 0},\n                                       {10000, 1},\
+    \ {100000, 1}, {1000000, 1}};\n\n    auto compress = [](ColorPath a, ColorPath\
+    \ b, const auto&) {\n        bool join = a.last_color == b.first_color;\n    \
+    \    ColorPath res{a.first_color, b.last_color, a.first_sum, b.last_sum, false};\n\
+    \        if (join && a.connected) res.first_sum += b.first_sum;\n        if (join\
+    \ && b.connected) res.last_sum += a.last_sum;\n        res.connected = a.connected\
+    \ && b.connected && join;\n        return res;\n    };\n    auto rake = [](ColorPoint\
+    \ a, ColorPoint b) {\n        return ColorPoint{{a.sum[0] + b.sum[0], a.sum[1]\
+    \ + b.sum[1]}};\n    };\n    auto add_edge = [](ColorPath path, const auto&) {\n\
+    \        ColorPoint res{{0, 0}};\n        res.sum[path.first_color] = path.first_sum;\n\
+    \        return res;\n    };\n    auto add_vertex = [](ColorPoint side, ColorVertex\
+    \ value, int) {\n        long long sum = value.weight + side.sum[value.color];\n\
+    \        return ColorPath{value.color, value.color, sum, sum, true};\n    };\n\
+    \n    auto stt = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{{0,\
+    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    auto\
+    \ query = [&](int v) {\n        using Step = decltype(stt)::step_type;\n     \
+    \   int color = values[v].color;\n        long long answer = values[v].weight\
+    \ + stt.local_point(v).sum[color];\n        bool touches_top = true;\n       \
+    \ bool touches_bottom = true;\n        bool pending_open = false;\n        ColorPoint\
+    \ pending = stt.point_id();\n\n        stt.for_each_rerooting_step(v, [&](const\
+    \ auto& step) {\n            if (step.type == Step::CompressLower) {\n       \
+    \         const ColorPath& lower = stt.path_down(step.sibling);\n            \
+    \    bool connect = touches_bottom && lower.first_color == color;\n          \
+    \      if (connect) answer += lower.first_sum;\n                touches_bottom\
+    \ = connect && lower.connected;\n            } else if (step.type == Step::CompressUpper)\
+    \ {\n                const ColorPath& upper = stt.path_up(step.sibling);\n   \
+    \             bool connect = touches_top && upper.first_color == color;\n    \
+    \            if (connect) answer += upper.first_sum;\n                touches_top\
+    \ = connect && upper.connected;\n            } else if (step.type == Step::AddEdge)\
+    \ {\n                pending_open = touches_top;\n                pending = stt.point_id();\n\
+    \            } else if (step.type == Step::RakeLeft) {\n                if (pending_open)\
+    \ pending = stt.rake(stt.point(step.sibling), pending);\n            } else if\
+    \ (step.type == Step::RakeRight) {\n                if (pending_open) pending\
+    \ = stt.rake(pending, stt.point(step.sibling));\n            } else {\n      \
+    \          const auto& value = values[step.vertex];\n                if (pending_open\
+    \ && value.color == color) {\n                    answer += value.weight + pending.sum[color];\n\
+    \                    touches_top = true;\n                    touches_bottom =\
+    \ true;\n                } else {\n                    touches_top = false;\n\
+    \                    touches_bottom = false;\n                }\n            \
+    \    pending_open = false;\n                pending = stt.point_id();\n      \
+    \      }\n        });\n\n        return answer;\n    };\n\n    auto brute = [&](int\
+    \ start) {\n        int color = values[start].color;\n        long long answer\
+    \ = 0;\n        std::vector<char> seen(g.size(), false);\n        std::vector<int>\
+    \ stack = {start};\n        seen[start] = true;\n        while (!stack.empty())\
+    \ {\n            int v = stack.back();\n            stack.pop_back();\n      \
+    \      answer += values[v].weight;\n            for (const auto& e : g[v]) {\n\
+    \                if (seen[e.to] || values[e.to].color != color) continue;\n  \
+    \              seen[e.to] = true;\n                stack.push_back(e.to);\n  \
+    \          }\n        }\n        return answer;\n    };\n\n    auto check_all\
+    \ = [&]() {\n        for (int v = 0; v < g.size(); v++) assert(query(v) == brute(v));\n\
+    \    };\n\n    check_all();\n    values[2].color ^= 1;\n    stt.set(2, values[2]);\n\
+    \    check_all();\n    values[5].weight += 7;\n    stt.set(5, values[5]);\n  \
+    \  check_all();\n    values[1].color ^= 1;\n    stt.set(1, values[1]);\n    check_all();\n\
+    \    values[4].weight += 11;\n    stt.set(4, values[4]);\n    check_all();\n}\n\
+    \nvoid test_centroid_decomposition() {\n    auto g = sample_tree();\n    m1une::tree::CentroidDecomposition<long\
+    \ long> cd(g);\n\n    assert(cd.size() == 7);\n    assert(!cd.empty());\n    assert(cd.root()\
+    \ == 0);\n    assert(cd.roots == std::vector<int>{0});\n    assert(cd.parent[cd.root()]\
+    \ == -1);\n    assert(cd.depth[cd.root()] == 0);\n    assert(cd.order.size() ==\
+    \ 7);\n\n    int child_count = 0;\n    for (const auto& ch : cd.children) child_count\
+    \ += int(ch.size());\n    assert(child_count == 6);\n    for (int v = 0; v < 7;\
+    \ v++) {\n        if (v == cd.root()) continue;\n        assert(cd.parent[v] !=\
+    \ -1);\n        assert(cd.depth[v] == cd.depth[cd.parent[v]] + 1);\n    }\n}\n\
+    \nvoid test_forest() {\n    Graph<int> g(4);\n    g.add_edge(0, 1, 5);\n    g.add_edge(2,\
+    \ 3, 7);\n\n    auto diameter = m1une::tree::tree_diameter(g);\n    assert(diameter.cost\
+    \ == 7);\n    assert(diameter.edge_count == 1);\n\n    auto component_size = m1une::tree::rerooting_dp(\n\
+    \        g,\n        0,\n        [](int a, int b) { return a + b; },\n       \
+    \ [](int acc, int) { return acc + 1; },\n        [](int dp, const auto&) { return\
+    \ dp; });\n    assert(component_size == std::vector<int>(4, 2));\n\n    m1une::tree::CentroidDecomposition<int>\
+    \ cd(g);\n    assert(cd.roots.size() == 2);\n    assert(cd.order.size() == 4);\n\
+    }\n\nint main() {\n    test_rooted_tree();\n    test_sparse_table_lca();\n   \
+    \ test_hld();\n    test_diameter();\n    test_rerooting();\n    test_static_top_tree();\n\
+    \    test_rerooting_static_top_tree();\n    test_rerooting_static_top_tree_vertex_component();\n\
+    \    test_centroid_decomposition();\n    test_forest();\n\n    long long a = 0,\
+    \ b = 0;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - graph/graph.hpp
   - tree/all.hpp
@@ -1154,7 +1367,7 @@ data:
   isVerificationFile: true
   path: verify/tree/tree_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 03:31:44+09:00'
+  timestamp: '2026-06-17 11:05:34+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/tree/tree_algorithms.test.cpp

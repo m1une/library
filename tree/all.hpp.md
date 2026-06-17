@@ -292,19 +292,23 @@ data:
     #include <type_traits>\n#line 10 \"tree/rerooting_static_top_tree.hpp\"\n\n#line\
     \ 12 \"tree/rerooting_static_top_tree.hpp\"\n\nnamespace m1une {\nnamespace tree\
     \ {\n\nnamespace internal {\n\nenum class RerootingStaticTopTreeNodeType {\n \
-    \   Compress,\n    Rake,\n    AddEdge,\n    AddVertex,\n};\n\n}  // namespace\
-    \ internal\n\ntemplate <class T, class Vertex, class Path, class Point, class\
-    \ CompressDown, class CompressUp, class Rake,\n          class AddEdgeDown, class\
-    \ AddEdgeUp, class AddVertex>\nstruct RerootingStaticTopTree {\n    using cost_type\
-    \ = T;\n    using vertex_type = Vertex;\n    using path_type = Path;\n    using\
-    \ point_type = Point;\n    using edge_type = m1une::graph::Edge<T>;\n    using\
-    \ node_type = internal::RerootingStaticTopTreeNodeType;\n\n    struct Node {\n\
-    \        node_type type;\n        int left = -1;\n        int right = -1;\n  \
-    \      int parent = -1;\n        int vertex = -1;\n        edge_type edge;\n \
-    \       int size = 0;\n        int height = 1;\n        std::optional<Path> path_down;\n\
+    \   Compress,\n    Rake,\n    AddEdge,\n    AddVertex,\n};\n\nenum class RerootingStaticTopTreeStepType\
+    \ {\n    CompressLower,\n    CompressUpper,\n    AddEdge,\n    RakeLeft,\n   \
+    \ RakeRight,\n    AddVertex,\n};\n\n}  // namespace internal\n\ntemplate <class\
+    \ T, class Vertex, class Path, class Point, class CompressDown, class CompressUp,\
+    \ class Rake,\n          class AddEdgeDown, class AddEdgeUp, class AddVertex>\n\
+    struct RerootingStaticTopTree {\n    using cost_type = T;\n    using vertex_type\
+    \ = Vertex;\n    using path_type = Path;\n    using point_type = Point;\n    using\
+    \ edge_type = m1une::graph::Edge<T>;\n    using node_type = internal::RerootingStaticTopTreeNodeType;\n\
+    \    using step_type = internal::RerootingStaticTopTreeStepType;\n\n    struct\
+    \ Node {\n        node_type type;\n        int left = -1;\n        int right =\
+    \ -1;\n        int parent = -1;\n        int vertex = -1;\n        edge_type edge;\n\
+    \        int size = 0;\n        int height = 1;\n        std::optional<Path> path_down;\n\
     \        std::optional<Path> path_up;\n        std::optional<Point> point;\n \
-    \   };\n\n   private:\n    int _n;\n    int _root;\n    int _root_node;\n    Point\
-    \ _point_id;\n    CompressDown _compress_down;\n    CompressUp _compress_up;\n\
+    \   };\n\n    struct RerootingStep {\n        step_type type;\n        int node\
+    \ = -1;\n        int sibling = -1;\n        int vertex = -1;\n        edge_type\
+    \ edge;\n    };\n\n   private:\n    int _n;\n    int _root;\n    int _root_node;\n\
+    \    Point _point_id;\n    CompressDown _compress_down;\n    CompressUp _compress_up;\n\
     \    Rake _rake;\n    AddEdgeDown _add_edge_down;\n    AddEdgeUp _add_edge_up;\n\
     \    AddVertex _add_vertex;\n    std::vector<Vertex> _values;\n    std::vector<Node>\
     \ _nodes;\n    std::vector<int> _vertex_node;\n    std::vector<int> _edge_node;\n\
@@ -416,6 +420,10 @@ data:
     \ int(_nodes.size()));\n        return _nodes[id];\n    }\n\n    int parent_node(int\
     \ id) const {\n        return node(id).parent;\n    }\n\n    int vertex_node(int\
     \ v) const {\n        assert(0 <= v && v < _n);\n        return _vertex_node[v];\n\
+    \    }\n\n    int local_point_node(int v) const {\n        int id = vertex_node(v);\n\
+    \        assert(_nodes[id].type == node_type::AddVertex);\n        return _nodes[id].left;\n\
+    \    }\n\n    const Point& local_point(int v) const {\n        int point_node\
+    \ = local_point_node(v);\n        return point_node == -1 ? _point_id : node_point(point_node);\n\
     \    }\n\n    const Vertex& get(int v) const {\n        assert(0 <= v && v < _n);\n\
     \        return _values[v];\n    }\n\n    const Vertex& operator[](int v) const\
     \ {\n        return get(v);\n    }\n\n    void set(int v, const Vertex& value)\
@@ -434,10 +442,36 @@ data:
     \ -1);\n        return path_down(_root_node);\n    }\n\n    const Path& all_prod_up()\
     \ const {\n        assert(_root_node != -1);\n        return path_up(_root_node);\n\
     \    }\n\n    const Point& point_id() const {\n        return _point_id;\n   \
-    \ }\n\n    Path compress_down(const Path& upper, const Path& lower, edge_type\
-    \ edge) const {\n        return _compress_down(upper, lower, edge);\n    }\n\n\
-    \    Path compress_up(const Path& lower, const Path& upper, edge_type edge) const\
-    \ {\n        return _compress_up(lower, upper, edge);\n    }\n\n    Point rake(const\
+    \ }\n\n    template <class F>\n    void for_each_rerooting_step(int v, F&& f)\
+    \ const {\n        assert(0 <= v && v < _n);\n        int cur = _vertex_node[v];\n\
+    \        assert(cur != -1);\n        while (_nodes[cur].parent != -1) {\n    \
+    \        int par = _nodes[cur].parent;\n            const auto& p = _nodes[par];\n\
+    \            RerootingStep step;\n            step.node = par;\n            if\
+    \ (p.type == node_type::Compress) {\n                step.edge = p.edge;\n   \
+    \             if (p.left == cur) {\n                    step.type = step_type::CompressLower;\n\
+    \                    step.sibling = p.right;\n                } else {\n     \
+    \               assert(p.right == cur);\n                    step.type = step_type::CompressUpper;\n\
+    \                    step.sibling = p.left;\n                }\n            }\
+    \ else if (p.type == node_type::Rake) {\n                if (p.left == cur) {\n\
+    \                    step.type = step_type::RakeRight;\n                    step.sibling\
+    \ = p.right;\n                } else {\n                    assert(p.right ==\
+    \ cur);\n                    step.type = step_type::RakeLeft;\n              \
+    \      step.sibling = p.left;\n                }\n            } else if (p.type\
+    \ == node_type::AddEdge) {\n                assert(p.left == cur);\n         \
+    \       step.type = step_type::AddEdge;\n                step.edge = p.edge;\n\
+    \            } else {\n                assert(p.type == node_type::AddVertex);\n\
+    \                assert(p.left == cur);\n                step.type = step_type::AddVertex;\n\
+    \                step.vertex = p.vertex;\n            }\n            f(step);\n\
+    \            cur = par;\n        }\n    }\n\n    std::vector<RerootingStep> rerooting_steps(int\
+    \ v) const {\n        std::vector<RerootingStep> result;\n        int cur = vertex_node(v);\n\
+    \        int depth = 0;\n        while (_nodes[cur].parent != -1) {\n        \
+    \    cur = _nodes[cur].parent;\n            depth++;\n        }\n        result.reserve(depth);\n\
+    \        for_each_rerooting_step(v, [&](const RerootingStep& step) {\n       \
+    \     result.push_back(step);\n        });\n        return result;\n    }\n\n\
+    \    Path compress_down(const Path& upper, const Path& lower, edge_type edge)\
+    \ const {\n        return _compress_down(upper, lower, edge);\n    }\n\n    Path\
+    \ compress_up(const Path& lower, const Path& upper, edge_type edge) const {\n\
+    \        return _compress_up(lower, upper, edge);\n    }\n\n    Point rake(const\
     \ Point& left, const Point& right) const {\n        return _rake(left, right);\n\
     \    }\n\n    Point add_edge_down(const Path& path, edge_type edge) const {\n\
     \        return _add_edge_down(path, edge);\n    }\n\n    Point add_edge_up(const\
@@ -833,7 +867,7 @@ data:
   isVerificationFile: false
   path: tree/all.hpp
   requiredBy: []
-  timestamp: '2026-06-17 03:31:44+09:00'
+  timestamp: '2026-06-17 11:05:34+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
