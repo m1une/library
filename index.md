@@ -101,6 +101,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_monoid_array.hpp
       title: Dynamic Monoid Array
+    - icon: ':warning:'
+      path: data_structure/fenwick_tree.hpp
+      title: Fenwick Tree (Binary Indexed Tree)
     - icon: ':heavy_check_mark:'
       path: data_structure/hash_common.hpp
       title: data_structure/hash_common.hpp
