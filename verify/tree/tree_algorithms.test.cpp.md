@@ -474,59 +474,71 @@ data:
     \    cur = _nodes[cur].parent;\n            depth++;\n        }\n        result.reserve(depth);\n\
     \        for_each_rerooting_step(v, [&](const RerootingStep& step) {\n       \
     \     result.push_back(step);\n        });\n        return result;\n    }\n\n\
-    \    Path compress_down(const Path& upper, const Path& lower, edge_type edge)\
-    \ const {\n        return _compress_down(upper, lower, edge);\n    }\n\n    Path\
-    \ compress_up(const Path& lower, const Path& upper, edge_type edge) const {\n\
-    \        return _compress_up(lower, upper, edge);\n    }\n\n    Point rake(const\
-    \ Point& left, const Point& right) const {\n        return _rake(left, right);\n\
-    \    }\n\n    Point add_edge_down(const Path& path, edge_type edge) const {\n\
-    \        return _add_edge_down(path, edge);\n    }\n\n    Point add_edge_up(const\
-    \ Path& path, edge_type edge) const {\n        return _add_edge_up(path, edge);\n\
-    \    }\n\n    Path add_vertex(const Point& side, const Vertex& value, int vertex)\
-    \ const {\n        return _add_vertex(side, value, vertex);\n    }\n\n    static\
-    \ edge_type reverse_edge(edge_type edge) {\n        return reversed_edge(edge);\n\
-    \    }\n};\n\ntemplate <class T, class Vertex, class Point, class CompressDown,\
-    \ class CompressUp, class Rake, class AddEdgeDown,\n          class AddEdgeUp,\
-    \ class AddVertex>\nRerootingStaticTopTree(const m1une::graph::Graph<T>&, const\
-    \ std::vector<Vertex>&, Point, CompressDown, CompressUp,\n                   \
-    \    Rake, AddEdgeDown, AddEdgeUp, AddVertex, int)\n    -> RerootingStaticTopTree<T,\
+    \    template <class Folder>\n    auto fold_rerooting(int v, Folder folder) const\
+    \ {\n        folder.start(v, _values[v], local_point(v));\n        for_each_rerooting_step(v,\
+    \ [&](const RerootingStep& step) {\n            if (step.type == step_type::CompressLower)\
+    \ {\n                folder.compress_lower(path_down(step.sibling), step.edge);\n\
+    \            } else if (step.type == step_type::CompressUpper) {\n           \
+    \     folder.compress_upper(path_up(step.sibling), reversed_edge(step.edge));\n\
+    \            } else if (step.type == step_type::AddEdge) {\n                folder.add_edge(reversed_edge(step.edge));\n\
+    \            } else if (step.type == step_type::RakeLeft) {\n                folder.rake_left(point(step.sibling));\n\
+    \            } else if (step.type == step_type::RakeRight) {\n               \
+    \ folder.rake_right(point(step.sibling));\n            } else {\n            \
+    \    folder.add_vertex(step.vertex, _values[step.vertex]);\n            }\n  \
+    \      });\n        return folder.result();\n    }\n\n    Path compress_down(const\
+    \ Path& upper, const Path& lower, edge_type edge) const {\n        return _compress_down(upper,\
+    \ lower, edge);\n    }\n\n    Path compress_up(const Path& lower, const Path&\
+    \ upper, edge_type edge) const {\n        return _compress_up(lower, upper, edge);\n\
+    \    }\n\n    Point rake(const Point& left, const Point& right) const {\n    \
+    \    return _rake(left, right);\n    }\n\n    Point add_edge_down(const Path&\
+    \ path, edge_type edge) const {\n        return _add_edge_down(path, edge);\n\
+    \    }\n\n    Point add_edge_up(const Path& path, edge_type edge) const {\n  \
+    \      return _add_edge_up(path, edge);\n    }\n\n    Path add_vertex(const Point&\
+    \ side, const Vertex& value, int vertex) const {\n        return _add_vertex(side,\
+    \ value, vertex);\n    }\n\n    static edge_type reverse_edge(edge_type edge)\
+    \ {\n        return reversed_edge(edge);\n    }\n};\n\ntemplate <class T, class\
+    \ Vertex, class Point, class CompressDown, class CompressUp, class Rake, class\
+    \ AddEdgeDown,\n          class AddEdgeUp, class AddVertex>\nRerootingStaticTopTree(const\
+    \ m1une::graph::Graph<T>&, const std::vector<Vertex>&, Point, CompressDown, CompressUp,\n\
+    \                       Rake, AddEdgeDown, AddEdgeUp, AddVertex, int)\n    ->\
+    \ RerootingStaticTopTree<T, Vertex, std::invoke_result_t<AddVertex, Point, Vertex,\
+    \ int>, Point, CompressDown,\n                              CompressUp, Rake,\
+    \ AddEdgeDown, AddEdgeUp, AddVertex>;\n\ntemplate <class T, class Vertex, class\
+    \ Point, class CompressDown, class CompressUp, class Rake, class AddEdgeDown,\n\
+    \          class AddEdgeUp, class AddVertex>\nRerootingStaticTopTree(const m1une::graph::Graph<T>&,\
+    \ const std::vector<Vertex>&, Point, CompressDown, CompressUp,\n             \
+    \          Rake, AddEdgeDown, AddEdgeUp, AddVertex)\n    -> RerootingStaticTopTree<T,\
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, CompressDown,\n\
     \                              CompressUp, Rake, AddEdgeDown, AddEdgeUp, AddVertex>;\n\
-    \ntemplate <class T, class Vertex, class Point, class CompressDown, class CompressUp,\
-    \ class Rake, class AddEdgeDown,\n          class AddEdgeUp, class AddVertex>\n\
-    RerootingStaticTopTree(const m1une::graph::Graph<T>&, const std::vector<Vertex>&,\
-    \ Point, CompressDown, CompressUp,\n                       Rake, AddEdgeDown,\
-    \ AddEdgeUp, AddVertex)\n    -> RerootingStaticTopTree<T, Vertex, std::invoke_result_t<AddVertex,\
-    \ Point, Vertex, int>, Point, CompressDown,\n                              CompressUp,\
-    \ Rake, AddEdgeDown, AddEdgeUp, AddVertex>;\n\n}  // namespace tree\n}  // namespace\
-    \ m1une\n\n\n#line 1 \"tree/rooted_tree.hpp\"\n\n\n\n#line 7 \"tree/rooted_tree.hpp\"\
-    \n\n#line 9 \"tree/rooted_tree.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\n\
-    template <class T = int>\nstruct RootedTree {\n    using cost_type = T;\n    using\
-    \ edge_type = m1une::graph::Edge<T>;\n\n    int root;\n    std::vector<int> parent;\n\
-    \    std::vector<int> parent_edge;\n    std::vector<int> depth;\n    std::vector<T>\
-    \ dist;\n    std::vector<int> subtree_size;\n    std::vector<int> tin;\n    std::vector<int>\
-    \ tout;\n    std::vector<int> order;\n    std::vector<std::vector<int>> up;\n\n\
-    \   private:\n    int _n;\n    int _log;\n\n    void check_vertex(int v) const\
-    \ {\n        assert(0 <= v && v < _n);\n        assert(tin[v] != -1);\n    }\n\
-    \n   public:\n    RootedTree() : root(-1), _n(0), _log(0) {}\n    explicit RootedTree(const\
-    \ m1une::graph::Graph<T>& g, int root_ = 0) {\n        build(g, root_);\n    }\n\
-    \n    void build(const m1une::graph::Graph<T>& g, int root_ = 0) {\n        _n\
-    \ = g.size();\n        root = _n == 0 ? -1 : root_;\n        _log = 1;\n     \
-    \   while ((1U << _log) <= (unsigned int)(std::max(1, _n))) _log++;\n\n      \
-    \  parent.assign(_n, -1);\n        parent_edge.assign(_n, -1);\n        depth.assign(_n,\
-    \ 0);\n        dist.assign(_n, T(0));\n        subtree_size.assign(_n, 0);\n \
-    \       tin.assign(_n, -1);\n        tout.assign(_n, -1);\n        order.clear();\n\
-    \        order.reserve(_n);\n        up.assign(_log, std::vector<int>(_n, -1));\n\
-    \n        if (_n == 0) return;\n        assert(0 <= root && root < _n);\n\n  \
-    \      struct Frame {\n            int v;\n            int state;\n        };\n\
-    \n        std::vector<char> visited(_n, false);\n        std::vector<Frame> stack;\n\
-    \        stack.push_back({root, 0});\n        visited[root] = true;\n        int\
-    \ timer = 0;\n\n        while (!stack.empty()) {\n            Frame frame = stack.back();\n\
-    \            stack.pop_back();\n            int v = frame.v;\n            if (frame.state\
-    \ == 0) {\n                tin[v] = timer++;\n                order.push_back(v);\n\
-    \                up[0][v] = parent[v];\n                for (int k = 1; k < _log;\
-    \ k++) {\n                    int p = up[k - 1][v];\n                    up[k][v]\
-    \ = p == -1 ? -1 : up[k - 1][p];\n                }\n\n                stack.push_back({v,\
+    \n}  // namespace tree\n}  // namespace m1une\n\n\n#line 1 \"tree/rooted_tree.hpp\"\
+    \n\n\n\n#line 7 \"tree/rooted_tree.hpp\"\n\n#line 9 \"tree/rooted_tree.hpp\"\n\
+    \nnamespace m1une {\nnamespace tree {\n\ntemplate <class T = int>\nstruct RootedTree\
+    \ {\n    using cost_type = T;\n    using edge_type = m1une::graph::Edge<T>;\n\n\
+    \    int root;\n    std::vector<int> parent;\n    std::vector<int> parent_edge;\n\
+    \    std::vector<int> depth;\n    std::vector<T> dist;\n    std::vector<int> subtree_size;\n\
+    \    std::vector<int> tin;\n    std::vector<int> tout;\n    std::vector<int> order;\n\
+    \    std::vector<std::vector<int>> up;\n\n   private:\n    int _n;\n    int _log;\n\
+    \n    void check_vertex(int v) const {\n        assert(0 <= v && v < _n);\n  \
+    \      assert(tin[v] != -1);\n    }\n\n   public:\n    RootedTree() : root(-1),\
+    \ _n(0), _log(0) {}\n    explicit RootedTree(const m1une::graph::Graph<T>& g,\
+    \ int root_ = 0) {\n        build(g, root_);\n    }\n\n    void build(const m1une::graph::Graph<T>&\
+    \ g, int root_ = 0) {\n        _n = g.size();\n        root = _n == 0 ? -1 : root_;\n\
+    \        _log = 1;\n        while ((1U << _log) <= (unsigned int)(std::max(1,\
+    \ _n))) _log++;\n\n        parent.assign(_n, -1);\n        parent_edge.assign(_n,\
+    \ -1);\n        depth.assign(_n, 0);\n        dist.assign(_n, T(0));\n       \
+    \ subtree_size.assign(_n, 0);\n        tin.assign(_n, -1);\n        tout.assign(_n,\
+    \ -1);\n        order.clear();\n        order.reserve(_n);\n        up.assign(_log,\
+    \ std::vector<int>(_n, -1));\n\n        if (_n == 0) return;\n        assert(0\
+    \ <= root && root < _n);\n\n        struct Frame {\n            int v;\n     \
+    \       int state;\n        };\n\n        std::vector<char> visited(_n, false);\n\
+    \        std::vector<Frame> stack;\n        stack.push_back({root, 0});\n    \
+    \    visited[root] = true;\n        int timer = 0;\n\n        while (!stack.empty())\
+    \ {\n            Frame frame = stack.back();\n            stack.pop_back();\n\
+    \            int v = frame.v;\n            if (frame.state == 0) {\n         \
+    \       tin[v] = timer++;\n                order.push_back(v);\n             \
+    \   up[0][v] = parent[v];\n                for (int k = 1; k < _log; k++) {\n\
+    \                    int p = up[k - 1][v];\n                    up[k][v] = p ==\
+    \ -1 ? -1 : up[k - 1][p];\n                }\n\n                stack.push_back({v,\
     \ 1});\n                const auto& adj = g[v];\n                for (int i =\
     \ int(adj.size()) - 1; i >= 0; i--) {\n                    const auto& e = adj[i];\n\
     \                    if (!e.alive) continue;\n                    if (visited[e.to])\
@@ -1028,41 +1040,44 @@ data:
     \ value, int) {\n        long long sum = value.weight + side.sum[value.color];\n\
     \        return ColorPath{value.color, value.color, sum, sum, true};\n    };\n\
     \n    auto stt = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{{0,\
-    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    auto\
-    \ query = [&](int v) {\n        using Step = decltype(stt)::step_type;\n     \
-    \   int color = values[v].color;\n        long long answer = values[v].weight\
-    \ + stt.local_point(v).sum[color];\n        bool touches_top = true;\n       \
-    \ bool touches_bottom = true;\n        bool pending_open = false;\n        ColorPoint\
-    \ pending = stt.point_id();\n\n        stt.for_each_rerooting_step(v, [&](const\
-    \ auto& step) {\n            if (step.type == Step::CompressLower) {\n       \
-    \         const ColorPath& lower = stt.path_down(step.sibling);\n            \
-    \    bool connect = touches_bottom && lower.first_color == color;\n          \
-    \      if (connect) answer += lower.first_sum;\n                touches_bottom\
-    \ = connect && lower.connected;\n            } else if (step.type == Step::CompressUpper)\
-    \ {\n                const ColorPath& upper = stt.path_up(step.sibling);\n   \
-    \             bool connect = touches_top && upper.first_color == color;\n    \
-    \            if (connect) answer += upper.first_sum;\n                touches_top\
-    \ = connect && upper.connected;\n            } else if (step.type == Step::AddEdge)\
-    \ {\n                pending_open = touches_top;\n                pending = stt.point_id();\n\
-    \            } else if (step.type == Step::RakeLeft) {\n                if (pending_open)\
-    \ pending = stt.rake(stt.point(step.sibling), pending);\n            } else if\
-    \ (step.type == Step::RakeRight) {\n                if (pending_open) pending\
-    \ = stt.rake(pending, stt.point(step.sibling));\n            } else {\n      \
-    \          const auto& value = values[step.vertex];\n                if (pending_open\
-    \ && value.color == color) {\n                    answer += value.weight + pending.sum[color];\n\
-    \                    touches_top = true;\n                    touches_bottom =\
-    \ true;\n                } else {\n                    touches_top = false;\n\
-    \                    touches_bottom = false;\n                }\n            \
-    \    pending_open = false;\n                pending = stt.point_id();\n      \
-    \      }\n        });\n\n        return answer;\n    };\n\n    auto brute = [&](int\
-    \ start) {\n        int color = values[start].color;\n        long long answer\
-    \ = 0;\n        std::vector<char> seen(g.size(), false);\n        std::vector<int>\
-    \ stack = {start};\n        seen[start] = true;\n        while (!stack.empty())\
-    \ {\n            int v = stack.back();\n            stack.pop_back();\n      \
-    \      answer += values[v].weight;\n            for (const auto& e : g[v]) {\n\
-    \                if (seen[e.to] || values[e.to].color != color) continue;\n  \
-    \              seen[e.to] = true;\n                stack.push_back(e.to);\n  \
-    \          }\n        }\n        return answer;\n    };\n\n    auto check_all\
+    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    using\
+    \ ColorStt = decltype(stt);\n    struct QueryFolder {\n        const ColorStt&\
+    \ stt;\n        const std::vector<ColorVertex>& values;\n        int color = 0;\n\
+    \        long long answer = 0;\n        bool touches_top = false;\n        bool\
+    \ touches_bottom = false;\n        bool pending_open = false;\n        ColorPoint\
+    \ pending{{0, 0}};\n\n        void start(int v, const ColorVertex& value, const\
+    \ ColorPoint& local) {\n            color = value.color;\n            answer =\
+    \ value.weight + local.sum[color];\n            touches_top = true;\n        \
+    \    touches_bottom = true;\n            pending_open = false;\n            pending\
+    \ = stt.point_id();\n            assert(values[v].color == color);\n        }\n\
+    \n        void compress_lower(const ColorPath& lower, ColorStt::edge_type) {\n\
+    \            bool connect = touches_bottom && lower.first_color == color;\n  \
+    \          if (connect) answer += lower.first_sum;\n            touches_bottom\
+    \ = connect && lower.connected;\n        }\n\n        void compress_upper(const\
+    \ ColorPath& upper, ColorStt::edge_type) {\n            bool connect = touches_top\
+    \ && upper.first_color == color;\n            if (connect) answer += upper.first_sum;\n\
+    \            touches_top = connect && upper.connected;\n        }\n\n        void\
+    \ add_edge(ColorStt::edge_type) {\n            pending_open = touches_top;\n \
+    \           pending = stt.point_id();\n        }\n\n        void rake_left(const\
+    \ ColorPoint& point) {\n            if (pending_open) pending = stt.rake(point,\
+    \ pending);\n        }\n\n        void rake_right(const ColorPoint& point) {\n\
+    \            if (pending_open) pending = stt.rake(pending, point);\n        }\n\
+    \n        void add_vertex(int, const ColorVertex& value) {\n            if (pending_open\
+    \ && value.color == color) {\n                answer += value.weight + pending.sum[color];\n\
+    \                touches_top = true;\n                touches_bottom = true;\n\
+    \            } else {\n                touches_top = false;\n                touches_bottom\
+    \ = false;\n            }\n            pending_open = false;\n            pending\
+    \ = stt.point_id();\n        }\n\n        long long result() const {\n       \
+    \     return answer;\n        }\n    };\n\n    auto query = [&](int v) {\n   \
+    \     return stt.fold_rerooting(v, QueryFolder{stt, values});\n    };\n\n    auto\
+    \ brute = [&](int start) {\n        int color = values[start].color;\n       \
+    \ long long answer = 0;\n        std::vector<char> seen(g.size(), false);\n  \
+    \      std::vector<int> stack = {start};\n        seen[start] = true;\n      \
+    \  while (!stack.empty()) {\n            int v = stack.back();\n            stack.pop_back();\n\
+    \            answer += values[v].weight;\n            for (const auto& e : g[v])\
+    \ {\n                if (seen[e.to] || values[e.to].color != color) continue;\n\
+    \                seen[e.to] = true;\n                stack.push_back(e.to);\n\
+    \            }\n        }\n        return answer;\n    };\n\n    auto check_all\
     \ = [&]() {\n        for (int v = 0; v < g.size(); v++) assert(query(v) == brute(v));\n\
     \    };\n\n    check_all();\n    values[2].color ^= 1;\n    stt.set(2, values[2]);\n\
     \    check_all();\n    values[5].weight += 7;\n    stt.set(5, values[5]);\n  \
@@ -1290,41 +1305,44 @@ data:
     \ value, int) {\n        long long sum = value.weight + side.sum[value.color];\n\
     \        return ColorPath{value.color, value.color, sum, sum, true};\n    };\n\
     \n    auto stt = m1une::tree::RerootingStaticTopTree(\n        g, values, ColorPoint{{0,\
-    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    auto\
-    \ query = [&](int v) {\n        using Step = decltype(stt)::step_type;\n     \
-    \   int color = values[v].color;\n        long long answer = values[v].weight\
-    \ + stt.local_point(v).sum[color];\n        bool touches_top = true;\n       \
-    \ bool touches_bottom = true;\n        bool pending_open = false;\n        ColorPoint\
-    \ pending = stt.point_id();\n\n        stt.for_each_rerooting_step(v, [&](const\
-    \ auto& step) {\n            if (step.type == Step::CompressLower) {\n       \
-    \         const ColorPath& lower = stt.path_down(step.sibling);\n            \
-    \    bool connect = touches_bottom && lower.first_color == color;\n          \
-    \      if (connect) answer += lower.first_sum;\n                touches_bottom\
-    \ = connect && lower.connected;\n            } else if (step.type == Step::CompressUpper)\
-    \ {\n                const ColorPath& upper = stt.path_up(step.sibling);\n   \
-    \             bool connect = touches_top && upper.first_color == color;\n    \
-    \            if (connect) answer += upper.first_sum;\n                touches_top\
-    \ = connect && upper.connected;\n            } else if (step.type == Step::AddEdge)\
-    \ {\n                pending_open = touches_top;\n                pending = stt.point_id();\n\
-    \            } else if (step.type == Step::RakeLeft) {\n                if (pending_open)\
-    \ pending = stt.rake(stt.point(step.sibling), pending);\n            } else if\
-    \ (step.type == Step::RakeRight) {\n                if (pending_open) pending\
-    \ = stt.rake(pending, stt.point(step.sibling));\n            } else {\n      \
-    \          const auto& value = values[step.vertex];\n                if (pending_open\
-    \ && value.color == color) {\n                    answer += value.weight + pending.sum[color];\n\
-    \                    touches_top = true;\n                    touches_bottom =\
-    \ true;\n                } else {\n                    touches_top = false;\n\
-    \                    touches_bottom = false;\n                }\n            \
-    \    pending_open = false;\n                pending = stt.point_id();\n      \
-    \      }\n        });\n\n        return answer;\n    };\n\n    auto brute = [&](int\
-    \ start) {\n        int color = values[start].color;\n        long long answer\
-    \ = 0;\n        std::vector<char> seen(g.size(), false);\n        std::vector<int>\
-    \ stack = {start};\n        seen[start] = true;\n        while (!stack.empty())\
-    \ {\n            int v = stack.back();\n            stack.pop_back();\n      \
-    \      answer += values[v].weight;\n            for (const auto& e : g[v]) {\n\
-    \                if (seen[e.to] || values[e.to].color != color) continue;\n  \
-    \              seen[e.to] = true;\n                stack.push_back(e.to);\n  \
-    \          }\n        }\n        return answer;\n    };\n\n    auto check_all\
+    \ 0}}, compress, compress, rake, add_edge, add_edge, add_vertex);\n\n    using\
+    \ ColorStt = decltype(stt);\n    struct QueryFolder {\n        const ColorStt&\
+    \ stt;\n        const std::vector<ColorVertex>& values;\n        int color = 0;\n\
+    \        long long answer = 0;\n        bool touches_top = false;\n        bool\
+    \ touches_bottom = false;\n        bool pending_open = false;\n        ColorPoint\
+    \ pending{{0, 0}};\n\n        void start(int v, const ColorVertex& value, const\
+    \ ColorPoint& local) {\n            color = value.color;\n            answer =\
+    \ value.weight + local.sum[color];\n            touches_top = true;\n        \
+    \    touches_bottom = true;\n            pending_open = false;\n            pending\
+    \ = stt.point_id();\n            assert(values[v].color == color);\n        }\n\
+    \n        void compress_lower(const ColorPath& lower, ColorStt::edge_type) {\n\
+    \            bool connect = touches_bottom && lower.first_color == color;\n  \
+    \          if (connect) answer += lower.first_sum;\n            touches_bottom\
+    \ = connect && lower.connected;\n        }\n\n        void compress_upper(const\
+    \ ColorPath& upper, ColorStt::edge_type) {\n            bool connect = touches_top\
+    \ && upper.first_color == color;\n            if (connect) answer += upper.first_sum;\n\
+    \            touches_top = connect && upper.connected;\n        }\n\n        void\
+    \ add_edge(ColorStt::edge_type) {\n            pending_open = touches_top;\n \
+    \           pending = stt.point_id();\n        }\n\n        void rake_left(const\
+    \ ColorPoint& point) {\n            if (pending_open) pending = stt.rake(point,\
+    \ pending);\n        }\n\n        void rake_right(const ColorPoint& point) {\n\
+    \            if (pending_open) pending = stt.rake(pending, point);\n        }\n\
+    \n        void add_vertex(int, const ColorVertex& value) {\n            if (pending_open\
+    \ && value.color == color) {\n                answer += value.weight + pending.sum[color];\n\
+    \                touches_top = true;\n                touches_bottom = true;\n\
+    \            } else {\n                touches_top = false;\n                touches_bottom\
+    \ = false;\n            }\n            pending_open = false;\n            pending\
+    \ = stt.point_id();\n        }\n\n        long long result() const {\n       \
+    \     return answer;\n        }\n    };\n\n    auto query = [&](int v) {\n   \
+    \     return stt.fold_rerooting(v, QueryFolder{stt, values});\n    };\n\n    auto\
+    \ brute = [&](int start) {\n        int color = values[start].color;\n       \
+    \ long long answer = 0;\n        std::vector<char> seen(g.size(), false);\n  \
+    \      std::vector<int> stack = {start};\n        seen[start] = true;\n      \
+    \  while (!stack.empty()) {\n            int v = stack.back();\n            stack.pop_back();\n\
+    \            answer += values[v].weight;\n            for (const auto& e : g[v])\
+    \ {\n                if (seen[e.to] || values[e.to].color != color) continue;\n\
+    \                seen[e.to] = true;\n                stack.push_back(e.to);\n\
+    \            }\n        }\n        return answer;\n    };\n\n    auto check_all\
     \ = [&]() {\n        for (int v = 0; v < g.size(); v++) assert(query(v) == brute(v));\n\
     \    };\n\n    check_all();\n    values[2].color ^= 1;\n    stt.set(2, values[2]);\n\
     \    check_all();\n    values[5].weight += 7;\n    stt.set(5, values[5]);\n  \
@@ -1367,7 +1385,7 @@ data:
   isVerificationFile: true
   path: verify/tree/tree_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 11:05:34+09:00'
+  timestamp: '2026-06-17 11:44:51+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/tree/tree_algorithms.test.cpp

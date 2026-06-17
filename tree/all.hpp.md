@@ -468,59 +468,71 @@ data:
     \    cur = _nodes[cur].parent;\n            depth++;\n        }\n        result.reserve(depth);\n\
     \        for_each_rerooting_step(v, [&](const RerootingStep& step) {\n       \
     \     result.push_back(step);\n        });\n        return result;\n    }\n\n\
-    \    Path compress_down(const Path& upper, const Path& lower, edge_type edge)\
-    \ const {\n        return _compress_down(upper, lower, edge);\n    }\n\n    Path\
-    \ compress_up(const Path& lower, const Path& upper, edge_type edge) const {\n\
-    \        return _compress_up(lower, upper, edge);\n    }\n\n    Point rake(const\
-    \ Point& left, const Point& right) const {\n        return _rake(left, right);\n\
-    \    }\n\n    Point add_edge_down(const Path& path, edge_type edge) const {\n\
-    \        return _add_edge_down(path, edge);\n    }\n\n    Point add_edge_up(const\
-    \ Path& path, edge_type edge) const {\n        return _add_edge_up(path, edge);\n\
-    \    }\n\n    Path add_vertex(const Point& side, const Vertex& value, int vertex)\
-    \ const {\n        return _add_vertex(side, value, vertex);\n    }\n\n    static\
-    \ edge_type reverse_edge(edge_type edge) {\n        return reversed_edge(edge);\n\
-    \    }\n};\n\ntemplate <class T, class Vertex, class Point, class CompressDown,\
-    \ class CompressUp, class Rake, class AddEdgeDown,\n          class AddEdgeUp,\
-    \ class AddVertex>\nRerootingStaticTopTree(const m1une::graph::Graph<T>&, const\
-    \ std::vector<Vertex>&, Point, CompressDown, CompressUp,\n                   \
-    \    Rake, AddEdgeDown, AddEdgeUp, AddVertex, int)\n    -> RerootingStaticTopTree<T,\
+    \    template <class Folder>\n    auto fold_rerooting(int v, Folder folder) const\
+    \ {\n        folder.start(v, _values[v], local_point(v));\n        for_each_rerooting_step(v,\
+    \ [&](const RerootingStep& step) {\n            if (step.type == step_type::CompressLower)\
+    \ {\n                folder.compress_lower(path_down(step.sibling), step.edge);\n\
+    \            } else if (step.type == step_type::CompressUpper) {\n           \
+    \     folder.compress_upper(path_up(step.sibling), reversed_edge(step.edge));\n\
+    \            } else if (step.type == step_type::AddEdge) {\n                folder.add_edge(reversed_edge(step.edge));\n\
+    \            } else if (step.type == step_type::RakeLeft) {\n                folder.rake_left(point(step.sibling));\n\
+    \            } else if (step.type == step_type::RakeRight) {\n               \
+    \ folder.rake_right(point(step.sibling));\n            } else {\n            \
+    \    folder.add_vertex(step.vertex, _values[step.vertex]);\n            }\n  \
+    \      });\n        return folder.result();\n    }\n\n    Path compress_down(const\
+    \ Path& upper, const Path& lower, edge_type edge) const {\n        return _compress_down(upper,\
+    \ lower, edge);\n    }\n\n    Path compress_up(const Path& lower, const Path&\
+    \ upper, edge_type edge) const {\n        return _compress_up(lower, upper, edge);\n\
+    \    }\n\n    Point rake(const Point& left, const Point& right) const {\n    \
+    \    return _rake(left, right);\n    }\n\n    Point add_edge_down(const Path&\
+    \ path, edge_type edge) const {\n        return _add_edge_down(path, edge);\n\
+    \    }\n\n    Point add_edge_up(const Path& path, edge_type edge) const {\n  \
+    \      return _add_edge_up(path, edge);\n    }\n\n    Path add_vertex(const Point&\
+    \ side, const Vertex& value, int vertex) const {\n        return _add_vertex(side,\
+    \ value, vertex);\n    }\n\n    static edge_type reverse_edge(edge_type edge)\
+    \ {\n        return reversed_edge(edge);\n    }\n};\n\ntemplate <class T, class\
+    \ Vertex, class Point, class CompressDown, class CompressUp, class Rake, class\
+    \ AddEdgeDown,\n          class AddEdgeUp, class AddVertex>\nRerootingStaticTopTree(const\
+    \ m1une::graph::Graph<T>&, const std::vector<Vertex>&, Point, CompressDown, CompressUp,\n\
+    \                       Rake, AddEdgeDown, AddEdgeUp, AddVertex, int)\n    ->\
+    \ RerootingStaticTopTree<T, Vertex, std::invoke_result_t<AddVertex, Point, Vertex,\
+    \ int>, Point, CompressDown,\n                              CompressUp, Rake,\
+    \ AddEdgeDown, AddEdgeUp, AddVertex>;\n\ntemplate <class T, class Vertex, class\
+    \ Point, class CompressDown, class CompressUp, class Rake, class AddEdgeDown,\n\
+    \          class AddEdgeUp, class AddVertex>\nRerootingStaticTopTree(const m1une::graph::Graph<T>&,\
+    \ const std::vector<Vertex>&, Point, CompressDown, CompressUp,\n             \
+    \          Rake, AddEdgeDown, AddEdgeUp, AddVertex)\n    -> RerootingStaticTopTree<T,\
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, CompressDown,\n\
     \                              CompressUp, Rake, AddEdgeDown, AddEdgeUp, AddVertex>;\n\
-    \ntemplate <class T, class Vertex, class Point, class CompressDown, class CompressUp,\
-    \ class Rake, class AddEdgeDown,\n          class AddEdgeUp, class AddVertex>\n\
-    RerootingStaticTopTree(const m1une::graph::Graph<T>&, const std::vector<Vertex>&,\
-    \ Point, CompressDown, CompressUp,\n                       Rake, AddEdgeDown,\
-    \ AddEdgeUp, AddVertex)\n    -> RerootingStaticTopTree<T, Vertex, std::invoke_result_t<AddVertex,\
-    \ Point, Vertex, int>, Point, CompressDown,\n                              CompressUp,\
-    \ Rake, AddEdgeDown, AddEdgeUp, AddVertex>;\n\n}  // namespace tree\n}  // namespace\
-    \ m1une\n\n\n#line 1 \"tree/rooted_tree.hpp\"\n\n\n\n#line 7 \"tree/rooted_tree.hpp\"\
-    \n\n#line 9 \"tree/rooted_tree.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\n\
-    template <class T = int>\nstruct RootedTree {\n    using cost_type = T;\n    using\
-    \ edge_type = m1une::graph::Edge<T>;\n\n    int root;\n    std::vector<int> parent;\n\
-    \    std::vector<int> parent_edge;\n    std::vector<int> depth;\n    std::vector<T>\
-    \ dist;\n    std::vector<int> subtree_size;\n    std::vector<int> tin;\n    std::vector<int>\
-    \ tout;\n    std::vector<int> order;\n    std::vector<std::vector<int>> up;\n\n\
-    \   private:\n    int _n;\n    int _log;\n\n    void check_vertex(int v) const\
-    \ {\n        assert(0 <= v && v < _n);\n        assert(tin[v] != -1);\n    }\n\
-    \n   public:\n    RootedTree() : root(-1), _n(0), _log(0) {}\n    explicit RootedTree(const\
-    \ m1une::graph::Graph<T>& g, int root_ = 0) {\n        build(g, root_);\n    }\n\
-    \n    void build(const m1une::graph::Graph<T>& g, int root_ = 0) {\n        _n\
-    \ = g.size();\n        root = _n == 0 ? -1 : root_;\n        _log = 1;\n     \
-    \   while ((1U << _log) <= (unsigned int)(std::max(1, _n))) _log++;\n\n      \
-    \  parent.assign(_n, -1);\n        parent_edge.assign(_n, -1);\n        depth.assign(_n,\
-    \ 0);\n        dist.assign(_n, T(0));\n        subtree_size.assign(_n, 0);\n \
-    \       tin.assign(_n, -1);\n        tout.assign(_n, -1);\n        order.clear();\n\
-    \        order.reserve(_n);\n        up.assign(_log, std::vector<int>(_n, -1));\n\
-    \n        if (_n == 0) return;\n        assert(0 <= root && root < _n);\n\n  \
-    \      struct Frame {\n            int v;\n            int state;\n        };\n\
-    \n        std::vector<char> visited(_n, false);\n        std::vector<Frame> stack;\n\
-    \        stack.push_back({root, 0});\n        visited[root] = true;\n        int\
-    \ timer = 0;\n\n        while (!stack.empty()) {\n            Frame frame = stack.back();\n\
-    \            stack.pop_back();\n            int v = frame.v;\n            if (frame.state\
-    \ == 0) {\n                tin[v] = timer++;\n                order.push_back(v);\n\
-    \                up[0][v] = parent[v];\n                for (int k = 1; k < _log;\
-    \ k++) {\n                    int p = up[k - 1][v];\n                    up[k][v]\
-    \ = p == -1 ? -1 : up[k - 1][p];\n                }\n\n                stack.push_back({v,\
+    \n}  // namespace tree\n}  // namespace m1une\n\n\n#line 1 \"tree/rooted_tree.hpp\"\
+    \n\n\n\n#line 7 \"tree/rooted_tree.hpp\"\n\n#line 9 \"tree/rooted_tree.hpp\"\n\
+    \nnamespace m1une {\nnamespace tree {\n\ntemplate <class T = int>\nstruct RootedTree\
+    \ {\n    using cost_type = T;\n    using edge_type = m1une::graph::Edge<T>;\n\n\
+    \    int root;\n    std::vector<int> parent;\n    std::vector<int> parent_edge;\n\
+    \    std::vector<int> depth;\n    std::vector<T> dist;\n    std::vector<int> subtree_size;\n\
+    \    std::vector<int> tin;\n    std::vector<int> tout;\n    std::vector<int> order;\n\
+    \    std::vector<std::vector<int>> up;\n\n   private:\n    int _n;\n    int _log;\n\
+    \n    void check_vertex(int v) const {\n        assert(0 <= v && v < _n);\n  \
+    \      assert(tin[v] != -1);\n    }\n\n   public:\n    RootedTree() : root(-1),\
+    \ _n(0), _log(0) {}\n    explicit RootedTree(const m1une::graph::Graph<T>& g,\
+    \ int root_ = 0) {\n        build(g, root_);\n    }\n\n    void build(const m1une::graph::Graph<T>&\
+    \ g, int root_ = 0) {\n        _n = g.size();\n        root = _n == 0 ? -1 : root_;\n\
+    \        _log = 1;\n        while ((1U << _log) <= (unsigned int)(std::max(1,\
+    \ _n))) _log++;\n\n        parent.assign(_n, -1);\n        parent_edge.assign(_n,\
+    \ -1);\n        depth.assign(_n, 0);\n        dist.assign(_n, T(0));\n       \
+    \ subtree_size.assign(_n, 0);\n        tin.assign(_n, -1);\n        tout.assign(_n,\
+    \ -1);\n        order.clear();\n        order.reserve(_n);\n        up.assign(_log,\
+    \ std::vector<int>(_n, -1));\n\n        if (_n == 0) return;\n        assert(0\
+    \ <= root && root < _n);\n\n        struct Frame {\n            int v;\n     \
+    \       int state;\n        };\n\n        std::vector<char> visited(_n, false);\n\
+    \        std::vector<Frame> stack;\n        stack.push_back({root, 0});\n    \
+    \    visited[root] = true;\n        int timer = 0;\n\n        while (!stack.empty())\
+    \ {\n            Frame frame = stack.back();\n            stack.pop_back();\n\
+    \            int v = frame.v;\n            if (frame.state == 0) {\n         \
+    \       tin[v] = timer++;\n                order.push_back(v);\n             \
+    \   up[0][v] = parent[v];\n                for (int k = 1; k < _log; k++) {\n\
+    \                    int p = up[k - 1][v];\n                    up[k][v] = p ==\
+    \ -1 ? -1 : up[k - 1][p];\n                }\n\n                stack.push_back({v,\
     \ 1});\n                const auto& adj = g[v];\n                for (int i =\
     \ int(adj.size()) - 1; i >= 0; i--) {\n                    const auto& e = adj[i];\n\
     \                    if (!e.alive) continue;\n                    if (visited[e.to])\
@@ -867,7 +879,7 @@ data:
   isVerificationFile: false
   path: tree/all.hpp
   requiredBy: []
-  timestamp: '2026-06-17 11:05:34+09:00'
+  timestamp: '2026-06-17 11:44:51+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
