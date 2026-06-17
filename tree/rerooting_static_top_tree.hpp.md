@@ -855,11 +855,11 @@ auto compress = [](Path a, Path b, const auto&) {
 };
 
 auto rake = [](Point a, Point b) {
-    return Point{{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]}};
+    return Point{a.sum[0] + b.sum[0], a.sum[1] + b.sum[1]};
 };
 
 auto add_edge = [](Path path, const auto&) {
-    Point res{{0, 0}};
+    Point res{};
     res.sum[path.first_color] = path.first_sum;
     return res;
 };
@@ -882,7 +882,7 @@ Build the structure like this:
 auto stt = m1une::tree::RerootingStaticTopTree(
     g,
     values,
-    Point{{0, 0}},
+    Point{0, 0},
     compress,
     compress,
     rake,
@@ -906,7 +906,7 @@ struct QueryFolder {
     bool touches_top = false;
     bool touches_bottom = false;
     bool pending_open = false;
-    Point pending{{0, 0}};
+    Point pending{};
 
     void start(int, const Vertex& value, const Point& local) {
         color = value.color;
