@@ -12,9 +12,9 @@
 namespace m1une {
 namespace data_structure {
 
-template <m1une::monoid::IsCommutativeGroup Monoid>
+template <m1une::monoid::IsCommutativeGroup Group>
 struct LinkCutTree {
-    using T = typename Monoid::value_type;
+    using T = typename Group::value_type;
 
    private:
     struct Node {
@@ -25,11 +25,11 @@ struct LinkCutTree {
         int size = 1;
         int virtual_size = 0;
         int all_size = 1;
-        T value = Monoid::id();
-        T prod = Monoid::id();
-        T rev_prod = Monoid::id();
-        T virtual_prod = Monoid::id();
-        T all_prod = Monoid::id();
+        T value = Group::id();
+        T prod = Group::id();
+        T rev_prod = Group::id();
+        T virtual_prod = Group::id();
+        T all_prod = Group::id();
     };
 
     struct EdgeInfo {
@@ -53,15 +53,15 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<U, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { Group::make(x); } ||
+        requires(U x, int i) { Group::make(x, i); } ||
         std::convertible_to<U, T>
     )
     static T make_node_value(const U& value, int index) {
-        if constexpr (requires(U x) { Monoid::make(x); }) {
-            return Monoid::make(value);
-        } else if constexpr (requires(U x, int i) { Monoid::make(x, i); }) {
-            return Monoid::make(value, index);
+        if constexpr (requires(U x) { Group::make(x); }) {
+            return Group::make(value);
+        } else if constexpr (requires(U x, int i) { Group::make(x, i); }) {
+            return Group::make(value, index);
         } else {
             return static_cast<T>(value);
         }
@@ -76,20 +76,20 @@ struct LinkCutTree {
     }
 
     T child_prod(int node) const {
-        return node == -1 ? Monoid::id() : _nodes[node].prod;
+        return node == -1 ? Group::id() : _nodes[node].prod;
     }
 
     T child_rev_prod(int node) const {
-        return node == -1 ? Monoid::id() : _nodes[node].rev_prod;
+        return node == -1 ? Group::id() : _nodes[node].rev_prod;
     }
 
     T child_all_prod(int node) const {
-        return node == -1 ? Monoid::id() : _nodes[node].all_prod;
+        return node == -1 ? Group::id() : _nodes[node].all_prod;
     }
 
     T node_subtree_prod(int node) const {
         const Node& x = _nodes[node];
-        return Monoid::op(x.value, x.virtual_prod);
+        return Group::op(x.value, x.virtual_prod);
     }
 
     int node_subtree_size(int node) const {
@@ -105,24 +105,24 @@ struct LinkCutTree {
         Node& x = _nodes[node];
         x.size = 1 + child_size(x.left) + child_size(x.right);
         x.all_size = 1 + x.virtual_size + child_all_size(x.left) + child_all_size(x.right);
-        x.prod = Monoid::op(Monoid::op(child_prod(x.left), x.value), child_prod(x.right));
-        x.rev_prod = Monoid::op(Monoid::op(child_rev_prod(x.right), x.value), child_rev_prod(x.left));
-        x.all_prod = Monoid::op(Monoid::op(child_all_prod(x.left), x.value),
-                                Monoid::op(x.virtual_prod, child_all_prod(x.right)));
+        x.prod = Group::op(Group::op(child_prod(x.left), x.value), child_prod(x.right));
+        x.rev_prod = Group::op(Group::op(child_rev_prod(x.right), x.value), child_rev_prod(x.left));
+        x.all_prod = Group::op(Group::op(child_all_prod(x.left), x.value),
+                                Group::op(x.virtual_prod, child_all_prod(x.right)));
     }
 
     void add_virtual_child(int node, int child) {
         if (child == -1) return;
         Node& x = _nodes[node];
         x.virtual_size += _nodes[child].all_size;
-        x.virtual_prod = Monoid::op(x.virtual_prod, _nodes[child].all_prod);
+        x.virtual_prod = Group::op(x.virtual_prod, _nodes[child].all_prod);
     }
 
     void remove_virtual_child(int node, int child) {
         if (child == -1) return;
         Node& x = _nodes[node];
         x.virtual_size -= _nodes[child].all_size;
-        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inv(_nodes[child].all_prod));
+        x.virtual_prod = Group::op(x.virtual_prod, Group::inv(_nodes[child].all_prod));
     }
 
     void apply_reverse(int node) {
@@ -237,8 +237,8 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<U, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { Group::make(x); } ||
+        requires(U x, int i) { Group::make(x, i); } ||
         std::convertible_to<U, T>
     )
     explicit LinkCutTree(const std::vector<U>& values) {
@@ -254,7 +254,7 @@ struct LinkCutTree {
         return _nodes.empty();
     }
 
-    int add_vertex(const T& value = Monoid::id()) {
+    int add_vertex(const T& value = Group::id()) {
         Node node;
         node.value = value;
         node.prod = value;
@@ -276,8 +276,8 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { Group::make(x); } ||
+        requires(U x, int i) { Group::make(x, i); } ||
         std::convertible_to<U, T>
     )
     int add_vertex(const U& value) {
@@ -328,8 +328,8 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { Group::make(x); } ||
+        requires(U x, int i) { Group::make(x, i); } ||
         std::convertible_to<U, T>
     )
     void set(int v, const U& value) {
@@ -398,7 +398,7 @@ struct LinkCutTree {
         return link(child, parent);
     }
 
-    int link_edge(int u, int v, const T& value = Monoid::id()) {
+    int link_edge(int u, int v, const T& value = Group::id()) {
         check_vertex(u);
         check_vertex(v);
         if (u == v || connected(u, v)) return -1;
@@ -426,8 +426,8 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { Group::make(x); } ||
+        requires(U x, int i) { Group::make(x, i); } ||
         std::convertible_to<U, T>
     )
     int link_edge(int u, int v, const U& value) {
@@ -488,8 +488,8 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { Group::make(x); } ||
+        requires(U x, int i) { Group::make(x, i); } ||
         std::convertible_to<U, T>
     )
     void set_edge(int edge_id, const U& value) {
@@ -653,7 +653,7 @@ struct LinkCutTree {
         assert(parent(root, child) == v);
         T whole = subtree_prod(root, v);
         T sub = subtree_prod(root, child);
-        return Monoid::op(whole, Monoid::inv(sub));
+        return Group::op(whole, Group::inv(sub));
     }
 
     // Returns `v`'s rooted subtree size excluding the child-side subtree.
