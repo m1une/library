@@ -30,6 +30,7 @@
 "verify/flow/flow_algorithms.test.cpp": "2026-06-17 01:33:20 +0900",
 "verify/graph/graph_algorithms.test.cpp": "2026-06-17 01:33:20 +0900",
 "verify/graph/library_checker_general_matching.test.cpp": "2026-06-16 17:34:41 +0900",
+"verify/optimization/hungarian.test.cpp": "2026-06-17 10:25:58 +0900",
 "verify/string/aoj_alds1_14_b.test.cpp": "2026-06-13 20:51:48 +0900",
 "verify/string/yosupo_zalgorithm.test.cpp": "2026-06-13 20:51:48 +0900",
 "verify/tree/tree_algorithms.test.cpp": "2026-06-17 03:31:44 +0900",
