@@ -75,6 +75,78 @@ void test_edge_path_and_subtree_updates() {
     assert(!lct.connected(0, 2));
 }
 
+void test_rooted_tree_utility_apis() {
+    m1une::data_structure::LazyLinkedCutTree<AddSum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+
+    assert(lct.link_parent(1, 0));
+    assert(lct.link_parent(2, 0));
+    assert(lct.link_parent(3, 2));
+    assert(lct.link_parent(4, 2));
+
+    assert(lct.root(4) == 0);
+    lct.reroot(0);
+
+    Node component = lct.component_prod(0);
+    assert(component.sum == 15);
+    assert(component.size == 5);
+    assert(lct.component_size(0) == 5);
+
+    assert(lct.child_toward(0, 4) == 2);
+    assert(lct.child_toward(2, 4) == 4);
+    assert(lct.child_toward(4, 0) == 2);
+
+    Node branch = lct.branch_prod(0, 4);
+    assert(branch.sum == 12);
+    assert(branch.size == 3);
+    assert(lct.branch_size(0, 4) == 3);
+
+    assert(lct.parent(0, 4) == 2);
+    assert(lct.parent(0, 2) == 0);
+    assert(lct.parent(0, 0) == -1);
+
+    Node subtree = lct.subtree_prod(0, 2);
+    assert(subtree.sum == 12);
+    assert(subtree.size == 3);
+    assert(lct.subtree_size(0, 2) == 3);
+
+    Node excluding = lct.subtree_prod_excluding_child(0, 2, 4);
+    assert(excluding.sum == 7);
+    assert(excluding.size == 2);
+    assert(lct.subtree_size_excluding_child(0, 2, 4) == 2);
+
+    lct.reroot(0);
+    assert(lct.cut_parent(4));
+
+    assert(!lct.connected(4, 0));
+    component = lct.component_prod(0);
+    assert(component.sum == 10);
+    assert(component.size == 4);
+    assert(lct.component_size(0) == 4);
+    component = lct.component_prod(4);
+    assert(component.sum == 5);
+    assert(component.size == 1);
+    assert(lct.component_size(4) == 1);
+
+    m1une::data_structure::LazyLinkedCutTree<AddSum> lct2(std::vector<long long>{1, 2, 3, 4, 5});
+    assert(lct2.link_parent(1, 0));
+    assert(lct2.link_parent(2, 0));
+    assert(lct2.link_parent(3, 2));
+    assert(lct2.link_parent(4, 2));
+    lct2.apply(3, 4, 10);
+    lct2.reroot(0);
+
+    assert(lct2.cut_parent(2));
+    assert(!lct2.connected(2, 0));
+    component = lct2.component_prod(0);
+    assert(component.sum == 3);
+    assert(component.size == 2);
+    assert(lct2.component_size(0) == 2);
+    component = lct2.component_prod(2);
+    assert(component.sum == 42);
+    assert(component.size == 3);
+    assert(lct2.component_size(2) == 3);
+}
+
 bool naive_connected(const std::vector<std::vector<int>>& adj, int s, int t) {
     std::vector<int> parent(adj.size(), -1);
     std::vector<int> stack;
@@ -218,6 +290,7 @@ void test_random_vertex_path_updates() {
 int main() {
     test_vertex_path_and_subtree_updates();
     test_edge_path_and_subtree_updates();
+    test_rooted_tree_utility_apis();
     test_random_vertex_path_updates();
 
     long long a, b;

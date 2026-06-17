@@ -367,6 +367,7 @@ struct LazyLinkedCutTree {
         set(v, make_node_value(value, v));
     }
 
+    // Applies `f` to one vertex.
     void apply(int v, const F& f) {
         check_vertex(v);
         access(v);
@@ -374,6 +375,8 @@ struct LazyLinkedCutTree {
         update(v);
     }
 
+    // Applies `f` to the path from `u` to `v`. Internally calls `evert(u)`,
+    // so the represented root may change.
     void apply(int u, int v, const F& f) {
         check_vertex(u);
         check_vertex(v);
@@ -383,12 +386,19 @@ struct LazyLinkedCutTree {
         apply_operator(v, f);
     }
 
+    // Makes `v` the represented root of its component.
     void evert(int v) {
         check_vertex(v);
         access(v);
         apply_reverse(v);
     }
 
+    // Alias for `evert(v)`; changes the represented root to `v`.
+    void reroot(int v) {
+        evert(v);
+    }
+
+    // Returns the current represented root of `v`'s component.
     int component_root(int v) {
         check_vertex(v);
         access(v);
@@ -402,6 +412,11 @@ struct LazyLinkedCutTree {
         return cur;
     }
 
+    // Alias for `component_root(v)`.
+    int root(int v) {
+        return component_root(v);
+    }
+
     bool connected(int u, int v) {
         check_vertex(u);
         check_vertex(v);
@@ -413,6 +428,7 @@ struct LazyLinkedCutTree {
         return connected(u, v);
     }
 
+    // Links two components. Internally calls `evert(u)`, so the represented root may change.
     bool link(int u, int v) {
         check_vertex(u);
         check_vertex(v);
@@ -424,6 +440,12 @@ struct LazyLinkedCutTree {
         add_virtual_child(v, u);
         update(v);
         return true;
+    }
+
+    // Links `child` under `parent`. This is the same operation as `link(child, parent)`;
+    // it internally calls `evert(child)`, so that side's represented root may change.
+    bool link_parent(int child, int parent) {
+        return link(child, parent);
     }
 
     int link_edge(int u, int v, const T& value = ActedMonoid::id()) {
@@ -465,6 +487,7 @@ struct LazyLinkedCutTree {
         return link_edge(u, v, make_node_value(value, size()));
     }
 
+    // Cuts edge `(u, v)`. Internally calls `evert(u)`, so the represented root may change.
     bool cut(int u, int v) {
         check_vertex(u);
         check_vertex(v);
@@ -474,6 +497,19 @@ struct LazyLinkedCutTree {
         if (_nodes[v].left != u || _nodes[u].right != -1) return false;
         _nodes[v].left = -1;
         _nodes[u].parent = -1;
+        update(v);
+        return true;
+    }
+
+    // Cuts the parent edge of `v` in the current represented-root orientation.
+    // Unlike `cut(u, v)`, this does not call `evert`.
+    bool cut_parent(int v) {
+        check_vertex(v);
+        access(v);
+        int left = _nodes[v].left;
+        if (left == -1) return false;
+        _nodes[v].left = -1;
+        _nodes[left].parent = -1;
         update(v);
         return true;
     }
@@ -514,6 +550,8 @@ struct LazyLinkedCutTree {
         apply(edge_node(edge_id), f);
     }
 
+    // Returns the path product from `u` to `v`. Internally calls `evert(u)`,
+    // so the represented root may change.
     T prod(int u, int v) {
         check_vertex(u);
         check_vertex(v);
@@ -523,10 +561,14 @@ struct LazyLinkedCutTree {
         return _nodes[v].prod;
     }
 
+    // Alias for `prod(u, v)`. Internally calls `evert(u)`,
+    // so the represented root may change.
     T path_prod(int u, int v) {
         return prod(u, v);
     }
 
+    // Returns the number of vertices on path `u`-`v`. Internally calls `evert(u)`,
+    // so the represented root may change.
     int path_size(int u, int v) {
         check_vertex(u);
         check_vertex(v);
@@ -536,6 +578,8 @@ struct LazyLinkedCutTree {
         return _nodes[v].size;
     }
 
+    // Returns the `k`-th vertex on path `u`-`v`. Internally calls `evert(u)`,
+    // so the represented root may change.
     int kth_vertex(int u, int v, int k) {
         check_vertex(u);
         check_vertex(v);
@@ -569,6 +613,8 @@ struct LazyLinkedCutTree {
         return access(v);
     }
 
+    // Returns the aggregate of `v`'s subtree when the represented tree is rooted at `root`.
+    // Internally calls `evert(root)`, so the represented root may change.
     T subtree_prod(int root, int v) {
         check_vertex(root);
         check_vertex(v);
@@ -578,12 +624,15 @@ struct LazyLinkedCutTree {
         return node_subtree_prod(v);
     }
 
+    // Returns the aggregate of `v`'s subtree with respect to the current represented root.
     T subtree_prod(int v) {
         check_vertex(v);
         access(v);
         return node_subtree_prod(v);
     }
 
+    // Returns the size of `v`'s subtree when the represented tree is rooted at `root`.
+    // Internally calls `evert(root)`, so the represented root may change.
     int subtree_size(int root, int v) {
         check_vertex(root);
         check_vertex(v);
@@ -593,10 +642,81 @@ struct LazyLinkedCutTree {
         return node_subtree_size(v);
     }
 
+    // Returns the size of `v`'s subtree with respect to the current represented root.
     int subtree_size(int v) {
         check_vertex(v);
         access(v);
         return node_subtree_size(v);
+    }
+
+    // Returns the aggregate of the whole connected component containing `v`.
+    T component_prod(int v) {
+        int r = root(v);
+        return subtree_prod(r, r);
+    }
+
+    // Returns the number of vertices in the connected component containing `v`.
+    int component_size(int v) {
+        int r = root(v);
+        return subtree_size(r, r);
+    }
+
+    // Returns the child of `root` that lies on path `root`-`v`.
+    int child_toward(int root, int v) {
+        check_vertex(root);
+        check_vertex(v);
+        assert(root != v);
+        assert(connected(root, v));
+        return kth_vertex(root, v, 1);
+    }
+
+    // Returns the aggregate of the entire branch of `root` that contains `v`.
+    T branch_prod(int root, int v) {
+        check_vertex(root);
+        check_vertex(v);
+        assert(root != v);
+        int child = child_toward(root, v);
+        return subtree_prod(root, child);
+    }
+
+    // Returns the size of the entire branch of `root` that contains `v`.
+    int branch_size(int root, int v) {
+        check_vertex(root);
+        check_vertex(v);
+        assert(root != v);
+        int child = child_toward(root, v);
+        return subtree_size(root, child);
+    }
+
+    // Returns the parent of `v` when rooted at `root`, or `-1` if `v == root`.
+    int parent(int root, int v) {
+        check_vertex(root);
+        check_vertex(v);
+        if (root == v) return -1;
+        assert(connected(root, v));
+        int d = path_size(root, v);
+        assert(2 <= d);
+        return kth_vertex(root, v, d - 2);
+    }
+
+    // Returns `v`'s rooted subtree aggregate excluding the child-side subtree.
+    T subtree_prod_excluding_child(int root, int v, int child) {
+        check_vertex(root);
+        check_vertex(v);
+        check_vertex(child);
+        assert(parent(root, child) == v);
+        T whole = subtree_prod(root, v);
+        T sub = subtree_prod(root, child);
+        return ActedMonoid::op(whole, ActedMonoid::inv(sub));
+    }
+
+    // Returns `v`'s rooted subtree size excluding the child-side subtree.
+    int subtree_size_excluding_child(int root, int v, int child) {
+        check_vertex(root);
+        check_vertex(v);
+        check_vertex(child);
+        assert(parent(root, child) == v);
+        return subtree_size(root, v) - subtree_size(root, child);
     }
 };
 
