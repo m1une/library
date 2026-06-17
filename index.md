@@ -381,6 +381,9 @@ data:
   - name: sequence
     pages:
     - icon: ':warning:'
+      path: sequence/inversion_count.hpp
+      title: Inversion Count
+    - icon: ':warning:'
       path: sequence/lis.hpp
       title: Longest Increasing Subsequence (LIS)
   - name: string
