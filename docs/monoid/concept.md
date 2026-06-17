@@ -32,10 +32,10 @@ To satisfy `m1une::monoid::IsMonoid`, a type `M` must implement:
 
 `m1une::monoid::IsCommutativeGroup` extends `IsMonoid` with an inverse:
 
-* `static constexpr T inverse(const T& x);`
+* `static constexpr T inv(const T& x);`
   Returns the inverse of `x` with respect to `op`.
 
-The concept checks only that `inverse` exists. The type should satisfy the
+The concept checks only that `inv` exists. The type should satisfy the
 group laws, and `op` should be commutative.
 
 ## Example

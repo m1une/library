@@ -19,7 +19,7 @@ struct Xor {
         return a ^ b;
     }
 
-    static constexpr T inverse(const T& x) {
+    static constexpr T inv(const T& x) {
         return x;
     }
 };

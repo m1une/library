@@ -22,7 +22,7 @@ struct RangeAddRangeSum {
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return {a.sum + b.sum, a.size + b.size};
     }
-    static constexpr value_type inverse(const value_type& x) {
+    static constexpr value_type inv(const value_type& x) {
         return {-x.sum, -x.size};
     }
 

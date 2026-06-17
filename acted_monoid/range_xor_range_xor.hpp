@@ -21,7 +21,7 @@ struct RangeXorRangeXor {
     static constexpr value_type op(const value_type& a, const value_type& b) {
         return {a.val ^ b.val, a.size + b.size};
     }
-    static constexpr value_type inverse(const value_type& x) {
+    static constexpr value_type inv(const value_type& x) {
         return {x.val, -x.size};
     }
 

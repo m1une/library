@@ -122,7 +122,7 @@ struct LinkedCutTree {
         if (child == -1) return;
         Node& x = _nodes[node];
         x.virtual_size -= _nodes[child].all_size;
-        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inverse(_nodes[child].all_prod));
+        x.virtual_prod = Monoid::op(x.virtual_prod, Monoid::inv(_nodes[child].all_prod));
     }
 
     void apply_reverse(int node) {

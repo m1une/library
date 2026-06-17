@@ -24,7 +24,7 @@ concept IsMonoid = requires(typename M::value_type a, typename M::value_type b) 
 // A type satisfying this concept must also obey commutativity and inverse laws.
 template <typename M>
 concept IsCommutativeGroup = IsMonoid<M> && requires(typename M::value_type a) {
-    { M::inverse(a) } -> std::same_as<typename M::value_type>;
+    { M::inv(a) } -> std::same_as<typename M::value_type>;
 };
 
 }  // namespace monoid

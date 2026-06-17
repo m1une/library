@@ -22,12 +22,12 @@ struct M {
     using value_type = T;
     static T id();
     static T op(const T& a, const T& b);
-    static T inverse(const T& x);
+    static T inv(const T& x);
 };
 ```
 
 `op` must be associative and commutative, `id()` must be its identity, and
-`inverse(x)` must satisfy `op(x, inverse(x)) == id()`.
+`inv(x)` must satisfy `op(x, inv(x)) == id()`.
 
 ## Construction
 
@@ -87,4 +87,4 @@ the group identity when you want subtree products over edge values only.
 
 This structure does not support non-commutative subtree products. A represented
 subtree has no canonical linear order, and the virtual-child aggregate relies on
-commutativity and `inverse`.
+commutativity and `inv`.

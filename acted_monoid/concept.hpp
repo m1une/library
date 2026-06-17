@@ -28,7 +28,7 @@ concept IsActedMonoid = requires(typename AM::value_type a, typename AM::value_t
 // The value operation must obey commutativity and inverse laws.
 template <typename AM>
 concept IsCommutativeActedGroup = IsActedMonoid<AM> && requires(typename AM::value_type a) {
-    { AM::inverse(a) } -> std::same_as<typename AM::value_type>;
+    { AM::inv(a) } -> std::same_as<typename AM::value_type>;
 };
 
 }  // namespace acted_monoid

@@ -26,7 +26,7 @@ struct AM {
 
     static T id();
     static T op(const T& a, const T& b);
-    static T inverse(const T& x);
+    static T inv(const T& x);
 
     static F op_id();
     static F op_comp(const F& f, const F& g);
@@ -36,7 +36,7 @@ struct AM {
 ```
 
 `op` must be associative and commutative, `id()` must be its identity, and
-`inverse(x)` must satisfy `op(x, inverse(x)) == id()`. As with
+`inv(x)` must satisfy `op(x, inv(x)) == id()`. As with
 `LazyPathLinkCutTree`, `mapping` must distribute over `op`.
 
 ## Construction
