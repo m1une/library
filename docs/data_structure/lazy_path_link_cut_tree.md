@@ -87,8 +87,8 @@ Construction from `std::vector<U>` is supported when
 | `bool same(u, v)` | Alias for `connected(u, v)`. | Amortized `O(log N)` |
 | `bool link(u, v)` | Adds edge `(u, v)` if they are in different trees. Returns whether it was added. | Amortized `O(log N)` |
 | `int link_edge(u, v, value)` | Adds an edge-value node between `u` and `v`. Returns an edge id, or `-1` if `u` and `v` are already connected. | Amortized `O(log N)` |
-| `bool cut(u, v)` | Removes edge `(u, v)` if it exists. Returns whether it was removed. | Amortized `O(log N)` |
-| `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. Returns whether it was removed. | Amortized `O(log N)` |
+| `bool cut(u, v)` | Removes edge `(u, v)` if it exists. On success, the resulting trees are rooted at `u` and `v`. | Amortized `O(log N)` |
+| `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. On success, the endpoint trees are rooted at the stored endpoints. | Amortized `O(log N)` |
 | `T get_edge(edge_id)` | Returns the value stored in the helper edge node. | Amortized `O(log N)` |
 | `void set_edge(edge_id, value)` | Updates the value stored in the helper edge node. | Amortized `O(log N)` |
 | `void apply_edge(edge_id, f)` | Applies operator `f` to one helper edge node. | Amortized `O(log N)` |
@@ -113,9 +113,27 @@ distributes over that monoid.
 
 ## Represented Roots And LCA
 
-`link`, `cut`, `prod`, `apply(u, v, f)`, `path_size`, and `kth_vertex` use
-rerooting internally. They may change the represented root of the affected
-tree.
+`evert(v)` changes the represented root of the tree containing `v`.
+
+The following public methods reroot internally:
+
+* `link(u, v)` first reroots `u`'s tree at `u`. If it succeeds, the merged tree
+  keeps the original represented root of `v`'s tree. If it returns `false`
+  because `u` and `v` were already connected, that tree may be left rooted at
+  `u`.
+* `link_edge(u, v, value)` uses `link` twice. If it succeeds, the merged tree
+  keeps the original represented root of `v`'s tree.
+* `cut(u, v)` first reroots at `u`. If it succeeds, the tree containing `u` is
+  rooted at `u`, and the tree containing `v` is rooted at `v`. If it returns
+  `false` after `u != v`, `u`'s tree may still be left rooted at `u`.
+* `cut_edge(edge_id)` uses `cut` twice. If it succeeds, the original `u`-side
+  tree is rooted at the stored `u` endpoint, the original `v`-side tree is
+  rooted at the stored `v` endpoint, and the helper edge node is isolated.
+* `prod(u, v)`, `path_prod(u, v)`, `apply(u, v, f)`, `path_size(u, v)`, and
+  `kth_vertex(u, v, k)` reroot at `u`, so the represented root becomes `u`.
+
+Other public methods may expose or splay vertices, but they do not change the
+represented root.
 
 `lca(u, v)` is computed with respect to the current represented root. If the
 root matters, call `evert(r)` immediately before `lca`:
