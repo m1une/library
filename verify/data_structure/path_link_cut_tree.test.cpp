@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "data_structure/link_cut_tree.hpp"
+#include "data_structure/path_link_cut_tree.hpp"
 #include "monoid/add.hpp"
 
 struct StringConcat {
@@ -21,7 +21,7 @@ struct StringConcat {
 };
 
 void test_vertex_sum() {
-    m1une::data_structure::LinkCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1, 2, 3, 4, 5});
+    m1une::data_structure::PathLinkCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1, 2, 3, 4, 5});
 
     assert(lct.size() == 5);
     assert(!lct.empty());
@@ -58,7 +58,7 @@ void test_vertex_sum() {
 }
 
 void test_path_order() {
-    m1une::data_structure::LinkCutTree<StringConcat> lct(std::vector<std::string>{"a", "b", "c", "d"});
+    m1une::data_structure::PathLinkCutTree<StringConcat> lct(std::vector<std::string>{"a", "b", "c", "d"});
     assert(lct.link(0, 1));
     assert(lct.link(1, 2));
     assert(lct.link(1, 3));
@@ -71,7 +71,7 @@ void test_path_order() {
 }
 
 void test_edge_nodes() {
-    m1une::data_structure::LinkCutTree<m1une::monoid::Add<long long>> lct(3);
+    m1une::data_structure::PathLinkCutTree<m1une::monoid::Add<long long>> lct(3);
 
     int e01 = lct.link_edge(0, 1, 5);
     int e12 = lct.link_edge(1, 2, 7);

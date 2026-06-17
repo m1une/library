@@ -47,3 +47,14 @@ The concept requires the type to implement these members:
 
 The concept checks the interface only. Associativity, identity laws, and the
 interaction between `mapping` and `op` must be satisfied by the implementation.
+
+## Commutative Acted Group
+
+`m1une::acted_monoid::IsCommutativeActedGroup` extends `IsActedMonoid` with an
+inverse for the value monoid:
+
+* `static constexpr value_type inverse(const value_type& x)`
+  Returns the inverse of `x` with respect to the value operation `op`.
+
+The concept checks only the interface. The value operation should satisfy the
+commutative group laws, and `mapping` should still distribute over `op`.

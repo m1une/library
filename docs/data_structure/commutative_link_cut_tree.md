@@ -1,12 +1,12 @@
 ---
-title: Link-Cut Tree With Subtree
-documentation_of: ../../data_structure/link_cut_tree_with_subtree.hpp
+title: Commutative Link-Cut Tree
+documentation_of: ../../data_structure/commutative_link_cut_tree.hpp
 ---
 
 ## Overview
 
-`m1une::data_structure::LinkCutTreeWithSubtree<Monoid>` is a link-cut tree with
-the same path-query interface as `LinkCutTree`, plus rooted subtree queries.
+`m1une::data_structure::CommutativeLinkCutTree<Monoid>` is a link-cut tree with
+the same path-query interface as `PathLinkCutTree`, plus rooted subtree queries.
 
 The monoid operation must be commutative and must provide an inverse. This lets
 the structure maintain aggregates of virtual child subtrees and update them in
@@ -15,7 +15,7 @@ queries are both amortized $O(\log N)$.
 
 ## Template Parameter
 
-`Monoid` must satisfy `m1une::data_structure::IsCommutativeGroupMonoid`:
+`Monoid` must satisfy `m1une::monoid::IsCommutativeGroup`:
 
 ```cpp
 struct M {
@@ -32,16 +32,16 @@ struct M {
 ## Construction
 
 ```cpp
-LinkCutTreeWithSubtree<Monoid> lct;
-LinkCutTreeWithSubtree<Monoid> lct(n);
-LinkCutTreeWithSubtree<Monoid> lct(values);
+CommutativeLinkCutTree<Monoid> lct;
+CommutativeLinkCutTree<Monoid> lct(n);
+CommutativeLinkCutTree<Monoid> lct(values);
 ```
 
-Construction and `add_vertex` follow `LinkCutTree`.
+Construction and `add_vertex` follow `PathLinkCutTree`.
 
 ## Methods
 
-All `LinkCutTree` methods are available with the same meaning:
+All `PathLinkCutTree` methods are available with the same meaning:
 
 * vertex and edge-node value access: `get`, `set`, `get_edge`, `set_edge`
 * dynamic forest operations: `evert`, `link`, `link_edge`, `cut`, `cut_edge`
@@ -60,14 +60,14 @@ Additional subtree methods:
 ## Example
 
 ```cpp
-#include "data_structure/link_cut_tree_with_subtree.hpp"
+#include "data_structure/commutative_link_cut_tree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using Sum = m1une::monoid::Add<long long>;
-    m1une::data_structure::LinkCutTreeWithSubtree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::CommutativeLinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     lct.link(0, 1);
     lct.link(1, 2);
@@ -81,7 +81,7 @@ int main() {
 
 ## Notes
 
-`link_edge` creates helper vertices exactly like `LinkCutTree`; subtree sizes
+`link_edge` creates helper vertices exactly like `PathLinkCutTree`; subtree sizes
 and products include those helper vertices. Initialize original vertices with
 the group identity when you want subtree products over edge values only.
 

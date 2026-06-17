@@ -28,6 +28,16 @@ To satisfy `m1une::monoid::IsMonoid`, a type `M` must implement:
 * `static constexpr T op(const T& a, const T& b);`
   Combines two values.
 
+## Commutative Group
+
+`m1une::monoid::IsCommutativeGroup` extends `IsMonoid` with an inverse:
+
+* `static constexpr T inverse(const T& x);`
+  Returns the inverse of `x` with respect to `op`.
+
+The concept checks only that `inverse` exists. The type should satisfy the
+group laws, and `op` should be commutative.
+
 ## Example
 
 ```cpp

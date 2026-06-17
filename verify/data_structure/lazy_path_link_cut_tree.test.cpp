@@ -5,13 +5,13 @@
 #include <vector>
 
 #include "acted_monoid/range_add_range_sum.hpp"
-#include "data_structure/lazy_link_cut_tree.hpp"
+#include "data_structure/lazy_path_link_cut_tree.hpp"
 
 using AddSum = m1une::acted_monoid::RangeAddRangeSum<long long>;
 using Node = AddSum::value_type;
 
 void test_vertex_path_updates() {
-    m1une::data_structure::LazyLinkCutTree<AddSum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::LazyPathLinkCutTree<AddSum> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     assert(lct.size() == 5);
     assert(!lct.empty());
@@ -44,7 +44,7 @@ void test_vertex_path_updates() {
 }
 
 void test_edge_path_updates() {
-    m1une::data_structure::LazyLinkCutTree<AddSum> lct(3);
+    m1une::data_structure::LazyPathLinkCutTree<AddSum> lct(3);
 
     int e01 = lct.link_edge(0, 1, 5);
     int e12 = lct.link_edge(1, 2, 7);

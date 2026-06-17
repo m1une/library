@@ -1,11 +1,11 @@
 ---
-title: Link-Cut Tree
-documentation_of: ../../data_structure/link_cut_tree.hpp
+title: Path Link-Cut Tree
+documentation_of: ../../data_structure/path_link_cut_tree.hpp
 ---
 
 ## Overview
 
-`m1une::data_structure::LinkCutTree<Monoid>` maintains a dynamic forest. It
+`m1une::data_structure::PathLinkCutTree<Monoid>` maintains a dynamic forest. It
 supports linking two trees, cutting an existing edge, rerooting a represented
 tree, and querying a monoid product on a path.
 
@@ -33,14 +33,14 @@ struct M {
 ## Construction
 
 ```cpp
-LinkCutTree<Monoid> lct;
-LinkCutTree<Monoid> lct(n);
-LinkCutTree<Monoid> lct(values);
+PathLinkCutTree<Monoid> lct;
+PathLinkCutTree<Monoid> lct(n);
+PathLinkCutTree<Monoid> lct(values);
 ```
 
-* `LinkCutTree(n)` creates `n` isolated vertices initialized with
+* `PathLinkCutTree(n)` creates `n` isolated vertices initialized with
   `Monoid::id()`.
-* `LinkCutTree(values)` creates one isolated vertex for each value.
+* `PathLinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
 As with `Segtree`, construction from `std::vector<U>` is supported when
@@ -118,14 +118,14 @@ int x = lct.lca(u, v);
 ## Example: Vertex Path Sum
 
 ```cpp
-#include "data_structure/link_cut_tree.hpp"
+#include "data_structure/path_link_cut_tree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using Sum = m1une::monoid::Add<long long>;
-    m1une::data_structure::LinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4});
+    m1une::data_structure::PathLinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4});
 
     lct.link(0, 1);
     lct.link(1, 2);
@@ -145,7 +145,7 @@ link-cut-tree vertex for the edge value and links it between the two endpoints.
 
 ```cpp
 using Sum = m1une::monoid::Add<long long>;
-m1une::data_structure::LinkCutTree<Sum> lct(n);
+m1une::data_structure::PathLinkCutTree<Sum> lct(n);
 
 int edge_id = lct.link_edge(u, v, weight);
 
@@ -171,6 +171,6 @@ ids remain unchanged.
 
 This implementation maintains path aggregates only. It does not maintain
 subtree aggregates of the represented tree. For a variant with subtree-query
-helpers, use `LinkCutTreeWithSubtree`.
+helpers, use `CommutativeLinkCutTree`.
 
-For path updates with lazy propagation, use `LazyLinkCutTree`.
+For path updates with lazy propagation, use `LazyPathLinkCutTree`.

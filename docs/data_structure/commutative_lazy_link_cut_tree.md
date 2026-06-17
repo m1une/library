@@ -1,12 +1,12 @@
 ---
-title: Lazy Link-Cut Tree With Subtree
-documentation_of: ../../data_structure/lazy_link_cut_tree_with_subtree.hpp
+title: Commutative Lazy Link-Cut Tree
+documentation_of: ../../data_structure/commutative_lazy_link_cut_tree.hpp
 ---
 
 ## Overview
 
-`m1une::data_structure::LazyLinkCutTreeWithSubtree<ActedMonoid>` is the subtree
-query companion to `LazyLinkCutTree`. It keeps the same dynamic path query and
+`m1une::data_structure::CommutativeLazyLinkCutTree<ActedMonoid>` is the subtree
+query companion to `LazyPathLinkCutTree`. It keeps the same dynamic path query and
 path update interface, and adds rooted subtree queries.
 
 The value monoid must be commutative and must provide an inverse. The structure
@@ -17,7 +17,7 @@ amortized $O(\log N)$.
 ## Template Parameter
 
 `ActedMonoid` must satisfy
-`m1une::data_structure::IsCommutativeGroupActedMonoid`:
+`m1une::acted_monoid::IsCommutativeActedGroup`:
 
 ```cpp
 struct AM {
@@ -37,21 +37,21 @@ struct AM {
 
 `op` must be associative and commutative, `id()` must be its identity, and
 `inverse(x)` must satisfy `op(x, inverse(x)) == id()`. As with
-`LazyLinkCutTree`, `mapping` must distribute over `op`.
+`LazyPathLinkCutTree`, `mapping` must distribute over `op`.
 
 ## Construction
 
 ```cpp
-LazyLinkCutTreeWithSubtree<ActedMonoid> lct;
-LazyLinkCutTreeWithSubtree<ActedMonoid> lct(n);
-LazyLinkCutTreeWithSubtree<ActedMonoid> lct(values);
+CommutativeLazyLinkCutTree<ActedMonoid> lct;
+CommutativeLazyLinkCutTree<ActedMonoid> lct(n);
+CommutativeLazyLinkCutTree<ActedMonoid> lct(values);
 ```
 
-Construction and `add_vertex` follow `LazyLinkCutTree`.
+Construction and `add_vertex` follow `LazyPathLinkCutTree`.
 
 ## Methods
 
-All `LazyLinkCutTree` methods are available with the same meaning:
+All `LazyPathLinkCutTree` methods are available with the same meaning:
 
 * vertex and edge-node value access: `get`, `set`, `get_edge`, `set_edge`
 * dynamic forest operations: `evert`, `link`, `link_edge`, `cut`, `cut_edge`
@@ -72,13 +72,13 @@ Additional subtree methods:
 
 ```cpp
 #include "acted_monoid/range_add_range_sum.hpp"
-#include "data_structure/lazy_link_cut_tree_with_subtree.hpp"
+#include "data_structure/commutative_lazy_link_cut_tree.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
-    m1une::data_structure::LazyLinkCutTreeWithSubtree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::CommutativeLazyLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     lct.link(0, 1);
     lct.link(1, 2);

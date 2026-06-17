@@ -1,14 +1,14 @@
 ---
-title: Lazy Link-Cut Tree
-documentation_of: ../../data_structure/lazy_link_cut_tree.hpp
+title: Lazy Path Link-Cut Tree
+documentation_of: ../../data_structure/lazy_path_link_cut_tree.hpp
 ---
 
 ## Overview
 
-`m1une::data_structure::LazyLinkCutTree<ActedMonoid>` maintains a dynamic
+`m1une::data_structure::LazyPathLinkCutTree<ActedMonoid>` maintains a dynamic
 forest with path queries and path updates.
 
-It is the lazy-propagation version of `LinkCutTree`. The value monoid gives the
+It is the lazy-propagation version of `PathLinkCutTree`. The value monoid gives the
 path query, and the operator monoid gives the path update. This matches the
 same acted-monoid style used by `LazySegtree`.
 
@@ -51,14 +51,14 @@ link-cut tree reverses preferred paths dynamically.
 ## Construction
 
 ```cpp
-LazyLinkCutTree<ActedMonoid> lct;
-LazyLinkCutTree<ActedMonoid> lct(n);
-LazyLinkCutTree<ActedMonoid> lct(values);
+LazyPathLinkCutTree<ActedMonoid> lct;
+LazyPathLinkCutTree<ActedMonoid> lct(n);
+LazyPathLinkCutTree<ActedMonoid> lct(values);
 ```
 
-* `LazyLinkCutTree(n)` creates `n` isolated vertices initialized with
+* `LazyPathLinkCutTree(n)` creates `n` isolated vertices initialized with
   `ActedMonoid::id()`.
-* `LazyLinkCutTree(values)` creates one isolated vertex for each value.
+* `LazyPathLinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
 Construction from `std::vector<U>` is supported when
@@ -101,7 +101,7 @@ Construction from `std::vector<U>` is supported when
 `prod`, `apply(u, v, f)`, `path_size`, and `kth_vertex` require `u` and `v` to
 be connected. This is checked by `assert`.
 
-Unlike `LinkCutTree::get`, `LazyLinkCutTree::get` is not `const`, because it
+Unlike `PathLinkCutTree::get`, `LazyPathLinkCutTree::get` is not `const`, because it
 must expose the vertex and push pending lazy operations first.
 
 ## Path Order
@@ -129,13 +129,13 @@ int x = lct.lca(u, v);
 
 ```cpp
 #include "acted_monoid/range_add_range_sum.hpp"
-#include "data_structure/lazy_link_cut_tree.hpp"
+#include "data_structure/lazy_path_link_cut_tree.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
-    m1une::data_structure::LazyLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4});
+    m1une::data_structure::LazyPathLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4});
 
     lct.link(0, 1);
     lct.link(1, 2);
@@ -156,7 +156,7 @@ updates and path sums.
 
 ```cpp
 using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
-m1une::data_structure::LazyLinkCutTree<AM> lct(n);
+m1une::data_structure::LazyPathLinkCutTree<AM> lct(n);
 
 int edge_id = lct.link_edge(u, v, weight);
 
@@ -174,4 +174,4 @@ All complexities are amortized. `size()` includes helper edge nodes created by
 
 This implementation maintains path aggregates only. It does not maintain
 subtree aggregates of the represented tree. For a variant with subtree-query
-helpers, use `LazyLinkCutTreeWithSubtree`.
+helpers, use `CommutativeLazyLinkCutTree`.

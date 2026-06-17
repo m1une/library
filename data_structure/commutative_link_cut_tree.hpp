@@ -1,5 +1,5 @@
-#ifndef M1UNE_LINK_CUT_TREE_WITH_SUBTREE_HPP
-#define M1UNE_LINK_CUT_TREE_WITH_SUBTREE_HPP 1
+#ifndef M1UNE_COMMUTATIVE_LINK_CUT_TREE_HPP
+#define M1UNE_COMMUTATIVE_LINK_CUT_TREE_HPP 1
 
 #include <cassert>
 #include <concepts>
@@ -12,13 +12,8 @@
 namespace m1une {
 namespace data_structure {
 
-template <typename M>
-concept IsCommutativeGroupMonoid = m1une::monoid::IsMonoid<M> && requires(typename M::value_type a) {
-    { M::inverse(a) } -> std::same_as<typename M::value_type>;
-};
-
-template <IsCommutativeGroupMonoid Monoid>
-struct LinkCutTreeWithSubtree {
+template <m1une::monoid::IsCommutativeGroup Monoid>
+struct CommutativeLinkCutTree {
     using T = typename Monoid::value_type;
 
    private:
@@ -222,20 +217,20 @@ struct LinkCutTreeWithSubtree {
     }
 
    public:
-    LinkCutTreeWithSubtree() = default;
+    CommutativeLinkCutTree() = default;
 
-    explicit LinkCutTreeWithSubtree(int n) {
+    explicit CommutativeLinkCutTree(int n) {
         assert(0 <= n);
         _nodes.reserve(n);
         for (int i = 0; i < n; i++) add_vertex();
     }
 
-    explicit LinkCutTreeWithSubtree(const std::vector<T>& values) {
+    explicit CommutativeLinkCutTree(const std::vector<T>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);
     }
 
-    explicit LinkCutTreeWithSubtree(std::vector<T>&& values) {
+    explicit CommutativeLinkCutTree(std::vector<T>&& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));
     }
@@ -246,7 +241,7 @@ struct LinkCutTreeWithSubtree {
         requires(U x, int i) { Monoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
-    explicit LinkCutTreeWithSubtree(const std::vector<U>& values) {
+    explicit CommutativeLinkCutTree(const std::vector<U>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i], i));
     }
@@ -557,4 +552,4 @@ struct LinkCutTreeWithSubtree {
 }  // namespace data_structure
 }  // namespace m1une
 
-#endif  // M1UNE_LINK_CUT_TREE_WITH_SUBTREE_HPP
+#endif  // M1UNE_COMMUTATIVE_LINK_CUT_TREE_HPP

@@ -1,5 +1,5 @@
-#ifndef M1UNE_LINK_CUT_TREE_HPP
-#define M1UNE_LINK_CUT_TREE_HPP 1
+#ifndef M1UNE_LAZY_PATH_LINK_CUT_TREE_HPP
+#define M1UNE_LAZY_PATH_LINK_CUT_TREE_HPP 1
 
 #include <cassert>
 #include <concepts>
@@ -7,14 +7,15 @@
 #include <utility>
 #include <vector>
 
-#include "monoid/concept.hpp"
+#include "acted_monoid/concept.hpp"
 
 namespace m1une {
 namespace data_structure {
 
-template <m1une::monoid::IsMonoid Monoid>
-struct LinkCutTree {
-    using T = typename Monoid::value_type;
+template <m1une::acted_monoid::IsActedMonoid ActedMonoid>
+struct LazyPathLinkCutTree {
+    using T = typename ActedMonoid::value_type;
+    using F = typename ActedMonoid::operator_type;
 
    private:
     struct Node {
@@ -23,9 +24,10 @@ struct LinkCutTree {
         int parent = -1;
         bool rev = false;
         int size = 1;
-        T value = Monoid::id();
-        T prod = Monoid::id();
-        T rev_prod = Monoid::id();
+        T value = ActedMonoid::id();
+        T prod = ActedMonoid::id();
+        T rev_prod = ActedMonoid::id();
+        F lazy = ActedMonoid::op_id();
     };
 
     struct EdgeInfo {
@@ -49,15 +51,15 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<U, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { ActedMonoid::make(x); } ||
+        requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
     static T make_node_value(const U& value, int index) {
-        if constexpr (requires(U x) { Monoid::make(x); }) {
-            return Monoid::make(value);
-        } else if constexpr (requires(U x, int i) { Monoid::make(x, i); }) {
-            return Monoid::make(value, index);
+        if constexpr (requires(U x) { ActedMonoid::make(x); }) {
+            return ActedMonoid::make(value);
+        } else if constexpr (requires(U x, int i) { ActedMonoid::make(x, i); }) {
+            return ActedMonoid::make(value, index);
         } else {
             return static_cast<T>(value);
         }
@@ -75,12 +77,12 @@ struct LinkCutTree {
     void update(int node) {
         Node& x = _nodes[node];
         x.size = 1 + child_size(x.left) + child_size(x.right);
-        T left_prod = x.left == -1 ? Monoid::id() : _nodes[x.left].prod;
-        T right_prod = x.right == -1 ? Monoid::id() : _nodes[x.right].prod;
-        T left_rev_prod = x.left == -1 ? Monoid::id() : _nodes[x.left].rev_prod;
-        T right_rev_prod = x.right == -1 ? Monoid::id() : _nodes[x.right].rev_prod;
-        x.prod = Monoid::op(Monoid::op(left_prod, x.value), right_prod);
-        x.rev_prod = Monoid::op(Monoid::op(right_rev_prod, x.value), left_rev_prod);
+        T left_prod = x.left == -1 ? ActedMonoid::id() : _nodes[x.left].prod;
+        T right_prod = x.right == -1 ? ActedMonoid::id() : _nodes[x.right].prod;
+        T left_rev_prod = x.left == -1 ? ActedMonoid::id() : _nodes[x.left].rev_prod;
+        T right_rev_prod = x.right == -1 ? ActedMonoid::id() : _nodes[x.right].rev_prod;
+        x.prod = ActedMonoid::op(ActedMonoid::op(left_prod, x.value), right_prod);
+        x.rev_prod = ActedMonoid::op(ActedMonoid::op(right_rev_prod, x.value), left_rev_prod);
     }
 
     void apply_reverse(int node) {
@@ -91,11 +93,26 @@ struct LinkCutTree {
         x.rev = !x.rev;
     }
 
+    void apply_operator(int node, const F& f) {
+        if (node == -1) return;
+        Node& x = _nodes[node];
+        x.value = ActedMonoid::mapping(f, x.value);
+        x.prod = ActedMonoid::mapping(f, x.prod);
+        x.rev_prod = ActedMonoid::mapping(f, x.rev_prod);
+        x.lazy = ActedMonoid::op_comp(f, x.lazy);
+    }
+
     void push(int node) {
-        if (node == -1 || !_nodes[node].rev) return;
-        apply_reverse(_nodes[node].left);
-        apply_reverse(_nodes[node].right);
-        _nodes[node].rev = false;
+        if (node == -1) return;
+        Node& x = _nodes[node];
+        if (x.rev) {
+            apply_reverse(x.left);
+            apply_reverse(x.right);
+            x.rev = false;
+        }
+        apply_operator(x.left, x.lazy);
+        apply_operator(x.right, x.lazy);
+        x.lazy = ActedMonoid::op_id();
     }
 
     void push_to(int node) {
@@ -173,31 +190,31 @@ struct LinkCutTree {
     }
 
    public:
-    LinkCutTree() = default;
+    LazyPathLinkCutTree() = default;
 
-    explicit LinkCutTree(int n) {
+    explicit LazyPathLinkCutTree(int n) {
         assert(0 <= n);
         _nodes.reserve(n);
         for (int i = 0; i < n; i++) add_vertex();
     }
 
-    explicit LinkCutTree(const std::vector<T>& values) {
+    explicit LazyPathLinkCutTree(const std::vector<T>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);
     }
 
-    explicit LinkCutTree(std::vector<T>&& values) {
+    explicit LazyPathLinkCutTree(std::vector<T>&& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));
     }
 
     template <class U>
     requires (!std::same_as<U, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { ActedMonoid::make(x); } ||
+        requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
-    explicit LinkCutTree(const std::vector<U>& values) {
+    explicit LazyPathLinkCutTree(const std::vector<U>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i], i));
     }
@@ -210,7 +227,7 @@ struct LinkCutTree {
         return _nodes.empty();
     }
 
-    int add_vertex(const T& value = Monoid::id()) {
+    int add_vertex(const T& value = ActedMonoid::id()) {
         Node node;
         node.value = value;
         node.prod = value;
@@ -230,8 +247,8 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { ActedMonoid::make(x); } ||
+        requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
     int add_vertex(const U& value) {
@@ -257,12 +274,13 @@ struct LinkCutTree {
         return {_edges[edge_id].u, _edges[edge_id].v};
     }
 
-    const T& get(int v) const {
+    T get(int v) {
         check_vertex(v);
+        access(v);
         return _nodes[v].value;
     }
 
-    const T& operator[](int v) const {
+    T operator[](int v) {
         return get(v);
     }
 
@@ -282,12 +300,28 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { ActedMonoid::make(x); } ||
+        requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
     void set(int v, const U& value) {
         set(v, make_node_value(value, v));
+    }
+
+    void apply(int v, const F& f) {
+        check_vertex(v);
+        access(v);
+        _nodes[v].value = ActedMonoid::mapping(f, _nodes[v].value);
+        update(v);
+    }
+
+    void apply(int u, int v, const F& f) {
+        check_vertex(u);
+        check_vertex(v);
+        assert(connected(u, v));
+        evert(u);
+        access(v);
+        apply_operator(v, f);
     }
 
     void evert(int v) {
@@ -330,7 +364,7 @@ struct LinkCutTree {
         return true;
     }
 
-    int link_edge(int u, int v, const T& value = Monoid::id()) {
+    int link_edge(int u, int v, const T& value = ActedMonoid::id()) {
         check_vertex(u);
         check_vertex(v);
         if (u == v || connected(u, v)) return -1;
@@ -358,8 +392,8 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { ActedMonoid::make(x); } ||
+        requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
     int link_edge(int u, int v, const U& value) {
@@ -392,7 +426,7 @@ struct LinkCutTree {
         return ok1 && ok2;
     }
 
-    const T& get_edge(int edge_id) const {
+    T get_edge(int edge_id) {
         return get(edge_node(edge_id));
     }
 
@@ -406,12 +440,16 @@ struct LinkCutTree {
 
     template <class U>
     requires (!std::same_as<std::remove_cvref_t<U>, T>) && (
-        requires(U x) { Monoid::make(x); } ||
-        requires(U x, int i) { Monoid::make(x, i); } ||
+        requires(U x) { ActedMonoid::make(x); } ||
+        requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
     void set_edge(int edge_id, const U& value) {
         set(edge_node(edge_id), make_node_value(value, edge_node(edge_id)));
+    }
+
+    void apply_edge(int edge_id, const F& f) {
+        apply(edge_node(edge_id), f);
     }
 
     T prod(int u, int v) {
@@ -473,4 +511,4 @@ struct LinkCutTree {
 }  // namespace data_structure
 }  // namespace m1une
 
-#endif  // M1UNE_LINK_CUT_TREE_HPP
+#endif  // M1UNE_LAZY_PATH_LINK_CUT_TREE_HPP

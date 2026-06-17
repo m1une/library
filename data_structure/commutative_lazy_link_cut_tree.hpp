@@ -1,5 +1,5 @@
-#ifndef M1UNE_LAZY_LINK_CUT_TREE_HPP
-#define M1UNE_LAZY_LINK_CUT_TREE_HPP 1
+#ifndef M1UNE_COMMUTATIVE_LAZY_LINK_CUT_TREE_HPP
+#define M1UNE_COMMUTATIVE_LAZY_LINK_CUT_TREE_HPP 1
 
 #include <cassert>
 #include <concepts>
@@ -12,8 +12,8 @@
 namespace m1une {
 namespace data_structure {
 
-template <m1une::acted_monoid::IsActedMonoid ActedMonoid>
-struct LazyLinkCutTree {
+template <m1une::acted_monoid::IsCommutativeActedGroup ActedMonoid>
+struct CommutativeLazyLinkCutTree {
     using T = typename ActedMonoid::value_type;
     using F = typename ActedMonoid::operator_type;
 
@@ -24,9 +24,15 @@ struct LazyLinkCutTree {
         int parent = -1;
         bool rev = false;
         int size = 1;
+        int virtual_size = 0;
+        int rake_size = 0;
+        int all_size = 1;
         T value = ActedMonoid::id();
         T prod = ActedMonoid::id();
         T rev_prod = ActedMonoid::id();
+        T virtual_prod = ActedMonoid::id();
+        T rake_prod = ActedMonoid::id();
+        T all_prod = ActedMonoid::id();
         F lazy = ActedMonoid::op_id();
     };
 
@@ -69,6 +75,39 @@ struct LazyLinkCutTree {
         return node == -1 ? 0 : _nodes[node].size;
     }
 
+    int child_all_size(int node) const {
+        return node == -1 ? 0 : _nodes[node].all_size;
+    }
+
+    int child_rake_size(int node) const {
+        return node == -1 ? 0 : _nodes[node].rake_size;
+    }
+
+    T child_prod(int node) const {
+        return node == -1 ? ActedMonoid::id() : _nodes[node].prod;
+    }
+
+    T child_rev_prod(int node) const {
+        return node == -1 ? ActedMonoid::id() : _nodes[node].rev_prod;
+    }
+
+    T child_all_prod(int node) const {
+        return node == -1 ? ActedMonoid::id() : _nodes[node].all_prod;
+    }
+
+    T child_rake_prod(int node) const {
+        return node == -1 ? ActedMonoid::id() : _nodes[node].rake_prod;
+    }
+
+    T node_subtree_prod(int node) const {
+        const Node& x = _nodes[node];
+        return ActedMonoid::op(x.value, x.virtual_prod);
+    }
+
+    int node_subtree_size(int node) const {
+        return 1 + _nodes[node].virtual_size;
+    }
+
     bool is_splay_root(int node) const {
         int parent = _nodes[node].parent;
         return parent == -1 || (_nodes[parent].left != node && _nodes[parent].right != node);
@@ -77,12 +116,27 @@ struct LazyLinkCutTree {
     void update(int node) {
         Node& x = _nodes[node];
         x.size = 1 + child_size(x.left) + child_size(x.right);
-        T left_prod = x.left == -1 ? ActedMonoid::id() : _nodes[x.left].prod;
-        T right_prod = x.right == -1 ? ActedMonoid::id() : _nodes[x.right].prod;
-        T left_rev_prod = x.left == -1 ? ActedMonoid::id() : _nodes[x.left].rev_prod;
-        T right_rev_prod = x.right == -1 ? ActedMonoid::id() : _nodes[x.right].rev_prod;
-        x.prod = ActedMonoid::op(ActedMonoid::op(left_prod, x.value), right_prod);
-        x.rev_prod = ActedMonoid::op(ActedMonoid::op(right_rev_prod, x.value), left_rev_prod);
+        x.rake_size = x.virtual_size + child_rake_size(x.left) + child_rake_size(x.right);
+        x.all_size = x.size + x.rake_size;
+        x.prod = ActedMonoid::op(ActedMonoid::op(child_prod(x.left), x.value), child_prod(x.right));
+        x.rev_prod = ActedMonoid::op(ActedMonoid::op(child_rev_prod(x.right), x.value), child_rev_prod(x.left));
+        x.rake_prod = ActedMonoid::op(ActedMonoid::op(child_rake_prod(x.left), x.virtual_prod),
+                                      child_rake_prod(x.right));
+        x.all_prod = ActedMonoid::op(x.prod, x.rake_prod);
+    }
+
+    void add_virtual_child(int node, int child) {
+        if (child == -1) return;
+        Node& x = _nodes[node];
+        x.virtual_size += _nodes[child].all_size;
+        x.virtual_prod = ActedMonoid::op(x.virtual_prod, _nodes[child].all_prod);
+    }
+
+    void remove_virtual_child(int node, int child) {
+        if (child == -1) return;
+        Node& x = _nodes[node];
+        x.virtual_size -= _nodes[child].all_size;
+        x.virtual_prod = ActedMonoid::op(x.virtual_prod, ActedMonoid::inverse(_nodes[child].all_prod));
     }
 
     void apply_reverse(int node) {
@@ -99,6 +153,7 @@ struct LazyLinkCutTree {
         x.value = ActedMonoid::mapping(f, x.value);
         x.prod = ActedMonoid::mapping(f, x.prod);
         x.rev_prod = ActedMonoid::mapping(f, x.rev_prod);
+        x.all_prod = ActedMonoid::op(x.prod, x.rake_prod);
         x.lazy = ActedMonoid::op_comp(f, x.lazy);
     }
 
@@ -172,6 +227,8 @@ struct LazyLinkCutTree {
         int last = -1;
         for (int cur = node; cur != -1; cur = _nodes[cur].parent) {
             splay(cur);
+            add_virtual_child(cur, _nodes[cur].right);
+            remove_virtual_child(cur, last);
             _nodes[cur].right = last;
             if (last != -1) _nodes[last].parent = cur;
             update(cur);
@@ -190,20 +247,20 @@ struct LazyLinkCutTree {
     }
 
    public:
-    LazyLinkCutTree() = default;
+    CommutativeLazyLinkCutTree() = default;
 
-    explicit LazyLinkCutTree(int n) {
+    explicit CommutativeLazyLinkCutTree(int n) {
         assert(0 <= n);
         _nodes.reserve(n);
         for (int i = 0; i < n; i++) add_vertex();
     }
 
-    explicit LazyLinkCutTree(const std::vector<T>& values) {
+    explicit CommutativeLazyLinkCutTree(const std::vector<T>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);
     }
 
-    explicit LazyLinkCutTree(std::vector<T>&& values) {
+    explicit CommutativeLazyLinkCutTree(std::vector<T>&& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));
     }
@@ -214,7 +271,7 @@ struct LazyLinkCutTree {
         requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
-    explicit LazyLinkCutTree(const std::vector<U>& values) {
+    explicit CommutativeLazyLinkCutTree(const std::vector<U>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i], i));
     }
@@ -232,6 +289,7 @@ struct LazyLinkCutTree {
         node.value = value;
         node.prod = value;
         node.rev_prod = value;
+        node.all_prod = value;
         _nodes.push_back(std::move(node));
         return int(_nodes.size()) - 1;
     }
@@ -241,6 +299,7 @@ struct LazyLinkCutTree {
         node.value = std::move(value);
         node.prod = node.value;
         node.rev_prod = node.value;
+        node.all_prod = node.value;
         _nodes.push_back(std::move(node));
         return int(_nodes.size()) - 1;
     }
@@ -360,7 +419,10 @@ struct LazyLinkCutTree {
         if (u == v) return false;
         evert(u);
         if (component_root(v) == u) return false;
+        access(v);
         _nodes[u].parent = v;
+        add_virtual_child(v, u);
+        update(v);
         return true;
     }
 
@@ -506,9 +568,39 @@ struct LazyLinkCutTree {
         access(u);
         return access(v);
     }
+
+    T subtree_prod(int root, int v) {
+        check_vertex(root);
+        check_vertex(v);
+        assert(connected(root, v));
+        evert(root);
+        access(v);
+        return node_subtree_prod(v);
+    }
+
+    T subtree_prod(int v) {
+        check_vertex(v);
+        access(v);
+        return node_subtree_prod(v);
+    }
+
+    int subtree_size(int root, int v) {
+        check_vertex(root);
+        check_vertex(v);
+        assert(connected(root, v));
+        evert(root);
+        access(v);
+        return node_subtree_size(v);
+    }
+
+    int subtree_size(int v) {
+        check_vertex(v);
+        access(v);
+        return node_subtree_size(v);
+    }
 };
 
 }  // namespace data_structure
 }  // namespace m1une
 
-#endif  // M1UNE_LAZY_LINK_CUT_TREE_HPP
+#endif  // M1UNE_COMMUTATIVE_LAZY_LINK_CUT_TREE_HPP
