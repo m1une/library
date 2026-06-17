@@ -1,5 +1,5 @@
-#ifndef M1UNE_COMMUTATIVE_LINK_CUT_TREE_HPP
-#define M1UNE_COMMUTATIVE_LINK_CUT_TREE_HPP 1
+#ifndef M1UNE_LINKED_CUT_TREE_HPP
+#define M1UNE_LINKED_CUT_TREE_HPP 1
 
 #include <cassert>
 #include <concepts>
@@ -13,7 +13,7 @@ namespace m1une {
 namespace data_structure {
 
 template <m1une::monoid::IsCommutativeGroup Monoid>
-struct CommutativeLinkCutTree {
+struct LinkedCutTree {
     using T = typename Monoid::value_type;
 
    private:
@@ -217,20 +217,20 @@ struct CommutativeLinkCutTree {
     }
 
    public:
-    CommutativeLinkCutTree() = default;
+    LinkedCutTree() = default;
 
-    explicit CommutativeLinkCutTree(int n) {
+    explicit LinkedCutTree(int n) {
         assert(0 <= n);
         _nodes.reserve(n);
         for (int i = 0; i < n; i++) add_vertex();
     }
 
-    explicit CommutativeLinkCutTree(const std::vector<T>& values) {
+    explicit LinkedCutTree(const std::vector<T>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);
     }
 
-    explicit CommutativeLinkCutTree(std::vector<T>&& values) {
+    explicit LinkedCutTree(std::vector<T>&& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));
     }
@@ -241,7 +241,7 @@ struct CommutativeLinkCutTree {
         requires(U x, int i) { Monoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
-    explicit CommutativeLinkCutTree(const std::vector<U>& values) {
+    explicit LinkedCutTree(const std::vector<U>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i], i));
     }
@@ -552,4 +552,4 @@ struct CommutativeLinkCutTree {
 }  // namespace data_structure
 }  // namespace m1une
 
-#endif  // M1UNE_COMMUTATIVE_LINK_CUT_TREE_HPP
+#endif  // M1UNE_LINKED_CUT_TREE_HPP

@@ -174,4 +174,4 @@ All complexities are amortized. `size()` includes helper edge nodes created by
 
 This implementation maintains path aggregates only. It does not maintain
 subtree aggregates of the represented tree. For a variant with subtree-query
-helpers, use `CommutativeLazyLinkCutTree`.
+helpers, use `LazyLinkedCutTree`.

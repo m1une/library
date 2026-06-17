@@ -1,11 +1,11 @@
 ---
-title: Commutative Link-Cut Tree
-documentation_of: ../../data_structure/commutative_link_cut_tree.hpp
+title: Linked-Cut Tree
+documentation_of: ../../data_structure/linked_cut_tree.hpp
 ---
 
 ## Overview
 
-`m1une::data_structure::CommutativeLinkCutTree<Monoid>` is a link-cut tree with
+`m1une::data_structure::LinkedCutTree<Monoid>` is a link-cut tree with
 the same path-query interface as `PathLinkCutTree`, plus rooted subtree queries.
 
 The monoid operation must be commutative and must provide an inverse. This lets
@@ -32,9 +32,9 @@ struct M {
 ## Construction
 
 ```cpp
-CommutativeLinkCutTree<Monoid> lct;
-CommutativeLinkCutTree<Monoid> lct(n);
-CommutativeLinkCutTree<Monoid> lct(values);
+LinkedCutTree<Monoid> lct;
+LinkedCutTree<Monoid> lct(n);
+LinkedCutTree<Monoid> lct(values);
 ```
 
 Construction and `add_vertex` follow `PathLinkCutTree`.
@@ -60,14 +60,14 @@ Additional subtree methods:
 ## Example
 
 ```cpp
-#include "data_structure/commutative_link_cut_tree.hpp"
+#include "data_structure/linked_cut_tree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using Sum = m1une::monoid::Add<long long>;
-    m1une::data_structure::CommutativeLinkCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::LinkedCutTree<Sum> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     lct.link(0, 1);
     lct.link(1, 2);

@@ -7,13 +7,13 @@
 #include <vector>
 
 #include "acted_monoid/range_add_range_sum.hpp"
-#include "data_structure/commutative_lazy_link_cut_tree.hpp"
+#include "data_structure/lazy_linked_cut_tree.hpp"
 
 using AddSum = m1une::acted_monoid::RangeAddRangeSum<long long>;
 using Node = AddSum::value_type;
 
 void test_vertex_path_and_subtree_updates() {
-    m1une::data_structure::CommutativeLazyLinkCutTree<AddSum> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::LazyLinkedCutTree<AddSum> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     assert(lct.link(0, 1));
     assert(lct.link(1, 2));
@@ -47,7 +47,7 @@ void test_vertex_path_and_subtree_updates() {
 }
 
 void test_edge_path_and_subtree_updates() {
-    m1une::data_structure::CommutativeLazyLinkCutTree<AddSum> lct(3);
+    m1une::data_structure::LazyLinkedCutTree<AddSum> lct(3);
 
     int e01 = lct.link_edge(0, 1, 5);
     int e12 = lct.link_edge(1, 2, 7);
@@ -158,7 +158,7 @@ void test_random_vertex_path_updates() {
         initial.push_back(i + 1);
         value.push_back(i + 1);
     }
-    m1une::data_structure::CommutativeLazyLinkCutTree<AddSum> lct(initial);
+    m1une::data_structure::LazyLinkedCutTree<AddSum> lct(initial);
     std::vector<std::vector<int>> adj(n);
     std::vector<std::pair<int, int>> edges;
     std::mt19937 rng(2);

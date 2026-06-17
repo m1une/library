@@ -1,5 +1,5 @@
-#ifndef M1UNE_COMMUTATIVE_LAZY_LINK_CUT_TREE_HPP
-#define M1UNE_COMMUTATIVE_LAZY_LINK_CUT_TREE_HPP 1
+#ifndef M1UNE_LAZY_LINKED_CUT_TREE_HPP
+#define M1UNE_LAZY_LINKED_CUT_TREE_HPP 1
 
 #include <cassert>
 #include <concepts>
@@ -13,7 +13,7 @@ namespace m1une {
 namespace data_structure {
 
 template <m1une::acted_monoid::IsCommutativeActedGroup ActedMonoid>
-struct CommutativeLazyLinkCutTree {
+struct LazyLinkedCutTree {
     using T = typename ActedMonoid::value_type;
     using F = typename ActedMonoid::operator_type;
 
@@ -247,20 +247,20 @@ struct CommutativeLazyLinkCutTree {
     }
 
    public:
-    CommutativeLazyLinkCutTree() = default;
+    LazyLinkedCutTree() = default;
 
-    explicit CommutativeLazyLinkCutTree(int n) {
+    explicit LazyLinkedCutTree(int n) {
         assert(0 <= n);
         _nodes.reserve(n);
         for (int i = 0; i < n; i++) add_vertex();
     }
 
-    explicit CommutativeLazyLinkCutTree(const std::vector<T>& values) {
+    explicit LazyLinkedCutTree(const std::vector<T>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(values[i]);
     }
 
-    explicit CommutativeLazyLinkCutTree(std::vector<T>&& values) {
+    explicit LazyLinkedCutTree(std::vector<T>&& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(std::move(values[i]));
     }
@@ -271,7 +271,7 @@ struct CommutativeLazyLinkCutTree {
         requires(U x, int i) { ActedMonoid::make(x, i); } ||
         std::convertible_to<U, T>
     )
-    explicit CommutativeLazyLinkCutTree(const std::vector<U>& values) {
+    explicit LazyLinkedCutTree(const std::vector<U>& values) {
         _nodes.reserve(values.size());
         for (int i = 0; i < int(values.size()); i++) add_vertex(make_node_value(values[i], i));
     }
@@ -603,4 +603,4 @@ struct CommutativeLazyLinkCutTree {
 }  // namespace data_structure
 }  // namespace m1une
 
-#endif  // M1UNE_COMMUTATIVE_LAZY_LINK_CUT_TREE_HPP
+#endif  // M1UNE_LAZY_LINKED_CUT_TREE_HPP

@@ -6,11 +6,11 @@
 #include <utility>
 #include <vector>
 
-#include "data_structure/commutative_link_cut_tree.hpp"
+#include "data_structure/linked_cut_tree.hpp"
 #include "monoid/add.hpp"
 
 void test_vertex_subtree_sum() {
-    m1une::data_structure::CommutativeLinkCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1, 2, 3, 4, 5});
+    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1, 2, 3, 4, 5});
 
     assert(lct.link(0, 1));
     assert(lct.link(1, 2));
@@ -36,7 +36,7 @@ void test_vertex_subtree_sum() {
 }
 
 void test_edge_nodes_subtree() {
-    m1une::data_structure::CommutativeLinkCutTree<m1une::monoid::Add<long long>> lct(3);
+    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(3);
 
     int e01 = lct.link_edge(0, 1, 5);
     int e12 = lct.link_edge(1, 2, 7);
@@ -130,7 +130,7 @@ void test_random_vertex_sum() {
     constexpr int n = 8;
     std::vector<long long> value;
     for (int i = 0; i < n; i++) value.push_back(i + 1);
-    m1une::data_structure::CommutativeLinkCutTree<m1une::monoid::Add<long long>> lct(value);
+    m1une::data_structure::LinkedCutTree<m1une::monoid::Add<long long>> lct(value);
     std::vector<std::vector<int>> adj(n);
     std::vector<std::pair<int, int>> edges;
     std::mt19937 rng(1);

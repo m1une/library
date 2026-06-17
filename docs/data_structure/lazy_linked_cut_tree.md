@@ -1,11 +1,11 @@
 ---
-title: Commutative Lazy Link-Cut Tree
-documentation_of: ../../data_structure/commutative_lazy_link_cut_tree.hpp
+title: Lazy Linked-Cut Tree
+documentation_of: ../../data_structure/lazy_linked_cut_tree.hpp
 ---
 
 ## Overview
 
-`m1une::data_structure::CommutativeLazyLinkCutTree<ActedMonoid>` is the subtree
+`m1une::data_structure::LazyLinkedCutTree<ActedMonoid>` is the subtree
 query companion to `LazyPathLinkCutTree`. It keeps the same dynamic path query and
 path update interface, and adds rooted subtree queries.
 
@@ -42,9 +42,9 @@ struct AM {
 ## Construction
 
 ```cpp
-CommutativeLazyLinkCutTree<ActedMonoid> lct;
-CommutativeLazyLinkCutTree<ActedMonoid> lct(n);
-CommutativeLazyLinkCutTree<ActedMonoid> lct(values);
+LazyLinkedCutTree<ActedMonoid> lct;
+LazyLinkedCutTree<ActedMonoid> lct(n);
+LazyLinkedCutTree<ActedMonoid> lct(values);
 ```
 
 Construction and `add_vertex` follow `LazyPathLinkCutTree`.
@@ -72,13 +72,13 @@ Additional subtree methods:
 
 ```cpp
 #include "acted_monoid/range_add_range_sum.hpp"
-#include "data_structure/commutative_lazy_link_cut_tree.hpp"
+#include "data_structure/lazy_linked_cut_tree.hpp"
 #include <iostream>
 #include <vector>
 
 int main() {
     using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
-    m1une::data_structure::CommutativeLazyLinkCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
+    m1une::data_structure::LazyLinkedCutTree<AM> lct(std::vector<long long>{1, 2, 3, 4, 5});
 
     lct.link(0, 1);
     lct.link(1, 2);
