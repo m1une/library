@@ -1,7 +1,22 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':x:'
+    path: fps/all.hpp
+    title: fps/all.hpp
+  - icon: ':question:'
+    path: fps/convolution.hpp
+    title: Convolution
+  - icon: ':question:'
+    path: fps/formal_power_series.hpp
+    title: Formal Power Series
+  - icon: ':question:'
+    path: fps/linear_recurrence.hpp
+    title: Linear Recurrence and Bostan-Mori
+  - icon: ':question:'
+    path: fps/multipoint_evaluation.hpp
+    title: Multipoint Evaluation and Interpolation
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/dual_segtree.test.cpp
@@ -12,9 +27,36 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
-  _isVerificationFailed: false
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/convolution_mod.test.cpp
+    title: verify/fps/convolution_mod.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/exp_of_formal_power_series.test.cpp
+    title: verify/fps/exp_of_formal_power_series.test.cpp
+  - icon: ':x:'
+    path: verify/fps/fps_algorithms.test.cpp
+    title: verify/fps/fps_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/inv_of_formal_power_series.test.cpp
+    title: verify/fps/inv_of_formal_power_series.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+    title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/multipoint_evaluation.test.cpp
+    title: verify/fps/multipoint_evaluation.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/polynomial_interpolation.test.cpp
+    title: verify/fps/polynomial_interpolation.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/polynomial_taylor_shift.test.cpp
+    title: verify/fps/polynomial_taylor_shift.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/pow_of_formal_power_series.test.cpp
+    title: verify/fps/pow_of_formal_power_series.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/modint.hpp\"\n\n\n\n#include <cstdint>\n#include <iostream>\n\
@@ -119,13 +161,27 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: math/modint.hpp
-  requiredBy: []
+  requiredBy:
+  - fps/formal_power_series.hpp
+  - fps/all.hpp
+  - fps/multipoint_evaluation.hpp
+  - fps/linear_recurrence.hpp
+  - fps/convolution.hpp
   timestamp: '2026-06-06 20:32:01+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - verify/data_structure/dual_segtree.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
+  - verify/fps/inv_of_formal_power_series.test.cpp
+  - verify/fps/pow_of_formal_power_series.test.cpp
+  - verify/fps/polynomial_interpolation.test.cpp
+  - verify/fps/exp_of_formal_power_series.test.cpp
+  - verify/fps/multipoint_evaluation.test.cpp
+  - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+  - verify/fps/convolution_mod.test.cpp
+  - verify/fps/polynomial_taylor_shift.test.cpp
+  - verify/fps/fps_algorithms.test.cpp
 documentation_of: math/modint.hpp
 layout: document
 title: ModInt

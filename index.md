@@ -187,6 +187,23 @@ data:
     - icon: ':heavy_check_mark:'
       path: flow/min_cost_flow.hpp
       title: Min Cost Flow
+  - name: fps
+    pages:
+    - icon: ':x:'
+      path: fps/all.hpp
+      title: fps/all.hpp
+    - icon: ':question:'
+      path: fps/convolution.hpp
+      title: Convolution
+    - icon: ':question:'
+      path: fps/formal_power_series.hpp
+      title: Formal Power Series
+    - icon: ':question:'
+      path: fps/linear_recurrence.hpp
+      title: Linear Recurrence and Bostan-Mori
+    - icon: ':question:'
+      path: fps/multipoint_evaluation.hpp
+      title: Multipoint Evaluation and Interpolation
   - name: graph
     pages:
     - icon: ':heavy_check_mark:'
@@ -257,7 +274,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/modint.hpp
       title: ModInt
   - name: monoid
@@ -562,6 +579,35 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/flow/flow_algorithms.test.cpp
       title: verify/flow/flow_algorithms.test.cpp
+  - name: verify/fps
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/convolution_mod.test.cpp
+      title: verify/fps/convolution_mod.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/exp_of_formal_power_series.test.cpp
+      title: verify/fps/exp_of_formal_power_series.test.cpp
+    - icon: ':x:'
+      path: verify/fps/fps_algorithms.test.cpp
+      title: verify/fps/fps_algorithms.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/inv_of_formal_power_series.test.cpp
+      title: verify/fps/inv_of_formal_power_series.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+      title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/multipoint_evaluation.test.cpp
+      title: verify/fps/multipoint_evaluation.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/polynomial_interpolation.test.cpp
+      title: verify/fps/polynomial_interpolation.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/polynomial_taylor_shift.test.cpp
+      title: verify/fps/polynomial_taylor_shift.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/pow_of_formal_power_series.test.cpp
+      title: verify/fps/pow_of_formal_power_series.test.cpp
   - name: verify/graph
     pages:
     - icon: ':heavy_check_mark:'
