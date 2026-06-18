@@ -6,6 +6,17 @@ LIBRARY_ROOT = os.path.abspath(os.path.dirname(__file__))
 INCLUDE_PATHS = ['.', LIBRARY_ROOT]
 visited = set()
 
+def line_marker_name(display_name):
+    """
+    Builds a diagnostic filename that is safe for syntax highlighters.
+
+    Ace misparses a #line filename containing a path separator and can treat the
+    following source line as part of a string. The filename is only used for
+    diagnostics, so keep its path context with a separator that cannot trigger
+    that tokenizer bug.
+    """
+    return re.sub(r'[/\\]+', '::', display_name).replace('"', "'")
+
 def resolve_include(header, current_file_dir):
     """
     Finds the absolute path for a given header file.
@@ -34,6 +45,7 @@ def expand_file(path, display_name=None):
 
     if display_name is None:
         display_name = os.path.relpath(path, LIBRARY_ROOT)
+    marker_name = line_marker_name(display_name)
 
     print(f'// BEGIN: {display_name}')
 
@@ -108,7 +120,7 @@ def expand_file(path, display_name=None):
             continue
         
         if not first_line_emitted:
-            print(f'#line {i + 1} "{display_name}"')
+            print(f'#line {i + 1} "{marker_name}"')
             first_line_emitted = True
             
         m = re.match(r'#\s*include\s*"([^"]+)"', stripped_line)
@@ -117,7 +129,7 @@ def expand_file(path, display_name=None):
             resolved = resolve_include(header, current_file_dir)
             if resolved:
                 expand_file(resolved, header)
-                print(f'#line {i + 2} "{display_name}"')
+                print(f'#line {i + 2} "{marker_name}"')
             else:
                 print(f'// [warning] include not found: {header}')
                 print(line, end='')
