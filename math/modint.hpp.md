@@ -28,6 +28,12 @@ data:
     path: verify/data_structure/lazy_segtree.test.cpp
     title: verify/data_structure/lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/data_structure/rake_compress_link_cut_tree.test.cpp
+    title: verify/data_structure/rake_compress_link_cut_tree.test.cpp
+  - icon: ':x:'
+    path: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
+    title: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/fps/convolution_mod.test.cpp
     title: verify/fps/convolution_mod.test.cpp
   - icon: ':heavy_check_mark:'
@@ -54,9 +60,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/fps/pow_of_formal_power_series.test.cpp
     title: verify/fps/pow_of_formal_power_series.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/modint.hpp\"\n\n\n\n#include <cstdint>\n#include <iostream>\n\
@@ -168,11 +174,13 @@ data:
   - fps/linear_recurrence.hpp
   - fps/convolution.hpp
   timestamp: '2026-06-06 20:32:01+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
   - verify/data_structure/dual_segtree.test.cpp
+  - verify/data_structure/rake_compress_link_cut_tree.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
+  - verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
   - verify/fps/inv_of_formal_power_series.test.cpp
   - verify/fps/pow_of_formal_power_series.test.cpp
   - verify/fps/polynomial_interpolation.test.cpp

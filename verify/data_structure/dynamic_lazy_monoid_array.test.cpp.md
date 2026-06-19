@@ -10,7 +10,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: data_structure/dynamic_lazy_monoid_array.hpp
     title: Dynamic Lazy Monoid Array
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []

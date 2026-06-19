@@ -164,6 +164,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/potentialized_dsu.hpp
       title: Potentialized DSU
+    - icon: ':question:'
+      path: data_structure/rake_compress_link_cut_tree.hpp
+      title: Rake-Compress Link-Cut Tree
     - icon: ':heavy_check_mark:'
       path: data_structure/segtree.hpp
       title: Segment Tree
@@ -274,7 +277,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/modint.hpp
       title: ModInt
   - name: monoid
@@ -569,11 +572,17 @@ data:
       path: verify/data_structure/potentialized_dsu.test.cpp
       title: verify/data_structure/potentialized_dsu.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/data_structure/rake_compress_link_cut_tree.test.cpp
+      title: verify/data_structure/rake_compress_link_cut_tree.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/data_structure/segtree.test.cpp
       title: verify/data_structure/segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/sparse_table.test.cpp
       title: verify/data_structure/sparse_table.test.cpp
+    - icon: ':x:'
+      path: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
+      title: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
   - name: verify/flow
     pages:
     - icon: ':heavy_check_mark:'
