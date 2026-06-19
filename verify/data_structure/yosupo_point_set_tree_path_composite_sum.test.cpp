@@ -91,20 +91,18 @@ int main() {
     for (int i = 0; i < q; i++) {
         int type;
         std::cin >> type;
+        int root;
         if (type == 0) {
             int w;
             mint x;
-            std::cin >> w >> x;
+            std::cin >> w >> x >> root;
             lct.set(vertex_node[w], Vertex{true, x, mint(0)});
-        } else if (type == 1) {
+        } else {
             int e;
             mint y, z;
-            std::cin >> e >> y >> z;
+            std::cin >> e >> y >> z >> root;
             lct.set_edge(edge_id[e], Vertex{false, y, z});
-        } else {
-            int w;
-            std::cin >> w;
-            std::cout << lct.component_prod(vertex_node[w]).s << '\n';
         }
+        std::cout << lct.component_prod(vertex_node[root]).s << '\n';
     }
 }
