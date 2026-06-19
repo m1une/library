@@ -32,6 +32,7 @@
 "verify/data_structure/rake_compress_link_cut_tree.test.cpp": "2026-06-19 15:58:28 +0900",
 "verify/data_structure/segtree.test.cpp": "2026-06-17 21:06:48 +0900",
 "verify/data_structure/sparse_table.test.cpp": "2026-06-17 21:06:48 +0900",
+"verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp": "2026-06-19 16:14:20 +0900",
 "verify/flow/flow_algorithms.test.cpp": "2026-06-17 14:06:24 +0900",
 "verify/fps/convolution_mod.test.cpp": "2026-06-19 07:30:52 +0900",
 "verify/fps/exp_of_formal_power_series.test.cpp": "2026-06-19 07:30:52 +0900",
