@@ -46,7 +46,7 @@ Interpolation requires all points to be distinct.
 ## Complexity
 
 For `n` points, construction, evaluation, and interpolation each take
-$O(M(n) \log n)$ time and $O(n \log n)$ temporary storage.
+$O(n \log^2 n)$ time and $O(n \log n)$ temporary storage.
 
 ## Example
 
