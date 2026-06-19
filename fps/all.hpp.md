@@ -410,8 +410,18 @@ data:
   - verify/fps/fps_algorithms.test.cpp
 documentation_of: fps/all.hpp
 layout: document
-redirect_from:
-- /library/fps/all.hpp
-- /library/fps/all.hpp.html
-title: fps/all.hpp
+title: Formal Power Series All
 ---
+
+## Overview
+
+`fps/all.hpp` includes every formal power series header in this directory.
+
+## Included Headers
+
+| Header | Contents |
+| --- | --- |
+| `fps/convolution.hpp` | Naive, NTT, and CRT-based convolution. |
+| `fps/formal_power_series.hpp` | Formal power series operations and polynomial utilities. |
+| `fps/linear_recurrence.hpp` | Berlekamp-Massey and linear-recurrence term evaluation. |
+| `fps/multipoint_evaluation.hpp` | Multipoint evaluation and polynomial interpolation. |

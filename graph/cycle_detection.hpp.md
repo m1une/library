@@ -211,8 +211,8 @@ first cycle found by the DFS.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `find_directed_cycle` | `template <class T> Cycle find_directed_cycle(const Graph<T>& g)` | Finds a directed cycle. | $O(N+M)$ |
-| `find_undirected_cycle` | `template <class T> Cycle find_undirected_cycle(const Graph<T>& g)` | Finds an undirected cycle. | $O(N+M)$ |
+| `find_directed_cycle` | `template <class T> Cycle find_directed_cycle(const Graph<T>& g)` | Finds a directed cycle. | $O(N + M)$ |
+| `find_undirected_cycle` | `template <class T> Cycle find_undirected_cycle(const Graph<T>& g)` | Finds an undirected cycle. | $O(N + M)$ |
 
 ## Example
 

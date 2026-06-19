@@ -77,7 +77,7 @@ int main() {
 
     // Query the range [1, 4) -> {2, 5, 3}
     auto [min_val, max_val] = seg.prod(1, 4);
-    
+
     std::cout << "Min: " << min_val << ", Max: " << max_val << "\n"; // Output: Min: 2, Max: 5
 
     return 0;

@@ -340,9 +340,9 @@ Choose the cost type to match the algorithm. For example, use
 | `size` | `int size() const` | Returns the number of vertices. | $O(1)$ |
 | `empty` | `bool empty() const` | Returns whether the graph has no vertices. | $O(1)$ |
 | `edge_count` | `int edge_count() const` | Returns the number of logical edges added. | $O(1)$ |
-| `add_vertex` | `int add_vertex()` | Adds one vertex and returns its index. | $O(1)$ amortized |
-| `add_directed_edge` | `int add_directed_edge(int from, int to, T cost = T(1))` | Adds one directed edge and returns its id. | $O(1)$ amortized |
-| `add_edge` | `int add_edge(int u, int v, T cost = T(1))` | Adds one undirected edge and returns its id. | $O(1)$ amortized |
+| `add_vertex` | `int add_vertex()` | Adds one vertex and returns its index. | Amortized $O(1)$ |
+| `add_directed_edge` | `int add_directed_edge(int from, int to, T cost = T(1))` | Adds one directed edge and returns its id. | Amortized $O(1)$ |
+| `add_edge` | `int add_edge(int u, int v, T cost = T(1))` | Adds one undirected edge and returns its id. | Amortized $O(1)$ |
 | `set_edge_alive` | `void set_edge_alive(int id, bool alive)` | Sets the alive flag of every adjacency arc with edge id `id`. | $O(1)$ |
 | `erase_edge` | `void erase_edge(int id)` | Marks edge id `id` as inactive. | $O(1)$ |
 | `revive_edge` | `void revive_edge(int id)` | Marks edge id `id` as active. | $O(1)$ |
@@ -351,8 +351,8 @@ Choose the cost type to match the algorithm. For example, use
 | `operator[]` | `std::vector<Edge<T>>& operator[](int v)` | Returns mutable adjacency list of vertex `v`. | $O(1)$ |
 | `adjacency` | `const std::vector<std::vector<Edge<T>>>& adjacency() const` | Returns immutable adjacency lists. | $O(1)$ |
 | `adjacency` | `std::vector<std::vector<Edge<T>>>& adjacency()` | Returns mutable adjacency lists. | $O(1)$ |
-| `edges` | `std::vector<Edge<T>> edges(bool include_inactive = false) const` | Returns one entry per logical edge id. Inactive edges are skipped unless `include_inactive` is true. | $O(N+M)$ |
-| `reversed` | `Graph<T> reversed() const` | Returns the graph with all arcs reversed. | $O(N+M)$ |
+| `edges` | `std::vector<Edge<T>> edges(bool include_inactive = false) const` | Returns one entry per logical edge id. Inactive edges are skipped unless `include_inactive` is true. | $O(N + M)$ |
+| `reversed` | `Graph<T> reversed() const` | Returns the graph with all arcs reversed. | $O(N + M)$ |
 
 ## Notes
 

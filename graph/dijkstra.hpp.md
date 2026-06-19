@@ -192,8 +192,8 @@ The result contains these members:
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `dijkstra` | `template <class T> DijkstraResult<T> dijkstra(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from one source. | $O((N+M)\log N)$ |
-| `dijkstra` | `template <class T> DijkstraResult<T> dijkstra(const Graph<T>& g, const std::vector<int>& sources, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from multiple sources. | $O((N+M)\log N)$ |
+| `dijkstra` | `template <class T> DijkstraResult<T> dijkstra(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from one source. | $O((N + M) \log N)$ |
+| `dijkstra` | `template <class T> DijkstraResult<T> dijkstra(const Graph<T>& g, const std::vector<int>& sources, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from multiple sources. | $O((N + M) \log N)$ |
 
 ## Example
 

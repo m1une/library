@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: utilities/bigint.hpp
+    title: BigInt
+  - icon: ':heavy_check_mark:'
     path: utilities/int128.hpp
     title: Int128
   - icon: ':heavy_check_mark:'
@@ -21,13 +24,111 @@ data:
     links:
     - https://judge.yosupo.jp/problem/aplusb
   bundledCode: "#line 1 \"verify/utilities/basic_utilities.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <bits/stdc++.h>\nusing\
-    \ namespace std;\n\n#line 1 \"utilities/int128.hpp\"\n\n\n\n#line 10 \"utilities/int128.hpp\"\
-    \n\nnamespace m1une {\nnamespace utilities {\n\nusing i128 = __int128_t;\nusing\
-    \ u128 = __uint128_t;\n\ninline std::string to_string(u128 x) {\n    if (x ==\
-    \ 0) {\n        return \"0\";\n    }\n    std::string s;\n    while (x > 0) {\n\
-    \        s.push_back(static_cast<char>('0' + x % 10));\n        x /= 10;\n   \
-    \ }\n    std::reverse(s.begin(), s.end());\n    return s;\n}\n\ninline std::string\
+    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <iostream>\n#include <limits>\n#include <sstream>\n#include\
+    \ <stdexcept>\n#include <string>\n#include <vector>\n\n#line 1 \"utilities/bigint.hpp\"\
+    \n\n\n\n#line 5 \"utilities/bigint.hpp\"\n#include <iomanip>\n#line 9 \"utilities/bigint.hpp\"\
+    \n#include <tuple>\n#line 11 \"utilities/bigint.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ utilities {\n\nstruct BigInt {\n    static constexpr int BASE = 1000000000;\n\
+    \    static constexpr int BASE_DIGITS = 9;\n\n    std::vector<int> a;\n    int\
+    \ sign;\n\n    BigInt() : sign(1) {}\n\n    BigInt(long long v) {\n        *this\
+    \ = v;\n    }\n\n    BigInt(const std::string& s) {\n        read(s);\n    }\n\
+    \n    BigInt& operator=(long long v) {\n        sign = 1;\n        unsigned long\
+    \ long magnitude = static_cast<unsigned long long>(v);\n        if (v < 0) {\n\
+    \            sign = -1;\n            magnitude = 0 - magnitude;\n        }\n \
+    \       a.clear();\n        for (; magnitude > 0; magnitude /= BASE) {\n     \
+    \       a.push_back(int(magnitude % BASE));\n        }\n        return *this;\n\
+    \    }\n\n    BigInt& operator=(const std::string& s) {\n        read(s);\n  \
+    \      return *this;\n    }\n\n    void trim() {\n        while (!a.empty() &&\
+    \ a.back() == 0) {\n            a.pop_back();\n        }\n        if (a.empty())\
+    \ sign = 1;\n    }\n\n    void read(const std::string& s) {\n        sign = 1;\n\
+    \        a.clear();\n        int pos = 0;\n        while (pos < (int)s.size()\
+    \ && (s[pos] == '-' || s[pos] == '+')) {\n            if (s[pos] == '-') sign\
+    \ = -1;\n            ++pos;\n        }\n        for (int i = int(s.size()) - 1;\
+    \ i >= pos; i -= BASE_DIGITS) {\n            int x = 0;\n            for (int\
+    \ j = std::max(pos, i - BASE_DIGITS + 1); j <= i; ++j) {\n                x =\
+    \ x * 10 + (s[j] - '0');\n            }\n            a.push_back(x);\n       \
+    \ }\n        trim();\n    }\n\n    std::string to_string() const {\n        if\
+    \ (a.empty()) return \"0\";\n        std::string res = \"\";\n        if (sign\
+    \ == -1) res += '-';\n        res += std::to_string(a.back());\n        for (int\
+    \ i = (int)a.size() - 2; i >= 0; --i) {\n            std::string block = std::to_string(a[i]);\n\
+    \            res += std::string(BASE_DIGITS - block.length(), '0') + block;\n\
+    \        }\n        return res;\n    }\n\n    bool is_zero() const {\n       \
+    \ return a.empty() || (a.size() == 1 && a[0] == 0);\n    }\n\n    BigInt operator-()\
+    \ const {\n        BigInt res = *this;\n        if (!is_zero()) res.sign = -sign;\n\
+    \        return res;\n    }\n\n    BigInt abs() const {\n        BigInt res =\
+    \ *this;\n        res.sign = 1;\n        return res;\n    }\n\n    friend bool\
+    \ operator<(const BigInt& x, const BigInt& y) {\n        if (x.sign != y.sign)\
+    \ return x.sign < y.sign;\n        if (x.a.size() != y.a.size()) {\n         \
+    \   return (x.sign == 1) ? (x.a.size() < y.a.size()) : (x.a.size() > y.a.size());\n\
+    \        }\n        for (int i = (int)x.a.size() - 1; i >= 0; --i) {\n       \
+    \     if (x.a[i] != y.a[i]) {\n                return (x.sign == 1) ? (x.a[i]\
+    \ < y.a[i]) : (x.a[i] > y.a[i]);\n            }\n        }\n        return false;\n\
+    \    }\n\n    friend bool operator>(const BigInt& x, const BigInt& y) {\n    \
+    \    return y < x;\n    }\n    friend bool operator<=(const BigInt& x, const BigInt&\
+    \ y) {\n        return !(y < x);\n    }\n    friend bool operator>=(const BigInt&\
+    \ x, const BigInt& y) {\n        return !(x < y);\n    }\n    friend bool operator==(const\
+    \ BigInt& x, const BigInt& y) {\n        return !(x < y) && !(y < x);\n    }\n\
+    \    friend bool operator!=(const BigInt& x, const BigInt& y) {\n        return\
+    \ x < y || y < x;\n    }\n\n    BigInt& operator+=(const BigInt& other) {\n  \
+    \      if (sign != other.sign) return *this -= (-other);\n        for (int i =\
+    \ 0, carry = 0; i < (int)std::max(a.size(), other.a.size()) || carry; ++i) {\n\
+    \            if (i == (int)a.size()) a.push_back(0);\n            a[i] += carry\
+    \ + (i < (int)other.a.size() ? other.a[i] : 0);\n            carry = a[i] >= BASE;\n\
+    \            if (carry) a[i] -= BASE;\n        }\n        return *this;\n    }\n\
+    \n    BigInt& operator-=(const BigInt& other) {\n        if (sign != other.sign)\
+    \ return *this += (-other);\n        if (abs() < other.abs()) {\n            BigInt\
+    \ tmp = other;\n            tmp -= *this;\n            *this = tmp;\n        \
+    \    sign = -sign;\n            return *this;\n        }\n        for (int i =\
+    \ 0, carry = 0; i < (int)other.a.size() || carry; ++i) {\n            a[i] -=\
+    \ carry + (i < (int)other.a.size() ? other.a[i] : 0);\n            carry = a[i]\
+    \ < 0;\n            if (carry) a[i] += BASE;\n        }\n        trim();\n   \
+    \     return *this;\n    }\n\n    BigInt& operator*=(int v) {\n        long long\
+    \ multiplier = v;\n        if (multiplier < 0) {\n            sign = -sign;\n\
+    \            multiplier = -multiplier;\n        }\n        long long carry = 0;\n\
+    \        for (int i = 0; i < (int)a.size() || carry; ++i) {\n            if (i\
+    \ == (int)a.size()) a.push_back(0);\n            const long long cur = a[i] *\
+    \ multiplier + carry;\n            carry = cur / BASE;\n            a[i] = (int)(cur\
+    \ % BASE);\n        }\n        trim();\n        return *this;\n    }\n\n    BigInt&\
+    \ operator*=(const BigInt& other) {\n        if (is_zero() || other.is_zero())\
+    \ return *this = 0;\n        std::vector<int> res(a.size() + other.a.size());\n\
+    \        for (int i = 0; i < (int)a.size(); ++i) {\n            for (int j = 0,\
+    \ carry = 0; j < (int)other.a.size() || carry; ++j) {\n                long long\
+    \ cur = res[i + j] + a[i] * (long long)(j < (int)other.a.size() ? other.a[j] :\
+    \ 0) + carry;\n                carry = (int)(cur / BASE);\n                res[i\
+    \ + j] = (int)(cur % BASE);\n            }\n        }\n        a = res;\n    \
+    \    sign *= other.sign;\n        trim();\n        return *this;\n    }\n\n  \
+    \  friend std::pair<BigInt, BigInt> divmod(const BigInt& a1, const BigInt& b1)\
+    \ {\n        if (b1.is_zero()) {\n            throw std::domain_error(\"BigInt\
+    \ division by zero\");\n        }\n        BigInt a = a1.abs(), b = b1.abs(),\
+    \ q, r;\n        q.a.resize(a.a.size());\n        for (int i = (int)a.a.size()\
+    \ - 1; i >= 0; --i) {\n            r *= BASE;\n            r += a.a[i];\n    \
+    \        int s1 = r.a.size() <= b.a.size() ? 0 : r.a[b.a.size()];\n          \
+    \  int s2 = r.a.size() <= b.a.size() - 1 ? 0 : r.a[b.a.size() - 1];\n        \
+    \    int d = ((long long)BASE * s1 + s2) / b.a.back();\n            r -= b * d;\n\
+    \            while (r < 0) {\n                r += b;\n                --d;\n\
+    \            }\n            q.a[i] = d;\n        }\n        q.sign = a1.sign *\
+    \ b1.sign;\n        r.sign = a1.sign;\n        q.trim();\n        r.trim();\n\
+    \        return {q, r};\n    }\n\n    BigInt& operator/=(const BigInt& other)\
+    \ {\n        return *this = divmod(*this, other).first;\n    }\n    BigInt& operator%=(const\
+    \ BigInt& other) {\n        return *this = divmod(*this, other).second;\n    }\n\
+    \n    friend BigInt operator+(BigInt x, const BigInt& y) {\n        return x +=\
+    \ y;\n    }\n    friend BigInt operator-(BigInt x, const BigInt& y) {\n      \
+    \  return x -= y;\n    }\n    friend BigInt operator*(BigInt x, const BigInt&\
+    \ y) {\n        return x *= y;\n    }\n    friend BigInt operator/(BigInt x, const\
+    \ BigInt& y) {\n        return x /= y;\n    }\n    friend BigInt operator%(BigInt\
+    \ x, const BigInt& y) {\n        return x %= y;\n    }\n\n    friend std::ostream&\
+    \ operator<<(std::ostream& os, const BigInt& b) {\n        return os << b.to_string();\n\
+    \    }\n\n    friend std::istream& operator>>(std::istream& is, BigInt& b) {\n\
+    \        std::string s;\n        if (is >> s) b.read(s);\n        return is;\n\
+    \    }\n};\n\n}  // namespace utilities\n}  // namespace m1une\n\n\n#line 1 \"\
+    utilities/int128.hpp\"\n\n\n\n#line 5 \"utilities/int128.hpp\"\n#include <cctype>\n\
+    #include <istream>\n#include <ostream>\n#line 10 \"utilities/int128.hpp\"\n\n\
+    namespace m1une {\nnamespace utilities {\n\nusing i128 = __int128_t;\nusing u128\
+    \ = __uint128_t;\n\ninline std::string to_string(u128 x) {\n    if (x == 0) {\n\
+    \        return \"0\";\n    }\n    std::string s;\n    while (x > 0) {\n     \
+    \   s.push_back(static_cast<char>('0' + x % 10));\n        x /= 10;\n    }\n \
+    \   std::reverse(s.begin(), s.end());\n    return s;\n}\n\ninline std::string\
     \ to_string(i128 x) {\n    if (x < 0) {\n        u128 magnitude = static_cast<u128>(-(x\
     \ + 1)) + 1;\n        return \"-\" + to_string(magnitude);\n    }\n    return\
     \ to_string(static_cast<u128>(x));\n}\n\ninline u128 parse_uint128(const std::string&\
@@ -52,9 +153,10 @@ data:
     \    }\n    return is;\n}\n\ninline std::istream& operator>>(std::istream& is,\
     \ __int128_t& x) {\n    std::string s;\n    is >> s;\n    if (is) {\n        x\
     \ = m1une::utilities::parse_int128(s);\n    }\n    return is;\n}\n\n\n#line 1\
-    \ \"utilities/random.hpp\"\n\n\n\n#line 8 \"utilities/random.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace utilities {\n\nstruct Random {\n   private:\n    std::mt19937_64\
-    \ _engine;\n\n    static unsigned long long chrono_seed() {\n        return static_cast<unsigned\
+    \ \"utilities/random.hpp\"\n\n\n\n#line 5 \"utilities/random.hpp\"\n#include <chrono>\n\
+    #include <random>\n#line 8 \"utilities/random.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ utilities {\n\nstruct Random {\n   private:\n    std::mt19937_64 _engine;\n\n\
+    \    static unsigned long long chrono_seed() {\n        return static_cast<unsigned\
     \ long long>(\n            std::chrono::steady_clock::now().time_since_epoch().count());\n\
     \    }\n\n   public:\n    Random() : _engine(chrono_seed()) {}\n    explicit Random(unsigned\
     \ long long seed) : _engine(seed) {}\n\n    void seed(unsigned long long value)\
@@ -82,61 +184,84 @@ data:
     \ - _start).count();\n    }\n\n    long long elapsed_ms() const {\n        return\
     \ std::chrono::duration_cast<std::chrono::milliseconds>(clock::now() - _start).count();\n\
     \    }\n\n    bool expired() const {\n        return elapsed() >= _limit;\n  \
-    \  }\n};\n\n}  // namespace utilities\n}  // namespace m1une\n\n\n#line 9 \"verify/utilities/basic_utilities.test.cpp\"\
-    \n\nvoid test_int128() {\n    using m1une::utilities::i128;\n    using m1une::utilities::parse_int128;\n\
-    \    using m1une::utilities::parse_uint128;\n    using m1une::utilities::to_string;\n\
-    \    using m1une::utilities::u128;\n\n    i128 x = parse_int128(\"-170141183460469231731687303715884105\"\
-    );\n    assert(to_string(x) == \"-170141183460469231731687303715884105\");\n\n\
-    \    u128 y = parse_uint128(\"340282366920938463463374607431768211\");\n    assert(to_string(y)\
-    \ == \"340282366920938463463374607431768211\");\n\n    stringstream ss;\n    ss\
-    \ << x << \" \" << y;\n    assert(ss.str() == \"-170141183460469231731687303715884105\
-    \ 340282366920938463463374607431768211\");\n\n    i128 read_x;\n    u128 read_y;\n\
-    \    ss >> read_x >> read_y;\n    assert(read_x == x);\n    assert(read_y == y);\n\
-    }\n\nvoid test_random() {\n    m1une::utilities::Random rng1(42), rng2(42);\n\
-    \    for (int i = 0; i < 10; ++i) {\n        assert(rng1() == rng2());\n    }\n\
-    \n    for (int i = 0; i < 100; ++i) {\n        long long x = rng1.uniform(-5,\
-    \ 5);\n        assert(-5 <= x && x <= 5);\n        double y = rng1.real(-1.0,\
-    \ 2.0);\n        assert(-1.0 <= y && y < 2.0);\n    }\n\n    vector<int> v = {1,\
-    \ 2, 3, 4, 5};\n    rng1.shuffle(v);\n    sort(v.begin(), v.end());\n    assert((v\
-    \ == vector<int>{1, 2, 3, 4, 5}));\n    int picked = rng1.choice(v);\n    assert(1\
-    \ <= picked && picked <= 5);\n}\n\nvoid test_timer() {\n    m1une::utilities::Timer\
-    \ timer(0.0);\n    assert(timer.elapsed() >= 0.0);\n    assert(timer.elapsed_ms()\
-    \ >= 0);\n    assert(timer.expired());\n    timer.set_limit(1000000.0);\n    timer.reset();\n\
-    \    assert(!timer.expired());\n}\n\nint main() {\n    test_int128();\n    test_random();\n\
-    \    test_timer();\n\n    long long a, b;\n    cin >> a >> b;\n    cout << a +\
-    \ b << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <bits/stdc++.h>\n\
-    using namespace std;\n\n#include \"utilities/int128.hpp\"\n#include \"utilities/random.hpp\"\
-    \n#include \"utilities/timer.hpp\"\n\nvoid test_int128() {\n    using m1une::utilities::i128;\n\
+    \  }\n};\n\n}  // namespace utilities\n}  // namespace m1une\n\n\n#line 16 \"\
+    verify/utilities/basic_utilities.test.cpp\"\n\nvoid test_bigint() {\n    using\
+    \ m1une::utilities::BigInt;\n\n    const long long min_long_long = std::numeric_limits<long\
+    \ long>::min();\n    BigInt minimum(min_long_long);\n    assert(minimum.to_string()\
+    \ == std::to_string(min_long_long));\n\n    BigInt scaled = 1;\n    scaled *=\
+    \ std::numeric_limits<int>::min();\n    assert(scaled.to_string() == std::to_string(std::numeric_limits<int>::min()));\n\
+    \n    BigInt positive = -1;\n    positive *= std::numeric_limits<int>::min();\n\
+    \    assert(positive.to_string() == \"2147483648\");\n\n    BigInt large(\"12345678901234567890\"\
+    );\n    assert(large.to_string() == \"12345678901234567890\");\n\n    bool rejected_division_by_zero\
+    \ = false;\n    try {\n        (void)(large / BigInt(0));\n    } catch (const\
+    \ std::domain_error&) {\n        rejected_division_by_zero = true;\n    }\n  \
+    \  assert(rejected_division_by_zero);\n}\n\nvoid test_int128() {\n    using m1une::utilities::i128;\n\
     \    using m1une::utilities::parse_int128;\n    using m1une::utilities::parse_uint128;\n\
     \    using m1une::utilities::to_string;\n    using m1une::utilities::u128;\n\n\
     \    i128 x = parse_int128(\"-170141183460469231731687303715884105\");\n    assert(to_string(x)\
     \ == \"-170141183460469231731687303715884105\");\n\n    u128 y = parse_uint128(\"\
     340282366920938463463374607431768211\");\n    assert(to_string(y) == \"340282366920938463463374607431768211\"\
-    );\n\n    stringstream ss;\n    ss << x << \" \" << y;\n    assert(ss.str() ==\
-    \ \"-170141183460469231731687303715884105 340282366920938463463374607431768211\"\
+    );\n\n    std::stringstream ss;\n    ss << x << \" \" << y;\n    assert(ss.str()\
+    \ == \"-170141183460469231731687303715884105 340282366920938463463374607431768211\"\
     );\n\n    i128 read_x;\n    u128 read_y;\n    ss >> read_x >> read_y;\n    assert(read_x\
     \ == x);\n    assert(read_y == y);\n}\n\nvoid test_random() {\n    m1une::utilities::Random\
     \ rng1(42), rng2(42);\n    for (int i = 0; i < 10; ++i) {\n        assert(rng1()\
     \ == rng2());\n    }\n\n    for (int i = 0; i < 100; ++i) {\n        long long\
     \ x = rng1.uniform(-5, 5);\n        assert(-5 <= x && x <= 5);\n        double\
     \ y = rng1.real(-1.0, 2.0);\n        assert(-1.0 <= y && y < 2.0);\n    }\n\n\
-    \    vector<int> v = {1, 2, 3, 4, 5};\n    rng1.shuffle(v);\n    sort(v.begin(),\
-    \ v.end());\n    assert((v == vector<int>{1, 2, 3, 4, 5}));\n    int picked =\
-    \ rng1.choice(v);\n    assert(1 <= picked && picked <= 5);\n}\n\nvoid test_timer()\
+    \    std::vector<int> v = {1, 2, 3, 4, 5};\n    rng1.shuffle(v);\n    std::sort(v.begin(),\
+    \ v.end());\n    assert((v == std::vector<int>{1, 2, 3, 4, 5}));\n    int picked\
+    \ = rng1.choice(v);\n    assert(1 <= picked && picked <= 5);\n}\n\nvoid test_timer()\
     \ {\n    m1une::utilities::Timer timer(0.0);\n    assert(timer.elapsed() >= 0.0);\n\
     \    assert(timer.elapsed_ms() >= 0);\n    assert(timer.expired());\n    timer.set_limit(1000000.0);\n\
-    \    timer.reset();\n    assert(!timer.expired());\n}\n\nint main() {\n    test_int128();\n\
-    \    test_random();\n    test_timer();\n\n    long long a, b;\n    cin >> a >>\
-    \ b;\n    cout << a + b << '\\n';\n}\n"
+    \    timer.reset();\n    assert(!timer.expired());\n}\n\nint main() {\n    test_bigint();\n\
+    \    test_int128();\n    test_random();\n    test_timer();\n\n    long long a,\
+    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <iostream>\n#include <limits>\n#include <sstream>\n\
+    #include <stdexcept>\n#include <string>\n#include <vector>\n\n#include \"utilities/bigint.hpp\"\
+    \n#include \"utilities/int128.hpp\"\n#include \"utilities/random.hpp\"\n#include\
+    \ \"utilities/timer.hpp\"\n\nvoid test_bigint() {\n    using m1une::utilities::BigInt;\n\
+    \n    const long long min_long_long = std::numeric_limits<long long>::min();\n\
+    \    BigInt minimum(min_long_long);\n    assert(minimum.to_string() == std::to_string(min_long_long));\n\
+    \n    BigInt scaled = 1;\n    scaled *= std::numeric_limits<int>::min();\n   \
+    \ assert(scaled.to_string() == std::to_string(std::numeric_limits<int>::min()));\n\
+    \n    BigInt positive = -1;\n    positive *= std::numeric_limits<int>::min();\n\
+    \    assert(positive.to_string() == \"2147483648\");\n\n    BigInt large(\"12345678901234567890\"\
+    );\n    assert(large.to_string() == \"12345678901234567890\");\n\n    bool rejected_division_by_zero\
+    \ = false;\n    try {\n        (void)(large / BigInt(0));\n    } catch (const\
+    \ std::domain_error&) {\n        rejected_division_by_zero = true;\n    }\n  \
+    \  assert(rejected_division_by_zero);\n}\n\nvoid test_int128() {\n    using m1une::utilities::i128;\n\
+    \    using m1une::utilities::parse_int128;\n    using m1une::utilities::parse_uint128;\n\
+    \    using m1une::utilities::to_string;\n    using m1une::utilities::u128;\n\n\
+    \    i128 x = parse_int128(\"-170141183460469231731687303715884105\");\n    assert(to_string(x)\
+    \ == \"-170141183460469231731687303715884105\");\n\n    u128 y = parse_uint128(\"\
+    340282366920938463463374607431768211\");\n    assert(to_string(y) == \"340282366920938463463374607431768211\"\
+    );\n\n    std::stringstream ss;\n    ss << x << \" \" << y;\n    assert(ss.str()\
+    \ == \"-170141183460469231731687303715884105 340282366920938463463374607431768211\"\
+    );\n\n    i128 read_x;\n    u128 read_y;\n    ss >> read_x >> read_y;\n    assert(read_x\
+    \ == x);\n    assert(read_y == y);\n}\n\nvoid test_random() {\n    m1une::utilities::Random\
+    \ rng1(42), rng2(42);\n    for (int i = 0; i < 10; ++i) {\n        assert(rng1()\
+    \ == rng2());\n    }\n\n    for (int i = 0; i < 100; ++i) {\n        long long\
+    \ x = rng1.uniform(-5, 5);\n        assert(-5 <= x && x <= 5);\n        double\
+    \ y = rng1.real(-1.0, 2.0);\n        assert(-1.0 <= y && y < 2.0);\n    }\n\n\
+    \    std::vector<int> v = {1, 2, 3, 4, 5};\n    rng1.shuffle(v);\n    std::sort(v.begin(),\
+    \ v.end());\n    assert((v == std::vector<int>{1, 2, 3, 4, 5}));\n    int picked\
+    \ = rng1.choice(v);\n    assert(1 <= picked && picked <= 5);\n}\n\nvoid test_timer()\
+    \ {\n    m1une::utilities::Timer timer(0.0);\n    assert(timer.elapsed() >= 0.0);\n\
+    \    assert(timer.elapsed_ms() >= 0);\n    assert(timer.expired());\n    timer.set_limit(1000000.0);\n\
+    \    timer.reset();\n    assert(!timer.expired());\n}\n\nint main() {\n    test_bigint();\n\
+    \    test_int128();\n    test_random();\n    test_timer();\n\n    long long a,\
+    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
+  - utilities/bigint.hpp
   - utilities/int128.hpp
   - utilities/random.hpp
   - utilities/timer.hpp
   isVerificationFile: true
   path: verify/utilities/basic_utilities.test.cpp
   requiredBy: []
-  timestamp: '2026-06-15 23:35:14+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/utilities/basic_utilities.test.cpp

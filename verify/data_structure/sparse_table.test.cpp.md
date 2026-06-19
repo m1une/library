@@ -96,22 +96,22 @@ data:
     \ T& b) {\n        return std::min(a, b);\n    }\n};\n\n}  // namespace monoid\n\
     }  // namespace m1une\n\n\n#line 5 \"verify/data_structure/sparse_table.test.cpp\"\
     \n\n#include <iostream>\n#line 8 \"verify/data_structure/sparse_table.test.cpp\"\
-    \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
+    \n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     }\n\nint main() {\n    fast_io();\n\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
     \    std::vector<long long> A(N);\n    for (int i = 0; i < N; ++i) {\n       \
     \ std::cin >> A[i];\n    }\n\n    m1une::data_structure::SparseTable<m1une::monoid::Min<long\
     \ long>> st(A);\n\n    for (int q = 0; q < Q; ++q) {\n        int l, r;\n    \
-    \    std::cin >> l >> r;\n        \n        std::cout << st.prod(l, r) << \"\\\
-    n\";\n    }\n\n    return 0;\n}\n"
+    \    std::cin >> l >> r;\n\n        std::cout << st.prod(l, r) << \"\\n\";\n \
+    \   }\n\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/staticrmq\"\n\n#include\
     \ \"data_structure/sparse_table.hpp\"\n#include \"monoid/min.hpp\"\n\n#include\
     \ <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n\n    int N, Q;\n\
+    \    std::cin.tie(nullptr);\n}\n\nint main() {\n    fast_io();\n\n    int N, Q;\n\
     \    std::cin >> N >> Q;\n\n    std::vector<long long> A(N);\n    for (int i =\
     \ 0; i < N; ++i) {\n        std::cin >> A[i];\n    }\n\n    m1une::data_structure::SparseTable<m1une::monoid::Min<long\
     \ long>> st(A);\n\n    for (int q = 0; q < Q; ++q) {\n        int l, r;\n    \
-    \    std::cin >> l >> r;\n        \n        std::cout << st.prod(l, r) << \"\\\
-    n\";\n    }\n\n    return 0;\n}\n"
+    \    std::cin >> l >> r;\n\n        std::cout << st.prod(l, r) << \"\\n\";\n \
+    \   }\n\n    return 0;\n}\n"
   dependsOn:
   - data_structure/sparse_table.hpp
   - monoid/concept.hpp
@@ -119,7 +119,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/sparse_table.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 21:06:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/sparse_table.test.cpp

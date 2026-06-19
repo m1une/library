@@ -80,12 +80,12 @@ using AM = m1une::acted_monoid::RangeFlipRangeSum<long long>;
 int main() {
     std::vector<long long> A = {1, 0, 1, 0, 0};
     int N = A.size();
-    
+
     std::vector<AM::value_type> init_nodes(N);
-    for(int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i) {
         init_nodes[i] = AM::make(A[i]);
     }
-    
+
     m1une::data_structure::LazySegtree<AM> seg(init_nodes);
 
     // Sum of [0, 5) is 2 (two 1s)

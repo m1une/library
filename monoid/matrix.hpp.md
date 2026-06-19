@@ -65,7 +65,7 @@ using Mat = m1une::monoid::Matrix<long long, 2>;
 int main() {
     int N = 3;
     std::vector<Mat::value_type> init_data(N);
-    
+
     // Initialize matrices (e.g., Fibonacci transition matrices)
     for (int i = 0; i < N; ++i) {
         init_data[i][0] = {1, 1};
@@ -75,7 +75,7 @@ int main() {
     m1une::data_structure::Segtree<Mat> seg(init_data);
 
     auto res = seg.prod(0, N);
-    
+
     std::cout << res[0][0] << " " << res[0][1] << "\n";
     std::cout << res[1][0] << " " << res[1][1] << "\n";
 

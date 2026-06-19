@@ -41,7 +41,7 @@ data:
     #include <limits>
 
 
-    #include "arg_min.hpp"
+    #include "monoid/arg_min.hpp"
 
 
     namespace m1une {
@@ -71,7 +71,7 @@ data:
   isVerificationFile: false
   path: monoid/arg_max.hpp
   requiredBy: []
-  timestamp: '2026-06-15 02:20:43+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/arg_max.hpp
@@ -100,7 +100,7 @@ int main() {
     m1une::data_structure::Segtree<ArgMaxM> seg(A);
 
     auto res = seg.prod(0, A.size());
-    
+
     std::cout << "Max Value: " << res.value << "\n"; // Output: 8
     std::cout << "Order: " << res.ord << "\n";       // Output: 1 (Order 1 is chosen over order 3)
 

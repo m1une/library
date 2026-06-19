@@ -178,8 +178,8 @@ The result contains these members:
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `bfs` | `template <class T> BfsResult bfs(const Graph<T>& g, int s)` | Runs BFS from one source. | $O(N+M)$ |
-| `bfs` | `template <class T> BfsResult bfs(const Graph<T>& g, const std::vector<int>& sources)` | Runs multi-source BFS. | $O(N+M)$ |
+| `bfs` | `template <class T> BfsResult bfs(const Graph<T>& g, int s)` | Runs BFS from one source. | $O(N + M)$ |
+| `bfs` | `template <class T> BfsResult bfs(const Graph<T>& g, const std::vector<int>& sources)` | Runs multi-source BFS. | $O(N + M)$ |
 
 ## Example
 

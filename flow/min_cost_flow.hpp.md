@@ -220,13 +220,13 @@ then adds one entry after each augmentation.
 | Constructor | `explicit MinCostFlow(int n)` | Creates a graph with `n` vertices. | $O(N)$ |
 | `size` | `int size() const` | Returns the number of vertices. | $O(1)$ |
 | `edge_count` | `int edge_count() const` | Returns the number of original edges. | $O(1)$ |
-| `add_edge` | `int add_edge(int from, int to, Cap cap, Cost cost)` | Adds a directed edge and returns its edge id. | $O(1)$ amortized |
+| `add_edge` | `int add_edge(int from, int to, Cap cap, Cost cost)` | Adds a directed edge and returns its edge id. | Amortized $O(1)$ |
 | `get_edge` | `Edge get_edge(int i) const` | Returns the current state of original edge `i`. | $O(1)$ |
 | `edges` | `std::vector<Edge> edges() const` | Returns all original edges with current flow. | $O(M)$ |
-| `flow` | `std::pair<Cap, Cost> flow(int s, int t)` | Sends as much flow as possible with minimum cost. | $O(NM + FM\log N)$ |
-| `flow` | `std::pair<Cap, Cost> flow(int s, int t, Cap flow_limit)` | Sends at most `flow_limit` flow with minimum cost. | $O(NM + FM\log N)$ |
-| `slope` | `std::vector<std::pair<Cap, Cost>> slope(int s, int t)` | Returns flow-cost breakpoints while sending as much as possible. | $O(NM + FM\log N)$ |
-| `slope` | `std::vector<std::pair<Cap, Cost>> slope(int s, int t, Cap flow_limit)` | Returns flow-cost breakpoints up to `flow_limit`. | $O(NM + FM\log N)$ |
+| `flow` | `std::pair<Cap, Cost> flow(int s, int t)` | Sends as much flow as possible with minimum cost. | $O(N \cdot M + F \cdot M \log N)$ |
+| `flow` | `std::pair<Cap, Cost> flow(int s, int t, Cap flow_limit)` | Sends at most `flow_limit` flow with minimum cost. | $O(N \cdot M + F \cdot M \log N)$ |
+| `slope` | `std::vector<std::pair<Cap, Cost>> slope(int s, int t)` | Returns flow-cost breakpoints while sending as much as possible. | $O(N \cdot M + F \cdot M \log N)$ |
+| `slope` | `std::vector<std::pair<Cap, Cost>> slope(int s, int t, Cap flow_limit)` | Returns flow-cost breakpoints up to `flow_limit`. | $O(N \cdot M + F \cdot M \log N)$ |
 
 Here, `F` is the number of augmentations. The first term initializes potentials
 with Bellman-Ford.

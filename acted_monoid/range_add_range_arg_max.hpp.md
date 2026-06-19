@@ -60,9 +60,11 @@ title: Range Add Range ArgMax
 
 ## Overview
 
-An Acted Monoid to support Range Addition and queries for the Maximum Value and its relative order (ArgMax).
+An acted monoid for range addition and range maximum queries with the position
+of the selected maximum.
 
 ### Tie-breaking
+
 If there are multiple maximum values in the queried range, the `op` function returns the earliest order.
 
 ## Example

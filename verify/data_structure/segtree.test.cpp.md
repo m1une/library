@@ -26,24 +26,24 @@ data:
   bundledCode: "#line 1 \"verify/data_structure/segtree.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\n#line 1 \"data_structure/segtree.hpp\"\
     \n\n\n\n#include <cassert>\n#include <concepts>\n#include <utility>\n#include\
-    \ <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
-    \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
-    \ the requirements of a Monoid.\n// A Monoid must have a `value_type`, an identity\
-    \ element `id()`, and an associative binary operation `op()`.\ntemplate <typename\
-    \ M>\nconcept IsMonoid = requires(typename M::value_type a, typename M::value_type\
-    \ b) {\n    // 1. Must define `value_type`\n    typename M::value_type;\n\n  \
-    \  // 2. Must have a static method `id()` returning `value_type`\n    { M::id()\
-    \ } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
-    \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
-    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
-    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 1 \"math/bit_ceil.hpp\"\
-    \n\n\n\nnamespace m1une {\nnamespace math {\n\ntemplate <typename T>\nconstexpr\
-    \ T bit_ceil(T n) {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n)\
-    \ x <<= 1;\n    return x;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 11 \"data_structure/segtree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
+    \ <vector>\n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace\
+    \ math {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1)\
+    \ return 1;\n    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n} \
+    \ // namespace math\n}  // namespace m1une\n\n\n#line 1 \"monoid/concept.hpp\"\
+    \n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid\
+    \ {\n\n// Concept to check if a type satisfies the requirements of a Monoid.\n\
+    // A Monoid must have a `value_type`, an identity element `id()`, and an associative\
+    \ binary operation `op()`.\ntemplate <typename M>\nconcept IsMonoid = requires(typename\
+    \ M::value_type a, typename M::value_type b) {\n    // 1. Must define `value_type`\n\
+    \    typename M::value_type;\n\n    // 2. Must have a static method `id()` returning\
+    \ `value_type`\n    { M::id() } -> std::same_as<typename M::value_type>;\n\n \
+    \   // 3. Must have a static method `op(a, b)` returning `value_type`\n    { M::op(a,\
+    \ b) } -> std::same_as<typename M::value_type>;\n};\n\n// Concept for commutative\
+    \ group monoids.\n// A type satisfying this concept must also obey commutativity\
+    \ and inverse laws.\ntemplate <typename M>\nconcept IsCommutativeGroup = IsMonoid<M>\
+    \ && requires(typename M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename\
+    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
+    \ 11 \"data_structure/segtree.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
     \ {\n\n// A generic Segment Tree utilizing C++20 Concepts for type safety.\n//\
     \ It requires a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\ntemplate\
     \ <m1une::monoid::IsMonoid Monoid>\nstruct Segtree {\n    using T = typename Monoid::value_type;\n\
@@ -130,7 +130,7 @@ data:
     \   static constexpr T inv(const T& x) {\n        return -x;\n    }\n};\n\n} \
     \ // namespace monoid\n}  // namespace m1une\n\n\n#line 6 \"verify/data_structure/segtree.test.cpp\"\
     \n#include <iostream>\n#line 8 \"verify/data_structure/segtree.test.cpp\"\n\n\
-    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
+    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     }\n\nint main() {\n    fast_io();\n    int n, q;\n    std::cin >> n >> q;\n\n\
     \    std::vector<long long> a(n);\n    for (int i = 0; i < n; i++) {\n       \
     \ std::cin >> a[i];\n    }\n\n    m1une::data_structure::Segtree<m1une::monoid::Add<long\
@@ -145,8 +145,8 @@ data:
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\
     \n#include \"data_structure/segtree.hpp\"\n#include \"monoid/add.hpp\"\n#include\
     \ <cassert>\n#include <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(NULL);\n}\n\nint main() {\n    fast_io();\n    int n, q;\n \
-    \   std::cin >> n >> q;\n\n    std::vector<long long> a(n);\n    for (int i =\
+    \    std::cin.tie(nullptr);\n}\n\nint main() {\n    fast_io();\n    int n, q;\n\
+    \    std::cin >> n >> q;\n\n    std::vector<long long> a(n);\n    for (int i =\
     \ 0; i < n; i++) {\n        std::cin >> a[i];\n    }\n\n    m1une::data_structure::Segtree<m1une::monoid::Add<long\
     \ long>> seg(a);\n    assert(seg.size() == n);\n    assert(seg.empty() == (n ==\
     \ 0));\n    assert(seg.to_vector() == a);\n    for (int i = 0; i < n; i++) assert(seg[i]\
@@ -158,13 +158,13 @@ data:
     \ 0;\n}\n"
   dependsOn:
   - data_structure/segtree.hpp
-  - monoid/concept.hpp
   - math/bit_ceil.hpp
+  - monoid/concept.hpp
   - monoid/add.hpp
   isVerificationFile: true
   path: verify/data_structure/segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 21:06:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/segtree.test.cpp

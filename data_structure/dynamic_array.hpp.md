@@ -458,7 +458,7 @@ In this document:
 | `T get(int pos) const` | Returns a copy of the element at `pos`. | $O(\log N)$ |
 | `void set(int pos, T val)` | Overwrites the element at index `pos` with `val`. | $O(\log N)$ |
 | `void reverse(int l, int r)` | Reverses the half-open range `[l, r)` lazily. | $O(\log N)$ |
-| `void reverse()` | Reverses the entire array lazily. | $O(1)$ amortized |
+| `void reverse()` | Reverses the entire array lazily. | Amortized $O(1)$ |
 | `void rotate(int l, int m, int r)` | Moves `[m, r)` before `[l, m)`, like `std::rotate`. | $O(\log N)$ |
 | `std::vector<T> to_vector() const` | Dumps the entire array to `std::vector`. | $O(N)$ |
 | `std::vector<T> to_vector(int l, int r) const` | Dumps `[l, r)` to `std::vector`, where `K = r - l`. | $O(K + \log N)$ |

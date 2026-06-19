@@ -183,7 +183,7 @@ has at least two DFS children.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `lowlink` | `template <class T> LowLinkResult<T> lowlink(const Graph<T>& g)` | Computes `ord`, `low`, `articulation`, `bridges`, and `bridge_ids`. | $O(N+M)$ |
+| `lowlink` | `template <class T> LowLinkResult<T> lowlink(const Graph<T>& g)` | Computes `ord`, `low`, `articulation`, `bridges`, and `bridge_ids`. | $O(N + M)$ |
 
 ## Example
 

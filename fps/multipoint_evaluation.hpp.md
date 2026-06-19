@@ -13,7 +13,7 @@ data:
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
     path: fps/all.hpp
-    title: fps/all.hpp
+    title: Formal Power Series All
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/fps/fps_algorithms.test.cpp
@@ -458,7 +458,7 @@ Interpolation requires all points to be distinct.
 ## Complexity
 
 For `n` points, construction, evaluation, and interpolation each take
-$\mathcal{O}(M(n)\log n)$ time and $\mathcal{O}(n\log n)$ temporary storage.
+$O(M(n) \log n)$ time and $O(n \log n)$ temporary storage.
 
 ## Example
 

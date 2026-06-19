@@ -74,7 +74,7 @@ title: Min-Plus Matrix Monoid
 
 ## Overview
 
-A monoid for range matrix multiplication over the Min-Plus (Tropical) semiring. 
+A monoid for range matrix multiplication over the Min-Plus (Tropical) semiring.
 In this algebra, the standard addition operation is replaced by `std::min`, and the standard multiplication operation is replaced by regular addition `+`.
 
 This is highly effective for solving **Dynamic DP** problems (where state transitions involve taking the minimum of sums) or finding shortest paths over dynamic edge weights on a Segment Tree.
@@ -95,7 +95,7 @@ using MinMat = m1une::monoid::MinPlusMatrix<long long, 2>;
 int main() {
     int N = 3;
     std::vector<MinMat::value_type> init_data(N);
-    
+
     // Initialize state transitions
     for (int i = 0; i < N; ++i) {
         auto mat = MinMat::make_inf();
@@ -110,7 +110,7 @@ int main() {
 
     // Get the transition matrix for the range [0, 3)
     auto res = seg.prod(0, N);
-    
+
     // Output the shortest path cost from initial state j to final state i
     std::cout << "Cost 0 -> 0: " << res[0][0] << "\n";
     std::cout << "Cost 1 -> 0: " << res[0][1] << "\n";

@@ -57,7 +57,7 @@ title: Binary Inversion Monoid
 
 ## Overview
 
-A monoid for counting the number of `0`s, `1`s, and inversions (the number of pairs where `1` appears before `0`) in a binary array. 
+A monoid for counting the number of `0`s, `1`s, and inversions (the number of pairs where `1` appears before `0`) in a binary array.
 
 ## Initialization
 
@@ -86,7 +86,7 @@ int main() {
     m1une::data_structure::Segtree<BinInv> seg(init_data);
 
     auto res = seg.prod(0, N);
-    
+
     std::cout << "Zeros: " << res.zeros << "\n";
     std::cout << "Ones: " << res.ones << "\n";
     std::cout << "Inversions: " << res.inversions << "\n"; // Output: 5

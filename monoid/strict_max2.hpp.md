@@ -46,7 +46,7 @@ data:
     #include <limits>
 
 
-    #include "strict_min2.hpp"
+    #include "monoid/strict_min2.hpp"
 
 
     namespace m1une {
@@ -76,7 +76,7 @@ data:
   isVerificationFile: false
   path: monoid/strict_max2.hpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/strict_max2.hpp
@@ -112,7 +112,7 @@ int main() {
     m1une::data_structure::Segtree<StrictMax2M> seg(init_data);
 
     auto res = seg.prod(2, 6); // Range: [5, 3, 8, 6]
-    
+
     std::cout << "1st Max: " << res.opt1 << "\n"; // Output: 8
     std::cout << "2nd Max: " << res.opt2 << "\n"; // Output: 6
 

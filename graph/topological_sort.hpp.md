@@ -169,8 +169,8 @@ decides which one appears first.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `topological_sort` | `template <class T> std::optional<std::vector<int>> topological_sort(const Graph<T>& g)` | Returns an ordering, or `std::nullopt` if a cycle exists. | $O(N+M)$ |
-| `is_dag` | `template <class T> bool is_dag(const Graph<T>& g)` | Returns whether the graph is acyclic. | $O(N+M)$ |
+| `topological_sort` | `template <class T> std::optional<std::vector<int>> topological_sort(const Graph<T>& g)` | Returns an ordering, or `std::nullopt` if a cycle exists. | $O(N + M)$ |
+| `is_dag` | `template <class T> bool is_dag(const Graph<T>& g)` | Returns whether the graph is acyclic. | $O(N + M)$ |
 
 ## Example
 

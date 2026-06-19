@@ -193,7 +193,7 @@ the decomposition is weak connectivity; reachability direction is ignored.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `connected_components` | `template <class T> ConnectedComponents connected_components(const Graph<T>& g)` | Returns component ids and groups. | $O(N+M)$ |
+| `connected_components` | `template <class T> ConnectedComponents connected_components(const Graph<T>& g)` | Returns component ids and groups. | $O(N + M)$ |
 
 ## Example
 

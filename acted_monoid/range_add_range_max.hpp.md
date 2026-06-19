@@ -51,7 +51,7 @@ title: Range Add Range Max
 
 An Acted Monoid representing Range Addition operations and Range Maximum queries.
 
-It uses `std::numeric_limits<T>::lowest()` as the default identity element for the Value Monoid to correctly handle negative maximum values. 
+It uses `std::numeric_limits<T>::lowest()` as the default identity element for the Value Monoid to correctly handle negative maximum values.
 
 ## Example
 

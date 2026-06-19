@@ -536,14 +536,14 @@ Compared with `StaticTopTree`, it stores each path cluster in both directions:
 
 This is the extra information needed when a query asks for the DP value with an
 arbitrary vertex `v` as the root. After removing `v`, the remaining connected
-components can be represented by `O(log N)` static-top-tree clusters. Some of
+components can be represented by $O(\log N)$ static-top-tree clusters. Some of
 those clusters are viewed in the original rooted direction, and some are viewed
 in the reverse direction. Therefore forward and backward transitions are kept
 separate.
 
 This header maintains the decomposition and the cached directional cluster
 values under vertex-value and edge-cost updates. It also exposes the
-`O(log N)` rerooting walk around a query vertex with
+$O(\log N)$ rerooting walk around a query vertex with
 `for_each_rerooting_step(v, f)` and `rerooting_steps(v)`.
 
 There is deliberately no universal `prod(v)` member. For many static-top-tree
@@ -750,36 +750,36 @@ oriented in the direction the rerooting walk is moving.
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `RerootingStaticTopTree(...)` | Builds the expression tree. | `O(N log N)` callback work |
-| `int size()` | Number of original vertices. | `O(1)` |
-| `bool empty()` | Whether the original tree is empty. | `O(1)` |
-| `int root()` | Root used to orient the static decomposition. | `O(1)` |
-| `int root_node()` | Expression-tree node id of the whole-tree path cluster. | `O(1)` |
-| `int node_count()` | Number of expression-tree nodes. | `O(1)` |
-| `int height()` | Height of the expression tree. Updates are proportional to this. | `O(1)` |
-| `const std::vector<Node>& nodes()` | All expression-tree nodes. | `O(1)` |
-| `const Node& node(id)` | One expression-tree node. | `O(1)` |
-| `int parent_node(id)` | Parent expression node, or `-1` at the root. | `O(1)` |
-| `int vertex_node(v)` | The `AddVertex` node corresponding to original vertex `v`. | `O(1)` |
-| `int local_point_node(v)` | Rake node stored inside `AddVertex(v)`, or `-1`. | `O(1)` |
-| `const Point& local_point(v)` | Raked non-heavy child contribution stored at `v`, or `point_id()`. | `O(1)` |
-| `const Vertex& get(v)` | Stored value of original vertex `v`. | `O(1)` |
-| `void set(v, value)` | Update one vertex value and recompute ancestors. | `O(height)` |
-| `void set_edge_cost(edge_id, cost)` | Update one edge cost and recompute ancestors. | `O(height)` |
-| `const Path& path_down(node_id)` | Downward path value of a path-output node. | `O(1)` |
-| `const Path& path_up(node_id)` | Upward path value of a path-output node. | `O(1)` |
-| `const Point& point(node_id)` | Point value of a point-output node. | `O(1)` |
-| `const Path& all_prod_down()` | Whole-tree downward path value. | `O(1)` |
-| `const Path& all_prod_up()` | Whole-tree upward path value. | `O(1)` |
-| `const Point& point_id()` | Identity point value for `rake`. | `O(1)` |
-| `for_each_rerooting_step(v, f)` | Visits rerooting steps from `vertex_node(v)` to `root_node()`. | `O(height)` |
-| `std::vector<RerootingStep> rerooting_steps(v)` | Returns the same rerooting steps as a vector. | `O(height)` |
-| `fold_rerooting(v, folder)` | Runs the rerooting walk and calls the folder methods above. | `O(height)` |
+| `RerootingStaticTopTree(...)` | Builds the expression tree. | $O(N \log N)$ callback work |
+| `int size()` | Number of original vertices. | $O(1)$ |
+| `bool empty()` | Whether the original tree is empty. | $O(1)$ |
+| `int root()` | Root used to orient the static decomposition. | $O(1)$ |
+| `int root_node()` | Expression-tree node id of the whole-tree path cluster. | $O(1)$ |
+| `int node_count()` | Number of expression-tree nodes. | $O(1)$ |
+| `int height()` | Height of the expression tree. Updates are proportional to this. | $O(1)$ |
+| `const std::vector<Node>& nodes()` | All expression-tree nodes. | $O(1)$ |
+| `const Node& node(id)` | One expression-tree node. | $O(1)$ |
+| `int parent_node(id)` | Parent expression node, or `-1` at the root. | $O(1)$ |
+| `int vertex_node(v)` | The `AddVertex` node corresponding to original vertex `v`. | $O(1)$ |
+| `int local_point_node(v)` | Rake node stored inside `AddVertex(v)`, or `-1`. | $O(1)$ |
+| `const Point& local_point(v)` | Raked non-heavy child contribution stored at `v`, or `point_id()`. | $O(1)$ |
+| `const Vertex& get(v)` | Stored value of original vertex `v`. | $O(1)$ |
+| `void set(v, value)` | Update one vertex value and recompute ancestors. | $O(\text{height})$ |
+| `void set_edge_cost(edge_id, cost)` | Update one edge cost and recompute ancestors. | $O(\text{height})$ |
+| `const Path& path_down(node_id)` | Downward path value of a path-output node. | $O(1)$ |
+| `const Path& path_up(node_id)` | Upward path value of a path-output node. | $O(1)$ |
+| `const Point& point(node_id)` | Point value of a point-output node. | $O(1)$ |
+| `const Path& all_prod_down()` | Whole-tree downward path value. | $O(1)$ |
+| `const Path& all_prod_up()` | Whole-tree upward path value. | $O(1)$ |
+| `const Point& point_id()` | Identity point value for `rake`. | $O(1)$ |
+| `for_each_rerooting_step(v, f)` | Visits rerooting steps from `vertex_node(v)` to `root_node()`. | $O(\text{height})$ |
+| `std::vector<RerootingStep> rerooting_steps(v)` | Returns the same rerooting steps as a vector. | $O(\text{height})$ |
+| `fold_rerooting(v, folder)` | Runs the rerooting walk and calls the folder methods above. | $O(\text{height})$ |
 | `compress_down(...)`, `compress_up(...)` | Public wrappers around the directional path callbacks. | Callback cost |
 | `rake(...)` | Public wrapper around the point merge callback. | Callback cost |
 | `add_edge_down(...)`, `add_edge_up(...)` | Public wrappers around the directional edge callbacks. | Callback cost |
 | `add_vertex(...)` | Public wrapper around the vertex callback. | Callback cost |
-| `static reverse_edge(edge)` | Returns a copy of `edge` with `from` and `to` swapped. | `O(1)` |
+| `static reverse_edge(edge)` | Returns a copy of `edge` with `from` and `to` swapped. | $O(1)$ |
 
 Calling `path_down` or `path_up` on a point-output node, or `point` on a
 path-output node, is a logic error and is checked by `assert`.
@@ -797,7 +797,7 @@ For a rerooting-style static top tree solution:
    edge direction.
 5. For a query vertex `v`, initialize the query state from `local_point(v)`,
    then process `for_each_rerooting_step(v, f)`. The siblings encountered on
-   this walk form the `O(log N)` clusters needed for the rerooted answer.
+   this walk form the $O(\log N)$ clusters needed for the rerooted answer.
 
 The final fold depends on the DP. For example, a DP that stores path clusters
 as functions usually applies the collected functions to a point state; a DP
@@ -999,8 +999,8 @@ std::cout << query(v) << '\n';
 The input vertices in ABC460 G are 1-indexed, so decrement `v` before using
 these snippets.
 
-The total complexity is `O(N log N)` construction callback work and
-`O(log N)` per update/query, assuming the static top tree height is logarithmic.
+The total complexity is $O(N \log N)$ construction callback work and
+$O(\log N)$ per update/query, assuming the static top tree height is logarithmic.
 The verification test `test_rerooting_static_top_tree_vertex_component`
 contains a small brute-force-checked version of this pattern.
 

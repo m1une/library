@@ -44,7 +44,7 @@ data:
     #include <functional>
 
 
-    #include "top_k.hpp"
+    #include "monoid/top_k.hpp"
 
 
     namespace m1une {
@@ -74,7 +74,7 @@ data:
   isVerificationFile: false
   path: monoid/bottom_k.hpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/bottom_k.hpp
@@ -116,7 +116,7 @@ int main() {
 
     // Get the bottom 3 elements in the range [0, 4) -> {10, 20, 40}
     std::vector<long long> bottom3 = seg.prod(0, 4);
-    
+
     for (long long x : bottom3) {
         std::cout << x << " ";
     }

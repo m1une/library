@@ -58,6 +58,7 @@ Helper for writing recursive lambdas without declaring a separate function objec
 
 ```cpp
 #include "utilities/y_combinator.hpp"
+#include <iostream>
 
 int main() {
     auto fact = m1une::utilities::y_combinator([](auto self, int n) -> long long {
@@ -66,5 +67,6 @@ int main() {
     });
 
     long long x = fact(10);
+    std::cout << x << "\n";
 }
 ```

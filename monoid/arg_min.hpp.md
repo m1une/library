@@ -80,7 +80,7 @@ int main() {
     m1une::data_structure::Segtree<ArgMinM> seg(A);
 
     auto res = seg.prod(0, A.size());
-    
+
     std::cout << "Min Value: " << res.value << "\n"; // Output: 2
     std::cout << "Order: " << res.ord << "\n";       // Output: 1 (Order 1 is chosen over order 3)
 

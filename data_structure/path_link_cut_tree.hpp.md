@@ -419,31 +419,31 @@ is available.
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `int size()` | Number of link-cut-tree vertices. | `O(1)` |
-| `bool empty()` | Whether there are no vertices. | `O(1)` |
-| `int add_vertex(value)` | Adds one isolated vertex and returns its id. | Amortized `O(1)` |
-| `int edge_count()` | Number of edge helpers created by `link_edge`. | `O(1)` |
-| `bool edge_alive(edge_id)` | Whether the helper edge is currently linked. | `O(1)` |
-| `int edge_node(edge_id)` | Link-cut-tree vertex id storing this edge's value. | `O(1)` |
-| `std::pair<int, int> edge_endpoints(edge_id)` | Original endpoints passed to `link_edge`. | `O(1)` |
-| `const T& get(v)` | Returns the stored value of vertex `v`. | `O(1)` |
-| `const T& operator[](v)` | Alias for `get(v)`. | `O(1)` |
-| `void set(v, value)` | Updates the value of vertex `v`. | Amortized `O(log N)` |
-| `void evert(v)` | Makes `v` the represented root of its tree. | Amortized `O(log N)` |
-| `int component_root(v)` | Returns the represented root of `v`'s tree. | Amortized `O(log N)` |
-| `bool connected(u, v)` | Returns whether `u` and `v` are in the same tree. | Amortized `O(log N)` |
-| `bool same(u, v)` | Alias for `connected(u, v)`. | Amortized `O(log N)` |
-| `bool link(u, v)` | Adds edge `(u, v)` if they are in different trees. Returns whether it was added. | Amortized `O(log N)` |
-| `int link_edge(u, v, value)` | Adds an edge-value node between `u` and `v`. Returns an edge id, or `-1` if `u` and `v` are already connected. | Amortized `O(log N)` |
-| `bool cut(u, v)` | Removes edge `(u, v)` if it exists. On success, the resulting trees are rooted at `u` and `v`. | Amortized `O(log N)` |
-| `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. On success, the endpoint trees are rooted at the stored endpoints. | Amortized `O(log N)` |
-| `const T& get_edge(edge_id)` | Returns the value stored in the helper edge node. | `O(1)` |
-| `void set_edge(edge_id, value)` | Updates the value stored in the helper edge node. | Amortized `O(log N)` |
-| `T prod(u, v)` | Returns the monoid product on the path from `u` to `v`. | Amortized `O(log N)` |
-| `T path_prod(u, v)` | Alias for `prod(u, v)`. | Amortized `O(log N)` |
-| `int path_size(u, v)` | Number of link-cut-tree vertices on the path from `u` to `v`. | Amortized `O(log N)` |
-| `int kth_vertex(u, v, k)` | Returns the `k`-th vertex on the path from `u` to `v`, zero-indexed. | Amortized `O(log N)` |
-| `int lca(u, v)` | Returns the LCA with respect to the current represented root, or `-1` if disconnected. | Amortized `O(log N)` |
+| `int size()` | Number of link-cut-tree vertices. | $O(1)$ |
+| `bool empty()` | Whether there are no vertices. | $O(1)$ |
+| `int add_vertex(value)` | Adds one isolated vertex and returns its id. | Amortized $O(1)$ |
+| `int edge_count()` | Number of edge helpers created by `link_edge`. | $O(1)$ |
+| `bool edge_alive(edge_id)` | Whether the helper edge is currently linked. | $O(1)$ |
+| `int edge_node(edge_id)` | Link-cut-tree vertex id storing this edge's value. | $O(1)$ |
+| `std::pair<int, int> edge_endpoints(edge_id)` | Original endpoints passed to `link_edge`. | $O(1)$ |
+| `const T& get(v)` | Returns the stored value of vertex `v`. | $O(1)$ |
+| `const T& operator[](v)` | Alias for `get(v)`. | $O(1)$ |
+| `void set(v, value)` | Updates the value of vertex `v`. | Amortized $O(\log N)$ |
+| `void evert(v)` | Makes `v` the represented root of its tree. | Amortized $O(\log N)$ |
+| `int component_root(v)` | Returns the represented root of `v`'s tree. | Amortized $O(\log N)$ |
+| `bool connected(u, v)` | Returns whether `u` and `v` are in the same tree. | Amortized $O(\log N)$ |
+| `bool same(u, v)` | Alias for `connected(u, v)`. | Amortized $O(\log N)$ |
+| `bool link(u, v)` | Adds edge `(u, v)` if they are in different trees. Returns whether it was added. | Amortized $O(\log N)$ |
+| `int link_edge(u, v, value)` | Adds an edge-value node between `u` and `v`. Returns an edge id, or `-1` if `u` and `v` are already connected. | Amortized $O(\log N)$ |
+| `bool cut(u, v)` | Removes edge `(u, v)` if it exists. On success, the resulting trees are rooted at `u` and `v`. | Amortized $O(\log N)$ |
+| `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. On success, the endpoint trees are rooted at the stored endpoints. | Amortized $O(\log N)$ |
+| `const T& get_edge(edge_id)` | Returns the value stored in the helper edge node. | $O(1)$ |
+| `void set_edge(edge_id, value)` | Updates the value stored in the helper edge node. | Amortized $O(\log N)$ |
+| `T prod(u, v)` | Returns the monoid product on the path from `u` to `v`. | Amortized $O(\log N)$ |
+| `T path_prod(u, v)` | Alias for `prod(u, v)`. | Amortized $O(\log N)$ |
+| `int path_size(u, v)` | Number of link-cut-tree vertices on the path from `u` to `v`. | Amortized $O(\log N)$ |
+| `int kth_vertex(u, v, k)` | Returns the `k`-th vertex on the path from `u` to `v`, zero-indexed. | Amortized $O(\log N)$ |
+| `int lca(u, v)` | Returns the LCA with respect to the current represented root, or `-1` if disconnected. | Amortized $O(\log N)$ |
 
 `prod`, `path_size`, and `kth_vertex` require `u` and `v` to be connected.
 This is checked by `assert`.

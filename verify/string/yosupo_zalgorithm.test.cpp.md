@@ -74,7 +74,7 @@ data:
     \ % Mod, Base % Mod};\n    }\n};\n\n}  // namespace string\n}  // namespace m1une\n\
     \n\n#line 4 \"verify/string/yosupo_zalgorithm.test.cpp\"\n#include <iostream>\n\
     #line 6 \"verify/string/yosupo_zalgorithm.test.cpp\"\n\nvoid fast_io() {\n   \
-    \ std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n}\n\nusing\
+    \ std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n}\n\nusing\
     \ RH = m1une::string::RollingHash<10007, 2305843009213693951LL>;\n\nint main()\
     \ {\n    fast_io();\n    std::string S;\n    std::cin >> S;\n    int N = S.size();\n\
     \n    RH rh(S);\n\n    for (int i = 0; i < N; ++i) {\n        std::cout << rh.lcp(0,\
@@ -82,7 +82,7 @@ data:
     \n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/zalgorithm\"\n\n#include\
     \ \"../../string/rolling_hash.hpp\"\n#include <iostream>\n#include <string>\n\n\
-    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(NULL);\n\
+    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     }\n\nusing RH = m1une::string::RollingHash<10007, 2305843009213693951LL>;\n\n\
     int main() {\n    fast_io();\n    std::string S;\n    std::cin >> S;\n    int\
     \ N = S.size();\n\n    RH rh(S);\n\n    for (int i = 0; i < N; ++i) {\n      \
@@ -93,7 +93,7 @@ data:
   isVerificationFile: true
   path: verify/string/yosupo_zalgorithm.test.cpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/yosupo_zalgorithm.test.cpp

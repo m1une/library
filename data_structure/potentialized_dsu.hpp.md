@@ -207,12 +207,12 @@ consistency.
 | `PotentializedDsu(int n)` | Creates `n` singleton sets with identity potentials. | $O(N)$ |
 | `int size()` | Returns the number of elements. | $O(1)$ |
 | `bool empty()` | Returns whether the DSU has no elements. | $O(1)$ |
-| `bool merge(int a, int b, T w)` | Adds the constraint `diff(a, b) == w`. Returns `false` only when `a` and `b` were already connected and the constraint contradicts the stored potentials. | $O(\alpha(N))$ amortized |
-| `bool same(int a, int b)` | Returns whether `a` and `b` are in the same set. | $O(\alpha(N))$ amortized |
-| `int leader(int a)` | Returns the representative of the set containing `a`. | $O(\alpha(N))$ amortized |
-| `int group_size(int a)`, `int size(int a)` | Returns the size of the set containing `a`. | $O(\alpha(N))$ amortized |
-| `T potential(int a)` | Returns the root-relative potential of `a`. | $O(\alpha(N))$ amortized |
-| `T diff(int a, int b)` | Returns the potential difference from `a` to `b`. Requires `same(a, b)`. | $O(\alpha(N))$ amortized |
+| `bool merge(int a, int b, T w)` | Adds the constraint `diff(a, b) == w`. Returns `false` only when `a` and `b` were already connected and the constraint contradicts the stored potentials. | Amortized $O(\alpha(N))$ |
+| `bool same(int a, int b)` | Returns whether `a` and `b` are in the same set. | Amortized $O(\alpha(N))$ |
+| `int leader(int a)` | Returns the representative of the set containing `a`. | Amortized $O(\alpha(N))$ |
+| `int group_size(int a)`, `int size(int a)` | Returns the size of the set containing `a`. | Amortized $O(\alpha(N))$ |
+| `T potential(int a)` | Returns the root-relative potential of `a`. | Amortized $O(\alpha(N))$ |
+| `T diff(int a, int b)` | Returns the potential difference from `a` to `b`. Requires `same(a, b)`. | Amortized $O(\alpha(N))$ |
 | `std::vector<std::vector<int>> groups()` | Returns all sets as vectors of element indices. | $O(N \alpha(N))$ |
 
 ## Example

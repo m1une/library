@@ -17,125 +17,140 @@ data:
   bundledCode: "#line 1 \"verify/data_structure/persistent_ordered_multiset.test.cpp\"\
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n#line\
     \ 1 \"data_structure/persistent_ordered_multiset.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <chrono>\n#include <cstdint>\n#include <functional>\n#include <initializer_list>\n\
-    #include <memory>\n#include <utility>\n#include <vector>\n\nnamespace m1une {\n\
-    namespace data_structure {\n\ntemplate <typename T, typename Compare = std::less<T>>\n\
-    struct PersistentOrderedMultiset {\n   private:\n    struct Node;\n    using NodePtr\
-    \ = std::shared_ptr<const Node>;\n\n    struct Node {\n        T key;\n      \
-    \  int priority;\n        int count;\n        int size;\n        int distinct_size;\n\
-    \        NodePtr l, r;\n\n        Node(T value, int node_priority, int multiplicity,\
-    \ NodePtr left, NodePtr right)\n            : key(std::move(value)),\n       \
-    \       priority(node_priority),\n              count(multiplicity),\n       \
-    \       size(multiplicity + subtree_size(left) + subtree_size(right)),\n     \
-    \         distinct_size(1 + subtree_distinct_size(left) + subtree_distinct_size(right)),\n\
-    \              l(std::move(left)),\n              r(std::move(right)) {}\n   \
-    \ };\n\n    NodePtr root;\n    std::uint32_t rng_state;\n    Compare comp;\n\n\
-    \    static int subtree_size(const NodePtr& t) {\n        return t ? t->size :\
-    \ 0;\n    }\n\n    static int subtree_distinct_size(const NodePtr& t) {\n    \
-    \    return t ? t->distinct_size : 0;\n    }\n\n    static std::uint32_t next_state(std::uint32_t\
+    #include <chrono>\n#include <cstdint>\n#include <deque>\n#include <functional>\n\
+    #include <initializer_list>\n#include <memory>\n#include <utility>\n#include <vector>\n\
+    \nnamespace m1une {\nnamespace data_structure {\n\ntemplate <typename T, typename\
+    \ Compare = std::less<T>>\nstruct PersistentOrderedMultiset {\n   private:\n \
+    \   struct Node {\n        T key;\n        int priority;\n        int count;\n\
+    \        int size;\n        int distinct_size;\n        int l, r;\n\n        Node(T\
+    \ value, int node_priority, int multiplicity, int subtree_count, int unique_count,\
+    \ int left,\n             int right)\n            : key(std::move(value)),\n \
+    \             priority(node_priority),\n              count(multiplicity),\n \
+    \             size(subtree_count),\n              distinct_size(unique_count),\n\
+    \              l(left),\n              r(right) {}\n    };\n\n    int root;\n\
+    \    std::uint32_t rng_state;\n    Compare comp;\n    std::shared_ptr<std::deque<Node>>\
+    \ pool;\n\n    int subtree_size(int t) const {\n        return t == -1 ? 0 : (*pool)[t].size;\n\
+    \    }\n\n    int subtree_distinct_size(int t) const {\n        return t == -1\
+    \ ? 0 : (*pool)[t].distinct_size;\n    }\n\n    static std::uint32_t next_state(std::uint32_t\
     \ state) {\n        state ^= state << 13;\n        state ^= state >> 17;\n   \
     \     state ^= state << 5;\n        return state == 0 ? 1 : state;\n    }\n\n\
     \    bool equal(const T& a, const T& b) const {\n        return !comp(a, b) &&\
-    \ !comp(b, a);\n    }\n\n    NodePtr make_node(T key, int priority, int count,\
-    \ NodePtr l, NodePtr r) const {\n        return std::make_shared<Node>(std::move(key),\
-    \ priority, count, std::move(l), std::move(r));\n    }\n\n    NodePtr merge(const\
-    \ NodePtr& l, const NodePtr& r) const {\n        if (!l || !r) return l ? l :\
-    \ r;\n        if (l->priority > r->priority) {\n            return make_node(l->key,\
-    \ l->priority, l->count, l->l, merge(l->r, r));\n        }\n        return make_node(r->key,\
-    \ r->priority, r->count, merge(l, r->l), r->r);\n    }\n\n    NodePtr rotate_right(const\
-    \ NodePtr& t) const {\n        NodePtr s = t->l;\n        NodePtr new_t = make_node(t->key,\
-    \ t->priority, t->count, s->r, t->r);\n        return make_node(s->key, s->priority,\
-    \ s->count, s->l, new_t);\n    }\n\n    NodePtr rotate_left(const NodePtr& t)\
-    \ const {\n        NodePtr s = t->r;\n        NodePtr new_t = make_node(t->key,\
-    \ t->priority, t->count, t->l, s->l);\n        return make_node(s->key, s->priority,\
-    \ s->count, new_t, s->r);\n    }\n\n    NodePtr insert_impl(const NodePtr& t,\
-    \ T& key, int multiplicity, int priority) const {\n        if (!t) return make_node(std::move(key),\
-    \ priority, multiplicity, nullptr, nullptr);\n        if (equal(key, t->key))\
-    \ {\n            return make_node(t->key, t->priority, t->count + multiplicity,\
-    \ t->l, t->r);\n        }\n        if (comp(key, t->key)) {\n            NodePtr\
-    \ l = insert_impl(t->l, key, multiplicity, priority);\n            NodePtr res\
-    \ = make_node(t->key, t->priority, t->count, l, t->r);\n            return l->priority\
-    \ > res->priority ? rotate_right(res) : res;\n        }\n        NodePtr r = insert_impl(t->r,\
-    \ key, multiplicity, priority);\n        NodePtr res = make_node(t->key, t->priority,\
-    \ t->count, t->l, r);\n        return r->priority > res->priority ? rotate_left(res)\
-    \ : res;\n    }\n\n    NodePtr erase_one_impl(const NodePtr& t, const T& key,\
-    \ bool& erased) const {\n        if (!t) return nullptr;\n        if (equal(key,\
-    \ t->key)) {\n            erased = true;\n            if (t->count > 1) return\
-    \ make_node(t->key, t->priority, t->count - 1, t->l, t->r);\n            return\
-    \ merge(t->l, t->r);\n        }\n        if (comp(key, t->key)) {\n          \
-    \  NodePtr l = erase_one_impl(t->l, key, erased);\n            return erased ?\
-    \ make_node(t->key, t->priority, t->count, l, t->r) : t;\n        }\n        NodePtr\
-    \ r = erase_one_impl(t->r, key, erased);\n        return erased ? make_node(t->key,\
-    \ t->priority, t->count, t->l, r) : t;\n    }\n\n    NodePtr erase_all_impl(const\
-    \ NodePtr& t, const T& key, int& erased) const {\n        if (!t) return nullptr;\n\
-    \        if (equal(key, t->key)) {\n            erased = t->count;\n         \
-    \   return merge(t->l, t->r);\n        }\n        if (comp(key, t->key)) {\n \
-    \           NodePtr l = erase_all_impl(t->l, key, erased);\n            return\
-    \ erased ? make_node(t->key, t->priority, t->count, l, t->r) : t;\n        }\n\
-    \        NodePtr r = erase_all_impl(t->r, key, erased);\n        return erased\
-    \ ? make_node(t->key, t->priority, t->count, t->l, r) : t;\n    }\n\n    const\
-    \ T* kth_impl(NodePtr t, int k) const {\n        while (t) {\n            int\
-    \ left_size = subtree_size(t->l);\n            if (k < left_size) {\n        \
-    \        t = t->l;\n            } else if (k < left_size + t->count) {\n     \
-    \           return &t->key;\n            } else {\n                k -= left_size\
-    \ + t->count;\n                t = t->r;\n            }\n        }\n        return\
-    \ nullptr;\n    }\n\n    int count_impl(NodePtr t, const T& key) const {\n   \
-    \     while (t) {\n            if (equal(key, t->key)) return t->count;\n    \
-    \        t = comp(key, t->key) ? t->l : t->r;\n        }\n        return 0;\n\
-    \    }\n\n    int order_of_key_impl(NodePtr t, const T& key) const {\n       \
-    \ int res = 0;\n        while (t) {\n            if (comp(t->key, key)) {\n  \
-    \              res += subtree_size(t->l) + t->count;\n                t = t->r;\n\
-    \            } else {\n                t = t->l;\n            }\n        }\n \
-    \       return res;\n    }\n\n    int order_of_key_upper_impl(NodePtr t, const\
-    \ T& key) const {\n        int res = 0;\n        while (t) {\n            if (!comp(key,\
-    \ t->key)) {\n                res += subtree_size(t->l) + t->count;\n        \
-    \        t = t->r;\n            } else {\n                t = t->l;\n        \
-    \    }\n        }\n        return res;\n    }\n\n    const T* lower_bound_impl(NodePtr\
-    \ t, const T& key) const {\n        const T* res = nullptr;\n        while (t)\
-    \ {\n            if (!comp(t->key, key)) {\n                res = &t->key;\n \
-    \               t = t->l;\n            } else {\n                t = t->r;\n \
-    \           }\n        }\n        return res;\n    }\n\n    const T* upper_bound_impl(NodePtr\
-    \ t, const T& key) const {\n        const T* res = nullptr;\n        while (t)\
-    \ {\n            if (comp(key, t->key)) {\n                res = &t->key;\n  \
-    \              t = t->l;\n            } else {\n                t = t->r;\n  \
-    \          }\n        }\n        return res;\n    }\n\n    const T* max_less_impl(NodePtr\
-    \ t, const T& key, bool strict) const {\n        const T* res = nullptr;\n   \
-    \     while (t) {\n            bool ok = strict ? comp(t->key, key) : !comp(key,\
-    \ t->key);\n            if (ok) {\n                res = &t->key;\n          \
-    \      t = t->r;\n            } else {\n                t = t->l;\n          \
-    \  }\n        }\n        return res;\n    }\n\n    void dump_impl(const NodePtr&\
-    \ t, std::vector<T>& res) const {\n        if (!t) return;\n        dump_impl(t->l,\
-    \ res);\n        for (int i = 0; i < t->count; i++) {\n            res.push_back(t->key);\n\
-    \        }\n        dump_impl(t->r, res);\n    }\n\n    PersistentOrderedMultiset(NodePtr\
-    \ node, std::uint32_t state, Compare compare)\n        : root(std::move(node)),\
-    \ rng_state(state), comp(std::move(compare)) {}\n\n   public:\n    explicit PersistentOrderedMultiset(Compare\
-    \ compare)\n        : root(nullptr),\n          rng_state(std::uint32_t(std::chrono::steady_clock::now().time_since_epoch().count())),\n\
-    \          comp(std::move(compare)) {\n        if (rng_state == 0) rng_state =\
-    \ 1;\n    }\n\n    PersistentOrderedMultiset() : PersistentOrderedMultiset(Compare())\
-    \ {}\n\n    PersistentOrderedMultiset(std::initializer_list<T> init, Compare compare\
-    \ = Compare())\n        : PersistentOrderedMultiset(std::move(compare)) {\n  \
-    \      for (const T& x : init) *this = insert(x);\n    }\n\n    template <typename\
-    \ Iterator>\n    PersistentOrderedMultiset(Iterator first, Iterator last, Compare\
-    \ compare = Compare())\n        : PersistentOrderedMultiset(std::move(compare))\
+    \ !comp(b, a);\n    }\n\n    int make_node(T key, int priority, int count, int\
+    \ l, int r) const {\n        int size = count + subtree_size(l) + subtree_size(r);\n\
+    \        int distinct_size = 1 + subtree_distinct_size(l) + subtree_distinct_size(r);\n\
+    \        pool->emplace_back(std::move(key), priority, count, size, distinct_size,\
+    \ l, r);\n        return int(pool->size()) - 1;\n    }\n\n    int merge(int l,\
+    \ int r) const {\n        if (l == -1 || r == -1) return l == -1 ? r : l;\n  \
+    \      if ((*pool)[l].priority > (*pool)[r].priority) {\n            Node node\
+    \ = (*pool)[l];\n            int right = merge(node.r, r);\n            return\
+    \ make_node(std::move(node.key), node.priority, node.count, node.l, right);\n\
+    \        }\n        Node node = (*pool)[r];\n        int left = merge(l, node.l);\n\
+    \        return make_node(std::move(node.key), node.priority, node.count, left,\
+    \ node.r);\n    }\n\n    int rotate_right(int t) const {\n        Node node =\
+    \ (*pool)[t];\n        Node child = (*pool)[node.l];\n        int new_t = make_node(std::move(node.key),\
+    \ node.priority, node.count, child.r, node.r);\n        return make_node(std::move(child.key),\
+    \ child.priority, child.count, child.l, new_t);\n    }\n\n    int rotate_left(int\
+    \ t) const {\n        Node node = (*pool)[t];\n        Node child = (*pool)[node.r];\n\
+    \        int new_t = make_node(std::move(node.key), node.priority, node.count,\
+    \ node.l, child.l);\n        return make_node(std::move(child.key), child.priority,\
+    \ child.count, new_t, child.r);\n    }\n\n    int insert_impl(int t, T& key, int\
+    \ multiplicity, int priority) const {\n        if (t == -1) return make_node(std::move(key),\
+    \ priority, multiplicity, -1, -1);\n        Node node = (*pool)[t];\n        if\
+    \ (equal(key, node.key)) {\n            return make_node(std::move(node.key),\
+    \ node.priority, node.count + multiplicity, node.l, node.r);\n        }\n    \
+    \    if (comp(key, node.key)) {\n            int l = insert_impl(node.l, key,\
+    \ multiplicity, priority);\n            int res = make_node(std::move(node.key),\
+    \ node.priority, node.count, l, node.r);\n            return (*pool)[l].priority\
+    \ > (*pool)[res].priority ? rotate_right(res) : res;\n        }\n        int r\
+    \ = insert_impl(node.r, key, multiplicity, priority);\n        int res = make_node(std::move(node.key),\
+    \ node.priority, node.count, node.l, r);\n        return (*pool)[r].priority >\
+    \ (*pool)[res].priority ? rotate_left(res) : res;\n    }\n\n    int erase_one_impl(int\
+    \ t, const T& key, bool& erased) const {\n        if (t == -1) return -1;\n  \
+    \      Node node = (*pool)[t];\n        if (equal(key, node.key)) {\n        \
+    \    erased = true;\n            if (node.count > 1) {\n                return\
+    \ make_node(std::move(node.key), node.priority, node.count - 1, node.l, node.r);\n\
+    \            }\n            return merge(node.l, node.r);\n        }\n       \
+    \ if (comp(key, node.key)) {\n            int l = erase_one_impl(node.l, key,\
+    \ erased);\n            return erased ? make_node(std::move(node.key), node.priority,\
+    \ node.count, l, node.r) : t;\n        }\n        int r = erase_one_impl(node.r,\
+    \ key, erased);\n        return erased ? make_node(std::move(node.key), node.priority,\
+    \ node.count, node.l, r) : t;\n    }\n\n    int erase_all_impl(int t, const T&\
+    \ key, int& erased) const {\n        if (t == -1) return -1;\n        Node node\
+    \ = (*pool)[t];\n        if (equal(key, node.key)) {\n            erased = node.count;\n\
+    \            return merge(node.l, node.r);\n        }\n        if (comp(key, node.key))\
+    \ {\n            int l = erase_all_impl(node.l, key, erased);\n            return\
+    \ erased ? make_node(std::move(node.key), node.priority, node.count, l, node.r)\
+    \ : t;\n        }\n        int r = erase_all_impl(node.r, key, erased);\n    \
+    \    return erased ? make_node(std::move(node.key), node.priority, node.count,\
+    \ node.l, r) : t;\n    }\n\n    const T* kth_impl(int t, int k) const {\n    \
+    \    while (t != -1) {\n            const Node& node = (*pool)[t];\n         \
+    \   int left_size = subtree_size(node.l);\n            if (k < left_size) {\n\
+    \                t = node.l;\n            } else if (k < left_size + node.count)\
+    \ {\n                return &node.key;\n            } else {\n               \
+    \ k -= left_size + node.count;\n                t = node.r;\n            }\n \
+    \       }\n        return nullptr;\n    }\n\n    int count_impl(int t, const T&\
+    \ key) const {\n        while (t != -1) {\n            const Node& node = (*pool)[t];\n\
+    \            if (equal(key, node.key)) return node.count;\n            t = comp(key,\
+    \ node.key) ? node.l : node.r;\n        }\n        return 0;\n    }\n\n    int\
+    \ order_of_key_impl(int t, const T& key) const {\n        int res = 0;\n     \
+    \   while (t != -1) {\n            const Node& node = (*pool)[t];\n          \
+    \  if (comp(node.key, key)) {\n                res += subtree_size(node.l) + node.count;\n\
+    \                t = node.r;\n            } else {\n                t = node.l;\n\
+    \            }\n        }\n        return res;\n    }\n\n    int order_of_key_upper_impl(int\
+    \ t, const T& key) const {\n        int res = 0;\n        while (t != -1) {\n\
+    \            const Node& node = (*pool)[t];\n            if (!comp(key, node.key))\
+    \ {\n                res += subtree_size(node.l) + node.count;\n             \
+    \   t = node.r;\n            } else {\n                t = node.l;\n         \
+    \   }\n        }\n        return res;\n    }\n\n    const T* lower_bound_impl(int\
+    \ t, const T& key) const {\n        const T* res = nullptr;\n        while (t\
+    \ != -1) {\n            const Node& node = (*pool)[t];\n            if (!comp(node.key,\
+    \ key)) {\n                res = &node.key;\n                t = node.l;\n   \
+    \         } else {\n                t = node.r;\n            }\n        }\n  \
+    \      return res;\n    }\n\n    const T* upper_bound_impl(int t, const T& key)\
+    \ const {\n        const T* res = nullptr;\n        while (t != -1) {\n      \
+    \      const Node& node = (*pool)[t];\n            if (comp(key, node.key)) {\n\
+    \                res = &node.key;\n                t = node.l;\n            }\
+    \ else {\n                t = node.r;\n            }\n        }\n        return\
+    \ res;\n    }\n\n    const T* max_less_impl(int t, const T& key, bool strict)\
+    \ const {\n        const T* res = nullptr;\n        while (t != -1) {\n      \
+    \      const Node& node = (*pool)[t];\n            bool ok = strict ? comp(node.key,\
+    \ key) : !comp(key, node.key);\n            if (ok) {\n                res = &node.key;\n\
+    \                t = node.r;\n            } else {\n                t = node.l;\n\
+    \            }\n        }\n        return res;\n    }\n\n    void dump_impl(int\
+    \ t, std::vector<T>& res) const {\n        if (t == -1) return;\n        const\
+    \ Node& node = (*pool)[t];\n        dump_impl(node.l, res);\n        for (int\
+    \ i = 0; i < node.count; i++) res.push_back(node.key);\n        dump_impl(node.r,\
+    \ res);\n    }\n\n    PersistentOrderedMultiset(int node, std::uint32_t state,\
+    \ Compare compare,\n                              std::shared_ptr<std::deque<Node>>\
+    \ node_pool)\n        : root(node), rng_state(state), comp(std::move(compare)),\
+    \ pool(std::move(node_pool)) {}\n\n   public:\n    explicit PersistentOrderedMultiset(Compare\
+    \ compare)\n        : root(-1),\n          rng_state(std::uint32_t(std::chrono::steady_clock::now().time_since_epoch().count())),\n\
+    \          comp(std::move(compare)),\n          pool(std::make_shared<std::deque<Node>>())\
+    \ {\n        if (rng_state == 0) rng_state = 1;\n    }\n\n    PersistentOrderedMultiset()\
+    \ : PersistentOrderedMultiset(Compare()) {}\n\n    PersistentOrderedMultiset(std::initializer_list<T>\
+    \ init, Compare compare = Compare())\n        : PersistentOrderedMultiset(std::move(compare))\
+    \ {\n        for (const T& x : init) *this = insert(x);\n    }\n\n    template\
+    \ <typename Iterator>\n    PersistentOrderedMultiset(Iterator first, Iterator\
+    \ last, Compare compare = Compare())\n        : PersistentOrderedMultiset(std::move(compare))\
     \ {\n        while (first != last) {\n            *this = insert(*first);\n  \
     \          ++first;\n        }\n    }\n\n    int size() const {\n        return\
     \ subtree_size(root);\n    }\n\n    int unique_size() const {\n        return\
     \ subtree_distinct_size(root);\n    }\n\n    bool empty() const {\n        return\
     \ size() == 0;\n    }\n\n    PersistentOrderedMultiset clear() const {\n     \
-    \   return PersistentOrderedMultiset(nullptr, rng_state, comp);\n    }\n\n   \
-    \ PersistentOrderedMultiset insert(T key, int multiplicity = 1) const {\n    \
-    \    assert(multiplicity > 0);\n        std::uint32_t next = next_state(rng_state);\n\
+    \   return PersistentOrderedMultiset(-1, rng_state, comp, pool);\n    }\n\n  \
+    \  PersistentOrderedMultiset insert(T key, int multiplicity = 1) const {\n   \
+    \     assert(multiplicity > 0);\n        std::uint32_t next = next_state(rng_state);\n\
     \        return PersistentOrderedMultiset(insert_impl(root, key, multiplicity,\
-    \ int(next)), next, comp);\n    }\n\n    PersistentOrderedMultiset erase_one(const\
-    \ T& key) const {\n        bool erased = false;\n        NodePtr next_root = erase_one_impl(root,\
+    \ int(next)), next, comp, pool);\n    }\n\n    PersistentOrderedMultiset erase_one(const\
+    \ T& key) const {\n        bool erased = false;\n        int next_root = erase_one_impl(root,\
     \ key, erased);\n        return erased ? PersistentOrderedMultiset(next_root,\
-    \ rng_state, comp) : *this;\n    }\n\n    PersistentOrderedMultiset erase(const\
+    \ rng_state, comp, pool) : *this;\n    }\n\n    PersistentOrderedMultiset erase(const\
     \ T& key) const {\n        return erase_one(key);\n    }\n\n    PersistentOrderedMultiset\
-    \ erase_all(const T& key) const {\n        int erased = 0;\n        NodePtr next_root\
+    \ erase_all(const T& key) const {\n        int erased = 0;\n        int next_root\
     \ = erase_all_impl(root, key, erased);\n        return erased ? PersistentOrderedMultiset(next_root,\
-    \ rng_state, comp) : *this;\n    }\n\n    bool contains(const T& key) const {\n\
-    \        return count(key) > 0;\n    }\n\n    int count(const T& key) const {\n\
-    \        return count_impl(root, key);\n    }\n\n    const T* find_by_order(int\
+    \ rng_state, comp, pool) : *this;\n    }\n\n    bool contains(const T& key) const\
+    \ {\n        return count(key) > 0;\n    }\n\n    int count(const T& key) const\
+    \ {\n        return count_impl(root, key);\n    }\n\n    const T* find_by_order(int\
     \ k) const {\n        assert(0 <= k && k < size());\n        return kth_impl(root,\
     \ k);\n    }\n\n    T kth(int k) const {\n        assert(0 <= k && k < size());\n\
     \        return *kth_impl(root, k);\n    }\n\n    int order_of_key(const T& key)\
@@ -197,7 +212,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/persistent_ordered_multiset.test.cpp
   requiredBy: []
-  timestamp: '2026-06-14 14:10:32+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/persistent_ordered_multiset.test.cpp

@@ -74,27 +74,29 @@ data:
     \ % Mod, Base % Mod};\n    }\n};\n\n}  // namespace string\n}  // namespace m1une\n\
     \n\n#line 4 \"verify/string/aoj_alds1_14_b.test.cpp\"\n#include <iostream>\n#line\
     \ 6 \"verify/string/aoj_alds1_14_b.test.cpp\"\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(NULL);\n}\n\nusing RH = m1une::string::RollingHash<10007, 2305843009213693951LL>;\n\
-    \nint main() {\n    fast_io();\n    std::string T, P;\n    std::cin >> T >> P;\n\
-    \n    if (T.size() < P.size()) return 0;\n\n    RH rh(T);\n    \n    long long\
-    \ p_hash = RH::compute_hash(P);\n\n    int n = T.size(), m = P.size();\n    for\
-    \ (int i = 0; i <= n - m; ++i) {\n        if (rh.get(i, i + m) == p_hash) {\n\
-    \            std::cout << i << \"\\n\";\n        }\n    }\n\n    return 0;\n}\n"
+    \    std::cin.tie(nullptr);\n}\n\nusing RH = m1une::string::RollingHash<10007,\
+    \ 2305843009213693951LL>;\n\nint main() {\n    fast_io();\n    std::string T,\
+    \ P;\n    std::cin >> T >> P;\n\n    if (T.size() < P.size()) return 0;\n\n  \
+    \  RH rh(T);\n\n    long long p_hash = RH::compute_hash(P);\n\n    int n = T.size(),\
+    \ m = P.size();\n    for (int i = 0; i <= n - m; ++i) {\n        if (rh.get(i,\
+    \ i + m) == p_hash) {\n            std::cout << i << \"\\n\";\n        }\n   \
+    \ }\n\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_B\"\
     \n\n#include \"../../string/rolling_hash.hpp\"\n#include <iostream>\n#include\
     \ <string>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n \
-    \   std::cin.tie(NULL);\n}\n\nusing RH = m1une::string::RollingHash<10007, 2305843009213693951LL>;\n\
-    \nint main() {\n    fast_io();\n    std::string T, P;\n    std::cin >> T >> P;\n\
-    \n    if (T.size() < P.size()) return 0;\n\n    RH rh(T);\n    \n    long long\
-    \ p_hash = RH::compute_hash(P);\n\n    int n = T.size(), m = P.size();\n    for\
-    \ (int i = 0; i <= n - m; ++i) {\n        if (rh.get(i, i + m) == p_hash) {\n\
-    \            std::cout << i << \"\\n\";\n        }\n    }\n\n    return 0;\n}\n"
+    \   std::cin.tie(nullptr);\n}\n\nusing RH = m1une::string::RollingHash<10007,\
+    \ 2305843009213693951LL>;\n\nint main() {\n    fast_io();\n    std::string T,\
+    \ P;\n    std::cin >> T >> P;\n\n    if (T.size() < P.size()) return 0;\n\n  \
+    \  RH rh(T);\n\n    long long p_hash = RH::compute_hash(P);\n\n    int n = T.size(),\
+    \ m = P.size();\n    for (int i = 0; i <= n - m; ++i) {\n        if (rh.get(i,\
+    \ i + m) == p_hash) {\n            std::cout << i << \"\\n\";\n        }\n   \
+    \ }\n\n    return 0;\n}\n"
   dependsOn:
   - string/rolling_hash.hpp
   isVerificationFile: true
   path: verify/string/aoj_alds1_14_b.test.cpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/aoj_alds1_14_b.test.cpp

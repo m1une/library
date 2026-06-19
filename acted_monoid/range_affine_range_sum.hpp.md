@@ -100,7 +100,7 @@ int main() {
 
     m1une::data_structure::LazySegtree<AM> seg(init_nodes);
 
-    // Apply f(x) = 2x + 3 to range [0, 2) 
+    // Apply f(x) = 2x + 3 to range [0, 2)
     // Elements become: (2*1 + 3) = 5, and (2*2 + 3) = 7 -> Array: {5, 7, 3}
     seg.apply(0, 2, {2, 3});
 

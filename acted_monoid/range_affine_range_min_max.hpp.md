@@ -60,9 +60,11 @@ title: Range Affine Range Min Max
 
 ## Overview
 
-An exceptionally versatile Acted Monoid that tracks both the **minimum** and **maximum** values of a contiguous subarray simultaneously while supporting Range Affine Transformations ($f(x) = ax + b$). 
+An acted monoid that tracks the minimum and maximum values of a range while
+supporting affine transformations $f(x) = ax + b$.
 
-This acted monoid perfectly handles **negative scale factors** ($a < 0$). When a negative value multiplies a range, the relative ordering inverts: the previous minimum becomes the basis for the new maximum, and the previous maximum becomes the basis for the new minimum. By maintaining both boundaries, the data structure accurately maps the state without losing validity.
+Negative scale factors reverse the ordering, so the mapping swaps the roles of
+the previous minimum and maximum before applying the transformation.
 
 ## Template Parameters
 
@@ -84,6 +86,7 @@ This acted monoid perfectly handles **negative scale factors** ($a < 0$). When a
 When building or updating individual elements, use the `make(val)` helper function to encapsulate the scalar into a node matching the value monoid specification.
 
 ### `static constexpr value_type make(const T& val)`
+
 * **Parameters:**
   * `val`: The initial scalar value.
 * **Returns:** A `RangeAffineRangeMinMaxNode` where both `min_val` and `max_val` are set to `val`.

@@ -194,8 +194,8 @@ The result contains these members:
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `zero_one_bfs` | `template <class T> ZeroOneBfsResult zero_one_bfs(const Graph<T>& g, int s, int inf = std::numeric_limits<int>::max() / 2)` | Runs 0-1 BFS from one source. | $O(N+M)$ |
-| `zero_one_bfs` | `template <class T> ZeroOneBfsResult zero_one_bfs(const Graph<T>& g, const std::vector<int>& sources, int inf = std::numeric_limits<int>::max() / 2)` | Runs multi-source 0-1 BFS. | $O(N+M)$ |
+| `zero_one_bfs` | `template <class T> ZeroOneBfsResult zero_one_bfs(const Graph<T>& g, int s, int inf = std::numeric_limits<int>::max() / 2)` | Runs 0-1 BFS from one source. | $O(N + M)$ |
+| `zero_one_bfs` | `template <class T> ZeroOneBfsResult zero_one_bfs(const Graph<T>& g, const std::vector<int>& sources, int inf = std::numeric_limits<int>::max() / 2)` | Runs multi-source 0-1 BFS. | $O(N + M)$ |
 
 ## Example
 

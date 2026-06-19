@@ -17,9 +17,9 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"data_structure/lazy_segtree.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <bit>\n#include <concepts>\n#include <utility>\n#include <vector>\n\n\
-    #line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
+  bundledCode: "#line 1 \"data_structure/lazy_segtree.hpp\"\n\n\n\n#include <bit>\n\
+    #include <cassert>\n#include <concepts>\n#include <utility>\n#include <vector>\n\
+    \n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
     \ for an Acted Monoid.\ntemplate <typename AM>\nconcept IsActedMonoid = requires(typename\
     \ AM::value_type a, typename AM::value_type b, typename AM::operator_type f,\n\
@@ -168,7 +168,7 @@ data:
     \ sm);\n        } while ((r & -r) != r);\n        return 0;\n    }\n};\n\n}  //\
     \ namespace data_structure\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_LAZY_SEGTREE_HPP\n#define M1UNE_LAZY_SEGTREE_HPP 1\n\n#include\
-    \ <cassert>\n#include <bit>\n#include <concepts>\n#include <utility>\n#include\
+    \ <bit>\n#include <cassert>\n#include <concepts>\n#include <utility>\n#include\
     \ <vector>\n\n#include \"acted_monoid/concept.hpp\"\n#include \"math/bit_ceil.hpp\"\
     \n\nnamespace m1une {\nnamespace data_structure {\n\n// A highly generic Lazy\
     \ Segment Tree utilizing C++20 Concepts for type safety.\n// It operates on any\
@@ -304,7 +304,7 @@ data:
   isVerificationFile: false
   path: data_structure/lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-17 21:06:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/data_structure/lazy_segtree.test.cpp
@@ -362,7 +362,7 @@ All non-empty constructors build the tree in $O(N)$ time.
 | `T prod(int l, int r)` | Returns the value monoid product over `[l, r)`. | $O(\log N)$ |
 | `T all_prod()` | Returns the product of the entire array. | $O(1)$ |
 | `std::vector<T> to_vector()` | Pushes all pending updates and returns all elements. | $O(N)$ |
-| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O((r-l)\log N)$ |
+| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O((r - l) \log N)$ |
 | `void apply(int p, F f)` | Applies operator `f` to index `p`. | $O(\log N)$ |
 | `void apply(int l, int r, F f)` | Applies operator `f` to every element in `[l, r)`. | $O(\log N)$ |
 | `int max_right<G>(int l, G g)` | Returns the largest `r` such that `g(prod(l, r))` is `true`. Requires `g(ActedMonoid::id())`. | $O(\log N)$ |

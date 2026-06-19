@@ -115,7 +115,7 @@ int main() {
 
     // Min subarray sum in the whole array is -7 (from "-4, 1, -2, -1")
     auto node = seg.prod(0, N);
-    std::cout << "Min Subarray Sum: " << node.opt << "\n"; 
+    std::cout << "Min Subarray Sum: " << node.opt << "\n";
 
     return 0;
 }

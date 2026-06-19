@@ -274,7 +274,7 @@ range products on each version, use `PersistentLazySegtree`.
 | `PersistentDualSegtree apply(int p, T x)` | Returns a new version where `x` is applied to index `p`. | $O(\log N)$ |
 | `PersistentDualSegtree apply(int l, int r, T x)` | Returns a new version where `x` is applied to every element in `[l, r)`. | $O(\log N)$ |
 | `std::vector<T> to_vector()` | Returns all elements as a vector. | $O(N)$ |
-| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O(\log N + r-l)$ |
+| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O(\log N + r - l)$ |
 
 ## Example
 

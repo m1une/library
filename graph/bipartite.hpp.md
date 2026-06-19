@@ -531,34 +531,34 @@ least one incident edge; otherwise the method returns `std::nullopt`.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `bipartite` | `template <class T> BipartiteResult bipartite(const Graph<T>& g)` | Returns a bipartite flag and colors. | $O(N+M)$ |
-| `is_bipartite` | `template <class T> bool is_bipartite(const Graph<T>& g)` | Returns only the bipartite flag. | $O(N+M)$ |
-| `make_bipartite_matching` | `template <class T> std::optional<BipartiteMatchingGraph> make_bipartite_matching(const Graph<T>& g)` | Builds a `BipartiteMatching` from a bipartite `Graph<T>`, or returns `std::nullopt`. | $O(N+M)$ |
+| `bipartite` | `template <class T> BipartiteResult bipartite(const Graph<T>& g)` | Returns a bipartite flag and colors. | $O(N + M)$ |
+| `is_bipartite` | `template <class T> bool is_bipartite(const Graph<T>& g)` | Returns only the bipartite flag. | $O(N + M)$ |
+| `make_bipartite_matching` | `template <class T> std::optional<BipartiteMatchingGraph> make_bipartite_matching(const Graph<T>& g)` | Builds a `BipartiteMatching` from a bipartite `Graph<T>`, or returns `std::nullopt`. | $O(N + M)$ |
 
 ## Matching Methods
 
 | Method | Signature | Description | Complexity |
 | --- | --- | --- | --- |
 | Constructor | `BipartiteMatching()` | Creates an empty bipartite graph. | $O(1)$ |
-| Constructor | `BipartiteMatching(int left_size, int right_size)` | Creates a bipartite graph with explicit side sizes. | $O(L+R)$ |
+| Constructor | `BipartiteMatching(int left_size, int right_size)` | Creates a bipartite graph with explicit side sizes. | $O(L + R)$ |
 | `left_size` | `int left_size() const` | Returns the number of left-side vertices. | $O(1)$ |
 | `right_size` | `int right_size() const` | Returns the number of right-side vertices. | $O(1)$ |
 | `edge_count` | `int edge_count() const` | Returns the number of registered edges. | $O(1)$ |
-| `add_edge` | `int add_edge(int left, int right)` | Adds an edge and returns its edge id. | $O(1)$ amortized |
+| `add_edge` | `int add_edge(int left, int right)` | Adds an edge and returns its edge id. | Amortized $O(1)$ |
 | `get_edge` | `Edge get_edge(int i) const` | Returns edge `i`. | $O(1)$ |
 | `edges` | `std::vector<Edge> edges(bool include_inactive = false) const` | Returns active edges, or all edges if `include_inactive` is true. | $O(M)$ |
 | `set_edge_alive` | `void set_edge_alive(int id, bool alive)` | Sets whether edge `id` is usable. | $O(1)$ |
 | `erase_edge` | `void erase_edge(int id)` | Marks edge `id` unusable. | $O(1)$ |
 | `revive_edge` | `void revive_edge(int id)` | Marks edge `id` usable again. | $O(1)$ |
 | `is_edge_alive` | `bool is_edge_alive(int id) const` | Returns whether edge `id` is usable. | $O(1)$ |
-| `max_matching` | `int max_matching()` | Computes and stores a maximum matching. | $O(M\sqrt{L+R})$ |
-| `matching_size` | `int matching_size()` | Returns the current maximum matching size, computing it if needed. | $O(M\sqrt{L+R})$ if not computed |
-| `left_match` | `std::vector<int> left_match()` | Returns `right` matched to each left vertex, or `-1`. | $O(M\sqrt{L+R})$ if not computed |
-| `right_match` | `std::vector<int> right_match()` | Returns `left` matched to each right vertex, or `-1`. | $O(M\sqrt{L+R})$ if not computed |
-| `matching` | `std::vector<Pair> matching()` | Returns matched pairs and edge ids. | $O(M\sqrt{L+R})$ if not computed |
-| `minimum_vertex_cover` | `BipartiteVertexSet minimum_vertex_cover()` | Returns a minimum vertex cover. | $O(M\sqrt{L+R})$ if not computed |
-| `maximum_independent_set` | `BipartiteVertexSet maximum_independent_set()` | Returns a maximum independent set. | $O(M\sqrt{L+R})$ if not computed |
-| `minimum_edge_cover` | `std::optional<std::vector<int>> minimum_edge_cover()` | Returns edge ids of a minimum edge cover, or `std::nullopt` if an isolated vertex exists. | $O(M\sqrt{L+R})$ if not computed |
+| `max_matching` | `int max_matching()` | Computes and stores a maximum matching. | $O(M \sqrt{L + R})$ |
+| `matching_size` | `int matching_size()` | Returns the current maximum matching size, computing it if needed. | $O(M \sqrt{L + R})$ if not computed |
+| `left_match` | `std::vector<int> left_match()` | Returns `right` matched to each left vertex, or `-1`. | $O(M \sqrt{L + R})$ if not computed |
+| `right_match` | `std::vector<int> right_match()` | Returns `left` matched to each right vertex, or `-1`. | $O(M \sqrt{L + R})$ if not computed |
+| `matching` | `std::vector<Pair> matching()` | Returns matched pairs and edge ids. | $O(M \sqrt{L + R})$ if not computed |
+| `minimum_vertex_cover` | `BipartiteVertexSet minimum_vertex_cover()` | Returns a minimum vertex cover. | $O(M \sqrt{L + R})$ if not computed |
+| `maximum_independent_set` | `BipartiteVertexSet maximum_independent_set()` | Returns a maximum independent set. | $O(M \sqrt{L + R})$ if not computed |
+| `minimum_edge_cover` | `std::optional<std::vector<int>> minimum_edge_cover()` | Returns edge ids of a minimum edge cover, or `std::nullopt` if an isolated vertex exists. | $O(M \sqrt{L + R})$ if not computed |
 
 ## Example
 

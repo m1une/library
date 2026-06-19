@@ -56,7 +56,7 @@ title: Affine Monoid
 
 ## Overview
 
-A monoid for composing affine transformations, expressed as $f(x) = ax + b$. 
+A monoid for composing affine transformations, expressed as $f(x) = ax + b$.
 The underlying `value_type` is `std::pair<T, T>`, where `first` represents $a$ (the multiplier) and `second` represents $b$ (the addend).
 
 This is particularly useful when you have a sequence of operations like "multiply by $X$, then add $Y$" and you want to find the composite function of a range.
@@ -83,10 +83,10 @@ int main() {
     // 0: f(x) = 2x + 3
     // 1: f(x) = 1x + 5 (Add 5)
     // 2: f(x) = 3x + 0 (Multiply by 3)
-    
+
     std::vector<AffineM::value_type> ops = {
-        {2, 3}, 
-        AffineM::make_add(5), 
+        {2, 3},
+        AffineM::make_add(5),
         AffineM::make_mul(3)
     };
 

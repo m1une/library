@@ -589,7 +589,7 @@ title: Lazy Link-Cut Tree
 
 ## Overview
 
-`m1une::data_structure::LazyLinkCutTree<ActedMonoid>` maintains a dynamic
+`m1une::data_structure::LazyLinkCutTree<ActedGroup>` maintains a dynamic
 forest. It supports linking two trees, cutting edges, rerooting represented
 trees, querying path products, applying lazy updates on paths, and querying
 rooted subtree products and sizes.
@@ -598,18 +598,18 @@ The value is stored on link-cut-tree vertices. If you need edge values, create
 one extra link-cut-tree vertex for each original edge and connect it between the
 two endpoints. The `link_edge` helper does this for you.
 
-The value monoid must be commutative and must provide an inverse. The structure
-keeps a cached aggregate of virtual child subtrees, while path lazy propagation
-updates only preferred-path vertices. Path operations and subtree queries are
-amortized $O(\log N)$.
+The values must form a commutative group. The structure keeps a cached aggregate
+of virtual child subtrees, while path lazy propagation updates only
+preferred-path vertices. Path operations and subtree queries are amortized
+$O(\log N)$.
 
 ## Template Parameter
 
-`ActedMonoid` must satisfy
+`ActedGroup` must satisfy
 `m1une::acted_monoid::IsCommutativeActedGroup`:
 
 ```cpp
-struct AM {
+struct AG {
     using value_type = T;
     using operator_type = F;
 
@@ -631,31 +631,31 @@ struct AM {
 ## Construction
 
 ```cpp
-LazyLinkCutTree<ActedMonoid> lct;
-LazyLinkCutTree<ActedMonoid> lct(n);
-LazyLinkCutTree<ActedMonoid> lct(values);
+LazyLinkCutTree<ActedGroup> lct;
+LazyLinkCutTree<ActedGroup> lct(n);
+LazyLinkCutTree<ActedGroup> lct(values);
 ```
 
 * `LazyLinkCutTree(n)` creates `n` isolated vertices initialized with
-  `ActedMonoid::id()`.
+  `ActedGroup::id()`.
 * `LazyLinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
 Construction from `std::vector<U>` is supported when
-`ActedMonoid::make(value)`, `ActedMonoid::make(value, index)`, or
+`ActedGroup::make(value)`, `ActedGroup::make(value, index)`, or
 `static_cast<T>(value)` is available.
 
 ## Methods
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `int size()` | Number of link-cut-tree vertices, including helper edge nodes. | `O(1)` |
-| `bool empty()` | Whether there are no vertices. | `O(1)` |
-| `int add_vertex(value)` | Adds one isolated vertex and returns its id. | Amortized `O(1)` |
-| `int edge_count()` | Number of edge helpers created by `link_edge`. | `O(1)` |
-| `bool edge_alive(edge_id)` | Whether the helper edge is currently linked. | `O(1)` |
-| `int edge_node(edge_id)` | Link-cut-tree vertex id storing this edge's value. | `O(1)` |
-| `std::pair<int, int> edge_endpoints(edge_id)` | Original endpoints passed to `link_edge`. | `O(1)` |
+| `int size()` | Number of link-cut-tree vertices, including helper edge nodes. | $O(1)$ |
+| `bool empty()` | Whether there are no vertices. | $O(1)$ |
+| `int add_vertex(value)` | Adds one isolated vertex and returns its id. | Amortized $O(1)$ |
+| `int edge_count()` | Number of edge helpers created by `link_edge`. | $O(1)$ |
+| `bool edge_alive(edge_id)` | Whether the helper edge is currently linked. | $O(1)$ |
+| `int edge_node(edge_id)` | Link-cut-tree vertex id storing this edge's value. | $O(1)$ |
+| `std::pair<int, int> edge_endpoints(edge_id)` | Original endpoints passed to `link_edge`. | $O(1)$ |
 | `T get(v)` | Pushes pending updates and returns the stored value of vertex `v`. | Amortized $O(\log N)$ |
 | `T operator[](v)` | Alias for `get(v)`. | Amortized $O(\log N)$ |
 | `void set(v, value)` | Updates the value of vertex `v`. | Amortized $O(\log N)$ |
@@ -761,7 +761,7 @@ lct.cut_parent(4);  // cuts edge 2-4 without changing the represented root first
 
 `link_edge` creates helper vertices for edge values. Subtree sizes and products
 include those helper vertices. Initialize original vertices with
-`ActedMonoid::id()` when you want subtree products over edge values only.
+`ActedGroup::id()` when you want subtree products over edge values only.
 
 `evert(v)` and `reroot(v)` change the represented root of the component to `v`.
 

@@ -123,7 +123,7 @@ title: Dynamic Bitset
 
 ## Overview
 
-A data structure representing a dynamically-sized array of bits. Unlike `std::bitset`, whose size must be defined as a template parameter at compile-time, `DynamicBitset` wraps a `std::vector<uint64_t>` to allow the size to be determined at runtime. 
+A data structure representing a dynamically-sized array of bits. Unlike `std::bitset`, whose size must be defined as a template parameter at compile-time, `DynamicBitset` wraps a `std::vector<uint64_t>` to allow the size to be determined at runtime.
 
 It retains the performance benefits of packing bits into 64-bit words, enabling fast bulk operations (processing 64 bits per CPU cycle) and hardware-accelerated set-bit counting (`popcount`).
 
@@ -171,7 +171,7 @@ int main() {
 
     // Bitwise operations
     m1une::utilities::DynamicBitset bs3 = bs & bs2;
-    
+
     std::cout << bs3.test(10) << "\n";     // Output: 0 (since it was reset in bs2)
     std::cout << bs3.count() << "\n";      // Output: 2
 

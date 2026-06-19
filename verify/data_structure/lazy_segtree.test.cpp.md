@@ -28,7 +28,7 @@ data:
     - https://judge.yosupo.jp/problem/range_affine_range_sum
   bundledCode: "#line 1 \"verify/data_structure/lazy_segtree.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\n\n#line 1 \"data_structure/lazy_segtree.hpp\"\
-    \n\n\n\n#include <cassert>\n#include <bit>\n#include <concepts>\n#include <utility>\n\
+    \n\n\n\n#include <bit>\n#include <cassert>\n#include <concepts>\n#include <utility>\n\
     #include <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
     \ for an Acted Monoid.\ntemplate <typename AM>\nconcept IsActedMonoid = requires(typename\
@@ -286,7 +286,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 21:06:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/lazy_segtree.test.cpp

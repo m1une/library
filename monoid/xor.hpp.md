@@ -42,7 +42,7 @@ title: Bitwise XOR Monoid
 
 ## Overview
 
-A monoid representing the bitwise XOR operation. 
+A monoid representing the bitwise XOR operation.
 
 ## Template Parameters
 

@@ -101,7 +101,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: data_structure/dynamic_monoid_array.hpp
       title: Dynamic Monoid Array
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/fenwick_tree.hpp
       title: Fenwick Tree (Binary Indexed Tree)
     - icon: ':heavy_check_mark:'
@@ -194,7 +194,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: fps/all.hpp
-      title: fps/all.hpp
+      title: Formal Power Series All
     - icon: ':heavy_check_mark:'
       path: fps/convolution.hpp
       title: Convolution
@@ -400,10 +400,10 @@ data:
       title: Simplex Algorithm
   - name: sequence
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: sequence/inversion_count.hpp
       title: Inversion Count
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: sequence/lis.hpp
       title: Longest Increasing Subsequence (LIS)
   - name: string
@@ -445,7 +445,7 @@ data:
       title: Tree
   - name: utilities
     pages:
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: utilities/bigint.hpp
       title: BigInt
     - icon: ':heavy_check_mark:'
@@ -505,6 +505,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/dynamic_monoid_array.test.cpp
       title: verify/data_structure/dynamic_monoid_array.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/data_structure/fenwick_tree.test.cpp
+      title: verify/data_structure/fenwick_tree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/data_structure/hash_map.test.cpp
       title: verify/data_structure/hash_map.test.cpp
@@ -642,6 +645,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/optimization/simplex.test.cpp
       title: verify/optimization/simplex.test.cpp
+  - name: verify/sequence
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/sequence/sequence_algorithms.test.cpp
+      title: verify/sequence/sequence_algorithms.test.cpp
   - name: verify/string
     pages:
     - icon: ':heavy_check_mark:'

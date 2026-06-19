@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: fps/all.hpp
-    title: fps/all.hpp
+    title: Formal Power Series All
   - icon: ':heavy_check_mark:'
     path: fps/convolution.hpp
     title: Convolution

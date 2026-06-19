@@ -165,7 +165,7 @@ In addition to standard substring hashes, this class supports advanced operation
 | `RollingHash(const std::string& s)` | Builds prefix hashes and base powers for `s`, and keeps a copy for character comparisons. | $O(N)$ time and space |
 | `long long get(int l, int r) const` | Returns the hash of substring `[l, r)`. | $O(1)$ |
 | `long long concat(int l1, int r1, int l2, int r2) const` | Returns the hash of `[l1, r1)` followed by `[l2, r2)`. | $O(1)$ |
-| `int lcp(int l1, int r1, int l2, int r2) const` | Returns the longest common prefix length of two substrings. | $O(\log(\min(r1-l1, r2-l2)))$ |
+| `int lcp(int l1, int r1, int l2, int r2) const` | Returns the longest common prefix length of two substrings. | $O(\log(\min(r1 - l1, r2 - l2)))$ |
 | `int compare(int l1, int r1, int l2, int r2) const` | Lexicographically compares two substrings. Returns `-1`, `0`, or `1`. | $O(\log N)$ |
 | `long long repeat(int l, int r, long long k) const` | Returns the hash of substring `[l, r)` repeated `k` times. | $O(\log k)$ |
 
@@ -204,6 +204,7 @@ int main() {
 
     // Static compute hash (O(1) space)
     long long pattern = RH::compute_hash("cad");
+    std::cout << repeated << " " << pattern << "\n";
 
     return 0;
 }

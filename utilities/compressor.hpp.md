@@ -100,6 +100,7 @@ Coordinate compression helper. It stores sorted unique values and maps original 
 
 ```cpp
 #include "utilities/compressor.hpp"
+#include <iostream>
 #include <vector>
 
 int main() {
@@ -108,5 +109,6 @@ int main() {
 
     int id = comp.get(100);     // 2
     long long value = comp[id]; // 100
+    std::cout << id << " " << value << "\n";
 }
 ```

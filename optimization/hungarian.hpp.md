@@ -181,9 +181,9 @@ subtraction and summation, such as `long long` or `long double`.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `hungarian_min` | `template <class T> HungarianResult<T> hungarian_min(const std::vector<std::vector<T>>& cost)` | Returns a minimum-cost assignment. | $O(\min(H,W)^2 \max(H,W))$ |
-| `hungarian_max` | `template <class T> HungarianResult<T> hungarian_max(const std::vector<std::vector<T>>& cost)` | Returns a maximum-cost assignment. | $O(\min(H,W)^2 \max(H,W))$ |
-| `hungarian` | `template <class T> HungarianResult<T> hungarian(const std::vector<std::vector<T>>& cost)` | Alias of `hungarian_min`. | $O(\min(H,W)^2 \max(H,W))$ |
+| `hungarian_min` | `template <class T> HungarianResult<T> hungarian_min(const std::vector<std::vector<T>>& cost)` | Returns a minimum-cost assignment. | $O(\min(H, W)^2 \max(H, W))$ |
+| `hungarian_max` | `template <class T> HungarianResult<T> hungarian_max(const std::vector<std::vector<T>>& cost)` | Returns a maximum-cost assignment. | $O(\min(H, W)^2 \max(H, W))$ |
+| `hungarian` | `template <class T> HungarianResult<T> hungarian(const std::vector<std::vector<T>>& cost)` | Alias of `hungarian_min`. | $O(\min(H, W)^2 \max(H, W))$ |
 
 ## Example
 

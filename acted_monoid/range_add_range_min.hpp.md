@@ -74,7 +74,7 @@ int main() {
     seg.apply(1, 4, -15);
 
     // Get the minimum in range [0, 3) -> min(10, 5, 15) = 5
-    std::cout << seg.prod(0, 3) << "\n"; 
+    std::cout << seg.prod(0, 3) << "\n";
 
     return 0;
 }

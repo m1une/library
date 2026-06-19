@@ -37,7 +37,7 @@ title: Bitwise AND Monoid
 
 ## Overview
 
-A monoid representing the bitwise AND operation. 
+A monoid representing the bitwise AND operation.
 
 ## Template Parameters
 

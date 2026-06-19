@@ -51,7 +51,7 @@ data:
     #include <limits>
 
 
-    #include "min_subarray.hpp"
+    #include "monoid/min_subarray.hpp"
 
 
     namespace m1une {
@@ -81,7 +81,7 @@ data:
   isVerificationFile: false
   path: monoid/max_subarray.hpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/max_subarray.hpp
@@ -131,7 +131,7 @@ int main() {
 
     // Max subarray sum in the whole array is 6 (from "4, -1, 2, 1")
     auto node = seg.prod(0, N);
-    std::cout << "Max Subarray Sum: " << node.opt << "\n"; 
+    std::cout << "Max Subarray Sum: " << node.opt << "\n";
 
     return 0;
 }

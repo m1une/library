@@ -88,13 +88,14 @@ title: Range AP Update Range Min Max
 
 ## Overview
 
-An exceptionally powerful Acted Monoid that supports overwriting a range with an Arithmetic Progression (AP) and querying both the **minimum** and **maximum** values in a range.
+An acted monoid that overwrites a range with an arithmetic progression and
+queries the minimum and maximum values in a range.
 
 The operator replaces existing elements with a linear function $f(i) = a \cdot i + b$, where $i$ is the 0-based order inside the updated range.
 
 ### Mathematical Mechanism
 
-Unlike AP Addition (which cannot support Min/Max queries because the sum of an arbitrary curve and a line is unpredictable), AP **Update** completely overwrites the segment data with a perfectly straight line. 
+Unlike AP Addition (which cannot support Min/Max queries because the sum of an arbitrary curve and a line is unpredictable), AP **Update** completely overwrites the segment data with a perfectly straight line.
 
 Because a linear function is monotonic, the minimum and maximum values over any continuous range occur at the boundary endpoints. Therefore, by storing the segment `size`, the new Min/Max can be computed in $O(1)$ time by evaluating the local endpoints.
 
@@ -119,6 +120,7 @@ Because a linear function is monotonic, the minimum and maximum values over any 
 Leaf nodes are initialized with `make(val)` or by constructing a data structure directly from raw values.
 
 ### `static constexpr value_type make(const T& val)`
+
 * **Parameters:**
   * `val`: The initial scalar value of the element.
 * **Returns:** A fully initialized single-element node.

@@ -34,8 +34,8 @@ data:
     \ a);\n        }\n        a = M::op(a, a);\n        n >>= 1;\n    }\n    return\
     \ res;\n}\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_POWER_HPP\n#define M1UNE_MONOID_POWER_HPP 1\n\n#include\
-    \ \"concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Computes a^n\
-    \ (a * a * ... * a, n times) for an element 'a' in Monoid 'M'.\n// Uses binary\
+    \ \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Computes\
+    \ a^n (a * a * ... * a, n times) for an element 'a' in Monoid 'M'.\n// Uses binary\
     \ exponentiation to achieve O(log n) time complexity.\n// The template parameter\
     \ 'M' is constrained by the 'IsMonoid' concept.\ntemplate <IsMonoid M>\nconstexpr\
     \ typename M::value_type power(typename M::value_type a, long long n) {\n    typename\
@@ -48,7 +48,7 @@ data:
   isVerificationFile: false
   path: monoid/power.hpp
   requiredBy: []
-  timestamp: '2026-06-17 21:06:48+09:00'
+  timestamp: '2026-06-20 02:38:39+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/power.hpp
@@ -83,10 +83,10 @@ int main() {
     Mat::value_type transition{};
     transition[0] = {1, 1};
     transition[1] = {1, 0};
-    
+
     // Compute the 10th power of the Fibonacci transition matrix
     auto res = m1une::monoid::power<Mat>(transition, 10);
-    
+
     std::cout << res[0][0] << "\n";
     return 0;
 }

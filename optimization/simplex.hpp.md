@@ -295,7 +295,7 @@ The inputs are:
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `simplex_maximize` | `template <class T> SimplexResult<T> simplex_maximize(const std::vector<std::vector<T>>& a, const std::vector<T>& b, const std::vector<T>& c, T eps = T(1e-10))` | Maximizes `c^T x` subject to `A x <= b` and `x >= 0`. | `O(P H W)` where `P` is the number of pivots, `H = b.size()`, and `W = c.size()`. Simplex has exponential worst-case behavior. |
+| `simplex_maximize` | `template <class T> SimplexResult<T> simplex_maximize(const std::vector<std::vector<T>>& a, const std::vector<T>& b, const std::vector<T>& c, T eps = T(1e-10))` | Maximizes `c^T x` subject to `A x <= b` and `x >= 0`. | $O(P \cdot H \cdot W)$ where `P` is the number of pivots, `H = b.size()`, and `W = c.size()`. Simplex has exponential worst-case behavior. |
 | `simplex_minimize` | `template <class T> SimplexResult<T> simplex_minimize(const std::vector<std::vector<T>>& a, const std::vector<T>& b, const std::vector<T>& c, T eps = T(1e-10))` | Minimizes `c^T x` under the same constraints. | Same as above. |
 | `simplex` | `template <class T> SimplexResult<T> simplex(const std::vector<std::vector<T>>& a, const std::vector<T>& b, const std::vector<T>& c, T eps = T(1e-10))` | Alias of `simplex_maximize`. | Same as above. |
 

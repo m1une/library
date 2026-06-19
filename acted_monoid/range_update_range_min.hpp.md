@@ -56,7 +56,7 @@ An Acted Monoid representing Range Update (overwrite/assignment) operations and 
 
 ### Important Usage Note
 
-This implementation uses `std::optional<T>` as the `operator_type` to safely represent the state of "no operation" (the identity element of the operator monoid). 
+This implementation uses `std::optional<T>` as the `operator_type` to safely represent the state of "no operation" (the identity element of the operator monoid).
 
 - A valid update operation with value $v$ is represented as `std::optional<T>(v)`.
 - The identity operator (no operation) is represented as `std::nullopt`.
