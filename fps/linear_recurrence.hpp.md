@@ -423,7 +423,7 @@ a[n] = recurrence[0] * a[n - 1]
 ## Complexity
 
 For recurrence order `d`, the running time is
-$O(M(d) \log \mathrm{index})$ and the working memory is
+$O(d \log d \log \mathrm{index})$ and the working memory is
 $O(d)$ apart from convolution buffers.
 
 ## Example

@@ -519,6 +519,7 @@ integration must be smaller than the modulus.
 ## Basic Operations
 
 Let `Fps` denote `FormalPowerSeries<Mint>`.
+Here, `n` is the number of coefficients involved in the operation.
 
 | Operation | Description | Complexity |
 | --- | --- | --- |
@@ -526,7 +527,7 @@ Let `Fps` denote `FormalPowerSeries<Mint>`.
 | `f.pre(n)` | Returns exactly the first `n` coefficients, padding with zero. | $O(n)$ |
 | `f.reversed(n)` | Resizes to `n` when specified, then reverses coefficients. | $O(n)$ |
 | `f + g`, `f - g` | Coefficient-wise addition or subtraction. | $O(n)$ |
-| `f * g` | Polynomial convolution. | $O(M(n))$ |
+| `f * g` | Polynomial convolution. | $O(n \log n)$ |
 | `f * c`, `f / c` | Scalar multiplication or division. | $O(n)$ |
 | `f << k` | Multiplies by $x^k$. | $O(n + k)$ |
 | `f >> k` | Divides by $x^k$, discarding lower terms. | $O(n)$ |
@@ -534,17 +535,15 @@ Let `Fps` denote `FormalPowerSeries<Mint>`.
 | `f.integral()` | Formal integral with constant term zero. | $O(n)$ |
 | `f.evaluate(x)` | Evaluates by Horner's method. | $O(n)$ |
 
-Here, $M(n)$ is the cost of multiplying degree-$n$ polynomials.
-
 ## Series Functions
 
 | Method | Requirement | Result | Complexity |
 | --- | --- | --- | --- |
-| `f.inv(n)` | `f[0] != 0` | $1/f \pmod{x^n}$ | $O(M(n))$ |
-| `f.log(n)` | `f[0] == 1` | $\log f \pmod{x^n}$ | $O(M(n))$ |
-| `f.exp(n)` | `f[0] == 0` | $\exp f \pmod{x^n}$ | $O(M(n))$ |
-| `f.pow(k, n)` | `k >= 0` | $f^k \pmod{x^n}$ | $O(M(n))$ |
-| `f.sqrt(n)` | A square root exists | An optional $g$ with $g^2=f \pmod{x^n}$ | $O(M(n))$ |
+| `f.inv(n)` | `f[0] != 0` | $1/f \pmod{x^n}$ | $O(n \log n)$ |
+| `f.log(n)` | `f[0] == 1` | $\log f \pmod{x^n}$ | $O(n \log n)$ |
+| `f.exp(n)` | `f[0] == 0` | $\exp f \pmod{x^n}$ | $O(n \log n)$ |
+| `f.pow(k, n)` | `k >= 0` | $f^k \pmod{x^n}$ | $O(n \log n)$ |
+| `f.sqrt(n)` | A square root exists | An optional $g$ with $g^2=f \pmod{x^n}$ | $O(n \log n)$ |
 
 When `n` is omitted, the current series size is used. `sqrt` returns
 `std::nullopt` if the leading degree is odd or its coefficient is not a
@@ -554,9 +553,9 @@ quadratic residue.
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `f.divmod(g)` | Returns the quotient and remainder of polynomial division. | $O(M(n))$ |
-| `f / g`, `f % g` | Returns only the quotient or remainder. | $O(M(n))$ |
-| `f.taylor_shift(c)` | Returns coefficients of `f(x + c)`. | $O(M(n))$ |
+| `f.divmod(g)` | Returns the quotient and remainder of polynomial division. | $O(n \log n)$ |
+| `f / g`, `f % g` | Returns only the quotient or remainder. | $O(n \log n)$ |
+| `f.taylor_shift(c)` | Returns coefficients of `f(x + c)`. | $O(n \log n)$ |
 
 The divisor must be nonzero. Taylor shift requires `f.size() < Mint::mod()`.
 
