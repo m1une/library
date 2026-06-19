@@ -135,7 +135,7 @@ corresponding operation. Their bounds are therefore:
 | `multipoint_evaluate` | $O(D \log D + N \log^2 N)$ |
 | `polynomial_interpolate` | $O(N \log^2 N)$ |
 
-## Example
+## Reusing a Subproduct Tree
 
 ```cpp
 #include "fps/multipoint_evaluation.hpp"
@@ -160,5 +160,84 @@ int main() {
 
     Fps restored = tree.interpolate(values);
     assert(restored == f);
+}
+```
+
+## One-Shot Multipoint Evaluation
+
+Use `multipoint_evaluate` when the points are needed for only one polynomial.
+
+```cpp
+#include "fps/multipoint_evaluation.hpp"
+#include "math/modint.hpp"
+
+#include <cassert>
+#include <vector>
+
+using mint = m1une::math::modint998244353;
+using Fps = m1une::fps::FormalPowerSeries<mint>;
+
+int main() {
+    // f(x) = 2x^3 - x + 5
+    Fps f = {5, -1, 0, 2};
+    std::vector<mint> points = {-2, 0, 3};
+
+    std::vector<mint> values =
+        m1une::fps::multipoint_evaluate(f, points);
+
+    assert(values[0] == mint(-9));
+    assert(values[1] == mint(5));
+    assert(values[2] == mint(56));
+}
+```
+
+## One-Shot Polynomial Interpolation
+
+Use `polynomial_interpolate` to recover the unique polynomial of degree less
+than the number of distinct points.
+
+```cpp
+#include "fps/multipoint_evaluation.hpp"
+#include "math/modint.hpp"
+
+#include <cassert>
+#include <vector>
+
+using mint = m1une::math::modint998244353;
+using Fps = m1une::fps::FormalPowerSeries<mint>;
+
+int main() {
+    // The points lie on f(x) = x^2 + 2x + 3.
+    std::vector<mint> points = {-1, 0, 2};
+    std::vector<mint> values = {2, 3, 11};
+
+    Fps f = m1une::fps::polynomial_interpolate(points, values);
+
+    Fps expected = {3, 2, 1};
+    assert(f == expected);
+}
+```
+
+## Empty Inputs
+
+Both free functions accept an empty point set.
+
+```cpp
+#include "fps/multipoint_evaluation.hpp"
+#include "math/modint.hpp"
+
+#include <cassert>
+#include <vector>
+
+using mint = m1une::math::modint998244353;
+using Fps = m1une::fps::FormalPowerSeries<mint>;
+
+int main() {
+    Fps f = {1, 2, 3};
+    std::vector<mint> points;
+    std::vector<mint> values;
+
+    assert(m1une::fps::multipoint_evaluate(f, points).empty());
+    assert(m1une::fps::polynomial_interpolate(points, values).empty());
 }
 ```
