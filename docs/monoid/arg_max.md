@@ -24,7 +24,7 @@ int main() {
     m1une::data_structure::Segtree<ArgMaxM> seg(A);
 
     auto res = seg.prod(0, A.size());
-    
+
     std::cout << "Max Value: " << res.value << "\n"; // Output: 8
     std::cout << "Order: " << res.ord << "\n";       // Output: 1 (Order 1 is chosen over order 3)
 

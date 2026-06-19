@@ -5,9 +5,10 @@ documentation_of: ../../utilities/bigint.hpp
 
 ## Overview
 
-A robust, arbitrarily large integer class intended for competitive programming. It operates in base $10^9$, packing 9 decimal digits per 32-bit `int` within a `std::vector<int>`. This ensures an optimal balance between memory usage and computational speed, while keeping the standard arithmetic operations from overflowing `long long` limits.
+An arbitrary-precision signed integer for competitive programming. Digits are
+stored in base $10^9$ blocks.
 
-It supports all standard math and bitwise operators, seamlessly handles negative numbers, and integrates with standard I/O streams (`std::cin` / `std::cout`).
+It supports arithmetic, comparisons, and standard stream input and output.
 
 ## Methods
 
@@ -27,7 +28,8 @@ It supports all standard math and bitwise operators, seamlessly handles negative
 | Relational Operators | `<, >, <=, >=, ==, !=` are all fully supported. | $O(N)$ |
 | Stream Operators | `<<` (output) and `>>` (input) integration. | $O(N)$ |
 
-*Note: $N$ and $M$ denote the number of base-$10^9$ blocks in the respective numbers, which roughly equals $Digits / 9$.*
+Here, $N$ and $M$ denote the number of base-$10^9$ blocks in the operands.
+Division by zero throws `std::domain_error`.
 
 ## Example
 
@@ -38,17 +40,18 @@ It supports all standard math and bitwise operators, seamlessly handles negative
 using m1une::utilities::BigInt;
 
 int main() {
-    BigInt a = "12345678901234567890";
+    BigInt a("12345678901234567890");
     BigInt b = 987654321;
-    
+
     BigInt sum = a + b;
     BigInt diff = a - b;
     BigInt prod = a * b;
-    
+
     // std::pair<BigInt, BigInt>
-    auto [quotient, remainder] = divmod(a, b); 
+    auto [quotient, remainder] = divmod(a, b);
 
     std::cout << "Sum: " << sum << "\n";
+    std::cout << "Difference: " << diff << "\n";
     std::cout << "Product: " << prod << "\n";
     std::cout << "Quotient: " << quotient << " R: " << remainder << "\n";
 

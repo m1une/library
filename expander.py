@@ -1,10 +1,11 @@
-import sys
 import os
 import re
+import sys
 
 LIBRARY_ROOT = os.path.abspath(os.path.dirname(__file__))
-INCLUDE_PATHS = ['.', LIBRARY_ROOT]
+INCLUDE_PATHS = ('.', LIBRARY_ROOT)
 visited = set()
+
 
 def line_marker_name(display_name):
     """
@@ -17,6 +18,7 @@ def line_marker_name(display_name):
     """
     return re.sub(r'[/\\]+', '::', display_name).replace('"', "'")
 
+
 def resolve_include(header, current_file_dir):
     """
     Finds the absolute path for a given header file.
@@ -26,12 +28,13 @@ def resolve_include(header, current_file_dir):
     relative_path = os.path.join(current_file_dir, header)
     if os.path.isfile(relative_path):
         return os.path.abspath(relative_path)
-    
+
     for path in INCLUDE_PATHS:
         full_path = os.path.join(path, header)
         if os.path.isfile(full_path):
             return os.path.abspath(full_path)
     return None
+
 
 def expand_file(path, display_name=None):
     """
@@ -49,12 +52,12 @@ def expand_file(path, display_name=None):
 
     print(f'// BEGIN: {display_name}')
 
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         lines = f.readlines()
 
     # --- Pre-processing Step: Identify lines to skip ---
     lines_to_skip = set()
-    
+
     # Identify and mark include guards for removal
     if lines:
         # Method 1: #pragma once
@@ -62,7 +65,7 @@ def expand_file(path, display_name=None):
             if line.strip() == "#pragma once":
                 lines_to_skip.add(i)
                 break
-        
+
         # Method 2: #ifndef/#define/#endif guards
         if not lines_to_skip and len(lines) >= 2:
             first_line_idx, first_line = -1, ""
@@ -70,14 +73,14 @@ def expand_file(path, display_name=None):
                 if line.strip():
                     first_line_idx, first_line = i, line
                     break
-            
+
             second_line_idx, second_line = -1, ""
             if first_line_idx != -1:
                 for i in range(first_line_idx + 1, len(lines)):
                     if lines[i].strip():
                         second_line_idx, second_line = i, lines[i]
                         break
-            
+
             last_endif_idx = -1
             for i in range(len(lines) - 1, -1, -1):
                 if lines[i].strip().startswith('#endif'):
@@ -96,33 +99,54 @@ def expand_file(path, display_name=None):
 
     # --- Main Processing Loop ---
     first_line_emitted = False
-    local_block_state = 0  # 0: normal, 1: skipping #ifdef LOCAL, 2: in #else of LOCAL
+    conditional_depth = 0
+    local_block_depth = None
+    skipping_local_branch = False
     current_file_dir = os.path.dirname(path)
 
     for i, line in enumerate(lines):
         stripped_line = line.strip()
 
-        # Handle #ifdef LOCAL state machine
-        if stripped_line.startswith('#ifdef LOCAL'):
-            local_block_state = 1
+        is_conditional_start = re.match(r'#\s*(?:if|ifdef|ifndef)\b', stripped_line)
+        is_local_start = re.match(
+            r'#\s*(?:ifdef\s+LOCAL\b|if\s+defined\s*(?:\(\s*LOCAL\s*\)|LOCAL\b))',
+            stripped_line,
+        )
+        if is_conditional_start:
+            if local_block_depth is None and is_local_start:
+                local_block_depth = conditional_depth
+                skipping_local_branch = True
+                conditional_depth += 1
+                continue
+            conditional_depth += 1
+        elif (
+            re.match(r'#\s*else\b', stripped_line)
+            and local_block_depth is not None
+            and conditional_depth == local_block_depth + 1
+        ):
+            skipping_local_branch = False
             continue
-        elif stripped_line.startswith('#else') and local_block_state == 1:
-            local_block_state = 2
+        elif re.match(r'#\s*endif\b', stripped_line):
+            if (
+                local_block_depth is not None
+                and conditional_depth == local_block_depth + 1
+            ):
+                conditional_depth -= 1
+                local_block_depth = None
+                skipping_local_branch = False
+                continue
+            conditional_depth = max(0, conditional_depth - 1)
+
+        if skipping_local_branch:
             continue
-        elif stripped_line.startswith('#endif') and (local_block_state == 1 or local_block_state == 2):
-            local_block_state = 0
+
+        if i in lines_to_skip:
             continue
-        
-        if local_block_state == 1: # Skip lines inside #ifdef LOCAL
-            continue
-            
-        if i in lines_to_skip: # Skip include guard lines
-            continue
-        
+
         if not first_line_emitted:
             print(f'#line {i + 1} "{marker_name}"')
             first_line_emitted = True
-            
+
         m = re.match(r'#\s*include\s*"([^"]+)"', stripped_line)
         if m:
             header = m.group(1)
@@ -138,9 +162,11 @@ def expand_file(path, display_name=None):
 
     print(f'// END: {display_name}')
 
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("Usage: python3 expander.py <main_file.cpp> > bundled_file.cpp", file=sys.stderr)
         sys.exit(1)
 
+    visited.clear()
     expand_file(sys.argv[1])

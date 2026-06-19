@@ -48,10 +48,15 @@ int main() {
     assert(i.clear().empty());
 
     Array base = {1, 2, 3};
+    const int& stable_reference = base[1];
+    Array pointer_growth = base;
+    for (int x = 0; x < 1000; x++) pointer_growth = pointer_growth.push_back(x);
     Array j = base.append(base);
     assert(j.to_vector() == (std::vector<int>{1, 2, 3, 1, 2, 3}));
     assert(j.reverse().to_vector() == (std::vector<int>{3, 2, 1, 3, 2, 1}));
     assert(base.to_vector() == (std::vector<int>{1, 2, 3}));
+    assert(stable_reference == 2);
+    assert(pointer_growth.size() == 1003);
 
     std::mt19937 rng(0);
     std::vector<std::pair<Array, std::vector<int>>> versions;

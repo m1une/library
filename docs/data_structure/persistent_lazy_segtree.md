@@ -23,7 +23,7 @@ new versions while older versions remain available.
 | `T prod(int l, int r)` | Returns the acted-monoid product over `[l, r)`. | $O(\log N)$ |
 | `T all_prod()` | Returns the product of the entire array. | $O(1)$ |
 | `std::vector<T> to_vector()` | Returns all elements as a vector. | $O(N)$ |
-| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O(\log N + r-l)$ |
+| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O(\log N + r - l)$ |
 | `PersistentLazySegtree apply(int p, F f)` | Returns a new version where `f` is applied to index `p`. | $O(\log N)$ |
 | `PersistentLazySegtree apply(int l, int r, F f)` | Returns a new version where `f` is applied to every element in `[l, r)`. | $O(\log N)$ |
 | `int max_right<G>(int l, G g)` | Returns the largest `r` such that `g(prod(l, r))` is `true`. | $O(\log N)$ |

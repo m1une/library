@@ -33,7 +33,7 @@ int main() {
 
     // Query range [3, 8) -> "(()()"
     auto res = seg.prod(3, 8);
-    
+
     std::cout << "Matched Pairs: " << res.matched << "\n"; // Output: 2
     std::cout << "Unmatched '(': " << res.unmatched_left << "\n"; // Output: 1
     std::cout << "Unmatched ')': " << res.unmatched_right << "\n"; // Output: 0

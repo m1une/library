@@ -47,8 +47,8 @@ because it can be made arbitrarily small.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `bellman_ford` | `template <class T> BellmanFordResult<T> bellman_ford(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from one source. | $O(NM)$ |
-| `bellman_ford` | `template <class T> BellmanFordResult<T> bellman_ford(const Graph<T>& g, const std::vector<int>& sources, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from multiple sources. | $O(NM)$ |
+| `bellman_ford` | `template <class T> BellmanFordResult<T> bellman_ford(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from one source. | $O(N \cdot M)$ |
+| `bellman_ford` | `template <class T> BellmanFordResult<T> bellman_ford(const Graph<T>& g, const std::vector<int>& sources, T inf = std::numeric_limits<T>::max() / T(4))` | Runs from multiple sources. | $O(N \cdot M)$ |
 
 ## Example
 

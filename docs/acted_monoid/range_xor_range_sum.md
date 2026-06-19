@@ -9,7 +9,7 @@ An Acted Monoid representing Range Bitwise XOR operations and Range Sum queries.
 
 ### Mathematical Mechanism
 
-Because the XOR operation acts bit-by-bit, it does not distribute directly over addition ($C \oplus (A + B) \neq (C \oplus A) + (C \oplus B)$). To compute the new sum of a range after XORing by a value $f$, the segment tree node must independently track **how many times each bit is set** in its range. 
+Because the XOR operation acts bit-by-bit, it does not distribute directly over addition ($C \oplus (A + B) \neq (C \oplus A) + (C \oplus B)$). To compute the new sum of a range after XORing by a value $f$, the segment tree node must independently track **how many times each bit is set** in its range.
 
 If the $i$-th bit of $f$ is set, the new number of set bits at position $i$ within the segment becomes `size - old_bit_count`. The total sum is then re-evaluated based on the new bit counts.
 
@@ -35,12 +35,12 @@ using AM = m1une::acted_monoid::RangeXorRangeSum<long long, 30>;
 int main() {
     std::vector<long long> A = {1, 2, 3, 4, 5};
     int N = A.size();
-    
+
     std::vector<AM::value_type> init_nodes(N);
-    for(int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i) {
         init_nodes[i] = AM::make(A[i]);
     }
-    
+
     m1une::data_structure::LazySegtree<AM> seg(init_nodes);
 
     // Get the sum of range [0, 4) -> 1 + 2 + 3 + 4 = 10

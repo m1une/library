@@ -7,6 +7,9 @@ documentation_of: ../../data_structure/persistent_dynamic_array.hpp
 
 `PersistentDynamicArray` is a path-copying implicit treap. It acts like a persistent version of `DynamicArray`: update operations return a new array and leave the old version available.
 
+Nodes are stored in a shared block-contiguous pool and refer to children by integer index. This avoids per-node allocation and reference-counted child pointers while preserving stable references returned by `at`, `front`, and `back`.
+The pool is append-only and is released when the last related version is destroyed.
+
 The structure supports index-based insertion, deletion, point assignment, reversal, rotation, splitting, and concatenation. Untouched subtrees are shared between versions.
 
 ## Complexity Notation
@@ -46,23 +49,23 @@ The structure supports index-based insertion, deletion, point assignment, revers
 | `int size() const` | Returns the number of elements. | $O(1)$ |
 | `bool empty() const` | Returns whether the array is empty. | $O(1)$ |
 | `PersistentDynamicArray clear() const` | Returns an empty version. | $O(1)$ |
-| `PersistentDynamicArray insert(int pos, T val) const` | Returns a version with `val` inserted before index `pos`. | $O(\log N)$ expected |
-| `PersistentDynamicArray insert(int pos, const std::vector<T>& v) const` | Returns a version with all elements of `v` inserted before index `pos`. | $O(M + \log N)$ expected |
-| `PersistentDynamicArray insert(int pos, const PersistentDynamicArray& other) const` | Returns a version with `other` inserted before index `pos`. | $O(\log N)$ expected |
-| `PersistentDynamicArray push_back(T val) const`, `push_front(T val) const` | Returns a version with one element added. | $O(\log N)$ expected |
-| `PersistentDynamicArray append(...) const` | Appends a vector or another persistent dynamic array. | $O(M + \log N)$ expected for a vector; $O(\log N)$ expected for another array |
-| `PersistentDynamicArray erase(int pos) const` | Returns a version with the element at `pos` removed. | $O(\log N)$ expected |
-| `PersistentDynamicArray erase(int l, int r) const` | Returns a version with `[l, r)` removed. | $O(\log N)$ expected |
-| `PersistentDynamicArray pop_back() const`, `pop_front() const` | Returns a version with one element removed. | $O(\log N)$ expected |
-| `const T& at(int pos) const`, `operator[]` | Returns the element at `pos`. | $O(\log N)$ expected |
-| `T get(int pos) const` | Returns a copy of the element at `pos`. | $O(\log N)$ expected |
-| `const T& front() const`, `back() const` | Returns the first or last element. | $O(\log N)$ expected |
-| `PersistentDynamicArray set(int pos, T val) const` | Returns a version where index `pos` is overwritten by `val`. | $O(\log N)$ expected |
-| `PersistentDynamicArray reverse(int l, int r) const` | Returns a version with `[l, r)` reversed. | $O(\log N)$ expected |
+| `PersistentDynamicArray insert(int pos, T val) const` | Returns a version with `val` inserted before index `pos`. | Expected $O(\log N)$ |
+| `PersistentDynamicArray insert(int pos, const std::vector<T>& v) const` | Returns a version with all elements of `v` inserted before index `pos`. | Expected $O(M + \log N)$ |
+| `PersistentDynamicArray insert(int pos, const PersistentDynamicArray& other) const` | Returns a version with `other` inserted before index `pos`. Versions sharing a pool reuse its nodes; an independently constructed array is copied into this pool. | Expected $O(\log N)$ with a shared pool; $O(M + \log N)$ otherwise |
+| `PersistentDynamicArray push_back(T val) const`, `push_front(T val) const` | Returns a version with one element added. | Expected $O(\log N)$ |
+| `PersistentDynamicArray append(...) const` | Appends a vector or another persistent dynamic array. | Expected $O(M + \log N)$ for a vector or independent array; $O(\log N)$ for a version sharing the pool |
+| `PersistentDynamicArray erase(int pos) const` | Returns a version with the element at `pos` removed. | Expected $O(\log N)$ |
+| `PersistentDynamicArray erase(int l, int r) const` | Returns a version with `[l, r)` removed. | Expected $O(\log N)$ |
+| `PersistentDynamicArray pop_back() const`, `pop_front() const` | Returns a version with one element removed. | Expected $O(\log N)$ |
+| `const T& at(int pos) const`, `operator[]` | Returns the element at `pos`. | Expected $O(\log N)$ |
+| `T get(int pos) const` | Returns a copy of the element at `pos`. | Expected $O(\log N)$ |
+| `const T& front() const`, `back() const` | Returns the first or last element. | Expected $O(\log N)$ |
+| `PersistentDynamicArray set(int pos, T val) const` | Returns a version where index `pos` is overwritten by `val`. | Expected $O(\log N)$ |
+| `PersistentDynamicArray reverse(int l, int r) const` | Returns a version with `[l, r)` reversed. | Expected $O(\log N)$ |
 | `PersistentDynamicArray reverse() const` | Returns a version with the whole array reversed. | $O(1)$ |
-| `PersistentDynamicArray rotate(int l, int m, int r) const` | Returns a version where `[m, r)` is moved before `[l, m)`, like `std::rotate`. | $O(\log N)$ expected |
-| `std::pair<PersistentDynamicArray, PersistentDynamicArray> split(int pos) const` | Returns `{prefix, suffix}` split at `pos`. | $O(\log N)$ expected |
-| `PersistentDynamicArray split_off(int pos) const` | Returns the suffix `[pos, N)` while leaving the current version unchanged. | $O(\log N)$ expected |
+| `PersistentDynamicArray rotate(int l, int m, int r) const` | Returns a version where `[m, r)` is moved before `[l, m)`, like `std::rotate`. | Expected $O(\log N)$ |
+| `std::pair<PersistentDynamicArray, PersistentDynamicArray> split(int pos) const` | Returns `{prefix, suffix}` split at `pos`. | Expected $O(\log N)$ |
+| `PersistentDynamicArray split_off(int pos) const` | Returns the suffix `[pos, N)` while leaving the current version unchanged. | Expected $O(\log N)$ |
 | `std::vector<T> to_vector() const` | Dumps the entire array. | $O(N)$ |
 | `std::vector<T> to_vector(int l, int r) const` | Dumps `[l, r)`, where `K = r - l`. | $O(K + \log N)$ |
 

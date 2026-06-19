@@ -30,6 +30,7 @@ When initializing the lazy segment tree, you must transform the raw binary value
 **Always use the `make(val)` helper method** to securely build the leaf nodes.
 
 ### `static constexpr value_type make(int val)`
+
 * **Parameters:**
   * `val`: The binary element value (`0` or `1`).
 * **Returns:** A `BinaryInversionNode` properly initialized for a single element.

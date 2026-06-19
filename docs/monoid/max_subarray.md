@@ -45,7 +45,7 @@ int main() {
 
     // Max subarray sum in the whole array is 6 (from "4, -1, 2, 1")
     auto node = seg.prod(0, N);
-    std::cout << "Max Subarray Sum: " << node.opt << "\n"; 
+    std::cout << "Max Subarray Sum: " << node.opt << "\n";
 
     return 0;
 }

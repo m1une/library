@@ -49,7 +49,7 @@ Construction takes $O(N)$ time.
 | `void apply(int p, T x)` | Applies `x` to index `p`. | $O(\log N)$ |
 | `void apply(int l, int r, T x)` | Applies `x` to every element in `[l, r)`. | $O(\log N)$ |
 | `std::vector<T> to_vector()` | Pushes all pending updates and returns all elements. | $O(N)$ |
-| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O((r-l)\log N)$ |
+| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O((r - l) \log N)$ |
 
 ## Example
 

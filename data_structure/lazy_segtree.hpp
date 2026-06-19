@@ -1,8 +1,8 @@
 #ifndef M1UNE_LAZY_SEGTREE_HPP
 #define M1UNE_LAZY_SEGTREE_HPP 1
 
-#include <cassert>
 #include <bit>
+#include <cassert>
 #include <concepts>
 #include <utility>
 #include <vector>

@@ -35,7 +35,7 @@ int main() {
 
     // Get the top 3 elements in the range [0, 4) -> {50, 40, 20}
     std::vector<long long> top3 = seg.prod(0, 4);
-    
+
     for (long long x : top3) {
         std::cout << x << " ";
     }

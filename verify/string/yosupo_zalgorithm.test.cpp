@@ -6,7 +6,7 @@
 
 void fast_io() {
     std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
+    std::cin.tie(nullptr);
 }
 
 using RH = m1une::string::RollingHash<10007, 2305843009213693951LL>;

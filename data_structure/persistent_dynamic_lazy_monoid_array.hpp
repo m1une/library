@@ -21,44 +21,27 @@ struct PersistentDynamicLazyMonoidArray {
     using F = typename ActedMonoid::operator_type;
 
    private:
-    struct Node;
-    using NodePtr = std::shared_ptr<const Node>;
-
     struct Node {
         T val, prod, rprod;
         F lazy;
         int priority;
         int count;
+        int l, r;
         bool rev;
         bool has_lazy;
-        NodePtr l, r;
 
-        Node(T value, int node_priority, bool reversed, NodePtr left, NodePtr right)
-            : val(std::move(value)),
-              prod(ActedMonoid::op(ActedMonoid::op(node_prod(left), val), node_prod(right))),
-              rprod(ActedMonoid::op(ActedMonoid::op(node_rprod(right), val), node_rprod(left))),
-              lazy(ActedMonoid::op_id()),
-              priority(node_priority),
-              count(1 + subtree_size(left) + subtree_size(right)),
-              rev(reversed),
-              has_lazy(false),
-              l(std::move(left)),
-              r(std::move(right)) {
-            if (rev) std::swap(prod, rprod);
-        }
-
-        Node(T value, T product, T reverse_product, F lazy_value, int node_priority, int node_count, bool reversed,
-             bool lazy_flag, NodePtr left, NodePtr right)
+        Node(T value, T product, T reverse_product, F lazy_value, int node_priority, int node_count, int left,
+             int right, bool reversed, bool lazy_flag)
             : val(std::move(value)),
               prod(std::move(product)),
               rprod(std::move(reverse_product)),
               lazy(std::move(lazy_value)),
               priority(node_priority),
               count(node_count),
+              l(left),
+              r(right),
               rev(reversed),
-              has_lazy(lazy_flag),
-              l(std::move(left)),
-              r(std::move(right)) {}
+              has_lazy(lazy_flag) {}
     };
 
     struct BuildNode {
@@ -69,19 +52,20 @@ struct PersistentDynamicLazyMonoidArray {
         BuildNode(T value, int node_priority) : val(std::move(value)), priority(node_priority), l(-1), r(-1) {}
     };
 
-    NodePtr root;
+    int root;
     std::uint32_t rng_state;
+    std::shared_ptr<std::vector<Node>> pool;
 
-    static int subtree_size(const NodePtr& t) {
-        return t ? t->count : 0;
+    int subtree_size(int t) const {
+        return t == -1 ? 0 : (*pool)[t].count;
     }
 
-    static T node_prod(const NodePtr& t) {
-        return t ? t->prod : ActedMonoid::id();
+    T node_prod(int t) const {
+        return t == -1 ? ActedMonoid::id() : (*pool)[t].prod;
     }
 
-    static T node_rprod(const NodePtr& t) {
-        return t ? t->rprod : ActedMonoid::id();
+    T node_rprod(int t) const {
+        return t == -1 ? ActedMonoid::id() : (*pool)[t].rprod;
     }
 
     static std::uint32_t next_state(std::uint32_t state) {
@@ -129,160 +113,181 @@ struct PersistentDynamicLazyMonoidArray {
         }
     }
 
-    static F compose_for_child(const F& inherited, const NodePtr& t, long long ord) {
+    F compose_for_child(const F& inherited, int t, long long ord) const {
         F shifted = shift_operator(inherited, ord);
-        if (!t->has_lazy) return shifted;
-        return ActedMonoid::op_comp(shifted, shift_operator(t->lazy, ord));
+        const Node& node = (*pool)[t];
+        if (!node.has_lazy) return shifted;
+        return ActedMonoid::op_comp(shifted, shift_operator(node.lazy, ord));
     }
 
-    NodePtr make_node(T val, int priority, bool rev, NodePtr l, NodePtr r) const {
-        return std::make_shared<Node>(std::move(val), priority, rev, std::move(l), std::move(r));
+    int make_raw_node(T val, T prod, T rprod, F lazy, int priority, int count, bool rev, bool has_lazy, int l,
+                      int r) const {
+        pool->emplace_back(std::move(val), std::move(prod), std::move(rprod), std::move(lazy), priority, count, l,
+                           r, rev, has_lazy);
+        return int(pool->size()) - 1;
     }
 
-    NodePtr make_raw_node(T val, T prod, T rprod, F lazy, int priority, int count, bool rev, bool has_lazy,
-                          NodePtr l, NodePtr r) const {
-        return std::make_shared<Node>(std::move(val), std::move(prod), std::move(rprod), std::move(lazy), priority,
-                                      count, rev, has_lazy, std::move(l), std::move(r));
+    int make_node(T val, int priority, bool rev, int l, int r) const {
+        T prod = ActedMonoid::op(ActedMonoid::op(node_prod(l), val), node_prod(r));
+        T rprod = ActedMonoid::op(ActedMonoid::op(node_rprod(r), val), node_rprod(l));
+        if (rev) std::swap(prod, rprod);
+        int count = 1 + subtree_size(l) + subtree_size(r);
+        return make_raw_node(std::move(val), std::move(prod), std::move(rprod), ActedMonoid::op_id(), priority,
+                             count, rev, false, l, r);
     }
 
-    NodePtr reversed_node(const NodePtr& t) const {
-        if (!t) return nullptr;
-        F lazy = t->has_lazy ? reverse_operator(t->lazy, t->count) : t->lazy;
-        return make_raw_node(t->val, t->rprod, t->prod, lazy, t->priority, t->count, !t->rev, t->has_lazy, t->l,
-                             t->r);
+    int reversed_node(int t) const {
+        if (t == -1) return -1;
+        Node node = (*pool)[t];
+        F lazy = node.has_lazy ? reverse_operator(node.lazy, node.count) : node.lazy;
+        return make_raw_node(std::move(node.val), std::move(node.rprod), std::move(node.prod), std::move(lazy),
+                             node.priority, node.count, !node.rev, node.has_lazy, node.l, node.r);
     }
 
-    NodePtr all_apply(const NodePtr& t, const F& f) const {
-        if (!t) return nullptr;
-        int left_count = t->rev ? subtree_size(t->r) : subtree_size(t->l);
-        return make_raw_node(mapping_at(f, t->val, left_count), mapping_at(f, t->prod, 0),
-                             mapping_at(reverse_operator(f, t->count), t->rprod, 0),
-                             ActedMonoid::op_comp(f, t->lazy), t->priority, t->count, t->rev, true, t->l, t->r);
+    int all_apply(int t, const F& f) const {
+        if (t == -1) return -1;
+        Node node = (*pool)[t];
+        int left_count = node.rev ? subtree_size(node.r) : subtree_size(node.l);
+        return make_raw_node(mapping_at(f, node.val, left_count), mapping_at(f, node.prod, 0),
+                             mapping_at(reverse_operator(f, node.count), node.rprod, 0),
+                             ActedMonoid::op_comp(f, node.lazy), node.priority, node.count, node.rev, true, node.l,
+                             node.r);
     }
 
-    NodePtr push(const NodePtr& t) const {
-        if (!t) return nullptr;
-        if (!t->rev && !t->has_lazy) return t;
-        NodePtr l = t->l;
-        NodePtr r = t->r;
-        if (t->rev) {
+    int push(int t) const {
+        if (t == -1) return -1;
+        const Node& stored = (*pool)[t];
+        if (!stored.rev && !stored.has_lazy) return t;
+        Node node = stored;
+        int l = node.l;
+        int r = node.r;
+        if (node.rev) {
             std::swap(l, r);
             l = reversed_node(l);
             r = reversed_node(r);
         }
-        if (t->has_lazy) {
-            l = all_apply(l, t->lazy);
-            r = all_apply(r, shift_operator(t->lazy, subtree_size(l) + 1));
+        if (node.has_lazy) {
+            l = all_apply(l, node.lazy);
+            r = all_apply(r, shift_operator(node.lazy, subtree_size(l) + 1));
         }
-        return make_node(t->val, t->priority, false, std::move(l), std::move(r));
+        return make_node(std::move(node.val), node.priority, false, l, r);
     }
 
-    NodePtr merge(const NodePtr& l, const NodePtr& r) const {
-        if (!l || !r) return l ? l : r;
-        if (l->priority > r->priority) {
-            NodePtr t = push(l);
-            return make_node(t->val, t->priority, false, t->l, merge(t->r, r));
+    int merge(int l, int r) const {
+        if (l == -1 || r == -1) return l == -1 ? r : l;
+        if ((*pool)[l].priority > (*pool)[r].priority) {
+            Node node = (*pool)[push(l)];
+            int right = merge(node.r, r);
+            return make_node(std::move(node.val), node.priority, false, node.l, right);
         }
-        NodePtr t = push(r);
-        return make_node(t->val, t->priority, false, merge(l, t->l), t->r);
+        Node node = (*pool)[push(r)];
+        int left = merge(l, node.l);
+        return make_node(std::move(node.val), node.priority, false, left, node.r);
     }
 
-    std::pair<NodePtr, NodePtr> split(const NodePtr& t, int pos) const {
-        if (!t) return {nullptr, nullptr};
-        NodePtr u = push(t);
-        int left_count = subtree_size(u->l);
+    std::pair<int, int> split_node(int t, int pos) const {
+        if (t == -1) return {-1, -1};
+        Node node = (*pool)[push(t)];
+        int left_count = subtree_size(node.l);
         if (pos <= left_count) {
-            auto [a, b] = split(u->l, pos);
-            return {a, make_node(u->val, u->priority, false, b, u->r)};
+            auto [a, b] = split_node(node.l, pos);
+            return {a, make_node(std::move(node.val), node.priority, false, b, node.r)};
         }
-        auto [a, b] = split(u->r, pos - left_count - 1);
-        return {make_node(u->val, u->priority, false, u->l, a), b};
+        auto [a, b] = split_node(node.r, pos - left_count - 1);
+        return {make_node(std::move(node.val), node.priority, false, node.l, a), b};
     }
 
-    NodePtr set_node(const NodePtr& t, int pos, T val) const {
-        NodePtr u = push(t);
-        int left_count = subtree_size(u->l);
+    int set_node(int t, int pos, T val) const {
+        Node node = (*pool)[push(t)];
+        int left_count = subtree_size(node.l);
         if (pos < left_count) {
-            return make_node(u->val, u->priority, false, set_node(u->l, pos, std::move(val)), u->r);
+            int l = set_node(node.l, pos, std::move(val));
+            return make_node(std::move(node.val), node.priority, false, l, node.r);
         }
         if (pos == left_count) {
-            return make_node(std::move(val), u->priority, false, u->l, u->r);
+            return make_node(std::move(val), node.priority, false, node.l, node.r);
         }
-        return make_node(u->val, u->priority, false, u->l, set_node(u->r, pos - left_count - 1, std::move(val)));
+        int r = set_node(node.r, pos - left_count - 1, std::move(val));
+        return make_node(std::move(node.val), node.priority, false, node.l, r);
     }
 
-    T get_value(NodePtr t, int pos, F inherited, bool reversed = false) const {
-        while (t) {
-            bool cur_reversed = reversed ^ t->rev;
-            NodePtr l = cur_reversed ? t->r : t->l;
-            NodePtr r = cur_reversed ? t->l : t->r;
+    T get_value(int t, int pos, F inherited, bool reversed = false) const {
+        while (t != -1) {
+            const Node& node = (*pool)[t];
+            bool cur_reversed = reversed ^ node.rev;
+            int l = cur_reversed ? node.r : node.l;
+            int r = cur_reversed ? node.l : node.r;
             int left_count = subtree_size(l);
             if (pos < left_count) {
                 inherited = compose_for_child(inherited, t, 0);
-                t = std::move(l);
+                t = l;
                 reversed = cur_reversed;
             } else if (pos == left_count) {
-                return mapping_at(inherited, t->val, left_count);
+                return mapping_at(inherited, node.val, left_count);
             } else {
                 pos -= left_count + 1;
                 inherited = compose_for_child(inherited, t, left_count + 1);
-                t = std::move(r);
+                t = r;
                 reversed = cur_reversed;
             }
         }
         return ActedMonoid::id();
     }
 
-    T prod_dfs(const NodePtr& t, int ql, int qr, int offset, const F& inherited, bool reversed = false) const {
-        if (!t || qr <= offset || offset + t->count <= ql) return ActedMonoid::id();
-        bool cur_reversed = reversed ^ t->rev;
-        if (ql <= offset && offset + t->count <= qr) {
-            return mapping_at(inherited, reversed ? t->rprod : t->prod, 0);
+    T prod_dfs(int t, int ql, int qr, int offset, const F& inherited, bool reversed = false) const {
+        if (t == -1 || qr <= offset || offset + (*pool)[t].count <= ql) return ActedMonoid::id();
+        const Node& node = (*pool)[t];
+        bool cur_reversed = reversed ^ node.rev;
+        if (ql <= offset && offset + node.count <= qr) {
+            return mapping_at(inherited, reversed ? node.rprod : node.prod, 0);
         }
-        const NodePtr& l = cur_reversed ? t->r : t->l;
-        const NodePtr& r = cur_reversed ? t->l : t->r;
+        int l = cur_reversed ? node.r : node.l;
+        int r = cur_reversed ? node.l : node.r;
         int left_count = subtree_size(l);
         int node_pos = offset + left_count;
         T res = prod_dfs(l, ql, qr, offset, compose_for_child(inherited, t, 0), cur_reversed);
-        if (ql <= node_pos && node_pos < qr) res = ActedMonoid::op(res, mapping_at(inherited, t->val, left_count));
+        if (ql <= node_pos && node_pos < qr) res = ActedMonoid::op(res, mapping_at(inherited, node.val, left_count));
         return ActedMonoid::op(
-            res, prod_dfs(r, ql, qr, node_pos + 1, compose_for_child(inherited, t, left_count + 1), cur_reversed));
+            res, prod_dfs(r, ql, qr, node_pos + 1, compose_for_child(inherited, t, left_count + 1),
+                          cur_reversed));
     }
 
-    void dump_dfs(const NodePtr& t, std::vector<T>& res, const F& inherited, bool reversed = false) const {
-        if (!t) return;
-        bool cur_reversed = reversed ^ t->rev;
-        const NodePtr& l = cur_reversed ? t->r : t->l;
-        const NodePtr& r = cur_reversed ? t->l : t->r;
+    void dump_dfs(int t, std::vector<T>& res, const F& inherited, bool reversed = false) const {
+        if (t == -1) return;
+        const Node& node = (*pool)[t];
+        bool cur_reversed = reversed ^ node.rev;
+        int l = cur_reversed ? node.r : node.l;
+        int r = cur_reversed ? node.l : node.r;
         int left_count = subtree_size(l);
         dump_dfs(l, res, compose_for_child(inherited, t, 0), cur_reversed);
-        res.push_back(mapping_at(inherited, t->val, left_count));
+        res.push_back(mapping_at(inherited, node.val, left_count));
         dump_dfs(r, res, compose_for_child(inherited, t, left_count + 1), cur_reversed);
     }
 
-    void dump_range_dfs(const NodePtr& t, int ql, int qr, int offset, std::vector<T>& res, const F& inherited,
+    void dump_range_dfs(int t, int ql, int qr, int offset, std::vector<T>& res, const F& inherited,
                         bool reversed = false) const {
-        if (!t || qr <= offset || offset + t->count <= ql) return;
-        bool cur_reversed = reversed ^ t->rev;
-        const NodePtr& l = cur_reversed ? t->r : t->l;
-        const NodePtr& r = cur_reversed ? t->l : t->r;
+        if (t == -1 || qr <= offset || offset + (*pool)[t].count <= ql) return;
+        const Node& node = (*pool)[t];
+        bool cur_reversed = reversed ^ node.rev;
+        int l = cur_reversed ? node.r : node.l;
+        int r = cur_reversed ? node.l : node.r;
         int left_count = subtree_size(l);
         int node_pos = offset + left_count;
         dump_range_dfs(l, ql, qr, offset, res, compose_for_child(inherited, t, 0), cur_reversed);
-        if (ql <= node_pos && node_pos < qr) res.push_back(mapping_at(inherited, t->val, left_count));
+        if (ql <= node_pos && node_pos < qr) res.push_back(mapping_at(inherited, node.val, left_count));
         dump_range_dfs(r, ql, qr, node_pos + 1, res, compose_for_child(inherited, t, left_count + 1),
                        cur_reversed);
     }
 
-    NodePtr build_from_nodes(std::vector<BuildNode>& nodes, int t) const {
-        if (t == -1) return nullptr;
-        NodePtr l = build_from_nodes(nodes, nodes[t].l);
-        NodePtr r = build_from_nodes(nodes, nodes[t].r);
-        return make_node(std::move(nodes[t].val), nodes[t].priority, false, std::move(l), std::move(r));
+    int build_from_nodes(std::vector<BuildNode>& nodes, int t) const {
+        if (t == -1) return -1;
+        int l = build_from_nodes(nodes, nodes[t].l);
+        int r = build_from_nodes(nodes, nodes[t].r);
+        return make_node(std::move(nodes[t].val), nodes[t].priority, false, l, r);
     }
 
-    NodePtr build_cartesian(std::vector<BuildNode>& nodes) const {
-        if (nodes.empty()) return nullptr;
+    int build_cartesian(std::vector<BuildNode>& nodes) const {
+        if (nodes.empty()) return -1;
         std::vector<int> stack;
         stack.reserve(nodes.size());
         for (int i = 0; i < int(nodes.size()); i++) {
@@ -298,14 +303,14 @@ struct PersistentDynamicLazyMonoidArray {
         return build_from_nodes(nodes, stack.front());
     }
 
-    NodePtr build_from_vector(const std::vector<T>& v, std::uint32_t& state) const {
+    int build_from_vector(const std::vector<T>& v, std::uint32_t& state) const {
         std::vector<BuildNode> nodes;
         nodes.reserve(v.size());
         for (const T& x : v) nodes.emplace_back(x, next_priority(state));
         return build_cartesian(nodes);
     }
 
-    NodePtr build_from_vector(std::vector<T>&& v, std::uint32_t& state) const {
+    int build_from_vector(std::vector<T>&& v, std::uint32_t& state) const {
         std::vector<BuildNode> nodes;
         nodes.reserve(v.size());
         for (T& x : v) nodes.emplace_back(std::move(x), next_priority(state));
@@ -313,41 +318,62 @@ struct PersistentDynamicLazyMonoidArray {
     }
 
     template <typename U>
-    NodePtr build_from_values(const std::vector<U>& v, std::uint32_t& state) const {
+    int build_from_values(const std::vector<U>& v, std::uint32_t& state) const {
         std::vector<BuildNode> nodes;
         nodes.reserve(v.size());
         for (const U& x : v) nodes.emplace_back(make_value(x), next_priority(state));
         return build_cartesian(nodes);
     }
 
-    explicit PersistentDynamicLazyMonoidArray(NodePtr node, std::uint32_t state)
-        : root(std::move(node)), rng_state(state) {}
+    int import_node(const PersistentDynamicLazyMonoidArray& other, int t) const {
+        if (t == -1) return -1;
+        if (pool == other.pool) return t;
+        const Node& node = (*other.pool)[t];
+        int l = import_node(other, node.l);
+        int r = import_node(other, node.r);
+        return make_raw_node(node.val, node.prod, node.rprod, node.lazy, node.priority, node.count, node.rev,
+                             node.has_lazy, l, r);
+    }
+
+    explicit PersistentDynamicLazyMonoidArray(int node, std::uint32_t state,
+                                              std::shared_ptr<std::vector<Node>> node_pool)
+        : root(node), rng_state(state), pool(std::move(node_pool)) {}
 
    public:
     PersistentDynamicLazyMonoidArray()
-        : root(nullptr), rng_state(std::uint32_t(std::chrono::steady_clock::now().time_since_epoch().count())) {
+        : root(-1),
+          rng_state(std::uint32_t(std::chrono::steady_clock::now().time_since_epoch().count())),
+          pool(std::make_shared<std::vector<Node>>()) {
         if (rng_state == 0) rng_state = 1;
     }
 
-    explicit PersistentDynamicLazyMonoidArray(int n) : PersistentDynamicLazyMonoidArray(n, ActedMonoid::id()) {}
+    explicit PersistentDynamicLazyMonoidArray(int n)
+        : PersistentDynamicLazyMonoidArray(n, ActedMonoid::id()) {}
 
     PersistentDynamicLazyMonoidArray(int n, const T& value) : PersistentDynamicLazyMonoidArray() {
         assert(0 <= n);
+        pool->reserve(n);
         std::vector<T> v(n, value);
         root = build_from_vector(std::move(v), rng_state);
     }
 
-    explicit PersistentDynamicLazyMonoidArray(const std::vector<T>& v) : PersistentDynamicLazyMonoidArray() {
+    explicit PersistentDynamicLazyMonoidArray(const std::vector<T>& v)
+        : PersistentDynamicLazyMonoidArray() {
+        pool->reserve(v.size());
         root = build_from_vector(v, rng_state);
     }
 
     explicit PersistentDynamicLazyMonoidArray(std::vector<T>&& v) : PersistentDynamicLazyMonoidArray() {
+        pool->reserve(v.size());
         root = build_from_vector(std::move(v), rng_state);
     }
 
     template <typename U>
-        requires(!std::same_as<U, T>) && (requires(U x) { ActedMonoid::make(x); } || std::convertible_to<U, T>)
-    explicit PersistentDynamicLazyMonoidArray(const std::vector<U>& v) : PersistentDynamicLazyMonoidArray() {
+        requires(!std::same_as<U, T>) &&
+                (requires(U x) { ActedMonoid::make(x); } || std::convertible_to<U, T>)
+    explicit PersistentDynamicLazyMonoidArray(const std::vector<U>& v)
+        : PersistentDynamicLazyMonoidArray() {
+        pool->reserve(v.size());
         root = build_from_values(v, rng_state);
     }
 
@@ -363,33 +389,33 @@ struct PersistentDynamicLazyMonoidArray {
     }
 
     PersistentDynamicLazyMonoidArray clear() const {
-        return PersistentDynamicLazyMonoidArray(nullptr, rng_state);
+        return PersistentDynamicLazyMonoidArray(-1, rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray insert(int pos, T value) const {
         assert(0 <= pos && pos <= size());
         std::uint32_t next = next_state(rng_state);
-        NodePtr node = make_node(std::move(value), int(next), false, nullptr, nullptr);
-        auto [l, r] = split(root, pos);
-        return PersistentDynamicLazyMonoidArray(merge(merge(l, node), r), next);
+        int node = make_node(std::move(value), int(next), false, -1, -1);
+        auto [l, r] = split_node(root, pos);
+        return PersistentDynamicLazyMonoidArray(merge(merge(l, node), r), next, pool);
     }
 
     PersistentDynamicLazyMonoidArray insert(int pos, const std::vector<T>& v) const {
         assert(0 <= pos && pos <= size());
         if (v.empty()) return *this;
         std::uint32_t next = rng_state;
-        NodePtr mid = build_from_vector(v, next);
-        auto [l, r] = split(root, pos);
-        return PersistentDynamicLazyMonoidArray(merge(merge(l, mid), r), next);
+        int mid = build_from_vector(v, next);
+        auto [l, r] = split_node(root, pos);
+        return PersistentDynamicLazyMonoidArray(merge(merge(l, mid), r), next, pool);
     }
 
     PersistentDynamicLazyMonoidArray insert(int pos, std::vector<T>&& v) const {
         assert(0 <= pos && pos <= size());
         if (v.empty()) return *this;
         std::uint32_t next = rng_state;
-        NodePtr mid = build_from_vector(std::move(v), next);
-        auto [l, r] = split(root, pos);
-        return PersistentDynamicLazyMonoidArray(merge(merge(l, mid), r), next);
+        int mid = build_from_vector(std::move(v), next);
+        auto [l, r] = split_node(root, pos);
+        return PersistentDynamicLazyMonoidArray(merge(merge(l, mid), r), next, pool);
     }
 
     PersistentDynamicLazyMonoidArray insert(int pos, std::initializer_list<T> init) const {
@@ -399,8 +425,9 @@ struct PersistentDynamicLazyMonoidArray {
     PersistentDynamicLazyMonoidArray insert(int pos, const PersistentDynamicLazyMonoidArray& other) const {
         assert(0 <= pos && pos <= size());
         if (other.empty()) return *this;
-        auto [l, r] = split(root, pos);
-        return PersistentDynamicLazyMonoidArray(merge(merge(l, other.root), r), rng_state);
+        int mid = import_node(other, other.root);
+        auto [l, r] = split_node(root, pos);
+        return PersistentDynamicLazyMonoidArray(merge(merge(l, mid), r), rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray push_back(T value) const {
@@ -425,19 +452,19 @@ struct PersistentDynamicLazyMonoidArray {
 
     PersistentDynamicLazyMonoidArray erase(int pos) const {
         assert(0 <= pos && pos < size());
-        auto [a, b] = split(root, pos);
-        auto [mid, c] = split(b, 1);
+        auto [a, b] = split_node(root, pos);
+        auto [mid, c] = split_node(b, 1);
         (void)mid;
-        return PersistentDynamicLazyMonoidArray(merge(a, c), rng_state);
+        return PersistentDynamicLazyMonoidArray(merge(a, c), rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray erase(int l, int r) const {
         assert(0 <= l && l <= r && r <= size());
         if (l == r) return *this;
-        auto [a, b] = split(root, l);
-        auto [mid, c] = split(b, r - l);
+        auto [a, b] = split_node(root, l);
+        auto [mid, c] = split_node(b, r - l);
         (void)mid;
-        return PersistentDynamicLazyMonoidArray(merge(a, c), rng_state);
+        return PersistentDynamicLazyMonoidArray(merge(a, c), rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray pop_back() const {
@@ -471,28 +498,28 @@ struct PersistentDynamicLazyMonoidArray {
 
     PersistentDynamicLazyMonoidArray set(int pos, T value) const {
         assert(0 <= pos && pos < size());
-        return PersistentDynamicLazyMonoidArray(set_node(root, pos, std::move(value)), rng_state);
+        return PersistentDynamicLazyMonoidArray(set_node(root, pos, std::move(value)), rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray reverse(int l, int r) const {
         assert(0 <= l && l <= r && r <= size());
         if (l == r) return *this;
-        auto [a, b] = split(root, l);
-        auto [mid, c] = split(b, r - l);
-        return PersistentDynamicLazyMonoidArray(merge(merge(a, reversed_node(mid)), c), rng_state);
+        auto [a, b] = split_node(root, l);
+        auto [mid, c] = split_node(b, r - l);
+        return PersistentDynamicLazyMonoidArray(merge(merge(a, reversed_node(mid)), c), rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray reverse() const {
-        return PersistentDynamicLazyMonoidArray(reversed_node(root), rng_state);
+        return PersistentDynamicLazyMonoidArray(reversed_node(root), rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray rotate(int l, int m, int r) const {
         assert(0 <= l && l <= m && m <= r && r <= size());
         if (l == m || m == r) return *this;
-        auto [a, b] = split(root, l);
-        auto [c, d] = split(b, m - l);
-        auto [e, f] = split(d, r - m);
-        return PersistentDynamicLazyMonoidArray(merge(merge(a, e), merge(c, f)), rng_state);
+        auto [a, b] = split_node(root, l);
+        auto [c, d] = split_node(b, m - l);
+        auto [e, f] = split_node(d, r - m);
+        return PersistentDynamicLazyMonoidArray(merge(merge(a, e), merge(c, f)), rng_state, pool);
     }
 
     PersistentDynamicLazyMonoidArray apply(int pos, const F& f) const {
@@ -503,9 +530,9 @@ struct PersistentDynamicLazyMonoidArray {
     PersistentDynamicLazyMonoidArray apply(int l, int r, const F& f) const {
         assert(0 <= l && l <= r && r <= size());
         if (l == r) return *this;
-        auto [a, b] = split(root, l);
-        auto [mid, c] = split(b, r - l);
-        return PersistentDynamicLazyMonoidArray(merge(merge(a, all_apply(mid, f)), c), rng_state);
+        auto [a, b] = split_node(root, l);
+        auto [mid, c] = split_node(b, r - l);
+        return PersistentDynamicLazyMonoidArray(merge(merge(a, all_apply(mid, f)), c), rng_state, pool);
     }
 
     T prod(int l, int r) const {
@@ -515,18 +542,19 @@ struct PersistentDynamicLazyMonoidArray {
     }
 
     T all_prod() const {
-        return root ? root->prod : ActedMonoid::id();
+        return root == -1 ? ActedMonoid::id() : (*pool)[root].prod;
     }
 
     std::pair<PersistentDynamicLazyMonoidArray, PersistentDynamicLazyMonoidArray> split(int pos) const {
         assert(0 <= pos && pos <= size());
-        auto [l, r] = split(root, pos);
-        return {PersistentDynamicLazyMonoidArray(l, rng_state), PersistentDynamicLazyMonoidArray(r, rng_state)};
+        auto [l, r] = split_node(root, pos);
+        return {PersistentDynamicLazyMonoidArray(l, rng_state, pool),
+                PersistentDynamicLazyMonoidArray(r, rng_state, pool)};
     }
 
     PersistentDynamicLazyMonoidArray split_off(int pos) const {
         assert(0 <= pos && pos <= size());
-        return PersistentDynamicLazyMonoidArray(split(root, pos).second, rng_state);
+        return PersistentDynamicLazyMonoidArray(split_node(root, pos).second, rng_state, pool);
     }
 
     std::vector<T> to_vector() const {

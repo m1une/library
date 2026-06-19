@@ -21,28 +21,28 @@ For convenience, the library provides the following common type aliases:
 
 | Constructor | Description | Complexity |
 | --- | --- | --- |
-| `ModInt()` | Initializes the value to `0`. | $\mathcal{O}(1)$ |
-| `ModInt(int v)`, `ModInt(long long v)`, `ModInt(unsigned int v)` | Initializes from an integer. Negative values are converted to their positive modulo equivalents. | $\mathcal{O}(1)$ |
+| `ModInt()` | Initializes the value to `0`. | $O(1)$ |
+| `ModInt(int v)`, `ModInt(long long v)`, `ModInt(unsigned int v)` | Initializes from an integer. Negative values are converted to their positive modulo equivalents. | $O(1)$ |
 
 ## Methods
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `uint32_t val() const` | Returns the stored value in `[0, Modulus - 1]`. | $\mathcal{O}(1)$ |
-| `ModInt pow(long long n) const` | Computes the `n`-th power by binary exponentiation. | $\mathcal{O}(\log n)$ |
-| `ModInt inv() const` | Computes the modular inverse by the extended Euclidean algorithm. The value and modulus must be coprime. | $\mathcal{O}(\log(\text{Modulus}))$ |
-| `static uint32_t mod()` | Returns the modulus associated with this type. | $\mathcal{O}(1)$ |
-| `static ModInt raw(uint32_t v)` | Constructs directly from `v` without applying `% Modulus`. Use only when `v < Modulus`. | $\mathcal{O}(1)$ |
+| `uint32_t val() const` | Returns the stored value in `[0, Modulus - 1]`. | $O(1)$ |
+| `ModInt pow(long long n) const` | Computes the `n`-th power by binary exponentiation. | $O(\log n)$ |
+| `ModInt inv() const` | Computes the modular inverse by the extended Euclidean algorithm. The value and modulus must be coprime. | $O(\log(\text{Modulus}))$ |
+| `static uint32_t mod()` | Returns the modulus associated with this type. | $O(1)$ |
+| `static ModInt raw(uint32_t v)` | Constructs directly from `v` without applying `% Modulus`. Use only when `v < Modulus`. | $O(1)$ |
 
 ## Operators
 
 | Operators | Description | Complexity |
 | --- | --- | --- |
-| `+`, `-`, `*`, `+=`, `-=`, `*=` | Performs addition, subtraction, or multiplication with automatic modulo adjustment. | $\mathcal{O}(1)$ |
-| `/`, `/=` | Multiplies by the modular inverse of the right-hand side. | $\mathcal{O}(\log(\text{Modulus}))$ |
-| `++`, `--` | Increments or decrements while wrapping around `0` and `Modulus - 1`. | $\mathcal{O}(1)$ |
-| `==`, `!=` | Compares stored values. | $\mathcal{O}(1)$ |
-| `<<`, `>>` | Outputs the stored value or inputs a standard integer. | $\mathcal{O}(1)$ |
+| `+`, `-`, `*`, `+=`, `-=`, `*=` | Performs addition, subtraction, or multiplication with automatic modulo adjustment. | $O(1)$ |
+| `/`, `/=` | Multiplies by the modular inverse of the right-hand side. | $O(\log(\text{Modulus}))$ |
+| `++`, `--` | Increments or decrements while wrapping around `0` and `Modulus - 1`. | $O(1)$ |
+| `==`, `!=` | Compares stored values. | $O(1)$ |
+| `<<`, `>>` | Outputs the stored value or inputs a standard integer. | $O(1)$ |
 
 ## Example
 

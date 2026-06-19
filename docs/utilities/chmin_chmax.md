@@ -18,9 +18,11 @@ Small update helpers for dynamic programming and relaxation code. Each function 
 
 ```cpp
 #include "utilities/chmin_chmax.hpp"
+#include <iostream>
 
 int main() {
     int best = 100;
     bool updated = m1une::utilities::chmin(best, 42);
+    std::cout << updated << " " << best << "\n";
 }
 ```

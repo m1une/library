@@ -35,17 +35,17 @@ Let `Fps` denote `FormalPowerSeries<Mint>`.
 
 | Operation | Description | Complexity |
 | --- | --- | --- |
-| `f.shrink()` | Removes trailing zero coefficients. | $\mathcal{O}(n)$ |
-| `f.pre(n)` | Returns exactly the first `n` coefficients, padding with zero. | $\mathcal{O}(n)$ |
-| `f.reversed(n)` | Resizes to `n` when specified, then reverses coefficients. | $\mathcal{O}(n)$ |
-| `f + g`, `f - g` | Coefficient-wise addition or subtraction. | $\mathcal{O}(n)$ |
-| `f * g` | Polynomial convolution. | $\mathcal{O}(M(n))$ |
-| `f * c`, `f / c` | Scalar multiplication or division. | $\mathcal{O}(n)$ |
-| `f << k` | Multiplies by $x^k$. | $\mathcal{O}(n+k)$ |
-| `f >> k` | Divides by $x^k$, discarding lower terms. | $\mathcal{O}(n)$ |
-| `f.derivative()` | Formal derivative. | $\mathcal{O}(n)$ |
-| `f.integral()` | Formal integral with constant term zero. | $\mathcal{O}(n)$ |
-| `f.evaluate(x)` | Evaluates by Horner's method. | $\mathcal{O}(n)$ |
+| `f.shrink()` | Removes trailing zero coefficients. | $O(n)$ |
+| `f.pre(n)` | Returns exactly the first `n` coefficients, padding with zero. | $O(n)$ |
+| `f.reversed(n)` | Resizes to `n` when specified, then reverses coefficients. | $O(n)$ |
+| `f + g`, `f - g` | Coefficient-wise addition or subtraction. | $O(n)$ |
+| `f * g` | Polynomial convolution. | $O(M(n))$ |
+| `f * c`, `f / c` | Scalar multiplication or division. | $O(n)$ |
+| `f << k` | Multiplies by $x^k$. | $O(n + k)$ |
+| `f >> k` | Divides by $x^k$, discarding lower terms. | $O(n)$ |
+| `f.derivative()` | Formal derivative. | $O(n)$ |
+| `f.integral()` | Formal integral with constant term zero. | $O(n)$ |
+| `f.evaluate(x)` | Evaluates by Horner's method. | $O(n)$ |
 
 Here, $M(n)$ is the cost of multiplying degree-$n$ polynomials.
 
@@ -53,11 +53,11 @@ Here, $M(n)$ is the cost of multiplying degree-$n$ polynomials.
 
 | Method | Requirement | Result | Complexity |
 | --- | --- | --- | --- |
-| `f.inv(n)` | `f[0] != 0` | $1/f \pmod{x^n}$ | $\mathcal{O}(M(n))$ |
-| `f.log(n)` | `f[0] == 1` | $\log f \pmod{x^n}$ | $\mathcal{O}(M(n))$ |
-| `f.exp(n)` | `f[0] == 0` | $\exp f \pmod{x^n}$ | $\mathcal{O}(M(n))$ |
-| `f.pow(k, n)` | `k >= 0` | $f^k \pmod{x^n}$ | $\mathcal{O}(M(n))$ |
-| `f.sqrt(n)` | A square root exists | An optional $g$ with $g^2=f \pmod{x^n}$ | $\mathcal{O}(M(n))$ |
+| `f.inv(n)` | `f[0] != 0` | $1/f \pmod{x^n}$ | $O(M(n))$ |
+| `f.log(n)` | `f[0] == 1` | $\log f \pmod{x^n}$ | $O(M(n))$ |
+| `f.exp(n)` | `f[0] == 0` | $\exp f \pmod{x^n}$ | $O(M(n))$ |
+| `f.pow(k, n)` | `k >= 0` | $f^k \pmod{x^n}$ | $O(M(n))$ |
+| `f.sqrt(n)` | A square root exists | An optional $g$ with $g^2=f \pmod{x^n}$ | $O(M(n))$ |
 
 When `n` is omitted, the current series size is used. `sqrt` returns
 `std::nullopt` if the leading degree is odd or its coefficient is not a
@@ -67,9 +67,9 @@ quadratic residue.
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `f.divmod(g)` | Returns the quotient and remainder of polynomial division. | $\mathcal{O}(M(n))$ |
-| `f / g`, `f % g` | Returns only the quotient or remainder. | $\mathcal{O}(M(n))$ |
-| `f.taylor_shift(c)` | Returns coefficients of `f(x + c)`. | $\mathcal{O}(M(n))$ |
+| `f.divmod(g)` | Returns the quotient and remainder of polynomial division. | $O(M(n))$ |
+| `f / g`, `f % g` | Returns only the quotient or remainder. | $O(M(n))$ |
+| `f.taylor_shift(c)` | Returns coefficients of `f(x + c)`. | $O(M(n))$ |
 
 The divisor must be nonzero. Taylor shift requires `f.size() < Mint::mod()`.
 
@@ -78,6 +78,7 @@ The divisor must be nonzero. Taylor shift requires `f.size() < Mint::mod()`.
 ```cpp
 #include "fps/formal_power_series.hpp"
 #include "math/modint.hpp"
+#include <iostream>
 
 using mint = m1une::math::modint998244353;
 using Fps = m1une::fps::FormalPowerSeries<mint>;
@@ -91,5 +92,6 @@ int main() {
     Fps shifted = f.taylor_shift(10);
 
     mint value = f.evaluate(4);
+    std::cout << value << "\n";
 }
 ```

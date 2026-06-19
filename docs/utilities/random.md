@@ -27,6 +27,7 @@ A convenience wrapper around `std::mt19937_64`. It supports deterministic seeds 
 
 ```cpp
 #include "utilities/random.hpp"
+#include <iostream>
 #include <vector>
 
 int main() {
@@ -37,5 +38,6 @@ int main() {
 
     std::vector<int> v = {1, 2, 3, 4, 5};
     rng.shuffle(v);
+    std::cout << x << " " << p << " " << v.front() << "\n";
 }
 ```

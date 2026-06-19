@@ -14,7 +14,7 @@ connects each connected component.
 
 Use it when you need a minimum spanning tree (connected graph) or minimum
 spanning forest (possibly disconnected graph). It is especially convenient when
-the input is an edge list or when $M\log M$ is acceptable.
+the input is an edge list or when $M \log M$ is acceptable.
 
 ## Graph Orientation
 
@@ -43,7 +43,7 @@ If the graph is disconnected, the result is a minimum spanning forest and
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `kruskal` | `template <class T> MinimumSpanningForest<T> kruskal(const Graph<T>& g)` | Returns total cost, selected edges, and component count. | $O(M\log M)$ |
+| `kruskal` | `template <class T> MinimumSpanningForest<T> kruskal(const Graph<T>& g)` | Returns total cost, selected edges, and component count. | $O(M \log M)$ |
 
 ## Example
 

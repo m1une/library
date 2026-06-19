@@ -31,7 +31,7 @@ int main() {
     m1une::data_structure::Segtree<StrictMax2M> seg(init_data);
 
     auto res = seg.prod(2, 6); // Range: [5, 3, 8, 6]
-    
+
     std::cout << "1st Max: " << res.opt1 << "\n"; // Output: 8
     std::cout << "2nd Max: " << res.opt2 << "\n"; // Output: 6
 

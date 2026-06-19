@@ -7,7 +7,7 @@ documentation_of: ../../acted_monoid/range_add_range_max.hpp
 
 An Acted Monoid representing Range Addition operations and Range Maximum queries.
 
-It uses `std::numeric_limits<T>::lowest()` as the default identity element for the Value Monoid to correctly handle negative maximum values. 
+It uses `std::numeric_limits<T>::lowest()` as the default identity element for the Value Monoid to correctly handle negative maximum values.
 
 ## Example
 

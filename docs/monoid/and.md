@@ -5,7 +5,7 @@ documentation_of: ../../monoid/and.hpp
 
 ## Overview
 
-A monoid representing the bitwise AND operation. 
+A monoid representing the bitwise AND operation.
 
 ## Template Parameters
 

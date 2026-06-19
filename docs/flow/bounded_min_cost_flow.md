@@ -98,7 +98,7 @@ The result contains these members:
 | Constructor | `explicit BoundedMinCostFlow(int n)` | Creates a graph with `n` vertices. | $O(N)$ |
 | `size` | `int size() const` | Returns the number of vertices. | $O(1)$ |
 | `edge_count` | `int edge_count() const` | Returns the number of edges. | $O(1)$ |
-| `add_edge` | `int add_edge(int from, int to, Cap lower, Cap upper, Cost cost)` | Adds an edge with bounds and cost, then returns its id. | $O(1)$ amortized |
+| `add_edge` | `int add_edge(int from, int to, Cap lower, Cap upper, Cost cost)` | Adds an edge with bounds and cost, then returns its id. | Amortized $O(1)$ |
 | `get_edge` | `Edge get_edge(int i) const` | Returns original edge `i`. | $O(1)$ |
 | `edges` | `std::vector<Edge> edges() const` | Returns all original edges. | $O(M)$ |
 | `set_balance` | `void set_balance(int v, Cap b)` | Sets `balance[v] = b`. | $O(1)$ |
@@ -107,9 +107,9 @@ The result contains these members:
 | `add_demand` | `void add_demand(int v, Cap demand)` | Adds non-negative demand to vertex `v`. | $O(1)$ |
 | `balance` | `Cap balance(int v) const` | Returns `balance[v]`. | $O(1)$ |
 | `balances` | `const std::vector<Cap>& balances() const` | Returns all balances. | $O(1)$ |
-| `min_cost_flow` | `std::optional<Result> min_cost_flow() const` | Solves using stored balances. | $O(NM + FM\log N)$ |
-| `min_cost_flow` | `std::optional<Result> min_cost_flow(const std::vector<Cap>& balance) const` | Solves using explicit balances. | $O(NM + FM\log N)$ |
-| `min_cost_st_flow` | `std::optional<Result> min_cost_st_flow(int s, int t, Cap flow_value) const` | Solves exact `s-t` flow with value `flow_value`. | $O(NM + FM\log N)$ |
+| `min_cost_flow` | `std::optional<Result> min_cost_flow() const` | Solves using stored balances. | $O(N \cdot M + F \cdot M \log N)$ |
+| `min_cost_flow` | `std::optional<Result> min_cost_flow(const std::vector<Cap>& balance) const` | Solves using explicit balances. | $O(N \cdot M + F \cdot M \log N)$ |
+| `min_cost_st_flow` | `std::optional<Result> min_cost_st_flow(int s, int t, Cap flow_value) const` | Solves exact `s-t` flow with value `flow_value`. | $O(N \cdot M + F \cdot M \log N)$ |
 
 Here, `F` is the number of augmentations made by the internal
 `MinCostFlow<Cap, Cost>` repair step.

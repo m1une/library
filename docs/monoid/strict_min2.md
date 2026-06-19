@@ -31,7 +31,7 @@ int main() {
     m1une::data_structure::Segtree<StrictMin2M> seg(init_data);
 
     auto res = seg.prod(0, 4); // Range: [3, 3, 5, 8]
-    
+
     std::cout << "1st Min: " << res.opt1 << "\n"; // Output: 3
     std::cout << "2nd Min: " << res.opt2 << "\n"; // Output: 5
 

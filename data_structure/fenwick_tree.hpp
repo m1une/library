@@ -1,8 +1,8 @@
 #ifndef M1UNE_DATA_STRUCTURE_FENWICK_TREE_HPP
 #define M1UNE_DATA_STRUCTURE_FENWICK_TREE_HPP 1
 
-#include <vector>
 #include <cassert>
+#include <vector>
 
 namespace m1une {
 namespace data_structure {
@@ -11,46 +11,54 @@ template <typename T>
 struct FenwickTree {
    private:
     int _n;
-    std::vector<T> data;
+    std::vector<T> _data;
 
    public:
     FenwickTree() : _n(0) {}
-    
-    explicit FenwickTree(int n) : _n(n), data(n + 1, 0) {}
-    
-    explicit FenwickTree(const std::vector<T>& a) : _n(a.size()), data(a.size() + 1, 0) {
-        // Initialize in O(N) time
-        for (int i = 1; i <= _n; i++) {
-            data[i] += a[i - 1];
-            int p = i + (i & -i);
+
+    explicit FenwickTree(int n) : _n(n), _data(n + 1, T{}) {}
+
+    explicit FenwickTree(const std::vector<T>& a)
+        : _n(int(a.size())), _data(a.size() + 1, T{}) {
+        for (int i = 1; i <= _n; ++i) {
+            _data[i] += a[i - 1];
+            const int p = i + (i & -i);
             if (p <= _n) {
-                data[p] += data[i];
+                _data[p] += _data[i];
             }
         }
     }
 
-    // Adds 'x' to the element at index 'p' (0-indexed)
-    void add(int p, T x) {
+    int size() const {
+        return _n;
+    }
+
+    bool empty() const {
+        return _n == 0;
+    }
+
+    // Adds `x` to the element at zero-based index `p`.
+    void add(int p, const T& x) {
         assert(0 <= p && p < _n);
-        p++;
+        ++p;
         while (p <= _n) {
-            data[p] += x;
+            _data[p] += x;
             p += p & -p;
         }
     }
 
-    // Returns the sum of elements in the range [0, r)
+    // Returns the sum of elements in the range [0, r).
     T sum(int r) const {
         assert(0 <= r && r <= _n);
-        T s = 0;
+        T result{};
         while (r > 0) {
-            s += data[r];
+            result += _data[r];
             r -= r & -r;
         }
-        return s;
+        return result;
     }
 
-    // Returns the sum of elements in the range [l, r)
+    // Returns the sum of elements in the range [l, r).
     T sum(int l, int r) const {
         assert(0 <= l && l <= r && r <= _n);
         return sum(r) - sum(l);
@@ -64,8 +72,8 @@ struct FenwickTree {
         int k = 1;
         while (k <= _n) k <<= 1;
         for (k >>= 1; k > 0; k >>= 1) {
-            if (x + k <= _n && data[x + k] < w) {
-                w -= data[x + k];
+            if (x + k <= _n && _data[x + k] < w) {
+                w -= _data[x + k];
                 x += k;
             }
         }

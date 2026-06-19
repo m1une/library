@@ -35,12 +35,12 @@ int main() {
     // 1 implies the seat is empty (true), 0 implies occupied (false)
     std::vector<bool> A = {true, false, true, true, false, true};
     int N = A.size();
-    
+
     std::vector<AM::value_type> init_nodes(N);
-    for(int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i) {
         init_nodes[i] = AM::make(A[i]);
     }
-    
+
     m1une::data_structure::LazySegtree<AM> seg(init_nodes);
 
     // Initial longest block of empty seats is 2 (indices 2 to 3)

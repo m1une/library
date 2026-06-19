@@ -35,7 +35,7 @@ int main() {
 
     // Get the top 2 elements in the range [0, 5) -> { (50, 3), (40, 1) }
     auto top2 = seg.prod(0, 5);
-    
+
     for (auto p : top2) {
         std::cout << "Value: " << p.first << " Count: " << p.second << "\n";
     }

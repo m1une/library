@@ -2,6 +2,7 @@
 
 #include "data_structure/persistent_ordered_set.hpp"
 
+#include <cassert>
 #include <iostream>
 
 void fast_io() {
@@ -11,6 +12,12 @@ void fast_io() {
 
 int main() {
     fast_io();
+
+    m1une::data_structure::PersistentOrderedSet<int> pointer_test = {1, 3, 5};
+    const int* stable_pointer = pointer_test.lower_bound(3);
+    auto pointer_test_next = pointer_test;
+    for (int x = 10; x < 1000; x++) pointer_test_next = pointer_test_next.insert(x);
+    assert(stable_pointer && *stable_pointer == 3);
 
     int N, Q;
     std::cin >> N >> Q;

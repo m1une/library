@@ -6,7 +6,7 @@
 
 void fast_io() {
     std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
+    std::cin.tie(nullptr);
 }
 
 using RH = m1une::string::RollingHash<10007, 2305843009213693951LL>;
@@ -19,7 +19,7 @@ int main() {
     if (T.size() < P.size()) return 0;
 
     RH rh(T);
-    
+
     long long p_hash = RH::compute_hash(P);
 
     int n = T.size(), m = P.size();

@@ -29,7 +29,7 @@ int main() {
 
     // Get the composed permutation for the range [0, 2)
     auto res = seg.prod(0, 2);
-    
+
     std::cout << "0 maps to: " << res[0] << "\n";
     std::cout << "1 maps to: " << res[1] << "\n";
     std::cout << "2 maps to: " << res[2] << "\n";

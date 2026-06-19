@@ -30,10 +30,10 @@ int main() {
     Mat::value_type transition{};
     transition[0] = {1, 1};
     transition[1] = {1, 0};
-    
+
     // Compute the 10th power of the Fibonacci transition matrix
     auto res = m1une::monoid::power<Mat>(transition, 10);
-    
+
     std::cout << res[0][0] << "\n";
     return 0;
 }

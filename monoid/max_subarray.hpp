@@ -4,7 +4,7 @@
 #include <functional>
 #include <limits>
 
-#include "min_subarray.hpp"
+#include "monoid/min_subarray.hpp"
 
 namespace m1une {
 namespace monoid {

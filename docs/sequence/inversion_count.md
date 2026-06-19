@@ -5,15 +5,17 @@ documentation_of: ../../sequence/inversion_count.hpp
 
 ## Overview
 
-Calculates the number of inversions in a given sequence. An inversion is a pair of indices `(i, j)` such that `i < j` and `a[i] > a[j]`. It represents how far away the array is from being completely sorted.
+Calculates the number of inversions in a sequence. An inversion is a pair of
+indices `(i, j)` such that `i < j` and `a[i] > a[j]`.
 
-The algorithm uses a modified Merge Sort, which is highly efficient and operates seamlessly on any comparable data type (e.g., `int`, `long long`, `double`, `std::string`) without requiring coordinate compression.
+The implementation uses merge sort and does not require coordinate compression.
 
-*Note: The function returns a `long long` because the maximum number of inversions in an array of size $N$ is $N(N-1)/2$, which will easily overflow a standard 32-bit `int` for $N \ge 10^5$.*
+The return type is `long long` because a sequence of size $N$ can have
+$N(N-1)/2$ inversions.
 
 ## Template Parameters
 
-* `T`: The underlying data type of the sequence elements. Must be comparable using `<=`.
+* `T`: Element type. Values must be comparable using `<`.
 
 ## Methods
 
@@ -30,16 +32,15 @@ The algorithm uses a modified Merge Sort, which is highly efficient and operates
 
 int main() {
     std::vector<int> a = {2, 4, 1, 3, 5};
-    
-    // Calculate inversions
-    long long invs = m1une::sequence::inversion_count(a);
-    
+
+    const long long inversions = m1une::sequence::inversion_count(a);
+
     // The inversions are:
     // (2, 1) -> indices 0 and 2
     // (4, 1) -> indices 1 and 2
     // (4, 3) -> indices 1 and 3
-    std::cout << "Inversions: " << invs << "\n"; // Output: 3
-    
+    std::cout << "Inversions: " << inversions << "\n"; // Output: 3
+
     // To avoid copying the array if you don't need it afterward:
     // long long fast_invs = m1une::sequence::inversion_count(std::move(a));
 

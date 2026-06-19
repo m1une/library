@@ -5,7 +5,7 @@ documentation_of: ../../data_structure/link_cut_tree.hpp
 
 ## Overview
 
-`m1une::data_structure::LinkCutTree<Monoid>` maintains a dynamic forest. It
+`m1une::data_structure::LinkCutTree<Group>` maintains a dynamic forest. It
 supports linking two trees, cutting edges, rerooting represented trees, querying
 path products, and querying rooted subtree products and sizes.
 
@@ -13,17 +13,16 @@ The value is stored on link-cut-tree vertices. If you need edge values, create
 one extra link-cut-tree vertex for each original edge and connect it between the
 two endpoints. The `link_edge` helper does this for you.
 
-The monoid operation must be commutative and must provide an inverse. This lets
-the structure maintain aggregates of virtual child subtrees and update them in
-constant time whenever `access` changes the preferred path. Path and subtree
-queries are both amortized $O(\log N)$.
+The values must form a commutative group. The inverse lets the structure update
+aggregates of virtual child subtrees in constant time whenever `access` changes
+the preferred path. Path and subtree queries are both amortized $O(\log N)$.
 
 ## Template Parameter
 
-`Monoid` must satisfy `m1une::monoid::IsCommutativeGroup`:
+`Group` must satisfy `m1une::monoid::IsCommutativeGroup`:
 
 ```cpp
-struct M {
+struct G {
     using value_type = T;
     static T id();
     static T op(const T& a, const T& b);
@@ -37,33 +36,33 @@ struct M {
 ## Construction
 
 ```cpp
-LinkCutTree<Monoid> lct;
-LinkCutTree<Monoid> lct(n);
-LinkCutTree<Monoid> lct(values);
+LinkCutTree<Group> lct;
+LinkCutTree<Group> lct(n);
+LinkCutTree<Group> lct(values);
 ```
 
 * `LinkCutTree(n)` creates `n` isolated vertices initialized with
-  `Monoid::id()`.
+  `Group::id()`.
 * `LinkCutTree(values)` creates one isolated vertex for each value.
 * `add_vertex(value)` appends a new isolated vertex and returns its index.
 
 As with `Segtree`, construction from `std::vector<U>` is supported when
-`Monoid::make(value)`, `Monoid::make(value, index)`, or `static_cast<T>(value)`
+`Group::make(value)`, `Group::make(value, index)`, or `static_cast<T>(value)`
 is available.
 
 ## Methods
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `int size()` | Number of link-cut-tree vertices, including helper edge nodes. | `O(1)` |
-| `bool empty()` | Whether there are no vertices. | `O(1)` |
-| `int add_vertex(value)` | Adds one isolated vertex and returns its id. | Amortized `O(1)` |
-| `int edge_count()` | Number of edge helpers created by `link_edge`. | `O(1)` |
-| `bool edge_alive(edge_id)` | Whether the helper edge is currently linked. | `O(1)` |
-| `int edge_node(edge_id)` | Link-cut-tree vertex id storing this edge's value. | `O(1)` |
-| `std::pair<int, int> edge_endpoints(edge_id)` | Original endpoints passed to `link_edge`. | `O(1)` |
-| `const T& get(v)` | Returns the stored value of vertex `v`. | `O(1)` |
-| `const T& operator[](v)` | Alias for `get(v)`. | `O(1)` |
+| `int size()` | Number of link-cut-tree vertices, including helper edge nodes. | $O(1)$ |
+| `bool empty()` | Whether there are no vertices. | $O(1)$ |
+| `int add_vertex(value)` | Adds one isolated vertex and returns its id. | Amortized $O(1)$ |
+| `int edge_count()` | Number of edge helpers created by `link_edge`. | $O(1)$ |
+| `bool edge_alive(edge_id)` | Whether the helper edge is currently linked. | $O(1)$ |
+| `int edge_node(edge_id)` | Link-cut-tree vertex id storing this edge's value. | $O(1)$ |
+| `std::pair<int, int> edge_endpoints(edge_id)` | Original endpoints passed to `link_edge`. | $O(1)$ |
+| `const T& get(v)` | Returns the stored value of vertex `v`. | $O(1)$ |
+| `const T& operator[](v)` | Alias for `get(v)`. | $O(1)$ |
 | `void set(v, value)` | Updates the value of vertex `v`. | Amortized $O(\log N)$ |
 | `void evert(v)` | Makes `v` the represented root of its component. | Amortized $O(\log N)$ |
 | `void reroot(v)` | Alias for `evert(v)`. | Amortized $O(\log N)$ |
@@ -77,7 +76,7 @@ is available.
 | `bool cut(u, v)` | Removes edge `(u, v)` if it exists. On success, the resulting components are rooted at `u` and `v`. | Amortized $O(\log N)$ |
 | `bool cut_parent(v)` | Removes the current parent edge of `v` with respect to the represented root. On success, `v` becomes the root of the detached child-side component. | Amortized $O(\log N)$ |
 | `bool cut_edge(edge_id)` | Removes a helper edge created by `link_edge`. On success, the endpoint components are rooted at the stored endpoints. | Amortized $O(\log N)$ |
-| `const T& get_edge(edge_id)` | Returns the value stored in the helper edge node. | `O(1)` |
+| `const T& get_edge(edge_id)` | Returns the value stored in the helper edge node. | $O(1)$ |
 | `void set_edge(edge_id, value)` | Updates the value stored in the helper edge node. | Amortized $O(\log N)$ |
 | `T prod(u, v)` | Group product on the path from `u` to `v`. | Amortized $O(\log N)$ |
 | `T path_prod(u, v)` | Alias for `prod(u, v)`. | Amortized $O(\log N)$ |

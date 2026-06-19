@@ -49,7 +49,7 @@ All non-empty constructors build the tree in $O(N)$ time.
 | `T prod(int l, int r)` | Returns the monoid product over `[l, r)`. | $O(\log N)$ |
 | `T all_prod()` | Returns the product of the entire array. | $O(1)$ |
 | `std::vector<T> to_vector()` | Returns all elements as a vector. | $O(N)$ |
-| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O(r-l)$ |
+| `std::vector<T> to_vector(int l, int r)` | Returns the elements in `[l, r)`. | $O(r - l)$ |
 | `int max_right<F>(int l, F f)` | Returns the largest `r` such that `f(prod(l, r))` is `true`. Requires `f(Monoid::id())`. | $O(\log N)$ |
 | `int min_left<F>(int r, F f)` | Returns the smallest `l` such that `f(prod(l, r))` is `true`. Requires `f(Monoid::id())`. | $O(\log N)$ |
 

@@ -44,8 +44,8 @@ a[n] = recurrence[0] * a[n - 1]
 ## Complexity
 
 For recurrence order `d`, the running time is
-$\mathcal{O}(M(d)\log \mathrm{index})$ and the working memory is
-$\mathcal{O}(d)$ apart from convolution buffers.
+$O(M(d) \log \mathrm{index})$ and the working memory is
+$O(d)$ apart from convolution buffers.
 
 ## Example
 
@@ -53,6 +53,7 @@ $\mathcal{O}(d)$ apart from convolution buffers.
 #include "fps/linear_recurrence.hpp"
 #include "math/modint.hpp"
 
+#include <iostream>
 #include <vector>
 
 using mint = m1une::math::modint998244353;
@@ -62,5 +63,6 @@ int main() {
     std::vector<mint> recurrence = {1, 1};
     mint fibonacci_100 = m1une::fps::linear_recurrence_kth(
         initial, recurrence, 100);
+    std::cout << fibonacci_100 << "\n";
 }
 ```

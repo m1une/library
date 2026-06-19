@@ -50,8 +50,8 @@ The result contains these members:
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `dag_shortest_path` | `template <class T> std::optional<DagShortestPathResult<T>> dag_shortest_path(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4))` | Runs DAG shortest paths from one source. | $O(N+M)$ |
-| `dag_shortest_path` | `template <class T> std::optional<DagShortestPathResult<T>> dag_shortest_path(const Graph<T>& g, const std::vector<int>& sources, T inf = std::numeric_limits<T>::max() / T(4))` | Runs multi-source DAG shortest paths. | $O(N+M)$ |
+| `dag_shortest_path` | `template <class T> std::optional<DagShortestPathResult<T>> dag_shortest_path(const Graph<T>& g, int s, T inf = std::numeric_limits<T>::max() / T(4))` | Runs DAG shortest paths from one source. | $O(N + M)$ |
+| `dag_shortest_path` | `template <class T> std::optional<DagShortestPathResult<T>> dag_shortest_path(const Graph<T>& g, const std::vector<int>& sources, T inf = std::numeric_limits<T>::max() / T(4))` | Runs multi-source DAG shortest paths. | $O(N + M)$ |
 
 ## Example
 

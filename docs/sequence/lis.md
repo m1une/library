@@ -5,15 +5,16 @@ documentation_of: ../../sequence/lis.hpp
 
 ## Overview
 
-Calculates the Longest Increasing Subsequence (LIS) of a given array. Instead of returning just the maximum length or the raw values, this function optimally computes and returns a `std::vector<int>` containing the **0-based indices** of the elements that form the sequence. 
+Returns the zero-based indices of a longest increasing subsequence. The indices
+can be used to recover the values or to align the result with parallel arrays.
 
-This enables you to easily reconstruct the sequence, query the original elements, or correlate them with parallel arrays.
-
-The implementation tracks the DP array and back-pointers, utilizing `std::lower_bound` (or `std::upper_bound`) to run efficiently in $O(N \log N)$ time.
+The implementation uses a tails array and predecessor links. It uses
+`std::lower_bound` for a strict subsequence and `std::upper_bound` for a
+non-decreasing subsequence.
 
 ## Template Parameters
 
-* `T`: The underlying data type of the elements in the array. Must be comparable using `<`.
+* `T`: Element type. Values must be comparable using `<`.
 
 ## Methods
 
@@ -30,28 +31,22 @@ The implementation tracks the DP array and back-pointers, utilizing `std::lower_
 
 int main() {
     std::vector<int> a = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
-    
-    // Find strictly increasing subsequence
-    std::vector<int> lis_indices = m1une::sequence::lis(a);
-    
-    std::cout << "LIS Length: " << lis_indices.size() << "\n"; // Output: 4
-    
+
+    const std::vector<int> lis_indices = m1une::sequence::lis(a);
+
+    std::cout << "LIS length: " << lis_indices.size() << "\n"; // Output: 4
+
     std::cout << "Indices: ";
     for (int idx : lis_indices) std::cout << idx << " ";
-    // Output might be: 1 2 4 5  (corresponding to indices of 1, 4, 5, 9)
-    std::cout << "\n";
-    
-    std::cout << "Values: ";
-    for (int idx : lis_indices) std::cout << a[idx] << " ";
-    // Output: 1 4 5 9
     std::cout << "\n";
 
-    // Find non-decreasing subsequence (allows duplicates)
-    std::vector<int> nds_indices = m1une::sequence::lis(a, false);
-    
-    std::cout << "Non-Decreasing Length: " << nds_indices.size() << "\n"; // Output: 5
-    // A valid non-decreasing sequence values: 1 1 2 3 5
-    
+    std::cout << "Values: ";
+    for (int idx : lis_indices) std::cout << a[idx] << " ";
+    std::cout << "\n";
+
+    const std::vector<int> non_decreasing = m1une::sequence::lis(a, false);
+    std::cout << "Non-decreasing length: " << non_decreasing.size() << "\n";
+
     return 0;
 }
 ```

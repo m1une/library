@@ -5,7 +5,7 @@ documentation_of: ../../acted_monoid/range_ap_add_range_sum.hpp
 
 ## Overview
 
-An Acted Monoid that supports adding an arithmetic progression to a range, alongside range sum queries. 
+An Acted Monoid that supports adding an arithmetic progression to a range, alongside range sum queries.
 
 The operator is represented as a function $f(i) = a \cdot i + b$, where $i$ is the 0-based order inside the updated range.
 

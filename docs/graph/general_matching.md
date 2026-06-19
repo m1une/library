@@ -17,7 +17,7 @@ The implementation uses shortest-augmenting-path phases for general graphs
 (the Micali-Vazirani/Gabow framework). Each phase builds the admissible graph
 for the current shortest augmenting paths, finds a maximal vertex-disjoint set
 of those paths, lifts them through recorded blossom bridges, and augments all
-of them together. There are $O(\sqrt N)$ phases and each phase is linear in the
+of them together. There are $O(\sqrt{N})$ phases and each phase is linear in the
 active graph size.
 
 ## Graph Orientation
@@ -83,14 +83,14 @@ back to the original `Graph<T>` edge ids.
 | Constructor | `explicit GeneralMatching(int n)` | Creates a matching graph with `n` vertices. | $O(N)$ |
 | `size` | `int size() const` | Returns the number of vertices. | $O(1)$ |
 | `edge_count` | `int edge_count() const` | Returns the number of registered edges. | $O(1)$ |
-| `add_edge` | `int add_edge(int from, int to)` | Adds an undirected edge and returns its id. | $O(1)$ amortized |
+| `add_edge` | `int add_edge(int from, int to)` | Adds an undirected edge and returns its id. | Amortized $O(1)$ |
 | `get_edge` | `Edge get_edge(int i) const` | Returns edge `i`. | $O(1)$ |
 | `edges` | `std::vector<Edge> edges(bool include_inactive = false) const` | Returns active edges, or all edges if `include_inactive` is true. | $O(M)$ |
 | `set_edge_alive` | `void set_edge_alive(int id, bool alive)` | Sets whether edge `id` is usable. | $O(1)$ |
 | `erase_edge` | `void erase_edge(int id)` | Marks edge `id` unusable. | $O(1)$ |
 | `revive_edge` | `void revive_edge(int id)` | Marks edge `id` usable again. | $O(1)$ |
 | `is_edge_alive` | `bool is_edge_alive(int id) const` | Returns whether edge `id` is usable. | $O(1)$ |
-| `max_matching` | `int max_matching()` | Computes and stores a maximum matching. | $O(M\sqrt N)$ |
+| `max_matching` | `int max_matching()` | Computes and stores a maximum matching. | $O(M \sqrt{N})$ |
 | `matching_size` | `int matching_size()` | Returns the current maximum matching size, computing it if needed. | Same as `max_matching` if not computed |
 | `mate` | `std::vector<int> mate()` | Returns the matched vertex of each vertex, or `-1`. | Same as `max_matching` if not computed |
 | `mate_edge` | `std::vector<int> mate_edge()` | Returns the matched edge id of each vertex, or `-1`. | Same as `max_matching` if not computed |
@@ -101,7 +101,7 @@ back to the original `Graph<T>` edge ids.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `make_general_matching` | `template <class T> GeneralMatchingGraph make_general_matching(const Graph<T>& g)` | Builds a `GeneralMatching` from active edges of `g` and stores original edge-id mapping. | $O(N+M)$ |
+| `make_general_matching` | `template <class T> GeneralMatchingGraph make_general_matching(const Graph<T>& g)` | Builds a `GeneralMatching` from active edges of `g` and stores original edge-id mapping. | $O(N + M)$ |
 
 ## Example
 

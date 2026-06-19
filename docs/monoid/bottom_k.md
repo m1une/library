@@ -37,7 +37,7 @@ int main() {
 
     // Get the bottom 3 elements in the range [0, 4) -> {10, 20, 40}
     std::vector<long long> bottom3 = seg.prod(0, 4);
-    
+
     for (long long x : bottom3) {
         std::cout << x << " ";
     }

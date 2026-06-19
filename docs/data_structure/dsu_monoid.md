@@ -45,12 +45,12 @@ The monoid must provide:
 | --- | --- | --- |
 | `int size()` | Returns the number of elements. | $O(1)$ |
 | `bool empty()` | Returns whether the DSU has no elements. | $O(1)$ |
-| `int merge(int a, int b)` | Merges the sets containing `a` and `b`; returns the leader of the merged set. | $O(\alpha(N))$ amortized |
-| `bool same(int a, int b)` | Returns whether `a` and `b` are in the same set. | $O(\alpha(N))$ amortized |
-| `int leader(int a)` | Returns the representative of the set containing `a`. | $O(\alpha(N))$ amortized |
-| `int group_size(int a)`, `int size(int a)` | Returns the size of the set containing `a`. | $O(\alpha(N))$ amortized |
-| `T prod(int a)`, `T get(int a)` | Returns the aggregate of the set containing `a`. | $O(\alpha(N))$ amortized |
-| `void set(int a, T value)` | Replaces the aggregate of the set containing `a`. | $O(\alpha(N))$ amortized |
+| `int merge(int a, int b)` | Merges the sets containing `a` and `b`; returns the leader of the merged set. | Amortized $O(\alpha(N))$ |
+| `bool same(int a, int b)` | Returns whether `a` and `b` are in the same set. | Amortized $O(\alpha(N))$ |
+| `int leader(int a)` | Returns the representative of the set containing `a`. | Amortized $O(\alpha(N))$ |
+| `int group_size(int a)`, `int size(int a)` | Returns the size of the set containing `a`. | Amortized $O(\alpha(N))$ |
+| `T prod(int a)`, `T get(int a)` | Returns the aggregate of the set containing `a`. | Amortized $O(\alpha(N))$ |
+| `void set(int a, T value)` | Replaces the aggregate of the set containing `a`. | Amortized $O(\alpha(N))$ |
 | `std::vector<std::vector<int>> groups()` | Returns all sets as vectors of element indices. | $O(N \alpha(N))$ |
 
 ## Example

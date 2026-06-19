@@ -70,7 +70,7 @@ graph has type `Graph<int>` and its edge costs are all `1`.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `strongly_connected_components` | `template <class T> SccResult strongly_connected_components(const Graph<T>& g)` | Returns component ids and groups. | $O(N+M)$ |
+| `strongly_connected_components` | `template <class T> SccResult strongly_connected_components(const Graph<T>& g)` | Returns component ids and groups. | $O(N + M)$ |
 
 ## Example
 

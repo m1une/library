@@ -7,6 +7,9 @@ documentation_of: ../../data_structure/persistent_ordered_set.hpp
 
 `PersistentOrderedSet` is a path-copying randomized binary search tree for sets. Updates return a new set and leave the old version available, like a persistent version of `OrderedSet`.
 
+Its underlying tree uses an indexed, block-contiguous node pool rather than per-node pointers.
+The pool is append-only and is released when the last related version is destroyed.
+
 Pointers returned by bound and predecessor/successor methods remain valid while the version they came from is alive.
 
 ## Template Parameters

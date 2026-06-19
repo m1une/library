@@ -7,6 +7,9 @@ documentation_of: ../../data_structure/persistent_dynamic_lazy_monoid_array.hpp
 
 `PersistentDynamicLazyMonoidArray` is a path-copying implicit treap for dynamic sequences with lazy range actions and range product queries. Updates return a new sequence and keep previous versions unchanged.
 
+Nodes live in a shared contiguous pool and store integer child indices. This improves locality and removes per-node allocation and reference-counted child pointers.
+The pool is append-only and is released when the last related version is destroyed.
+
 It supports insertion, deletion, reversal, rotation, point assignment, range application, range products, splitting, and concatenation.
 
 ## Template Parameters
@@ -17,7 +20,7 @@ It supports insertion, deletion, reversal, rotation, point assignment, range app
 
 | Operation | Description | Complexity |
 | --- | --- | --- |
-| `insert`, `push_back`, `push_front`, `append` | Return a version with values inserted. | Expected $O(\log N)$ for one value; expected $O(M + \log N)$ for a vector |
+| `insert`, `push_back`, `push_front`, `append` | Return a version with values inserted. Another version sharing the pool reuses its nodes; an independently constructed array is copied into this pool. | Expected $O(\log N)$ for one value or a shared-pool version; $O(M + \log N)$ for a vector or independent array |
 | `erase`, `pop_back`, `pop_front` | Return a version with values removed. | Expected $O(\log N)$ |
 | `set` | Returns a version with one value replaced. | Expected $O(\log N)$ |
 | `apply` | Returns a version with an operator applied to one value or a half-open range. | Expected $O(\log N)$ |
@@ -35,6 +38,7 @@ Order-aware acted monoids should store relative order information such as `size`
 ```cpp
 #include "acted_monoid/range_add_range_sum.hpp"
 #include "data_structure/persistent_dynamic_lazy_monoid_array.hpp"
+#include <iostream>
 
 using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
 using Array = m1une::data_structure::PersistentDynamicLazyMonoidArray<AM>;
@@ -47,5 +51,6 @@ int main() {
     // a is still {1, 2, 3, 4, 5}
     // c is {1, 5, 14, 13, 12}
     long long sum = c.prod(0, 5).sum;
+    std::cout << sum << "\n";
 }
 ```

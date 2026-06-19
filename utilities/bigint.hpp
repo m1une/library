@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -30,13 +31,14 @@ struct BigInt {
 
     BigInt& operator=(long long v) {
         sign = 1;
+        unsigned long long magnitude = static_cast<unsigned long long>(v);
         if (v < 0) {
             sign = -1;
-            v = -v;
+            magnitude = 0 - magnitude;
         }
         a.clear();
-        for (; v > 0; v /= BASE) {
-            a.push_back(v % BASE);
+        for (; magnitude > 0; magnitude /= BASE) {
+            a.push_back(int(magnitude % BASE));
         }
         return *this;
     }
@@ -61,7 +63,7 @@ struct BigInt {
             if (s[pos] == '-') sign = -1;
             ++pos;
         }
-        for (int i = s.size() - 1; i >= pos; i -= BASE_DIGITS) {
+        for (int i = int(s.size()) - 1; i >= pos; i -= BASE_DIGITS) {
             int x = 0;
             for (int j = std::max(pos, i - BASE_DIGITS + 1); j <= i; ++j) {
                 x = x * 10 + (s[j] - '0');
@@ -158,14 +160,16 @@ struct BigInt {
     }
 
     BigInt& operator*=(int v) {
-        if (v < 0) {
+        long long multiplier = v;
+        if (multiplier < 0) {
             sign = -sign;
-            v = -v;
+            multiplier = -multiplier;
         }
-        for (int i = 0, carry = 0; i < (int)a.size() || carry; ++i) {
+        long long carry = 0;
+        for (int i = 0; i < (int)a.size() || carry; ++i) {
             if (i == (int)a.size()) a.push_back(0);
-            long long cur = a[i] * (long long)v + carry;
-            carry = (int)(cur / BASE);
+            const long long cur = a[i] * multiplier + carry;
+            carry = cur / BASE;
             a[i] = (int)(cur % BASE);
         }
         trim();
@@ -189,6 +193,9 @@ struct BigInt {
     }
 
     friend std::pair<BigInt, BigInt> divmod(const BigInt& a1, const BigInt& b1) {
+        if (b1.is_zero()) {
+            throw std::domain_error("BigInt division by zero");
+        }
         BigInt a = a1.abs(), b = b1.abs(), q, r;
         q.a.resize(a.a.size());
         for (int i = (int)a.a.size() - 1; i >= 0; --i) {

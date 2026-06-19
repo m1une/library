@@ -36,8 +36,8 @@ If either input is empty, the result is empty.
 
 Let `n = a.size() + b.size()`.
 
-* `convolution`: $\mathcal{O}(n \log n)$ for large inputs.
-* `convolution_naive`: $\mathcal{O}(|a||b|)$.
+* `convolution`: $O(n \log n)$ for large inputs.
+* `convolution_naive`: $O(|a| \cdot |b|)$.
 
 For an NTT-friendly modulus, the transform length must divide
 `Mint::mod() - 1`. The CRT fallback supports transform lengths up to

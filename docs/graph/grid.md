@@ -64,10 +64,10 @@ The passable predicate must be callable as `bool passable(int i, int j)`.
 | `adj8` | `std::vector<std::pair<int, int>> adj8(int i, int j) const` | Returns inside 8-neighbor cells of `(i, j)`. | $O(1)$ |
 | `adj4_ids` | `std::vector<int> adj4_ids(int v) const` | Returns inside 4-neighbor vertex ids of `v`. | $O(1)$ |
 | `adj8_ids` | `std::vector<int> adj8_ids(int v) const` | Returns inside 8-neighbor vertex ids of `v`. | $O(1)$ |
-| `graph4` | `Graph<int> graph4() const` | Builds an undirected 4-neighbor graph with all cells passable. | $O(HW)$ |
-| `graph8` | `Graph<int> graph8() const` | Builds an undirected 8-neighbor graph with all cells passable. | $O(HW)$ |
-| `graph4` | `template <class Passable> Graph<int> graph4(Passable passable) const` | Builds an undirected 4-neighbor graph using a passable predicate. | $O(HW)$ |
-| `graph8` | `template <class Passable> Graph<int> graph8(Passable passable) const` | Builds an undirected 8-neighbor graph using a passable predicate. | $O(HW)$ |
+| `graph4` | `Graph<int> graph4() const` | Builds an undirected 4-neighbor graph with all cells passable. | $O(H \cdot W)$ |
+| `graph8` | `Graph<int> graph8() const` | Builds an undirected 8-neighbor graph with all cells passable. | $O(H \cdot W)$ |
+| `graph4` | `template <class Passable> Graph<int> graph4(Passable passable) const` | Builds an undirected 4-neighbor graph using a passable predicate. | $O(H \cdot W)$ |
+| `graph8` | `template <class Passable> Graph<int> graph8(Passable passable) const` | Builds an undirected 8-neighbor graph using a passable predicate. | $O(H \cdot W)$ |
 
 ## Example
 

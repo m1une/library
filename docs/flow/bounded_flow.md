@@ -80,7 +80,7 @@ The result contains these members:
 | Constructor | `explicit BoundedFlow(int n)` | Creates a graph with `n` vertices. | $O(N)$ |
 | `size` | `int size() const` | Returns the number of vertices. | $O(1)$ |
 | `edge_count` | `int edge_count() const` | Returns the number of edges. | $O(1)$ |
-| `add_edge` | `int add_edge(int from, int to, Cap lower, Cap upper)` | Adds an edge with bounds and returns its id. | $O(1)$ amortized |
+| `add_edge` | `int add_edge(int from, int to, Cap lower, Cap upper)` | Adds an edge with bounds and returns its id. | Amortized $O(1)$ |
 | `get_edge` | `Edge get_edge(int i) const` | Returns original edge `i`. | $O(1)$ |
 | `edges` | `std::vector<Edge> edges() const` | Returns all original edges. | $O(M)$ |
 | `set_balance` | `void set_balance(int v, Cap b)` | Sets `balance[v] = b`. | $O(1)$ |

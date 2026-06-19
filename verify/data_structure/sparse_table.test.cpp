@@ -8,7 +8,7 @@
 
 void fast_io() {
     std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
+    std::cin.tie(nullptr);
 }
 
 int main() {
@@ -27,7 +27,7 @@ int main() {
     for (int q = 0; q < Q; ++q) {
         int l, r;
         std::cin >> l >> r;
-        
+
         std::cout << st.prod(l, r) << "\n";
     }
 

@@ -60,8 +60,8 @@ T(N) <= T(N - 1) + T(N - 4)
 ```
 
 The positive root of `x^4 = x^3 + 1` is about `1.381`, so the search tree is
-bounded by `O(1.381^N)`. With the polynomial work in each node, the usual bound
-for this branching algorithm is written as `O(1.381^N * N)` when adjacency
+bounded by $O(1.381^N)$. With the polynomial work in each node, the usual bound
+for this branching algorithm is written as $O(1.381^N \cdot N)$ when adjacency
 bookkeeping is implemented linearly.
 
 The implementation follows that branching algorithm. It stores adjacency lists
@@ -102,15 +102,15 @@ Returned vertices are sorted in increasing order.
 
 | Function | Signature | Description | Complexity |
 | --- | --- | --- | --- |
-| `maximum_clique` | `template <class T> MaximumCliqueResult maximum_clique(const Graph<T>& g)` | Returns one maximum clique. | `O(1.381^N * N)` branching bound |
-| `maximum_clique_size` | `template <class T> int maximum_clique_size(const Graph<T>& g)` | Returns the size of a maximum clique. | `O(1.381^N * N)` branching bound |
-| `maximum_independent_set` | `template <class T> MaximumIndependentSetResult maximum_independent_set(const Graph<T>& g)` | Returns one maximum independent set. | `O(1.381^N * N)` branching bound |
-| `maximum_independent_set_size` | `template <class T> int maximum_independent_set_size(const Graph<T>& g)` | Returns the size of a maximum independent set. | `O(1.381^N * N)` branching bound |
-| `minimum_vertex_cover` | `template <class T> MinimumVertexCoverResult minimum_vertex_cover(const Graph<T>& g)` | Returns one minimum vertex cover. | `O(1.381^N * N)` branching bound |
-| `minimum_vertex_cover_size` | `template <class T> int minimum_vertex_cover_size(const Graph<T>& g)` | Returns the size of a minimum vertex cover. | `O(1.381^N * N)` branching bound |
-| `is_clique` | `template <class T> bool is_clique(const Graph<T>& g, const std::vector<int>& vertices)` | Checks whether `vertices` is a clique. | $O(N+M+K^2)$ |
-| `is_independent_set` | `template <class T> bool is_independent_set(const Graph<T>& g, const std::vector<int>& vertices)` | Checks whether `vertices` is an independent set. | $O(N+M+K^2)$ |
-| `is_vertex_cover` | `template <class T> bool is_vertex_cover(const Graph<T>& g, const std::vector<int>& vertices)` | Checks whether `vertices` is a vertex cover. | $O(N+M+K)$ |
+| `maximum_clique` | `template <class T> MaximumCliqueResult maximum_clique(const Graph<T>& g)` | Returns one maximum clique. | $O(1.381^N \cdot N)$ branching bound |
+| `maximum_clique_size` | `template <class T> int maximum_clique_size(const Graph<T>& g)` | Returns the size of a maximum clique. | $O(1.381^N \cdot N)$ branching bound |
+| `maximum_independent_set` | `template <class T> MaximumIndependentSetResult maximum_independent_set(const Graph<T>& g)` | Returns one maximum independent set. | $O(1.381^N \cdot N)$ branching bound |
+| `maximum_independent_set_size` | `template <class T> int maximum_independent_set_size(const Graph<T>& g)` | Returns the size of a maximum independent set. | $O(1.381^N \cdot N)$ branching bound |
+| `minimum_vertex_cover` | `template <class T> MinimumVertexCoverResult minimum_vertex_cover(const Graph<T>& g)` | Returns one minimum vertex cover. | $O(1.381^N \cdot N)$ branching bound |
+| `minimum_vertex_cover_size` | `template <class T> int minimum_vertex_cover_size(const Graph<T>& g)` | Returns the size of a minimum vertex cover. | $O(1.381^N \cdot N)$ branching bound |
+| `is_clique` | `template <class T> bool is_clique(const Graph<T>& g, const std::vector<int>& vertices)` | Checks whether `vertices` is a clique. | $O(N + M + K^2)$ |
+| `is_independent_set` | `template <class T> bool is_independent_set(const Graph<T>& g, const std::vector<int>& vertices)` | Checks whether `vertices` is an independent set. | $O(N + M + K^2)$ |
+| `is_vertex_cover` | `template <class T> bool is_vertex_cover(const Graph<T>& g, const std::vector<int>& vertices)` | Checks whether `vertices` is a vertex cover. | $O(N + M + K)$ |
 
 Here, `K = vertices.size()`.
 

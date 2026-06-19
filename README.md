@@ -18,6 +18,7 @@ contest.
 | `flow/` | Flow-network algorithms such as max flow, min-cost flow, and bounded flow. |
 | `optimization/` | Cost-matrix and numeric optimization algorithms such as Hungarian assignment, simplex LP, and integer LP. |
 | `fps/` | Fast convolution, formal power series operations, multipoint evaluation, interpolation, and linear recurrences. |
+| `sequence/` | Sequence algorithms such as longest increasing subsequence and inversion counting. |
 | `data_structure/` | Segment trees, sparse table, DSU, link-cut tree variants, ordered sets, hash tables, and related containers. |
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
