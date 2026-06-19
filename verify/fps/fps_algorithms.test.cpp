@@ -25,14 +25,14 @@ void test_convolution() {
         int n = 33 + int(rng() % 70);
         int m = 33 + int(rng() % 70);
         std::vector<mint> a(n), b(m);
-        for (mint& value : a) value = mint(rng());
-        for (mint& value : b) value = mint(rng());
+        for (mint& value : a) value = mint(static_cast<uint32_t>(rng()));
+        for (mint& value : b) value = mint(static_cast<uint32_t>(rng()));
         assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a, b));
     }
 
     std::vector<mint1e9> a(70), b(65);
-    for (mint1e9& value : a) value = mint1e9(rng());
-    for (mint1e9& value : b) value = mint1e9(rng());
+    for (mint1e9& value : a) value = mint1e9(static_cast<uint32_t>(rng()));
+    for (mint1e9& value : b) value = mint1e9(static_cast<uint32_t>(rng()));
     assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a, b));
 }
 
