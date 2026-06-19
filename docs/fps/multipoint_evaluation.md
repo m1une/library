@@ -5,8 +5,81 @@ documentation_of: ../../fps/multipoint_evaluation.hpp
 
 ## Overview
 
-A subproduct tree supports fast evaluation of one polynomial at many points
-and interpolation through many point-value pairs.
+This header provides a subproduct tree for two related polynomial operations:
+
+* multipoint evaluation computes $f(x_i)$ for many points $x_i$;
+* interpolation constructs the unique polynomial $f$ of degree less than $N$
+  such that $f(x_i) = y_i$ for every point-value pair.
+
+Building `SubproductTree` once is useful when several polynomials are evaluated
+at the same points. The free functions provide the same operations when the
+tree is needed only once.
+
+## Complexity Notation
+
+* `N` is the number of points.
+* `D` is the number of coefficients in the polynomial being evaluated.
+
+Polynomial multiplication uses the NTT-based convolution from
+`fps/convolution.hpp`.
+
+## Subproduct Tree
+
+For each point $x_i$, a leaf stores the polynomial
+
+$$
+P_i(x) = x - x_i.
+$$
+
+Each internal node stores the product of its two children. Therefore, the root
+contains
+
+$$
+P(x) = \prod_{i=0}^{N-1}(x - x_i).
+$$
+
+The tree stores $O(N \log N)$ coefficients in total.
+
+### Multipoint Evaluation
+
+Evaluation propagates polynomial remainders from the root toward the leaves.
+If a node represents polynomial $P_v(x)$, it receives
+
+$$
+f(x) \bmod P_v(x).
+$$
+
+The remainder is reduced modulo each child polynomial and passed downward. At
+leaf $i$, the modulus is $x - x_i$, so the constant remainder is exactly
+$f(x_i)$.
+
+This evaluates all points together instead of applying Horner's method
+independently at every point.
+
+### Interpolation
+
+Interpolation requires the points to be distinct. Let
+
+$$
+P(x) = \prod_{i=0}^{N-1}(x - x_i).
+$$
+
+The tree first evaluates $P'(x)$ at every point and computes the leaf weights
+
+$$
+w_i = \frac{y_i}{P'(x_i)}.
+$$
+
+For an internal node with left and right product polynomials $P_L$ and $P_R$,
+the corresponding interpolation polynomials are combined as
+
+$$
+F = F_L P_R + F_R P_L.
+$$
+
+At the root, this is the Lagrange interpolation polynomial through all
+$(x_i, y_i)$. Distinct points guarantee that every $P'(x_i)$ is nonzero and
+invertible.
 
 ## API
 
@@ -24,10 +97,23 @@ struct SubproductTree {
 };
 ```
 
-`product()` returns
-$\prod_i (x-\mathrm{points}[i])$.
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `SubproductTree(points)` | Builds the product tree for `points`. | $O(N \log^2 N)$ |
+| `int size() const` | Returns the number of points. | $O(1)$ |
+| `const Fps& product() const` | Returns $\prod_i (x - x_i)$. For no points, returns the constant polynomial $1$. | $O(1)$ |
+| `evaluate(polynomial) const` | Returns `polynomial(points[i])` for every point. | $O(D \log D + N \log^2 N)$ |
+| `interpolate(values) const` | Returns the polynomial of degree less than `N` whose value at `points[i]` is `values[i]`. | $O(N \log^2 N)$ |
 
-The free functions below are convenient when the tree is used once:
+If `D <= N`, evaluation simplifies to $O(N \log^2 N)$. The tree itself uses
+$O(N \log N)$ memory. Evaluation and interpolation use
+$O(N \log N + D)$ auxiliary memory.
+
+`interpolate` requires `values.size() == size()` and pairwise distinct points.
+For an empty point set, evaluation returns an empty vector and interpolation
+returns an empty polynomial.
+
+## Free Functions
 
 ```cpp
 template <class Mint>
@@ -41,12 +127,13 @@ FormalPowerSeries<Mint> polynomial_interpolate(
     const std::vector<Mint>& values);
 ```
 
-Interpolation requires all points to be distinct.
+Each free function constructs a temporary `SubproductTree` and performs the
+corresponding operation. Their bounds are therefore:
 
-## Complexity
-
-For `n` points, construction, evaluation, and interpolation each take
-$O(n \log^2 n)$ time and $O(n \log n)$ temporary storage.
+| Function | Complexity |
+| --- | --- |
+| `multipoint_evaluate` | $O(D \log D + N \log^2 N)$ |
+| `polynomial_interpolate` | $O(N \log^2 N)$ |
 
 ## Example
 
@@ -54,6 +141,7 @@ $O(n \log^2 n)$ time and $O(n \log n)$ temporary storage.
 #include "fps/multipoint_evaluation.hpp"
 #include "math/modint.hpp"
 
+#include <cassert>
 #include <vector>
 
 using mint = m1une::math::modint998244353;
@@ -65,6 +153,12 @@ int main() {
 
     m1une::fps::SubproductTree<mint> tree(points);
     std::vector<mint> values = tree.evaluate(f);
+
+    assert(values[0] == mint(3));
+    assert(values[1] == mint(21));
+    assert(values[2] == mint(108));
+
     Fps restored = tree.interpolate(values);
+    assert(restored == f);
 }
 ```
