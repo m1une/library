@@ -307,8 +307,9 @@ These types describe three different levels of the tree DP:
 
 The three panels show the core conversions: `add_vertex` combines local
 `Vertex` data with raked virtual-child `Point` data, `compress` concatenates
-ordered `Path` clusters, and `add_edge` turns a child `Path` into the `Point`
-contribution attached to its parent.
+ordered `Path` clusters, and `add_edge` converts an off-path branch from
+`Path` form into `Point` form so that it can be combined with the other virtual
+children.
 
 ### `Vertex`
 
@@ -352,9 +353,21 @@ that order. It must be associative, but does not need to be commutative.
 Reversing a represented path may change the aggregate, so each link-cut-tree
 node maintains both the forward and reverse `Path` products.
 
-`add_edge(path)` closes the child-side path cluster and converts it into the
-one-boundary `Point` contribution seen by its parent. A `Path` needs neither an
-identity nor an inverse.
+When a branch is part of the preferred path, its summary is a `Path` because
+its order matters. When that branch becomes a virtual child, it must be stored
+in the parent's unordered `Point` aggregate instead. `add_edge(path)` performs
+this conversion:
+
+```cpp
+Point branch = add_edge(child_path);
+virtual_children = rake(virtual_children, branch);
+```
+
+Despite its name, `add_edge` does not modify the represented tree or create an
+edge. `link` and `link_edge` do that. The name follows the rake-compress
+operation that closes a path cluster at its parent-side boundary.
+
+A `Path` needs neither an identity nor an inverse.
 
 At a link-cut-tree node, the aggregate is formed schematically as:
 
@@ -388,8 +401,8 @@ The operations have the following meanings:
 * `compress(p, c)` joins an upper parent-side path cluster with a lower
   child-side path cluster. It must be associative, but need not be commutative.
 * `add_vertex(point, vertex)` combines one node with its virtual children.
-* `add_edge(path)` converts a represented child cluster into the contribution
-  seen by its parent.
+* `add_edge(path)` converts an ordered branch summary into the unordered
+  `Point` value that can be raked with the other virtual children.
 
 The inverse of `add_edge(path)` is used only when `access` changes a preferred
 child back into a virtual child or vice versa.
