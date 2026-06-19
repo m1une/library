@@ -1,17 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/rake_compress_link_cut_tree.hpp
     title: Rake-Compress Link-Cut Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum
@@ -217,14 +217,13 @@ data:
     \        int u, v;\n        mint b, c;\n        std::cin >> u >> v >> b >> c;\n\
     \        edge_id[i] = lct.link_edge(\n            vertex_node[u], vertex_node[v],\
     \ Vertex{false, b, c}\n        );\n    }\n\n    for (int i = 0; i < q; i++) {\n\
-    \        int type;\n        std::cin >> type;\n        if (type == 0) {\n    \
-    \        int w;\n            mint x;\n            std::cin >> w >> x;\n      \
-    \      lct.set(vertex_node[w], Vertex{true, x, mint(0)});\n        } else if (type\
-    \ == 1) {\n            int e;\n            mint y, z;\n            std::cin >>\
-    \ e >> y >> z;\n            lct.set_edge(edge_id[e], Vertex{false, y, z});\n \
-    \       } else {\n            int w;\n            std::cin >> w;\n           \
-    \ std::cout << lct.component_prod(vertex_node[w]).s << '\\n';\n        }\n   \
-    \ }\n}\n"
+    \        int type;\n        std::cin >> type;\n        int root;\n        if (type\
+    \ == 0) {\n            int w;\n            mint x;\n            std::cin >> w\
+    \ >> x >> root;\n            lct.set(vertex_node[w], Vertex{true, x, mint(0)});\n\
+    \        } else {\n            int e;\n            mint y, z;\n            std::cin\
+    \ >> e >> y >> z >> root;\n            lct.set_edge(edge_id[e], Vertex{false,\
+    \ y, z});\n        }\n        std::cout << lct.component_prod(vertex_node[root]).s\
+    \ << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum\"\
     \n\n#include <iostream>\n#include <vector>\n\n#include \"data_structure/rake_compress_link_cut_tree.hpp\"\
     \n#include \"math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
@@ -254,22 +253,21 @@ data:
     \        int u, v;\n        mint b, c;\n        std::cin >> u >> v >> b >> c;\n\
     \        edge_id[i] = lct.link_edge(\n            vertex_node[u], vertex_node[v],\
     \ Vertex{false, b, c}\n        );\n    }\n\n    for (int i = 0; i < q; i++) {\n\
-    \        int type;\n        std::cin >> type;\n        if (type == 0) {\n    \
-    \        int w;\n            mint x;\n            std::cin >> w >> x;\n      \
-    \      lct.set(vertex_node[w], Vertex{true, x, mint(0)});\n        } else if (type\
-    \ == 1) {\n            int e;\n            mint y, z;\n            std::cin >>\
-    \ e >> y >> z;\n            lct.set_edge(edge_id[e], Vertex{false, y, z});\n \
-    \       } else {\n            int w;\n            std::cin >> w;\n           \
-    \ std::cout << lct.component_prod(vertex_node[w]).s << '\\n';\n        }\n   \
-    \ }\n}\n"
+    \        int type;\n        std::cin >> type;\n        int root;\n        if (type\
+    \ == 0) {\n            int w;\n            mint x;\n            std::cin >> w\
+    \ >> x >> root;\n            lct.set(vertex_node[w], Vertex{true, x, mint(0)});\n\
+    \        } else {\n            int e;\n            mint y, z;\n            std::cin\
+    \ >> e >> y >> z >> root;\n            lct.set_edge(edge_id[e], Vertex{false,\
+    \ y, z});\n        }\n        std::cout << lct.component_prod(vertex_node[root]).s\
+    \ << '\\n';\n    }\n}\n"
   dependsOn:
   - data_structure/rake_compress_link_cut_tree.hpp
   - math/modint.hpp
   isVerificationFile: true
   path: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 15:58:28+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-19 16:14:20+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
 layout: document
