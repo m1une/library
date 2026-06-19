@@ -189,19 +189,19 @@ data:
       title: Min Cost Flow
   - name: fps
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: fps/all.hpp
       title: fps/all.hpp
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: fps/convolution.hpp
       title: Convolution
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: fps/formal_power_series.hpp
       title: Formal Power Series
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: fps/linear_recurrence.hpp
       title: Linear Recurrence and Bostan-Mori
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: fps/multipoint_evaluation.hpp
       title: Multipoint Evaluation and Interpolation
   - name: graph
@@ -274,7 +274,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: math/modint.hpp
       title: ModInt
   - name: monoid
@@ -587,7 +587,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/fps/exp_of_formal_power_series.test.cpp
       title: verify/fps/exp_of_formal_power_series.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/fps_algorithms.test.cpp
       title: verify/fps/fps_algorithms.test.cpp
     - icon: ':heavy_check_mark:'

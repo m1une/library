@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: fps/all.hpp
     title: fps/all.hpp
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -390,10 +390,11 @@ data:
     \ {\n    std::mt19937 rng(712367);\n    for (int iteration = 0; iteration < 30;\
     \ iteration++) {\n        int n = 33 + int(rng() % 70);\n        int m = 33 +\
     \ int(rng() % 70);\n        std::vector<mint> a(n), b(m);\n        for (mint&\
-    \ value : a) value = mint(rng());\n        for (mint& value : b) value = mint(rng());\n\
-    \        assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a,\
-    \ b));\n    }\n\n    std::vector<mint1e9> a(70), b(65);\n    for (mint1e9& value\
-    \ : a) value = mint1e9(rng());\n    for (mint1e9& value : b) value = mint1e9(rng());\n\
+    \ value : a) value = mint(static_cast<uint32_t>(rng()));\n        for (mint& value\
+    \ : b) value = mint(static_cast<uint32_t>(rng()));\n        assert_equal(m1une::fps::convolution(a,\
+    \ b), m1une::fps::convolution_naive(a, b));\n    }\n\n    std::vector<mint1e9>\
+    \ a(70), b(65);\n    for (mint1e9& value : a) value = mint1e9(static_cast<uint32_t>(rng()));\n\
+    \    for (mint1e9& value : b) value = mint1e9(static_cast<uint32_t>(rng()));\n\
     \    assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a,\
     \ b));\n}\n\nvoid test_series_functions() {\n    Fps f(96);\n    f[0] = 1;\n \
     \   for (int i = 1; i < int(f.size()); i++) f[i] = mint(i * i + 7);\n\n    Fps\
@@ -449,10 +450,11 @@ data:
     \ {\n    std::mt19937 rng(712367);\n    for (int iteration = 0; iteration < 30;\
     \ iteration++) {\n        int n = 33 + int(rng() % 70);\n        int m = 33 +\
     \ int(rng() % 70);\n        std::vector<mint> a(n), b(m);\n        for (mint&\
-    \ value : a) value = mint(rng());\n        for (mint& value : b) value = mint(rng());\n\
-    \        assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a,\
-    \ b));\n    }\n\n    std::vector<mint1e9> a(70), b(65);\n    for (mint1e9& value\
-    \ : a) value = mint1e9(rng());\n    for (mint1e9& value : b) value = mint1e9(rng());\n\
+    \ value : a) value = mint(static_cast<uint32_t>(rng()));\n        for (mint& value\
+    \ : b) value = mint(static_cast<uint32_t>(rng()));\n        assert_equal(m1une::fps::convolution(a,\
+    \ b), m1une::fps::convolution_naive(a, b));\n    }\n\n    std::vector<mint1e9>\
+    \ a(70), b(65);\n    for (mint1e9& value : a) value = mint1e9(static_cast<uint32_t>(rng()));\n\
+    \    for (mint1e9& value : b) value = mint1e9(static_cast<uint32_t>(rng()));\n\
     \    assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a,\
     \ b));\n}\n\nvoid test_series_functions() {\n    Fps f(96);\n    f[0] = 1;\n \
     \   for (int i = 1; i < int(f.size()); i++) f[i] = mint(i * i + 7);\n\n    Fps\
@@ -508,8 +510,8 @@ data:
   isVerificationFile: true
   path: verify/fps/fps_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-19 11:46:09+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/fps/fps_algorithms.test.cpp
 layout: document
