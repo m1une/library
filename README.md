@@ -35,7 +35,7 @@ contest.
 | `ds/segment_tree/` | Segment trees, lazy propagation, dual segment trees, and persistent variants. |
 | `ds/range_query/` | Fenwick trees and static sparse-table queries. |
 | `ds/dynamic_array/` | Implicit-treap sequences with insertion, deletion, reversal, aggregation, or persistence. |
-| `ds/ordered_set/` | Ordered sets and multisets, including persistent variants. |
+| `ds/ordered_set/` | Ordered sets and multisets, including persistent variants and a binary trie. |
 | `ds/dynamic_tree/` | Link-cut trees and rake-compress trees for changing forests. |
 | `ds/hash_table/` | Hash maps and hash sets. |
 
