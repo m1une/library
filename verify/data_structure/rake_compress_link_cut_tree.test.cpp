@@ -41,17 +41,17 @@ struct AffineTreeSum {
         Path(T a_, T b_, T s_, T x_) : a(a_), b(b_), s(s_), x(x_) {}
     };
 
-    struct Vertex {
+    struct NodeValue {
         bool is_vertex;
         T x;
         T y;
 
-        Vertex() = delete;
+        NodeValue() = delete;
 
-        Vertex(bool is_vertex_, T x_, T y_) : is_vertex(is_vertex_), x(x_), y(y_) {}
+        NodeValue(bool is_vertex_, T x_, T y_) : is_vertex(is_vertex_), x(x_), y(y_) {}
     };
 
-    static Path add_vertex(const Point& d, const Vertex& u) {
+    static Path add_vertex(const Point& d, const NodeValue& u) {
         if (u.is_vertex) return Path{T(1), T(0), d.s + u.x, d.x + T(1)};
         return Path{u.x, u.y, d.s * u.x + d.x * u.y, d.x};
     }
@@ -107,7 +107,7 @@ std::pair<mint, int> naive_dfs(
 
 void test_random_updates() {
     using TreeDP = AffineTreeSum<mint>;
-    using Vertex = typename TreeDP::Vertex;
+    using NodeValue = typename TreeDP::NodeValue;
     using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;
 
     constexpr int n = 12;
@@ -120,7 +120,7 @@ void test_random_updates() {
 
     for (int i = 0; i < n; i++) {
         value[i] = mint(int(rng() % 100));
-        vertex_node[i] = lct.add_vertex(Vertex{true, value[i], mint(0)});
+        vertex_node[i] = lct.add_vertex(NodeValue{true, value[i], mint(0)});
     }
 
     for (int v = 1; v < n; v++) {
@@ -131,7 +131,7 @@ void test_random_updates() {
         edges.push_back(Edge{parent, v, a, b});
         graph[parent].push_back(AdjEdge{v, id});
         graph[v].push_back(AdjEdge{parent, id});
-        assert(lct.link_edge(vertex_node[parent], vertex_node[v], Vertex{false, a, b}) == id);
+        assert(lct.link_edge(vertex_node[parent], vertex_node[v], NodeValue{false, a, b}) == id);
     }
 
     for (int step = 0; step < 4000; step++) {
@@ -139,12 +139,12 @@ void test_random_updates() {
         if (type == 0) {
             int v = int(rng() % n);
             value[v] = mint(int(rng() % 1000));
-            lct.set(vertex_node[v], Vertex{true, value[v], mint(0)});
+            lct.set(vertex_node[v], NodeValue{true, value[v], mint(0)});
         } else if (type == 1) {
             int id = int(rng() % edges.size());
             edges[id].a = mint(int(rng() % 5));
             edges[id].b = mint(int(rng() % 1000));
-            lct.set_edge(id, Vertex{false, edges[id].a, edges[id].b});
+            lct.set_edge(id, NodeValue{false, edges[id].a, edges[id].b});
         } else {
             int root = int(rng() % n);
             mint expected = naive_dfs(root, -1, value, edges, graph).first;
@@ -155,15 +155,15 @@ void test_random_updates() {
 
 void test_cut_and_link() {
     using TreeDP = AffineTreeSum<mint>;
-    using Vertex = typename TreeDP::Vertex;
+    using NodeValue = typename TreeDP::NodeValue;
     using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;
 
     LCT lct;
-    int a = lct.add_vertex(Vertex{true, mint(2), mint(0)});
-    int b = lct.add_vertex(Vertex{true, mint(3), mint(0)});
-    int c = lct.add_vertex(Vertex{true, mint(5), mint(0)});
-    int e0 = lct.link_edge(a, b, Vertex{false, mint(0), mint(7)});
-    int e1 = lct.link_edge(b, c, Vertex{false, mint(2), mint(1)});
+    int a = lct.add_vertex(NodeValue{true, mint(2), mint(0)});
+    int b = lct.add_vertex(NodeValue{true, mint(3), mint(0)});
+    int c = lct.add_vertex(NodeValue{true, mint(5), mint(0)});
+    int e0 = lct.link_edge(a, b, NodeValue{false, mint(0), mint(7)});
+    int e1 = lct.link_edge(b, c, NodeValue{false, mint(2), mint(1)});
 
     assert(lct.component_prod(a).s == mint(16));
     assert(lct.component_prod(c).s == mint(27));

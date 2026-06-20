@@ -15,7 +15,7 @@ template <class TreeDPInfo>
 struct RakeCompressLinkCutTree {
     using Point = typename TreeDPInfo::Point;
     using Path = typename TreeDPInfo::Path;
-    using Vertex = typename TreeDPInfo::Vertex;
+    using NodeValue = typename TreeDPInfo::NodeValue;
 
    private:
     struct Node {
@@ -23,13 +23,13 @@ struct RakeCompressLinkCutTree {
         int right = -1;
         int parent = -1;
         bool rev = false;
-        Vertex value;
+        NodeValue value;
         Point virtual_prod;
         Path prod;
         Path rev_prod;
 
-        explicit Node(const Vertex& vertex)
-            : value(vertex),
+        explicit Node(const NodeValue& node_value)
+            : value(node_value),
               virtual_prod(Point::id()),
               prod(TreeDPInfo::add_vertex(virtual_prod, value)),
               rev_prod(prod) {}
@@ -162,8 +162,8 @@ struct RakeCompressLinkCutTree {
         return last;
     }
 
-    void check_vertex(int v) const {
-        assert(0 <= v && v < int(_nodes.size()));
+    void check_node(int node) const {
+        assert(0 <= node && node < int(_nodes.size()));
     }
 
     void check_edge(int edge_id) const {
@@ -173,9 +173,9 @@ struct RakeCompressLinkCutTree {
    public:
     RakeCompressLinkCutTree() = default;
 
-    explicit RakeCompressLinkCutTree(const std::vector<Vertex>& values) {
+    explicit RakeCompressLinkCutTree(const std::vector<NodeValue>& values) {
         _nodes.reserve(values.size());
-        for (const Vertex& value : values) add_vertex(value);
+        for (const NodeValue& value : values) add_vertex(value);
     }
 
     int size() const {
@@ -186,8 +186,8 @@ struct RakeCompressLinkCutTree {
         return _nodes.empty();
     }
 
-    int add_vertex(const Vertex& vertex) {
-        _nodes.emplace_back(vertex);
+    int add_vertex(const NodeValue& node_value) {
+        _nodes.emplace_back(node_value);
         return int(_nodes.size()) - 1;
     }
 
@@ -210,25 +210,25 @@ struct RakeCompressLinkCutTree {
         return {_edges[edge_id].u, _edges[edge_id].v};
     }
 
-    const Vertex& get(int v) const {
-        check_vertex(v);
+    const NodeValue& get(int v) const {
+        check_node(v);
         return _nodes[v].value;
     }
 
-    const Vertex& operator[](int v) const {
+    const NodeValue& operator[](int v) const {
         return get(v);
     }
 
-    void set(int v, const Vertex& vertex) {
-        check_vertex(v);
+    void set(int v, const NodeValue& node_value) {
+        check_node(v);
         access(v);
-        _nodes[v].value = vertex;
+        _nodes[v].value = node_value;
         update(v);
     }
 
     // Makes v the represented root of its component.
     void evert(int v) {
-        check_vertex(v);
+        check_node(v);
         access(v);
         apply_reverse(v);
     }
@@ -238,7 +238,7 @@ struct RakeCompressLinkCutTree {
     }
 
     int component_root(int v) {
-        check_vertex(v);
+        check_node(v);
         access(v);
         int cur = v;
         push(cur);
@@ -255,8 +255,8 @@ struct RakeCompressLinkCutTree {
     }
 
     bool connected(int u, int v) {
-        check_vertex(u);
-        check_vertex(v);
+        check_node(u);
+        check_node(v);
         if (u == v) return true;
         return component_root(u) == component_root(v);
     }
@@ -267,8 +267,8 @@ struct RakeCompressLinkCutTree {
 
     // Links two different components and returns whether an edge was added.
     bool link(int u, int v) {
-        check_vertex(u);
-        check_vertex(v);
+        check_node(u);
+        check_node(v);
         if (u == v) return false;
         evert(u);
         if (component_root(v) == u) return false;
@@ -283,12 +283,12 @@ struct RakeCompressLinkCutTree {
         return link(child, parent);
     }
 
-    int link_edge(int u, int v, const Vertex& edge_vertex) {
-        check_vertex(u);
-        check_vertex(v);
+    int link_edge(int u, int v, const NodeValue& edge_value) {
+        check_node(u);
+        check_node(v);
         if (u == v || connected(u, v)) return -1;
         int edge_id = int(_edges.size());
-        int node = add_vertex(edge_vertex);
+        int node = add_vertex(edge_value);
         _edges.push_back(EdgeInfo{u, v, node, true});
         bool ok1 = link(u, node);
         bool ok2 = link(node, v);
@@ -298,8 +298,8 @@ struct RakeCompressLinkCutTree {
 
     // Cuts the represented-tree edge (u, v), if it exists.
     bool cut(int u, int v) {
-        check_vertex(u);
-        check_vertex(v);
+        check_node(u);
+        check_node(v);
         if (u == v) return false;
         evert(u);
         access(v);
@@ -312,7 +312,7 @@ struct RakeCompressLinkCutTree {
 
     // Cuts the parent edge of v in the current represented-root orientation.
     bool cut_parent(int v) {
-        check_vertex(v);
+        check_node(v);
         access(v);
         int left = _nodes[v].left;
         if (left == -1) return false;
@@ -332,12 +332,12 @@ struct RakeCompressLinkCutTree {
         return ok1 && ok2;
     }
 
-    const Vertex& get_edge(int edge_id) const {
+    const NodeValue& get_edge(int edge_id) const {
         return get(edge_node(edge_id));
     }
 
-    void set_edge(int edge_id, const Vertex& edge_vertex) {
-        set(edge_node(edge_id), edge_vertex);
+    void set_edge(int edge_id, const NodeValue& edge_value) {
+        set(edge_node(edge_id), edge_value);
     }
 
     // Reroots the represented tree at v and returns its whole-tree cluster.

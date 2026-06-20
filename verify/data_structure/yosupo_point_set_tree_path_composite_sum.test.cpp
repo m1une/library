@@ -30,13 +30,13 @@ struct PointSetTreePathCompositeSum {
         T x;
     };
 
-    struct Vertex {
+    struct NodeValue {
         bool is_vertex;
         T x;
         T y;
     };
 
-    static Path add_vertex(const Point& d, const Vertex& u) {
+    static Path add_vertex(const Point& d, const NodeValue& u) {
         if (u.is_vertex) return Path{T(1), T(0), d.s + u.x, d.x + T(1)};
         return Path{u.x, u.y, d.s * u.x + d.x * u.y, d.x};
     }
@@ -61,7 +61,7 @@ struct PointSetTreePathCompositeSum {
 
 int main() {
     using TreeDP = PointSetTreePathCompositeSum<mint>;
-    using Vertex = typename TreeDP::Vertex;
+    using NodeValue = typename TreeDP::NodeValue;
     using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;
 
     std::ios::sync_with_stdio(false);
@@ -75,7 +75,7 @@ int main() {
     for (int i = 0; i < n; i++) {
         mint a;
         std::cin >> a;
-        vertex_node[i] = lct.add_vertex(Vertex{true, a, mint(0)});
+        vertex_node[i] = lct.add_vertex(NodeValue{true, a, mint(0)});
     }
 
     std::vector<int> edge_id(n - 1);
@@ -84,7 +84,7 @@ int main() {
         mint b, c;
         std::cin >> u >> v >> b >> c;
         edge_id[i] = lct.link_edge(
-            vertex_node[u], vertex_node[v], Vertex{false, b, c}
+            vertex_node[u], vertex_node[v], NodeValue{false, b, c}
         );
     }
 
@@ -96,12 +96,12 @@ int main() {
             int w;
             mint x;
             std::cin >> w >> x >> root;
-            lct.set(vertex_node[w], Vertex{true, x, mint(0)});
+            lct.set(vertex_node[w], NodeValue{true, x, mint(0)});
         } else {
             int e;
             mint y, z;
             std::cin >> e >> y >> z >> root;
-            lct.set_edge(edge_id[e], Vertex{false, y, z});
+            lct.set_edge(edge_id[e], NodeValue{false, y, z});
         }
         std::cout << lct.component_prod(vertex_node[root]).s << '\n';
     }
