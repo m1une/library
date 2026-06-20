@@ -1,0 +1,353 @@
+---
+data:
+  _extendedDependsOn:
+  - icon: ':heavy_check_mark:'
+    path: string/all.hpp
+    title: String Algorithms Bundle
+  - icon: ':heavy_check_mark:'
+    path: string/manacher.hpp
+    title: Manacher Algorithm
+  - icon: ':heavy_check_mark:'
+    path: string/prefix_function.hpp
+    title: Prefix Function and KMP
+  - icon: ':heavy_check_mark:'
+    path: string/rolling_hash.hpp
+    title: Static Rolling Hash
+  - icon: ':heavy_check_mark:'
+    path: string/suffix_array.hpp
+    title: Suffix Array and LCP Array
+  - icon: ':heavy_check_mark:'
+    path: string/z_algorithm.hpp
+    title: Z Algorithm
+  _extendedRequiredBy: []
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
+  _pathExtension: cpp
+  _verificationStatusIcon: ':heavy_check_mark:'
+  attributes:
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    links:
+    - https://judge.yosupo.jp/problem/aplusb
+  bundledCode: "#line 1 \"verify/string/string_algorithms.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"string/all.hpp\"\n\n\
+    \n\n#line 1 \"string/manacher.hpp\"\n\n\n\n#include <algorithm>\n#include <cassert>\n\
+    #include <vector>\n\nnamespace m1une {\nnamespace string {\n\nstruct ManacherResult\
+    \ {\n    // odd[i] is the radius including center i.\n    // The palindrome is\
+    \ [i - odd[i] + 1, i + odd[i]).\n    std::vector<int> odd;\n\n    // even[i] is\
+    \ the radius centered between i - 1 and i.\n    // The palindrome is [i - even[i],\
+    \ i + even[i]).\n    std::vector<int> even;\n\n    int size() const {\n      \
+    \  return int(odd.size());\n    }\n\n    bool empty() const {\n        return\
+    \ odd.empty();\n    }\n\n    bool is_palindrome(int left, int right) const {\n\
+    \        int n = size();\n        assert(0 <= left && left <= right && right <=\
+    \ n);\n        int length = right - left;\n        if (length == 0) return true;\n\
+    \        if (length & 1) {\n            int center = (left + right) / 2;\n   \
+    \         return length / 2 + 1 <= odd[center];\n        }\n        int center\
+    \ = (left + right) / 2;\n        return length / 2 <= even[center];\n    }\n\n\
+    \    int longest_length() const {\n        int result = 0;\n        for (int radius\
+    \ : odd) result = std::max(result, 2 * radius - 1);\n        for (int radius :\
+    \ even) result = std::max(result, 2 * radius);\n        return result;\n    }\n\
+    };\n\ntemplate <class Sequence>\nManacherResult manacher(const Sequence& sequence)\
+    \ {\n    int n = int(sequence.size());\n    ManacherResult result;\n    result.odd.assign(n,\
+    \ 0);\n    result.even.assign(n, 0);\n\n    int left = 0;\n    int right = -1;\n\
+    \    for (int i = 0; i < n; i++) {\n        int radius = i > right ? 1 : std::min(result.odd[left\
+    \ + right - i], right - i + 1);\n        while (\n            0 <= i - radius\
+    \ &&\n            i + radius < n &&\n            sequence[i - radius] == sequence[i\
+    \ + radius]\n        ) {\n            radius++;\n        }\n        result.odd[i]\
+    \ = radius;\n        if (right < i + radius - 1) {\n            left = i - radius\
+    \ + 1;\n            right = i + radius - 1;\n        }\n    }\n\n    left = 0;\n\
+    \    right = -1;\n    for (int i = 0; i < n; i++) {\n        int radius = i >\
+    \ right ? 0 : std::min(result.even[left + right - i + 1], right - i + 1);\n  \
+    \      while (\n            0 <= i - radius - 1 &&\n            i + radius < n\
+    \ &&\n            sequence[i - radius - 1] == sequence[i + radius]\n        )\
+    \ {\n            radius++;\n        }\n        result.even[i] = radius;\n    \
+    \    if (right < i + radius - 1) {\n            left = i - radius;\n         \
+    \   right = i + radius - 1;\n        }\n    }\n    return result;\n}\n\n}  //\
+    \ namespace string\n}  // namespace m1une\n\n\n#line 1 \"string/prefix_function.hpp\"\
+    \n\n\n\n#line 5 \"string/prefix_function.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ string {\n\n// Returns the KMP prefix function.\ntemplate <class Sequence>\n\
+    std::vector<int> prefix_function(const Sequence& sequence) {\n    int n = int(sequence.size());\n\
+    \    std::vector<int> prefix(n);\n    for (int i = 1; i < n; i++) {\n        int\
+    \ j = prefix[i - 1];\n        while (j > 0 && sequence[i] != sequence[j]) {\n\
+    \            j = prefix[j - 1];\n        }\n        if (sequence[i] == sequence[j])\
+    \ j++;\n        prefix[i] = j;\n    }\n    return prefix;\n}\n\n// Returns every\
+    \ starting position where pattern occurs in text.\n// An empty pattern occurs\
+    \ at every position from 0 through text.size().\ntemplate <class Text, class Pattern>\n\
+    std::vector<int> kmp_search(const Text& text, const Pattern& pattern) {\n    int\
+    \ n = int(text.size());\n    int m = int(pattern.size());\n    if (m == 0) {\n\
+    \        std::vector<int> occurrences(n + 1);\n        for (int i = 0; i <= n;\
+    \ i++) occurrences[i] = i;\n        return occurrences;\n    }\n\n    std::vector<int>\
+    \ prefix = prefix_function(pattern);\n    std::vector<int> occurrences;\n    int\
+    \ matched = 0;\n    for (int i = 0; i < n; i++) {\n        while (matched > 0\
+    \ && text[i] != pattern[matched]) {\n            matched = prefix[matched - 1];\n\
+    \        }\n        if (text[i] == pattern[matched]) matched++;\n        if (matched\
+    \ == m) {\n            occurrences.push_back(i - m + 1);\n            matched\
+    \ = prefix[matched - 1];\n        }\n    }\n    return occurrences;\n}\n\n}  //\
+    \ namespace string\n}  // namespace m1une\n\n\n#line 1 \"string/rolling_hash.hpp\"\
+    \n\n\n\n#line 5 \"string/rolling_hash.hpp\"\n#include <string>\n#include <utility>\n\
+    #line 8 \"string/rolling_hash.hpp\"\n\nnamespace m1une {\nnamespace string {\n\
+    \n// Standard Rolling Hash for static strings.\n// Precomputes hashes to answer\
+    \ substring queries in O(1).\n// Provides advanced operations like LCP, lexicographical\
+    \ comparison, and string repetition in O(log N).\ntemplate <long long Base = 10007,\
+    \ long long Mod = (1LL << 61) - 1>\nstruct RollingHash {\n    std::string s;\n\
+    \    std::vector<long long> hash;\n    std::vector<long long> power;\n\n    RollingHash()\
+    \ = default;\n\n    // Constructs the rolling hash table for the given string.\n\
+    \    explicit RollingHash(const std::string& str) : s(str) {\n        int n =\
+    \ s.size();\n        hash.assign(n + 1, 0);\n        power.assign(n + 1, 1);\n\
+    \        for (int i = 0; i < n; ++i) {\n            // Use __int128_t to prevent\
+    \ overflow during multiplication\n            hash[i + 1] = (static_cast<__int128_t>(hash[i])\
+    \ * Base + s[i]) % Mod;\n            power[i + 1] = (static_cast<__int128_t>(power[i])\
+    \ * Base) % Mod;\n        }\n    }\n\n    // Returns the hash of the substring\
+    \ S[l..r) in O(1).\n    long long get(int l, int r) const {\n        long long\
+    \ res = hash[r] - (static_cast<__int128_t>(hash[l]) * power[r - l]) % Mod;\n \
+    \       if (res < 0) res += Mod;\n        return res;\n    }\n\n    // Returns\
+    \ the hash of the concatenated substrings S[l1..r1) and S[l2..r2).\n    long long\
+    \ concat(int l1, int r1, int l2, int r2) const {\n        long long h1 = get(l1,\
+    \ r1);\n        long long h2 = get(l2, r2);\n        return combine(h1, h2, power[r2\
+    \ - l2]);\n    }\n\n    // Calculates the Longest Common Prefix (LCP) length of\
+    \ S[l1..r1) and S[l2..r2) in O(log N).\n    int lcp(int l1, int r1, int l2, int\
+    \ r2) const {\n        int len = std::min(r1 - l1, r2 - l2);\n        int low\
+    \ = 0, high = len + 1;\n        while (high - low > 1) {\n            int mid\
+    \ = low + (high - low) / 2;\n            if (get(l1, l1 + mid) == get(l2, l2 +\
+    \ mid)) {\n                low = mid;\n            } else {\n                high\
+    \ = mid;\n            }\n        }\n        return low;\n    }\n\n    // Lexicographically\
+    \ compares S[l1..r1) and S[l2..r2) in O(log N).\n    // Returns -1 if S[l1..r1)\
+    \ < S[l2..r2), 0 if equal, and 1 if S[l1..r1) > S[l2..r2).\n    int compare(int\
+    \ l1, int r1, int l2, int r2) const {\n        int l = lcp(l1, r1, l2, r2);\n\
+    \        bool end1 = (l1 + l == r1);\n        bool end2 = (l2 + l == r2);\n  \
+    \      if (end1 && end2) return 0;\n        if (end1) return -1;\n        if (end2)\
+    \ return 1;\n        return s[l1 + l] < s[l2 + l] ? -1 : 1;\n    }\n\n    // Returns\
+    \ the hash of the substring S[l..r) repeated 'k' times.\n    long long repeat(int\
+    \ l, int r, long long k) const {\n        long long h = get(l, r);\n        long\
+    \ long p = power[r - l];\n        return repeat_hash(h, p, k);\n    }\n\n    //\
+    \ --- Static Helpers for dynamic processing and Monoid integration ---\n\n   \
+    \ // Computes the hash of a single string in O(N) time and O(1) space.\n    static\
+    \ long long compute_hash(const std::string& str) {\n        long long h = 0;\n\
+    \        for (char c : str) {\n            h = (static_cast<__int128_t>(h) * Base\
+    \ + c) % Mod;\n        }\n        return h;\n    }\n\n    // Combines two hashes.\
+    \ Equivalent to concatenating string 'b' to the right of string 'a'.\n    static\
+    \ constexpr long long combine(long long h1, long long h2, long long base_power2)\
+    \ {\n        return (static_cast<__int128_t>(h1) * base_power2 + h2) % Mod;\n\
+    \    }\n\n    // Returns the hash of a string (with hash 'h' and base_power 'p')\
+    \ repeated 'k' times.\n    static constexpr long long repeat_hash(long long h,\
+    \ long long p, long long k) {\n        long long res_h = 0;\n        long long\
+    \ res_p = 1;\n        long long cur_h = h;\n        long long cur_p = p;\n   \
+    \     while (k > 0) {\n            if (k & 1) {\n                res_h = combine(res_h,\
+    \ cur_h, cur_p);\n                res_p = (static_cast<__int128_t>(res_p) * cur_p)\
+    \ % Mod;\n            }\n            cur_h = combine(cur_h, cur_h, cur_p);\n \
+    \           cur_p = (static_cast<__int128_t>(cur_p) * cur_p) % Mod;\n        \
+    \    k >>= 1;\n        }\n        return res_h;\n    }\n\n    // Creates the state\
+    \ pair {hash_value, base_power} for a single character.\n    static constexpr\
+    \ std::pair<long long, long long> make_single(long long c) {\n        return {c\
+    \ % Mod, Base % Mod};\n    }\n};\n\n}  // namespace string\n}  // namespace m1une\n\
+    \n\n#line 1 \"string/suffix_array.hpp\"\n\n\n\n#line 6 \"string/suffix_array.hpp\"\
+    \n#include <numeric>\n#line 8 \"string/suffix_array.hpp\"\n#include <type_traits>\n\
+    #line 10 \"string/suffix_array.hpp\"\n\nnamespace m1une {\nnamespace string {\n\
+    namespace detail {\n\ntemplate <class Sequence>\nstd::vector<int> suffix_array_impl(const\
+    \ Sequence& sequence) {\n    int n = int(sequence.size());\n    if (n == 0) return\
+    \ {};\n\n    using Value = std::remove_cv_t<std::remove_reference_t<decltype(sequence[0])>>;\n\
+    \    std::vector<Value> sorted(sequence.begin(), sequence.end());\n    std::sort(sorted.begin(),\
+    \ sorted.end());\n    sorted.erase(std::unique(sorted.begin(), sorted.end()),\
+    \ sorted.end());\n\n    int length = n + 1;\n    std::vector<int> order(length);\n\
+    \    std::vector<int> rank(length);\n    std::vector<int> key(length);\n    key[n]\
+    \ = 0;\n    for (int i = 0; i < n; i++) {\n        key[i] = int(std::lower_bound(sorted.begin(),\
+    \ sorted.end(), sequence[i]) - sorted.begin()) + 1;\n    }\n\n    int alphabet\
+    \ = int(sorted.size()) + 1;\n    std::vector<int> count(std::max(length, alphabet),\
+    \ 0);\n    for (int value : key) count[value]++;\n    for (int i = 1; i < alphabet;\
+    \ i++) count[i] += count[i - 1];\n    for (int i = length - 1; i >= 0; i--) order[--count[key[i]]]\
+    \ = i;\n\n    int classes = 1;\n    rank[order[0]] = 0;\n    for (int i = 1; i\
+    \ < length; i++) {\n        if (key[order[i - 1]] != key[order[i]]) classes++;\n\
+    \        rank[order[i]] = classes - 1;\n    }\n\n    std::vector<int> shifted(length);\n\
+    \    std::vector<int> next_rank(length);\n    for (long long half = 1; half <\
+    \ length; half <<= 1) {\n        for (int i = 0; i < length; i++) {\n        \
+    \    long long position = order[i] - half;\n            if (position < 0) position\
+    \ += length;\n            shifted[i] = int(position);\n        }\n\n        count.assign(classes,\
+    \ 0);\n        for (int position : shifted) count[rank[position]]++;\n       \
+    \ for (int i = 1; i < classes; i++) count[i] += count[i - 1];\n        for (int\
+    \ i = length - 1; i >= 0; i--) {\n            int position = shifted[i];\n   \
+    \         order[--count[rank[position]]] = position;\n        }\n\n        int\
+    \ next_classes = 1;\n        next_rank[order[0]] = 0;\n        for (int i = 1;\
+    \ i < length; i++) {\n            int current = order[i];\n            int previous\
+    \ = order[i - 1];\n            int current_second = int((current + half) % length);\n\
+    \            int previous_second = int((previous + half) % length);\n        \
+    \    if (\n                rank[current] != rank[previous] ||\n              \
+    \  rank[current_second] != rank[previous_second]\n            ) {\n          \
+    \      next_classes++;\n            }\n            next_rank[current] = next_classes\
+    \ - 1;\n        }\n        rank.swap(next_rank);\n        classes = next_classes;\n\
+    \        if (classes == length) break;\n    }\n\n    std::vector<int> suffixes(n);\n\
+    \    for (int i = 0; i < n; i++) suffixes[i] = order[i + 1];\n    return suffixes;\n\
+    }\n\n}  // namespace detail\n\ntemplate <class Sequence>\nstd::vector<int> suffix_array(const\
+    \ Sequence& sequence) {\n    return detail::suffix_array_impl(sequence);\n}\n\n\
+    inline std::vector<int> suffix_array(const std::string& text) {\n    std::vector<unsigned\
+    \ char> values;\n    values.reserve(text.size());\n    for (unsigned char character\
+    \ : text) values.push_back(character);\n    return detail::suffix_array_impl(values);\n\
+    }\n\ntemplate <class Sequence>\nstd::vector<int> lcp_array(const Sequence& sequence,\
+    \ const std::vector<int>& suffixes) {\n    int n = int(sequence.size());\n   \
+    \ assert(int(suffixes.size()) == n);\n    if (n == 0) return {};\n\n    std::vector<int>\
+    \ rank(n);\n    for (int i = 0; i < n; i++) {\n        assert(0 <= suffixes[i]\
+    \ && suffixes[i] < n);\n        rank[suffixes[i]] = i;\n    }\n\n    std::vector<int>\
+    \ lcp(n - 1);\n    int common = 0;\n    for (int i = 0; i < n; i++) {\n      \
+    \  int position = rank[i];\n        if (position == n - 1) {\n            common\
+    \ = 0;\n            continue;\n        }\n        int j = suffixes[position +\
+    \ 1];\n        while (\n            i + common < n &&\n            j + common\
+    \ < n &&\n            sequence[i + common] == sequence[j + common]\n        )\
+    \ {\n            common++;\n        }\n        lcp[position] = common;\n     \
+    \   if (common > 0) common--;\n    }\n    return lcp;\n}\n\n}  // namespace string\n\
+    }  // namespace m1une\n\n\n#line 1 \"string/z_algorithm.hpp\"\n\n\n\n#line 6 \"\
+    string/z_algorithm.hpp\"\n\nnamespace m1une {\nnamespace string {\n\n// Returns\
+    \ z[i] = LCP(sequence, sequence[i..]).\ntemplate <class Sequence>\nstd::vector<int>\
+    \ z_algorithm(const Sequence& sequence) {\n    int n = int(sequence.size());\n\
+    \    if (n == 0) return {};\n\n    std::vector<int> z(n);\n    z[0] = n;\n   \
+    \ int left = 0;\n    int right = 0;\n    for (int i = 1; i < n; i++) {\n     \
+    \   if (i < right) z[i] = std::min(right - i, z[i - left]);\n        while (i\
+    \ + z[i] < n && sequence[z[i]] == sequence[i + z[i]]) {\n            z[i]++;\n\
+    \        }\n        if (right < i + z[i]) {\n            left = i;\n         \
+    \   right = i + z[i];\n        }\n    }\n    return z;\n}\n\n}  // namespace string\n\
+    }  // namespace m1une\n\n\n#line 9 \"string/all.hpp\"\n\n\n#line 4 \"verify/string/string_algorithms.test.cpp\"\
+    \n\n#line 7 \"verify/string/string_algorithms.test.cpp\"\n#include <cstdint>\n\
+    #include <iostream>\n#line 12 \"verify/string/string_algorithms.test.cpp\"\n\n\
+    namespace {\n\nvoid test_edge_cases() {\n    std::string empty;\n    assert(m1une::string::z_algorithm(empty).empty());\n\
+    \    assert(m1une::string::prefix_function(empty).empty());\n    assert(m1une::string::suffix_array(empty).empty());\n\
+    \    assert(m1une::string::lcp_array(empty, std::vector<int>()).empty());\n\n\
+    \    auto empty_palindromes = m1une::string::manacher(empty);\n    assert(empty_palindromes.empty());\n\
+    \    assert(empty_palindromes.longest_length() == 0);\n    assert(empty_palindromes.is_palindrome(0,\
+    \ 0));\n\n    std::string text = \"aaaa\";\n    assert(\n        m1une::string::kmp_search(text,\
+    \ std::string(\"aa\")) ==\n        std::vector<int>({0, 1, 2})\n    );\n    assert(\n\
+    \        m1une::string::kmp_search(text, empty) ==\n        std::vector<int>({0,\
+    \ 1, 2, 3, 4})\n    );\n\n    std::vector<int> values;\n    values.push_back(2);\n\
+    \    values.push_back(-1);\n    values.push_back(2);\n    assert(\n        m1une::string::suffix_array(values)\
+    \ ==\n        std::vector<int>({1, 2, 0})\n    );\n    assert(\n        m1une::string::z_algorithm(values)\
+    \ ==\n        std::vector<int>({3, 0, 1})\n    );\n\n    std::string bytes;\n\
+    \    bytes.push_back(char(255));\n    bytes.push_back(char(0));\n    bytes.push_back(char(128));\n\
+    \    assert(\n        m1une::string::suffix_array(bytes) ==\n        std::vector<int>({1,\
+    \ 2, 0})\n    );\n}\n\nvoid test_randomized() {\n    std::uint64_t state = 31;\n\
+    \    auto random = [&state]() {\n        state ^= state << 7;\n        state ^=\
+    \ state >> 9;\n        return state;\n    };\n\n    for (int trial = 0; trial\
+    \ < 1500; trial++) {\n        int n = int(random() % 45);\n        std::string\
+    \ text(n, 'a');\n        for (char& character : text) character = char('a' + random()\
+    \ % 4);\n\n        std::vector<int> z = m1une::string::z_algorithm(text);\n  \
+    \      for (int i = 0; i < n; i++) {\n            [[maybe_unused]] int expected\
+    \ = 0;\n            while (\n                i + expected < n &&\n           \
+    \     text[expected] == text[i + expected]\n            ) {\n                expected++;\n\
+    \            }\n            assert(z[i] == expected);\n        }\n\n        std::vector<int>\
+    \ prefix = m1une::string::prefix_function(text);\n        for (int i = 0; i <\
+    \ n; i++) {\n            [[maybe_unused]] int expected = 0;\n            for (int\
+    \ length = 1; length <= i; length++) {\n                if (\n               \
+    \     text.substr(0, length) ==\n                    text.substr(i - length +\
+    \ 1, length)\n                ) {\n                    expected = length;\n  \
+    \              }\n            }\n            assert(prefix[i] == expected);\n\
+    \        }\n\n        int pattern_length = int(random() % 12);\n        std::string\
+    \ pattern(pattern_length, 'a');\n        for (char& character : pattern) character\
+    \ = char('a' + random() % 4);\n        std::vector<int> expected_occurrences;\n\
+    \        for (int i = 0; i + pattern_length <= n; i++) {\n            if (text.substr(i,\
+    \ pattern_length) == pattern) {\n                expected_occurrences.push_back(i);\n\
+    \            }\n        }\n        assert(\n            m1une::string::kmp_search(text,\
+    \ pattern) ==\n            expected_occurrences\n        );\n\n        m1une::string::ManacherResult\
+    \ palindromes =\n            m1une::string::manacher(text);\n        int longest\
+    \ = 0;\n        for (int left = 0; left <= n; left++) {\n            for (int\
+    \ right = left; right <= n; right++) {\n                bool expected = true;\n\
+    \                for (int offset = 0; offset < (right - left) / 2; offset++) {\n\
+    \                    if (text[left + offset] != text[right - 1 - offset]) {\n\
+    \                        expected = false;\n                        break;\n \
+    \                   }\n                }\n                assert(palindromes.is_palindrome(left,\
+    \ right) == expected);\n                if (expected) longest = std::max(longest,\
+    \ right - left);\n            }\n        }\n        assert(palindromes.longest_length()\
+    \ == longest);\n\n        std::vector<int> suffixes = m1une::string::suffix_array(text);\n\
+    \        std::vector<int> expected_suffixes(n);\n        std::iota(expected_suffixes.begin(),\
+    \ expected_suffixes.end(), 0);\n        std::sort(\n            expected_suffixes.begin(),\n\
+    \            expected_suffixes.end(),\n            [&text](int a, int b) {\n \
+    \               return text.substr(a) < text.substr(b);\n            }\n     \
+    \   );\n        assert(suffixes == expected_suffixes);\n\n        std::vector<int>\
+    \ lcp = m1une::string::lcp_array(text, suffixes);\n        for (int i = 0; i +\
+    \ 1 < n; i++) {\n            int expected = 0;\n            while (\n        \
+    \        suffixes[i] + expected < n &&\n                suffixes[i + 1] + expected\
+    \ < n &&\n                text[suffixes[i] + expected] ==\n                  \
+    \  text[suffixes[i + 1] + expected]\n            ) {\n                expected++;\n\
+    \            }\n            assert(lcp[i] == expected);\n        }\n    }\n}\n\
+    \n}  // namespace\n\nint main() {\n    test_edge_cases();\n    test_randomized();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
+    string/all.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n\
+    #include <iostream>\n#include <numeric>\n#include <string>\n#include <vector>\n\
+    \nnamespace {\n\nvoid test_edge_cases() {\n    std::string empty;\n    assert(m1une::string::z_algorithm(empty).empty());\n\
+    \    assert(m1une::string::prefix_function(empty).empty());\n    assert(m1une::string::suffix_array(empty).empty());\n\
+    \    assert(m1une::string::lcp_array(empty, std::vector<int>()).empty());\n\n\
+    \    auto empty_palindromes = m1une::string::manacher(empty);\n    assert(empty_palindromes.empty());\n\
+    \    assert(empty_palindromes.longest_length() == 0);\n    assert(empty_palindromes.is_palindrome(0,\
+    \ 0));\n\n    std::string text = \"aaaa\";\n    assert(\n        m1une::string::kmp_search(text,\
+    \ std::string(\"aa\")) ==\n        std::vector<int>({0, 1, 2})\n    );\n    assert(\n\
+    \        m1une::string::kmp_search(text, empty) ==\n        std::vector<int>({0,\
+    \ 1, 2, 3, 4})\n    );\n\n    std::vector<int> values;\n    values.push_back(2);\n\
+    \    values.push_back(-1);\n    values.push_back(2);\n    assert(\n        m1une::string::suffix_array(values)\
+    \ ==\n        std::vector<int>({1, 2, 0})\n    );\n    assert(\n        m1une::string::z_algorithm(values)\
+    \ ==\n        std::vector<int>({3, 0, 1})\n    );\n\n    std::string bytes;\n\
+    \    bytes.push_back(char(255));\n    bytes.push_back(char(0));\n    bytes.push_back(char(128));\n\
+    \    assert(\n        m1une::string::suffix_array(bytes) ==\n        std::vector<int>({1,\
+    \ 2, 0})\n    );\n}\n\nvoid test_randomized() {\n    std::uint64_t state = 31;\n\
+    \    auto random = [&state]() {\n        state ^= state << 7;\n        state ^=\
+    \ state >> 9;\n        return state;\n    };\n\n    for (int trial = 0; trial\
+    \ < 1500; trial++) {\n        int n = int(random() % 45);\n        std::string\
+    \ text(n, 'a');\n        for (char& character : text) character = char('a' + random()\
+    \ % 4);\n\n        std::vector<int> z = m1une::string::z_algorithm(text);\n  \
+    \      for (int i = 0; i < n; i++) {\n            [[maybe_unused]] int expected\
+    \ = 0;\n            while (\n                i + expected < n &&\n           \
+    \     text[expected] == text[i + expected]\n            ) {\n                expected++;\n\
+    \            }\n            assert(z[i] == expected);\n        }\n\n        std::vector<int>\
+    \ prefix = m1une::string::prefix_function(text);\n        for (int i = 0; i <\
+    \ n; i++) {\n            [[maybe_unused]] int expected = 0;\n            for (int\
+    \ length = 1; length <= i; length++) {\n                if (\n               \
+    \     text.substr(0, length) ==\n                    text.substr(i - length +\
+    \ 1, length)\n                ) {\n                    expected = length;\n  \
+    \              }\n            }\n            assert(prefix[i] == expected);\n\
+    \        }\n\n        int pattern_length = int(random() % 12);\n        std::string\
+    \ pattern(pattern_length, 'a');\n        for (char& character : pattern) character\
+    \ = char('a' + random() % 4);\n        std::vector<int> expected_occurrences;\n\
+    \        for (int i = 0; i + pattern_length <= n; i++) {\n            if (text.substr(i,\
+    \ pattern_length) == pattern) {\n                expected_occurrences.push_back(i);\n\
+    \            }\n        }\n        assert(\n            m1une::string::kmp_search(text,\
+    \ pattern) ==\n            expected_occurrences\n        );\n\n        m1une::string::ManacherResult\
+    \ palindromes =\n            m1une::string::manacher(text);\n        int longest\
+    \ = 0;\n        for (int left = 0; left <= n; left++) {\n            for (int\
+    \ right = left; right <= n; right++) {\n                bool expected = true;\n\
+    \                for (int offset = 0; offset < (right - left) / 2; offset++) {\n\
+    \                    if (text[left + offset] != text[right - 1 - offset]) {\n\
+    \                        expected = false;\n                        break;\n \
+    \                   }\n                }\n                assert(palindromes.is_palindrome(left,\
+    \ right) == expected);\n                if (expected) longest = std::max(longest,\
+    \ right - left);\n            }\n        }\n        assert(palindromes.longest_length()\
+    \ == longest);\n\n        std::vector<int> suffixes = m1une::string::suffix_array(text);\n\
+    \        std::vector<int> expected_suffixes(n);\n        std::iota(expected_suffixes.begin(),\
+    \ expected_suffixes.end(), 0);\n        std::sort(\n            expected_suffixes.begin(),\n\
+    \            expected_suffixes.end(),\n            [&text](int a, int b) {\n \
+    \               return text.substr(a) < text.substr(b);\n            }\n     \
+    \   );\n        assert(suffixes == expected_suffixes);\n\n        std::vector<int>\
+    \ lcp = m1une::string::lcp_array(text, suffixes);\n        for (int i = 0; i +\
+    \ 1 < n; i++) {\n            int expected = 0;\n            while (\n        \
+    \        suffixes[i] + expected < n &&\n                suffixes[i + 1] + expected\
+    \ < n &&\n                text[suffixes[i] + expected] ==\n                  \
+    \  text[suffixes[i + 1] + expected]\n            ) {\n                expected++;\n\
+    \            }\n            assert(lcp[i] == expected);\n        }\n    }\n}\n\
+    \n}  // namespace\n\nint main() {\n    test_edge_cases();\n    test_randomized();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
+  dependsOn:
+  - string/all.hpp
+  - string/manacher.hpp
+  - string/prefix_function.hpp
+  - string/rolling_hash.hpp
+  - string/suffix_array.hpp
+  - string/z_algorithm.hpp
+  isVerificationFile: true
+  path: verify/string/string_algorithms.test.cpp
+  requiredBy: []
+  timestamp: '2026-06-21 02:43:08+09:00'
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: verify/string/string_algorithms.test.cpp
+layout: document
+redirect_from:
+- /verify/verify/string/string_algorithms.test.cpp
+- /verify/verify/string/string_algorithms.test.cpp.html
+title: verify/string/string_algorithms.test.cpp
+---

@@ -5,13 +5,16 @@ data:
   - icon: ':warning:'
     path: monoid/rolling_hash.hpp
     title: Rolling Hash Monoid
+  - icon: ':heavy_check_mark:'
+    path: string/all.hpp
+    title: String Algorithms Bundle
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/string/aoj_alds1_14_b.test.cpp
     title: verify/string/aoj_alds1_14_b.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/string/yosupo_zalgorithm.test.cpp
-    title: verify/string/yosupo_zalgorithm.test.cpp
+    path: verify/string/string_algorithms.test.cpp
+    title: verify/string/string_algorithms.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -137,10 +140,11 @@ data:
   path: string/rolling_hash.hpp
   requiredBy:
   - monoid/rolling_hash.hpp
+  - string/all.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/string/yosupo_zalgorithm.test.cpp
+  - verify/string/string_algorithms.test.cpp
   - verify/string/aoj_alds1_14_b.test.cpp
 documentation_of: string/rolling_hash.hpp
 layout: document
