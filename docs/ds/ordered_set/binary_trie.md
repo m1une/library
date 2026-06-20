@@ -18,6 +18,10 @@ every value already in the trie.
 * `BitWidth`: The number of low bits used by the trie. Defaults to all bits of
   `UInt`. Every inserted value and xor operand must fit in these bits.
 
+An exclusive `upper` bound may be larger than the largest representable
+`BitWidth`-bit value when that bound fits in `UInt`. For example, with
+`BitWidth == 30`, passing `1U << 30` includes every possible value.
+
 ## Methods
 
 Let $B$ be `BitWidth`.
@@ -44,8 +48,15 @@ Let $B$ be `BitWidth`.
 | `int count_less_equal(UInt value) const` | Returns the number of stored values less than or equal to `value`. | $O(B)$ |
 | `int count_greater(UInt value) const` | Returns the number of stored values strictly greater than `value`. | $O(B)$ |
 | `int count_greater_equal(UInt value) const` | Returns the number of stored values greater than or equal to `value`. | $O(B)$ |
-| `int count_less_xor(UInt value, UInt upper) const` | Counts stored values for which `(stored_value ^ value) < upper`. | $O(B)$ |
+| `int count_xor_less(UInt value, UInt upper) const` | Counts stored values for which `(stored_value ^ value) < upper`. | $O(B)$ |
+| `int count_xor_less_equal(UInt value, UInt upper) const` | Counts stored values for which `(stored_value ^ value) <= upper`. | $O(B)$ |
+| `int count_xor_greater(UInt value, UInt lower) const` | Counts stored values for which `(stored_value ^ value) > lower`. | $O(B)$ |
+| `int count_xor_greater_equal(UInt value, UInt lower) const` | Counts stored values for which `(stored_value ^ value) >= lower`. | $O(B)$ |
+| `int count_xor_range(UInt value, UInt lower, UInt upper) const` | Counts stored values for which `lower <= (stored_value ^ value) < upper`. | $O(B)$ |
 | `std::vector<UInt> to_vector() const` | Returns all values in sorted order, including duplicates. | $O(NB)$ |
+
+`count_less_xor(value, upper)` is a compatibility alias for
+`count_xor_less(value, upper)`.
 
 ## Example
 

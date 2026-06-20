@@ -74,6 +74,21 @@ void unit_test() {
             assert(trie.count_less_xor(value, 512) ==
                    int(std::lower_bound(xor_values.begin(), xor_values.end(), 512) -
                        xor_values.begin()));
+            assert(trie.count_xor_less(value, 512) ==
+                   int(std::lower_bound(xor_values.begin(), xor_values.end(), 512) -
+                       xor_values.begin()));
+            assert(trie.count_xor_less_equal(value, 512) ==
+                   int(std::upper_bound(xor_values.begin(), xor_values.end(), 512) -
+                       xor_values.begin()));
+            assert(trie.count_xor_greater(value, 512) ==
+                   int(xor_values.end() -
+                       std::upper_bound(xor_values.begin(), xor_values.end(), 512)));
+            assert(trie.count_xor_greater_equal(value, 512) ==
+                   int(xor_values.end() -
+                       std::lower_bound(xor_values.begin(), xor_values.end(), 512)));
+            assert(trie.count_xor_range(value, 200, 800) ==
+                   int(std::lower_bound(xor_values.begin(), xor_values.end(), 800) -
+                       std::lower_bound(xor_values.begin(), xor_values.end(), 200)));
         }
 
         assert(trie.size() == int(expected.size()));

@@ -215,6 +215,37 @@ struct BinaryTrie {
         return result;
     }
 
+    int count_xor_less(UInt value, UInt upper) const {
+        return count_less_xor(value, upper);
+    }
+
+    int count_xor_less_equal(UInt value, UInt upper) const {
+        assert(valid_value(value));
+        assert(valid_value(upper));
+        if (upper == value_mask()) return size();
+        return count_xor_less(value, upper + UInt(1));
+    }
+
+    int count_xor_greater(UInt value, UInt lower) const {
+        assert(valid_value(value));
+        assert(valid_value(lower));
+        return size() - count_xor_less_equal(value, lower);
+    }
+
+    int count_xor_greater_equal(UInt value, UInt lower) const {
+        assert(valid_value(value));
+        assert(valid_value(lower));
+        return size() - count_xor_less(value, lower);
+    }
+
+    int count_xor_range(UInt value, UInt lower, UInt upper) const {
+        assert(valid_value(value));
+        assert(valid_value(lower));
+        assert(lower <= upper);
+        return count_xor_less(value, upper) -
+               count_xor_less(value, lower);
+    }
+
     int order_of_key(UInt value) const {
         return count_less_xor(0, value);
     }
