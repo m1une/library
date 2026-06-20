@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: data_structure/dsu.hpp
+    path: ds/union_find/dsu.hpp
     title: DSU (Disjoint Set Union)
   - icon: ':heavy_check_mark:'
     path: graph/bellman_ford.hpp
@@ -280,11 +280,11 @@ data:
     \ <= id) result.original_edge_id.resize(id + 1);\n        result.original_edge_id[id]\
     \ = e.id;\n    }\n\n    return result;\n}\n\n}  // namespace graph\n}  // namespace\
     \ m1une\n\n\n#line 1 \"graph/connected_components.hpp\"\n\n\n\n#line 6 \"graph/connected_components.hpp\"\
-    \n\n#line 1 \"data_structure/dsu.hpp\"\n\n\n\n#include <algorithm>\n#include <numeric>\n\
-    #line 7 \"data_structure/dsu.hpp\"\n\nnamespace m1une {\nnamespace data_structure\
-    \ {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i] is the\
-    \ parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
-    \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
+    \n\n#line 1 \"ds/union_find/dsu.hpp\"\n\n\n\n#include <algorithm>\n#include <numeric>\n\
+    #line 7 \"ds/union_find/dsu.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\nstruct\
+    \ Dsu {\n   private:\n    int _n;\n    // parent_or_size[i] is the parent of i\
+    \ if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i] is\
+    \ the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
     \    Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1)\
     \ {}\n\n    // Merges the group containing 'a' with the group containing 'b'.\n\
     \    // Returns the leader of the merged group.\n    int merge(int a, int b) {\n\
@@ -306,20 +306,20 @@ data:
     \        }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
     \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
     \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
-    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace data_structure\n\
-    }  // namespace m1une\n\n\n#line 9 \"graph/connected_components.hpp\"\n\nnamespace\
+    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace ds\n}\
+    \  // namespace m1une\n\n\n#line 9 \"graph/connected_components.hpp\"\n\nnamespace\
     \ m1une {\nnamespace graph {\n\nstruct ConnectedComponents {\n    int count;\n\
     \    std::vector<int> comp;\n    std::vector<std::vector<int>> groups;\n\n   \
     \ bool same(int u, int v) const {\n        assert(0 <= u && u < int(comp.size()));\n\
     \        assert(0 <= v && v < int(comp.size()));\n        return comp[u] == comp[v];\n\
     \    }\n};\n\ntemplate <class T>\nConnectedComponents connected_components(const\
-    \ Graph<T>& g) {\n    int n = g.size();\n    m1une::data_structure::Dsu dsu(n);\n\
-    \    for (const auto& e : g.edges()) dsu.merge(e.from, e.to);\n\n    ConnectedComponents\
-    \ result;\n    result.comp.assign(n, 0);\n    std::vector<int> leader_to_comp(n,\
-    \ -1);\n    for (int v = 0; v < n; v++) {\n        int leader = dsu.leader(v);\n\
-    \        if (leader_to_comp[leader] == -1) {\n            leader_to_comp[leader]\
-    \ = int(result.groups.size());\n            result.groups.push_back({});\n   \
-    \     }\n        int c = leader_to_comp[leader];\n        result.comp[v] = c;\n\
+    \ Graph<T>& g) {\n    int n = g.size();\n    m1une::ds::Dsu dsu(n);\n    for (const\
+    \ auto& e : g.edges()) dsu.merge(e.from, e.to);\n\n    ConnectedComponents result;\n\
+    \    result.comp.assign(n, 0);\n    std::vector<int> leader_to_comp(n, -1);\n\
+    \    for (int v = 0; v < n; v++) {\n        int leader = dsu.leader(v);\n    \
+    \    if (leader_to_comp[leader] == -1) {\n            leader_to_comp[leader] =\
+    \ int(result.groups.size());\n            result.groups.push_back({});\n     \
+    \   }\n        int c = leader_to_comp[leader];\n        result.comp[v] = c;\n\
     \        result.groups[c].push_back(v);\n    }\n    result.count = int(result.groups.size());\n\
     \n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n\
     #line 1 \"graph/cycle_detection.hpp\"\n\n\n\n#line 6 \"graph/cycle_detection.hpp\"\
@@ -733,25 +733,24 @@ data:
     \ == std::max(0, n - 1);\n    }\n};\n\ntemplate <class T>\nMinimumSpanningForest<T>\
     \ kruskal(const Graph<T>& g) {\n    int n = g.size();\n    auto edges = g.edges();\n\
     \    std::sort(edges.begin(), edges.end(), [](const auto& a, const auto& b) {\n\
-    \        return a.cost < b.cost;\n    });\n\n    m1une::data_structure::Dsu dsu(n);\n\
-    \    MinimumSpanningForest<T> result;\n    result.cost = T(0);\n    result.components\
-    \ = n;\n\n    for (const auto& e : edges) {\n        if (dsu.same(e.from, e.to))\
-    \ continue;\n        dsu.merge(e.from, e.to);\n        result.cost += e.cost;\n\
-    \        result.edges.push_back(e);\n        result.components--;\n    }\n\n \
-    \   return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line\
-    \ 1 \"graph/lowlink.hpp\"\n\n\n\n#line 6 \"graph/lowlink.hpp\"\n\n#line 8 \"graph/lowlink.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct LowLinkResult\
-    \ {\n    std::vector<int> ord;\n    std::vector<int> low;\n    std::vector<int>\
-    \ articulation;\n    std::vector<Edge<T>> bridges;\n    std::vector<int> bridge_ids;\n\
-    };\n\ntemplate <class T>\nLowLinkResult<T> lowlink(const Graph<T>& g) {\n    int\
-    \ n = g.size();\n    LowLinkResult<T> result;\n    result.ord.assign(n, -1);\n\
-    \    result.low.assign(n, -1);\n    int now = 0;\n\n    auto dfs = [&](auto self,\
-    \ int v, int parent_edge) -> void {\n        result.ord[v] = result.low[v] = now++;\n\
-    \        int child_count = 0;\n        bool is_articulation = false;\n\n     \
-    \   for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n      \
-    \      if (e.id == parent_edge) continue;\n            int to = e.to;\n      \
-    \      if (result.ord[to] == -1) {\n                child_count++;\n         \
-    \       self(self, to, e.id);\n                result.low[v] = std::min(result.low[v],\
+    \        return a.cost < b.cost;\n    });\n\n    m1une::ds::Dsu dsu(n);\n    MinimumSpanningForest<T>\
+    \ result;\n    result.cost = T(0);\n    result.components = n;\n\n    for (const\
+    \ auto& e : edges) {\n        if (dsu.same(e.from, e.to)) continue;\n        dsu.merge(e.from,\
+    \ e.to);\n        result.cost += e.cost;\n        result.edges.push_back(e);\n\
+    \        result.components--;\n    }\n\n    return result;\n}\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n\n#line 1 \"graph/lowlink.hpp\"\n\n\n\n#line\
+    \ 6 \"graph/lowlink.hpp\"\n\n#line 8 \"graph/lowlink.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace graph {\n\ntemplate <class T>\nstruct LowLinkResult {\n    std::vector<int>\
+    \ ord;\n    std::vector<int> low;\n    std::vector<int> articulation;\n    std::vector<Edge<T>>\
+    \ bridges;\n    std::vector<int> bridge_ids;\n};\n\ntemplate <class T>\nLowLinkResult<T>\
+    \ lowlink(const Graph<T>& g) {\n    int n = g.size();\n    LowLinkResult<T> result;\n\
+    \    result.ord.assign(n, -1);\n    result.low.assign(n, -1);\n    int now = 0;\n\
+    \n    auto dfs = [&](auto self, int v, int parent_edge) -> void {\n        result.ord[v]\
+    \ = result.low[v] = now++;\n        int child_count = 0;\n        bool is_articulation\
+    \ = false;\n\n        for (const auto& e : g[v]) {\n            if (!e.alive)\
+    \ continue;\n            if (e.id == parent_edge) continue;\n            int to\
+    \ = e.to;\n            if (result.ord[to] == -1) {\n                child_count++;\n\
+    \                self(self, to, e.id);\n                result.low[v] = std::min(result.low[v],\
     \ result.low[to]);\n                if (parent_edge != -1 && result.ord[v] <=\
     \ result.low[to]) is_articulation = true;\n                if (result.ord[v] <\
     \ result.low[to]) {\n                    result.bridges.push_back(e);\n      \
@@ -1128,7 +1127,7 @@ data:
   - graph/bipartite.hpp
   - graph/graph.hpp
   - graph/connected_components.hpp
-  - data_structure/dsu.hpp
+  - ds/union_find/dsu.hpp
   - graph/cycle_detection.hpp
   - graph/general_matching.hpp
   - graph/grid.hpp
@@ -1147,7 +1146,7 @@ data:
   path: graph/undirected.hpp
   requiredBy:
   - graph/all.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
+  timestamp: '2026-06-20 20:05:21+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp

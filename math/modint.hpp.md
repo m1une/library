@@ -25,20 +25,20 @@ data:
     title: Combinatorial Sequences
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dual_segtree.test.cpp
-    title: verify/data_structure/dual_segtree.test.cpp
+    path: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
+    title: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
-    title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+    path: verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
+    title: verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/lazy_segtree.test.cpp
-    title: verify/data_structure/lazy_segtree.test.cpp
+    path: verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
+    title: verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/rake_compress_link_cut_tree.test.cpp
-    title: verify/data_structure/rake_compress_link_cut_tree.test.cpp
+    path: verify/ds/segment_tree/dual_segtree.test.cpp
+    title: verify/ds/segment_tree/dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
-    title: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
+    path: verify/ds/segment_tree/lazy_segtree.test.cpp
+    title: verify/ds/segment_tree/lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/fps/convolution_mod.test.cpp
     title: verify/fps/convolution_mod.test.cpp
@@ -199,11 +199,11 @@ data:
   timestamp: '2026-06-06 20:32:01+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
-  - verify/data_structure/dual_segtree.test.cpp
-  - verify/data_structure/rake_compress_link_cut_tree.test.cpp
-  - verify/data_structure/lazy_segtree.test.cpp
-  - verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
+  - verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
+  - verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
+  - verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
+  - verify/ds/segment_tree/dual_segtree.test.cpp
+  - verify/ds/segment_tree/lazy_segtree.test.cpp
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp
   - verify/math/math_algorithms.test.cpp

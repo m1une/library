@@ -78,101 +78,113 @@ data:
     - icon: ':warning:'
       path: acted_monoid/wrapper.hpp
       title: Acted Monoid Wrapper
-  - name: data_structure
+  - name: ds/dynamic_array
     pages:
     - icon: ':heavy_check_mark:'
-      path: data_structure/disjoint_sparse_table.hpp
-      title: Disjoint Sparse Table
-    - icon: ':heavy_check_mark:'
-      path: data_structure/dsu.hpp
-      title: DSU (Disjoint Set Union)
-    - icon: ':heavy_check_mark:'
-      path: data_structure/dsu_monoid.hpp
-      title: DSU with Monoid
-    - icon: ':heavy_check_mark:'
-      path: data_structure/dual_segtree.hpp
-      title: Dual Segment Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/dynamic_array.hpp
+      path: ds/dynamic_array/dynamic_array.hpp
       title: Dynamic Array
     - icon: ':heavy_check_mark:'
-      path: data_structure/dynamic_lazy_monoid_array.hpp
+      path: ds/dynamic_array/dynamic_lazy_monoid_array.hpp
       title: Dynamic Lazy Monoid Array
     - icon: ':heavy_check_mark:'
-      path: data_structure/dynamic_monoid_array.hpp
+      path: ds/dynamic_array/dynamic_monoid_array.hpp
       title: Dynamic Monoid Array
     - icon: ':heavy_check_mark:'
-      path: data_structure/fenwick_tree.hpp
-      title: Fenwick Tree (Binary Indexed Tree)
-    - icon: ':heavy_check_mark:'
-      path: data_structure/hash_common.hpp
-      title: data_structure/hash_common.hpp
-    - icon: ':heavy_check_mark:'
-      path: data_structure/hash_map.hpp
-      title: Hash Map
-    - icon: ':heavy_check_mark:'
-      path: data_structure/hash_set.hpp
-      title: Hash Set
-    - icon: ':heavy_check_mark:'
-      path: data_structure/lazy_link_cut_tree.hpp
-      title: Lazy Link-Cut Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/lazy_path_link_cut_tree.hpp
-      title: Lazy Path Link-Cut Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/lazy_segtree.hpp
-      title: Lazy Segment Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/link_cut_tree.hpp
-      title: Link-Cut Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/ordered_multiset.hpp
-      title: Ordered Multiset
-    - icon: ':heavy_check_mark:'
-      path: data_structure/ordered_set.hpp
-      title: Ordered Set
-    - icon: ':heavy_check_mark:'
-      path: data_structure/path_link_cut_tree.hpp
-      title: Path Link-Cut Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_dsu.hpp
-      title: Persistent DSU
-    - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_dual_segtree.hpp
-      title: Persistent Dual Segment Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_dynamic_array.hpp
+      path: ds/dynamic_array/persistent_dynamic_array.hpp
       title: Persistent Dynamic Array
     - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_dynamic_lazy_monoid_array.hpp
+      path: ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp
       title: Persistent Dynamic Lazy Monoid Array
     - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_dynamic_monoid_array.hpp
+      path: ds/dynamic_array/persistent_dynamic_monoid_array.hpp
       title: Persistent Dynamic Monoid Array
+  - name: ds/dynamic_tree
+    pages:
     - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_lazy_segtree.hpp
-      title: Persistent Lazy Segment Tree
+      path: ds/dynamic_tree/lazy_link_cut_tree.hpp
+      title: Lazy Link-Cut Tree
     - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_ordered_multiset.hpp
+      path: ds/dynamic_tree/lazy_path_link_cut_tree.hpp
+      title: Lazy Path Link-Cut Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/dynamic_tree/link_cut_tree.hpp
+      title: Link-Cut Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/dynamic_tree/path_link_cut_tree.hpp
+      title: Path Link-Cut Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/dynamic_tree/rake_compress_link_cut_tree.hpp
+      title: Rake-Compress Link-Cut Tree
+  - name: ds/hash_table
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: ds/hash_table/hash_common.hpp
+      title: ds/hash_table/hash_common.hpp
+    - icon: ':heavy_check_mark:'
+      path: ds/hash_table/hash_map.hpp
+      title: Hash Map
+    - icon: ':heavy_check_mark:'
+      path: ds/hash_table/hash_set.hpp
+      title: Hash Set
+  - name: ds/ordered_set
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: ds/ordered_set/ordered_multiset.hpp
+      title: Ordered Multiset
+    - icon: ':heavy_check_mark:'
+      path: ds/ordered_set/ordered_set.hpp
+      title: Ordered Set
+    - icon: ':heavy_check_mark:'
+      path: ds/ordered_set/persistent_ordered_multiset.hpp
       title: Persistent Ordered Multiset
     - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_ordered_set.hpp
+      path: ds/ordered_set/persistent_ordered_set.hpp
       title: Persistent Ordered Set
+  - name: ds/range_query
+    pages:
     - icon: ':heavy_check_mark:'
-      path: data_structure/persistent_segtree.hpp
+      path: ds/range_query/disjoint_sparse_table.hpp
+      title: Disjoint Sparse Table
+    - icon: ':heavy_check_mark:'
+      path: ds/range_query/fenwick_tree.hpp
+      title: Fenwick Tree (Binary Indexed Tree)
+    - icon: ':heavy_check_mark:'
+      path: ds/range_query/sparse_table.hpp
+      title: Sparse Table
+  - name: ds/segment_tree
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: ds/segment_tree/dual_segtree.hpp
+      title: Dual Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segment_tree/lazy_segtree.hpp
+      title: Lazy Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segment_tree/persistent_dual_segtree.hpp
+      title: Persistent Dual Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segment_tree/persistent_lazy_segtree.hpp
+      title: Persistent Lazy Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segment_tree/persistent_segtree.hpp
       title: Persistent Segment Tree
     - icon: ':heavy_check_mark:'
-      path: data_structure/potentialized_dsu.hpp
-      title: Potentialized DSU
-    - icon: ':heavy_check_mark:'
-      path: data_structure/rake_compress_link_cut_tree.hpp
-      title: Rake-Compress Link-Cut Tree
-    - icon: ':heavy_check_mark:'
-      path: data_structure/segtree.hpp
+      path: ds/segment_tree/segtree.hpp
       title: Segment Tree
+  - name: ds/union_find
+    pages:
     - icon: ':heavy_check_mark:'
-      path: data_structure/sparse_table.hpp
-      title: Sparse Table
+      path: ds/union_find/dsu.hpp
+      title: DSU (Disjoint Set Union)
+    - icon: ':heavy_check_mark:'
+      path: ds/union_find/dsu_monoid.hpp
+      title: DSU with Monoid
+    - icon: ':heavy_check_mark:'
+      path: ds/union_find/persistent_dsu.hpp
+      title: Persistent DSU
+    - icon: ':heavy_check_mark:'
+      path: ds/union_find/potentialized_dsu.hpp
+      title: Potentialized DSU
   - name: flow
     pages:
     - icon: ':heavy_check_mark:'
@@ -497,113 +509,125 @@ data:
       path: utilities/y_combinator.hpp
       title: Y Combinator
   verificationCategories:
-  - name: verify/data_structure
+  - name: verify/ds/dynamic_array
     pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/disjoint_sparse_table.test.cpp
-      title: verify/data_structure/disjoint_sparse_table.test.cpp
+      path: verify/ds/dynamic_array/dynamic_array.test.cpp
+      title: verify/ds/dynamic_array/dynamic_array.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/dsu.test.cpp
-      title: verify/data_structure/dsu.test.cpp
+      path: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
+      title: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/dsu_monoid.test.cpp
-      title: verify/data_structure/dsu_monoid.test.cpp
+      path: verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
+      title: verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/dual_segtree.test.cpp
-      title: verify/data_structure/dual_segtree.test.cpp
+      path: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
+      title: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/dynamic_array.test.cpp
-      title: verify/data_structure/dynamic_array.test.cpp
+      path: verify/ds/dynamic_array/persistent_dynamic_array.test.cpp
+      title: verify/ds/dynamic_array/persistent_dynamic_array.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
-      title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+      path: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array.test.cpp
+      title: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
-      title: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
+      path: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+      title: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/dynamic_monoid_array.test.cpp
-      title: verify/data_structure/dynamic_monoid_array.test.cpp
+      path: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
+      title: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
+  - name: verify/ds/dynamic_tree
+    pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/fenwick_tree.test.cpp
-      title: verify/data_structure/fenwick_tree.test.cpp
+      path: verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp
+      title: verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/hash_map.test.cpp
-      title: verify/data_structure/hash_map.test.cpp
+      path: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
+      title: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/hash_map_associative_array.test.cpp
-      title: verify/data_structure/hash_map_associative_array.test.cpp
+      path: verify/ds/dynamic_tree/link_cut_tree.test.cpp
+      title: verify/ds/dynamic_tree/link_cut_tree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/hash_set.test.cpp
-      title: verify/data_structure/hash_set.test.cpp
+      path: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
+      title: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/lazy_link_cut_tree.test.cpp
-      title: verify/data_structure/lazy_link_cut_tree.test.cpp
+      path: verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
+      title: verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/lazy_path_link_cut_tree.test.cpp
-      title: verify/data_structure/lazy_path_link_cut_tree.test.cpp
+      path: verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
+      title: verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
+  - name: verify/ds/hash_table
+    pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/lazy_segtree.test.cpp
-      title: verify/data_structure/lazy_segtree.test.cpp
+      path: verify/ds/hash_table/hash_map.test.cpp
+      title: verify/ds/hash_table/hash_map.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/link_cut_tree.test.cpp
-      title: verify/data_structure/link_cut_tree.test.cpp
+      path: verify/ds/hash_table/hash_map_associative_array.test.cpp
+      title: verify/ds/hash_table/hash_map_associative_array.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/ordered_multiset.test.cpp
-      title: verify/data_structure/ordered_multiset.test.cpp
+      path: verify/ds/hash_table/hash_set.test.cpp
+      title: verify/ds/hash_table/hash_set.test.cpp
+  - name: verify/ds/ordered_set
+    pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/ordered_set.test.cpp
-      title: verify/data_structure/ordered_set.test.cpp
+      path: verify/ds/ordered_set/ordered_multiset.test.cpp
+      title: verify/ds/ordered_set/ordered_multiset.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/path_link_cut_tree.test.cpp
-      title: verify/data_structure/path_link_cut_tree.test.cpp
+      path: verify/ds/ordered_set/ordered_set.test.cpp
+      title: verify/ds/ordered_set/ordered_set.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_dsu.test.cpp
-      title: verify/data_structure/persistent_dsu.test.cpp
+      path: verify/ds/ordered_set/persistent_ordered_multiset.test.cpp
+      title: verify/ds/ordered_set/persistent_ordered_multiset.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_dsu_library_checker.test.cpp
-      title: verify/data_structure/persistent_dsu_library_checker.test.cpp
+      path: verify/ds/ordered_set/persistent_ordered_set.test.cpp
+      title: verify/ds/ordered_set/persistent_ordered_set.test.cpp
+  - name: verify/ds/range_query
+    pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_dual_segtree.test.cpp
-      title: verify/data_structure/persistent_dual_segtree.test.cpp
+      path: verify/ds/range_query/disjoint_sparse_table.test.cpp
+      title: verify/ds/range_query/disjoint_sparse_table.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_dynamic_array.test.cpp
-      title: verify/data_structure/persistent_dynamic_array.test.cpp
+      path: verify/ds/range_query/fenwick_tree.test.cpp
+      title: verify/ds/range_query/fenwick_tree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
-      title: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+      path: verify/ds/range_query/sparse_table.test.cpp
+      title: verify/ds/range_query/sparse_table.test.cpp
+  - name: verify/ds/segment_tree
+    pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
-      title: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+      path: verify/ds/segment_tree/dual_segtree.test.cpp
+      title: verify/ds/segment_tree/dual_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_dynamic_monoid_array.test.cpp
-      title: verify/data_structure/persistent_dynamic_monoid_array.test.cpp
+      path: verify/ds/segment_tree/lazy_segtree.test.cpp
+      title: verify/ds/segment_tree/lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_lazy_segtree.test.cpp
-      title: verify/data_structure/persistent_lazy_segtree.test.cpp
+      path: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
+      title: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_ordered_multiset.test.cpp
-      title: verify/data_structure/persistent_ordered_multiset.test.cpp
+      path: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
+      title: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_ordered_set.test.cpp
-      title: verify/data_structure/persistent_ordered_set.test.cpp
+      path: verify/ds/segment_tree/persistent_segtree.test.cpp
+      title: verify/ds/segment_tree/persistent_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/persistent_segtree.test.cpp
-      title: verify/data_structure/persistent_segtree.test.cpp
+      path: verify/ds/segment_tree/segtree.test.cpp
+      title: verify/ds/segment_tree/segtree.test.cpp
+  - name: verify/ds/union_find
+    pages:
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/potentialized_dsu.test.cpp
-      title: verify/data_structure/potentialized_dsu.test.cpp
+      path: verify/ds/union_find/dsu.test.cpp
+      title: verify/ds/union_find/dsu.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/rake_compress_link_cut_tree.test.cpp
-      title: verify/data_structure/rake_compress_link_cut_tree.test.cpp
+      path: verify/ds/union_find/dsu_monoid.test.cpp
+      title: verify/ds/union_find/dsu_monoid.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/segtree.test.cpp
-      title: verify/data_structure/segtree.test.cpp
+      path: verify/ds/union_find/persistent_dsu.test.cpp
+      title: verify/ds/union_find/persistent_dsu.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/sparse_table.test.cpp
-      title: verify/data_structure/sparse_table.test.cpp
+      path: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
+      title: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
-      title: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
+      path: verify/ds/union_find/potentialized_dsu.test.cpp
+      title: verify/ds/union_find/potentialized_dsu.test.cpp
   - name: verify/flow
     pages:
     - icon: ':heavy_check_mark:'

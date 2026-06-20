@@ -68,7 +68,7 @@ For the maximum counterpart, see `monoid/arg_max.hpp`.
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/arg_min.hpp"
 #include <iostream>
 #include <vector>
@@ -77,7 +77,7 @@ using ArgMinM = m1une::monoid::ArgMin<long long>;
 
 int main() {
     std::vector<long long> A = {4, 2, 5, 2, 8};
-    m1une::data_structure::Segtree<ArgMinM> seg(A);
+    m1une::ds::Segtree<ArgMinM> seg(A);
 
     auto res = seg.prod(0, A.size());
 

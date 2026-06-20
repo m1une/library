@@ -70,7 +70,7 @@ The `operator_type` is a boolean, where `true` indicates that the range should b
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_flip_range_sum.hpp"
 #include <iostream>
 #include <vector>
@@ -86,7 +86,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Sum of [0, 5) is 2 (two 1s)
     std::cout << "Initial 1s: " << seg.prod(0, 5).sum << "\n";

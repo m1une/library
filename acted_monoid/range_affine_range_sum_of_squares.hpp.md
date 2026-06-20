@@ -96,7 +96,7 @@ This allows you to perform multiple types of range operations seamlessly:
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_affine_range_sum_of_squares.hpp"
 #include <iostream>
 #include <vector>
@@ -112,7 +112,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Initial sum of squares for [0, 3): 1^2 + 2^2 + 3^2 = 14
     std::cout << "Initial Sum_Sq: " << seg.prod(0, 3).sum_sq << "\n"; // Output: 14

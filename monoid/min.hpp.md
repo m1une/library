@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/sparse_table.test.cpp
-    title: verify/data_structure/sparse_table.test.cpp
+    path: verify/ds/range_query/sparse_table.test.cpp
+    title: verify/ds/range_query/sparse_table.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -37,7 +37,7 @@ data:
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/sparse_table.test.cpp
+  - verify/ds/range_query/sparse_table.test.cpp
 documentation_of: monoid/min.hpp
 layout: document
 title: Min Monoid

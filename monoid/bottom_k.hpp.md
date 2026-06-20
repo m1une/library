@@ -95,7 +95,7 @@ Since the state is a `std::vector<T>`, you can use the `make(val)` helper to aut
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/bottom_k.hpp"
 #include <iostream>
 #include <vector>
@@ -112,7 +112,7 @@ int main() {
         init_data[i] = Bottom3M::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<Bottom3M> seg(init_data);
+    m1une::ds::Segtree<Bottom3M> seg(init_data);
 
     // Get the bottom 3 elements in the range [0, 4) -> {10, 20, 40}
     std::vector<long long> bottom3 = seg.prod(0, 4);

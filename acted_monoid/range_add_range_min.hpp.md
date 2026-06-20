@@ -59,7 +59,7 @@ An Acted Monoid representing Range Addition operations and Range Minimum queries
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_min.hpp"
 #include <iostream>
 #include <vector>
@@ -68,7 +68,7 @@ using AM = m1une::acted_monoid::RangeAddRangeMin<long long>;
 
 int main() {
     std::vector<long long> A = {10, 20, 30, 40, 50};
-    m1une::data_structure::LazySegtree<AM> seg(A);
+    m1une::ds::LazySegtree<AM> seg(A);
 
     // Add -15 to all elements in range [1, 4) -> {10, 5, 15, 25, 50}
     seg.apply(1, 4, -15);

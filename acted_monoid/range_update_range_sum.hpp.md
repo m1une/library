@@ -62,7 +62,7 @@ Since the sum of a range updated to a single value $f$ becomes $f \times \text{s
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_update_range_sum.hpp"
 #include <iostream>
 #include <vector>
@@ -78,7 +78,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Update the range [1, 4) to 10
     seg.apply(1, 4, std::optional<long long>(10));

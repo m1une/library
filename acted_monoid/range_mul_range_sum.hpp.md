@@ -65,7 +65,7 @@ Unlike Range Addition or Range Affine transformations, Range Multiplication dist
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_mul_range_sum.hpp"
 #include <iostream>
 #include <vector>
@@ -83,7 +83,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Sum of range [0, 3) -> 2 + 3 + 4 = 9
     std::cout << "Initial Sum: " << seg.prod(0, 3) << "\n";

@@ -110,7 +110,7 @@ To initialize a leaf node for a single value $x$, use the `make(val, allow_empty
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/max_subarray.hpp"
 #include <iostream>
 #include <vector>
@@ -127,7 +127,7 @@ int main() {
         init_data[i] = MaxSubM::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<MaxSubM> seg(init_data);
+    m1une::ds::Segtree<MaxSubM> seg(init_data);
 
     // Max subarray sum in the whole array is 6 (from "4, -1, 2, 1")
     auto node = seg.prod(0, N);

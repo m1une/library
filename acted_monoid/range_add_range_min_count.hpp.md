@@ -92,7 +92,7 @@ By reusing `m1une::monoid::MinCount`, this structure can easily be converted to 
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_min_count.hpp"
 #include <iostream>
 #include <vector>
@@ -108,7 +108,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Initial min is 4, appearing 2 times
     auto q1 = seg.prod(0, N);

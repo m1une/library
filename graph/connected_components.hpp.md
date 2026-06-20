@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: data_structure/dsu.hpp
+    path: ds/union_find/dsu.hpp
     title: DSU (Disjoint Set Union)
   - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
@@ -24,10 +24,10 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/connected_components.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <vector>\n\n#line 1 \"data_structure/dsu.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <numeric>\n#line 7 \"data_structure/dsu.hpp\"\n\nnamespace m1une {\n\
-    namespace data_structure {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i]\
-    \ is the parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
+    #include <vector>\n\n#line 1 \"ds/union_find/dsu.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <numeric>\n#line 7 \"ds/union_find/dsu.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ ds {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i] is\
+    \ the parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
     \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
     \    Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1)\
     \ {}\n\n    // Merges the group containing 'a' with the group containing 'b'.\n\
@@ -50,8 +50,8 @@ data:
     \        }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
     \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
     \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
-    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace data_structure\n\
-    }  // namespace m1une\n\n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\
+    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace ds\n}\
+    \  // namespace m1une\n\n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\
     \n#include <utility>\n#line 7 \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace\
     \ graph {\n\ntemplate <class T = int>\nstruct Edge {\n    using cost_type = T;\n\
     \n    int from;\n    int to;\n    T cost;\n    int id;\n    bool alive;\n\n  \
@@ -111,23 +111,23 @@ data:
     \ v) const {\n        assert(0 <= u && u < int(comp.size()));\n        assert(0\
     \ <= v && v < int(comp.size()));\n        return comp[u] == comp[v];\n    }\n\
     };\n\ntemplate <class T>\nConnectedComponents connected_components(const Graph<T>&\
-    \ g) {\n    int n = g.size();\n    m1une::data_structure::Dsu dsu(n);\n    for\
-    \ (const auto& e : g.edges()) dsu.merge(e.from, e.to);\n\n    ConnectedComponents\
-    \ result;\n    result.comp.assign(n, 0);\n    std::vector<int> leader_to_comp(n,\
-    \ -1);\n    for (int v = 0; v < n; v++) {\n        int leader = dsu.leader(v);\n\
-    \        if (leader_to_comp[leader] == -1) {\n            leader_to_comp[leader]\
-    \ = int(result.groups.size());\n            result.groups.push_back({});\n   \
-    \     }\n        int c = leader_to_comp[leader];\n        result.comp[v] = c;\n\
+    \ g) {\n    int n = g.size();\n    m1une::ds::Dsu dsu(n);\n    for (const auto&\
+    \ e : g.edges()) dsu.merge(e.from, e.to);\n\n    ConnectedComponents result;\n\
+    \    result.comp.assign(n, 0);\n    std::vector<int> leader_to_comp(n, -1);\n\
+    \    for (int v = 0; v < n; v++) {\n        int leader = dsu.leader(v);\n    \
+    \    if (leader_to_comp[leader] == -1) {\n            leader_to_comp[leader] =\
+    \ int(result.groups.size());\n            result.groups.push_back({});\n     \
+    \   }\n        int c = leader_to_comp[leader];\n        result.comp[v] = c;\n\
     \        result.groups[c].push_back(v);\n    }\n    result.count = int(result.groups.size());\n\
     \n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_CONNECTED_COMPONENTS_HPP\n#define M1UNE_GRAPH_CONNECTED_COMPONENTS_HPP\
-    \ 1\n\n#include <cassert>\n#include <vector>\n\n#include \"data_structure/dsu.hpp\"\
+    \ 1\n\n#include <cassert>\n#include <vector>\n\n#include \"ds/union_find/dsu.hpp\"\
     \n#include \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
     \ ConnectedComponents {\n    int count;\n    std::vector<int> comp;\n    std::vector<std::vector<int>>\
     \ groups;\n\n    bool same(int u, int v) const {\n        assert(0 <= u && u <\
     \ int(comp.size()));\n        assert(0 <= v && v < int(comp.size()));\n      \
     \  return comp[u] == comp[v];\n    }\n};\n\ntemplate <class T>\nConnectedComponents\
-    \ connected_components(const Graph<T>& g) {\n    int n = g.size();\n    m1une::data_structure::Dsu\
+    \ connected_components(const Graph<T>& g) {\n    int n = g.size();\n    m1une::ds::Dsu\
     \ dsu(n);\n    for (const auto& e : g.edges()) dsu.merge(e.from, e.to);\n\n  \
     \  ConnectedComponents result;\n    result.comp.assign(n, 0);\n    std::vector<int>\
     \ leader_to_comp(n, -1);\n    for (int v = 0; v < n; v++) {\n        int leader\
@@ -138,14 +138,14 @@ data:
     \n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n#endif\
     \  // M1UNE_GRAPH_CONNECTED_COMPONENTS_HPP\n"
   dependsOn:
-  - data_structure/dsu.hpp
+  - ds/union_find/dsu.hpp
   - graph/graph.hpp
   isVerificationFile: false
   path: graph/connected_components.hpp
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
+  timestamp: '2026-06-20 20:05:21+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp

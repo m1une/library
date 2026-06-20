@@ -3,48 +3,48 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: data_structure/dynamic_lazy_monoid_array.hpp
+    path: ds/dynamic_array/dynamic_lazy_monoid_array.hpp
     title: Dynamic Lazy Monoid Array
   - icon: ':heavy_check_mark:'
-    path: data_structure/lazy_link_cut_tree.hpp
-    title: Lazy Link-Cut Tree
-  - icon: ':heavy_check_mark:'
-    path: data_structure/lazy_path_link_cut_tree.hpp
-    title: Lazy Path Link-Cut Tree
-  - icon: ':heavy_check_mark:'
-    path: data_structure/lazy_segtree.hpp
-    title: Lazy Segment Tree
-  - icon: ':heavy_check_mark:'
-    path: data_structure/persistent_dynamic_lazy_monoid_array.hpp
+    path: ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp
     title: Persistent Dynamic Lazy Monoid Array
   - icon: ':heavy_check_mark:'
-    path: data_structure/persistent_lazy_segtree.hpp
+    path: ds/dynamic_tree/lazy_link_cut_tree.hpp
+    title: Lazy Link-Cut Tree
+  - icon: ':heavy_check_mark:'
+    path: ds/dynamic_tree/lazy_path_link_cut_tree.hpp
+    title: Lazy Path Link-Cut Tree
+  - icon: ':heavy_check_mark:'
+    path: ds/segment_tree/lazy_segtree.hpp
+    title: Lazy Segment Tree
+  - icon: ':heavy_check_mark:'
+    path: ds/segment_tree/persistent_lazy_segtree.hpp
     title: Persistent Lazy Segment Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
-    title: verify/data_structure/dynamic_lazy_monoid_array.test.cpp
+    path: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
+    title: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
-    title: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
+    path: verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
+    title: verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/lazy_link_cut_tree.test.cpp
-    title: verify/data_structure/lazy_link_cut_tree.test.cpp
+    path: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array.test.cpp
+    title: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/lazy_path_link_cut_tree.test.cpp
-    title: verify/data_structure/lazy_path_link_cut_tree.test.cpp
+    path: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+    title: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/lazy_segtree.test.cpp
-    title: verify/data_structure/lazy_segtree.test.cpp
+    path: verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp
+    title: verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
-    title: verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
+    path: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
+    title: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
-    title: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+    path: verify/ds/segment_tree/lazy_segtree.test.cpp
+    title: verify/ds/segment_tree/lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/persistent_lazy_segtree.test.cpp
-    title: verify/data_structure/persistent_lazy_segtree.test.cpp
+    path: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
+    title: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -88,23 +88,23 @@ data:
   isVerificationFile: false
   path: acted_monoid/concept.hpp
   requiredBy:
-  - data_structure/lazy_segtree.hpp
-  - data_structure/persistent_lazy_segtree.hpp
-  - data_structure/persistent_dynamic_lazy_monoid_array.hpp
-  - data_structure/lazy_path_link_cut_tree.hpp
-  - data_structure/lazy_link_cut_tree.hpp
-  - data_structure/dynamic_lazy_monoid_array.hpp
+  - ds/dynamic_tree/lazy_path_link_cut_tree.hpp
+  - ds/dynamic_tree/lazy_link_cut_tree.hpp
+  - ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp
+  - ds/dynamic_array/dynamic_lazy_monoid_array.hpp
+  - ds/segment_tree/lazy_segtree.hpp
+  - ds/segment_tree/persistent_lazy_segtree.hpp
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/dynamic_lazy_monoid_array.test.cpp
-  - verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
-  - verify/data_structure/persistent_dynamic_lazy_monoid_array.test.cpp
-  - verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
-  - verify/data_structure/lazy_segtree.test.cpp
-  - verify/data_structure/lazy_path_link_cut_tree.test.cpp
-  - verify/data_structure/persistent_lazy_segtree.test.cpp
-  - verify/data_structure/lazy_link_cut_tree.test.cpp
+  - verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
+  - verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp
+  - verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
+  - verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+  - verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array.test.cpp
+  - verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
+  - verify/ds/segment_tree/lazy_segtree.test.cpp
+  - verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
 documentation_of: acted_monoid/concept.hpp
 layout: document
 title: Acted Monoid Concept

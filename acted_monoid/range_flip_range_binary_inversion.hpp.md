@@ -105,7 +105,7 @@ When initializing the lazy segment tree, you must transform the raw binary value
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_flip_range_binary_inversion.hpp"
 #include <iostream>
 #include <vector>
@@ -122,7 +122,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // 1. Query entire array inversion count
     // Initial inversions: 5 (index pairs: (0,1), (0,3), (0,4), (2,3), (2,4))

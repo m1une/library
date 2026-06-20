@@ -4,32 +4,32 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/disjoint_sparse_table.test.cpp
-    title: verify/data_structure/disjoint_sparse_table.test.cpp
+    path: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
+    title: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dsu_monoid.test.cpp
-    title: verify/data_structure/dsu_monoid.test.cpp
+    path: verify/ds/dynamic_tree/link_cut_tree.test.cpp
+    title: verify/ds/dynamic_tree/link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dynamic_monoid_array.test.cpp
-    title: verify/data_structure/dynamic_monoid_array.test.cpp
+    path: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
+    title: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/link_cut_tree.test.cpp
-    title: verify/data_structure/link_cut_tree.test.cpp
+    path: verify/ds/range_query/disjoint_sparse_table.test.cpp
+    title: verify/ds/range_query/disjoint_sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/path_link_cut_tree.test.cpp
-    title: verify/data_structure/path_link_cut_tree.test.cpp
+    path: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
+    title: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/persistent_dual_segtree.test.cpp
-    title: verify/data_structure/persistent_dual_segtree.test.cpp
+    path: verify/ds/segment_tree/persistent_segtree.test.cpp
+    title: verify/ds/segment_tree/persistent_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/persistent_segtree.test.cpp
-    title: verify/data_structure/persistent_segtree.test.cpp
+    path: verify/ds/segment_tree/segtree.test.cpp
+    title: verify/ds/segment_tree/segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/potentialized_dsu.test.cpp
-    title: verify/data_structure/potentialized_dsu.test.cpp
+    path: verify/ds/union_find/dsu_monoid.test.cpp
+    title: verify/ds/union_find/dsu_monoid.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/segtree.test.cpp
-    title: verify/data_structure/segtree.test.cpp
+    path: verify/ds/union_find/potentialized_dsu.test.cpp
+    title: verify/ds/union_find/potentialized_dsu.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -58,15 +58,15 @@ data:
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/link_cut_tree.test.cpp
-  - verify/data_structure/persistent_dual_segtree.test.cpp
-  - verify/data_structure/persistent_segtree.test.cpp
-  - verify/data_structure/dsu_monoid.test.cpp
-  - verify/data_structure/dynamic_monoid_array.test.cpp
-  - verify/data_structure/potentialized_dsu.test.cpp
-  - verify/data_structure/segtree.test.cpp
-  - verify/data_structure/path_link_cut_tree.test.cpp
-  - verify/data_structure/disjoint_sparse_table.test.cpp
+  - verify/ds/dynamic_tree/link_cut_tree.test.cpp
+  - verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
+  - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
+  - verify/ds/range_query/disjoint_sparse_table.test.cpp
+  - verify/ds/segment_tree/persistent_dual_segtree.test.cpp
+  - verify/ds/segment_tree/persistent_segtree.test.cpp
+  - verify/ds/segment_tree/segtree.test.cpp
+  - verify/ds/union_find/dsu_monoid.test.cpp
+  - verify/ds/union_find/potentialized_dsu.test.cpp
 documentation_of: monoid/add.hpp
 layout: document
 title: Add Monoid

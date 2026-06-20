@@ -257,7 +257,7 @@ title: Heavy Light Decomposition
 paths. It maps every vertex to a position `tin[v]` in a base array, which lets
 path and subtree queries be answered by ordinary range data structures.
 
-Use it with `data_structure::Segtree`, `LazySegtree`, or another range-query
+Use it with `ds::Segtree`, `LazySegtree`, or another range-query
 structure over the HLD order.
 
 Inactive graph edges are ignored.
@@ -366,7 +366,7 @@ contiguously as `[tin[1], tout[1]) == [1, 4)`.
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "graph/graph.hpp"
 #include "monoid/add.hpp"
 #include "tree/heavy_light_decomposition.hpp"
@@ -380,7 +380,7 @@ int main() {
 
     m1une::tree::HeavyLightDecomposition<int> hld(g, 0);
     std::vector<long long> base(3, 1);
-    m1une::data_structure::Segtree<m1une::monoid::Add<long long>> seg(base);
+    m1une::ds::Segtree<m1une::monoid::Add<long long>> seg(base);
 
     long long sum = 0;
     hld.for_each_path(0, 2, [&](int l, int r, bool) {

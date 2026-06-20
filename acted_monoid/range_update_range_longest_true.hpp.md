@@ -98,7 +98,7 @@ Because updating an entire segment to `true` simply makes the contiguous length 
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_update_range_longest_true.hpp"
 #include <iostream>
 #include <vector>
@@ -116,7 +116,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Initial longest block of empty seats is 2 (indices 2 to 3)
     std::cout << "Max empty block: " << seg.all_prod().max_len << "\n"; // Output: 2

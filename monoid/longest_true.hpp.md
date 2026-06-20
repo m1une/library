@@ -70,7 +70,7 @@ Convert your target elements into booleans and use the `make` method to initiali
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/longest_true.hpp"
 #include <iostream>
 #include <vector>
@@ -88,7 +88,7 @@ int main() {
         init_data[i] = LTM::make(A[i] == target);
     }
 
-    m1une::data_structure::Segtree<LTM> seg(init_data);
+    m1une::ds::Segtree<LTM> seg(init_data);
 
     auto res = seg.prod(0, N);
     std::cout << "Max Length of " << target << "s: " << res.max_len << "\n"; // Output: 3

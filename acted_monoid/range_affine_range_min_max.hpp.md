@@ -94,7 +94,7 @@ When building or updating individual elements, use the `make(val)` helper functi
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_affine_range_min_max.hpp"
 #include <iostream>
 #include <vector>
@@ -110,7 +110,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Query range [0, 3) -> Elements: {2, 5, 3} -> Min: 2, Max: 5
     auto q1 = seg.prod(0, 3);

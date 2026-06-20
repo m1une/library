@@ -56,7 +56,7 @@ It uses `std::numeric_limits<T>::lowest()` as the default identity element for t
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_max.hpp"
 #include <iostream>
 #include <vector>
@@ -65,7 +65,7 @@ using AM = m1une::acted_monoid::RangeAddRangeMax<long long>;
 
 int main() {
     std::vector<long long> A = {1, 5, 2, 8, 3};
-    m1une::data_structure::LazySegtree<AM> seg(A);
+    m1une::ds::LazySegtree<AM> seg(A);
 
     // Get the maximum value in [1, 4) -> max(5, 2, 8) = 8
     std::cout << seg.prod(1, 4) << "\n";

@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dual_segtree.test.cpp
-    title: verify/data_structure/dual_segtree.test.cpp
+    path: verify/ds/segment_tree/dual_segtree.test.cpp
+    title: verify/ds/segment_tree/dual_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -48,7 +48,7 @@ data:
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/dual_segtree.test.cpp
+  - verify/ds/segment_tree/dual_segtree.test.cpp
 documentation_of: monoid/affine.hpp
 layout: document
 title: Affine Monoid
@@ -72,7 +72,7 @@ You can create operations directly using pairs, or use the provided helper funct
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/affine.hpp"
 #include <iostream>
 
@@ -90,7 +90,7 @@ int main() {
         AffineM::make_mul(3)
     };
 
-    m1une::data_structure::Segtree<AffineM> seg(ops);
+    m1une::ds::Segtree<AffineM> seg(ops);
 
     // Get the composite function for the range [0, 2)
     // f(x) = 1 * (2x + 3) + 5 = 2x + 8

@@ -88,7 +88,7 @@ This is defined as a type alias of `ArgMin` using `std::greater`. For the minimu
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/arg_max.hpp"
 #include <iostream>
 #include <vector>
@@ -97,7 +97,7 @@ using ArgMaxM = m1une::monoid::ArgMax<long long>;
 
 int main() {
     std::vector<long long> A = {4, 8, 5, 8, 2};
-    m1une::data_structure::Segtree<ArgMaxM> seg(A);
+    m1une::ds::Segtree<ArgMaxM> seg(A);
 
     auto res = seg.prod(0, A.size());
 

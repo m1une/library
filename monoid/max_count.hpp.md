@@ -93,7 +93,7 @@ When initializing a segment tree from an array of elements, use the `make(val)` 
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/max_count.hpp"
 #include <iostream>
 #include <vector>
@@ -109,7 +109,7 @@ int main() {
         init_data[i] = MaxCountM::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<MaxCountM> seg(init_data);
+    m1une::ds::Segtree<MaxCountM> seg(init_data);
 
     // Query the range [0, 6) -> Elements: {3, 9, 4, 9, 5, 9}
     // Maximum is 9, it appears 3 times.

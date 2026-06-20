@@ -4,11 +4,11 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
-    title: verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
+    path: verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
+    title: verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
-    title: verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+    path: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+    title: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -69,8 +69,8 @@ data:
   timestamp: '2026-06-15 02:20:43+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/data_structure/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
-  - verify/data_structure/dynamic_lazy_monoid_array_range_ap.test.cpp
+  - verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
+  - verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
 documentation_of: acted_monoid/range_ap_add_range_sum.hpp
 layout: document
 title: Range AP Add Range Sum
@@ -91,7 +91,7 @@ To apply a global formula on `[l, r)`, convert it to range-local form first: `a 
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_ap_add_range_sum.hpp"
 #include <iostream>
 #include <vector>
@@ -100,7 +100,7 @@ using AM = m1une::acted_monoid::RangeApAddRangeSum<long long>;
 
 int main() {
     std::vector<long long> A = {0, 0, 0, 0, 0};
-    m1une::data_structure::LazySegtree<AM> seg(A);
+    m1une::ds::LazySegtree<AM> seg(A);
 
     // Add f(i) = 2 * i + 5 to the range [1, 4), where i is local to [1, 4)
     // Array becomes: {0, 5, 7, 9, 0}

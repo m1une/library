@@ -57,7 +57,7 @@ Use the `make(val)` method to construct a leaf node from a single scalar value.
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/min_max.hpp"
 #include <iostream>
 #include <vector>
@@ -73,7 +73,7 @@ int main() {
         init_data[i] = MinMaxM::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<MinMaxM> seg(init_data);
+    m1une::ds::Segtree<MinMaxM> seg(init_data);
 
     // Query the range [1, 4) -> {2, 5, 3}
     auto [min_val, max_val] = seg.prod(1, 4);
