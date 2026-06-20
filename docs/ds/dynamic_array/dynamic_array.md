@@ -1,0 +1,111 @@
+---
+title: Dynamic Array
+documentation_of: ../../../ds/dynamic_array/dynamic_array.hpp
+---
+
+## Overview
+
+`DynamicArray` is an optimized implementation of an implicit treap, backed by a `std::vector` memory pool. It acts as a highly dynamic array, supporting index-based insertion, deletion, reversal, rotation, splitting, and concatenation.
+
+Because it relies on an array-based memory pool instead of standard pointers, copying the data structure copies one contiguous pool and avoids per-node heap allocation.
+
+## Complexity Notation
+
+In this document:
+
+* `N` is the current number of elements in the array.
+* `M` is the number of elements inserted or appended from another container.
+* `K` is the number of elements returned or moved into a newly returned array.
+* `V` is the current size of the internal memory pool, including erased nodes that have not been reused.
+
+## Template Parameters
+
+* `T`: The underlying data type of the elements.
+
+## Constructors and Assignment Operators
+
+* `DynamicArray()`
+  Constructs an empty dynamic array. ($O(1)$)
+
+* `DynamicArray(int n)`
+  Constructs a dynamic array with `n` value-initialized elements, like `std::vector<T>(n)`. ($O(N)$)
+
+* `DynamicArray(int n, const T& value)`
+  Constructs a dynamic array with `n` copies of `value`, like `std::vector<T>(n, value)`. ($O(N)$)
+
+* `DynamicArray(const DynamicArray& other)`
+  Copy constructor. Deep copies the array structure and memory pool. ($O(V)$)
+
+* `DynamicArray(DynamicArray&& other)`
+  Move constructor. Takes ownership of the other array's memory pool without reallocating. ($O(1)$)
+
+* `DynamicArray(const std::vector<T>& v)`
+  Constructs the dynamic array initialized with elements from `v`. ($O(N)$)
+
+* `DynamicArray(std::vector<T>&& v)`
+  Constructs the dynamic array by moving elements from an rvalue reference of a `std::vector`. ($O(N)$)
+
+* `DynamicArray(std::initializer_list<T> init)`
+  Constructs the dynamic array initialized with an initializer list. ($O(N \log N)$)
+
+* `operator=`
+  Supports both copy and move assignment.
+
+## Methods
+
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `int size() const` | Returns the current number of elements. | $O(1)$ |
+| `bool empty() const` | Returns whether the array is empty. | $O(1)$ |
+| `void clear()` | Removes all elements. | $O(1)$ |
+| `void push_back(T val)` | Appends `val` to the end. | $O(\log N)$ |
+| `void push_front(T val)` | Inserts `val` at the beginning. | $O(\log N)$ |
+| `void append(const std::vector<T>& v)` | Appends every element in `v`. | $O(M + \log N)$ |
+| `void append(const DynamicArray& other)` | Appends a copy of another dynamic array. | $O(M + \log N)$ |
+| `void insert(int pos, T val)` | Inserts `val` before index `pos`. | $O(\log N)$ |
+| `void insert(int pos, const std::vector<T>& v)` | Inserts all elements of `v` before index `pos`. | $O(M + \log N)$ |
+| `void insert(int pos, const DynamicArray& other)` | Inserts a copy of `other` before index `pos`. | $O(M + \log N)$ |
+| `void erase(int pos)` | Removes the element at index `pos`. | $O(\log N)$ |
+| `void erase(int l, int r)` | Removes the half-open range `[l, r)`. | $O(\log N)$ |
+| `void pop_back()`, `void pop_front()` | Removes one element from the back or front. | $O(\log N)$ |
+| `T& at(int pos)`, `const T& at(int pos) const` | Returns a reference to the element at `pos`. | $O(\log N)$ |
+| `operator[]` | Alias for `at(pos)`. | $O(\log N)$ |
+| `T& front()`, `T& back()` | Returns a reference to the first or last element. | $O(\log N)$ |
+| `T get(int pos) const` | Returns a copy of the element at `pos`. | $O(\log N)$ |
+| `void set(int pos, T val)` | Overwrites the element at index `pos` with `val`. | $O(\log N)$ |
+| `void reverse(int l, int r)` | Reverses the half-open range `[l, r)` lazily. | $O(\log N)$ |
+| `void reverse()` | Reverses the entire array lazily. | Amortized $O(1)$ |
+| `void rotate(int l, int m, int r)` | Moves `[m, r)` before `[l, m)`, like `std::rotate`. | $O(\log N)$ |
+| `std::vector<T> to_vector() const` | Dumps the entire array to `std::vector`. | $O(N)$ |
+| `std::vector<T> to_vector(int l, int r) const` | Dumps `[l, r)` to `std::vector`, where `K = r - l`. | $O(K + \log N)$ |
+| `DynamicArray split_off(int pos)` | Removes `[pos, N)` and returns it as a new array with its own pool, where `K = N - pos`. | $O(K + \log N)$ |
+
+## Example
+
+```cpp
+#include "ds/dynamic_array/dynamic_array.hpp"
+#include <iostream>
+#include <vector>
+
+using namespace m1une::ds;
+
+int main() {
+    DynamicArray<int> arr = {1, 2, 3, 4, 5};
+
+    arr.reverse(1, 4);          // {1, 4, 3, 2, 5}
+    arr.rotate(1, 3, 5);        // {1, 2, 5, 4, 3}
+    arr.insert(2, {10, 11});    // {1, 2, 10, 11, 5, 4, 3}
+    arr.erase(3, 5);            // {1, 2, 10, 4, 3}
+    arr.push_front(0);          // {0, 1, 2, 10, 4, 3}
+
+    DynamicArray<int> tail = arr.split_off(3);
+    arr.append(tail);           // {0, 1, 2, 10, 4, 3}
+
+    for (int x : arr.to_vector()) {
+        std::cout << x << " ";
+    }
+    std::cout << "\n";
+
+    return 0;
+}
+```

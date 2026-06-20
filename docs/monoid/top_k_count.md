@@ -14,7 +14,7 @@ Use the `make(val)` method to construct a leaf node containing a single value wi
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/top_k_count.hpp"
 #include <iostream>
 #include <vector>
@@ -31,7 +31,7 @@ int main() {
         init_data[i] = Top2CM::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<Top2CM> seg(init_data);
+    m1une::ds::Segtree<Top2CM> seg(init_data);
 
     // Get the top 2 elements in the range [0, 5) -> { (50, 3), (40, 1) }
     auto top2 = seg.prod(0, 5);

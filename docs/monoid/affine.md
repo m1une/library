@@ -21,7 +21,7 @@ You can create operations directly using pairs, or use the provided helper funct
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/affine.hpp"
 #include <iostream>
 
@@ -39,7 +39,7 @@ int main() {
         AffineM::make_mul(3)
     };
 
-    m1une::data_structure::Segtree<AffineM> seg(ops);
+    m1une::ds::Segtree<AffineM> seg(ops);
 
     // Get the composite function for the range [0, 2)
     // f(x) = 1 * (2x + 3) + 5 = 2x + 8

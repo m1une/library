@@ -22,7 +22,7 @@ This implementation uses `std::optional<T>` as the `operator_type` to safely rep
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_update_range_min.hpp"
 #include <iostream>
 #include <vector>
@@ -31,7 +31,7 @@ using AM = m1une::acted_monoid::RangeUpdateRangeMin<long long>;
 
 int main() {
     std::vector<long long> A = {10, 20, 30, 40, 50};
-    m1une::data_structure::LazySegtree<AM> seg(A);
+    m1une::ds::LazySegtree<AM> seg(A);
 
     // Overwrite range [1, 4) with 5 -> {10, 5, 5, 5, 50}
     seg.apply(1, 4, std::optional<long long>(5));

@@ -25,7 +25,7 @@ When initializing a Lazy Segment Tree, you must use the `make(val)` helper funct
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_xor_range_sum.hpp"
 #include <iostream>
 #include <vector>
@@ -41,7 +41,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Get the sum of range [0, 4) -> 1 + 2 + 3 + 4 = 10
     std::cout << "Initial Sum: " << seg.prod(0, 4).sum << "\n";

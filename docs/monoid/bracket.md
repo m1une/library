@@ -12,7 +12,7 @@ A sequence is considered a "valid bracket sequence" if both `unmatched_right` an
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/bracket.hpp"
 #include <iostream>
 #include <string>
@@ -29,7 +29,7 @@ int main() {
         init_data[i] = BracketM::make(S[i]);
     }
 
-    m1une::data_structure::Segtree<BracketM> seg(init_data);
+    m1une::ds::Segtree<BracketM> seg(init_data);
 
     // Query range [3, 8) -> "(()()"
     auto res = seg.prod(3, 8);

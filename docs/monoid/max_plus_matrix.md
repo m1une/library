@@ -13,7 +13,7 @@ This is highly effective for solving **Dynamic DP** problems (where state transi
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/max_plus_matrix.hpp"
 #include <iostream>
 #include <vector>
@@ -33,7 +33,7 @@ int main() {
         init_data[i] = mat;
     }
 
-    m1une::data_structure::Segtree<MaxMat> seg(init_data);
+    m1une::ds::Segtree<MaxMat> seg(init_data);
 
     auto res = seg.prod(0, N);
 

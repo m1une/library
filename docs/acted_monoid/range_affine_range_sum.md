@@ -18,7 +18,7 @@ When initializing a Lazy Segment Tree, you must initialize the leaf nodes with `
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_affine_range_sum.hpp"
 #include <iostream>
 #include <vector>
@@ -33,7 +33,7 @@ int main() {
         init_nodes[i] = AM::make(i + 1); // Array: {1, 2, 3}
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     // Apply f(x) = 2x + 3 to range [0, 2)
     // Elements become: (2*1 + 3) = 5, and (2*2 + 3) = 7 -> Array: {5, 7, 3}

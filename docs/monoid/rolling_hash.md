@@ -31,7 +31,7 @@ Generates a valid monoid element for a single character.
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/rolling_hash.hpp"
 #include <iostream>
 #include <string>
@@ -52,7 +52,7 @@ int main() {
     }
 
     // 2. Build the Segment Tree
-    m1une::data_structure::Segtree<RHMonoid> seg(init_data);
+    m1une::ds::Segtree<RHMonoid> seg(init_data);
 
     // 3. Point Update: Change S[1] ('b') to 'x' using `make`
     seg.set(1, RHMonoid::make('x'));

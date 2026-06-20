@@ -17,7 +17,7 @@ It uses the standard Euler-tour reduction:
    between `first[u]` and `first[v]`.
 
 That minimum-depth query is static RMQ, so this structure uses
-`data_structure::SparseTable` internally.
+`ds::SparseTable` internally.
 
 Use this when you need many LCA queries and want $O(1)$ per query. If you also
 need `kth_ancestor` or `jump`, use `RootedTree` instead.

@@ -12,7 +12,7 @@ Merging two matrices takes $O(N^3)$ time, so $N$ should be small (typically $N \
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/matrix.hpp"
 #include <iostream>
 #include <vector>
@@ -30,7 +30,7 @@ int main() {
         init_data[i][1] = {1, 0};
     }
 
-    m1une::data_structure::Segtree<Mat> seg(init_data);
+    m1une::ds::Segtree<Mat> seg(init_data);
 
     auto res = seg.prod(0, N);
 

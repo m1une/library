@@ -14,7 +14,7 @@ Since the state is a `std::vector<T>`, you can use the `make(val)` helper to aut
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/top_k.hpp"
 #include <iostream>
 #include <vector>
@@ -31,7 +31,7 @@ int main() {
         init_data[i] = Top3M::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<Top3M> seg(init_data);
+    m1une::ds::Segtree<Top3M> seg(init_data);
 
     // Get the top 3 elements in the range [0, 4) -> {50, 40, 20}
     std::vector<long long> top3 = seg.prod(0, 4);

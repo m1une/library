@@ -14,7 +14,7 @@ Use the `make(val)` helper to initialize leaf nodes, passing either `0` or `1`.
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/binary_inversion.hpp"
 #include <iostream>
 #include <vector>
@@ -31,7 +31,7 @@ int main() {
         init_data[i] = BinInv::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<BinInv> seg(init_data);
+    m1une::ds::Segtree<BinInv> seg(init_data);
 
     auto res = seg.prod(0, N);
 

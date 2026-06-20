@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include "data_structure/sparse_table.hpp"
+#include "ds/range_query/sparse_table.hpp"
 #include "graph/graph.hpp"
 
 namespace m1une {
@@ -50,7 +50,7 @@ struct SparseTableLca {
     };
 
     int _n;
-    m1une::data_structure::SparseTable<RmqMonoid> _st;
+    m1une::ds::SparseTable<RmqMonoid> _st;
 
     void check_vertex(int v) const {
         assert(0 <= v && v < _n);
@@ -78,7 +78,7 @@ struct SparseTableLca {
         first.assign(_n, -1);
         euler.clear();
         euler.reserve(std::max(0, 2 * _n - 1));
-        _st = m1une::data_structure::SparseTable<RmqMonoid>();
+        _st = m1une::ds::SparseTable<RmqMonoid>();
 
         if (_n == 0) return;
         assert(0 <= root && root < _n);
@@ -123,7 +123,7 @@ struct SparseTableLca {
         std::vector<RmqNode> rmq;
         rmq.reserve(euler.size());
         for (int v : euler) rmq.push_back({depth[v], v});
-        _st = m1une::data_structure::SparseTable<RmqMonoid>(std::move(rmq));
+        _st = m1une::ds::SparseTable<RmqMonoid>(std::move(rmq));
     }
 
     int size() const {

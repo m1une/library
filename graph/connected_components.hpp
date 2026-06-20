@@ -4,7 +4,7 @@
 #include <cassert>
 #include <vector>
 
-#include "data_structure/dsu.hpp"
+#include "ds/union_find/dsu.hpp"
 #include "graph/graph.hpp"
 
 namespace m1une {
@@ -25,7 +25,7 @@ struct ConnectedComponents {
 template <class T>
 ConnectedComponents connected_components(const Graph<T>& g) {
     int n = g.size();
-    m1une::data_structure::Dsu dsu(n);
+    m1une::ds::Dsu dsu(n);
     for (const auto& e : g.edges()) dsu.merge(e.from, e.to);
 
     ConnectedComponents result;

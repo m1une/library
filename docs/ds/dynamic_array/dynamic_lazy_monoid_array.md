@@ -1,0 +1,116 @@
+---
+title: Dynamic Lazy Monoid Array
+documentation_of: ../../../ds/dynamic_array/dynamic_lazy_monoid_array.hpp
+---
+
+## Overview
+
+`DynamicLazyMonoidArray` is an implicit treap for dynamic sequences with range products and lazy range actions. It supports indexed insertion, deletion, reversal, rotation, splitting, concatenation, range updates, and range product queries.
+
+Each node stores both forward and reversed products, so `reverse(l, r)` works correctly for non-commutative value monoids when the acted monoid action is compatible with the value operation.
+
+## Complexity Notation
+
+In this document:
+
+* `N` is the current number of elements in the sequence.
+* `M` is the number of elements inserted or appended from another container.
+* `K` is the number of elements returned or moved into a newly returned sequence.
+
+## Template Parameters
+
+* `ActedMonoid`: An acted monoid satisfying `m1une::acted_monoid::IsActedMonoid`.
+
+## Constructors
+
+* `DynamicLazyMonoidArray()`
+  Constructs an empty sequence. ($O(1)$)
+
+* `DynamicLazyMonoidArray(int n)`
+  Constructs a sequence with `n` copies of `ActedMonoid::id()`. ($O(N)$)
+
+* `DynamicLazyMonoidArray(int n, const T& value)`
+  Constructs a sequence with `n` copies of `value`. ($O(N)$)
+
+* `DynamicLazyMonoidArray(const std::vector<T>& v)`
+  Constructs the sequence from acted-monoid values. ($O(N)$)
+
+* `DynamicLazyMonoidArray(std::vector<T>&& v)`
+  Constructs the sequence by moving acted-monoid values. ($O(N)$)
+
+* `DynamicLazyMonoidArray(const std::vector<U>& v)`
+  Constructs the sequence from another type using `ActedMonoid::make(x)` if available, otherwise `static_cast<T>(x)`. ($O(N)$)
+
+* `DynamicLazyMonoidArray(std::initializer_list<T> init)`
+  Constructs the sequence from an initializer list of acted-monoid values. ($O(N \log N)$)
+
+## Methods
+
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `int size() const` | Returns the number of elements. | $O(1)$ |
+| `bool empty() const` | Returns whether the sequence is empty. | $O(1)$ |
+| `void clear()` | Removes all elements. | $O(1)$ |
+| `void insert(int pos, T value)` | Inserts `value` before index `pos`. | $O(\log N)$ |
+| `void insert(int pos, const std::vector<T>& v)` | Inserts every value in `v` before index `pos`. | $O(M + \log N)$ |
+| `void insert(int pos, const DynamicLazyMonoidArray& other)` | Inserts a copy of `other` before index `pos`. | $O(M + \log N)$ |
+| `void push_back(T value)`, `void push_front(T value)` | Inserts one value at the end or beginning. | $O(\log N)$ |
+| `void append(const std::vector<T>& v)` | Appends all values in `v`. | $O(M + \log N)$ |
+| `void append(const DynamicLazyMonoidArray& other)` | Appends a copy of `other`. | $O(M + \log N)$ |
+| `void erase(int pos)` | Removes the value at index `pos`. | $O(\log N)$ |
+| `void erase(int l, int r)` | Removes the half-open range `[l, r)`. | $O(\log N)$ |
+| `void pop_back()`, `void pop_front()` | Removes one value from the end or beginning. | $O(\log N)$ |
+| `T get(int pos)` | Pushes lazy tags on the path and returns the value at `pos`. | $O(\log N)$ |
+| `void set(int pos, T value)` | Replaces index `pos` and rebuilds affected products. | $O(\log N)$ |
+| `void reverse(int l, int r)` | Reverses the half-open range `[l, r)`. | $O(\log N)$ |
+| `void reverse()` | Reverses the entire sequence. | $O(1)$ |
+| `void rotate(int l, int m, int r)` | Moves `[m, r)` before `[l, m)`, like `std::rotate`. | $O(\log N)$ |
+| `void apply(int pos, const F& f)` | Applies lazy operator `f` to the value at index `pos`. | $O(\log N)$ |
+| `void apply(int l, int r, const F& f)` | Applies lazy operator `f` to every value in `[l, r)`. | $O(\log N)$ |
+| `T prod(int l, int r)` | Returns the acted-monoid product over `[l, r)`. | $O(\log N)$ |
+| `T all_prod() const` | Returns the acted-monoid product over the whole sequence. | $O(1)$ |
+| `std::vector<T> to_vector()` | Pushes lazy tags and dumps the sequence to `std::vector`. | $O(N)$ |
+| `std::vector<T> to_vector(int l, int r)` | Dumps `[l, r)` to `std::vector`, where `K = r - l`. | $O(K + \log N)$ |
+| `DynamicLazyMonoidArray split_off(int pos)` | Removes `[pos, N)` and returns it as a new sequence with its own pool, where `K = N - pos`. | $O(K + \log N)$ |
+
+## Notes
+
+`get`, `prod`, and `to_vector` are non-const because they may push pending lazy tags while walking the treap.
+
+For size-aware acted monoids such as `RangeAddRangeSum`, `ActedMonoid::id()` often has size `0`. In that case, prefer constructing from raw values or from explicit leaf values:
+
+```cpp
+using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
+using Array = m1une::ds::DynamicLazyMonoidArray<AM>;
+
+Array a(std::vector<long long>(n, 0)); // uses AM::make(x)
+Array b(n, AM::make(0));               // explicit leaf value
+```
+
+Order-aware acted monoids should store relative order information such as `size`, `ord`, or `ord_sum`, not immutable global indices. Arithmetic-progression acted monoids use range-local order; to apply a global formula on `[l, r)`, shift the constant term by `a * l`.
+
+## Example
+
+```cpp
+#include "ds/dynamic_array/dynamic_lazy_monoid_array.hpp"
+#include "acted_monoid/range_add_range_sum.hpp"
+#include <iostream>
+#include <vector>
+
+using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
+using Array = m1une::ds::DynamicLazyMonoidArray<AM>;
+
+int main() {
+    Array a(std::vector<long long>{1, 2, 3, 4, 5});
+
+    a.apply(1, 4, 10);                 // {1, 12, 13, 14, 5}
+    std::cout << a.prod(0, 5).sum << "\n";
+
+    a.reverse(1, 5);                   // {1, 5, 14, 13, 12}
+    a.set(2, AM::make(100));           // {1, 5, 100, 13, 12}
+
+    std::cout << a.prod(1, 4).sum << "\n";
+
+    return 0;
+}
+```

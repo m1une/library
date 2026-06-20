@@ -15,7 +15,7 @@ Merging two matrices takes $O(N^3)$ time, so $N$ should be kept small.
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/min_plus_matrix.hpp"
 #include <iostream>
 #include <vector>
@@ -37,7 +37,7 @@ int main() {
         init_data[i] = mat;
     }
 
-    m1une::data_structure::Segtree<MinMat> seg(init_data);
+    m1une::ds::Segtree<MinMat> seg(init_data);
 
     // Get the transition matrix for the range [0, 3)
     auto res = seg.prod(0, N);

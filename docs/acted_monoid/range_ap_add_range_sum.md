@@ -18,7 +18,7 @@ To apply a global formula on `[l, r)`, convert it to range-local form first: `a 
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_ap_add_range_sum.hpp"
 #include <iostream>
 #include <vector>
@@ -27,7 +27,7 @@ using AM = m1une::acted_monoid::RangeApAddRangeSum<long long>;
 
 int main() {
     std::vector<long long> A = {0, 0, 0, 0, 0};
-    m1une::data_structure::LazySegtree<AM> seg(A);
+    m1une::ds::LazySegtree<AM> seg(A);
 
     // Add f(i) = 2 * i + 5 to the range [1, 4), where i is local to [1, 4)
     // Array becomes: {0, 5, 7, 9, 0}

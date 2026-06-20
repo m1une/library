@@ -14,7 +14,7 @@ When initializing a segment tree from an array of elements, you should use the `
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/longest_same.hpp"
 #include <iostream>
 #include <vector>
@@ -30,7 +30,7 @@ int main() {
         init_data[i] = LSM::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<LSM> seg(init_data);
+    m1une::ds::Segtree<LSM> seg(init_data);
 
     // Get the maximum length of consecutive identical elements in range [0, 7)
     auto res = seg.prod(0, N);

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "data_structure/dsu.hpp"
+#include "ds/union_find/dsu.hpp"
 #include "graph/graph.hpp"
 
 namespace m1une {
@@ -29,7 +29,7 @@ MinimumSpanningForest<T> kruskal(const Graph<T>& g) {
         return a.cost < b.cost;
     });
 
-    m1une::data_structure::Dsu dsu(n);
+    m1une::ds::Dsu dsu(n);
     MinimumSpanningForest<T> result;
     result.cost = T(0);
     result.components = n;

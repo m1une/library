@@ -12,7 +12,7 @@ When two permutations $A$ and $B$ are merged (i.e., `op(A, B)`), it corresponds 
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/permutation.hpp"
 #include <iostream>
 #include <vector>
@@ -25,7 +25,7 @@ int main() {
         {0, 2, 1}  // Swaps index 1 and 2
     };
 
-    m1une::data_structure::Segtree<Perm3> seg(init_data);
+    m1une::ds::Segtree<Perm3> seg(init_data);
 
     // Get the composed permutation for the range [0, 2)
     auto res = seg.prod(0, 2);

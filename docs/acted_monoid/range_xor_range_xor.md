@@ -14,7 +14,7 @@ When a value $f$ is XORed to all elements in a segment, the total XOR sum of the
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_xor_range_xor.hpp"
 #include <iostream>
 #include <vector>
@@ -30,7 +30,7 @@ int main() {
         init_nodes[i] = AM::make(A[i]);
     }
 
-    m1une::data_structure::LazySegtree<AM> seg(init_nodes);
+    m1une::ds::LazySegtree<AM> seg(init_nodes);
 
     seg.apply(1, 4, 7);
 

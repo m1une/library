@@ -14,7 +14,7 @@ When initializing a segment tree from an array of elements, use the `make(val)` 
 ### Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/min_count.hpp"
 #include <iostream>
 #include <vector>
@@ -30,7 +30,7 @@ int main() {
         init_data[i] = MinCountM::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<MinCountM> seg(init_data);
+    m1une::ds::Segtree<MinCountM> seg(init_data);
 
     // Query the range [0, 5) -> Elements: {3, 1, 4, 1, 5}
     // Minimum is 1, it appears 2 times.

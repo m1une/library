@@ -12,7 +12,7 @@ For the maximum counterpart, see `monoid/strict_max2.hpp`.
 ## Example
 
 ```cpp
-#include "data_structure/segtree.hpp"
+#include "ds/segment_tree/segtree.hpp"
 #include "monoid/strict_min2.hpp"
 #include <iostream>
 #include <vector>
@@ -28,7 +28,7 @@ int main() {
         init_data[i] = StrictMin2M::make(A[i]);
     }
 
-    m1une::data_structure::Segtree<StrictMin2M> seg(init_data);
+    m1une::ds::Segtree<StrictMin2M> seg(init_data);
 
     auto res = seg.prod(0, 4); // Range: [3, 3, 5, 8]
 

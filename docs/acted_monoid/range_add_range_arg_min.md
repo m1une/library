@@ -20,7 +20,7 @@ By reusing `m1une::monoid::ArgMin`, this structure resolves ties by prioritizing
 ## Example
 
 ```cpp
-#include "data_structure/lazy_segtree.hpp"
+#include "ds/segment_tree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_arg_min.hpp"
 #include <iostream>
 #include <vector>
@@ -29,7 +29,7 @@ using AM = m1une::acted_monoid::RangeAddRangeArgMin<long long>;
 
 int main() {
     std::vector<long long> A = {8, 4, 9, 4, 7};
-    m1une::data_structure::LazySegtree<AM> seg(A);
+    m1une::ds::LazySegtree<AM> seg(A);
 
     // Initial min is 4 at order 1 (ties broken by earlier order)
     auto q1 = seg.prod(0, A.size());
