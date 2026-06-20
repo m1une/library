@@ -489,6 +489,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: string/suffix_array.hpp
       title: Suffix Array and LCP Array
+    - icon: ':question:'
+      path: string/trie.hpp
+      title: Trie
     - icon: ':heavy_check_mark:'
       path: string/z_algorithm.hpp
       title: Z Algorithm
@@ -822,6 +825,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/string/suffix_array.test.cpp
       title: verify/string/suffix_array.test.cpp
+    - icon: ':x:'
+      path: verify/string/trie.test.cpp
+      title: verify/string/trie.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/string/yosupo_zalgorithm.test.cpp
       title: verify/string/yosupo_zalgorithm.test.cpp
