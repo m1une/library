@@ -60,17 +60,16 @@ data:
     \    if (_limit >= 1) result[1] = 1;\n        for (int value = 2; value <= _limit;\
     \ value++) {\n            const int prime = _min_prime_factor[value];\n      \
     \      const int reduced = value / prime;\n            result[value] = reduced\
-    \ % prime == 0\n                                ? result[reduced] * prime\n  \
-    \                              : result[reduced] * (prime - 1);\n        }\n \
-    \       return result;\n    }\n\n    std::vector<int> mobius_table() const {\n\
-    \        std::vector<int> result(_limit + 1);\n        if (_limit >= 1) result[1]\
-    \ = 1;\n        for (int value = 2; value <= _limit; value++) {\n            const\
-    \ int prime = _min_prime_factor[value];\n            const int reduced = value\
-    \ / prime;\n            result[value] = reduced % prime == 0 ? 0 : -result[reduced];\n\
-    \        }\n        return result;\n    }\n};\n\n}  // namespace math\n}  // namespace\
-    \ m1une\n\n\n#line 7 \"verify/math/enumerate_primes.test.cpp\"\n\nint main() {\n\
-    \    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int\
-    \ n, step, offset;\n    std::cin >> n >> step >> offset;\n    m1une::math::PrimeSieve\
+    \ % prime == 0 ? result[reduced] * prime : result[reduced] * (prime - 1);\n  \
+    \      }\n        return result;\n    }\n\n    std::vector<int> mobius_table()\
+    \ const {\n        std::vector<int> result(_limit + 1);\n        if (_limit >=\
+    \ 1) result[1] = 1;\n        for (int value = 2; value <= _limit; value++) {\n\
+    \            const int prime = _min_prime_factor[value];\n            const int\
+    \ reduced = value / prime;\n            result[value] = reduced % prime == 0 ?\
+    \ 0 : -result[reduced];\n        }\n        return result;\n    }\n};\n\n}  //\
+    \ namespace math\n}  // namespace m1une\n\n\n#line 7 \"verify/math/enumerate_primes.test.cpp\"\
+    \n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    int n, step, offset;\n    std::cin >> n >> step >> offset;\n    m1une::math::PrimeSieve\
     \ sieve(n);\n    const std::vector<int>& primes = sieve.primes();\n\n    int selected_count\
     \ = 0;\n    if (offset < int(primes.size())) {\n        selected_count = (int(primes.size())\
     \ - 1 - offset) / step + 1;\n    }\n    std::cout << primes.size() << ' ' << selected_count\
@@ -92,7 +91,7 @@ data:
   isVerificationFile: true
   path: verify/math/enumerate_primes.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 09:06:39+09:00'
+  timestamp: '2026-06-20 09:18:49+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/math/enumerate_primes.test.cpp

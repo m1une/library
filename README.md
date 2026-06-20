@@ -22,7 +22,7 @@ contest.
 | `data_structure/` | Segment trees, sparse table, DSU, link-cut tree variants, ordered sets, hash tables, and related containers. |
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
-| `math/` | Modular arithmetic, combinatorics, sieves, 64-bit factorization, CRT, and floor sums. |
+| `math/` | Modular arithmetic, combinatorial sequences, sieves, 64-bit factorization, CRT, and floor sums. |
 | `string/`, `utilities/` | Standalone string algorithms and general helpers. |
 | `verify/` | Online Judge Verify Helper tests. |
 | `docs/` | Markdown documentation for the public headers. |

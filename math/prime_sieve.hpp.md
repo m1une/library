@@ -61,15 +61,14 @@ data:
     \    if (_limit >= 1) result[1] = 1;\n        for (int value = 2; value <= _limit;\
     \ value++) {\n            const int prime = _min_prime_factor[value];\n      \
     \      const int reduced = value / prime;\n            result[value] = reduced\
-    \ % prime == 0\n                                ? result[reduced] * prime\n  \
-    \                              : result[reduced] * (prime - 1);\n        }\n \
-    \       return result;\n    }\n\n    std::vector<int> mobius_table() const {\n\
-    \        std::vector<int> result(_limit + 1);\n        if (_limit >= 1) result[1]\
-    \ = 1;\n        for (int value = 2; value <= _limit; value++) {\n            const\
-    \ int prime = _min_prime_factor[value];\n            const int reduced = value\
-    \ / prime;\n            result[value] = reduced % prime == 0 ? 0 : -result[reduced];\n\
-    \        }\n        return result;\n    }\n};\n\n}  // namespace math\n}  // namespace\
-    \ m1une\n\n\n"
+    \ % prime == 0 ? result[reduced] * prime : result[reduced] * (prime - 1);\n  \
+    \      }\n        return result;\n    }\n\n    std::vector<int> mobius_table()\
+    \ const {\n        std::vector<int> result(_limit + 1);\n        if (_limit >=\
+    \ 1) result[1] = 1;\n        for (int value = 2; value <= _limit; value++) {\n\
+    \            const int prime = _min_prime_factor[value];\n            const int\
+    \ reduced = value / prime;\n            result[value] = reduced % prime == 0 ?\
+    \ 0 : -result[reduced];\n        }\n        return result;\n    }\n};\n\n}  //\
+    \ namespace math\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MATH_PRIME_SIEVE_HPP\n#define M1UNE_MATH_PRIME_SIEVE_HPP 1\n\
     \n#include <algorithm>\n#include <cassert>\n#include <utility>\n#include <vector>\n\
     \nnamespace m1une {\nnamespace math {\n\nstruct PrimeSieve {\n   private:\n  \
@@ -114,21 +113,20 @@ data:
     \    if (_limit >= 1) result[1] = 1;\n        for (int value = 2; value <= _limit;\
     \ value++) {\n            const int prime = _min_prime_factor[value];\n      \
     \      const int reduced = value / prime;\n            result[value] = reduced\
-    \ % prime == 0\n                                ? result[reduced] * prime\n  \
-    \                              : result[reduced] * (prime - 1);\n        }\n \
-    \       return result;\n    }\n\n    std::vector<int> mobius_table() const {\n\
-    \        std::vector<int> result(_limit + 1);\n        if (_limit >= 1) result[1]\
-    \ = 1;\n        for (int value = 2; value <= _limit; value++) {\n            const\
-    \ int prime = _min_prime_factor[value];\n            const int reduced = value\
-    \ / prime;\n            result[value] = reduced % prime == 0 ? 0 : -result[reduced];\n\
-    \        }\n        return result;\n    }\n};\n\n}  // namespace math\n}  // namespace\
-    \ m1une\n\n#endif  // M1UNE_MATH_PRIME_SIEVE_HPP\n"
+    \ % prime == 0 ? result[reduced] * prime : result[reduced] * (prime - 1);\n  \
+    \      }\n        return result;\n    }\n\n    std::vector<int> mobius_table()\
+    \ const {\n        std::vector<int> result(_limit + 1);\n        if (_limit >=\
+    \ 1) result[1] = 1;\n        for (int value = 2; value <= _limit; value++) {\n\
+    \            const int prime = _min_prime_factor[value];\n            const int\
+    \ reduced = value / prime;\n            result[value] = reduced % prime == 0 ?\
+    \ 0 : -result[reduced];\n        }\n        return result;\n    }\n};\n\n}  //\
+    \ namespace math\n}  // namespace m1une\n\n#endif  // M1UNE_MATH_PRIME_SIEVE_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: math/prime_sieve.hpp
   requiredBy:
   - math/all.hpp
-  timestamp: '2026-06-20 09:06:39+09:00'
+  timestamp: '2026-06-20 09:18:49+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/enumerate_primes.test.cpp

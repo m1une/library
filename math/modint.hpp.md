@@ -20,6 +20,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
+  - icon: ':heavy_check_mark:'
+    path: math/combinatorial_sequences.hpp
+    title: Combinatorial Sequences
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/data_structure/dual_segtree.test.cpp
@@ -64,8 +67,20 @@ data:
     path: verify/fps/pow_of_formal_power_series.test.cpp
     title: verify/fps/pow_of_formal_power_series.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/math/bell_number.test.cpp
+    title: verify/math/bell_number.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/bernoulli_number.test.cpp
+    title: verify/math/bernoulli_number.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/partition_function.test.cpp
+    title: verify/math/partition_function.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/stirling_number_of_the_second_kind.test.cpp
+    title: verify/math/stirling_number_of_the_second_kind.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -174,6 +189,7 @@ data:
   isVerificationFile: false
   path: math/modint.hpp
   requiredBy:
+  - math/combinatorial_sequences.hpp
   - math/all.hpp
   - fps/formal_power_series.hpp
   - fps/all.hpp
@@ -188,7 +204,11 @@ data:
   - verify/data_structure/rake_compress_link_cut_tree.test.cpp
   - verify/data_structure/lazy_segtree.test.cpp
   - verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
+  - verify/math/bell_number.test.cpp
+  - verify/math/partition_function.test.cpp
   - verify/math/math_algorithms.test.cpp
+  - verify/math/stirling_number_of_the_second_kind.test.cpp
+  - verify/math/bernoulli_number.test.cpp
   - verify/fps/inv_of_formal_power_series.test.cpp
   - verify/fps/pow_of_formal_power_series.test.cpp
   - verify/fps/polynomial_interpolation.test.cpp

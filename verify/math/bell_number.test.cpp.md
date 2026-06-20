@@ -5,79 +5,40 @@ data:
     path: fps/convolution.hpp
     title: Convolution
   - icon: ':heavy_check_mark:'
-    path: math/modint.hpp
-    title: ModInt
-  _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
-    path: fps/all.hpp
-    title: Formal Power Series All
-  - icon: ':heavy_check_mark:'
-    path: fps/linear_recurrence.hpp
-    title: Linear Recurrence and Bostan-Mori
-  - icon: ':heavy_check_mark:'
-    path: fps/multipoint_evaluation.hpp
-    title: Multipoint Evaluation and Interpolation
-  - icon: ':heavy_check_mark:'
-    path: math/all.hpp
-    title: Math All
+    path: fps/formal_power_series.hpp
+    title: Formal Power Series
   - icon: ':heavy_check_mark:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
-  _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/fps/exp_of_formal_power_series.test.cpp
-    title: verify/fps/exp_of_formal_power_series.test.cpp
+    path: math/combinatorics.hpp
+    title: Combinatorics
   - icon: ':heavy_check_mark:'
-    path: verify/fps/fps_algorithms.test.cpp
-    title: verify/fps/fps_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/fps/inv_of_formal_power_series.test.cpp
-    title: verify/fps/inv_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-    title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/fps/multipoint_evaluation.test.cpp
-    title: verify/fps/multipoint_evaluation.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/fps/polynomial_interpolation.test.cpp
-    title: verify/fps/polynomial_interpolation.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/fps/polynomial_taylor_shift.test.cpp
-    title: verify/fps/polynomial_taylor_shift.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/fps/pow_of_formal_power_series.test.cpp
-    title: verify/fps/pow_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/math/bell_number.test.cpp
-    title: verify/math/bell_number.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/math/bernoulli_number.test.cpp
-    title: verify/math/bernoulli_number.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/math/math_algorithms.test.cpp
-    title: verify/math/math_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/math/partition_function.test.cpp
-    title: verify/math/partition_function.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/math/stirling_number_of_the_second_kind.test.cpp
-    title: verify/math/stirling_number_of_the_second_kind.test.cpp
+    path: math/modint.hpp
+    title: ModInt
+  _extendedRequiredBy: []
+  _extendedVerifiedWith: []
   _isVerificationFailed: false
-  _pathExtension: hpp
+  _pathExtension: cpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    links: []
-  bundledCode: "#line 1 \"fps/formal_power_series.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <cstdint>\n#include <optional>\n#include <utility>\n\
-    #include <vector>\n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#line 5 \"fps/convolution.hpp\"\
-    \n#include <array>\n#line 10 \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\
-    \n\n\n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n#line 7 \"math/modint.hpp\"\
-    \n\nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct\
-    \ ModInt {\n   private:\n    uint32_t _v;\n\n   public:\n    static constexpr\
-    \ uint32_t mod() {\n        return Modulus;\n    }\n\n    static constexpr ModInt\
-    \ raw(uint32_t v) noexcept {\n        ModInt x;\n        x._v = v;\n        return\
-    \ x;\n    }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    constexpr ModInt(int\
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://judge.yosupo.jp/problem/bell_number
+    links:
+    - https://judge.yosupo.jp/problem/bell_number
+  bundledCode: "#line 1 \"verify/math/bell_number.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/bell_number\"\
+    \n\n#include <iostream>\n#include <vector>\n\n#line 1 \"math/combinatorial_sequences.hpp\"\
+    \n\n\n\n#include <cassert>\n#include <cstdint>\n#line 7 \"math/combinatorial_sequences.hpp\"\
+    \n\n#line 1 \"fps/formal_power_series.hpp\"\n\n\n\n#include <algorithm>\n#line\
+    \ 7 \"fps/formal_power_series.hpp\"\n#include <optional>\n#include <utility>\n\
+    #line 10 \"fps/formal_power_series.hpp\"\n\n#line 1 \"fps/convolution.hpp\"\n\n\
+    \n\n#line 5 \"fps/convolution.hpp\"\n#include <array>\n#line 10 \"fps/convolution.hpp\"\
+    \n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 7 \"math/modint.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n\
+    \   private:\n    uint32_t _v;\n\n   public:\n    static constexpr uint32_t mod()\
+    \ {\n        return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t\
+    \ v) noexcept {\n        ModInt x;\n        x._v = v;\n        return x;\n   \
+    \ }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    constexpr ModInt(int\
     \ v) noexcept {\n        long long x = (long long)(v % (long long)(Modulus));\n\
     \        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n  \
     \  }\n\n    constexpr ModInt(long long v) noexcept {\n        long long x = (long\
@@ -348,264 +309,111 @@ data:
     \      power *= shift;\n        }\n        Fps product = left * right;\n     \
     \   Fps result(n);\n        for (int i = 0; i < n; i++) result[i] = product[n\
     \ - 1 - i] * inverse_factorial[i];\n        return result;\n    }\n};\n\n}  //\
-    \ namespace fps\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_FPS_FORMAL_POWER_SERIES_HPP\n#define M1UNE_FPS_FORMAL_POWER_SERIES_HPP\
-    \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n#include\
-    \ <optional>\n#include <utility>\n#include <vector>\n\n#include \"fps/convolution.hpp\"\
-    \n\nnamespace m1une {\nnamespace fps {\n\nnamespace internal {\n\ntemplate <class\
-    \ Mint>\nstd::optional<Mint> modular_square_root(Mint value) {\n    const uint32_t\
-    \ mod = Mint::mod();\n    if (value == Mint(0)) return Mint(0);\n    if (mod ==\
-    \ 2) return value;\n    if (value.pow((mod - 1) / 2) != Mint(1)) return std::nullopt;\n\
-    \    if (mod % 4 == 3) return value.pow((mod + 1) / 4);\n\n    uint32_t q = mod\
-    \ - 1;\n    int s = 0;\n    while ((q & 1) == 0) {\n        q >>= 1;\n       \
-    \ s++;\n    }\n\n    Mint z = 2;\n    while (z.pow((mod - 1) / 2) == Mint(1))\
-    \ ++z;\n    Mint c = z.pow(q);\n    Mint x = value.pow((q + 1) / 2);\n    Mint\
-    \ t = value.pow(q);\n    int m = s;\n    while (t != Mint(1)) {\n        int i\
-    \ = 1;\n        Mint squared = t * t;\n        while (squared != Mint(1)) {\n\
-    \            squared *= squared;\n            i++;\n        }\n        Mint b\
-    \ = c.pow(uint64_t(1) << (m - i - 1));\n        x *= b;\n        c = b * b;\n\
-    \        t *= c;\n        m = i;\n    }\n    return x;\n}\n\n}  // namespace internal\n\
-    \ntemplate <class Mint>\nstruct FormalPowerSeries : std::vector<Mint> {\n    using\
-    \ std::vector<Mint>::vector;\n    using Fps = FormalPowerSeries;\n\n    FormalPowerSeries()\
-    \ = default;\n    FormalPowerSeries(const std::vector<Mint>& values) : std::vector<Mint>(values)\
-    \ {}\n    FormalPowerSeries(std::vector<Mint>&& values) : std::vector<Mint>(std::move(values))\
-    \ {}\n\n    Fps& shrink() {\n        while (!this->empty() && this->back() ==\
-    \ Mint(0)) this->pop_back();\n        return *this;\n    }\n\n    Fps pre(int\
-    \ degree) const {\n        assert(degree >= 0);\n        Fps result(this->begin(),\
-    \ this->begin() + std::min<int>(degree, this->size()));\n        result.resize(degree);\n\
-    \        return result;\n    }\n\n    Fps reversed(int size = -1) const {\n  \
-    \      Fps result = *this;\n        if (size >= 0) result.resize(size);\n    \
-    \    std::reverse(result.begin(), result.end());\n        return result;\n   \
-    \ }\n\n    Fps& operator+=(const Fps& rhs) {\n        if (this->size() < rhs.size())\
-    \ this->resize(rhs.size());\n        for (int i = 0; i < int(rhs.size()); i++)\
-    \ (*this)[i] += rhs[i];\n        return *this;\n    }\n\n    Fps& operator-=(const\
-    \ Fps& rhs) {\n        if (this->size() < rhs.size()) this->resize(rhs.size());\n\
-    \        for (int i = 0; i < int(rhs.size()); i++) (*this)[i] -= rhs[i];\n   \
-    \     return *this;\n    }\n\n    Fps& operator*=(const Fps& rhs) {\n        std::vector<Mint>\
-    \ lhs(this->begin(), this->end());\n        *this = convolution(lhs, rhs);\n \
-    \       return *this;\n    }\n\n    Fps& operator*=(Mint rhs) {\n        for (Mint&\
-    \ value : *this) value *= rhs;\n        return *this;\n    }\n\n    Fps& operator/=(Mint\
-    \ rhs) {\n        return *this *= rhs.inv();\n    }\n\n    Fps& operator<<=(int\
-    \ shift) {\n        assert(shift >= 0);\n        this->insert(this->begin(), shift,\
-    \ Mint(0));\n        return *this;\n    }\n\n    Fps& operator>>=(int shift) {\n\
-    \        assert(shift >= 0);\n        if (shift >= int(this->size())) {\n    \
-    \        this->clear();\n        } else {\n            this->erase(this->begin(),\
-    \ this->begin() + shift);\n        }\n        return *this;\n    }\n\n    Fps\
-    \ operator+() const {\n        return *this;\n    }\n\n    Fps operator-() const\
-    \ {\n        Fps result = *this;\n        for (Mint& value : result) value = Mint(0)\
-    \ - value;\n        return result;\n    }\n\n    friend Fps operator+(Fps lhs,\
-    \ const Fps& rhs) {\n        return lhs += rhs;\n    }\n\n    friend Fps operator-(Fps\
-    \ lhs, const Fps& rhs) {\n        return lhs -= rhs;\n    }\n\n    friend Fps\
-    \ operator*(Fps lhs, const Fps& rhs) {\n        return lhs *= rhs;\n    }\n\n\
-    \    friend Fps operator*(Fps lhs, Mint rhs) {\n        return lhs *= rhs;\n \
-    \   }\n\n    friend Fps operator*(Mint lhs, Fps rhs) {\n        return rhs *=\
-    \ lhs;\n    }\n\n    friend Fps operator/(Fps lhs, Mint rhs) {\n        return\
-    \ lhs /= rhs;\n    }\n\n    friend Fps operator<<(Fps lhs, int shift) {\n    \
-    \    return lhs <<= shift;\n    }\n\n    friend Fps operator>>(Fps lhs, int shift)\
-    \ {\n        return lhs >>= shift;\n    }\n\n    Fps derivative() const {\n  \
-    \      if (this->empty()) return {};\n        Fps result(this->size() - 1);\n\
-    \        for (int i = 1; i < int(this->size()); i++) result[i - 1] = (*this)[i]\
-    \ * Mint(i);\n        return result;\n    }\n\n    Fps integral() const {\n  \
-    \      Fps result(this->size() + 1);\n        if (this->empty()) return result;\n\
-    \        assert(this->size() < Mint::mod());\n\n        std::vector<Mint> inverse(this->size()\
-    \ + 1);\n        inverse[1] = 1;\n        for (int i = 2; i <= int(this->size());\
-    \ i++) {\n            inverse[i] = Mint(0) - Mint(Mint::mod() / uint32_t(i)) *\
-    \ inverse[Mint::mod() % uint32_t(i)];\n        }\n        for (int i = 0; i <\
-    \ int(this->size()); i++) result[i + 1] = (*this)[i] * inverse[i + 1];\n     \
-    \   return result;\n    }\n\n    Mint evaluate(Mint x) const {\n        Mint result\
-    \ = 0;\n        for (auto it = this->rbegin(); it != this->rend(); ++it) result\
-    \ = result * x + *it;\n        return result;\n    }\n\n    Fps inv(int degree\
-    \ = -1) const {\n        if (degree < 0) degree = int(this->size());\n       \
-    \ assert(degree >= 0);\n        if (degree == 0) return {};\n        assert(!this->empty()\
-    \ && (*this)[0] != Mint(0));\n\n        Fps result(1, (*this)[0].inv());\n   \
-    \     for (int size = 1; size < degree; size <<= 1) {\n            const int next_size\
-    \ = std::min(size << 1, degree);\n            Fps product = this->pre(next_size)\
-    \ * result;\n            product.resize(next_size);\n            for (Mint& value\
-    \ : product) value = Mint(0) - value;\n            product[0] += Mint(2);\n  \
-    \          result = (result * product).pre(next_size);\n        }\n        return\
-    \ result.pre(degree);\n    }\n\n    Fps log(int degree = -1) const {\n       \
-    \ if (degree < 0) degree = int(this->size());\n        assert(degree >= 0);\n\
-    \        if (degree == 0) return {};\n        assert(!this->empty() && (*this)[0]\
-    \ == Mint(1));\n        return (derivative() * inv(degree)).pre(degree - 1).integral();\n\
-    \    }\n\n    Fps exp(int degree = -1) const {\n        if (degree < 0) degree\
-    \ = int(this->size());\n        assert(degree >= 0);\n        if (degree == 0)\
-    \ return {};\n        assert(this->empty() || (*this)[0] == Mint(0));\n\n    \
-    \    Fps result(1, Mint(1));\n        for (int size = 1; size < degree; size <<=\
-    \ 1) {\n            const int next_size = std::min(size << 1, degree);\n     \
-    \       Fps correction = this->pre(next_size) - result.log(next_size);\n     \
-    \       correction[0] += Mint(1);\n            result = (result * correction).pre(next_size);\n\
-    \        }\n        return result.pre(degree);\n    }\n\n    Fps pow(long long\
-    \ exponent, int degree = -1) const {\n        if (degree < 0) degree = int(this->size());\n\
-    \        assert(exponent >= 0 && degree >= 0);\n        if (degree == 0) return\
-    \ {};\n        if (exponent == 0) {\n            Fps result(degree);\n       \
-    \     result[0] = 1;\n            return result;\n        }\n\n        int first\
-    \ = 0;\n        while (first < int(this->size()) && (*this)[first] == Mint(0))\
-    \ first++;\n        if (first == int(this->size()) || first > (degree - 1) / exponent)\
-    \ return Fps(degree);\n\n        const int shift = int(first * exponent);\n  \
-    \      const Mint leading = (*this)[first];\n        Fps normalized = (*this >>\
-    \ first) / leading;\n        Fps result = (normalized.log(degree - shift) * Mint(exponent)).exp(degree\
-    \ - shift);\n        result *= leading.pow(exponent);\n        result <<= shift;\n\
-    \        result.resize(degree);\n        return result;\n    }\n\n    std::optional<Fps>\
-    \ sqrt(int degree = -1) const {\n        if (degree < 0) degree = int(this->size());\n\
-    \        assert(degree >= 0);\n        if (degree == 0) return Fps();\n\n    \
-    \    int first = 0;\n        while (first < int(this->size()) && (*this)[first]\
-    \ == Mint(0)) first++;\n        if (first == int(this->size())) return Fps(degree);\n\
-    \        if (first >= degree) return Fps(degree);\n        if (first & 1) return\
-    \ std::nullopt;\n\n        const int shift = first / 2;\n        auto leading_root\
-    \ = internal::modular_square_root((*this)[first]);\n        if (!leading_root.has_value())\
-    \ return std::nullopt;\n\n        const int result_degree = degree - shift;\n\
-    \        Fps normalized = (*this >> first) / (*this)[first];\n        Fps result\
-    \ = (normalized.log(result_degree) / Mint(2)).exp(result_degree);\n        result\
-    \ *= *leading_root;\n        result <<= shift;\n        result.resize(degree);\n\
-    \        return result;\n    }\n\n    std::pair<Fps, Fps> divmod(const Fps& divisor)\
-    \ const {\n        Fps dividend = *this;\n        Fps normalized_divisor = divisor;\n\
-    \        dividend.shrink();\n        normalized_divisor.shrink();\n        assert(!normalized_divisor.empty());\n\
-    \n        if (dividend.size() < normalized_divisor.size()) return std::make_pair(Fps(),\
-    \ dividend);\n        const int quotient_size = int(dividend.size() - normalized_divisor.size()\
-    \ + 1);\n        Fps quotient =\n            (dividend.reversed().pre(quotient_size)\
-    \ * normalized_divisor.reversed().inv(quotient_size))\n                .pre(quotient_size)\n\
-    \                .reversed();\n        quotient.shrink();\n        Fps remainder\
-    \ = dividend - normalized_divisor * quotient;\n        remainder.resize(normalized_divisor.size()\
-    \ - 1);\n        remainder.shrink();\n        return std::make_pair(std::move(quotient),\
-    \ std::move(remainder));\n    }\n\n    Fps& operator/=(const Fps& rhs) {\n   \
-    \     *this = divmod(rhs).first;\n        return *this;\n    }\n\n    Fps& operator%=(const\
-    \ Fps& rhs) {\n        *this = divmod(rhs).second;\n        return *this;\n  \
-    \  }\n\n    friend Fps operator/(Fps lhs, const Fps& rhs) {\n        return lhs\
-    \ /= rhs;\n    }\n\n    friend Fps operator%(Fps lhs, const Fps& rhs) {\n    \
-    \    return lhs %= rhs;\n    }\n\n    Fps taylor_shift(Mint shift) const {\n \
-    \       const int n = int(this->size());\n        if (n == 0) return {};\n   \
-    \     assert(uint32_t(n) < Mint::mod());\n\n        std::vector<Mint> factorial(n,\
-    \ Mint(1));\n        std::vector<Mint> inverse_factorial(n, Mint(1));\n      \
-    \  for (int i = 1; i < n; i++) factorial[i] = factorial[i - 1] * Mint(i);\n  \
-    \      inverse_factorial[n - 1] = factorial[n - 1].inv();\n        for (int i\
-    \ = n - 1; i > 0; i--) inverse_factorial[i - 1] = inverse_factorial[i] * Mint(i);\n\
-    \n        Fps left(n);\n        Fps right(n);\n        Mint power = 1;\n     \
-    \   for (int i = 0; i < n; i++) {\n            left[n - 1 - i] = (*this)[i] *\
-    \ factorial[i];\n            right[i] = power * inverse_factorial[i];\n      \
-    \      power *= shift;\n        }\n        Fps product = left * right;\n     \
-    \   Fps result(n);\n        for (int i = 0; i < n; i++) result[i] = product[n\
-    \ - 1 - i] * inverse_factorial[i];\n        return result;\n    }\n};\n\n}  //\
-    \ namespace fps\n}  // namespace m1une\n\n#endif  // M1UNE_FPS_FORMAL_POWER_SERIES_HPP\n"
+    \ namespace fps\n}  // namespace m1une\n\n\n#line 1 \"math/combinatorics.hpp\"\
+    \n\n\n\n#line 7 \"math/combinatorics.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\ntemplate <class Mint>\nstruct Combinatorics {\n   private:\n    std::vector<Mint>\
+    \ _factorial;\n    std::vector<Mint> _inverse_factorial;\n\n   public:\n    explicit\
+    \ Combinatorics(int maximum = 0) : _factorial(1, Mint(1)), _inverse_factorial(1,\
+    \ Mint(1)) {\n        ensure(maximum);\n    }\n\n    int maximum() const {\n \
+    \       return int(_factorial.size()) - 1;\n    }\n\n    void ensure(int maximum)\
+    \ {\n        assert(maximum >= 0);\n        assert(static_cast<uint64_t>(maximum)\
+    \ < Mint::mod());\n        if (maximum <= this->maximum()) return;\n\n       \
+    \ const int old_maximum = this->maximum();\n        _factorial.resize(maximum\
+    \ + 1);\n        _inverse_factorial.resize(maximum + 1);\n        for (int i =\
+    \ old_maximum + 1; i <= maximum; i++) {\n            _factorial[i] = _factorial[i\
+    \ - 1] * Mint(i);\n        }\n        _inverse_factorial[maximum] = _factorial[maximum].inv();\n\
+    \        for (int i = maximum; i > old_maximum; i--) {\n            _inverse_factorial[i\
+    \ - 1] = _inverse_factorial[i] * Mint(i);\n        }\n    }\n\n    Mint factorial(int\
+    \ n) const {\n        assert(0 <= n && n <= maximum());\n        return _factorial[n];\n\
+    \    }\n\n    Mint inverse_factorial(int n) const {\n        assert(0 <= n &&\
+    \ n <= maximum());\n        return _inverse_factorial[n];\n    }\n\n    Mint inverse(int\
+    \ n) const {\n        assert(1 <= n && n <= maximum());\n        return _factorial[n\
+    \ - 1] * _inverse_factorial[n];\n    }\n\n    Mint binom(int n, int k) const {\n\
+    \        if (k < 0 || k > n) return Mint(0);\n        assert(n <= maximum());\n\
+    \        return _factorial[n] * _inverse_factorial[k] * _inverse_factorial[n -\
+    \ k];\n    }\n\n    Mint perm(int n, int k) const {\n        if (k < 0 || k >\
+    \ n) return Mint(0);\n        assert(n <= maximum());\n        return _factorial[n]\
+    \ * _inverse_factorial[n - k];\n    }\n\n    Mint multiset(int types, int count)\
+    \ const {\n        if (types < 0 || count < 0) return Mint(0);\n        if (types\
+    \ == 0) return Mint(count == 0);\n        const long long total = static_cast<long\
+    \ long>(types) + count - 1;\n        assert(total <= maximum());\n        return\
+    \ binom(static_cast<int>(total), count);\n    }\n\n    Mint catalan(int n) const\
+    \ {\n        assert(n >= 0);\n        const long long doubled = 2LL * n;\n   \
+    \     assert(doubled <= maximum());\n        return binom(int(doubled), n) - binom(int(doubled),\
+    \ n + 1);\n    }\n};\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line\
+    \ 10 \"math/combinatorial_sequences.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\ntemplate <class Mint>\nstd::vector<Mint> catalan_numbers(int maximum) {\n\
+    \    assert(maximum >= 0);\n    assert(static_cast<uint64_t>(maximum) + 1 < Mint::mod());\n\
+    \n    std::vector<Mint> inverse(maximum + 2);\n    inverse[1] = 1;\n    for (int\
+    \ i = 2; i <= maximum + 1; i++) {\n        inverse[i] = Mint(0) - Mint(Mint::mod()\
+    \ / uint32_t(i)) * inverse[Mint::mod() % uint32_t(i)];\n    }\n\n    std::vector<Mint>\
+    \ result(maximum + 1);\n    result[0] = 1;\n    for (int n = 0; n < maximum; n++)\
+    \ {\n        result[n + 1] = result[n] * Mint(2) * Mint(2LL * n + 1) * inverse[n\
+    \ + 2];\n    }\n    return result;\n}\n\ntemplate <class Mint>\nstd::vector<Mint>\
+    \ bernoulli_numbers(int maximum) {\n    assert(maximum >= 0);\n    assert(static_cast<uint64_t>(maximum)\
+    \ + 1 < Mint::mod());\n\n    using Fps = fps::FormalPowerSeries<Mint>;\n    Combinatorics<Mint>\
+    \ combinations(maximum + 1);\n    Fps denominator(maximum + 1);\n    for (int\
+    \ i = 0; i <= maximum; i++) {\n        denominator[i] = combinations.inverse_factorial(i\
+    \ + 1);\n    }\n\n    Fps generating_function = denominator.inv(maximum + 1);\n\
+    \    std::vector<Mint> result(maximum + 1);\n    for (int i = 0; i <= maximum;\
+    \ i++) {\n        result[i] = generating_function[i] * combinations.factorial(i);\n\
+    \    }\n    return result;\n}\n\ntemplate <class Mint>\nstd::vector<Mint> bell_numbers(int\
+    \ maximum) {\n    assert(maximum >= 0);\n    assert(static_cast<uint64_t>(maximum)\
+    \ < Mint::mod());\n\n    using Fps = fps::FormalPowerSeries<Mint>;\n    Combinatorics<Mint>\
+    \ combinations(maximum);\n    Fps exponent(maximum + 1);\n    for (int i = 1;\
+    \ i <= maximum; i++) {\n        exponent[i] = combinations.inverse_factorial(i);\n\
+    \    }\n\n    Fps generating_function = exponent.exp(maximum + 1);\n    std::vector<Mint>\
+    \ result(maximum + 1);\n    for (int i = 0; i <= maximum; i++) {\n        result[i]\
+    \ = generating_function[i] * combinations.factorial(i);\n    }\n    return result;\n\
+    }\n\ntemplate <class Mint>\nstd::vector<Mint> stirling_numbers_second_kind(int\
+    \ n) {\n    assert(n >= 0);\n    assert(static_cast<uint64_t>(n) < Mint::mod());\n\
+    \n    Combinatorics<Mint> combinations(n);\n    std::vector<Mint> powers(n + 1);\n\
+    \    std::vector<Mint> signs(n + 1);\n    for (int i = 0; i <= n; i++) {\n   \
+    \     powers[i] = Mint(i).pow(n) * combinations.inverse_factorial(i);\n      \
+    \  signs[i] = combinations.inverse_factorial(i);\n        if (i & 1) signs[i]\
+    \ = Mint(0) - signs[i];\n    }\n\n    std::vector<Mint> result = fps::convolution(powers,\
+    \ signs);\n    result.resize(n + 1);\n    return result;\n}\n\ntemplate <class\
+    \ Mint>\nstd::vector<Mint> partition_numbers(int maximum) {\n    assert(maximum\
+    \ >= 0);\n\n    using Fps = fps::FormalPowerSeries<Mint>;\n    Fps denominator(maximum\
+    \ + 1);\n    denominator[0] = 1;\n    for (long long k = 1;; k++) {\n        const\
+    \ long long first = k * (3 * k - 1) / 2;\n        const long long second = k *\
+    \ (3 * k + 1) / 2;\n        if (first > maximum) break;\n\n        const Mint\
+    \ sign = (k & 1) ? Mint(-1) : Mint(1);\n        denominator[int(first)] += sign;\n\
+    \        if (second <= maximum) denominator[int(second)] += sign;\n    }\n   \
+    \ return denominator.inv(maximum + 1);\n}\n\ntemplate <class Mint>\nstd::vector<Mint>\
+    \ derangement_numbers(int maximum) {\n    assert(maximum >= 0);\n\n    std::vector<Mint>\
+    \ result(maximum + 1);\n    result[0] = 1;\n    if (maximum >= 1) result[1] =\
+    \ 0;\n    for (int n = 2; n <= maximum; n++) {\n        result[n] = Mint(n - 1)\
+    \ * (result[n - 1] + result[n - 2]);\n    }\n    return result;\n}\n\n}  // namespace\
+    \ math\n}  // namespace m1une\n\n\n#line 8 \"verify/math/bell_number.test.cpp\"\
+    \n\nusing Mint = m1une::math::modint998244353;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n;\n    std::cin >> n;\n    const std::vector<Mint>\
+    \ values = m1une::math::bell_numbers<Mint>(n);\n    for (int i = 0; i <= n; i++)\
+    \ {\n        if (i) std::cout << ' ';\n        std::cout << values[i];\n    }\n\
+    \    std::cout << '\\n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/bell_number\"\n\n#include\
+    \ <iostream>\n#include <vector>\n\n#include \"math/combinatorial_sequences.hpp\"\
+    \n#include \"math/modint.hpp\"\n\nusing Mint = m1une::math::modint998244353;\n\
+    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    int n;\n    std::cin >> n;\n    const std::vector<Mint> values = m1une::math::bell_numbers<Mint>(n);\n\
+    \    for (int i = 0; i <= n; i++) {\n        if (i) std::cout << ' ';\n      \
+    \  std::cout << values[i];\n    }\n    std::cout << '\\n';\n}\n"
   dependsOn:
+  - math/combinatorial_sequences.hpp
+  - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
-  isVerificationFile: false
-  path: fps/formal_power_series.hpp
-  requiredBy:
-  - math/combinatorial_sequences.hpp
-  - math/all.hpp
-  - fps/all.hpp
-  - fps/multipoint_evaluation.hpp
-  - fps/linear_recurrence.hpp
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: LIBRARY_ALL_AC
-  verifiedWith:
-  - verify/math/bell_number.test.cpp
-  - verify/math/partition_function.test.cpp
-  - verify/math/math_algorithms.test.cpp
-  - verify/math/stirling_number_of_the_second_kind.test.cpp
-  - verify/math/bernoulli_number.test.cpp
-  - verify/fps/inv_of_formal_power_series.test.cpp
-  - verify/fps/pow_of_formal_power_series.test.cpp
-  - verify/fps/polynomial_interpolation.test.cpp
-  - verify/fps/exp_of_formal_power_series.test.cpp
-  - verify/fps/multipoint_evaluation.test.cpp
-  - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-  - verify/fps/polynomial_taylor_shift.test.cpp
-  - verify/fps/fps_algorithms.test.cpp
-documentation_of: fps/formal_power_series.hpp
+  - math/combinatorics.hpp
+  isVerificationFile: true
+  path: verify/math/bell_number.test.cpp
+  requiredBy: []
+  timestamp: '2026-06-20 09:18:49+09:00'
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: verify/math/bell_number.test.cpp
 layout: document
-title: Formal Power Series
+redirect_from:
+- /verify/verify/math/bell_number.test.cpp
+- /verify/verify/math/bell_number.test.cpp.html
+title: verify/math/bell_number.test.cpp
 ---
-
-## Overview
-
-`FormalPowerSeries<Mint>` is a vector-like polynomial and formal power
-series type. Coefficients are stored from the constant term upward.
-
-It provides the operations most often needed in polynomial problems:
-
-* addition, subtraction, scalar multiplication, and fast multiplication;
-* multiplication or division by a power of `x`;
-* derivative, integral, and point evaluation;
-* formal inverse, logarithm, exponential, integer power, and square root;
-* polynomial quotient and remainder;
-* Taylor shift from `f(x)` to `f(x + c)`.
-
-## Type
-
-```cpp
-template <class Mint>
-struct FormalPowerSeries : std::vector<Mint>;
-```
-
-`Mint` should be a static modular integer type with `mod()`, `val()`, `raw()`,
-`pow()`, and `inv()`. The supplied `math/modint.hpp` types satisfy this
-interface. Series functions assume a prime modulus, and degrees used by
-integration must be smaller than the modulus.
-
-## Basic Operations
-
-Let `Fps` denote `FormalPowerSeries<Mint>`.
-Here, `n` is the number of coefficients involved in the operation.
-
-| Operation | Description | Complexity |
-| --- | --- | --- |
-| `f.shrink()` | Removes trailing zero coefficients. | $O(n)$ |
-| `f.pre(n)` | Returns exactly the first `n` coefficients, padding with zero. | $O(n)$ |
-| `f.reversed(n)` | Resizes to `n` when specified, then reverses coefficients. | $O(n)$ |
-| `f + g`, `f - g` | Coefficient-wise addition or subtraction. | $O(n)$ |
-| `f * g` | Polynomial convolution. | $O(n \log n)$ |
-| `f * c`, `f / c` | Scalar multiplication or division. | $O(n)$ |
-| `f << k` | Multiplies by $x^k$. | $O(n + k)$ |
-| `f >> k` | Divides by $x^k$, discarding lower terms. | $O(n)$ |
-| `f.derivative()` | Formal derivative. | $O(n)$ |
-| `f.integral()` | Formal integral with constant term zero. | $O(n)$ |
-| `f.evaluate(x)` | Evaluates by Horner's method. | $O(n)$ |
-
-## Series Functions
-
-| Method | Requirement | Result | Complexity |
-| --- | --- | --- | --- |
-| `f.inv(n)` | `f[0] != 0` | $1/f \pmod{x^n}$ | $O(n \log n)$ |
-| `f.log(n)` | `f[0] == 1` | $\log f \pmod{x^n}$ | $O(n \log n)$ |
-| `f.exp(n)` | `f[0] == 0` | $\exp f \pmod{x^n}$ | $O(n \log n)$ |
-| `f.pow(k, n)` | `k >= 0` | $f^k \pmod{x^n}$ | $O(n \log n)$ |
-| `f.sqrt(n)` | A square root exists | An optional $g$ with $g^2=f \pmod{x^n}$ | $O(n \log n)$ |
-
-When `n` is omitted, the current series size is used. `sqrt` returns
-`std::nullopt` if the leading degree is odd or its coefficient is not a
-quadratic residue.
-
-## Polynomial Operations
-
-| Method | Description | Complexity |
-| --- | --- | --- |
-| `f.divmod(g)` | Returns the quotient and remainder of polynomial division. | $O(n \log n)$ |
-| `f / g`, `f % g` | Returns only the quotient or remainder. | $O(n \log n)$ |
-| `f.taylor_shift(c)` | Returns coefficients of `f(x + c)`. | $O(n \log n)$ |
-
-The divisor must be nonzero. Taylor shift requires `f.size() < Mint::mod()`.
-
-## Example
-
-```cpp
-#include "fps/formal_power_series.hpp"
-#include "math/modint.hpp"
-#include <iostream>
-
-using mint = m1une::math::modint998244353;
-using Fps = m1une::fps::FormalPowerSeries<mint>;
-
-int main() {
-    Fps f = {1, 2, 3};
-
-    Fps inverse = f.inv(5);
-    Fps logarithm = f.log(5);
-    Fps cube = f.pow(3, 7);
-    Fps shifted = f.taylor_shift(10);
-
-    mint value = f.evaluate(4);
-    std::cout << value << "\n";
-}
-```

@@ -281,6 +281,9 @@ data:
       path: math/bit_ceil.hpp
       title: Bit Ceil
     - icon: ':heavy_check_mark:'
+      path: math/combinatorial_sequences.hpp
+      title: Combinatorial Sequences
+    - icon: ':heavy_check_mark:'
       path: math/combinatorics.hpp
       title: Combinatorics
     - icon: ':heavy_check_mark:'
@@ -652,6 +655,12 @@ data:
   - name: verify/math
     pages:
     - icon: ':heavy_check_mark:'
+      path: verify/math/bell_number.test.cpp
+      title: verify/math/bell_number.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/bernoulli_number.test.cpp
+      title: verify/math/bernoulli_number.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/math/enumerate_primes.test.cpp
       title: verify/math/enumerate_primes.test.cpp
     - icon: ':heavy_check_mark:'
@@ -664,8 +673,14 @@ data:
       path: verify/math/math_algorithms.test.cpp
       title: verify/math/math_algorithms.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/math/partition_function.test.cpp
+      title: verify/math/partition_function.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/math/primality_test.test.cpp
       title: verify/math/primality_test.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/stirling_number_of_the_second_kind.test.cpp
+      title: verify/math/stirling_number_of_the_second_kind.test.cpp
   - name: verify/optimization
     pages:
     - icon: ':heavy_check_mark:'

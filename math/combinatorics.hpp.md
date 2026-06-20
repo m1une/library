@@ -5,10 +5,25 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
+  - icon: ':heavy_check_mark:'
+    path: math/combinatorial_sequences.hpp
+    title: Combinatorial Sequences
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/math/bell_number.test.cpp
+    title: verify/math/bell_number.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/bernoulli_number.test.cpp
+    title: verify/math/bernoulli_number.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/partition_function.test.cpp
+    title: verify/math/partition_function.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/stirling_number_of_the_second_kind.test.cpp
+    title: verify/math/stirling_number_of_the_second_kind.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -18,12 +33,12 @@ data:
     \ <cstdint>\n#include <vector>\n\nnamespace m1une {\nnamespace math {\n\ntemplate\
     \ <class Mint>\nstruct Combinatorics {\n   private:\n    std::vector<Mint> _factorial;\n\
     \    std::vector<Mint> _inverse_factorial;\n\n   public:\n    explicit Combinatorics(int\
-    \ maximum = 0)\n        : _factorial(1, Mint(1)), _inverse_factorial(1, Mint(1))\
-    \ {\n        ensure(maximum);\n    }\n\n    int maximum() const {\n        return\
-    \ int(_factorial.size()) - 1;\n    }\n\n    void ensure(int maximum) {\n     \
-    \   assert(maximum >= 0);\n        assert(static_cast<uint64_t>(maximum) < Mint::mod());\n\
-    \        if (maximum <= this->maximum()) return;\n\n        const int old_maximum\
-    \ = this->maximum();\n        _factorial.resize(maximum + 1);\n        _inverse_factorial.resize(maximum\
+    \ maximum = 0) : _factorial(1, Mint(1)), _inverse_factorial(1, Mint(1)) {\n  \
+    \      ensure(maximum);\n    }\n\n    int maximum() const {\n        return int(_factorial.size())\
+    \ - 1;\n    }\n\n    void ensure(int maximum) {\n        assert(maximum >= 0);\n\
+    \        assert(static_cast<uint64_t>(maximum) < Mint::mod());\n        if (maximum\
+    \ <= this->maximum()) return;\n\n        const int old_maximum = this->maximum();\n\
+    \        _factorial.resize(maximum + 1);\n        _inverse_factorial.resize(maximum\
     \ + 1);\n        for (int i = old_maximum + 1; i <= maximum; i++) {\n        \
     \    _factorial[i] = _factorial[i - 1] * Mint(i);\n        }\n        _inverse_factorial[maximum]\
     \ = _factorial[maximum].inv();\n        for (int i = maximum; i > old_maximum;\
@@ -42,15 +57,18 @@ data:
     \ return Mint(0);\n        if (types == 0) return Mint(count == 0);\n        const\
     \ long long total = static_cast<long long>(types) + count - 1;\n        assert(total\
     \ <= maximum());\n        return binom(static_cast<int>(total), count);\n    }\n\
-    };\n\n}  // namespace math\n}  // namespace m1une\n\n\n"
+    \n    Mint catalan(int n) const {\n        assert(n >= 0);\n        const long\
+    \ long doubled = 2LL * n;\n        assert(doubled <= maximum());\n        return\
+    \ binom(int(doubled), n) - binom(int(doubled), n + 1);\n    }\n};\n\n}  // namespace\
+    \ math\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MATH_COMBINATORICS_HPP\n#define M1UNE_MATH_COMBINATORICS_HPP\
     \ 1\n\n#include <cassert>\n#include <cstdint>\n#include <vector>\n\nnamespace\
     \ m1une {\nnamespace math {\n\ntemplate <class Mint>\nstruct Combinatorics {\n\
     \   private:\n    std::vector<Mint> _factorial;\n    std::vector<Mint> _inverse_factorial;\n\
-    \n   public:\n    explicit Combinatorics(int maximum = 0)\n        : _factorial(1,\
-    \ Mint(1)), _inverse_factorial(1, Mint(1)) {\n        ensure(maximum);\n    }\n\
-    \n    int maximum() const {\n        return int(_factorial.size()) - 1;\n    }\n\
-    \n    void ensure(int maximum) {\n        assert(maximum >= 0);\n        assert(static_cast<uint64_t>(maximum)\
+    \n   public:\n    explicit Combinatorics(int maximum = 0) : _factorial(1, Mint(1)),\
+    \ _inverse_factorial(1, Mint(1)) {\n        ensure(maximum);\n    }\n\n    int\
+    \ maximum() const {\n        return int(_factorial.size()) - 1;\n    }\n\n   \
+    \ void ensure(int maximum) {\n        assert(maximum >= 0);\n        assert(static_cast<uint64_t>(maximum)\
     \ < Mint::mod());\n        if (maximum <= this->maximum()) return;\n\n       \
     \ const int old_maximum = this->maximum();\n        _factorial.resize(maximum\
     \ + 1);\n        _inverse_factorial.resize(maximum + 1);\n        for (int i =\
@@ -71,17 +89,25 @@ data:
     \ const {\n        if (types < 0 || count < 0) return Mint(0);\n        if (types\
     \ == 0) return Mint(count == 0);\n        const long long total = static_cast<long\
     \ long>(types) + count - 1;\n        assert(total <= maximum());\n        return\
-    \ binom(static_cast<int>(total), count);\n    }\n};\n\n}  // namespace math\n\
-    }  // namespace m1une\n\n#endif  // M1UNE_MATH_COMBINATORICS_HPP\n"
+    \ binom(static_cast<int>(total), count);\n    }\n\n    Mint catalan(int n) const\
+    \ {\n        assert(n >= 0);\n        const long long doubled = 2LL * n;\n   \
+    \     assert(doubled <= maximum());\n        return binom(int(doubled), n) - binom(int(doubled),\
+    \ n + 1);\n    }\n};\n\n}  // namespace math\n}  // namespace m1une\n\n#endif\
+    \  // M1UNE_MATH_COMBINATORICS_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: math/combinatorics.hpp
   requiredBy:
+  - math/combinatorial_sequences.hpp
   - math/all.hpp
-  timestamp: '2026-06-20 09:06:39+09:00'
+  timestamp: '2026-06-20 09:18:49+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/math/bell_number.test.cpp
+  - verify/math/partition_function.test.cpp
   - verify/math/math_algorithms.test.cpp
+  - verify/math/stirling_number_of_the_second_kind.test.cpp
+  - verify/math/bernoulli_number.test.cpp
 documentation_of: math/combinatorics.hpp
 layout: document
 title: Combinatorics
@@ -98,6 +124,7 @@ These operations answer common counting questions:
 * How many ways can `k` objects be chosen from `n` objects?
 * How many ways can `k` distinct positions be filled from `n` choices?
 * How many ways can identical objects be distributed among several kinds?
+* How many balanced parenthesis strings contain `n` pairs?
 
 `Mint` must provide the static-modulus interface used by `ModInt`, and the
 modulus must be prime. The largest prepared index must be smaller than the
@@ -157,6 +184,24 @@ $$
 
 There are `multiset(k, n)` such solutions.
 
+### Catalan Numbers
+
+`catalan(n)` computes
+
+$$
+C_n
+= \frac{1}{n+1}\binom{2n}{n}
+= \binom{2n}{n}-\binom{2n}{n+1}.
+$$
+
+It counts balanced parenthesis strings with `n` pairs, binary tree shapes, and
+many other recursively nested structures. The first values are
+`1, 1, 2, 5, 14, 42`.
+
+This method requires factorials through `2 * n`. To generate every Catalan
+number through a limit in linear time, use `catalan_numbers` from
+`math/combinatorial_sequences.hpp`.
+
 ## Why Inverse Factorials Are Used
 
 Ordinary integer division cannot be used after taking a remainder. Under a
@@ -186,6 +231,7 @@ binom(n, k) = factorial[n]
 | `binom(n, k)` | Returns the binomial coefficient. Invalid `k` returns zero. | $O(1)$ |
 | `perm(n, k)` | Returns the number of ordered selections. Invalid `k` returns zero. | $O(1)$ |
 | `multiset(types, count)` | Returns the number of multisets of size `count` from `types` kinds. | $O(1)$ |
+| `catalan(n)` | Returns the `n`-th Catalan number. | $O(1)$ |
 
 ## Preconditions and Common Pitfalls
 
@@ -213,5 +259,6 @@ int main() {
     std::cout << combinations.binom(5, 2) << "\n";     // 10
     std::cout << combinations.perm(5, 2) << "\n";      // 20
     std::cout << combinations.multiset(3, 4) << "\n";  // 15
+    std::cout << combinations.catalan(5) << "\n";      // 42
 }
 ```
