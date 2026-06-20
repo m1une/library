@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/static_range_sum"
 
-#include "ds/range_query/disjoint_sparse_table.hpp"
-#include "monoid/add.hpp"
+#include "../../../ds/range_query/disjoint_sparse_table.hpp"
+#include "../../../monoid/add.hpp"
 
 #include <iostream>
 #include <vector>

@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-#include "acted_monoid/concept.hpp"
+#include "../../acted_monoid/concept.hpp"
 
 namespace m1une {
 namespace ds {

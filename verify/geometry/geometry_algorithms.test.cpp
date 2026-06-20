@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "geometry/all.hpp"
+#include "../../geometry/all.hpp"
 
 #include <algorithm>
 #include <cassert>

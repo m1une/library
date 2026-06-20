@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "math/all.hpp"
+#include "../../math/all.hpp"
 
 long long floor_div(long long numerator, long long denominator) {
     long long quotient = numerator / denominator;

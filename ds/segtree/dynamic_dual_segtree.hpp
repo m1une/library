@@ -10,8 +10,8 @@
 #include <utility>
 #include <vector>
 
-#include "ds/segtree/dynamic_segtree_common.hpp"
-#include "monoid/concept.hpp"
+#include "dynamic_segtree_common.hpp"
+#include "../../monoid/concept.hpp"
 
 namespace m1une {
 namespace ds {

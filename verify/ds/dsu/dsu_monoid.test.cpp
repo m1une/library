@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/dsu/dsu_monoid.hpp"
-#include "monoid/add.hpp"
+#include "../../../ds/dsu/dsu_monoid.hpp"
+#include "../../../monoid/add.hpp"
 
 #include <cassert>
 #include <iostream>

@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "ds/dsu/persistent_dsu.hpp"
+#include "../../../ds/dsu/persistent_dsu.hpp"
 using namespace m1une::ds;
 
 int main() {

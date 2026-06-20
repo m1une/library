@@ -1,12 +1,12 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/segtree/persistent_lazy_segtree.hpp"
+#include "../../../ds/segtree/persistent_lazy_segtree.hpp"
 
 #include <cassert>
 #include <iostream>
 #include <vector>
 
-#include "acted_monoid/range_add_range_sum.hpp"
+#include "../../../acted_monoid/range_add_range_sum.hpp"
 
 int main() {
     using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;

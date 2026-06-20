@@ -6,7 +6,7 @@
 #include <cmath>
 #include <optional>
 
-#include "geometry/point.hpp"
+#include "point.hpp"
 
 namespace m1une {
 namespace geometry {

@@ -5,7 +5,7 @@
 #include <optional>
 #include <vector>
 
-#include "flow/min_cost_flow.hpp"
+#include "min_cost_flow.hpp"
 
 namespace m1une {
 namespace flow {

@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/point_add_range_sum"
 
-#include "ds/segtree/dynamic_segtree.hpp"
+#include "../../../ds/segtree/dynamic_segtree.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include "monoid/add.hpp"
+#include "../../../monoid/add.hpp"
 
 namespace {
 

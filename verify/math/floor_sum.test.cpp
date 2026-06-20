@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "math/number_theory.hpp"
+#include "../../math/number_theory.hpp"
 
 int main() {
     std::ios::sync_with_stdio(false);

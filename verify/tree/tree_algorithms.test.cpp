@@ -8,8 +8,8 @@
 #include <set>
 #include <vector>
 
-#include "graph/graph.hpp"
-#include "tree/all.hpp"
+#include "../../graph/graph.hpp"
+#include "../../tree/all.hpp"
 
 using m1une::graph::Graph;
 

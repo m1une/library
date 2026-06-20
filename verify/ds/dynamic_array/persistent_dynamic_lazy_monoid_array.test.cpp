@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp"
+#include "../../../ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -11,7 +11,7 @@
 #include <utility>
 #include <vector>
 
-#include "acted_monoid/range_add_range_sum.hpp"
+#include "../../../acted_monoid/range_add_range_sum.hpp"
 
 using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;
 using Node = AM::value_type;

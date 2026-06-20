@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "ds/ordered_set/persistent_ordered_multiset.hpp"
+#include "persistent_ordered_multiset.hpp"
 
 namespace m1une {
 namespace ds {

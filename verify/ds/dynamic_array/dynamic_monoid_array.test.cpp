@@ -3,8 +3,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "ds/dynamic_array/dynamic_monoid_array.hpp"
-#include "monoid/add.hpp"
+#include "../../../ds/dynamic_array/dynamic_monoid_array.hpp"
+#include "../../../monoid/add.hpp"
 
 int main() {
     int n, q;

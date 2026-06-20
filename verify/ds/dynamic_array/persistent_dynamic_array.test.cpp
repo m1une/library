@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/dynamic_array/persistent_dynamic_array.hpp"
+#include "../../../ds/dynamic_array/persistent_dynamic_array.hpp"
 
 #include <algorithm>
 #include <cassert>

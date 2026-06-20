@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "optimization/simplex.hpp"
+#include "simplex.hpp"
 
 namespace m1une {
 namespace optimization {

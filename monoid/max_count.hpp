@@ -4,7 +4,7 @@
 #include <functional>
 #include <limits>
 
-#include "monoid/min_count.hpp"
+#include "min_count.hpp"
 
 namespace m1une {
 namespace monoid {

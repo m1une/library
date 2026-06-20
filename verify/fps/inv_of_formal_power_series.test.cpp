@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "fps/formal_power_series.hpp"
-#include "math/modint.hpp"
+#include "../../fps/formal_power_series.hpp"
+#include "../../math/modint.hpp"
 
 using mint = m1une::math::modint998244353;
 using Fps = m1une::fps::FormalPowerSeries<mint>;

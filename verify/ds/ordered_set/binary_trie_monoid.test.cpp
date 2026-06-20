@@ -1,8 +1,8 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/ordered_set/binary_trie_monoid.hpp"
-#include "monoid/add.hpp"
-#include "monoid/mul.hpp"
+#include "../../../ds/ordered_set/binary_trie_monoid.hpp"
+#include "../../../monoid/add.hpp"
+#include "../../../monoid/mul.hpp"
 
 #include <algorithm>
 #include <cassert>

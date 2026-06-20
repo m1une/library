@@ -1,7 +1,7 @@
 #ifndef M1UNE_HASH_MAP_HPP
 #define M1UNE_HASH_MAP_HPP 1
 
-#include "ds/hash_table/hash_common.hpp"
+#include "hash_common.hpp"
 
 #include <algorithm>
 #include <cstddef>

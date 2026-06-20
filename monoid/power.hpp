@@ -1,7 +1,7 @@
 #ifndef M1UNE_MONOID_POWER_HPP
 #define M1UNE_MONOID_POWER_HPP 1
 
-#include "monoid/concept.hpp"
+#include "concept.hpp"
 
 namespace m1une {
 namespace monoid {

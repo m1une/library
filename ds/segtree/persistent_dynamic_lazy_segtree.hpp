@@ -11,8 +11,8 @@
 #include <utility>
 #include <vector>
 
-#include "acted_monoid/concept.hpp"
-#include "ds/segtree/dynamic_segtree_common.hpp"
+#include "../../acted_monoid/concept.hpp"
+#include "dynamic_segtree_common.hpp"
 
 namespace m1une {
 namespace ds {

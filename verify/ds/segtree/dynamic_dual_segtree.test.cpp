@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/range_affine_point_get"
 
-#include "ds/segtree/dynamic_dual_segtree.hpp"
+#include "../../../ds/segtree/dynamic_dual_segtree.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -9,9 +9,9 @@
 #include <utility>
 #include <vector>
 
-#include "math/modint.hpp"
-#include "monoid/add.hpp"
-#include "monoid/affine.hpp"
+#include "../../../math/modint.hpp"
+#include "../../../monoid/add.hpp"
+#include "../../../monoid/affine.hpp"
 
 namespace {
 

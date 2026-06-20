@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "graph/all.hpp"
+#include "../../graph/all.hpp"
 
 using m1une::graph::Graph;
 

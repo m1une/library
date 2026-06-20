@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_D"
 
-#include "geometry/circle.hpp"
+#include "../../geometry/circle.hpp"
 
 #include <iomanip>
 #include <iostream>

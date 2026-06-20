@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 
-#include "acted_monoid/range_add_range_sum.hpp"
-#include "ds/dynamic_tree/lazy_path_link_cut_tree.hpp"
+#include "../../../acted_monoid/range_add_range_sum.hpp"
+#include "../../../ds/dynamic_tree/lazy_path_link_cut_tree.hpp"
 
 using AddSum = m1une::acted_monoid::RangeAddRangeSum<long long>;
 using Node = AddSum::value_type;

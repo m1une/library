@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/range_kth_smallest"
 
-#include "ds/ordered_set/persistent_ordered_multiset.hpp"
+#include "../../../ds/ordered_set/persistent_ordered_multiset.hpp"
 
 #include <algorithm>
 #include <iostream>

@@ -3,8 +3,8 @@
 #include <iostream>
 #include <vector>
 
-#include "ds/dynamic_tree/rake_compress_link_cut_tree.hpp"
-#include "math/modint.hpp"
+#include "../../../ds/dynamic_tree/rake_compress_link_cut_tree.hpp"
+#include "../../../math/modint.hpp"
 
 using mint = m1une::math::modint998244353;
 

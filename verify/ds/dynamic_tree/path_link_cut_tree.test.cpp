@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "ds/dynamic_tree/path_link_cut_tree.hpp"
-#include "monoid/add.hpp"
+#include "../../../ds/dynamic_tree/path_link_cut_tree.hpp"
+#include "../../../monoid/add.hpp"
 
 struct StringConcat {
     using value_type = std::string;

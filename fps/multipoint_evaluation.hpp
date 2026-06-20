@@ -4,7 +4,7 @@
 #include <cassert>
 #include <vector>
 
-#include "fps/formal_power_series.hpp"
+#include "formal_power_series.hpp"
 
 namespace m1une {
 namespace fps {

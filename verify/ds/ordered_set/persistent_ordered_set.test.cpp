@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/ordered_set"
 
-#include "ds/ordered_set/persistent_ordered_set.hpp"
+#include "../../../ds/ordered_set/persistent_ordered_set.hpp"
 
 #include <cassert>
 #include <iostream>

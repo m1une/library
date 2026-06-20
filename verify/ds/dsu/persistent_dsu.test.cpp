@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/dsu/persistent_dsu.hpp"
+#include "../../../ds/dsu/persistent_dsu.hpp"
 
 #include <algorithm>
 #include <cassert>

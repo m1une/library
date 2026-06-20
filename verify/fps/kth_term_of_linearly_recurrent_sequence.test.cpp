@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 
-#include "fps/linear_recurrence.hpp"
-#include "math/modint.hpp"
+#include "../../fps/linear_recurrence.hpp"
+#include "../../math/modint.hpp"
 
 using mint = m1une::math::modint998244353;
 

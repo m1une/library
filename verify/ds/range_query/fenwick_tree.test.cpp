@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "ds/range_query/fenwick_tree.hpp"
+#include "../../../ds/range_query/fenwick_tree.hpp"
 
 void test_fenwick_tree() {
     const std::vector<long long> values = {1, 2, 3};

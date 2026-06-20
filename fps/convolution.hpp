@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "math/modint.hpp"
+#include "../math/modint.hpp"
 
 namespace m1une {
 namespace fps {

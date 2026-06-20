@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "flow/flow.hpp"
+#include "../../flow/flow.hpp"
 
 void test_max_flow() {
     m1une::flow::MaxFlow<long long> mf(4);

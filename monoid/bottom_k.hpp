@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#include "monoid/top_k.hpp"
+#include "top_k.hpp"
 
 namespace m1une {
 namespace monoid {

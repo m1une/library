@@ -5,7 +5,7 @@
 #include <limits>
 #include <vector>
 
-#include "optimization/all.hpp"
+#include "../../optimization/all.hpp"
 
 constexpr long double EPS = 1e-8L;
 

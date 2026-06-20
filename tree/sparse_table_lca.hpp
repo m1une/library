@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#include "ds/range_query/sparse_table.hpp"
-#include "graph/graph.hpp"
+#include "../ds/range_query/sparse_table.hpp"
+#include "../graph/graph.hpp"
 
 namespace m1une {
 namespace tree {

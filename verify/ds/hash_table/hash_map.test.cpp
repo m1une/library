@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/hash_table/hash_map.hpp"
+#include "../../../ds/hash_table/hash_map.hpp"
 
 #include <cassert>
 #include <iostream>

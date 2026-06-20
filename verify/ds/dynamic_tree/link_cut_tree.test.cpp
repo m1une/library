@@ -6,8 +6,8 @@
 #include <utility>
 #include <vector>
 
-#include "ds/dynamic_tree/link_cut_tree.hpp"
-#include "monoid/add.hpp"
+#include "../../../ds/dynamic_tree/link_cut_tree.hpp"
+#include "../../../monoid/add.hpp"
 
 void test_vertex_subtree_sum() {
     m1une::ds::LinkCutTree<m1une::monoid::Add<long long>> lct(std::vector<int>{1, 2, 3, 4, 5});

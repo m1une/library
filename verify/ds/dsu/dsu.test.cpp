@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/unionfind"
 
 #include <bits/stdc++.h>
-#include "ds/dsu/dsu.hpp"
+#include "../../../ds/dsu/dsu.hpp"
 using namespace std;
 
 int main() {

@@ -1,11 +1,11 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/range_affine_range_sum"
 
-#include "ds/segtree/lazy_segtree.hpp"
+#include "../../../ds/segtree/lazy_segtree.hpp"
 
 #include <bits/stdc++.h>
 
-#include "acted_monoid/range_affine_range_sum.hpp"
-#include "math/modint.hpp"
+#include "../../../acted_monoid/range_affine_range_sum.hpp"
+#include "../../../math/modint.hpp"
 
 using mint = m1une::math::modint998244353;
 

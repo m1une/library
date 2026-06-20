@@ -9,10 +9,10 @@
 #include <string>
 #include <vector>
 
-#include "utilities/bigint.hpp"
-#include "utilities/int128.hpp"
-#include "utilities/random.hpp"
-#include "utilities/timer.hpp"
+#include "../../utilities/bigint.hpp"
+#include "../../utilities/int128.hpp"
+#include "../../utilities/random.hpp"
+#include "../../utilities/timer.hpp"
 
 void test_bigint() {
     using m1une::utilities::BigInt;

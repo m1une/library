@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "math/prime_factorization.hpp"
+#include "../../math/prime_factorization.hpp"
 
 int main() {
     std::ios::sync_with_stdio(false);

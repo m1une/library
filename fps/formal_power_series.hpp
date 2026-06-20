@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "fps/convolution.hpp"
+#include "convolution.hpp"
 
 namespace m1une {
 namespace fps {

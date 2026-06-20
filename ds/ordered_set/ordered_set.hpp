@@ -1,7 +1,7 @@
 #ifndef M1UNE_ORDERED_SET_HPP
 #define M1UNE_ORDERED_SET_HPP 1
 
-#include "ds/ordered_set/ordered_multiset.hpp"
+#include "ordered_multiset.hpp"
 
 #include <functional>
 #include <initializer_list>

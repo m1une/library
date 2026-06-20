@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include "math/prime_sieve.hpp"
+#include "../../math/prime_sieve.hpp"
 
 int main() {
     std::ios::sync_with_stdio(false);

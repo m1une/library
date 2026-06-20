@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_B"
 
-#include "string/prefix_function.hpp"
+#include "../../string/prefix_function.hpp"
 
 #include <iostream>
 #include <string>

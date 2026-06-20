@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 
-#include "sequence/inversion_count.hpp"
-#include "sequence/lis.hpp"
+#include "../../sequence/inversion_count.hpp"
+#include "../../sequence/lis.hpp"
 
 struct LessOnly {
     int value;

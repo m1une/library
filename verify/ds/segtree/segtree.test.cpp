@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/point_add_range_sum"
 
-#include "ds/segtree/segtree.hpp"
-#include "monoid/add.hpp"
+#include "../../../ds/segtree/segtree.hpp"
+#include "../../../monoid/add.hpp"
 #include <cassert>
 #include <iostream>
 #include <vector>

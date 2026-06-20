@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "ds/dynamic_array/dynamic_array.hpp"
+#include "../../../ds/dynamic_array/dynamic_array.hpp"
 
 int main() {
     int cursor = 0;

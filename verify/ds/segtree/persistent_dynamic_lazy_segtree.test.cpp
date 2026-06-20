@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/segtree/persistent_dynamic_lazy_segtree.hpp"
+#include "../../../ds/segtree/persistent_dynamic_lazy_segtree.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -8,10 +8,10 @@
 #include <iostream>
 #include <vector>
 
-#include "acted_monoid/range_add_range_sum.hpp"
-#include "acted_monoid/range_affine_range_sum.hpp"
-#include "acted_monoid/range_ap_add_range_sum.hpp"
-#include "math/modint.hpp"
+#include "../../../acted_monoid/range_add_range_sum.hpp"
+#include "../../../acted_monoid/range_affine_range_sum.hpp"
+#include "../../../acted_monoid/range_ap_add_range_sum.hpp"
+#include "../../../math/modint.hpp"
 
 namespace {
 

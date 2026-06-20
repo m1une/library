@@ -4,8 +4,8 @@
 #include <cassert>
 #include <vector>
 
-#include "ds/dsu/dsu.hpp"
-#include "graph/graph.hpp"
+#include "../ds/dsu/dsu.hpp"
+#include "graph.hpp"
 
 namespace m1une {
 namespace graph {

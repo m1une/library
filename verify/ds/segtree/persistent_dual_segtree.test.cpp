@@ -1,12 +1,12 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/segtree/persistent_dual_segtree.hpp"
+#include "../../../ds/segtree/persistent_dual_segtree.hpp"
 
 #include <cassert>
 #include <iostream>
 #include <vector>
 
-#include "monoid/add.hpp"
+#include "../../../monoid/add.hpp"
 
 int main() {
     using Add = m1une::monoid::Add<long long>;

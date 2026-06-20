@@ -5,7 +5,7 @@
 #include <limits>
 #include <vector>
 
-#include "optimization/all.hpp"
+#include "../../optimization/all.hpp"
 
 long long evaluate(const std::vector<long long>& c, const std::vector<long long>& x) {
     long long result = 0;

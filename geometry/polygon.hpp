@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 
-#include "geometry/line.hpp"
+#include "line.hpp"
 
 namespace m1une {
 namespace geometry {

@@ -3,8 +3,8 @@
 #include <iostream>
 #include <vector>
 
-#include "fps/multipoint_evaluation.hpp"
-#include "math/modint.hpp"
+#include "../../fps/multipoint_evaluation.hpp"
+#include "../../math/modint.hpp"
 
 using mint = m1une::math::modint998244353;
 using Fps = m1une::fps::FormalPowerSeries<mint>;

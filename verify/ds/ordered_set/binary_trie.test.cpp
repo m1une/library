@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/set_xor_min"
 
-#include "ds/ordered_set/binary_trie.hpp"
+#include "../../../ds/ordered_set/binary_trie.hpp"
 
 #include <algorithm>
 #include <cassert>

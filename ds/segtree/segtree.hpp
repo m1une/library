@@ -6,8 +6,8 @@
 #include <utility>
 #include <vector>
 
-#include "math/bit_ceil.hpp"
-#include "monoid/concept.hpp"
+#include "../../math/bit_ceil.hpp"
+#include "../../monoid/concept.hpp"
 
 namespace m1une {
 namespace ds {

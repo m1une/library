@@ -5,7 +5,7 @@
 #include <optional>
 #include <vector>
 
-#include "flow/max_flow.hpp"
+#include "max_flow.hpp"
 
 namespace m1une {
 namespace flow {

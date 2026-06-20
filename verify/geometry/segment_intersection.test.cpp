@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_B"
 
-#include "geometry/line.hpp"
+#include "../../geometry/line.hpp"
 
 #include <iostream>
 

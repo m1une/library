@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/staticrmq"
 
-#include "ds/range_query/sparse_table.hpp"
-#include "monoid/min.hpp"
+#include "../../../ds/range_query/sparse_table.hpp"
+#include "../../../monoid/min.hpp"
 
 #include <iostream>
 #include <vector>

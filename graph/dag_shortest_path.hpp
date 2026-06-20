@@ -7,8 +7,8 @@
 #include <optional>
 #include <vector>
 
-#include "graph/graph.hpp"
-#include "graph/topological_sort.hpp"
+#include "graph.hpp"
+#include "topological_sort.hpp"
 
 namespace m1une {
 namespace graph {

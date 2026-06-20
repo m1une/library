@@ -4,7 +4,7 @@
 using namespace std;
 using ll = long long;
 
-#include "ds/hash_table/hash_map.hpp"
+#include "../../../ds/hash_table/hash_map.hpp"
 
 int main() {
     ios::sync_with_stdio(false);

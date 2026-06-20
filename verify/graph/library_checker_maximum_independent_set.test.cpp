@@ -3,8 +3,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/graph.hpp"
-#include "graph/maximum_clique.hpp"
+#include "../../graph/graph.hpp"
+#include "../../graph/maximum_clique.hpp"
 
 int main() {
     int N, M;

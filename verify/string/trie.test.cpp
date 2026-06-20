@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C"
 
-#include "string/trie.hpp"
+#include "../../string/trie.hpp"
 
 #include <algorithm>
 #include <cassert>

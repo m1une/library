@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/ordered_set"
 
-#include "ds/ordered_set/ordered_multiset.hpp"
+#include "../../../ds/ordered_set/ordered_multiset.hpp"
 
 #include <iostream>
 

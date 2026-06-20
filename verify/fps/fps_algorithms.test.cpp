@@ -6,8 +6,8 @@
 #include <random>
 #include <vector>
 
-#include "fps/all.hpp"
-#include "math/modint.hpp"
+#include "../../fps/all.hpp"
+#include "../../math/modint.hpp"
 
 using mint = m1une::math::modint998244353;
 using mint1e9 = m1une::math::modint1000000007;

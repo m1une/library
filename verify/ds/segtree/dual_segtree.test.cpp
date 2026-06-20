@@ -1,11 +1,11 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/range_affine_point_get"
 
-#include "ds/segtree/dual_segtree.hpp"
+#include "../../../ds/segtree/dual_segtree.hpp"
 
 #include <bits/stdc++.h>
 
-#include "math/modint.hpp"
-#include "monoid/affine.hpp"
+#include "../../../math/modint.hpp"
+#include "../../../monoid/affine.hpp"
 
 using mint = m1une::math::modint998244353;
 using Affine = m1une::monoid::Affine<mint>;

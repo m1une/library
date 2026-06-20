@@ -3,11 +3,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "utilities/bisect.hpp"
-#include "utilities/chmin_chmax.hpp"
-#include "utilities/compressor.hpp"
-#include "utilities/run_length_encoding.hpp"
-#include "utilities/y_combinator.hpp"
+#include "../../utilities/bisect.hpp"
+#include "../../utilities/chmin_chmax.hpp"
+#include "../../utilities/compressor.hpp"
+#include "../../utilities/run_length_encoding.hpp"
+#include "../../utilities/y_combinator.hpp"
 
 void test_chmin_chmax() {
     int x = 10;

@@ -3,8 +3,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/graph.hpp"
-#include "graph/general_matching.hpp"
+#include "../../graph/graph.hpp"
+#include "../../graph/general_matching.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
