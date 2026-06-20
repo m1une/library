@@ -171,6 +171,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/range_query/sparse_table.hpp
       title: Sparse Table
+    - icon: ':heavy_check_mark:'
+      path: ds/range_query/wavelet_matrix.hpp
+      title: Wavelet Matrix
+    - icon: ':heavy_check_mark:'
+      path: ds/range_query/wavelet_matrix_sum.hpp
+      title: Wavelet Matrix with Sums
   - name: ds/segtree
     pages:
     - icon: ':heavy_check_mark:'
@@ -641,6 +647,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/range_query/sparse_table.test.cpp
       title: verify/ds/range_query/sparse_table.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/range_query/wavelet_matrix.test.cpp
+      title: verify/ds/range_query/wavelet_matrix.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/range_query/wavelet_matrix_sum.test.cpp
+      title: verify/ds/range_query/wavelet_matrix_sum.test.cpp
   - name: verify/ds/segtree
     pages:
     - icon: ':heavy_check_mark:'
