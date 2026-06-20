@@ -56,6 +56,9 @@ data:
     path: graph/topological_sort.hpp
     title: Topological Sort
   - icon: ':heavy_check_mark:'
+    path: graph/two_sat.hpp
+    title: Two-Satisfiability
+  - icon: ':heavy_check_mark:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   - icon: ':heavy_check_mark:'
@@ -396,8 +399,82 @@ data:
     }\n\ntemplate <class T>\nZeroOneBfsResult zero_one_bfs(const Graph<T>& g, int\
     \ s, int inf = std::numeric_limits<int>::max() / 2) {\n    return zero_one_bfs(g,\
     \ std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 10 \"graph/shortest_path.hpp\"\n\n\n#line 9 \"graph/directed.hpp\"\n\
-    \n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\
+    \n\n#line 10 \"graph/shortest_path.hpp\"\n\n\n#line 1 \"graph/two_sat.hpp\"\n\n\
+    \n\n#line 5 \"graph/two_sat.hpp\"\n#include <cstddef>\n#line 9 \"graph/two_sat.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\n// A 2-SAT solver using iterative\
+    \ strongly connected components.\nstruct TwoSat {\n   private:\n    struct Csr\
+    \ {\n        std::vector<int> start;\n        std::vector<int> to;\n    };\n\n\
+    \    int _n;\n    std::vector<std::pair<int, int>> _edges;\n    bool _solved;\n\
+    \    bool _satisfiable;\n    std::vector<bool> _answer;\n\n    int node(int variable,\
+    \ bool value) const {\n        assert(0 <= variable && variable < _n);\n     \
+    \   return 2 * variable + int(value);\n    }\n\n    void add_edge(int from, int\
+    \ to) {\n        _edges.emplace_back(from, to);\n        _solved = false;\n  \
+    \      _answer.clear();\n    }\n\n    Csr build_csr(bool reverse) const {\n  \
+    \      int vertices = 2 * _n;\n        Csr graph;\n        graph.start.assign(vertices\
+    \ + 1, 0);\n        graph.to.resize(_edges.size());\n\n        for (auto [from,\
+    \ to] : _edges) {\n            int source = reverse ? to : from;\n           \
+    \ graph.start[source + 1]++;\n        }\n        for (int v = 0; v < vertices;\
+    \ v++) {\n            graph.start[v + 1] += graph.start[v];\n        }\n\n   \
+    \     std::vector<int> cursor = graph.start;\n        for (auto [from, to] : _edges)\
+    \ {\n            int source = reverse ? to : from;\n            int target = reverse\
+    \ ? from : to;\n            graph.to[cursor[source]++] = target;\n        }\n\
+    \        return graph;\n    }\n\n   public:\n    TwoSat() : TwoSat(0) {}\n\n \
+    \   explicit TwoSat(int n)\n        : _n(n), _solved(false), _satisfiable(false)\
+    \ {\n        assert(0 <= n);\n        assert(n <= std::numeric_limits<int>::max()\
+    \ / 2);\n    }\n\n    int size() const {\n        return _n;\n    }\n\n    bool\
+    \ empty() const {\n        return _n == 0;\n    }\n\n    // Reserves space for\
+    \ approximately `clause_count` two-literal clauses.\n    void reserve(std::size_t\
+    \ clause_count) {\n        assert(clause_count <= std::size_t(std::numeric_limits<int>::max())\
+    \ / 2);\n        _edges.reserve(2 * clause_count);\n    }\n\n    // Adds (variable\
+    \ i == f) OR (variable j == g).\n    void add_clause(int i, bool f, int j, bool\
+    \ g) {\n        int a = node(i, f);\n        int b = node(j, g);\n        add_edge(a\
+    \ ^ 1, b);\n        add_edge(b ^ 1, a);\n    }\n\n    // Adds (variable i == f)\
+    \ => (variable j == g).\n    void add_implication(int i, bool f, int j, bool g)\
+    \ {\n        add_clause(i, !f, j, g);\n    }\n\n    // Forces variable i to equal\
+    \ value.\n    void set_value(int i, bool value) {\n        add_clause(i, value,\
+    \ i, value);\n    }\n\n    // Forces variables i and j to have equal values.\n\
+    \    void add_equal(int i, int j) {\n        add_clause(i, false, j, true);\n\
+    \        add_clause(i, true, j, false);\n    }\n\n    // Forces variables i and\
+    \ j to have different values.\n    void add_not_equal(int i, int j) {\n      \
+    \  add_clause(i, true, j, true);\n        add_clause(i, false, j, false);\n  \
+    \  }\n\n    bool satisfiable() {\n        if (_solved) return _satisfiable;\n\
+    \        assert(_edges.size() <= std::size_t(std::numeric_limits<int>::max()));\n\
+    \n        int vertices = 2 * _n;\n        Csr graph = build_csr(false);\n    \
+    \    Csr reverse_graph = build_csr(true);\n\n        std::vector<char> seen(vertices,\
+    \ false);\n        std::vector<int> order;\n        order.reserve(vertices);\n\
+    \        std::vector<std::pair<int, int>> stack;\n        stack.reserve(vertices);\n\
+    \n        for (int start = 0; start < vertices; start++) {\n            if (seen[start])\
+    \ continue;\n            seen[start] = true;\n            stack.emplace_back(start,\
+    \ graph.start[start]);\n\n            while (!stack.empty()) {\n             \
+    \   int v = stack.back().first;\n                int& edge = stack.back().second;\n\
+    \                if (edge == graph.start[v + 1]) {\n                    order.push_back(v);\n\
+    \                    stack.pop_back();\n                    continue;\n      \
+    \          }\n\n                int to = graph.to[edge++];\n                if\
+    \ (!seen[to]) {\n                    seen[to] = true;\n                    stack.emplace_back(to,\
+    \ graph.start[to]);\n                }\n            }\n        }\n\n        std::vector<int>\
+    \ component(vertices, -1);\n        std::vector<int> vertices_stack;\n       \
+    \ vertices_stack.reserve(vertices);\n        int component_count = 0;\n      \
+    \  for (int index = vertices - 1; index >= 0; index--) {\n            int start\
+    \ = order[index];\n            if (component[start] != -1) continue;\n\n     \
+    \       component[start] = component_count;\n            vertices_stack.push_back(start);\n\
+    \            while (!vertices_stack.empty()) {\n                int v = vertices_stack.back();\n\
+    \                vertices_stack.pop_back();\n                for (int edge = reverse_graph.start[v];\n\
+    \                     edge < reverse_graph.start[v + 1];\n                   \
+    \  edge++) {\n                    int to = reverse_graph.to[edge];\n         \
+    \           if (component[to] == -1) {\n                        component[to]\
+    \ = component_count;\n                        vertices_stack.push_back(to);\n\
+    \                    }\n                }\n            }\n            component_count++;\n\
+    \        }\n\n        _answer.assign(_n, false);\n        _satisfiable = true;\n\
+    \        for (int i = 0; i < _n; i++) {\n            if (component[2 * i] == component[2\
+    \ * i + 1]) {\n                _satisfiable = false;\n                _answer.clear();\n\
+    \                break;\n            }\n            _answer[i] = component[2 *\
+    \ i] < component[2 * i + 1];\n        }\n        _solved = true;\n        return\
+    \ _satisfiable;\n    }\n\n    const std::vector<bool>& answer() const {\n    \
+    \    assert(_solved && _satisfiable);\n        return _answer;\n    }\n\n    bool\
+    \ value(int variable) const {\n        assert(_solved && _satisfiable);\n    \
+    \    assert(0 <= variable && variable < _n);\n        return _answer[variable];\n\
+    \    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 10 \"graph/directed.hpp\"\
+    \n\n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\
     \n\n#line 10 \"graph/grid.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
     \ Grid {\n   private:\n    int _h;\n    int _w;\n\n   public:\n    static constexpr\
     \ std::array<int, 4> di4 = {-1, 0, 1, 0};\n    static constexpr std::array<int,\
@@ -1167,6 +1244,7 @@ data:
   - graph/dijkstra.hpp
   - graph/warshall_floyd.hpp
   - graph/zero_one_bfs.hpp
+  - graph/two_sat.hpp
   - graph/grid.hpp
   - graph/undirected.hpp
   - graph/bipartite.hpp
@@ -1179,7 +1257,7 @@ data:
   isVerificationFile: false
   path: graph/all.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 02:34:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
@@ -1212,6 +1290,7 @@ individual graph includes. Flow-network algorithms live separately under
 | `graph/grid.hpp` | Undirected graph builder | Helper for converting 2D grid cells to graph vertex ids. |
 | `graph/topological_sort.hpp` | Directed only | DAG ordering and cycle check. |
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
+| `graph/two_sat.hpp` | Implication graph | 2-SAT clauses, satisfiability, and one assignment. |
 | `graph/lowlink.hpp` | Undirected only | Articulation points and bridges. |
 | `graph/bipartite.hpp` | Direction ignored / explicit bipartite sides | Two-colorability, maximum matching, minimum vertex cover, maximum independent set, and minimum edge cover. |
 | `graph/general_matching.hpp` | Undirected only | Maximum-cardinality matching and minimum edge cover in general undirected graphs. |
