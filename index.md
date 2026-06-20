@@ -129,6 +129,9 @@ data:
   - name: ds/ordered_set
     pages:
     - icon: ':heavy_check_mark:'
+      path: ds/ordered_set/binary_trie.hpp
+      title: Binary Trie
+    - icon: ':heavy_check_mark:'
       path: ds/ordered_set/ordered_multiset.hpp
       title: Ordered Multiset
     - icon: ':heavy_check_mark:'
@@ -568,6 +571,9 @@ data:
       title: verify/ds/hash_table/hash_set.test.cpp
   - name: verify/ds/ordered_set
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/ordered_set/binary_trie.test.cpp
+      title: verify/ds/ordered_set/binary_trie.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/ordered_set/ordered_multiset.test.cpp
       title: verify/ds/ordered_set/ordered_multiset.test.cpp
