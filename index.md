@@ -275,11 +275,26 @@ data:
   - name: math
     pages:
     - icon: ':heavy_check_mark:'
+      path: math/all.hpp
+      title: Math All
+    - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
     - icon: ':heavy_check_mark:'
+      path: math/combinatorics.hpp
+      title: Combinatorics
+    - icon: ':heavy_check_mark:'
       path: math/modint.hpp
       title: ModInt
+    - icon: ':heavy_check_mark:'
+      path: math/number_theory.hpp
+      title: Number Theory
+    - icon: ':heavy_check_mark:'
+      path: math/prime_factorization.hpp
+      title: 64-bit Prime Factorization
+    - icon: ':heavy_check_mark:'
+      path: math/prime_sieve.hpp
+      title: Prime Sieve
   - name: monoid
     pages:
     - icon: ':heavy_check_mark:'
@@ -634,6 +649,23 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/graph/library_checker_maximum_independent_set.test.cpp
       title: verify/graph/library_checker_maximum_independent_set.test.cpp
+  - name: verify/math
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/math/enumerate_primes.test.cpp
+      title: verify/math/enumerate_primes.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/factorize.test.cpp
+      title: verify/math/factorize.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/floor_sum.test.cpp
+      title: verify/math/floor_sum.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/math_algorithms.test.cpp
+      title: verify/math/math_algorithms.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/primality_test.test.cpp
+      title: verify/math/primality_test.test.cpp
   - name: verify/optimization
     pages:
     - icon: ':heavy_check_mark:'
