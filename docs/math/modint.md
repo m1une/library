@@ -7,6 +7,28 @@ documentation_of: ../../math/modint.hpp
 
 A struct for automatic modular arithmetic. It wraps standard integer types to safely and automatically apply modulo operations during addition, subtraction, multiplication, and division. This is highly useful in competitive programming to prevent integer overflow and simplify code syntax.
 
+Two integers represent the same modular value when their difference is
+divisible by the modulus. For example, modulo `7`, the values `2`, `9`, and
+`-5` are equivalent.
+
+`ModInt<7>` stores all of them as the normalized representative `2`.
+
+## Division and Modular Inverses
+
+Modular division is not ordinary integer division. Dividing by `b` means
+multiplying by a value `b.inv()` such that
+
+$$
+b \cdot b^{-1} \equiv 1 \pmod{\text{Modulus}}.
+$$
+
+For example, modulo `11`, the inverse of `3` is `4`, because
+$3 \cdot 4 = 12$ has remainder `1`.
+
+An inverse exists only when the value and modulus are coprime. In particular,
+with a prime modulus, every nonzero value has an inverse. This is why prime
+moduli such as `998244353` and `1000000007` are common in counting problems.
+
 ## Template Parameters
 
 * `Modulus`: A `uint32_t` representing the modulo value (e.g., `998244353` or `1000000007`).

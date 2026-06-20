@@ -1,0 +1,144 @@
+---
+title: Prime Sieve
+documentation_of: ../../math/prime_sieve.hpp
+---
+
+## Overview
+
+`PrimeSieve` builds a linear sieve and stores the smallest prime factor of every
+integer up to a chosen limit. It is intended for contests with many primality,
+factorization, divisor, totient, or Mobius queries in a bounded range.
+
+For example, after constructing `PrimeSieve(1000000)`, primality checks for any
+integer through one million take constant time, and factorizations repeatedly
+divide by a stored smallest prime factor.
+
+## What the Sieve Stores
+
+For each integer `x >= 2`, `min_prime_factor(x)` is the smallest prime dividing
+`x`.
+
+| `x` | Smallest prime factor |
+| --- | --- |
+| `2` | `2` |
+| `15` | `3` |
+| `49` | `7` |
+| `91` | `7` |
+
+A number `x >= 2` is prime exactly when its smallest prime factor is itself.
+
+To factor `360`, repeatedly divide by the smallest stored factor:
+
+```text
+360 / 2 = 180
+180 / 2 = 90
+ 90 / 2 = 45
+ 45 / 3 = 15
+ 15 / 3 = 5
+  5 / 5 = 1
+```
+
+Therefore $360 = 2^3 \cdot 3^2 \cdot 5$.
+
+## Construction
+
+```cpp
+explicit PrimeSieve(int limit = 0);
+```
+
+Construction takes $O(\text{limit})$ time and $O(\text{limit})$ memory.
+
+The implementation is a linear sieve: each composite number is generated from
+its smallest prime factor only once. This gives linear construction time,
+unlike the more familiar Eratosthenes analysis of $O(n \log \log n)$.
+
+## Euler's Totient Function
+
+`totient(x)` returns Euler's totient function $\varphi(x)$: the number of
+integers from `1` through `x` that are coprime to `x`.
+
+For example, `1`, `5`, `7`, and `11` are the four integers coprime to `12`, so
+`totient(12)` is `4`.
+
+From the distinct prime divisors of `x`, it is computed as
+
+$$
+\varphi(x) = x \prod_{p \mid x}\frac{p-1}{p}.
+$$
+
+Totients are useful for counting reduced fractions and for modular arithmetic,
+especially Euler's theorem. See `prime_factorization.hpp` for a longer
+explanation and examples.
+
+## Mobius Function
+
+`mobius(x)` returns:
+
+* `1` for `x = 1`;
+* `0` when some prime square divides `x`;
+* `1` or `-1` otherwise, depending on whether `x` has an even or odd number of
+  distinct prime factors.
+
+For example:
+
+* `mobius(6) = 1` because $6 = 2 \cdot 3$ has two distinct prime factors;
+* `mobius(30) = -1` because $30 = 2 \cdot 3 \cdot 5$ has three;
+* `mobius(12) = 0` because $2^2$ divides `12`.
+
+The Mobius function is mainly used for inclusion-exclusion over divisors and
+for counting objects whose gcd is exactly `1`. See `prime_factorization.hpp`
+for the Mobius inversion formula.
+
+## API
+
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `limit()` | Returns the sieve limit. | $O(1)$ |
+| `primes()` | Returns all primes up to the limit. | $O(1)$ |
+| `min_prime_factors()` | Returns the complete smallest-prime-factor table. | $O(1)$ |
+| `is_prime(x)` | Tests whether `x` is prime. | $O(1)$ |
+| `min_prime_factor(x)` | Returns the smallest prime divisor of `x`. | $O(1)$ |
+| `factorize(x)` | Returns `(prime, exponent)` pairs in increasing order. | $O(\log x)$ |
+| `divisors(x)` | Returns all positive divisors in increasing order. | $O(d(x) \log d(x))$ |
+| `totient(x)` | Returns Euler's totient function. | $O(\log x)$ |
+| `mobius(x)` | Returns the Mobius function. | $O(\log x)$ |
+| `totient_table()` | Returns totients for the whole sieve range. | $O(\text{limit})$ |
+| `mobius_table()` | Returns Mobius values for the whole sieve range. | $O(\text{limit})$ |
+
+Queries require their argument to be within the constructed range.
+
+`factorize(1)` returns an empty list, while `divisors(1)` returns a list
+containing only `1`.
+
+The table methods are useful when nearly every value in the range will be
+queried. Calling `totient(x)` or `mobius(x)` separately is usually preferable
+for only a few values.
+
+## When to Use This Instead of Pollard-Rho
+
+Use `PrimeSieve` when:
+
+* there are many queries;
+* every input is at most a known, manageable limit;
+* $O(\text{limit})$ memory is acceptable.
+
+Use `prime_factorization.hpp` when inputs may be large 64-bit values. It avoids
+the large table, but each factorization is more expensive.
+
+## Example
+
+```cpp
+#include "math/prime_sieve.hpp"
+
+#include <iostream>
+
+int main() {
+    m1une::math::PrimeSieve sieve(1000000);
+    for (const auto& factor : sieve.factorize(360)) {
+        std::cout << factor.first << " " << factor.second << "\n";
+    }
+
+    std::cout << sieve.totient(12) << "\n";  // 4
+    std::cout << sieve.mobius(30) << "\n";   // -1
+}
+```
