@@ -252,6 +252,23 @@ data:
     - icon: ':heavy_check_mark:'
       path: fps/multipoint_evaluation.hpp
       title: Multipoint Evaluation and Interpolation
+  - name: geometry
+    pages:
+    - icon: ':x:'
+      path: geometry/all.hpp
+      title: Geometry Bundle
+    - icon: ':x:'
+      path: geometry/circle.hpp
+      title: Circles
+    - icon: ':x:'
+      path: geometry/line.hpp
+      title: Lines and Segments
+    - icon: ':x:'
+      path: geometry/point.hpp
+      title: 2D Point and Predicates
+    - icon: ':x:'
+      path: geometry/polygon.hpp
+      title: Polygons and Convex Hull
   - name: graph
     pages:
     - icon: ':heavy_check_mark:'
@@ -746,6 +763,29 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/fps/pow_of_formal_power_series.test.cpp
       title: verify/fps/pow_of_formal_power_series.test.cpp
+  - name: verify/geometry
+    pages:
+    - icon: ':x:'
+      path: verify/geometry/circle_line_intersection.test.cpp
+      title: verify/geometry/circle_line_intersection.test.cpp
+    - icon: ':x:'
+      path: verify/geometry/convex_hull.test.cpp
+      title: verify/geometry/convex_hull.test.cpp
+    - icon: ':x:'
+      path: verify/geometry/geometry_algorithms.test.cpp
+      title: verify/geometry/geometry_algorithms.test.cpp
+    - icon: ':x:'
+      path: verify/geometry/point_in_polygon.test.cpp
+      title: verify/geometry/point_in_polygon.test.cpp
+    - icon: ':x:'
+      path: verify/geometry/polygon_area.test.cpp
+      title: verify/geometry/polygon_area.test.cpp
+    - icon: ':x:'
+      path: verify/geometry/projection.test.cpp
+      title: verify/geometry/projection.test.cpp
+    - icon: ':x:'
+      path: verify/geometry/segment_intersection.test.cpp
+      title: verify/geometry/segment_intersection.test.cpp
   - name: verify/graph
     pages:
     - icon: ':heavy_check_mark:'

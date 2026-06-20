@@ -19,6 +19,7 @@ contest.
 | `optimization/` | Cost-matrix and numeric optimization algorithms such as Hungarian assignment, simplex LP, and integer LP. |
 | `fps/` | Fast convolution, formal power series operations, multipoint evaluation, interpolation, and linear recurrences. |
 | `sequence/` | Sequence algorithms such as longest increasing subsequence and inversion counting. |
+| `geometry/` | 2D points, lines, segments, polygons, convex hulls, and circles. |
 | `ds/` | Categorized data structures for range queries, connectivity, dynamic sequences and trees, ordered sets, and hash tables. |
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
