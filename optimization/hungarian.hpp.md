@@ -2,22 +2,22 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/all.hpp
     title: Optimization All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/optimization/hungarian.test.cpp
     title: verify/optimization/hungarian.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/optimization/integer_lp.test.cpp
     title: verify/optimization/integer_lp.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/optimization/simplex.test.cpp
     title: verify/optimization/simplex.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"optimization/hungarian.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -136,7 +136,7 @@ data:
   requiredBy:
   - optimization/all.hpp
   timestamp: '2026-06-17 10:25:58+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/optimization/integer_lp.test.cpp
   - verify/optimization/simplex.test.cpp

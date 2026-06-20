@@ -1,17 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: graph/graph.hpp
+    title: Graph
+  - icon: ':x:'
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/maximum_independent_set
@@ -212,21 +215,22 @@ data:
     \    cout << independent.size() << '\\n';\n    for (int x : independent.vertices)\
     \ {\n        cout << x << ' ';\n    }\n    cout << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/maximum_independent_set\"\
-    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"graph/graph.hpp\"\
-    \n#include \"graph/maximum_clique.hpp\"\n\nint main() {\n    int N, M;\n    cin\
-    \ >> N >> M;\n    m1une::graph::Graph<> g(N);\n    while (M--) {\n        int\
-    \ u, v;\n        cin >> u >> v;\n        g.add_edge(u, v);\n    }\n    auto independent\
-    \ = m1une::graph::maximum_independent_set(g);\n    cout << independent.size()\
+    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../graph/graph.hpp\"\
+    \n#include \"../../graph/maximum_clique.hpp\"\n\nint main() {\n    int N, M;\n\
+    \    cin >> N >> M;\n    m1une::graph::Graph<> g(N);\n    while (M--) {\n    \
+    \    int u, v;\n        cin >> u >> v;\n        g.add_edge(u, v);\n    }\n   \
+    \ auto independent = m1une::graph::maximum_independent_set(g);\n    cout << independent.size()\
     \ << '\\n';\n    for (int x : independent.vertices) {\n        cout << x << '\
     \ ';\n    }\n    cout << '\\n';\n}\n"
   dependsOn:
   - graph/graph.hpp
   - graph/maximum_clique.hpp
+  - graph/graph.hpp
   isVerificationFile: true
   path: verify/graph/library_checker_maximum_independent_set.test.cpp
   requiredBy: []
-  timestamp: '2026-06-18 02:05:18+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/graph/library_checker_maximum_independent_set.test.cpp
 layout: document

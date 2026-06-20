@@ -1,10 +1,10 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   - icon: ':heavy_check_mark:'
@@ -103,8 +103,8 @@ data:
     \    std::cin >> l >> r;\n\n        std::cout << st.prod(l, r) << \"\\n\";\n \
     \   }\n\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/staticrmq\"\n\n#include\
-    \ \"ds/range_query/sparse_table.hpp\"\n#include \"monoid/min.hpp\"\n\n#include\
-    \ <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
+    \ \"../../../ds/range_query/sparse_table.hpp\"\n#include \"../../../monoid/min.hpp\"\
+    \n\n#include <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n}\n\nint main() {\n    fast_io();\n\n    int N, Q;\n\
     \    std::cin >> N >> Q;\n\n    std::vector<long long> A(N);\n    for (int i =\
     \ 0; i < N; ++i) {\n        std::cin >> A[i];\n    }\n\n    m1une::ds::SparseTable<m1une::monoid::Min<long\
@@ -118,7 +118,7 @@ data:
   isVerificationFile: true
   path: verify/ds/range_query/sparse_table.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/range_query/sparse_table.test.cpp

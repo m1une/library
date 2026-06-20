@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"tree/sparse_table_lca.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -207,9 +207,9 @@ data:
     \ m1une\n\n\n"
   code: "#ifndef M1UNE_TREE_SPARSE_TABLE_LCA_HPP\n#define M1UNE_TREE_SPARSE_TABLE_LCA_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <limits>\n#include <utility>\n\
-    #include <vector>\n\n#include \"ds/range_query/sparse_table.hpp\"\n#include \"\
-    graph/graph.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\ntemplate <class T\
-    \ = int>\nstruct SparseTableLca {\n    using cost_type = T;\n    using edge_type\
+    #include <vector>\n\n#include \"../ds/range_query/sparse_table.hpp\"\n#include\
+    \ \"../graph/graph.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\ntemplate <class\
+    \ T = int>\nstruct SparseTableLca {\n    using cost_type = T;\n    using edge_type\
     \ = m1une::graph::Edge<T>;\n\n    int root;\n    std::vector<int> parent;\n  \
     \  std::vector<int> parent_edge;\n    std::vector<int> depth;\n    std::vector<T>\
     \ dist;\n    std::vector<int> subtree_size;\n    std::vector<int> tin;\n    std::vector<int>\
@@ -273,8 +273,8 @@ data:
   requiredBy:
   - tree/all.hpp
   - tree/tree.hpp
-  timestamp: '2026-06-20 20:05:21+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp

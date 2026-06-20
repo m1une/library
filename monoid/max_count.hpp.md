@@ -42,7 +42,7 @@ data:
     #include <limits>
 
 
-    #include "monoid/min_count.hpp"
+    #include "min_count.hpp"
 
 
     namespace m1une {
@@ -72,7 +72,7 @@ data:
   isVerificationFile: false
   path: monoid/max_count.hpp
   requiredBy: []
-  timestamp: '2026-06-20 02:38:39+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/max_count.hpp

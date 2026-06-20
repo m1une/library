@@ -169,11 +169,11 @@ data:
     \ std::cin >> l >> r >> k;\n        std::cout << matrix.kth_smallest(l, r, k)\
     \ << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n\
-    #include \"ds/range_query/wavelet_matrix.hpp\"\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n#include\
-    \ <optional>\n#include <vector>\n\nnamespace {\n\nvoid test_edge_cases() {\n \
-    \   m1une::ds::WaveletMatrix<long long> empty;\n    assert(empty.empty());\n \
-    \   assert(empty.size() == 0);\n\n    std::vector<long long> values;\n    values.push_back(std::numeric_limits<long\
+    #include \"../../../ds/range_query/wavelet_matrix.hpp\"\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n\
+    #include <optional>\n#include <vector>\n\nnamespace {\n\nvoid test_edge_cases()\
+    \ {\n    m1une::ds::WaveletMatrix<long long> empty;\n    assert(empty.empty());\n\
+    \    assert(empty.size() == 0);\n\n    std::vector<long long> values;\n    values.push_back(std::numeric_limits<long\
     \ long>::min());\n    values.push_back(-5);\n    values.push_back(0);\n    values.push_back(-5);\n\
     \    values.push_back(std::numeric_limits<long long>::max());\n\n    m1une::ds::WaveletMatrix<long\
     \ long> matrix(values);\n    assert(matrix.size() == 5);\n    assert(!matrix.empty());\n\
@@ -230,7 +230,7 @@ data:
   isVerificationFile: true
   path: verify/ds/range_query/wavelet_matrix.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:25:15+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/range_query/wavelet_matrix.test.cpp

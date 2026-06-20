@@ -307,8 +307,8 @@ data:
   code: "#ifndef M1UNE_PERSISTENT_DYNAMIC_LAZY_MONOID_ARRAY_HPP\n#define M1UNE_PERSISTENT_DYNAMIC_LAZY_MONOID_ARRAY_HPP\
     \ 1\n\n#include <cassert>\n#include <chrono>\n#include <concepts>\n#include <cstdint>\n\
     #include <initializer_list>\n#include <memory>\n#include <utility>\n#include <vector>\n\
-    \n#include \"acted_monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\
-    \ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\nstruct PersistentDynamicLazyMonoidArray\
+    \n#include \"../../acted_monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ ds {\n\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\nstruct PersistentDynamicLazyMonoidArray\
     \ {\n    using T = typename ActedMonoid::value_type;\n    using F = typename ActedMonoid::operator_type;\n\
     \n   private:\n    struct Node {\n        T val, prod, rprod;\n        F lazy;\n\
     \        int priority;\n        int count;\n        int l, r;\n        bool rev;\n\
@@ -579,7 +579,7 @@ data:
   isVerificationFile: false
   path: ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp

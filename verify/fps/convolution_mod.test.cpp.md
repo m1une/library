@@ -1,10 +1,13 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
+    path: math/modint.hpp
+    title: ModInt
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
@@ -171,21 +174,22 @@ data:
     \ b);\n    for (int i = 0; i < int(result.size()); i++) {\n        if (i) std::cout\
     \ << ' ';\n        std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/convolution_mod\"\n\n#include\
-    \ <iostream>\n#include <vector>\n\n#include \"fps/convolution.hpp\"\n#include\
-    \ \"math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\nint main()\
-    \ {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n   \
-    \ int n, m;\n    std::cin >> n >> m;\n    std::vector<mint> a(n), b(m);\n    for\
-    \ (mint& value : a) std::cin >> value;\n    for (mint& value : b) std::cin >>\
-    \ value;\n    std::vector<mint> result = m1une::fps::convolution(a, b);\n    for\
-    \ (int i = 0; i < int(result.size()); i++) {\n        if (i) std::cout << ' ';\n\
-    \        std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
+    \ <iostream>\n#include <vector>\n\n#include \"../../fps/convolution.hpp\"\n#include\
+    \ \"../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\n\
+    int main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    int n, m;\n    std::cin >> n >> m;\n    std::vector<mint> a(n), b(m);\n\
+    \    for (mint& value : a) std::cin >> value;\n    for (mint& value : b) std::cin\
+    \ >> value;\n    std::vector<mint> result = m1une::fps::convolution(a, b);\n \
+    \   for (int i = 0; i < int(result.size()); i++) {\n        if (i) std::cout <<\
+    \ ' ';\n        std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
   dependsOn:
   - fps/convolution.hpp
+  - math/modint.hpp
   - math/modint.hpp
   isVerificationFile: true
   path: verify/fps/convolution_mod.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 07:30:52+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/fps/convolution_mod.test.cpp

@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/manacher.hpp
     title: Manacher Algorithm
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/prefix_function.hpp
     title: Prefix Function and KMP
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: string/rolling_hash.hpp
     title: Static Rolling Hash
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/suffix_array.hpp
     title: Suffix Array and LCP Array
-  - icon: ':question:'
+  - icon: ':x:'
     path: string/trie.hpp
     title: Trie
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/z_algorithm.hpp
     title: Z Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/string/string_algorithms.test.cpp
     title: verify/string/string_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"string/all.hpp\"\n\n\n\n#line 1 \"string/manacher.hpp\"\n\
@@ -279,17 +279,17 @@ data:
     #define M1UNE_STRING_ALL_HPP 1
 
 
-    #include "string/manacher.hpp"
+    #include "manacher.hpp"
 
-    #include "string/prefix_function.hpp"
+    #include "prefix_function.hpp"
 
-    #include "string/rolling_hash.hpp"
+    #include "rolling_hash.hpp"
 
-    #include "string/suffix_array.hpp"
+    #include "suffix_array.hpp"
 
-    #include "string/trie.hpp"
+    #include "trie.hpp"
 
-    #include "string/z_algorithm.hpp"
+    #include "z_algorithm.hpp"
 
 
     #endif  // M1UNE_STRING_ALL_HPP
@@ -305,8 +305,8 @@ data:
   isVerificationFile: false
   path: string/all.hpp
   requiredBy: []
-  timestamp: '2026-06-21 02:49:46+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/string/string_algorithms.test.cpp
 documentation_of: string/all.hpp

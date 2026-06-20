@@ -1,20 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
+    path: math/modint.hpp
+    title: ModInt
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/polynomial_taylor_shift
@@ -310,9 +313,9 @@ data:
     \    for (int i = 0; i < n; i++) {\n        if (i) std::cout << ' ';\n       \
     \ std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/polynomial_taylor_shift\"\
-    \n\n#include <iostream>\n\n#include \"fps/formal_power_series.hpp\"\n#include\
-    \ \"math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\nusing Fps\
-    \ = m1une::fps::FormalPowerSeries<mint>;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
+    \n\n#include <iostream>\n\n#include \"../../fps/formal_power_series.hpp\"\n#include\
+    \ \"../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\nusing\
+    \ Fps = m1une::fps::FormalPowerSeries<mint>;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n\n    int n;\n    mint shift;\n    std::cin >> n\
     \ >> shift;\n    Fps a(n);\n    for (mint& value : a) std::cin >> value;\n   \
     \ Fps result = a.taylor_shift(shift);\n    for (int i = 0; i < n; i++) {\n   \
@@ -322,11 +325,12 @@ data:
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
+  - math/modint.hpp
   isVerificationFile: true
   path: verify/fps/polynomial_taylor_shift.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/fps/polynomial_taylor_shift.test.cpp
 layout: document

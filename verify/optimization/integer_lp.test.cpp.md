@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/all.hpp
     title: Optimization All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/hungarian.hpp
     title: Hungarian Algorithm
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/integer_lp.hpp
     title: Integer Linear Programming
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/simplex.hpp
     title: Simplex Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -389,7 +389,7 @@ data:
     \    test_no_variables();\n    test_against_bruteforce();\n\n    long long a,\
     \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <limits>\n#include <vector>\n\n#include \"optimization/all.hpp\"\
+    #include <iostream>\n#include <limits>\n#include <vector>\n\n#include \"../../optimization/all.hpp\"\
     \n\nlong long evaluate(const std::vector<long long>& c, const std::vector<long\
     \ long>& x) {\n    long long result = 0;\n    for (int i = 0; i < int(c.size());\
     \ i++) result += c[i] * x[i];\n    return result;\n}\n\nbool feasible(const std::vector<std::vector<long\
@@ -478,8 +478,8 @@ data:
   isVerificationFile: true
   path: verify/optimization/integer_lp.test.cpp
   requiredBy: []
-  timestamp: '2026-06-18 01:38:25+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/optimization/integer_lp.test.cpp
 layout: document

@@ -165,7 +165,7 @@ data:
     \ double> result = projection(line, point);\n        std::cout << result.x <<\
     \ \" \" << result.y << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A\"\
-    \n\n#include \"geometry/line.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
+    \n\n#include \"../../geometry/line.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
     \nint main() {\n    using namespace m1une::geometry;\n    Line<long double> line;\n\
     \    std::cin >> line.a.x >> line.a.y >> line.b.x >> line.b.y;\n\n    int q;\n\
     \    std::cin >> q;\n    std::cout << std::fixed << std::setprecision(15);\n \
@@ -178,7 +178,7 @@ data:
   isVerificationFile: true
   path: verify/geometry/projection.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/geometry/projection.test.cpp

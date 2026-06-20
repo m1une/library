@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/dsu/dsu.hpp
     title: DSU (Disjoint Set Union)
   _extendedRequiredBy: []
@@ -49,18 +49,18 @@ data:
     \    if (t == 0) {\n            dsu.merge(u, v);\n        } else {\n         \
     \   cout << (int)dsu.same(u, v) << '\\n';\n        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/unionfind\"\n\n#include\
-    \ <bits/stdc++.h>\n#include \"ds/dsu/dsu.hpp\"\nusing namespace std;\n\nint main()\
-    \ {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int N,\
-    \ Q;\n    cin >> N >> Q;\n    m1une::ds::Dsu dsu(N);\n    for (int q = 0; q <\
-    \ Q; ++q) {\n        int t, u, v;\n        cin >> t >> u >> v;\n        if (t\
-    \ == 0) {\n            dsu.merge(u, v);\n        } else {\n            cout <<\
-    \ (int)dsu.same(u, v) << '\\n';\n        }\n    }\n}\n"
+    \ <bits/stdc++.h>\n#include \"../../../ds/dsu/dsu.hpp\"\nusing namespace std;\n\
+    \nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n\
+    \    int N, Q;\n    cin >> N >> Q;\n    m1une::ds::Dsu dsu(N);\n    for (int q\
+    \ = 0; q < Q; ++q) {\n        int t, u, v;\n        cin >> t >> u >> v;\n    \
+    \    if (t == 0) {\n            dsu.merge(u, v);\n        } else {\n         \
+    \   cout << (int)dsu.same(u, v) << '\\n';\n        }\n    }\n}\n"
   dependsOn:
   - ds/dsu/dsu.hpp
   isVerificationFile: true
   path: verify/ds/dsu/dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/dsu.test.cpp

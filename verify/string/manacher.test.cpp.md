@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/manacher.hpp
     title: Manacher Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/enumerate_palindromes
@@ -57,7 +57,7 @@ data:
     \       std::cout << 2 * result.odd[center / 2] - 1;\n        }\n    }\n    std::cout\
     \ << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/enumerate_palindromes\"\
-    \n\n#include \"string/manacher.hpp\"\n\n#include <iostream>\n#include <string>\n\
+    \n\n#include \"../../string/manacher.hpp\"\n\n#include <iostream>\n#include <string>\n\
     \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    std::string text;\n    std::cin >> text;\n    m1une::string::ManacherResult\
     \ result = m1une::string::manacher(text);\n\n    for (int center = 0; center <\
@@ -70,8 +70,8 @@ data:
   isVerificationFile: true
   path: verify/string/manacher.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:43:08+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/string/manacher.test.cpp
 layout: document

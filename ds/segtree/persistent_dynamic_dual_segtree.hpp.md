@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/dynamic_segtree_common.hpp
     title: ds/segtree/dynamic_segtree_common.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -187,10 +187,10 @@ data:
   code: "#ifndef M1UNE_PERSISTENT_DYNAMIC_DUAL_SEGTREE_HPP\n#define M1UNE_PERSISTENT_DYNAMIC_DUAL_SEGTREE_HPP\
     \ 1\n\n#include <cassert>\n#include <concepts>\n#include <cstddef>\n#include <limits>\n\
     #include <memory>\n#include <numeric>\n#include <type_traits>\n#include <utility>\n\
-    #include <vector>\n\n#include \"ds/segtree/dynamic_segtree_common.hpp\"\n#include\
-    \ \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\n// A persistent\
-    \ sparse dual segment tree over an integral half-open interval.\ntemplate <m1une::monoid::IsMonoid\
-    \ Monoid, std::integral Index = long long>\nrequires(!std::same_as<std::remove_cv_t<Index>,\
+    #include <vector>\n\n#include \"dynamic_segtree_common.hpp\"\n#include \"../../monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace ds {\n\n// A persistent sparse dual segment tree\
+    \ over an integral half-open interval.\ntemplate <m1une::monoid::IsMonoid Monoid,\
+    \ std::integral Index = long long>\nrequires(!std::same_as<std::remove_cv_t<Index>,\
     \ bool>)\nstruct PersistentDynamicDualSegtree {\n    using T = typename Monoid::value_type;\n\
     \    using index_type = Index;\n    using size_type = detail::dynamic_size_type<Index>;\n\
     \n   private:\n    struct Node {\n        T val;\n        int left;\n        int\
@@ -293,7 +293,7 @@ data:
   isVerificationFile: false
   path: ds/segtree/persistent_dynamic_dual_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp

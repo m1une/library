@@ -264,20 +264,21 @@ data:
     \    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n\
     }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <vector>\n\n#include \"acted_monoid/range_add_range_sum.hpp\"\
-    \n#include \"ds/dynamic_tree/lazy_path_link_cut_tree.hpp\"\n\nusing AddSum = m1une::acted_monoid::RangeAddRangeSum<long\
-    \ long>;\nusing Node = AddSum::value_type;\n\nvoid test_vertex_path_updates()\
-    \ {\n    m1une::ds::LazyPathLinkCutTree<AddSum> lct(std::vector<long long>{1,\
-    \ 2, 3, 4, 5});\n\n    assert(lct.size() == 5);\n    assert(!lct.empty());\n \
-    \   assert(lct.link(0, 1));\n    assert(lct.link(1, 2));\n    assert(lct.link(1,\
-    \ 3));\n    assert(lct.link(3, 4));\n\n    Node path = lct.prod(2, 4);\n    assert(path.sum\
-    \ == 14);\n    assert(path.size == 4);\n    assert(lct.path_size(2, 4) == 4);\n\
-    \    assert(lct.kth_vertex(2, 4, 2) == 3);\n\n    lct.apply(2, 4, 10);\n    path\
-    \ = lct.prod(2, 4);\n    assert(path.sum == 54);\n    assert(path.size == 4);\n\
-    \    assert(lct.get(1).sum == 12);\n    assert(lct.get(0).sum == 1);\n\n    lct.apply(0,\
-    \ 3);\n    assert(lct[0].sum == 4);\n    lct.set(3, 100);\n    path = lct.path_prod(2,\
-    \ 4);\n    assert(path.sum == 140);\n\n    assert(lct.cut(1, 3));\n    assert(!lct.connected(2,\
-    \ 4));\n}\n\nvoid test_edge_path_updates() {\n    m1une::ds::LazyPathLinkCutTree<AddSum>\
+    #include <iostream>\n#include <vector>\n\n#include \"../../../acted_monoid/range_add_range_sum.hpp\"\
+    \n#include \"../../../ds/dynamic_tree/lazy_path_link_cut_tree.hpp\"\n\nusing AddSum\
+    \ = m1une::acted_monoid::RangeAddRangeSum<long long>;\nusing Node = AddSum::value_type;\n\
+    \nvoid test_vertex_path_updates() {\n    m1une::ds::LazyPathLinkCutTree<AddSum>\
+    \ lct(std::vector<long long>{1, 2, 3, 4, 5});\n\n    assert(lct.size() == 5);\n\
+    \    assert(!lct.empty());\n    assert(lct.link(0, 1));\n    assert(lct.link(1,\
+    \ 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3, 4));\n\n    Node path\
+    \ = lct.prod(2, 4);\n    assert(path.sum == 14);\n    assert(path.size == 4);\n\
+    \    assert(lct.path_size(2, 4) == 4);\n    assert(lct.kth_vertex(2, 4, 2) ==\
+    \ 3);\n\n    lct.apply(2, 4, 10);\n    path = lct.prod(2, 4);\n    assert(path.sum\
+    \ == 54);\n    assert(path.size == 4);\n    assert(lct.get(1).sum == 12);\n  \
+    \  assert(lct.get(0).sum == 1);\n\n    lct.apply(0, 3);\n    assert(lct[0].sum\
+    \ == 4);\n    lct.set(3, 100);\n    path = lct.path_prod(2, 4);\n    assert(path.sum\
+    \ == 140);\n\n    assert(lct.cut(1, 3));\n    assert(!lct.connected(2, 4));\n\
+    }\n\nvoid test_edge_path_updates() {\n    m1une::ds::LazyPathLinkCutTree<AddSum>\
     \ lct(3);\n\n    int e01 = lct.link_edge(0, 1, 5);\n    int e12 = lct.link_edge(1,\
     \ 2, 7);\n    assert(e01 == 0);\n    assert(e12 == 1);\n    assert(lct.edge_count()\
     \ == 2);\n    assert(lct.edge_alive(e01));\n    assert(lct.edge_node(e01) >= 3);\n\
@@ -300,7 +301,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp

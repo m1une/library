@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -127,10 +127,10 @@ data:
   code: "#ifndef M1UNE_DYNAMIC_SEGTREE_HPP\n#define M1UNE_DYNAMIC_SEGTREE_HPP 1\n\n\
     #include <array>\n#include <cassert>\n#include <concepts>\n#include <cstddef>\n\
     #include <limits>\n#include <numeric>\n#include <type_traits>\n#include <utility>\n\
-    #include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ ds {\n\n// A sparse segment tree over an integral half-open interval.\n// Nodes\
-    \ are allocated from a contiguous pool only when a position is touched.\ntemplate\
-    \ <m1une::monoid::IsMonoid Monoid, std::integral Index = long long>\nrequires(!std::same_as<std::remove_cv_t<Index>,\
+    #include <vector>\n\n#include \"../../monoid/concept.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace ds {\n\n// A sparse segment tree over an integral half-open interval.\n\
+    // Nodes are allocated from a contiguous pool only when a position is touched.\n\
+    template <m1une::monoid::IsMonoid Monoid, std::integral Index = long long>\nrequires(!std::same_as<std::remove_cv_t<Index>,\
     \ bool>)\nstruct DynamicSegtree {\n    using T = typename Monoid::value_type;\n\
     \    using index_type = Index;\n    using size_type = std::make_unsigned_t<Index>;\n\
     \n   private:\n    struct Node {\n        T val;\n        int left;\n        int\
@@ -225,7 +225,7 @@ data:
   isVerificationFile: false
   path: ds/segtree/dynamic_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/dynamic_segtree.test.cpp

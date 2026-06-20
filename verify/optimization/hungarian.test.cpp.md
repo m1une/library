@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/hungarian.hpp
     title: Hungarian Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -128,7 +128,7 @@ data:
     \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <limits>\n#include <vector>\n\
-    \n#include \"optimization/hungarian.hpp\"\n\nlong long brute_min(const std::vector<std::vector<long\
+    \n#include \"../../optimization/hungarian.hpp\"\n\nlong long brute_min(const std::vector<std::vector<long\
     \ long>>& cost) {\n    int h = int(cost.size());\n    int w = h == 0 ? 0 : int(cost[0].size());\n\
     \    if (h == 0 || w == 0) return 0;\n\n    long long best = std::numeric_limits<long\
     \ long>::max() / 4;\n    if (h <= w) {\n        std::vector<int> perm(w);\n  \
@@ -187,8 +187,8 @@ data:
   isVerificationFile: true
   path: verify/optimization/hungarian.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 10:25:58+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/optimization/hungarian.test.cpp
 layout: document

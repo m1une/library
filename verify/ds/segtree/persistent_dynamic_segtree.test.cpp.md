@@ -10,7 +10,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -288,31 +288,31 @@ data:
     \    test_extreme_coordinates();\n    test_randomized();\n\n    long long a, b;\n\
     \    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/segtree/persistent_dynamic_segtree.hpp\"\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n#include\
-    \ <string>\n#include <vector>\n\n#include \"monoid/add.hpp\"\n\nnamespace {\n\n\
-    struct Concat {\n    using value_type = std::string;\n\n    static value_type\
-    \ id() {\n        return \"\";\n    }\n\n    static value_type op(const value_type&\
-    \ a, const value_type& b) {\n        return a + b;\n    }\n};\n\nvoid test_versions()\
-    \ {\n    using Sum = m1une::monoid::Add<long long>;\n    using Seg = m1une::ds::PersistentDynamicSegtree<Sum>;\n\
-    \n    Seg base(-1'000'000'000'000'000'000LL, 1'000'000'000'000'000'000LL, 0);\n\
-    \    base.reserve(4096);\n    Seg first = base.set(-3, 2);\n    Seg second = first.set(2,\
-    \ 4);\n    Seg branch = base.set(7, 10);\n\n    assert(base.size() == 2'000'000'000'000'000'000ULL);\n\
-    \    assert(base.node_count() == branch.node_count());\n    assert(base.all_prod()\
-    \ == 0);\n    assert(first.all_prod() == 2);\n    assert(second.all_prod() ==\
-    \ 6);\n    assert(branch.all_prod() == 10);\n    assert(base.get(-3) == 0);\n\
-    \    assert(first.get(-3) == 2);\n    assert(second.get(2) == 4);\n    assert(branch.get(7)\
-    \ == 10);\n    assert(second.prod(-4, 3) == 6);\n    assert(second.max_right(-8,\
-    \ [](long long x) { return x <= 3; }) == 2);\n    assert(second.min_left(8, [](long\
-    \ long x) { return x <= 4; }) == -2);\n}\n\nvoid test_uniform_and_non_commutative()\
-    \ {\n    using Sum = m1une::monoid::Add<long long>;\n    using Seg = m1une::ds::PersistentDynamicSegtree<Sum,\
-    \ int>;\n\n    Seg uniform(-5, 6, 3);\n    assert(uniform.all_prod() == 33);\n\
-    \    assert(uniform.prod(-2, 4) == 18);\n    Seg changed = uniform.set(0, 10);\n\
-    \    assert(uniform.all_prod() == 33);\n    assert(changed.all_prod() == 40);\n\
-    \n    m1une::ds::PersistentDynamicSegtree<Concat, int> text(-2, 3, \"x\");\n \
-    \   auto first = text.set(1, \"a\");\n    auto second = first.set(-1, \"b\");\n\
-    \    assert(text.all_prod() == \"xxxxx\");\n    assert(first.all_prod() == \"\
-    xxxax\");\n    assert(second.all_prod() == \"xbxax\");\n}\n\nvoid test_extreme_coordinates()\
+    ../../../ds/segtree/persistent_dynamic_segtree.hpp\"\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n\
+    #include <string>\n#include <vector>\n\n#include \"../../../monoid/add.hpp\"\n\
+    \nnamespace {\n\nstruct Concat {\n    using value_type = std::string;\n\n    static\
+    \ value_type id() {\n        return \"\";\n    }\n\n    static value_type op(const\
+    \ value_type& a, const value_type& b) {\n        return a + b;\n    }\n};\n\n\
+    void test_versions() {\n    using Sum = m1une::monoid::Add<long long>;\n    using\
+    \ Seg = m1une::ds::PersistentDynamicSegtree<Sum>;\n\n    Seg base(-1'000'000'000'000'000'000LL,\
+    \ 1'000'000'000'000'000'000LL, 0);\n    base.reserve(4096);\n    Seg first = base.set(-3,\
+    \ 2);\n    Seg second = first.set(2, 4);\n    Seg branch = base.set(7, 10);\n\n\
+    \    assert(base.size() == 2'000'000'000'000'000'000ULL);\n    assert(base.node_count()\
+    \ == branch.node_count());\n    assert(base.all_prod() == 0);\n    assert(first.all_prod()\
+    \ == 2);\n    assert(second.all_prod() == 6);\n    assert(branch.all_prod() ==\
+    \ 10);\n    assert(base.get(-3) == 0);\n    assert(first.get(-3) == 2);\n    assert(second.get(2)\
+    \ == 4);\n    assert(branch.get(7) == 10);\n    assert(second.prod(-4, 3) == 6);\n\
+    \    assert(second.max_right(-8, [](long long x) { return x <= 3; }) == 2);\n\
+    \    assert(second.min_left(8, [](long long x) { return x <= 4; }) == -2);\n}\n\
+    \nvoid test_uniform_and_non_commutative() {\n    using Sum = m1une::monoid::Add<long\
+    \ long>;\n    using Seg = m1une::ds::PersistentDynamicSegtree<Sum, int>;\n\n \
+    \   Seg uniform(-5, 6, 3);\n    assert(uniform.all_prod() == 33);\n    assert(uniform.prod(-2,\
+    \ 4) == 18);\n    Seg changed = uniform.set(0, 10);\n    assert(uniform.all_prod()\
+    \ == 33);\n    assert(changed.all_prod() == 40);\n\n    m1une::ds::PersistentDynamicSegtree<Concat,\
+    \ int> text(-2, 3, \"x\");\n    auto first = text.set(1, \"a\");\n    auto second\
+    \ = first.set(-1, \"b\");\n    assert(text.all_prod() == \"xxxxx\");\n    assert(first.all_prod()\
+    \ == \"xxxax\");\n    assert(second.all_prod() == \"xbxax\");\n}\n\nvoid test_extreme_coordinates()\
     \ {\n    using Sum = m1une::monoid::Add<long long>;\n    using Seg = m1une::ds::PersistentDynamicSegtree<Sum>;\n\
     \n    constexpr long long left = std::numeric_limits<long long>::min();\n    constexpr\
     \ long long right = std::numeric_limits<long long>::max();\n    Seg base(left,\
@@ -361,7 +361,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/persistent_dynamic_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/persistent_dynamic_segtree.test.cpp

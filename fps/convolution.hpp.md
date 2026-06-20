@@ -1,74 +1,74 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/all.hpp
     title: Formal Power Series All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/all.hpp
     title: Math All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/fps/convolution_mod.test.cpp
     title: verify/fps/convolution_mod.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/exp_of_formal_power_series.test.cpp
     title: verify/fps/exp_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/fps_algorithms.test.cpp
     title: verify/fps/fps_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/inv_of_formal_power_series.test.cpp
     title: verify/fps/inv_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
     title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/multipoint_evaluation.test.cpp
     title: verify/fps/multipoint_evaluation.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/polynomial_interpolation.test.cpp
     title: verify/fps/polynomial_interpolation.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/polynomial_taylor_shift.test.cpp
     title: verify/fps/polynomial_taylor_shift.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/pow_of_formal_power_series.test.cpp
     title: verify/fps/pow_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/bell_number.test.cpp
     title: verify/math/bell_number.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/bernoulli_number.test.cpp
     title: verify/math/bernoulli_number.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"fps/convolution.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -219,7 +219,7 @@ data:
     }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_FPS_CONVOLUTION_HPP\n#define M1UNE_FPS_CONVOLUTION_HPP 1\n\n\
     #include <algorithm>\n#include <array>\n#include <cassert>\n#include <cstdint>\n\
-    #include <utility>\n#include <vector>\n\n#include \"math/modint.hpp\"\n\nnamespace\
+    #include <utility>\n#include <vector>\n\n#include \"../math/modint.hpp\"\n\nnamespace\
     \ m1une {\nnamespace fps {\n\nnamespace internal {\n\nconstexpr uint32_t primitive_root_constexpr(uint32_t\
     \ mod) {\n    if (mod == 2) return 1;\n    if (mod == 167772161) return 3;\n \
     \   if (mod == 469762049) return 3;\n    if (mod == 754974721) return 11;\n  \
@@ -325,8 +325,8 @@ data:
   - fps/all.hpp
   - fps/multipoint_evaluation.hpp
   - fps/linear_recurrence.hpp
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp

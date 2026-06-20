@@ -19,7 +19,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/dynamic_segtree_common.hpp
     title: ds/segtree/dynamic_segtree_common.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
@@ -456,10 +456,10 @@ data:
     \ r;\n            std::cout << seg.prod(l, r).sum << '\\n';\n        }\n    }\n\
     }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\
-    \n\n#include \"ds/segtree/dynamic_lazy_segtree.hpp\"\n\n#include <algorithm>\n\
+    \n\n#include \"../../../ds/segtree/dynamic_lazy_segtree.hpp\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\
-    \n#include \"acted_monoid/range_add_range_sum.hpp\"\n#include \"acted_monoid/range_affine_range_sum.hpp\"\
-    \n#include \"acted_monoid/range_ap_add_range_sum.hpp\"\n#include \"math/modint.hpp\"\
+    \n#include \"../../../acted_monoid/range_add_range_sum.hpp\"\n#include \"../../../acted_monoid/range_affine_range_sum.hpp\"\
+    \n#include \"../../../acted_monoid/range_ap_add_range_sum.hpp\"\n#include \"../../../math/modint.hpp\"\
     \n\nnamespace {\n\nvoid test_range_add() {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long\
     \ long>;\n    using Seg = m1une::ds::DynamicLazySegtree<AM>;\n\n    Seg seg(-1'000'000'000'000'000'000LL,\
     \ 1'000'000'000'000'000'000LL, AM::make(0));\n    assert(seg.size() == 2'000'000'000'000'000'000ULL);\n\
@@ -550,7 +550,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/dynamic_lazy_segtree.test.cpp

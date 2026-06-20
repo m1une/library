@@ -4,16 +4,16 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/dual_segtree.hpp
     title: Dual Segment Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   - icon: ':heavy_check_mark:'
     path: monoid/affine.hpp
     title: Affine Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -188,21 +188,22 @@ data:
     \ {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    solve();\n \
     \   return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_point_get\"\
-    \n\n#include \"ds/segtree/dual_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\n#include\
-    \ \"math/modint.hpp\"\n#include \"monoid/affine.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
-    using Affine = m1une::monoid::Affine<mint>;\n\nusing namespace std;\nusing ll\
-    \ = long long;\n\nvoid solve() {\n    ll N, Q;\n    cin >> N >> Q;\n    vector<Affine::value_type>\
-    \ a(N);\n    for (int i = 0; i < N; ++i) {\n        ll x;\n        cin >> x;\n\
-    \        a[i] = {0, x};\n    }\n\n    m1une::ds::DualSegtree<Affine> seg(a);\n\
-    \    assert(seg.size() == N);\n    assert(seg.empty() == (N == 0));\n    auto\
-    \ values = seg.to_vector();\n    assert(int(values.size()) == N);\n    for (int\
-    \ i = 0; i < N; i++) {\n        assert(values[i].second == a[i].second);\n   \
-    \ }\n    for (int q = 0; q < Q; ++q) {\n        ll t;\n        cin >> t;\n   \
-    \     if (t == 0) {\n            ll l, r, b, c;\n            cin >> l >> r >>\
-    \ b >> c;\n            seg.apply(l, r, {b, c});\n        } else {\n          \
-    \  ll i;\n            cin >> i;\n            cout << seg.get(i).second << '\\\
-    n';\n        }\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n \
-    \   cin.tie(nullptr);\n    solve();\n    return 0;\n}\n"
+    \n\n#include \"../../../ds/segtree/dual_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\
+    \n#include \"../../../math/modint.hpp\"\n#include \"../../../monoid/affine.hpp\"\
+    \n\nusing mint = m1une::math::modint998244353;\nusing Affine = m1une::monoid::Affine<mint>;\n\
+    \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
+    \    cin >> N >> Q;\n    vector<Affine::value_type> a(N);\n    for (int i = 0;\
+    \ i < N; ++i) {\n        ll x;\n        cin >> x;\n        a[i] = {0, x};\n  \
+    \  }\n\n    m1une::ds::DualSegtree<Affine> seg(a);\n    assert(seg.size() == N);\n\
+    \    assert(seg.empty() == (N == 0));\n    auto values = seg.to_vector();\n  \
+    \  assert(int(values.size()) == N);\n    for (int i = 0; i < N; i++) {\n     \
+    \   assert(values[i].second == a[i].second);\n    }\n    for (int q = 0; q < Q;\
+    \ ++q) {\n        ll t;\n        cin >> t;\n        if (t == 0) {\n          \
+    \  ll l, r, b, c;\n            cin >> l >> r >> b >> c;\n            seg.apply(l,\
+    \ r, {b, c});\n        } else {\n            ll i;\n            cin >> i;\n  \
+    \          cout << seg.get(i).second << '\\n';\n        }\n    }\n}\n\nint main()\
+    \ {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    solve();\n \
+    \   return 0;\n}\n"
   dependsOn:
   - ds/segtree/dual_segtree.hpp
   - math/bit_ceil.hpp
@@ -212,7 +213,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/dual_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/dual_segtree.test.cpp

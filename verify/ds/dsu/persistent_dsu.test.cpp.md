@@ -121,9 +121,9 @@ data:
     \        versions.push_back({next, next_expected});\n    }\n\n    long long x,\
     \ y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/dsu/persistent_dsu.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include\
-    \ <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\nstruct\
-    \ NaiveDsu {\n    std::vector<int> parent_or_size;\n\n    explicit NaiveDsu(int\
+    ../../../ds/dsu/persistent_dsu.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
+    #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
+    \nstruct NaiveDsu {\n    std::vector<int> parent_or_size;\n\n    explicit NaiveDsu(int\
     \ n = 0) : parent_or_size(n, -1) {}\n\n    int leader(int a) const {\n       \
     \ while (parent_or_size[a] >= 0) a = parent_or_size[a];\n        return a;\n \
     \   }\n\n    bool same(int a, int b) const {\n        return leader(a) == leader(b);\n\
@@ -175,7 +175,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dsu/persistent_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/persistent_dsu.test.cpp

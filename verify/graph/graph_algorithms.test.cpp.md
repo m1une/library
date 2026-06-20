@@ -1,80 +1,80 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/dsu/dsu.hpp
     title: DSU (Disjoint Set Union)
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bellman_ford.hpp
     title: Bellman-Ford
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bfs.hpp
     title: BFS
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bipartite.hpp
     title: Bipartite Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/connected_components.hpp
     title: Connected Components
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/cycle_detection.hpp
     title: Cycle Detection
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dag_shortest_path.hpp
     title: DAG Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dijkstra.hpp
     title: Dijkstra
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/general_matching.hpp
     title: General Matching
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/grid.hpp
     title: Grid
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/kruskal.hpp
     title: Kruskal
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowlink.hpp
     title: LowLink
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/scc.hpp
     title: Strongly Connected Components
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/topological_sort.hpp
     title: Topological Sort
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/two_sat.hpp
     title: Two-Satisfiability
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -1459,23 +1459,24 @@ data:
     \ long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <set>\n#include <string>\n#include\
-    \ <vector>\n\n#include \"graph/all.hpp\"\n\nusing m1une::graph::Graph;\n\nvoid\
-    \ test_graph_container() {\n    Graph<int> g(2);\n    assert(g.size() == 2);\n\
-    \    int added = g.add_vertex();\n    assert(added == 2);\n    int e0 = g.add_directed_edge(0,\
-    \ 1, 4);\n    int e1 = g.add_edge(1, 2, 5);\n    assert(e0 == 0);\n    assert(e1\
-    \ == 1);\n    assert(g.edge_count() == 2);\n    assert(g[1].size() == 1);\n  \
-    \  assert(g.edges().size() == 2);\n    auto rev = g.reversed();\n    assert(rev[1][0].to\
-    \ == 0);\n}\n\nvoid test_edge_alive() {\n    Graph<int> g(4);\n    int e01 = g.add_edge(0,\
-    \ 1);\n    int e12 = g.add_edge(1, 2);\n    int e23 = g.add_edge(2, 3);\n    (void)e01;\n\
-    \    (void)e23;\n\n    assert(g.edge_count() == 3);\n    assert(g.edges().size()\
-    \ == 3);\n    auto res = m1une::graph::bfs(g, 0);\n    assert(res.dist[3] == 3);\n\
-    \n    g.erase_edge(e12);\n    assert(!g.is_edge_alive(e12));\n    assert(g.edges().size()\
-    \ == 2);\n    assert(g.edges(true).size() == 3);\n    auto cut = m1une::graph::bfs(g,\
-    \ 0);\n    assert(!cut.reachable(3));\n\n    auto rev = g.reversed();\n    assert(!rev.is_edge_alive(e12));\n\
-    \    assert(rev.edges().size() == 2);\n\n    g.revive_edge(e12);\n    assert(g.is_edge_alive(e12));\n\
-    \    auto restored = m1une::graph::bfs(g, 0);\n    assert(restored.dist[3] ==\
-    \ 3);\n}\n\nvoid test_bfs() {\n    Graph<int> g(5);\n    g.add_directed_edge(0,\
-    \ 1);\n    g.add_directed_edge(0, 2);\n    g.add_directed_edge(1, 3);\n    g.add_directed_edge(2,\
+    \ <vector>\n\n#include \"../../graph/all.hpp\"\n\nusing m1une::graph::Graph;\n\
+    \nvoid test_graph_container() {\n    Graph<int> g(2);\n    assert(g.size() ==\
+    \ 2);\n    int added = g.add_vertex();\n    assert(added == 2);\n    int e0 =\
+    \ g.add_directed_edge(0, 1, 4);\n    int e1 = g.add_edge(1, 2, 5);\n    assert(e0\
+    \ == 0);\n    assert(e1 == 1);\n    assert(g.edge_count() == 2);\n    assert(g[1].size()\
+    \ == 1);\n    assert(g.edges().size() == 2);\n    auto rev = g.reversed();\n \
+    \   assert(rev[1][0].to == 0);\n}\n\nvoid test_edge_alive() {\n    Graph<int>\
+    \ g(4);\n    int e01 = g.add_edge(0, 1);\n    int e12 = g.add_edge(1, 2);\n  \
+    \  int e23 = g.add_edge(2, 3);\n    (void)e01;\n    (void)e23;\n\n    assert(g.edge_count()\
+    \ == 3);\n    assert(g.edges().size() == 3);\n    auto res = m1une::graph::bfs(g,\
+    \ 0);\n    assert(res.dist[3] == 3);\n\n    g.erase_edge(e12);\n    assert(!g.is_edge_alive(e12));\n\
+    \    assert(g.edges().size() == 2);\n    assert(g.edges(true).size() == 3);\n\
+    \    auto cut = m1une::graph::bfs(g, 0);\n    assert(!cut.reachable(3));\n\n \
+    \   auto rev = g.reversed();\n    assert(!rev.is_edge_alive(e12));\n    assert(rev.edges().size()\
+    \ == 2);\n\n    g.revive_edge(e12);\n    assert(g.is_edge_alive(e12));\n    auto\
+    \ restored = m1une::graph::bfs(g, 0);\n    assert(restored.dist[3] == 3);\n}\n\
+    \nvoid test_bfs() {\n    Graph<int> g(5);\n    g.add_directed_edge(0, 1);\n  \
+    \  g.add_directed_edge(0, 2);\n    g.add_directed_edge(1, 3);\n    g.add_directed_edge(2,\
     \ 3);\n    g.add_directed_edge(3, 4);\n\n    auto res = m1une::graph::bfs(g, 0);\n\
     \    assert(res.dist[0] == 0);\n    assert(res.dist[3] == 2);\n    assert(res.dist[4]\
     \ == 3);\n    auto path = res.path(4);\n    assert(path.front() == 0);\n    assert(path.back()\
@@ -1725,8 +1726,8 @@ data:
   isVerificationFile: true
   path: verify/graph/graph_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:34:20+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/graph/graph_algorithms.test.cpp
 layout: document

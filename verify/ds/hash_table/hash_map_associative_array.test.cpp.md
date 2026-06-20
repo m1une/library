@@ -179,7 +179,7 @@ data:
     \        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/associative_array\"\n\n\
     #include <bits/stdc++.h>\nusing namespace std;\nusing ll = long long;\n\n#include\
-    \ \"ds/hash_table/hash_map.hpp\"\n\nint main() {\n    ios::sync_with_stdio(false);\n\
+    \ \"../../../ds/hash_table/hash_map.hpp\"\n\nint main() {\n    ios::sync_with_stdio(false);\n\
     \    cin.tie(nullptr);\n    int Q;\n    cin >> Q;\n    m1une::ds::HashMap<ll,\
     \ ll> mp;\n    while (Q--) {\n        int t;\n        cin >> t;\n        if (t\
     \ == 0) {\n            ll k, v;\n            cin >> k >> v;\n            mp[k]\
@@ -191,7 +191,7 @@ data:
   isVerificationFile: true
   path: verify/ds/hash_table/hash_map_associative_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/hash_table/hash_map_associative_array.test.cpp

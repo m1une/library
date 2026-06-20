@@ -235,8 +235,8 @@ data:
     \ = st.min_ge(x);\n            std::cout << (ans ? *ans : -1) << '\\n';\n    \
     \    }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include\
-    \ \"ds/ordered_set/persistent_ordered_set.hpp\"\n\n#include <cassert>\n#include\
-    \ <iostream>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
+    \ \"../../../ds/ordered_set/persistent_ordered_set.hpp\"\n\n#include <cassert>\n\
+    #include <iostream>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n}\n\nint main() {\n    fast_io();\n\n    m1une::ds::PersistentOrderedSet<int>\
     \ pointer_test = {1, 3, 5};\n    const int* stable_pointer = pointer_test.lower_bound(3);\n\
     \    auto pointer_test_next = pointer_test;\n    for (int x = 10; x < 1000; x++)\
@@ -260,7 +260,7 @@ data:
   isVerificationFile: true
   path: verify/ds/ordered_set/persistent_ordered_set.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/ordered_set/persistent_ordered_set.test.cpp

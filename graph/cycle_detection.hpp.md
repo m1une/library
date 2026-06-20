@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/cycle_detection.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -116,14 +116,14 @@ data:
     \ }\n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\
     \n"
   code: "#ifndef M1UNE_GRAPH_CYCLE_DETECTION_HPP\n#define M1UNE_GRAPH_CYCLE_DETECTION_HPP\
-    \ 1\n\n#include <algorithm>\n#include <vector>\n\n#include \"graph/graph.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\nstruct Cycle {\n    std::vector<int>\
-    \ vertices;\n    std::vector<int> edge_ids;\n\n    bool empty() const {\n    \
-    \    return vertices.empty();\n    }\n};\n\ninline Cycle restore_cycle(int from,\
-    \ int to, int closing_edge, const std::vector<int>& parent,\n                \
-    \           const std::vector<int>& parent_edge) {\n    Cycle result;\n    result.vertices.push_back(to);\n\
-    \n    std::vector<int> middle_vertices;\n    std::vector<int> middle_edges;\n\
-    \    for (int v = from; v != to; v = parent[v]) {\n        middle_vertices.push_back(v);\n\
+    \ 1\n\n#include <algorithm>\n#include <vector>\n\n#include \"graph.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace graph {\n\nstruct Cycle {\n    std::vector<int> vertices;\n\
+    \    std::vector<int> edge_ids;\n\n    bool empty() const {\n        return vertices.empty();\n\
+    \    }\n};\n\ninline Cycle restore_cycle(int from, int to, int closing_edge, const\
+    \ std::vector<int>& parent,\n                           const std::vector<int>&\
+    \ parent_edge) {\n    Cycle result;\n    result.vertices.push_back(to);\n\n  \
+    \  std::vector<int> middle_vertices;\n    std::vector<int> middle_edges;\n   \
+    \ for (int v = from; v != to; v = parent[v]) {\n        middle_vertices.push_back(v);\n\
     \        middle_edges.push_back(parent_edge[v]);\n    }\n    std::reverse(middle_vertices.begin(),\
     \ middle_vertices.end());\n    std::reverse(middle_edges.begin(), middle_edges.end());\n\
     \n    result.vertices.insert(result.vertices.end(), middle_vertices.begin(), middle_vertices.end());\n\
@@ -161,8 +161,8 @@ data:
   - graph/all.hpp
   - graph/undirected.hpp
   - graph/directed.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/cycle_detection.hpp

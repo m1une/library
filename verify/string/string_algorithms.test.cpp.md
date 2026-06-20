@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/all.hpp
     title: String Algorithms Bundle
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/manacher.hpp
     title: Manacher Algorithm
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/prefix_function.hpp
     title: Prefix Function and KMP
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: string/rolling_hash.hpp
     title: Static Rolling Hash
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/suffix_array.hpp
     title: Suffix Array and LCP Array
-  - icon: ':question:'
+  - icon: ':x:'
     path: string/trie.hpp
     title: Trie
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/z_algorithm.hpp
     title: Z Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -342,7 +342,7 @@ data:
     \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
     n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    string/all.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n\
+    ../../string/all.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n\
     #include <iostream>\n#include <numeric>\n#include <string>\n#include <vector>\n\
     \nnamespace {\n\nvoid test_edge_cases() {\n    std::string empty;\n    assert(m1une::string::z_algorithm(empty).empty());\n\
     \    assert(m1une::string::prefix_function(empty).empty());\n    assert(m1une::string::suffix_array(empty).empty());\n\
@@ -416,8 +416,8 @@ data:
   isVerificationFile: true
   path: verify/string/string_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:49:46+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/string/string_algorithms.test.cpp
 layout: document

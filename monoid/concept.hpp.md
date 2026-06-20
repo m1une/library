@@ -26,7 +26,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/range_query/disjoint_sparse_table.hpp
     title: Disjoint Sparse Table
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
   - icon: ':heavy_check_mark:'
@@ -56,13 +56,13 @@ data:
   - icon: ':warning:'
     path: monoid/power.hpp
     title: Monoid Power
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
@@ -117,15 +117,15 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/segtree.test.cpp
     title: verify/ds/segtree/segtree.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"monoid/concept.hpp\"\n\n\n\n#include <concepts>\n\nnamespace\
@@ -182,7 +182,7 @@ data:
   - ds/dsu/potentialized_dsu.hpp
   - monoid/power.hpp
   timestamp: '2026-06-17 21:06:48+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
   - verify/ds/dynamic_tree/link_cut_tree.test.cpp

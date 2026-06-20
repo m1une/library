@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/scc.hpp\"\n\n\n\n#include <algorithm>\n#include <cassert>\n\
@@ -107,7 +107,7 @@ data:
     \ std::move(comp), std::move(groups)};\n}\n\n}  // namespace graph\n}  // namespace\
     \ m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_SCC_HPP\n#define M1UNE_GRAPH_SCC_HPP 1\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <utility>\n#include <vector>\n\n#include \"graph/graph.hpp\"\
+    #include <cassert>\n#include <utility>\n#include <vector>\n\n#include \"graph.hpp\"\
     \n\nnamespace m1une {\nnamespace graph {\n\nstruct SccResult {\n    int count;\n\
     \    std::vector<int> comp;\n    std::vector<std::vector<int>> groups;\n\n   \
     \ bool same(int u, int v) const {\n        assert(0 <= u && u < int(comp.size()));\n\
@@ -146,8 +146,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/directed.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/scc.hpp

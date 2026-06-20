@@ -1,10 +1,10 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -101,9 +101,9 @@ data:
     \ res;\n    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_DUAL_SEGTREE_HPP\n#define M1UNE_DUAL_SEGTREE_HPP 1\n\n#include\
     \ <cassert>\n#include <concepts>\n#include <utility>\n#include <vector>\n\n#include\
-    \ \"math/bit_ceil.hpp\"\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\n\
-    namespace ds {\n\n// A generic Dual Segment Tree for range monoid updates and\
-    \ point queries.\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct DualSegtree\
+    \ \"../../math/bit_ceil.hpp\"\n#include \"../../monoid/concept.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace ds {\n\n// A generic Dual Segment Tree for range monoid updates\
+    \ and point queries.\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct DualSegtree\
     \ {\n    using T = typename Monoid::value_type;\n\n   private:\n    int _n, _size,\
     \ _log;\n    std::vector<T> _d;\n\n    void all_apply(int k, const T& x) {\n \
     \       _d[k] = Monoid::op(x, _d[k]);\n    }\n\n    void push(int k) {\n     \
@@ -171,7 +171,7 @@ data:
   isVerificationFile: false
   path: ds/segtree/dual_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/dual_segtree.test.cpp

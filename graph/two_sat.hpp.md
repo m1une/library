@@ -2,22 +2,22 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/two_sat.test.cpp
     title: verify/graph/two_sat.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/two_sat.hpp\"\n\n\n\n#include <cassert>\n#include\
@@ -176,7 +176,7 @@ data:
   - graph/all.hpp
   - graph/directed.hpp
   timestamp: '2026-06-21 02:34:20+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/two_sat.test.cpp
   - verify/graph/graph_algorithms.test.cpp

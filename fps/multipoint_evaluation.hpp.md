@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/all.hpp
     title: Formal Power Series All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/fps_algorithms.test.cpp
     title: verify/fps/fps_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/multipoint_evaluation.test.cpp
     title: verify/fps/multipoint_evaluation.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/polynomial_interpolation.test.cpp
     title: verify/fps/polynomial_interpolation.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"fps/multipoint_evaluation.hpp\"\n\n\n\n#include <cassert>\n\
@@ -354,7 +354,7 @@ data:
     \ std::vector<Mint>& values) {\n    return SubproductTree<Mint>(points).interpolate(values);\n\
     }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_FPS_MULTIPOINT_EVALUATION_HPP\n#define M1UNE_FPS_MULTIPOINT_EVALUATION_HPP\
-    \ 1\n\n#include <cassert>\n#include <vector>\n\n#include \"fps/formal_power_series.hpp\"\
+    \ 1\n\n#include <cassert>\n#include <vector>\n\n#include \"formal_power_series.hpp\"\
     \n\nnamespace m1une {\nnamespace fps {\n\ntemplate <class Mint>\nstruct SubproductTree\
     \ {\n    using Fps = FormalPowerSeries<Mint>;\n\n   private:\n    int point_count_;\n\
     \    int leaf_count_;\n    std::vector<Mint> points_;\n    std::vector<Fps> product_;\n\
@@ -404,8 +404,8 @@ data:
   path: fps/multipoint_evaluation.hpp
   requiredBy:
   - fps/all.hpp
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/fps/polynomial_interpolation.test.cpp
   - verify/fps/multipoint_evaluation.test.cpp

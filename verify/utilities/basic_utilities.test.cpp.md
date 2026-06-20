@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/bigint.hpp
     title: BigInt
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/int128.hpp
     title: Int128
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/random.hpp
     title: Random
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/timer.hpp
     title: Timer
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -219,9 +219,9 @@ data:
     \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <limits>\n#include <sstream>\n\
-    #include <stdexcept>\n#include <string>\n#include <vector>\n\n#include \"utilities/bigint.hpp\"\
-    \n#include \"utilities/int128.hpp\"\n#include \"utilities/random.hpp\"\n#include\
-    \ \"utilities/timer.hpp\"\n\nvoid test_bigint() {\n    using m1une::utilities::BigInt;\n\
+    #include <stdexcept>\n#include <string>\n#include <vector>\n\n#include \"../../utilities/bigint.hpp\"\
+    \n#include \"../../utilities/int128.hpp\"\n#include \"../../utilities/random.hpp\"\
+    \n#include \"../../utilities/timer.hpp\"\n\nvoid test_bigint() {\n    using m1une::utilities::BigInt;\n\
     \n    const long long min_long_long = std::numeric_limits<long long>::min();\n\
     \    BigInt minimum(min_long_long);\n    assert(minimum.to_string() == std::to_string(min_long_long));\n\
     \n    BigInt scaled = 1;\n    scaled *= std::numeric_limits<int>::min();\n   \
@@ -261,8 +261,8 @@ data:
   isVerificationFile: true
   path: verify/utilities/basic_utilities.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 02:38:39+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/utilities/basic_utilities.test.cpp
 layout: document

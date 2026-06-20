@@ -209,21 +209,21 @@ data:
     }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GEOMETRY_CIRCLE_HPP\n#define M1UNE_GEOMETRY_CIRCLE_HPP 1\n\n\
     #include <algorithm>\n#include <cassert>\n#include <cmath>\n#include <vector>\n\
-    \n#include \"geometry/line.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\n\
-    template <Coordinate T>\nstruct Circle {\n    Point<T> center;\n    T radius;\n\
-    };\n\nenum class CircleRelation {\n    Separate,\n    ExternallyTangent,\n   \
-    \ Intersecting,\n    InternallyTangent,\n    Contained,\n    Coincident,\n};\n\
-    \ntemplate <Coordinate T>\nCircleRelation circle_relation(\n    const Circle<T>&\
-    \ first,\n    const Circle<T>& second,\n    long double eps = 1e-12L\n) {\n  \
-    \  assert(first.radius >= 0);\n    assert(second.radius >= 0);\n    long double\
-    \ d = geometry::distance(first.center, second.center);\n    long double r1 = static_cast<long\
-    \ double>(first.radius);\n    long double r2 = static_cast<long double>(second.radius);\n\
-    \    long double sum = r1 + r2;\n    long double difference = std::fabsl(r1 -\
-    \ r2);\n    if (d <= eps && difference <= eps) return CircleRelation::Coincident;\n\
-    \    if (sum < d - eps) return CircleRelation::Separate;\n    if (std::fabsl(d\
-    \ - sum) <= eps) return CircleRelation::ExternallyTangent;\n    if (d < difference\
-    \ - eps) return CircleRelation::Contained;\n    if (std::fabsl(d - difference)\
-    \ <= eps) return CircleRelation::InternallyTangent;\n    return CircleRelation::Intersecting;\n\
+    \n#include \"line.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate\
+    \ <Coordinate T>\nstruct Circle {\n    Point<T> center;\n    T radius;\n};\n\n\
+    enum class CircleRelation {\n    Separate,\n    ExternallyTangent,\n    Intersecting,\n\
+    \    InternallyTangent,\n    Contained,\n    Coincident,\n};\n\ntemplate <Coordinate\
+    \ T>\nCircleRelation circle_relation(\n    const Circle<T>& first,\n    const\
+    \ Circle<T>& second,\n    long double eps = 1e-12L\n) {\n    assert(first.radius\
+    \ >= 0);\n    assert(second.radius >= 0);\n    long double d = geometry::distance(first.center,\
+    \ second.center);\n    long double r1 = static_cast<long double>(first.radius);\n\
+    \    long double r2 = static_cast<long double>(second.radius);\n    long double\
+    \ sum = r1 + r2;\n    long double difference = std::fabsl(r1 - r2);\n    if (d\
+    \ <= eps && difference <= eps) return CircleRelation::Coincident;\n    if (sum\
+    \ < d - eps) return CircleRelation::Separate;\n    if (std::fabsl(d - sum) <=\
+    \ eps) return CircleRelation::ExternallyTangent;\n    if (d < difference - eps)\
+    \ return CircleRelation::Contained;\n    if (std::fabsl(d - difference) <= eps)\
+    \ return CircleRelation::InternallyTangent;\n    return CircleRelation::Intersecting;\n\
     }\n\ntemplate <Coordinate T>\nstd::vector<Point<long double>> circle_line_intersections(\n\
     \    const Circle<T>& circle,\n    const Line<T>& line,\n    long double eps =\
     \ 1e-12L\n) {\n    assert(circle.radius >= 0);\n    assert(line.a != line.b);\n\
@@ -262,7 +262,7 @@ data:
   path: geometry/circle.hpp
   requiredBy:
   - geometry/all.hpp
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/geometry/circle_line_intersection.test.cpp

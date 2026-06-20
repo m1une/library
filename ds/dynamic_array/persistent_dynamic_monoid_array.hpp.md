@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -245,11 +245,11 @@ data:
   code: "#ifndef M1UNE_PERSISTENT_DYNAMIC_MONOID_ARRAY_HPP\n#define M1UNE_PERSISTENT_DYNAMIC_MONOID_ARRAY_HPP\
     \ 1\n\n#include <cassert>\n#include <chrono>\n#include <concepts>\n#include <cstdint>\n\
     #include <initializer_list>\n#include <memory>\n#include <utility>\n#include <vector>\n\
-    \n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\ntemplate\
-    \ <m1une::monoid::IsMonoid Monoid>\nstruct PersistentDynamicMonoidArray {\n  \
-    \  using T = typename Monoid::value_type;\n\n   private:\n    struct Node {\n\
-    \        T val, prod, rprod;\n        int priority;\n        int count;\n    \
-    \    int l, r;\n        bool rev;\n\n        Node(T value, T product, T reverse_product,\
+    \n#include \"../../monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\
+    \ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct PersistentDynamicMonoidArray\
+    \ {\n    using T = typename Monoid::value_type;\n\n   private:\n    struct Node\
+    \ {\n        T val, prod, rprod;\n        int priority;\n        int count;\n\
+    \        int l, r;\n        bool rev;\n\n        Node(T value, T product, T reverse_product,\
     \ int node_priority, int node_count, int left, int right,\n             bool reversed)\n\
     \            : val(std::move(value)),\n              prod(std::move(product)),\n\
     \              rprod(std::move(reverse_product)),\n              priority(node_priority),\n\
@@ -462,7 +462,7 @@ data:
   isVerificationFile: false
   path: ds/dynamic_array/persistent_dynamic_monoid_array.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp

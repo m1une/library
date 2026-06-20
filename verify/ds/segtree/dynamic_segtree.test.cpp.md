@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -198,64 +198,65 @@ data:
     \ else {\n            int l, r;\n            std::cin >> l >> r;\n           \
     \ std::cout << seg.prod(l, r) << '\\n';\n        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\
-    \n#include \"ds/segtree/dynamic_segtree.hpp\"\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n#include\
-    \ <string>\n#include <vector>\n\n#include \"monoid/add.hpp\"\n\nnamespace {\n\n\
-    struct Concat {\n    using value_type = std::string;\n\n    static value_type\
-    \ id() {\n        return \"\";\n    }\n\n    static value_type op(const value_type&\
-    \ a, const value_type& b) {\n        return a + b;\n    }\n};\n\nvoid test_library_features()\
-    \ {\n    using Sum = m1une::monoid::Add<long long>;\n    using Seg = m1une::ds::DynamicSegtree<Sum>;\n\
-    \n    Seg empty;\n    assert(empty.empty());\n    assert(empty.size() == 0);\n\
-    \    assert(empty.all_prod() == 0);\n\n    Seg seg(-1'000'000'000'000'000'000LL,\
-    \ 1'000'000'000'000'000'000LL);\n    assert(!seg.empty());\n    assert(seg.left_bound()\
-    \ == -1'000'000'000'000'000'000LL);\n    assert(seg.right_bound() == 1'000'000'000'000'000'000LL);\n\
-    \    assert(seg.size() == 2'000'000'000'000'000'000ULL);\n\n    seg.reserve(256);\n\
-    \    seg.set(-3, 2);\n    seg.set(2, 4);\n    seg.set(7, 1);\n\n    assert(seg.get(-3)\
-    \ == 2);\n    assert(seg[-2] == 0);\n    assert(seg.prod(-4, 3) == 6);\n    assert(seg.prod(3,\
-    \ 7) == 0);\n    assert(seg.all_prod() == 7);\n    assert(seg.max_right(-8, [](long\
-    \ long x) { return x <= 5; }) == 2);\n    assert(seg.min_left(8, [](long long\
-    \ x) { return x <= 4; }) == 3);\n\n    [[maybe_unused]] std::size_t nodes = seg.node_count();\n\
-    \    seg.set(-3, 5);\n    assert(seg.node_count() == nodes);\n    assert(seg.all_prod()\
-    \ == 10);\n\n    seg.clear();\n    assert(seg.node_count() == 0);\n    assert(seg.all_prod()\
-    \ == 0);\n    assert(seg.get(-3) == 0);\n\n    m1une::ds::DynamicSegtree<Concat,\
-    \ int> text(-4, 5);\n    text.set(2, \"b\");\n    text.set(-1, \"a\");\n    assert(text.prod(-4,\
-    \ 5) == \"ab\");\n\n    Seg extreme(std::numeric_limits<long long>::min(), std::numeric_limits<long\
-    \ long>::max());\n    extreme.set(std::numeric_limits<long long>::min(), 3);\n\
-    \    extreme.set(std::numeric_limits<long long>::max() - 1, 4);\n    assert(extreme.size()\
-    \ == std::numeric_limits<unsigned long long>::max());\n    assert(extreme.get(std::numeric_limits<long\
-    \ long>::min()) == 3);\n    assert(extreme.get(std::numeric_limits<long long>::max()\
-    \ - 1) == 4);\n    assert(extreme.all_prod() == 7);\n\n    constexpr int left\
-    \ = -37;\n    constexpr int right = 42;\n    m1une::ds::DynamicSegtree<Sum, int>\
-    \ small(left, right);\n    std::vector<long long> a(right - left);\n    auto value_at\
-    \ = [&a](int p) -> long long& {\n        return a[std::size_t(p - left)];\n  \
-    \  };\n    std::uint64_t state = 1;\n    auto random = [&state]() {\n        state\
-    \ ^= state << 7;\n        state ^= state >> 9;\n        return state;\n    };\n\
-    \n    for (int step = 0; step < 2000; step++) {\n        int p = left + int(random()\
-    \ % a.size());\n        long long x = static_cast<long long>(random() % 10);\n\
-    \        small.set(p, x);\n        value_at(p) = x;\n\n        int l = left +\
-    \ int(random() % (a.size() + 1));\n        int r = left + int(random() % (a.size()\
-    \ + 1));\n        if (r < l) std::swap(l, r);\n        [[maybe_unused]] long long\
-    \ expected = 0;\n        for (int i = l; i < r; i++) expected += value_at(i);\n\
-    \        assert(small.prod(l, r) == expected);\n\n        long long limit = static_cast<long\
-    \ long>(random() % 100);\n        int max_right = l;\n        long long sum =\
-    \ 0;\n        while (max_right < right && sum + value_at(max_right) <= limit)\
-    \ {\n            sum += value_at(max_right);\n            max_right++;\n     \
-    \   }\n        assert(small.max_right(l, [limit](long long value) { return value\
-    \ <= limit; }) == max_right);\n\n        int min_left = r;\n        sum = 0;\n\
-    \        while (left < min_left && value_at(min_left - 1) + sum <= limit) {\n\
-    \            min_left--;\n            sum += value_at(min_left);\n        }\n\
-    \        assert(small.min_left(r, [limit](long long value) { return value <= limit;\
-    \ }) == min_left);\n    }\n}\n\n}  // namespace\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    test_library_features();\n\n    int n, q;\n\
-    \    std::cin >> n >> q;\n\n    using Sum = m1une::monoid::Add<long long>;\n \
-    \   m1une::ds::DynamicSegtree<Sum, int> seg(n);\n    seg.reserve(std::size_t(2)\
-    \ * std::size_t(n));\n\n    for (int i = 0; i < n; i++) {\n        long long x;\n\
-    \        std::cin >> x;\n        seg.set(i, x);\n    }\n\n    for (int query =\
-    \ 0; query < q; query++) {\n        int type;\n        std::cin >> type;\n   \
-    \     if (type == 0) {\n            int p;\n            long long x;\n       \
-    \     std::cin >> p >> x;\n            seg.set(p, seg.get(p) + x);\n        }\
-    \ else {\n            int l, r;\n            std::cin >> l >> r;\n           \
-    \ std::cout << seg.prod(l, r) << '\\n';\n        }\n    }\n}\n"
+    \n#include \"../../../ds/segtree/dynamic_segtree.hpp\"\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n\
+    #include <string>\n#include <vector>\n\n#include \"../../../monoid/add.hpp\"\n\
+    \nnamespace {\n\nstruct Concat {\n    using value_type = std::string;\n\n    static\
+    \ value_type id() {\n        return \"\";\n    }\n\n    static value_type op(const\
+    \ value_type& a, const value_type& b) {\n        return a + b;\n    }\n};\n\n\
+    void test_library_features() {\n    using Sum = m1une::monoid::Add<long long>;\n\
+    \    using Seg = m1une::ds::DynamicSegtree<Sum>;\n\n    Seg empty;\n    assert(empty.empty());\n\
+    \    assert(empty.size() == 0);\n    assert(empty.all_prod() == 0);\n\n    Seg\
+    \ seg(-1'000'000'000'000'000'000LL, 1'000'000'000'000'000'000LL);\n    assert(!seg.empty());\n\
+    \    assert(seg.left_bound() == -1'000'000'000'000'000'000LL);\n    assert(seg.right_bound()\
+    \ == 1'000'000'000'000'000'000LL);\n    assert(seg.size() == 2'000'000'000'000'000'000ULL);\n\
+    \n    seg.reserve(256);\n    seg.set(-3, 2);\n    seg.set(2, 4);\n    seg.set(7,\
+    \ 1);\n\n    assert(seg.get(-3) == 2);\n    assert(seg[-2] == 0);\n    assert(seg.prod(-4,\
+    \ 3) == 6);\n    assert(seg.prod(3, 7) == 0);\n    assert(seg.all_prod() == 7);\n\
+    \    assert(seg.max_right(-8, [](long long x) { return x <= 5; }) == 2);\n   \
+    \ assert(seg.min_left(8, [](long long x) { return x <= 4; }) == 3);\n\n    [[maybe_unused]]\
+    \ std::size_t nodes = seg.node_count();\n    seg.set(-3, 5);\n    assert(seg.node_count()\
+    \ == nodes);\n    assert(seg.all_prod() == 10);\n\n    seg.clear();\n    assert(seg.node_count()\
+    \ == 0);\n    assert(seg.all_prod() == 0);\n    assert(seg.get(-3) == 0);\n\n\
+    \    m1une::ds::DynamicSegtree<Concat, int> text(-4, 5);\n    text.set(2, \"b\"\
+    );\n    text.set(-1, \"a\");\n    assert(text.prod(-4, 5) == \"ab\");\n\n    Seg\
+    \ extreme(std::numeric_limits<long long>::min(), std::numeric_limits<long long>::max());\n\
+    \    extreme.set(std::numeric_limits<long long>::min(), 3);\n    extreme.set(std::numeric_limits<long\
+    \ long>::max() - 1, 4);\n    assert(extreme.size() == std::numeric_limits<unsigned\
+    \ long long>::max());\n    assert(extreme.get(std::numeric_limits<long long>::min())\
+    \ == 3);\n    assert(extreme.get(std::numeric_limits<long long>::max() - 1) ==\
+    \ 4);\n    assert(extreme.all_prod() == 7);\n\n    constexpr int left = -37;\n\
+    \    constexpr int right = 42;\n    m1une::ds::DynamicSegtree<Sum, int> small(left,\
+    \ right);\n    std::vector<long long> a(right - left);\n    auto value_at = [&a](int\
+    \ p) -> long long& {\n        return a[std::size_t(p - left)];\n    };\n    std::uint64_t\
+    \ state = 1;\n    auto random = [&state]() {\n        state ^= state << 7;\n \
+    \       state ^= state >> 9;\n        return state;\n    };\n\n    for (int step\
+    \ = 0; step < 2000; step++) {\n        int p = left + int(random() % a.size());\n\
+    \        long long x = static_cast<long long>(random() % 10);\n        small.set(p,\
+    \ x);\n        value_at(p) = x;\n\n        int l = left + int(random() % (a.size()\
+    \ + 1));\n        int r = left + int(random() % (a.size() + 1));\n        if (r\
+    \ < l) std::swap(l, r);\n        [[maybe_unused]] long long expected = 0;\n  \
+    \      for (int i = l; i < r; i++) expected += value_at(i);\n        assert(small.prod(l,\
+    \ r) == expected);\n\n        long long limit = static_cast<long long>(random()\
+    \ % 100);\n        int max_right = l;\n        long long sum = 0;\n        while\
+    \ (max_right < right && sum + value_at(max_right) <= limit) {\n            sum\
+    \ += value_at(max_right);\n            max_right++;\n        }\n        assert(small.max_right(l,\
+    \ [limit](long long value) { return value <= limit; }) == max_right);\n\n    \
+    \    int min_left = r;\n        sum = 0;\n        while (left < min_left && value_at(min_left\
+    \ - 1) + sum <= limit) {\n            min_left--;\n            sum += value_at(min_left);\n\
+    \        }\n        assert(small.min_left(r, [limit](long long value) { return\
+    \ value <= limit; }) == min_left);\n    }\n}\n\n}  // namespace\n\nint main()\
+    \ {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n   \
+    \ test_library_features();\n\n    int n, q;\n    std::cin >> n >> q;\n\n    using\
+    \ Sum = m1une::monoid::Add<long long>;\n    m1une::ds::DynamicSegtree<Sum, int>\
+    \ seg(n);\n    seg.reserve(std::size_t(2) * std::size_t(n));\n\n    for (int i\
+    \ = 0; i < n; i++) {\n        long long x;\n        std::cin >> x;\n        seg.set(i,\
+    \ x);\n    }\n\n    for (int query = 0; query < q; query++) {\n        int type;\n\
+    \        std::cin >> type;\n        if (type == 0) {\n            int p;\n   \
+    \         long long x;\n            std::cin >> p >> x;\n            seg.set(p,\
+    \ seg.get(p) + x);\n        } else {\n            int l, r;\n            std::cin\
+    \ >> l >> r;\n            std::cout << seg.prod(l, r) << '\\n';\n        }\n \
+    \   }\n}\n"
   dependsOn:
   - ds/segtree/dynamic_segtree.hpp
   - monoid/concept.hpp
@@ -263,7 +264,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/dynamic_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/dynamic_segtree.test.cpp

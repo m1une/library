@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/number_theory.hpp
     title: Number Theory
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/sum_of_floor_of_linear
@@ -91,18 +91,18 @@ data:
     \        long long n, mod, a, b;\n        std::cin >> n >> mod >> a >> b;\n  \
     \      std::cout << m1une::math::floor_sum(n, mod, a, b) << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/sum_of_floor_of_linear\"\
-    \n\n#include <iostream>\n\n#include \"math/number_theory.hpp\"\n\nint main() {\n\
-    \    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int\
-    \ query_count;\n    std::cin >> query_count;\n    while (query_count--) {\n  \
-    \      long long n, mod, a, b;\n        std::cin >> n >> mod >> a >> b;\n    \
-    \    std::cout << m1une::math::floor_sum(n, mod, a, b) << '\\n';\n    }\n}\n"
+    \n\n#include <iostream>\n\n#include \"../../math/number_theory.hpp\"\n\nint main()\
+    \ {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n   \
+    \ int query_count;\n    std::cin >> query_count;\n    while (query_count--) {\n\
+    \        long long n, mod, a, b;\n        std::cin >> n >> mod >> a >> b;\n  \
+    \      std::cout << m1une::math::floor_sum(n, mod, a, b) << '\\n';\n    }\n}\n"
   dependsOn:
   - math/number_theory.hpp
   isVerificationFile: true
   path: verify/math/floor_sum.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/math/floor_sum.test.cpp
 layout: document

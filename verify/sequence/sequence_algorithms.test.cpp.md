@@ -1,17 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: sequence/inversion_count.hpp
     title: Inversion Count
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: sequence/lis.hpp
     title: Longest Increasing Subsequence (LIS)
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -77,11 +77,11 @@ data:
     }\n\nint main() {\n    test_lis();\n    test_inversion_count();\n\n    long long\
     \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <vector>\n\n#include \"sequence/inversion_count.hpp\"\
-    \n#include \"sequence/lis.hpp\"\n\nstruct LessOnly {\n    int value;\n\n    explicit\
-    \ LessOnly(int value) : value(value) {}\n\n    friend bool operator<(const LessOnly&\
-    \ lhs, const LessOnly& rhs) {\n        return lhs.value < rhs.value;\n    }\n\
-    };\n\ntemplate <typename T>\nvoid assert_subsequence(\n    const std::vector<T>&\
+    #include <iostream>\n#include <vector>\n\n#include \"../../sequence/inversion_count.hpp\"\
+    \n#include \"../../sequence/lis.hpp\"\n\nstruct LessOnly {\n    int value;\n\n\
+    \    explicit LessOnly(int value) : value(value) {}\n\n    friend bool operator<(const\
+    \ LessOnly& lhs, const LessOnly& rhs) {\n        return lhs.value < rhs.value;\n\
+    \    }\n};\n\ntemplate <typename T>\nvoid assert_subsequence(\n    const std::vector<T>&\
     \ values,\n    const std::vector<int>& indices,\n    bool strict\n) {\n    for\
     \ (int i = 0; i < int(indices.size()); ++i) {\n        assert(0 <= indices[i]\
     \ && indices[i] < int(values.size()));\n        if (i == 0) continue;\n      \
@@ -105,8 +105,8 @@ data:
   isVerificationFile: true
   path: verify/sequence/sequence_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 02:38:39+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/sequence/sequence_algorithms.test.cpp
 layout: document

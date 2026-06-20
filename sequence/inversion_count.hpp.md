@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/sequence/sequence_algorithms.test.cpp
     title: verify/sequence/sequence_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"sequence/inversion_count.hpp\"\n\n\n\n#include <vector>\n\
@@ -48,7 +48,7 @@ data:
   path: sequence/inversion_count.hpp
   requiredBy: []
   timestamp: '2026-06-20 02:38:39+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/sequence/sequence_algorithms.test.cpp
 documentation_of: sequence/inversion_count.hpp

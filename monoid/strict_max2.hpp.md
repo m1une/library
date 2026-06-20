@@ -46,7 +46,7 @@ data:
     #include <limits>
 
 
-    #include "monoid/strict_min2.hpp"
+    #include "strict_min2.hpp"
 
 
     namespace m1une {
@@ -76,7 +76,7 @@ data:
   isVerificationFile: false
   path: monoid/strict_max2.hpp
   requiredBy: []
-  timestamp: '2026-06-20 02:38:39+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/strict_max2.hpp

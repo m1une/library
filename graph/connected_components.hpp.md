@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/dsu/dsu.hpp
     title: DSU (Disjoint Set Union)
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/connected_components.hpp\"\n\n\n\n#include <cassert>\n\
@@ -121,9 +121,9 @@ data:
     \        result.groups[c].push_back(v);\n    }\n    result.count = int(result.groups.size());\n\
     \n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_CONNECTED_COMPONENTS_HPP\n#define M1UNE_GRAPH_CONNECTED_COMPONENTS_HPP\
-    \ 1\n\n#include <cassert>\n#include <vector>\n\n#include \"ds/dsu/dsu.hpp\"\n\
-    #include \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
-    \ ConnectedComponents {\n    int count;\n    std::vector<int> comp;\n    std::vector<std::vector<int>>\
+    \ 1\n\n#include <cassert>\n#include <vector>\n\n#include \"../ds/dsu/dsu.hpp\"\
+    \n#include \"graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct ConnectedComponents\
+    \ {\n    int count;\n    std::vector<int> comp;\n    std::vector<std::vector<int>>\
     \ groups;\n\n    bool same(int u, int v) const {\n        assert(0 <= u && u <\
     \ int(comp.size()));\n        assert(0 <= v && v < int(comp.size()));\n      \
     \  return comp[u] == comp[v];\n    }\n};\n\ntemplate <class T>\nConnectedComponents\
@@ -145,8 +145,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-20 20:27:35+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/connected_components.hpp

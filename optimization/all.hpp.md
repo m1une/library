@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/hungarian.hpp
     title: Hungarian Algorithm
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/integer_lp.hpp
     title: Integer Linear Programming
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/simplex.hpp
     title: Simplex Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/optimization/integer_lp.test.cpp
     title: verify/optimization/integer_lp.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/optimization/simplex.test.cpp
     title: verify/optimization/simplex.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"optimization/all.hpp\"\n\n\n\n#line 1 \"optimization/hungarian.hpp\"\
@@ -310,11 +310,11 @@ data:
     #define M1UNE_OPTIMIZATION_ALL_HPP 1
 
 
-    #include "optimization/hungarian.hpp"
+    #include "hungarian.hpp"
 
-    #include "optimization/integer_lp.hpp"
+    #include "integer_lp.hpp"
 
-    #include "optimization/simplex.hpp"
+    #include "simplex.hpp"
 
 
     #endif  // M1UNE_OPTIMIZATION_ALL_HPP
@@ -327,8 +327,8 @@ data:
   isVerificationFile: false
   path: optimization/all.hpp
   requiredBy: []
-  timestamp: '2026-06-18 01:38:25+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/optimization/integer_lp.test.cpp
   - verify/optimization/simplex.test.cpp

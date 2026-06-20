@@ -10,10 +10,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
@@ -261,9 +261,9 @@ data:
     \ {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    solve();\n \
     \   return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\
-    \n\n#include \"ds/segtree/lazy_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\n#include\
-    \ \"acted_monoid/range_affine_range_sum.hpp\"\n#include \"math/modint.hpp\"\n\n\
-    using mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
+    \n\n#include \"../../../ds/segtree/lazy_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\
+    \n#include \"../../../acted_monoid/range_affine_range_sum.hpp\"\n#include \"../../../math/modint.hpp\"\
+    \n\nusing mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
     \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
     \    cin >> N >> Q;\n    vector<ll> a(N);\n    for (int i = 0; i < N; ++i) cin\
     \ >> a[i];\n\n    m1une::ds::LazySegtree<AM> seg(a);\n    assert(seg.size() ==\
@@ -286,7 +286,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/lazy_segtree.test.cpp

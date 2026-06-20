@@ -359,7 +359,7 @@ data:
     \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
     n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <utility>\n#include <vector>\n\n#include \"flow/flow.hpp\"\
+    #include <iostream>\n#include <utility>\n#include <vector>\n\n#include \"../../flow/flow.hpp\"\
     \n\nvoid test_max_flow() {\n    m1une::flow::MaxFlow<long long> mf(4);\n    int\
     \ e0 = mf.add_edge(0, 1, 2);\n    int e1 = mf.add_edge(0, 2, 1);\n    int e2 =\
     \ mf.add_edge(1, 2, 1);\n    int e3 = mf.add_edge(1, 3, 1);\n    int e4 = mf.add_edge(2,\
@@ -451,7 +451,7 @@ data:
   isVerificationFile: true
   path: verify/flow/flow_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 14:06:24+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/flow/flow_algorithms.test.cpp

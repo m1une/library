@@ -10,7 +10,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/dynamic_array/dynamic_lazy_monoid_array.hpp
     title: Dynamic Lazy Monoid Array
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
@@ -356,21 +356,21 @@ data:
     \            cin >> l >> r;\n            cout << ary.prod(l, r).sum << '\\n';\n\
     \        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum\"\
-    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"acted_monoid/range_affine_range_sum.hpp\"\
-    \n#include \"ds/dynamic_array/dynamic_lazy_monoid_array.hpp\"\n#include \"math/modint.hpp\"\
-    \n\nusing mint = m1une::math::modint998244353;\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
-    using Array = m1une::ds::DynamicLazyMonoidArray<AM>;\n\nint main() {\n    ios::sync_with_stdio(false);\n\
-    \    cin.tie(nullptr);\n    int N, Q;\n    cin >> N >> Q;\n    vector<int> a(N);\n\
-    \    for (int i = 0; i < N; ++i) cin >> a[i];\n    Array ary(a);\n    while (Q--)\
-    \ {\n        int t;\n        cin >> t;\n        if (t == 0) {\n            int\
-    \ i, x;\n            cin >> i >> x;\n            ary.insert(i, AM::make(x));\n\
-    \        } else if (t == 1) {\n            int i;\n            cin >> i;\n   \
-    \         ary.erase(i);\n        } else if (t == 2) {\n            int l, r;\n\
-    \            cin >> l >> r;\n            ary.reverse(l, r);\n        } else if\
-    \ (t == 3) {\n            int l, r, b, c;\n            cin >> l >> r >> b >> c;\n\
-    \            ary.apply(l, r, {b, c});\n        } else {\n            int l, r;\n\
-    \            cin >> l >> r;\n            cout << ary.prod(l, r).sum << '\\n';\n\
-    \        }\n    }\n}\n"
+    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../../acted_monoid/range_affine_range_sum.hpp\"\
+    \n#include \"../../../ds/dynamic_array/dynamic_lazy_monoid_array.hpp\"\n#include\
+    \ \"../../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
+    using AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\nusing Array = m1une::ds::DynamicLazyMonoidArray<AM>;\n\
+    \nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int\
+    \ N, Q;\n    cin >> N >> Q;\n    vector<int> a(N);\n    for (int i = 0; i < N;\
+    \ ++i) cin >> a[i];\n    Array ary(a);\n    while (Q--) {\n        int t;\n  \
+    \      cin >> t;\n        if (t == 0) {\n            int i, x;\n            cin\
+    \ >> i >> x;\n            ary.insert(i, AM::make(x));\n        } else if (t ==\
+    \ 1) {\n            int i;\n            cin >> i;\n            ary.erase(i);\n\
+    \        } else if (t == 2) {\n            int l, r;\n            cin >> l >>\
+    \ r;\n            ary.reverse(l, r);\n        } else if (t == 3) {\n         \
+    \   int l, r, b, c;\n            cin >> l >> r >> b >> c;\n            ary.apply(l,\
+    \ r, {b, c});\n        } else {\n            int l, r;\n            cin >> l >>\
+    \ r;\n            cout << ary.prod(l, r).sum << '\\n';\n        }\n    }\n}\n"
   dependsOn:
   - acted_monoid/range_affine_range_sum.hpp
   - ds/dynamic_array/dynamic_lazy_monoid_array.hpp
@@ -379,7 +379,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp

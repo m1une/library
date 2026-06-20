@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -164,9 +164,9 @@ data:
     \  assert(seg3.get(2) == 99);\n    assert(seg4.get(3) == 20);\n\n    long long\
     \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/segtree/persistent_dual_segtree.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
-    #include <vector>\n\n#include \"monoid/add.hpp\"\n\nint main() {\n    using Add\
-    \ = m1une::monoid::Add<long long>;\n    using Seg = m1une::ds::PersistentDualSegtree<Add>;\n\
+    ../../../ds/segtree/persistent_dual_segtree.hpp\"\n\n#include <cassert>\n#include\
+    \ <iostream>\n#include <vector>\n\n#include \"../../../monoid/add.hpp\"\n\nint\
+    \ main() {\n    using Add = m1une::monoid::Add<long long>;\n    using Seg = m1une::ds::PersistentDualSegtree<Add>;\n\
     \n    Seg seg(std::vector<long long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1,\
     \ 4, 10);\n    Seg seg2 = seg1.set(2, 100);\n    Seg seg3 = seg2.apply(0, 5, -1);\n\
     \    Seg seg4 = seg3.apply(3, 7);\n\n    auto check = [](const Seg& tree, const\
@@ -190,7 +190,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/persistent_dual_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/persistent_dual_segtree.test.cpp

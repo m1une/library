@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/bisect.hpp
     title: Bisect
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/chmin_chmax.hpp
     title: Chmin Chmax
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/compressor.hpp
     title: Compressor
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/run_length_encoding.hpp
     title: Run Length Encoding
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/y_combinator.hpp
     title: Y Combinator
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -129,11 +129,11 @@ data:
     \    test_bisect();\n    test_run_length_encoding();\n\n    long long a, b;\n\
     \    cin >> a >> b;\n    cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <bits/stdc++.h>\n\
-    using namespace std;\n\n#include \"utilities/bisect.hpp\"\n#include \"utilities/chmin_chmax.hpp\"\
-    \n#include \"utilities/compressor.hpp\"\n#include \"utilities/run_length_encoding.hpp\"\
-    \n#include \"utilities/y_combinator.hpp\"\n\nvoid test_chmin_chmax() {\n    int\
-    \ x = 10;\n    assert(m1une::utilities::chmin(x, 3));\n    assert(x == 3);\n \
-    \   assert(!m1une::utilities::chmin(x, 7));\n    assert(m1une::utilities::chmax(x,\
+    using namespace std;\n\n#include \"../../utilities/bisect.hpp\"\n#include \"../../utilities/chmin_chmax.hpp\"\
+    \n#include \"../../utilities/compressor.hpp\"\n#include \"../../utilities/run_length_encoding.hpp\"\
+    \n#include \"../../utilities/y_combinator.hpp\"\n\nvoid test_chmin_chmax() {\n\
+    \    int x = 10;\n    assert(m1une::utilities::chmin(x, 3));\n    assert(x ==\
+    \ 3);\n    assert(!m1une::utilities::chmin(x, 7));\n    assert(m1une::utilities::chmax(x,\
     \ 7));\n    assert(x == 7);\n    assert(!m1une::utilities::chmax(x, 4));\n}\n\n\
     void test_compressor() {\n    vector<long long> xs = {100, -5, 100, 7};\n    m1une::utilities::Compressor<long\
     \ long> comp(xs);\n\n    assert(comp.size() == 3);\n    assert(comp[0] == -5);\n\
@@ -173,8 +173,8 @@ data:
   isVerificationFile: true
   path: verify/utilities/extra_utilities.test.cpp
   requiredBy: []
-  timestamp: '2026-06-16 01:13:59+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/utilities/extra_utilities.test.cpp
 layout: document

@@ -1,17 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/general_matching.hpp
     title: General Matching
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: graph/graph.hpp
+    title: Graph
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/general_matching
@@ -400,8 +403,8 @@ data:
     \ v);\n    }\n    cout << gm.max_matching() << '\\n';\n    for (auto p : gm.matching())\
     \ {\n        cout << p.from << ' ' << p.to << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/general_matching\"\n\n\
-    #include <bits/stdc++.h>\nusing namespace std;\n\n#include \"graph/graph.hpp\"\
-    \n#include \"graph/general_matching.hpp\"\n\nint main() {\n    ios::sync_with_stdio(false);\n\
+    #include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../graph/graph.hpp\"\
+    \n#include \"../../graph/general_matching.hpp\"\n\nint main() {\n    ios::sync_with_stdio(false);\n\
     \    cin.tie(nullptr);\n\n    int N, M;\n    cin >> N >> M;\n    m1une::graph::GeneralMatching\
     \ gm(N);\n    while (M--) {\n        int u, v;\n        cin >> u >> v;\n     \
     \   gm.add_edge(u, v);\n    }\n    cout << gm.max_matching() << '\\n';\n    for\
@@ -410,11 +413,12 @@ data:
   dependsOn:
   - graph/graph.hpp
   - graph/general_matching.hpp
+  - graph/graph.hpp
   isVerificationFile: true
   path: verify/graph/library_checker_general_matching.test.cpp
   requiredBy: []
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/graph/library_checker_general_matching.test.cpp
 layout: document

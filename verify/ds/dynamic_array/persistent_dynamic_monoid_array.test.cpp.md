@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/dynamic_array/persistent_dynamic_monoid_array.hpp
     title: Persistent Dynamic Monoid Array
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -320,7 +320,7 @@ data:
     \ versions.push_back({next, next_expected});\n    }\n\n    long long x, y;\n \
     \   std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/dynamic_array/persistent_dynamic_monoid_array.hpp\"\n\n#include <algorithm>\n\
+    ../../../ds/dynamic_array/persistent_dynamic_monoid_array.hpp\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <numeric>\n#include <random>\n\
     #include <string>\n#include <utility>\n#include <vector>\n\nstruct StringMonoid\
     \ {\n    using value_type = std::string;\n\n    static std::string id() {\n  \
@@ -399,7 +399,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp

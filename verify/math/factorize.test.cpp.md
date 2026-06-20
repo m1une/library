@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/factorize
@@ -97,7 +97,7 @@ data:
     \        std::cout << factors.size();\n        for (uint64_t factor : factors)\
     \ std::cout << ' ' << factor;\n        std::cout << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/factorize\"\n\n#include\
-    \ <cstdint>\n#include <iostream>\n#include <vector>\n\n#include \"math/prime_factorization.hpp\"\
+    \ <cstdint>\n#include <iostream>\n#include <vector>\n\n#include \"../../math/prime_factorization.hpp\"\
     \n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    int query_count;\n    std::cin >> query_count;\n    while (query_count--)\
     \ {\n        uint64_t value;\n        std::cin >> value;\n        std::vector<uint64_t>\
@@ -109,8 +109,8 @@ data:
   isVerificationFile: true
   path: verify/math/factorize.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/math/factorize.test.cpp
 layout: document

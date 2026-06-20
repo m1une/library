@@ -2,25 +2,28 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/all.hpp
     title: Formal Power Series All
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/all.hpp
     title: Math All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: math/all.hpp
+    title: Math All
+  - icon: ':x:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
   _extendedVerifiedWith:
@@ -52,47 +55,89 @@ data:
     path: verify/fps/convolution_mod.test.cpp
     title: verify/fps/convolution_mod.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/fps/convolution_mod.test.cpp
+    title: verify/fps/convolution_mod.test.cpp
+  - icon: ':x:'
     path: verify/fps/exp_of_formal_power_series.test.cpp
     title: verify/fps/exp_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/exp_of_formal_power_series.test.cpp
+    title: verify/fps/exp_of_formal_power_series.test.cpp
+  - icon: ':x:'
     path: verify/fps/fps_algorithms.test.cpp
     title: verify/fps/fps_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/fps_algorithms.test.cpp
+    title: verify/fps/fps_algorithms.test.cpp
+  - icon: ':x:'
     path: verify/fps/inv_of_formal_power_series.test.cpp
     title: verify/fps/inv_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/inv_of_formal_power_series.test.cpp
+    title: verify/fps/inv_of_formal_power_series.test.cpp
+  - icon: ':x:'
     path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
     title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+    title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+  - icon: ':x:'
     path: verify/fps/multipoint_evaluation.test.cpp
     title: verify/fps/multipoint_evaluation.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/multipoint_evaluation.test.cpp
+    title: verify/fps/multipoint_evaluation.test.cpp
+  - icon: ':x:'
     path: verify/fps/polynomial_interpolation.test.cpp
     title: verify/fps/polynomial_interpolation.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/polynomial_interpolation.test.cpp
+    title: verify/fps/polynomial_interpolation.test.cpp
+  - icon: ':x:'
     path: verify/fps/polynomial_taylor_shift.test.cpp
     title: verify/fps/polynomial_taylor_shift.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/polynomial_taylor_shift.test.cpp
+    title: verify/fps/polynomial_taylor_shift.test.cpp
+  - icon: ':x:'
     path: verify/fps/pow_of_formal_power_series.test.cpp
     title: verify/fps/pow_of_formal_power_series.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/fps/pow_of_formal_power_series.test.cpp
+    title: verify/fps/pow_of_formal_power_series.test.cpp
+  - icon: ':x:'
     path: verify/math/bell_number.test.cpp
     title: verify/math/bell_number.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/math/bell_number.test.cpp
+    title: verify/math/bell_number.test.cpp
+  - icon: ':x:'
     path: verify/math/bernoulli_number.test.cpp
     title: verify/math/bernoulli_number.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/math/bernoulli_number.test.cpp
+    title: verify/math/bernoulli_number.test.cpp
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/math/math_algorithms.test.cpp
+    title: verify/math/math_algorithms.test.cpp
+  - icon: ':x:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/math/partition_function.test.cpp
+    title: verify/math/partition_function.test.cpp
+  - icon: ':x:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  _isVerificationFailed: false
+  - icon: ':x:'
+    path: verify/math/stirling_number_of_the_second_kind.test.cpp
+    title: verify/math/stirling_number_of_the_second_kind.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/modint.hpp\"\n\n\n\n#include <cstdint>\n#include <iostream>\n\
@@ -200,13 +245,14 @@ data:
   requiredBy:
   - math/combinatorial_sequences.hpp
   - math/all.hpp
+  - math/all.hpp
   - fps/formal_power_series.hpp
   - fps/all.hpp
   - fps/multipoint_evaluation.hpp
   - fps/linear_recurrence.hpp
   - fps/convolution.hpp
   timestamp: '2026-06-06 20:32:01+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
   - verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
@@ -217,18 +263,32 @@ data:
   - verify/ds/segtree/dynamic_lazy_segtree.test.cpp
   - verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
   - verify/math/bell_number.test.cpp
+  - verify/math/bell_number.test.cpp
+  - verify/math/partition_function.test.cpp
   - verify/math/partition_function.test.cpp
   - verify/math/math_algorithms.test.cpp
+  - verify/math/math_algorithms.test.cpp
+  - verify/math/stirling_number_of_the_second_kind.test.cpp
   - verify/math/stirling_number_of_the_second_kind.test.cpp
   - verify/math/bernoulli_number.test.cpp
+  - verify/math/bernoulli_number.test.cpp
+  - verify/fps/inv_of_formal_power_series.test.cpp
   - verify/fps/inv_of_formal_power_series.test.cpp
   - verify/fps/pow_of_formal_power_series.test.cpp
+  - verify/fps/pow_of_formal_power_series.test.cpp
+  - verify/fps/polynomial_interpolation.test.cpp
   - verify/fps/polynomial_interpolation.test.cpp
   - verify/fps/exp_of_formal_power_series.test.cpp
+  - verify/fps/exp_of_formal_power_series.test.cpp
+  - verify/fps/multipoint_evaluation.test.cpp
   - verify/fps/multipoint_evaluation.test.cpp
   - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+  - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+  - verify/fps/convolution_mod.test.cpp
   - verify/fps/convolution_mod.test.cpp
   - verify/fps/polynomial_taylor_shift.test.cpp
+  - verify/fps/polynomial_taylor_shift.test.cpp
+  - verify/fps/fps_algorithms.test.cpp
   - verify/fps/fps_algorithms.test.cpp
 documentation_of: math/modint.hpp
 layout: document

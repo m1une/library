@@ -1,23 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
+    path: math/modint.hpp
+    title: ModInt
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence
@@ -342,23 +345,24 @@ data:
     \ recurrence, index) << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence\"\
     \n\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\n#include \"\
-    fps/linear_recurrence.hpp\"\n#include \"math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
-    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
-    \n    int order;\n    uint64_t index;\n    std::cin >> order >> index;\n    std::vector<mint>\
-    \ initial(order), recurrence(order);\n    for (mint& value : initial) std::cin\
-    \ >> value;\n    for (mint& value : recurrence) std::cin >> value;\n    std::cout\
-    \ << m1une::fps::linear_recurrence_kth(initial, recurrence, index) << '\\n';\n\
-    }\n"
+    ../../fps/linear_recurrence.hpp\"\n#include \"../../math/modint.hpp\"\n\nusing\
+    \ mint = m1une::math::modint998244353;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int order;\n    uint64_t index;\n    std::cin\
+    \ >> order >> index;\n    std::vector<mint> initial(order), recurrence(order);\n\
+    \    for (mint& value : initial) std::cin >> value;\n    for (mint& value : recurrence)\
+    \ std::cin >> value;\n    std::cout << m1une::fps::linear_recurrence_kth(initial,\
+    \ recurrence, index) << '\\n';\n}\n"
   dependsOn:
   - fps/linear_recurrence.hpp
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
+  - math/modint.hpp
   isVerificationFile: true
   path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
 layout: document

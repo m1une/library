@@ -324,22 +324,23 @@ data:
     \ {\n    test_basic();\n    test_randomized_hulls();\n\n    long long a, b;\n\
     \    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    geometry/all.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include <cmath>\n\
-    #include <cstdint>\n#include <iostream>\n#include <vector>\n\nnamespace {\n\n\
-    bool close(long double a, long double b) {\n    return std::fabsl(a - b) <= 1e-10L;\n\
-    }\n\nvoid test_basic() {\n    using namespace m1une::geometry;\n    using P =\
-    \ Point<long long>;\n\n    P a(0, 0);\n    P b(3, 0);\n    P c(1, 2);\n    assert(cross(a,\
-    \ b, c) == 6);\n    assert(orientation(a, b, c) == 1);\n    assert(orientation(a,\
-    \ c, b) == -1);\n    assert(collinear(a, P(1, 0), b));\n\n    Segment<long long>\
-    \ first;\n    first.a = P(0, 0);\n    first.b = P(4, 4);\n    Segment<long long>\
-    \ second;\n    second.a = P(0, 4);\n    second.b = P(4, 0);\n    assert(intersects(first,\
-    \ second));\n    assert(close(distance(first, second), 0));\n\n    Line<long long>\
-    \ horizontal;\n    horizontal.a = P(0, 0);\n    horizontal.b = P(4, 0);\n    [[maybe_unused]]\
-    \ Point<long double> projected = projection(horizontal, P(2, 3));\n    assert(close(projected.x,\
-    \ 2));\n    assert(close(projected.y, 0));\n\n    Line<long long> diagonal1;\n\
-    \    diagonal1.a = P(0, 0);\n    diagonal1.b = P(2, 2);\n    Line<long long> diagonal2;\n\
-    \    diagonal2.a = P(0, 2);\n    diagonal2.b = P(2, 0);\n    [[maybe_unused]]\
-    \ auto crossing = line_intersection(diagonal1, diagonal2);\n    assert(crossing.has_value());\n\
+    ../../geometry/all.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include\
+    \ <cmath>\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\nnamespace\
+    \ {\n\nbool close(long double a, long double b) {\n    return std::fabsl(a - b)\
+    \ <= 1e-10L;\n}\n\nvoid test_basic() {\n    using namespace m1une::geometry;\n\
+    \    using P = Point<long long>;\n\n    P a(0, 0);\n    P b(3, 0);\n    P c(1,\
+    \ 2);\n    assert(cross(a, b, c) == 6);\n    assert(orientation(a, b, c) == 1);\n\
+    \    assert(orientation(a, c, b) == -1);\n    assert(collinear(a, P(1, 0), b));\n\
+    \n    Segment<long long> first;\n    first.a = P(0, 0);\n    first.b = P(4, 4);\n\
+    \    Segment<long long> second;\n    second.a = P(0, 4);\n    second.b = P(4,\
+    \ 0);\n    assert(intersects(first, second));\n    assert(close(distance(first,\
+    \ second), 0));\n\n    Line<long long> horizontal;\n    horizontal.a = P(0, 0);\n\
+    \    horizontal.b = P(4, 0);\n    [[maybe_unused]] Point<long double> projected\
+    \ = projection(horizontal, P(2, 3));\n    assert(close(projected.x, 2));\n   \
+    \ assert(close(projected.y, 0));\n\n    Line<long long> diagonal1;\n    diagonal1.a\
+    \ = P(0, 0);\n    diagonal1.b = P(2, 2);\n    Line<long long> diagonal2;\n   \
+    \ diagonal2.a = P(0, 2);\n    diagonal2.b = P(2, 0);\n    [[maybe_unused]] auto\
+    \ crossing = line_intersection(diagonal1, diagonal2);\n    assert(crossing.has_value());\n\
     \    assert(close(crossing->x, 1));\n    assert(close(crossing->y, 1));\n\n  \
     \  std::vector<P> square;\n    square.emplace_back(0, 0);\n    square.emplace_back(2,\
     \ 0);\n    square.emplace_back(2, 2);\n    square.emplace_back(0, 2);\n    assert(polygon_area2(square)\
@@ -396,7 +397,7 @@ data:
   isVerificationFile: true
   path: verify/geometry/geometry_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/geometry/geometry_algorithms.test.cpp

@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/z_algorithm.hpp
     title: Z Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/zalgorithm
@@ -33,8 +33,8 @@ data:
     \ + 1 == int(z.size()) ? \"\" : \" \");\n    }\n    std::cout << \"\\n\";\n\n\
     \    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/zalgorithm\"\n\n#include\
-    \ \"string/z_algorithm.hpp\"\n#include <iostream>\n#include <string>\n\nvoid fast_io()\
-    \ {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \ \"../../string/z_algorithm.hpp\"\n#include <iostream>\n#include <string>\n\n\
+    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     }\n\nint main() {\n    fast_io();\n    std::string S;\n    std::cin >> S;\n  \
     \  std::vector<int> z = m1une::string::z_algorithm(S);\n    for (int i = 0; i\
     \ < int(z.size()); ++i) {\n        std::cout << z[i] << (i + 1 == int(z.size())\
@@ -44,8 +44,8 @@ data:
   isVerificationFile: true
   path: verify/string/yosupo_zalgorithm.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:43:08+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/string/yosupo_zalgorithm.test.cpp
 layout: document

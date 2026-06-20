@@ -1,41 +1,44 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorics.hpp
     title: Combinatorics
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
+    path: math/modint.hpp
+    title: ModInt
+  - icon: ':x:'
     path: math/number_theory.hpp
     title: Number Theory
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/prime_sieve.hpp
     title: Prime Sieve
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\
@@ -599,19 +602,19 @@ data:
     #define M1UNE_MATH_ALL_HPP 1
 
 
-    #include "math/bit_ceil.hpp"
+    #include "bit_ceil.hpp"
 
-    #include "math/combinatorics.hpp"
+    #include "combinatorics.hpp"
 
-    #include "math/combinatorial_sequences.hpp"
+    #include "combinatorial_sequences.hpp"
 
-    #include "math/modint.hpp"
+    #include "modint.hpp"
 
-    #include "math/number_theory.hpp"
+    #include "number_theory.hpp"
 
-    #include "math/prime_factorization.hpp"
+    #include "prime_factorization.hpp"
 
-    #include "math/prime_sieve.hpp"
+    #include "prime_sieve.hpp"
 
 
     #endif  // M1UNE_MATH_ALL_HPP
@@ -624,14 +627,15 @@ data:
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
+  - math/modint.hpp
   - math/number_theory.hpp
   - math/prime_factorization.hpp
   - math/prime_sieve.hpp
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
 documentation_of: math/all.hpp

@@ -279,9 +279,9 @@ data:
   code: "#ifndef M1UNE_PERSISTENT_DYNAMIC_LAZY_SEGTREE_HPP\n#define M1UNE_PERSISTENT_DYNAMIC_LAZY_SEGTREE_HPP\
     \ 1\n\n#include <cassert>\n#include <concepts>\n#include <cstddef>\n#include <limits>\n\
     #include <memory>\n#include <numeric>\n#include <type_traits>\n#include <utility>\n\
-    #include <vector>\n\n#include \"acted_monoid/concept.hpp\"\n#include \"ds/segtree/dynamic_segtree_common.hpp\"\
-    \n\nnamespace m1une {\nnamespace ds {\n\n// A persistent sparse lazy segment tree\
-    \ over an integral half-open interval.\ntemplate <m1une::acted_monoid::IsActedMonoid\
+    #include <vector>\n\n#include \"../../acted_monoid/concept.hpp\"\n#include \"\
+    dynamic_segtree_common.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\n// A persistent\
+    \ sparse lazy segment tree over an integral half-open interval.\ntemplate <m1une::acted_monoid::IsActedMonoid\
     \ ActedMonoid, std::integral Index = long long>\nrequires(!std::same_as<std::remove_cv_t<Index>,\
     \ bool>)\nstruct PersistentDynamicLazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n    using index_type = Index;\n\
@@ -474,7 +474,7 @@ data:
   isVerificationFile: false
   path: ds/segtree/persistent_dynamic_lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp

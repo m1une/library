@@ -140,7 +140,7 @@ data:
     \        for (std::size_t i = 0; i < ctrl.size(); i++) {\n            if (occupied(ctrl[i]))\
     \ result.push_back(*value_at(i));\n        }\n        return result;\n    }\n\
     };\n\n}  // namespace ds\n}  // namespace m1une\n\n\n"
-  code: "#ifndef M1UNE_HASH_SET_HPP\n#define M1UNE_HASH_SET_HPP 1\n\n#include \"ds/hash_table/hash_common.hpp\"\
+  code: "#ifndef M1UNE_HASH_SET_HPP\n#define M1UNE_HASH_SET_HPP 1\n\n#include \"hash_common.hpp\"\
     \n\n#include <algorithm>\n#include <cstddef>\n#include <functional>\n#include\
     \ <initializer_list>\n#include <utility>\n#include <vector>\n\nnamespace m1une\
     \ {\nnamespace ds {\n\ntemplate <typename T, typename Hash = std::hash<T>, typename\
@@ -251,7 +251,7 @@ data:
   isVerificationFile: false
   path: ds/hash_table/hash_set.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/hash_table/hash_set.test.cpp

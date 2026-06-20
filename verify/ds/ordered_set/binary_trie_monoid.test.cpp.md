@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   - icon: ':heavy_check_mark:'
@@ -341,27 +341,28 @@ data:
     \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
     n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/ordered_set/binary_trie_monoid.hpp\"\n#include \"monoid/add.hpp\"\n#include\
-    \ \"monoid/mul.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n\
-    #include <iostream>\n#include <utility>\n#include <vector>\n\nvoid basic_test()\
-    \ {\n    using Product = m1une::monoid::Mul<long long>;\n    using ProductTrie\
-    \ =\n        m1une::ds::BinaryTrieMonoid<Product, std::uint32_t, 10>;\n\n    ProductTrie\
-    \ product;\n    product.insert(1, 2);\n    product.insert(2, 3);\n    product.insert(7,\
-    \ 5);\n    product.insert(7, 11);\n\n    assert(product.size() == 4);\n    assert(product.count(7)\
-    \ == 2);\n    assert(product.prod(7) == 55);\n    assert(product.kth(0) == 1);\n\
-    \    assert(product.kth(2) == 7);\n    assert(product.min() == 1);\n    assert(product.max()\
-    \ == 7);\n    assert(product.kth_xor(0, 3) == 1);\n    assert(product.kth_xor(2,\
-    \ 3) == 4);\n    assert(product.min_xor(3) == 1);\n    assert(product.max_xor(3)\
-    \ == 4);\n    assert(product.count_xor_equal(3, 4) == 2);\n    assert(product.prod_xor_less(3,\
-    \ 4) == 6);\n    assert(product.count_xor_less(3, 4) == 2);\n    assert(product.count_less_xor(3,\
-    \ 4) == 2);\n    assert(product.count_xor_less_equal(3, 4) == 4);\n    assert(product.count_xor_greater(3,\
-    \ 2) == 2);\n    assert(product.count_xor_greater_equal(3, 2) == 3);\n    assert(product.count_xor_range(3,\
-    \ 2, 5) == 3);\n    assert(product.prod_xor_equal(3, 4) == 55);\n    assert(product.prod_xor_less_equal(3,\
-    \ 4) == 330);\n    assert(product.prod_xor_greater(3, 2) == 55);\n    assert(product.prod_xor_greater_equal(3,\
-    \ 2) == 110);\n    assert(product.prod_xor_range(3, 2, 5) == 110);\n    assert(product.prod_xor_less(3,\
-    \ 0) == 1);\n    assert(product.prod_xor_less(0, 1024) == 330);\n    assert(product.prod_xor_range(3,\
-    \ 2, 1024) == 110);\n    assert(product.order_of_key(7) == 2);\n    assert(product.count_less(7)\
-    \ == 2);\n    assert(product.count_less_equal(7) == 4);\n    assert(product.count_greater(2)\
+    ../../../ds/ordered_set/binary_trie_monoid.hpp\"\n#include \"../../../monoid/add.hpp\"\
+    \n#include \"../../../monoid/mul.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
+    #include <cstdint>\n#include <iostream>\n#include <utility>\n#include <vector>\n\
+    \nvoid basic_test() {\n    using Product = m1une::monoid::Mul<long long>;\n  \
+    \  using ProductTrie =\n        m1une::ds::BinaryTrieMonoid<Product, std::uint32_t,\
+    \ 10>;\n\n    ProductTrie product;\n    product.insert(1, 2);\n    product.insert(2,\
+    \ 3);\n    product.insert(7, 5);\n    product.insert(7, 11);\n\n    assert(product.size()\
+    \ == 4);\n    assert(product.count(7) == 2);\n    assert(product.prod(7) == 55);\n\
+    \    assert(product.kth(0) == 1);\n    assert(product.kth(2) == 7);\n    assert(product.min()\
+    \ == 1);\n    assert(product.max() == 7);\n    assert(product.kth_xor(0, 3) ==\
+    \ 1);\n    assert(product.kth_xor(2, 3) == 4);\n    assert(product.min_xor(3)\
+    \ == 1);\n    assert(product.max_xor(3) == 4);\n    assert(product.count_xor_equal(3,\
+    \ 4) == 2);\n    assert(product.prod_xor_less(3, 4) == 6);\n    assert(product.count_xor_less(3,\
+    \ 4) == 2);\n    assert(product.count_less_xor(3, 4) == 2);\n    assert(product.count_xor_less_equal(3,\
+    \ 4) == 4);\n    assert(product.count_xor_greater(3, 2) == 2);\n    assert(product.count_xor_greater_equal(3,\
+    \ 2) == 3);\n    assert(product.count_xor_range(3, 2, 5) == 3);\n    assert(product.prod_xor_equal(3,\
+    \ 4) == 55);\n    assert(product.prod_xor_less_equal(3, 4) == 330);\n    assert(product.prod_xor_greater(3,\
+    \ 2) == 55);\n    assert(product.prod_xor_greater_equal(3, 2) == 110);\n    assert(product.prod_xor_range(3,\
+    \ 2, 5) == 110);\n    assert(product.prod_xor_less(3, 0) == 1);\n    assert(product.prod_xor_less(0,\
+    \ 1024) == 330);\n    assert(product.prod_xor_range(3, 2, 1024) == 110);\n   \
+    \ assert(product.order_of_key(7) == 2);\n    assert(product.count_less(7) == 2);\n\
+    \    assert(product.count_less_equal(7) == 4);\n    assert(product.count_greater(2)\
     \ == 2);\n    assert(product.count_greater_equal(2) == 3);\n    assert(product.count_range(2,\
     \ 7) == 1);\n    assert(product.prod_less(7) == 6);\n    assert(product.prod_less_equal(7)\
     \ == 330);\n    assert(product.prod_greater(2) == 55);\n    assert(product.prod_greater_equal(2)\
@@ -454,7 +455,7 @@ data:
   isVerificationFile: true
   path: verify/ds/ordered_set/binary_trie_monoid.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:41:47+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/ordered_set/binary_trie_monoid.test.cpp

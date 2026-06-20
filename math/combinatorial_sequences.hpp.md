@@ -1,41 +1,41 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorics.hpp
     title: Combinatorics
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/all.hpp
     title: Math All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/bell_number.test.cpp
     title: verify/math/bell_number.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/bernoulli_number.test.cpp
     title: verify/math/bernoulli_number.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/combinatorial_sequences.hpp\"\n\n\n\n#include <cassert>\n\
@@ -399,7 +399,7 @@ data:
     \ math\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MATH_COMBINATORIAL_SEQUENCES_HPP\n#define M1UNE_MATH_COMBINATORIAL_SEQUENCES_HPP\
     \ 1\n\n#include <cassert>\n#include <cstdint>\n#include <vector>\n\n#include \"\
-    fps/formal_power_series.hpp\"\n#include \"math/combinatorics.hpp\"\n\nnamespace\
+    ../fps/formal_power_series.hpp\"\n#include \"combinatorics.hpp\"\n\nnamespace\
     \ m1une {\nnamespace math {\n\ntemplate <class Mint>\nstd::vector<Mint> catalan_numbers(int\
     \ maximum) {\n    assert(maximum >= 0);\n    assert(static_cast<uint64_t>(maximum)\
     \ + 1 < Mint::mod());\n\n    std::vector<Mint> inverse(maximum + 2);\n    inverse[1]\
@@ -453,8 +453,8 @@ data:
   path: math/combinatorial_sequences.hpp
   requiredBy:
   - math/all.hpp
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp

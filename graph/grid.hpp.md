@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#include <cassert>\n\
@@ -124,8 +124,8 @@ data:
     }  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_GRID_HPP\n#define M1UNE_GRAPH_GRID_HPP 1\n\n#include\
     \ <array>\n#include <cassert>\n#include <utility>\n#include <vector>\n\n#include\
-    \ \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct Grid {\n\
-    \   private:\n    int _h;\n    int _w;\n\n   public:\n    static constexpr std::array<int,\
+    \ \"graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct Grid {\n   private:\n\
+    \    int _h;\n    int _w;\n\n   public:\n    static constexpr std::array<int,\
     \ 4> di4 = {-1, 0, 1, 0};\n    static constexpr std::array<int, 4> dj4 = {0, 1,\
     \ 0, -1};\n    static constexpr std::array<int, 8> di8 = {-1, -1, -1, 0, 0, 1,\
     \ 1, 1};\n    static constexpr std::array<int, 8> dj8 = {-1, 0, 1, -1, 1, -1,\
@@ -178,8 +178,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/grid.hpp

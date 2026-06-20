@@ -205,7 +205,7 @@ data:
     \ L.erase(cursor);\n        }\n    }\n    vector<int> ans = L.to_vector();\n \
     \   for (int x : ans) {\n        cout << x << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ITP2_1_C\"\n\n\
-    #include <bits/stdc++.h>\nusing namespace std;\n\n#include \"ds/dynamic_array/dynamic_array.hpp\"\
+    #include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../../ds/dynamic_array/dynamic_array.hpp\"\
     \n\nint main() {\n    int cursor = 0;\n    m1une::ds::DynamicArray<int> L;\n \
     \   int q;\n    cin >> q;\n    while (q--) {\n        int t;\n        cin >> t;\n\
     \        if (t == 0) {\n            int x;\n            cin >> x;\n          \
@@ -218,7 +218,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_array/dynamic_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_array/dynamic_array.test.cpp

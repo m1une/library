@@ -212,23 +212,23 @@ data:
     \ ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_PERSISTENT_ORDERED_SET_HPP\n#define M1UNE_PERSISTENT_ORDERED_SET_HPP\
     \ 1\n\n#include <functional>\n#include <initializer_list>\n#include <utility>\n\
-    #include <vector>\n\n#include \"ds/ordered_set/persistent_ordered_multiset.hpp\"\
-    \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <typename T, typename Compare\
-    \ = std::less<T>>\nstruct PersistentOrderedSet {\n   private:\n    using Multiset\
-    \ = PersistentOrderedMultiset<T, Compare>;\n\n    Multiset data;\n\n    explicit\
-    \ PersistentOrderedSet(Multiset multiset) : data(std::move(multiset)) {}\n\n \
-    \  public:\n    explicit PersistentOrderedSet(Compare compare) : data(std::move(compare))\
-    \ {}\n\n    PersistentOrderedSet() : PersistentOrderedSet(Compare()) {}\n\n  \
-    \  PersistentOrderedSet(std::initializer_list<T> init, Compare compare = Compare())\n\
-    \        : PersistentOrderedSet(std::move(compare)) {\n        for (const T& x\
-    \ : init) *this = insert(x);\n    }\n\n    template <typename Iterator>\n    PersistentOrderedSet(Iterator\
-    \ first, Iterator last, Compare compare = Compare())\n        : PersistentOrderedSet(std::move(compare))\
-    \ {\n        while (first != last) {\n            *this = insert(*first);\n  \
-    \          ++first;\n        }\n    }\n\n    int size() const {\n        return\
-    \ data.size();\n    }\n\n    int unique_size() const {\n        return data.size();\n\
-    \    }\n\n    bool empty() const {\n        return data.empty();\n    }\n\n  \
-    \  PersistentOrderedSet clear() const {\n        return PersistentOrderedSet(data.clear());\n\
-    \    }\n\n    PersistentOrderedSet insert(T key) const {\n        if (data.contains(key))\
+    #include <vector>\n\n#include \"persistent_ordered_multiset.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace ds {\n\ntemplate <typename T, typename Compare = std::less<T>>\n\
+    struct PersistentOrderedSet {\n   private:\n    using Multiset = PersistentOrderedMultiset<T,\
+    \ Compare>;\n\n    Multiset data;\n\n    explicit PersistentOrderedSet(Multiset\
+    \ multiset) : data(std::move(multiset)) {}\n\n   public:\n    explicit PersistentOrderedSet(Compare\
+    \ compare) : data(std::move(compare)) {}\n\n    PersistentOrderedSet() : PersistentOrderedSet(Compare())\
+    \ {}\n\n    PersistentOrderedSet(std::initializer_list<T> init, Compare compare\
+    \ = Compare())\n        : PersistentOrderedSet(std::move(compare)) {\n       \
+    \ for (const T& x : init) *this = insert(x);\n    }\n\n    template <typename\
+    \ Iterator>\n    PersistentOrderedSet(Iterator first, Iterator last, Compare compare\
+    \ = Compare())\n        : PersistentOrderedSet(std::move(compare)) {\n       \
+    \ while (first != last) {\n            *this = insert(*first);\n            ++first;\n\
+    \        }\n    }\n\n    int size() const {\n        return data.size();\n   \
+    \ }\n\n    int unique_size() const {\n        return data.size();\n    }\n\n \
+    \   bool empty() const {\n        return data.empty();\n    }\n\n    PersistentOrderedSet\
+    \ clear() const {\n        return PersistentOrderedSet(data.clear());\n    }\n\
+    \n    PersistentOrderedSet insert(T key) const {\n        if (data.contains(key))\
     \ return *this;\n        return PersistentOrderedSet(data.insert(std::move(key)));\n\
     \    }\n\n    PersistentOrderedSet erase(const T& key) const {\n        return\
     \ PersistentOrderedSet(data.erase(key));\n    }\n\n    bool contains(const T&\
@@ -256,7 +256,7 @@ data:
   isVerificationFile: false
   path: ds/ordered_set/persistent_ordered_set.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/ordered_set/persistent_ordered_set.test.cpp

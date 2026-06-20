@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/prefix_function.hpp
     title: Prefix Function and KMP
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_B
@@ -42,8 +42,8 @@ data:
     \    std::cin >> text >> pattern;\n\n    for (int position : m1une::string::kmp_search(text,\
     \ pattern)) {\n        std::cout << position << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_B\"\
-    \n\n#include \"string/prefix_function.hpp\"\n\n#include <iostream>\n#include <string>\n\
-    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n\n#include \"../../string/prefix_function.hpp\"\n\n#include <iostream>\n#include\
+    \ <string>\n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    std::string text;\n    std::string pattern;\n    std::cin >> text >> pattern;\n\
     \n    for (int position : m1une::string::kmp_search(text, pattern)) {\n      \
     \  std::cout << position << '\\n';\n    }\n}\n"
@@ -52,8 +52,8 @@ data:
   isVerificationFile: true
   path: verify/string/prefix_function.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:43:08+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/string/prefix_function.test.cpp
 layout: document

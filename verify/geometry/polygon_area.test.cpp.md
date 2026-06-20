@@ -213,7 +213,7 @@ data:
     \ polygon) std::cin >> point.x >> point.y;\n    std::cout << std::fixed << std::setprecision(1)\n\
     \              << polygon_area(polygon) << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_A\"\
-    \n\n#include \"geometry/polygon.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
+    \n\n#include \"../../geometry/polygon.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
     #include <vector>\n\nint main() {\n    using namespace m1une::geometry;\n    int\
     \ n;\n    std::cin >> n;\n    std::vector<Point<long long>> polygon(n);\n    for\
     \ (auto& point : polygon) std::cin >> point.x >> point.y;\n    std::cout << std::fixed\
@@ -226,7 +226,7 @@ data:
   isVerificationFile: true
   path: verify/geometry/polygon_area.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/geometry/polygon_area.test.cpp

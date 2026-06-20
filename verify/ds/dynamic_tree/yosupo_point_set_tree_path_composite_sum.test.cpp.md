@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/dynamic_tree/rake_compress_link_cut_tree.hpp
     title: Rake-Compress Link-Cut Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
@@ -241,8 +241,8 @@ data:
     \ EdgeValue{y, z});\n        }\n        std::cout << lct.component_prod(vertex_id[root]).s\
     \ << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum\"\
-    \n\n#include <iostream>\n#include <vector>\n\n#include \"ds/dynamic_tree/rake_compress_link_cut_tree.hpp\"\
-    \n#include \"math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
+    \n\n#include <iostream>\n#include <vector>\n\n#include \"../../../ds/dynamic_tree/rake_compress_link_cut_tree.hpp\"\
+    \n#include \"../../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
     \ntemplate <class T>\nstruct PointSetTreePathCompositeSum {\n    struct Point\
     \ {\n        T s;\n        T x;\n\n        static Point id() {\n            return\
     \ Point{T(0), T(0)};\n        }\n\n        Point inv() const {\n            return\
@@ -283,7 +283,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp

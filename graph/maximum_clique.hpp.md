@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/library_checker_maximum_independent_set.test.cpp
     title: verify/graph/library_checker_maximum_independent_set.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/maximum_clique.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -213,7 +213,7 @@ data:
     \ graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_MAXIMUM_CLIQUE_HPP\n#define M1UNE_GRAPH_MAXIMUM_CLIQUE_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <vector>\n\n#include\
-    \ \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct MaximumCliqueResult\
+    \ \"graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct MaximumCliqueResult\
     \ {\n    std::vector<int> vertices;\n\n    int size() const {\n        return\
     \ int(vertices.size());\n    }\n\n    bool empty() const {\n        return vertices.empty();\n\
     \    }\n};\n\nstruct MaximumIndependentSetResult {\n    std::vector<int> vertices;\n\
@@ -352,8 +352,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/library_checker_maximum_independent_set.test.cpp
   - verify/graph/graph_algorithms.test.cpp

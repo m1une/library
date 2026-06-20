@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/fps_algorithms.test.cpp
     title: verify/fps/fps_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"fps/all.hpp\"\n\n\n\n#line 1 \"fps/convolution.hpp\"\n\n\
@@ -383,13 +383,13 @@ data:
     #define M1UNE_FPS_ALL_HPP 1
 
 
-    #include "fps/convolution.hpp"
+    #include "convolution.hpp"
 
-    #include "fps/formal_power_series.hpp"
+    #include "formal_power_series.hpp"
 
-    #include "fps/linear_recurrence.hpp"
+    #include "linear_recurrence.hpp"
 
-    #include "fps/multipoint_evaluation.hpp"
+    #include "multipoint_evaluation.hpp"
 
 
     #endif  // M1UNE_FPS_ALL_HPP
@@ -404,8 +404,8 @@ data:
   isVerificationFile: false
   path: fps/all.hpp
   requiredBy: []
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/fps/fps_algorithms.test.cpp
 documentation_of: fps/all.hpp

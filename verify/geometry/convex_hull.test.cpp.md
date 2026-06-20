@@ -219,10 +219,10 @@ data:
     \ offset++) {\n        const auto& point = hull[(start + offset) % hull.size()];\n\
     \        std::cout << point.x << \" \" << point.y << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A\"\
-    \n\n#include \"geometry/polygon.hpp\"\n\n#include <algorithm>\n#include <iostream>\n\
-    #include <vector>\n\nint main() {\n    using namespace m1une::geometry;\n    int\
-    \ n;\n    std::cin >> n;\n    std::vector<Point<long long>> points(n);\n    for\
-    \ (auto& point : points) std::cin >> point.x >> point.y;\n\n    std::vector<Point<long\
+    \n\n#include \"../../geometry/polygon.hpp\"\n\n#include <algorithm>\n#include\
+    \ <iostream>\n#include <vector>\n\nint main() {\n    using namespace m1une::geometry;\n\
+    \    int n;\n    std::cin >> n;\n    std::vector<Point<long long>> points(n);\n\
+    \    for (auto& point : points) std::cin >> point.x >> point.y;\n\n    std::vector<Point<long\
     \ long>> hull = convex_hull(points, true);\n    int start = int(std::min_element(\n\
     \        hull.begin(),\n        hull.end(),\n        [](const auto& a, const auto&\
     \ b) {\n            if (a.y != b.y) return a.y < b.y;\n            return a.x\
@@ -237,7 +237,7 @@ data:
   isVerificationFile: true
   path: verify/geometry/convex_hull.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/geometry/convex_hull.test.cpp

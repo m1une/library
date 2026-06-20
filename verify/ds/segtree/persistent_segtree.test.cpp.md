@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -168,24 +168,25 @@ data:
     \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
     n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/segtree/persistent_segtree.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
-    #include <vector>\n\n#include \"monoid/add.hpp\"\n\nint main() {\n    using Seg\
-    \ = m1une::ds::PersistentSegtree<m1une::monoid::Add<long long>>;\n\n    Seg seg(std::vector<long\
-    \ long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.set(2, 10);\n    Seg seg2 = seg1.set(0,\
-    \ -1);\n\n    auto check = [](const Seg& tree, const std::vector<long long>& a)\
-    \ {\n        assert(tree.size() == int(a.size()));\n        assert(tree.empty()\
-    \ == a.empty());\n        assert(tree.to_vector() == a);\n        assert(tree.to_vector(1,\
-    \ 4) == std::vector<long long>(a.begin() + 1, a.begin() + 4));\n        long long\
-    \ total = 0;\n        for (long long x : a) total += x;\n        assert(tree.all_prod()\
-    \ == total);\n        for (int l = 0; l <= int(a.size()); l++) {\n           \
-    \ long long sum = 0;\n            for (int r = l; r <= int(a.size()); r++) {\n\
-    \                assert(tree.prod(l, r) == sum);\n                if (r < int(a.size()))\
-    \ sum += a[r];\n            }\n        }\n        for (int i = 0; i < int(a.size());\
-    \ i++) {\n            assert(tree.get(i) == a[i]);\n            assert(tree[i]\
-    \ == a[i]);\n        }\n    };\n\n    check(seg, {1, 2, 3, 4, 5});\n    check(seg1,\
-    \ {1, 2, 10, 4, 5});\n    check(seg2, {-1, 2, 10, 4, 5});\n\n    assert(seg.prod(0,\
-    \ 5) == 15);\n    assert(seg1.prod(0, 5) == 22);\n    assert(seg2.prod(0, 5) ==\
-    \ 20);\n    assert(seg.get(2) == 3);\n    assert(seg1.get(2) == 10);\n    assert(seg2.get(0)\
+    ../../../ds/segtree/persistent_segtree.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
+    #include <vector>\n\n#include \"../../../monoid/add.hpp\"\n\nint main() {\n  \
+    \  using Seg = m1une::ds::PersistentSegtree<m1une::monoid::Add<long long>>;\n\n\
+    \    Seg seg(std::vector<long long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.set(2,\
+    \ 10);\n    Seg seg2 = seg1.set(0, -1);\n\n    auto check = [](const Seg& tree,\
+    \ const std::vector<long long>& a) {\n        assert(tree.size() == int(a.size()));\n\
+    \        assert(tree.empty() == a.empty());\n        assert(tree.to_vector() ==\
+    \ a);\n        assert(tree.to_vector(1, 4) == std::vector<long long>(a.begin()\
+    \ + 1, a.begin() + 4));\n        long long total = 0;\n        for (long long\
+    \ x : a) total += x;\n        assert(tree.all_prod() == total);\n        for (int\
+    \ l = 0; l <= int(a.size()); l++) {\n            long long sum = 0;\n        \
+    \    for (int r = l; r <= int(a.size()); r++) {\n                assert(tree.prod(l,\
+    \ r) == sum);\n                if (r < int(a.size())) sum += a[r];\n         \
+    \   }\n        }\n        for (int i = 0; i < int(a.size()); i++) {\n        \
+    \    assert(tree.get(i) == a[i]);\n            assert(tree[i] == a[i]);\n    \
+    \    }\n    };\n\n    check(seg, {1, 2, 3, 4, 5});\n    check(seg1, {1, 2, 10,\
+    \ 4, 5});\n    check(seg2, {-1, 2, 10, 4, 5});\n\n    assert(seg.prod(0, 5) ==\
+    \ 15);\n    assert(seg1.prod(0, 5) == 22);\n    assert(seg2.prod(0, 5) == 20);\n\
+    \    assert(seg.get(2) == 3);\n    assert(seg1.get(2) == 10);\n    assert(seg2.get(0)\
     \ == -1);\n    assert(seg1.max_right(0, [](long long x) { return x <= 13; }) ==\
     \ 3);\n    assert(seg1.min_left(5, [](long long x) { return x <= 9; }) == 3);\n\
     \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
@@ -197,7 +198,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/persistent_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/persistent_segtree.test.cpp

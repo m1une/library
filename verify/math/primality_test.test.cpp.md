@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/primality_test
@@ -97,8 +97,8 @@ data:
     \        std::cout << (m1une::math::is_prime(value) ? \"Yes\" : \"No\") << '\\\
     n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/primality_test\"\n\n#include\
-    \ <cstdint>\n#include <iostream>\n\n#include \"math/prime_factorization.hpp\"\n\
-    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \ <cstdint>\n#include <iostream>\n\n#include \"../../math/prime_factorization.hpp\"\
+    \n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    int query_count;\n    std::cin >> query_count;\n    while (query_count--)\
     \ {\n        uint64_t value;\n        std::cin >> value;\n        std::cout <<\
     \ (m1une::math::is_prime(value) ? \"Yes\" : \"No\") << '\\n';\n    }\n}\n"
@@ -107,8 +107,8 @@ data:
   isVerificationFile: true
   path: verify/math/primality_test.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/math/primality_test.test.cpp
 layout: document

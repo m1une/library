@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/utilities/extra_utilities.test.cpp
     title: verify/utilities/extra_utilities.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"utilities/run_length_encoding.hpp\"\n\n\n\n#include <iterator>\n\
@@ -38,7 +38,7 @@ data:
   path: utilities/run_length_encoding.hpp
   requiredBy: []
   timestamp: '2026-06-16 01:13:59+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/utilities/extra_utilities.test.cpp
 documentation_of: utilities/run_length_encoding.hpp

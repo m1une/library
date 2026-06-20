@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"tree/diameter.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -112,7 +112,7 @@ data:
     \ = int(best.edge_ids.size());\n    }\n\n    return best;\n}\n\n}  // namespace\
     \ tree\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_TREE_DIAMETER_HPP\n#define M1UNE_TREE_DIAMETER_HPP 1\n\n#include\
-    \ <algorithm>\n#include <vector>\n\n#include \"graph/graph.hpp\"\n\nnamespace\
+    \ <algorithm>\n#include <vector>\n\n#include \"../graph/graph.hpp\"\n\nnamespace\
     \ m1une {\nnamespace tree {\n\ntemplate <class T = int>\nstruct TreeDiameter {\n\
     \    T cost;\n    int edge_count;\n    int from;\n    int to;\n    std::vector<int>\
     \ vertices;\n    std::vector<int> edge_ids;\n\n    bool empty() const {\n    \
@@ -155,8 +155,8 @@ data:
   requiredBy:
   - tree/all.hpp
   - tree/tree.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
 documentation_of: tree/diameter.hpp

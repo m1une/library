@@ -1,41 +1,44 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/all.hpp
     title: Math All
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorics.hpp
     title: Combinatorics
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
+    path: math/modint.hpp
+    title: ModInt
+  - icon: ':x:'
     path: math/number_theory.hpp
     title: Number Theory
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/prime_sieve.hpp
     title: Prime Sieve
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -726,9 +729,9 @@ data:
     \ >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <numeric>\n\
-    #include <utility>\n#include <vector>\n\n#include \"math/all.hpp\"\n\nlong long\
-    \ floor_div(long long numerator, long long denominator) {\n    long long quotient\
-    \ = numerator / denominator;\n    if (numerator % denominator < 0) quotient--;\n\
+    #include <utility>\n#include <vector>\n\n#include \"../../math/all.hpp\"\n\nlong\
+    \ long floor_div(long long numerator, long long denominator) {\n    long long\
+    \ quotient = numerator / denominator;\n    if (numerator % denominator < 0) quotient--;\n\
     \    return quotient;\n}\n\nvoid test_number_theory() {\n    using m1une::math::crt;\n\
     \    using m1une::math::floor_sum;\n    using m1une::math::inv_gcd;\n    using\
     \ m1une::math::inv_mod;\n    using m1une::math::pow_mod;\n\n    assert(pow_mod(-2,\
@@ -861,14 +864,15 @@ data:
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
+  - math/modint.hpp
   - math/number_theory.hpp
   - math/prime_factorization.hpp
   - math/prime_sieve.hpp
   isVerificationFile: true
   path: verify/math/math_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/math/math_algorithms.test.cpp
 layout: document

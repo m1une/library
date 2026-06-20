@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/lowlink.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -99,25 +99,25 @@ data:
     \    std::sort(result.bridge_ids.begin(), result.bridge_ids.end());\n    return\
     \ result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_LOWLINK_HPP\n#define M1UNE_GRAPH_LOWLINK_HPP 1\n\n#include\
-    \ <algorithm>\n#include <vector>\n\n#include \"graph/graph.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct LowLinkResult {\n \
-    \   std::vector<int> ord;\n    std::vector<int> low;\n    std::vector<int> articulation;\n\
-    \    std::vector<Edge<T>> bridges;\n    std::vector<int> bridge_ids;\n};\n\ntemplate\
-    \ <class T>\nLowLinkResult<T> lowlink(const Graph<T>& g) {\n    int n = g.size();\n\
-    \    LowLinkResult<T> result;\n    result.ord.assign(n, -1);\n    result.low.assign(n,\
-    \ -1);\n    int now = 0;\n\n    auto dfs = [&](auto self, int v, int parent_edge)\
-    \ -> void {\n        result.ord[v] = result.low[v] = now++;\n        int child_count\
-    \ = 0;\n        bool is_articulation = false;\n\n        for (const auto& e :\
-    \ g[v]) {\n            if (!e.alive) continue;\n            if (e.id == parent_edge)\
-    \ continue;\n            int to = e.to;\n            if (result.ord[to] == -1)\
-    \ {\n                child_count++;\n                self(self, to, e.id);\n \
-    \               result.low[v] = std::min(result.low[v], result.low[to]);\n   \
-    \             if (parent_edge != -1 && result.ord[v] <= result.low[to]) is_articulation\
-    \ = true;\n                if (result.ord[v] < result.low[to]) {\n           \
-    \         result.bridges.push_back(e);\n                    result.bridge_ids.push_back(e.id);\n\
-    \                }\n            } else {\n                result.low[v] = std::min(result.low[v],\
-    \ result.ord[to]);\n            }\n        }\n\n        if (parent_edge == -1\
-    \ && child_count >= 2) is_articulation = true;\n        if (is_articulation) result.articulation.push_back(v);\n\
+    \ <algorithm>\n#include <vector>\n\n#include \"graph.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace graph {\n\ntemplate <class T>\nstruct LowLinkResult {\n    std::vector<int>\
+    \ ord;\n    std::vector<int> low;\n    std::vector<int> articulation;\n    std::vector<Edge<T>>\
+    \ bridges;\n    std::vector<int> bridge_ids;\n};\n\ntemplate <class T>\nLowLinkResult<T>\
+    \ lowlink(const Graph<T>& g) {\n    int n = g.size();\n    LowLinkResult<T> result;\n\
+    \    result.ord.assign(n, -1);\n    result.low.assign(n, -1);\n    int now = 0;\n\
+    \n    auto dfs = [&](auto self, int v, int parent_edge) -> void {\n        result.ord[v]\
+    \ = result.low[v] = now++;\n        int child_count = 0;\n        bool is_articulation\
+    \ = false;\n\n        for (const auto& e : g[v]) {\n            if (!e.alive)\
+    \ continue;\n            if (e.id == parent_edge) continue;\n            int to\
+    \ = e.to;\n            if (result.ord[to] == -1) {\n                child_count++;\n\
+    \                self(self, to, e.id);\n                result.low[v] = std::min(result.low[v],\
+    \ result.low[to]);\n                if (parent_edge != -1 && result.ord[v] <=\
+    \ result.low[to]) is_articulation = true;\n                if (result.ord[v] <\
+    \ result.low[to]) {\n                    result.bridges.push_back(e);\n      \
+    \              result.bridge_ids.push_back(e.id);\n                }\n       \
+    \     } else {\n                result.low[v] = std::min(result.low[v], result.ord[to]);\n\
+    \            }\n        }\n\n        if (parent_edge == -1 && child_count >= 2)\
+    \ is_articulation = true;\n        if (is_articulation) result.articulation.push_back(v);\n\
     \    };\n\n    for (int v = 0; v < n; v++) {\n        if (result.ord[v] == -1)\
     \ dfs(dfs, v, -1);\n    }\n    std::sort(result.articulation.begin(), result.articulation.end());\n\
     \    std::sort(result.bridge_ids.begin(), result.bridge_ids.end());\n    return\
@@ -129,8 +129,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/lowlink.hpp

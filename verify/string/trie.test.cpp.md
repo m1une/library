@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':x:'
     path: string/trie.hpp
     title: Trie
   _extendedRequiredBy: []
@@ -147,7 +147,7 @@ data:
     \     std::cout << (trie.contains(word) ? \"yes\" : \"no\") << '\\n';\n      \
     \  }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C\"\
-    \n\n#include \"string/trie.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
+    \n\n#include \"../../string/trie.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
     #include <cstdint>\n#include <iostream>\n#include <map>\n#include <string>\n#include\
     \ <vector>\n\nnamespace {\n\nvoid test_features() {\n    m1une::string::Trie<>\
     \ trie;\n    assert(trie.empty());\n    assert(trie.node_count() == 1);\n    trie.reserve(128);\n\
@@ -211,7 +211,7 @@ data:
   isVerificationFile: true
   path: verify/string/trie.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:49:46+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/string/trie.test.cpp

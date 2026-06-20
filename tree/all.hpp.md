@@ -1,50 +1,50 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/centroid_decomposition.hpp
     title: Centroid Decomposition
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/diameter.hpp
     title: Tree Diameter
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/heavy_light_decomposition.hpp
     title: Heavy Light Decomposition
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rerooting_dp.hpp
     title: Rerooting DP
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rerooting_static_top_tree.hpp
     title: Rerooting Static Top Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/static_top_tree.hpp
     title: Static Top Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/tree.hpp
     title: Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"tree/all.hpp\"\n\n\n\n#line 1 \"tree/centroid_decomposition.hpp\"\
@@ -847,23 +847,23 @@ data:
     #define M1UNE_TREE_ALL_HPP 1
 
 
-    #include "tree/centroid_decomposition.hpp"
+    #include "centroid_decomposition.hpp"
 
-    #include "tree/diameter.hpp"
+    #include "diameter.hpp"
 
-    #include "tree/heavy_light_decomposition.hpp"
+    #include "heavy_light_decomposition.hpp"
 
-    #include "tree/rerooting_dp.hpp"
+    #include "rerooting_dp.hpp"
 
-    #include "tree/rerooting_static_top_tree.hpp"
+    #include "rerooting_static_top_tree.hpp"
 
-    #include "tree/rooted_tree.hpp"
+    #include "rooted_tree.hpp"
 
-    #include "tree/sparse_table_lca.hpp"
+    #include "sparse_table_lca.hpp"
 
-    #include "tree/static_top_tree.hpp"
+    #include "static_top_tree.hpp"
 
-    #include "tree/tree.hpp"
+    #include "tree.hpp"
 
 
     #endif  // M1UNE_TREE_ALL_HPP
@@ -885,8 +885,8 @@ data:
   isVerificationFile: false
   path: tree/all.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
 documentation_of: tree/all.hpp

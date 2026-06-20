@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -213,8 +213,8 @@ data:
   code: "#ifndef M1UNE_DS_BINARY_TRIE_MONOID_HPP\n#define M1UNE_DS_BINARY_TRIE_MONOID_HPP\
     \ 1\n\n#include <cassert>\n#include <cstdint>\n#include <initializer_list>\n#include\
     \ <limits>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n\
-    #include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\ntemplate\
-    \ <m1une::monoid::IsMonoid Monoid,\n          typename UInt = std::uint32_t,\n\
+    #include \"../../monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\n\
+    template <m1une::monoid::IsMonoid Monoid,\n          typename UInt = std::uint32_t,\n\
     \          int BitWidth = std::numeric_limits<UInt>::digits>\nstruct BinaryTrieMonoid\
     \ {\n    using T = typename Monoid::value_type;\n\n    static_assert(std::is_integral_v<UInt>);\n\
     \    static_assert(std::is_unsigned_v<UInt>);\n    static_assert(!std::is_same_v<UInt,\
@@ -400,7 +400,7 @@ data:
   isVerificationFile: false
   path: ds/ordered_set/binary_trie_monoid.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:41:47+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp

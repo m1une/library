@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/utilities/basic_utilities.test.cpp
     title: verify/utilities/basic_utilities.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"utilities/timer.hpp\"\n\n\n\n#include <chrono>\n\nnamespace\
@@ -39,7 +39,7 @@ data:
   path: utilities/timer.hpp
   requiredBy: []
   timestamp: '2026-06-15 23:35:14+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/utilities/basic_utilities.test.cpp
 documentation_of: utilities/timer.hpp

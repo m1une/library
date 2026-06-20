@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: utilities/shifted_array.hpp
     title: Shifted Array
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858
@@ -63,7 +63,7 @@ data:
     \    test_shifted_array_edges();\n\n    long long l, r;\n    cin >> l >> r;\n\
     \    cout << solve(l, r) << endl;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2858\"\
-    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"utilities/shifted_array.hpp\"\
+    \n\n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../utilities/shifted_array.hpp\"\
     \n\nconstexpr long long MAX = 100000;\n\nvoid test_shifted_array_edges() {\n \
     \   m1une::utilities::ShiftedArray<int> stepped(-2, 4, 0, 2);\n    stepped[-2]\
     \ = 1;\n    stepped[0] = 2;\n    stepped[4] = 3;\n    assert(stepped.index(2)\
@@ -92,8 +92,8 @@ data:
   isVerificationFile: true
   path: verify/utilities/shifted_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-13 20:51:48+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/utilities/shifted_array.test.cpp
 layout: document

@@ -206,8 +206,8 @@ data:
     \    }\n\n    long long A, B;\n    std::cin >> A >> B;\n    std::cout << A + B\
     \ << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/hash_table/hash_map.hpp\"\n\n#include <cassert>\n#include <iostream>\n#include\
-    \ <string>\n#include <unordered_map>\n\nint main() {\n    std::ios_base::sync_with_stdio(false);\n\
+    ../../../ds/hash_table/hash_map.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
+    #include <string>\n#include <unordered_map>\n\nint main() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n\n    m1une::ds::HashMap<long long, std::string>\
     \ mp;\n    assert(mp.empty());\n    auto inserted = mp.insert(5, std::string(\"\
     five\"));\n    assert(inserted.second);\n    assert(*inserted.first == \"five\"\
@@ -246,7 +246,7 @@ data:
   isVerificationFile: true
   path: verify/ds/hash_table/hash_map.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/hash_table/hash_map.test.cpp

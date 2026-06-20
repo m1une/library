@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/bipartite.hpp\"\n\n\n\n#include <cassert>\n#include\
@@ -234,14 +234,14 @@ data:
     \ m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_BIPARTITE_HPP\n#define M1UNE_GRAPH_BIPARTITE_HPP 1\n\n\
     #include <cassert>\n#include <optional>\n#include <queue>\n#include <vector>\n\
-    \n#include \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
-    \ BipartiteResult {\n    bool is_bipartite;\n    std::vector<int> color;\n   \
-    \ std::vector<int> left_vertices;\n    std::vector<int> right_vertices;\n    std::vector<int>\
-    \ left_id;\n    std::vector<int> right_id;\n};\n\ntemplate <class T>\nBipartiteResult\
-    \ bipartite(const Graph<T>& g) {\n    int n = g.size();\n    BipartiteResult result;\n\
-    \    result.is_bipartite = true;\n    result.color.assign(n, -1);\n    result.left_id.assign(n,\
-    \ -1);\n    result.right_id.assign(n, -1);\n\n    std::vector<std::vector<int>>\
-    \ adjacency(n);\n    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
+    \n#include \"graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct BipartiteResult\
+    \ {\n    bool is_bipartite;\n    std::vector<int> color;\n    std::vector<int>\
+    \ left_vertices;\n    std::vector<int> right_vertices;\n    std::vector<int> left_id;\n\
+    \    std::vector<int> right_id;\n};\n\ntemplate <class T>\nBipartiteResult bipartite(const\
+    \ Graph<T>& g) {\n    int n = g.size();\n    BipartiteResult result;\n    result.is_bipartite\
+    \ = true;\n    result.color.assign(n, -1);\n    result.left_id.assign(n, -1);\n\
+    \    result.right_id.assign(n, -1);\n\n    std::vector<std::vector<int>> adjacency(n);\n\
+    \    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
     \        adjacency[e.to].push_back(e.from);\n    }\n\n    std::queue<int> que;\n\
     \    for (int s = 0; s < n; s++) {\n        if (result.color[s] != -1) continue;\n\
     \        result.color[s] = 0;\n        que.push(s);\n        while (!que.empty())\
@@ -397,8 +397,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/bipartite.hpp

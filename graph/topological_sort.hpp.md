@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dag_shortest_path.hpp
     title: DAG Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/topological_sort.hpp\"\n\n\n\n#include <optional>\n\
@@ -100,20 +100,19 @@ data:
     \ graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_TOPOLOGICAL_SORT_HPP\n#define M1UNE_GRAPH_TOPOLOGICAL_SORT_HPP\
     \ 1\n\n#include <optional>\n#include <queue>\n#include <vector>\n\n#include \"\
-    graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\n\
-    std::optional<std::vector<int>> topological_sort(const Graph<T>& g) {\n    int\
-    \ n = g.size();\n    std::vector<int> indeg(n, 0);\n    for (int v = 0; v < n;\
-    \ v++) {\n        for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n\
-    \            indeg[e.to]++;\n        }\n    }\n\n    std::queue<int> que;\n  \
-    \  for (int v = 0; v < n; v++) {\n        if (indeg[v] == 0) que.push(v);\n  \
-    \  }\n\n    std::vector<int> order;\n    order.reserve(n);\n    while (!que.empty())\
-    \ {\n        int v = que.front();\n        que.pop();\n        order.push_back(v);\n\
-    \        for (const auto& e : g[v]) {\n            if (!e.alive) continue;\n \
-    \           indeg[e.to]--;\n            if (indeg[e.to] == 0) que.push(e.to);\n\
-    \        }\n    }\n\n    if (int(order.size()) != n) return std::nullopt;\n  \
-    \  return order;\n}\n\ntemplate <class T>\nbool is_dag(const Graph<T>& g) {\n\
-    \    return topological_sort(g).has_value();\n}\n\n}  // namespace graph\n}  //\
-    \ namespace m1une\n\n#endif  // M1UNE_GRAPH_TOPOLOGICAL_SORT_HPP\n"
+    graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstd::optional<std::vector<int>>\
+    \ topological_sort(const Graph<T>& g) {\n    int n = g.size();\n    std::vector<int>\
+    \ indeg(n, 0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& e\
+    \ : g[v]) {\n            if (!e.alive) continue;\n            indeg[e.to]++;\n\
+    \        }\n    }\n\n    std::queue<int> que;\n    for (int v = 0; v < n; v++)\
+    \ {\n        if (indeg[v] == 0) que.push(v);\n    }\n\n    std::vector<int> order;\n\
+    \    order.reserve(n);\n    while (!que.empty()) {\n        int v = que.front();\n\
+    \        que.pop();\n        order.push_back(v);\n        for (const auto& e :\
+    \ g[v]) {\n            if (!e.alive) continue;\n            indeg[e.to]--;\n \
+    \           if (indeg[e.to] == 0) que.push(e.to);\n        }\n    }\n\n    if\
+    \ (int(order.size()) != n) return std::nullopt;\n    return order;\n}\n\ntemplate\
+    \ <class T>\nbool is_dag(const Graph<T>& g) {\n    return topological_sort(g).has_value();\n\
+    }\n\n}  // namespace graph\n}  // namespace m1une\n\n#endif  // M1UNE_GRAPH_TOPOLOGICAL_SORT_HPP\n"
   dependsOn:
   - graph/graph.hpp
   isVerificationFile: false
@@ -124,8 +123,8 @@ data:
   - graph/undirected.hpp
   - graph/directed.hpp
   - graph/shortest_path.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/topological_sort.hpp

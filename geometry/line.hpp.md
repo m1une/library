@@ -181,32 +181,32 @@ data:
     \n}  // namespace geometry\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GEOMETRY_LINE_HPP\n#define M1UNE_GEOMETRY_LINE_HPP 1\n\n#include\
     \ <algorithm>\n#include <cassert>\n#include <cmath>\n#include <optional>\n\n#include\
-    \ \"geometry/point.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate\
-    \ <Coordinate T>\nstruct Line {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate\
-    \ <Coordinate T>\nstruct Segment {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate\
-    \ <Coordinate T>\nbool parallel(const Line<T>& first, const Line<T>& second, long\
-    \ double eps = 1e-12L) {\n    using W = wide_type<T>;\n    W first_x = W(first.b.x)\
-    \ - W(first.a.x);\n    W first_y = W(first.b.y) - W(first.a.y);\n    W second_x\
+    \ \"point.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate <Coordinate\
+    \ T>\nstruct Line {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate\
+    \ T>\nstruct Segment {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate\
+    \ T>\nbool parallel(const Line<T>& first, const Line<T>& second, long double eps\
+    \ = 1e-12L) {\n    using W = wide_type<T>;\n    W first_x = W(first.b.x) - W(first.a.x);\n\
+    \    W first_y = W(first.b.y) - W(first.a.y);\n    W second_x = W(second.b.x)\
+    \ - W(second.a.x);\n    W second_y = W(second.b.y) - W(second.a.y);\n    return\
+    \ sign<T>(first_x * second_y - first_y * second_x, eps) == 0;\n}\n\ntemplate <Coordinate\
+    \ T>\nbool orthogonal(const Line<T>& first, const Line<T>& second, long double\
+    \ eps = 1e-12L) {\n    using W = wide_type<T>;\n    W first_x = W(first.b.x) -\
+    \ W(first.a.x);\n    W first_y = W(first.b.y) - W(first.a.y);\n    W second_x\
     \ = W(second.b.x) - W(second.a.x);\n    W second_y = W(second.b.y) - W(second.a.y);\n\
-    \    return sign<T>(first_x * second_y - first_y * second_x, eps) == 0;\n}\n\n\
-    template <Coordinate T>\nbool orthogonal(const Line<T>& first, const Line<T>&\
-    \ second, long double eps = 1e-12L) {\n    using W = wide_type<T>;\n    W first_x\
-    \ = W(first.b.x) - W(first.a.x);\n    W first_y = W(first.b.y) - W(first.a.y);\n\
-    \    W second_x = W(second.b.x) - W(second.a.x);\n    W second_y = W(second.b.y)\
-    \ - W(second.a.y);\n    return sign<T>(first_x * second_x + first_y * second_y,\
-    \ eps) == 0;\n}\n\ntemplate <Coordinate T>\nPoint<long double> projection(const\
-    \ Line<T>& line, const Point<T>& point) {\n    assert(line.a != line.b);\n   \
-    \ Point<long double> a(line.a);\n    Point<long double> direction(\n        static_cast<long\
-    \ double>(line.b.x) - static_cast<long double>(line.a.x),\n        static_cast<long\
-    \ double>(line.b.y) - static_cast<long double>(line.a.y)\n    );\n    Point<long\
-    \ double> offset(\n        static_cast<long double>(point.x) - a.x,\n        static_cast<long\
-    \ double>(point.y) - a.y\n    );\n    long double ratio = dot(offset, direction)\
-    \ / dot(direction, direction);\n    return a + direction * ratio;\n}\n\ntemplate\
-    \ <Coordinate T>\nPoint<long double> reflection(const Line<T>& line, const Point<T>&\
-    \ point) {\n    Point<long double> projected = projection(line, point);\n    return\
-    \ projected * 2.0L - Point<long double>(point);\n}\n\ntemplate <Coordinate T>\n\
-    long double distance(const Line<T>& line, const Point<T>& point) {\n    assert(line.a\
-    \ != line.b);\n    Point<long double> direction(\n        static_cast<long double>(line.b.x)\
+    \    return sign<T>(first_x * second_x + first_y * second_y, eps) == 0;\n}\n\n\
+    template <Coordinate T>\nPoint<long double> projection(const Line<T>& line, const\
+    \ Point<T>& point) {\n    assert(line.a != line.b);\n    Point<long double> a(line.a);\n\
+    \    Point<long double> direction(\n        static_cast<long double>(line.b.x)\
+    \ - static_cast<long double>(line.a.x),\n        static_cast<long double>(line.b.y)\
+    \ - static_cast<long double>(line.a.y)\n    );\n    Point<long double> offset(\n\
+    \        static_cast<long double>(point.x) - a.x,\n        static_cast<long double>(point.y)\
+    \ - a.y\n    );\n    long double ratio = dot(offset, direction) / dot(direction,\
+    \ direction);\n    return a + direction * ratio;\n}\n\ntemplate <Coordinate T>\n\
+    Point<long double> reflection(const Line<T>& line, const Point<T>& point) {\n\
+    \    Point<long double> projected = projection(line, point);\n    return projected\
+    \ * 2.0L - Point<long double>(point);\n}\n\ntemplate <Coordinate T>\nlong double\
+    \ distance(const Line<T>& line, const Point<T>& point) {\n    assert(line.a !=\
+    \ line.b);\n    Point<long double> direction(\n        static_cast<long double>(line.b.x)\
     \ - static_cast<long double>(line.a.x),\n        static_cast<long double>(line.b.y)\
     \ - static_cast<long double>(line.a.y)\n    );\n    Point<long double> offset(\n\
     \        static_cast<long double>(point.x) - static_cast<long double>(line.a.x),\n\
@@ -259,7 +259,7 @@ data:
   - geometry/circle.hpp
   - geometry/all.hpp
   - geometry/polygon.hpp
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/geometry/polygon_area.test.cpp

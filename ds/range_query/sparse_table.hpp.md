@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/ds/range_query/sparse_table.test.cpp
     title: verify/ds/range_query/sparse_table.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"ds/range_query/sparse_table.hpp\"\n\n\n\n#include <bit>\n\
@@ -96,7 +96,7 @@ data:
     \ ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_SPARSE_TABLE_HPP\n#define M1UNE_SPARSE_TABLE_HPP 1\n\n#include\
     \ <bit>\n#include <cassert>\n#include <concepts>\n#include <utility>\n#include\
-    \ <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ <vector>\n\n#include \"../../monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
     \ ds {\n\n// A Sparse Table utilizing C++20 Concepts for type safety.\n// It requires\
     \ a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\n// [IMPORTANT] For\
     \ O(1) range queries to work correctly, the monoid operation MUST be idempotent.\n\
@@ -153,8 +153,8 @@ data:
   - tree/sparse_table_lca.hpp
   - tree/all.hpp
   - tree/tree.hpp
-  timestamp: '2026-06-20 20:05:21+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
   - verify/ds/range_query/sparse_table.test.cpp

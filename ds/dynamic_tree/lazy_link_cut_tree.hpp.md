@@ -303,8 +303,8 @@ data:
     \    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_LAZY_LINK_CUT_TREE_HPP\n#define M1UNE_LAZY_LINK_CUT_TREE_HPP\
     \ 1\n\n#include <cassert>\n#include <concepts>\n#include <type_traits>\n#include\
-    \ <utility>\n#include <vector>\n\n#include \"acted_monoid/concept.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace ds {\n\ntemplate <m1une::acted_monoid::IsCommutativeActedGroup\
+    \ <utility>\n#include <vector>\n\n#include \"../../acted_monoid/concept.hpp\"\n\
+    \nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::acted_monoid::IsCommutativeActedGroup\
     \ ActedGroup>\nstruct LazyLinkCutTree {\n    using T = typename ActedGroup::value_type;\n\
     \    using F = typename ActedGroup::operator_type;\n\n   private:\n    struct\
     \ Node {\n        int left = -1;\n        int right = -1;\n        int parent\
@@ -577,7 +577,7 @@ data:
   isVerificationFile: false
   path: ds/dynamic_tree/lazy_link_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp

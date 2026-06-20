@@ -131,11 +131,11 @@ data:
     \ flow\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_FLOW_BOUNDED_FLOW_HPP\n#define M1UNE_FLOW_BOUNDED_FLOW_HPP\
     \ 1\n\n#include <cassert>\n#include <optional>\n#include <vector>\n\n#include\
-    \ \"flow/max_flow.hpp\"\n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class\
-    \ Cap>\nstruct BoundedFlow {\n    struct Edge {\n        int from;\n        int\
-    \ to;\n        Cap lower;\n        Cap upper;\n    };\n\n    struct ResultEdge\
-    \ {\n        int from;\n        int to;\n        Cap lower;\n        Cap upper;\n\
-    \        Cap flow;\n    };\n\n    struct Result {\n        std::vector<ResultEdge>\
+    \ \"max_flow.hpp\"\n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class Cap>\n\
+    struct BoundedFlow {\n    struct Edge {\n        int from;\n        int to;\n\
+    \        Cap lower;\n        Cap upper;\n    };\n\n    struct ResultEdge {\n \
+    \       int from;\n        int to;\n        Cap lower;\n        Cap upper;\n \
+    \       Cap flow;\n    };\n\n    struct Result {\n        std::vector<ResultEdge>\
     \ edges;\n        std::vector<Cap> balance;\n\n        ResultEdge get_edge(int\
     \ i) const {\n            assert(0 <= i && i < int(edges.size()));\n         \
     \   return edges[i];\n        }\n\n        Cap flow(int i) const {\n         \
@@ -190,7 +190,7 @@ data:
   path: flow/bounded_flow.hpp
   requiredBy:
   - flow/flow.hpp
-  timestamp: '2026-06-17 01:33:20+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/flow/flow_algorithms.test.cpp

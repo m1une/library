@@ -230,9 +230,9 @@ data:
     \ return x.sum <= 19; }) == 3);\n\n    long long a, b;\n    std::cin >> a >> b;\n\
     \    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/segtree/persistent_lazy_segtree.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
-    #include <vector>\n\n#include \"acted_monoid/range_add_range_sum.hpp\"\n\nint\
-    \ main() {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n\
+    ../../../ds/segtree/persistent_lazy_segtree.hpp\"\n\n#include <cassert>\n#include\
+    \ <iostream>\n#include <vector>\n\n#include \"../../../acted_monoid/range_add_range_sum.hpp\"\
+    \n\nint main() {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n\
     \    using Seg = m1une::ds::PersistentLazySegtree<AM>;\n\n    Seg seg(std::vector<long\
     \ long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1, 4, 10);\n    Seg seg2 =\
     \ seg1.set(2, AM::make(100));\n    Seg seg3 = seg2.apply(0, 5, -1);\n\n    auto\
@@ -265,7 +265,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/persistent_lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/persistent_lazy_segtree.test.cpp

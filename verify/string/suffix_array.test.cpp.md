@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/suffix_array.hpp
     title: Suffix Array and LCP Array
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/suffixarray
@@ -76,8 +76,8 @@ data:
     \ << ' ';\n        std::cout << suffixes[i];\n    }\n    std::cout << '\\n';\n\
     }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/suffixarray\"\n\n#include\
-    \ \"string/suffix_array.hpp\"\n\n#include <iostream>\n#include <string>\n\nint\
-    \ main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \ \"../../string/suffix_array.hpp\"\n\n#include <iostream>\n#include <string>\n\
+    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    std::string text;\n    std::cin >> text;\n    std::vector<int> suffixes\
     \ = m1une::string::suffix_array(text);\n    for (int i = 0; i < int(suffixes.size());\
     \ i++) {\n        if (i != 0) std::cout << ' ';\n        std::cout << suffixes[i];\n\
@@ -87,8 +87,8 @@ data:
   isVerificationFile: true
   path: verify/string/suffix_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:43:08+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/string/suffix_array.test.cpp
 layout: document

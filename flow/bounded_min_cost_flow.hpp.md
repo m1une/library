@@ -155,16 +155,16 @@ data:
     \ // namespace flow\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP\n#define M1UNE_FLOW_BOUNDED_MIN_COST_FLOW_HPP\
     \ 1\n\n#include <cassert>\n#include <optional>\n#include <vector>\n\n#include\
-    \ \"flow/min_cost_flow.hpp\"\n\nnamespace m1une {\nnamespace flow {\n\ntemplate\
-    \ <class Cap, class Cost>\nstruct BoundedMinCostFlow {\n    struct Edge {\n  \
-    \      int from;\n        int to;\n        Cap lower;\n        Cap upper;\n  \
-    \      Cost cost;\n    };\n\n    struct ResultEdge {\n        int from;\n    \
-    \    int to;\n        Cap lower;\n        Cap upper;\n        Cap flow;\n    \
-    \    Cost cost;\n    };\n\n    struct Result {\n        std::vector<ResultEdge>\
-    \ edges;\n        std::vector<Cap> balance;\n        Cost cost;\n\n        ResultEdge\
-    \ get_edge(int i) const {\n            assert(0 <= i && i < int(edges.size()));\n\
-    \            return edges[i];\n        }\n\n        Cap flow(int i) const {\n\
-    \            assert(0 <= i && i < int(edges.size()));\n            return edges[i].flow;\n\
+    \ \"min_cost_flow.hpp\"\n\nnamespace m1une {\nnamespace flow {\n\ntemplate <class\
+    \ Cap, class Cost>\nstruct BoundedMinCostFlow {\n    struct Edge {\n        int\
+    \ from;\n        int to;\n        Cap lower;\n        Cap upper;\n        Cost\
+    \ cost;\n    };\n\n    struct ResultEdge {\n        int from;\n        int to;\n\
+    \        Cap lower;\n        Cap upper;\n        Cap flow;\n        Cost cost;\n\
+    \    };\n\n    struct Result {\n        std::vector<ResultEdge> edges;\n     \
+    \   std::vector<Cap> balance;\n        Cost cost;\n\n        ResultEdge get_edge(int\
+    \ i) const {\n            assert(0 <= i && i < int(edges.size()));\n         \
+    \   return edges[i];\n        }\n\n        Cap flow(int i) const {\n         \
+    \   assert(0 <= i && i < int(edges.size()));\n            return edges[i].flow;\n\
     \        }\n    };\n\n   private:\n    int _n;\n    std::vector<Edge> _edges;\n\
     \    std::vector<Cap> _balance;\n\n   public:\n    BoundedMinCostFlow() : BoundedMinCostFlow(0)\
     \ {}\n\n    explicit BoundedMinCostFlow(int n) : _n(n), _balance(n, Cap(0)) {\n\
@@ -226,7 +226,7 @@ data:
   path: flow/bounded_min_cost_flow.hpp
   requiredBy:
   - flow/flow.hpp
-  timestamp: '2026-06-17 01:33:20+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/flow/flow_algorithms.test.cpp

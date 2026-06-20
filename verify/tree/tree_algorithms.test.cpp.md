@@ -1,50 +1,53 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: graph/graph.hpp
+    title: Graph
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/centroid_decomposition.hpp
     title: Centroid Decomposition
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/diameter.hpp
     title: Tree Diameter
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/heavy_light_decomposition.hpp
     title: Heavy Light Decomposition
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rerooting_dp.hpp
     title: Rerooting DP
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rerooting_static_top_tree.hpp
     title: Rerooting Static Top Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/static_top_tree.hpp
     title: Static Top Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/tree.hpp
     title: Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -1111,9 +1114,9 @@ data:
     \ b = 0;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <array>\n#include <cassert>\n#include <iostream>\n#include <numeric>\n\
-    #include <set>\n#include <vector>\n\n#include \"graph/graph.hpp\"\n#include \"\
-    tree/all.hpp\"\n\nusing m1une::graph::Graph;\n\ntemplate <class Hld>\nstd::vector<int>\
-    \ expand_segments(const Hld& hld, const std::vector<m1une::tree::HldPathSegment>&\
+    #include <set>\n#include <vector>\n\n#include \"../../graph/graph.hpp\"\n#include\
+    \ \"../../tree/all.hpp\"\n\nusing m1une::graph::Graph;\n\ntemplate <class Hld>\n\
+    std::vector<int> expand_segments(const Hld& hld, const std::vector<m1une::tree::HldPathSegment>&\
     \ segments) {\n    std::vector<int> result;\n    for (auto seg : segments) {\n\
     \        if (seg.reversed) {\n            for (int i = seg.r - 1; i >= seg.l;\
     \ i--) result.push_back(hld.order[i]);\n        } else {\n            for (int\
@@ -1379,6 +1382,7 @@ data:
   - graph/graph.hpp
   - tree/all.hpp
   - tree/centroid_decomposition.hpp
+  - graph/graph.hpp
   - tree/diameter.hpp
   - tree/heavy_light_decomposition.hpp
   - tree/rerooting_dp.hpp
@@ -1392,8 +1396,8 @@ data:
   isVerificationFile: true
   path: verify/tree/tree_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/tree/tree_algorithms.test.cpp
 layout: document

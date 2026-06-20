@@ -160,8 +160,8 @@ data:
     \ = ms.min_ge(x);\n            std::cout << (ans ? *ans : -1) << '\\n';\n    \
     \    }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/ordered_set\"\n\n#include\
-    \ \"ds/ordered_set/ordered_multiset.hpp\"\n\n#include <iostream>\n\nvoid fast_io()\
-    \ {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \ \"../../../ds/ordered_set/ordered_multiset.hpp\"\n\n#include <iostream>\n\n\
+    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     }\n\nint main() {\n    fast_io();\n\n    int N, Q;\n    std::cin >> N >> Q;\n\n\
     \    m1une::ds::OrderedMultiset<int> ms;\n    for (int i = 0; i < N; i++) {\n\
     \        int a;\n        std::cin >> a;\n        ms.insert(a);\n    }\n\n    while\
@@ -180,7 +180,7 @@ data:
   isVerificationFile: true
   path: verify/ds/ordered_set/ordered_multiset.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/ordered_set/ordered_multiset.test.cpp

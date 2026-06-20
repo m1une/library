@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -128,14 +128,14 @@ data:
     \ == 0);\n    assert(empty.empty());\n\n    long long x, y;\n    std::cin >> x\
     \ >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/dsu/dsu_monoid.hpp\"\n#include \"monoid/add.hpp\"\n\n#include <cassert>\n#include\
-    \ <iostream>\n#include <string>\n#include <vector>\n\nstruct StringMonoid {\n\
-    \    using value_type = std::string;\n\n    static std::string id() {\n      \
-    \  return \"\";\n    }\n\n    static std::string op(const std::string& a, const\
-    \ std::string& b) {\n        return a + b;\n    }\n};\n\nint main() {\n    using\
-    \ Sum = m1une::monoid::Add<long long>;\n\n    m1une::ds::DsuMonoid<Sum> dsu(std::vector<int>{1,\
-    \ 2, 3, 4, 5});\n    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n   \
-    \ for (int i = 0; i < dsu.size(); i++) {\n        assert(dsu.size(i) == 1);\n\
+    ../../../ds/dsu/dsu_monoid.hpp\"\n#include \"../../../monoid/add.hpp\"\n\n#include\
+    \ <cassert>\n#include <iostream>\n#include <string>\n#include <vector>\n\nstruct\
+    \ StringMonoid {\n    using value_type = std::string;\n\n    static std::string\
+    \ id() {\n        return \"\";\n    }\n\n    static std::string op(const std::string&\
+    \ a, const std::string& b) {\n        return a + b;\n    }\n};\n\nint main() {\n\
+    \    using Sum = m1une::monoid::Add<long long>;\n\n    m1une::ds::DsuMonoid<Sum>\
+    \ dsu(std::vector<int>{1, 2, 3, 4, 5});\n    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n\
+    \    for (int i = 0; i < dsu.size(); i++) {\n        assert(dsu.size(i) == 1);\n\
     \        assert(dsu.prod(i) == i + 1);\n    }\n\n    dsu.merge(0, 1);\n    assert(dsu.same(0,\
     \ 1));\n    assert(dsu.size(0) == 2);\n    assert(dsu.prod(0) == 3);\n    assert(dsu.prod(1)\
     \ == 3);\n\n    dsu.merge(2, 3);\n    assert(dsu.prod(2) == 7);\n    dsu.merge(1,\
@@ -158,7 +158,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dsu/dsu_monoid.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/dsu_monoid.test.cpp

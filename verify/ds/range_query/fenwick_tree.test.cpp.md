@@ -60,7 +60,7 @@ data:
     \ >> l >> r;\n            std::cout << tree.sum(l, r) << '\\n';\n        }\n \
     \   }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\
-    \n#include <cassert>\n#include <iostream>\n#include <vector>\n\n#include \"ds/range_query/fenwick_tree.hpp\"\
+    \n#include <cassert>\n#include <iostream>\n#include <vector>\n\n#include \"../../../ds/range_query/fenwick_tree.hpp\"\
     \n\nvoid test_fenwick_tree() {\n    const std::vector<long long> values = {1,\
     \ 2, 3};\n    m1une::ds::FenwickTree<long long> tree(values);\n\n    assert(tree.size()\
     \ == 3);\n    assert(!tree.empty());\n    assert(tree.sum(0) == 0);\n    assert(tree.sum(3)\
@@ -82,7 +82,7 @@ data:
   isVerificationFile: true
   path: verify/ds/range_query/fenwick_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/range_query/fenwick_tree.test.cpp

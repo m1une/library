@@ -1,20 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"tree/rerooting_dp.hpp\"\n\n\n\n#include <vector>\n\n#line\
@@ -104,8 +104,8 @@ data:
     \ suff[i + 1]), v);\n        }\n    }\n\n    return answer;\n}\n\n}  // namespace\
     \ tree\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_TREE_REROOTING_DP_HPP\n#define M1UNE_TREE_REROOTING_DP_HPP\
-    \ 1\n\n#include <vector>\n\n#include \"graph/graph.hpp\"\n\nnamespace m1une {\n\
-    namespace tree {\n\ntemplate <class T, class DP, class Merge, class AddVertex,\
+    \ 1\n\n#include <vector>\n\n#include \"../graph/graph.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace tree {\n\ntemplate <class T, class DP, class Merge, class AddVertex,\
     \ class AddEdge>\nstd::vector<DP> rerooting_dp(const m1une::graph::Graph<T>& g,\
     \ DP id, Merge merge, AddVertex add_vertex,\n                             AddEdge\
     \ add_edge) {\n    int n = g.size();\n    std::vector<int> parent(n, -2), parent_edge(n,\
@@ -141,8 +141,8 @@ data:
   path: tree/rerooting_dp.hpp
   requiredBy:
   - tree/all.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
 documentation_of: tree/rerooting_dp.hpp

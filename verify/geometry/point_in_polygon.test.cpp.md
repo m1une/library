@@ -215,7 +215,7 @@ data:
     \ >> point.y;\n        std::cout << int(point_in_polygon(polygon, point)) << '\\\
     n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_C\"\
-    \n\n#include \"geometry/polygon.hpp\"\n\n#include <iostream>\n#include <vector>\n\
+    \n\n#include \"../../geometry/polygon.hpp\"\n\n#include <iostream>\n#include <vector>\n\
     \nint main() {\n    using namespace m1une::geometry;\n    int n;\n    std::cin\
     \ >> n;\n    std::vector<Point<long long>> polygon(n);\n    for (auto& point :\
     \ polygon) std::cin >> point.x >> point.y;\n\n    int q;\n    std::cin >> q;\n\
@@ -229,7 +229,7 @@ data:
   isVerificationFile: true
   path: verify/geometry/point_in_polygon.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/geometry/point_in_polygon.test.cpp

@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -132,8 +132,8 @@ data:
     }  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_PERSISTENT_DUAL_SEGTREE_HPP\n#define M1UNE_PERSISTENT_DUAL_SEGTREE_HPP\
     \ 1\n\n#include <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n\
-    #include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct PersistentDualSegtree\
+    #include <vector>\n\n#include \"../../monoid/concept.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct PersistentDualSegtree\
     \ {\n    using T = typename Monoid::value_type;\n\n   private:\n    struct Node\
     \ {\n        T val;\n        int l, r;\n        bool has_lazy;\n\n        Node()\
     \ : val(Monoid::id()), l(0), r(0), has_lazy(false) {}\n        explicit Node(T\
@@ -238,7 +238,7 @@ data:
   isVerificationFile: false
   path: ds/segtree/persistent_dual_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/persistent_dual_segtree.test.cpp

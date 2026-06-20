@@ -164,19 +164,19 @@ data:
     \ >> second.b.x >> second.b.y;\n        std::cout << intersects(first, second)\
     \ << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_B\"\
-    \n\n#include \"geometry/line.hpp\"\n\n#include <iostream>\n\nint main() {\n  \
-    \  using namespace m1une::geometry;\n    int q;\n    std::cin >> q;\n    while\
-    \ (q--) {\n        Segment<long long> first;\n        Segment<long long> second;\n\
-    \        std::cin >> first.a.x >> first.a.y >> first.b.x >> first.b.y;\n     \
-    \   std::cin >> second.a.x >> second.a.y >> second.b.x >> second.b.y;\n      \
-    \  std::cout << intersects(first, second) << '\\n';\n    }\n}\n"
+    \n\n#include \"../../geometry/line.hpp\"\n\n#include <iostream>\n\nint main()\
+    \ {\n    using namespace m1une::geometry;\n    int q;\n    std::cin >> q;\n  \
+    \  while (q--) {\n        Segment<long long> first;\n        Segment<long long>\
+    \ second;\n        std::cin >> first.a.x >> first.a.y >> first.b.x >> first.b.y;\n\
+    \        std::cin >> second.a.x >> second.a.y >> second.b.x >> second.b.y;\n \
+    \       std::cout << intersects(first, second) << '\\n';\n    }\n}\n"
   dependsOn:
   - geometry/line.hpp
   - geometry/point.hpp
   isVerificationFile: true
   path: verify/geometry/segment_intersection.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/geometry/segment_intersection.test.cpp

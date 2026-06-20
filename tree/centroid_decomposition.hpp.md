@@ -1,20 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"tree/centroid_decomposition.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -113,7 +113,7 @@ data:
     \ const {\n        return roots.empty() ? -1 : roots[0];\n    }\n};\n\n}  // namespace\
     \ tree\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_TREE_CENTROID_DECOMPOSITION_HPP\n#define M1UNE_TREE_CENTROID_DECOMPOSITION_HPP\
-    \ 1\n\n#include <algorithm>\n#include <vector>\n\n#include \"graph/graph.hpp\"\
+    \ 1\n\n#include <algorithm>\n#include <vector>\n\n#include \"../graph/graph.hpp\"\
     \n\nnamespace m1une {\nnamespace tree {\n\ntemplate <class T = int>\nstruct CentroidDecomposition\
     \ {\n    int n;\n    std::vector<int> parent;\n    std::vector<int> depth;\n \
     \   std::vector<int> order;\n    std::vector<int> roots;\n    std::vector<std::vector<int>>\
@@ -159,8 +159,8 @@ data:
   path: tree/centroid_decomposition.hpp
   requiredBy:
   - tree/all.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
 documentation_of: tree/centroid_decomposition.hpp

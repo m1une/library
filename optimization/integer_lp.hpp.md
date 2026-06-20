@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/simplex.hpp
     title: Simplex Algorithm
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: optimization/all.hpp
     title: Optimization All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/optimization/integer_lp.test.cpp
     title: verify/optimization/integer_lp.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/optimization/simplex.test.cpp
     title: verify/optimization/simplex.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"optimization/integer_lp.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -250,23 +250,22 @@ data:
     }  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_OPTIMIZATION_INTEGER_LP_HPP\n#define M1UNE_OPTIMIZATION_INTEGER_LP_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <cmath>\n#include <limits>\n\
-    #include <type_traits>\n#include <vector>\n\n#include \"optimization/simplex.hpp\"\
-    \n\nnamespace m1une {\nnamespace optimization {\n\nenum class IntegerLpStatus\
-    \ {\n    Optimal,\n    Infeasible,\n    Unbounded,\n};\n\ntemplate <class T>\n\
-    struct IntegerLpResult {\n    IntegerLpStatus status;\n    T objective_value;\n\
-    \    std::vector<T> variables;\n\n    bool is_optimal() const { return status\
-    \ == IntegerLpStatus::Optimal; }\n    bool is_infeasible() const { return status\
-    \ == IntegerLpStatus::Infeasible; }\n    bool is_unbounded() const { return status\
-    \ == IntegerLpStatus::Unbounded; }\n};\n\nnamespace detail {\n\ntemplate <class\
-    \ T>\nstruct IntegerLpSolver {\n    using Real = long double;\n\n    struct Node\
-    \ {\n        std::vector<std::vector<Real>> a;\n        std::vector<Real> b;\n\
-    \    };\n\n    int variable_count;\n    bool maximize;\n    Real eps;\n    std::vector<T>\
-    \ objective;\n    std::vector<Real> relaxation_objective;\n    Node initial_node;\n\
-    \n    bool has_incumbent = false;\n    T best_value = T();\n    std::vector<T>\
-    \ best_variables;\n\n    IntegerLpSolver(const std::vector<std::vector<T>>& a,\
-    \ const std::vector<T>& b,\n                    const std::vector<T>& c, bool\
-    \ is_maximize, Real epsilon)\n        : variable_count(int(c.size())),\n     \
-    \     maximize(is_maximize),\n          eps(epsilon),\n          objective(c),\n\
+    #include <type_traits>\n#include <vector>\n\n#include \"simplex.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace optimization {\n\nenum class IntegerLpStatus {\n    Optimal,\n\
+    \    Infeasible,\n    Unbounded,\n};\n\ntemplate <class T>\nstruct IntegerLpResult\
+    \ {\n    IntegerLpStatus status;\n    T objective_value;\n    std::vector<T> variables;\n\
+    \n    bool is_optimal() const { return status == IntegerLpStatus::Optimal; }\n\
+    \    bool is_infeasible() const { return status == IntegerLpStatus::Infeasible;\
+    \ }\n    bool is_unbounded() const { return status == IntegerLpStatus::Unbounded;\
+    \ }\n};\n\nnamespace detail {\n\ntemplate <class T>\nstruct IntegerLpSolver {\n\
+    \    using Real = long double;\n\n    struct Node {\n        std::vector<std::vector<Real>>\
+    \ a;\n        std::vector<Real> b;\n    };\n\n    int variable_count;\n    bool\
+    \ maximize;\n    Real eps;\n    std::vector<T> objective;\n    std::vector<Real>\
+    \ relaxation_objective;\n    Node initial_node;\n\n    bool has_incumbent = false;\n\
+    \    T best_value = T();\n    std::vector<T> best_variables;\n\n    IntegerLpSolver(const\
+    \ std::vector<std::vector<T>>& a, const std::vector<T>& b,\n                 \
+    \   const std::vector<T>& c, bool is_maximize, Real epsilon)\n        : variable_count(int(c.size())),\n\
+    \          maximize(is_maximize),\n          eps(epsilon),\n          objective(c),\n\
     \          relaxation_objective(c.size(), Real()),\n          initial_node() {\n\
     \        initial_node.a.assign(a.size(), std::vector<Real>(variable_count, Real()));\n\
     \        initial_node.b.assign(b.size(), Real());\n        for (int i = 0; i <\
@@ -383,8 +382,8 @@ data:
   path: optimization/integer_lp.hpp
   requiredBy:
   - optimization/all.hpp
-  timestamp: '2026-06-18 01:38:25+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/optimization/integer_lp.test.cpp
   - verify/optimization/simplex.test.cpp

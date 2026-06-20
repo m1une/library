@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -276,14 +276,14 @@ data:
     \    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_LINK_CUT_TREE_HPP\n#define M1UNE_LINK_CUT_TREE_HPP 1\n\n#include\
     \ <cassert>\n#include <concepts>\n#include <type_traits>\n#include <utility>\n\
-    #include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ ds {\n\ntemplate <m1une::monoid::IsCommutativeGroup Group>\nstruct LinkCutTree\
-    \ {\n    using T = typename Group::value_type;\n\n   private:\n    struct Node\
-    \ {\n        int left = -1;\n        int right = -1;\n        int parent = -1;\n\
-    \        bool rev = false;\n        int size = 1;\n        int virtual_size =\
-    \ 0;\n        int all_size = 1;\n        T value = Group::id();\n        T prod\
-    \ = Group::id();\n        T rev_prod = Group::id();\n        T virtual_prod =\
-    \ Group::id();\n        T all_prod = Group::id();\n    };\n\n    struct EdgeInfo\
+    #include <vector>\n\n#include \"../../monoid/concept.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace ds {\n\ntemplate <m1une::monoid::IsCommutativeGroup Group>\nstruct\
+    \ LinkCutTree {\n    using T = typename Group::value_type;\n\n   private:\n  \
+    \  struct Node {\n        int left = -1;\n        int right = -1;\n        int\
+    \ parent = -1;\n        bool rev = false;\n        int size = 1;\n        int\
+    \ virtual_size = 0;\n        int all_size = 1;\n        T value = Group::id();\n\
+    \        T prod = Group::id();\n        T rev_prod = Group::id();\n        T virtual_prod\
+    \ = Group::id();\n        T all_prod = Group::id();\n    };\n\n    struct EdgeInfo\
     \ {\n        int u = -1;\n        int v = -1;\n        int node = -1;\n      \
     \  bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo>\
     \ _edges;\n    std::vector<int> _path_buffer;\n\n    static T make_node_value(const\
@@ -526,7 +526,7 @@ data:
   isVerificationFile: false
   path: ds/dynamic_tree/link_cut_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_tree/link_cut_tree.test.cpp

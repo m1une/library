@@ -394,9 +394,9 @@ data:
     \ <= 80) versions.push_back({next, next_expected});\n    }\n\n    long long x,\
     \ y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp\"\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <iostream>\n#include <numeric>\n#include <random>\n\
-    #include <utility>\n#include <vector>\n\n#include \"acted_monoid/range_ap_add_range_sum.hpp\"\
+    ../../../ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp\"\n\n#include\
+    \ <algorithm>\n#include <cassert>\n#include <iostream>\n#include <numeric>\n#include\
+    \ <random>\n#include <utility>\n#include <vector>\n\n#include \"../../../acted_monoid/range_ap_add_range_sum.hpp\"\
     \n\nusing AM = m1une::acted_monoid::RangeApAddRangeSum<long long>;\nusing Node\
     \ = AM::value_type;\nusing Array = m1une::ds::PersistentDynamicLazyMonoidArray<AM>;\n\
     \nstd::vector<long long> sums(const std::vector<Node>& a) {\n    std::vector<long\
@@ -463,7 +463,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp

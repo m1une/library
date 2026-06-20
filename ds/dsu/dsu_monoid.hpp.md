@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -92,14 +92,14 @@ data:
     \  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_DSU_MONOID_HPP\n#define M1UNE_DSU_MONOID_HPP 1\n\n#include\
     \ <algorithm>\n#include <cassert>\n#include <concepts>\n#include <initializer_list>\n\
-    #include <utility>\n#include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct\
-    \ DsuMonoid {\n    using T = typename Monoid::value_type;\n\n   private:\n   \
-    \ int _n;\n    std::vector<int> parent_or_size;\n    std::vector<T> _prod;\n\n\
-    \    static int check_size(int n) {\n        assert(0 <= n);\n        return n;\n\
-    \    }\n\n    template <typename U>\n    static T make_value(const U& value, int\
-    \ index) {\n        if constexpr (requires(U x) { Monoid::make(x); }) {\n    \
-    \        return Monoid::make(value);\n        } else if constexpr (requires(U\
+    #include <utility>\n#include <vector>\n\n#include \"../../monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
+    struct DsuMonoid {\n    using T = typename Monoid::value_type;\n\n   private:\n\
+    \    int _n;\n    std::vector<int> parent_or_size;\n    std::vector<T> _prod;\n\
+    \n    static int check_size(int n) {\n        assert(0 <= n);\n        return\
+    \ n;\n    }\n\n    template <typename U>\n    static T make_value(const U& value,\
+    \ int index) {\n        if constexpr (requires(U x) { Monoid::make(x); }) {\n\
+    \            return Monoid::make(value);\n        } else if constexpr (requires(U\
     \ x, int i) { Monoid::make(x, i); }) {\n            return Monoid::make(value,\
     \ index);\n        } else {\n            return static_cast<T>(value);\n     \
     \   }\n    }\n\n   public:\n    DsuMonoid() : DsuMonoid(0) {}\n\n    explicit\
@@ -158,7 +158,7 @@ data:
   isVerificationFile: false
   path: ds/dsu/dsu_monoid.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dsu/dsu_monoid.test.cpp

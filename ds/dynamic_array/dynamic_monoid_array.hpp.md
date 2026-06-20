@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -237,24 +237,25 @@ data:
   code: "#ifndef M1UNE_DYNAMIC_MONOID_ARRAY_HPP\n#define M1UNE_DYNAMIC_MONOID_ARRAY_HPP\
     \ 1\n\n#include <cassert>\n#include <chrono>\n#include <concepts>\n#include <cstdint>\n\
     #include <initializer_list>\n#include <utility>\n#include <vector>\n\n#include\
-    \ \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid\
-    \ Monoid>\nstruct DynamicMonoidArray {\n    using T = typename Monoid::value_type;\n\
-    \n   private:\n    struct Node {\n        T val;\n        T prod;\n        T rprod;\n\
-    \        int priority;\n        int count;\n        int l, r;\n        bool rev;\n\
-    \n        Node()\n            : val(Monoid::id()),\n              prod(Monoid::id()),\n\
-    \              rprod(Monoid::id()),\n              priority(0),\n            \
-    \  count(0),\n              l(0),\n              r(0),\n              rev(false)\
-    \ {}\n\n        Node(T value, int node_priority)\n            : val(std::move(value)),\
-    \ prod(val), rprod(val), priority(node_priority), count(1), l(0), r(0), rev(false)\
-    \ {}\n    };\n\n    std::vector<Node> pool;\n    int root;\n    std::uint32_t\
-    \ rng_state;\n\n    template <typename U>\n    static T make_value(const U& value)\
-    \ {\n        if constexpr (requires(U x) { Monoid::make(x); }) {\n           \
-    \ return Monoid::make(value);\n        } else {\n            return static_cast<T>(value);\n\
-    \        }\n    }\n\n    int new_node(T value) {\n        pool.push_back(Node(std::move(value),\
-    \ next_priority()));\n        return int(pool.size()) - 1;\n    }\n\n    int next_priority()\
-    \ {\n        rng_state ^= rng_state << 13;\n        rng_state ^= rng_state >>\
-    \ 17;\n        rng_state ^= rng_state << 5;\n        return int(rng_state);\n\
-    \    }\n\n    void update(int t) {\n        if (!t) return;\n        int l = pool[t].l;\n\
+    \ \"../../monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\ntemplate\
+    \ <m1une::monoid::IsMonoid Monoid>\nstruct DynamicMonoidArray {\n    using T =\
+    \ typename Monoid::value_type;\n\n   private:\n    struct Node {\n        T val;\n\
+    \        T prod;\n        T rprod;\n        int priority;\n        int count;\n\
+    \        int l, r;\n        bool rev;\n\n        Node()\n            : val(Monoid::id()),\n\
+    \              prod(Monoid::id()),\n              rprod(Monoid::id()),\n     \
+    \         priority(0),\n              count(0),\n              l(0),\n       \
+    \       r(0),\n              rev(false) {}\n\n        Node(T value, int node_priority)\n\
+    \            : val(std::move(value)), prod(val), rprod(val), priority(node_priority),\
+    \ count(1), l(0), r(0), rev(false) {}\n    };\n\n    std::vector<Node> pool;\n\
+    \    int root;\n    std::uint32_t rng_state;\n\n    template <typename U>\n  \
+    \  static T make_value(const U& value) {\n        if constexpr (requires(U x)\
+    \ { Monoid::make(x); }) {\n            return Monoid::make(value);\n        }\
+    \ else {\n            return static_cast<T>(value);\n        }\n    }\n\n    int\
+    \ new_node(T value) {\n        pool.push_back(Node(std::move(value), next_priority()));\n\
+    \        return int(pool.size()) - 1;\n    }\n\n    int next_priority() {\n  \
+    \      rng_state ^= rng_state << 13;\n        rng_state ^= rng_state >> 17;\n\
+    \        rng_state ^= rng_state << 5;\n        return int(rng_state);\n    }\n\
+    \n    void update(int t) {\n        if (!t) return;\n        int l = pool[t].l;\n\
     \        int r = pool[t].r;\n        pool[t].count = 1 + pool[l].count + pool[r].count;\n\
     \        pool[t].prod = Monoid::op(Monoid::op(pool[l].prod, pool[t].val), pool[r].prod);\n\
     \        pool[t].rprod = Monoid::op(Monoid::op(pool[r].rprod, pool[t].val), pool[l].rprod);\n\
@@ -445,7 +446,7 @@ data:
   isVerificationFile: false
   path: ds/dynamic_array/dynamic_monoid_array.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp

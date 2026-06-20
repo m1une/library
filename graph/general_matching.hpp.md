@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/library_checker_general_matching.test.cpp
     title: verify/graph/library_checker_general_matching.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/general_matching.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -401,31 +401,31 @@ data:
     }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_GENERAL_MATCHING_HPP\n#define M1UNE_GRAPH_GENERAL_MATCHING_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <optional>\n#include\
-    \ <utility>\n#include <vector>\n\n#include \"graph/graph.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace graph {\n\nstruct GeneralMatching {\n    struct Edge {\n      \
-    \  int from;\n        int to;\n        int id;\n        bool alive;\n\n      \
-    \  int other(int v) const {\n            assert(v == from || v == to);\n     \
-    \       return from ^ to ^ v;\n        }\n    };\n\n    struct Pair {\n      \
-    \  int from;\n        int to;\n        int edge_id;\n    };\n\n   private:\n \
-    \   int _n;\n    std::vector<Edge> _edges;\n    std::vector<std::vector<int>>\
-    \ _adj;\n    std::vector<int> _mate;\n    std::vector<int> _mate_edge;\n    bool\
-    \ _calculated;\n\n    void invalidate() {\n        _calculated = false;\n    }\n\
-    \n    void ensure_matching() {\n        if (!_calculated) max_matching();\n  \
-    \  }\n\n    bool is_matched_edge(int id) const {\n        const auto& e = _edges[id];\n\
-    \        return _mate[e.from] == e.to && _mate_edge[e.from] == id;\n    }\n\n\
-    \    enum MatchingLabel : char {\n        even_label,\n        odd_label,\n  \
-    \      unlabeled\n    };\n\n    struct MutablePartition {\n        std::vector<int>\
-    \ parent;\n        std::vector<int> rank;\n        std::vector<int> representative;\n\
-    \n        MutablePartition() = default;\n\n        explicit MutablePartition(int\
-    \ n) {\n            reset(n);\n        }\n\n        void reset(int n) {\n    \
-    \        parent.resize(n);\n            rank.assign(n, 0);\n            representative.resize(n);\n\
-    \            for (int i = 0; i < n; i++) {\n                parent[i] = i;\n \
-    \               representative[i] = i;\n            }\n        }\n\n        int\
-    \ root(int v) {\n            if (parent[v] == v) return v;\n            return\
-    \ parent[v] = root(parent[v]);\n        }\n\n        int operator()(int v) {\n\
-    \            return representative[root(v)];\n        }\n\n        void unite(int\
-    \ a, int b) {\n            int ra = root(a);\n            int rb = root(b);\n\
-    \            if (ra == rb) return;\n            if (rank[ra] < rank[rb]) std::swap(ra,\
+    \ <utility>\n#include <vector>\n\n#include \"graph.hpp\"\n\nnamespace m1une {\n\
+    namespace graph {\n\nstruct GeneralMatching {\n    struct Edge {\n        int\
+    \ from;\n        int to;\n        int id;\n        bool alive;\n\n        int\
+    \ other(int v) const {\n            assert(v == from || v == to);\n          \
+    \  return from ^ to ^ v;\n        }\n    };\n\n    struct Pair {\n        int\
+    \ from;\n        int to;\n        int edge_id;\n    };\n\n   private:\n    int\
+    \ _n;\n    std::vector<Edge> _edges;\n    std::vector<std::vector<int>> _adj;\n\
+    \    std::vector<int> _mate;\n    std::vector<int> _mate_edge;\n    bool _calculated;\n\
+    \n    void invalidate() {\n        _calculated = false;\n    }\n\n    void ensure_matching()\
+    \ {\n        if (!_calculated) max_matching();\n    }\n\n    bool is_matched_edge(int\
+    \ id) const {\n        const auto& e = _edges[id];\n        return _mate[e.from]\
+    \ == e.to && _mate_edge[e.from] == id;\n    }\n\n    enum MatchingLabel : char\
+    \ {\n        even_label,\n        odd_label,\n        unlabeled\n    };\n\n  \
+    \  struct MutablePartition {\n        std::vector<int> parent;\n        std::vector<int>\
+    \ rank;\n        std::vector<int> representative;\n\n        MutablePartition()\
+    \ = default;\n\n        explicit MutablePartition(int n) {\n            reset(n);\n\
+    \        }\n\n        void reset(int n) {\n            parent.resize(n);\n   \
+    \         rank.assign(n, 0);\n            representative.resize(n);\n        \
+    \    for (int i = 0; i < n; i++) {\n                parent[i] = i;\n         \
+    \       representative[i] = i;\n            }\n        }\n\n        int root(int\
+    \ v) {\n            if (parent[v] == v) return v;\n            return parent[v]\
+    \ = root(parent[v]);\n        }\n\n        int operator()(int v) {\n         \
+    \   return representative[root(v)];\n        }\n\n        void unite(int a, int\
+    \ b) {\n            int ra = root(a);\n            int rb = root(b);\n       \
+    \     if (ra == rb) return;\n            if (rank[ra] < rank[rb]) std::swap(ra,\
     \ rb);\n            parent[rb] = ra;\n            if (rank[ra] == rank[rb]) rank[ra]++;\n\
     \        }\n\n        void make_rep(int v) {\n            representative[root(v)]\
     \ = v;\n        }\n    };\n\n    struct EdgeBucketQueue {\n        std::vector<std::vector<int>>\
@@ -728,8 +728,8 @@ data:
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/graph_algorithms.test.cpp

@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/dynamic_tree/rake_compress_link_cut_tree.hpp
     title: Rake-Compress Link-Cut Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
@@ -277,61 +277,62 @@ data:
     \ long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \n#include \"ds/dynamic_tree/rake_compress_link_cut_tree.hpp\"\n#include \"math/modint.hpp\"\
-    \n\nusing mint = m1une::math::modint998244353;\n\ntemplate <class T>\nstruct AffineTreeSum\
-    \ {\n    struct Point {\n        T s;\n        T x;\n\n        Point() = delete;\n\
-    \n        Point(T s_, T x_) : s(s_), x(x_) {}\n\n        static Point id() {\n\
-    \            return Point{T(0), T(0)};\n        }\n\n        Point inv() const\
-    \ {\n            return Point{T(0) - s, T(0) - x};\n        }\n    };\n\n    struct\
-    \ Path {\n        T a;\n        T b;\n        T s;\n        T x;\n\n        Path()\
-    \ = delete;\n\n        Path(T a_, T b_, T s_, T x_) : a(a_), b(b_), s(s_), x(x_)\
-    \ {}\n    };\n\n    struct VertexValue {\n        T x;\n\n        VertexValue()\
-    \ = delete;\n\n        explicit VertexValue(T x_) : x(x_) {}\n    };\n\n    struct\
-    \ EdgeValue {\n        T a;\n        T b;\n\n        EdgeValue() = delete;\n\n\
-    \        EdgeValue(T a_, T b_) : a(a_), b(b_) {}\n    };\n\n    static Path make_vertex_path(const\
-    \ Point& d, const VertexValue& vertex) {\n        return Path{T(1), T(0), d.s\
-    \ + vertex.x, d.x + T(1)};\n    }\n\n    static Path make_edge_path(const Point&\
-    \ d, const EdgeValue& edge) {\n        return Path{edge.a, edge.b, d.s * edge.a\
-    \ + d.x * edge.b, d.x};\n    }\n\n    static Point to_point(const Path& path)\
-    \ {\n        return Point{path.s, path.x};\n    }\n\n    static Point rake(const\
-    \ Point& a, const Point& b) {\n        return Point{a.s + b.s, a.x + b.x};\n \
-    \   }\n\n    static Path compress(const Path& parent_side, const Path& child_side)\
-    \ {\n        return Path{\n            parent_side.a * child_side.a,\n       \
-    \     parent_side.a * child_side.b + parent_side.b,\n            parent_side.s\
-    \ + parent_side.a * child_side.s + parent_side.b * child_side.x,\n           \
-    \ parent_side.x + child_side.x\n        };\n    }\n};\n\nstruct Edge {\n    int\
-    \ u;\n    int v;\n    mint a;\n    mint b;\n};\n\nstruct AdjEdge {\n    int to;\n\
-    \    int id;\n};\n\nstd::pair<mint, int> naive_dfs(\n    int v,\n    int parent,\n\
-    \    const std::vector<mint>& value,\n    const std::vector<Edge>& edges,\n  \
-    \  const std::vector<std::vector<AdjEdge>>& graph\n) {\n    mint sum = value[v];\n\
-    \    int count = 1;\n    for (const AdjEdge& e : graph[v]) {\n        if (e.to\
-    \ == parent) continue;\n        auto child = naive_dfs(e.to, v, value, edges,\
-    \ graph);\n        const Edge& edge = edges[e.id];\n        sum += edge.a * child.first\
-    \ + edge.b * mint(child.second);\n        count += child.second;\n    }\n    return\
-    \ {sum, count};\n}\n\nvoid test_random_updates() {\n    using TreeDP = AffineTreeSum<mint>;\n\
+    \n#include \"../../../ds/dynamic_tree/rake_compress_link_cut_tree.hpp\"\n#include\
+    \ \"../../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
+    \ntemplate <class T>\nstruct AffineTreeSum {\n    struct Point {\n        T s;\n\
+    \        T x;\n\n        Point() = delete;\n\n        Point(T s_, T x_) : s(s_),\
+    \ x(x_) {}\n\n        static Point id() {\n            return Point{T(0), T(0)};\n\
+    \        }\n\n        Point inv() const {\n            return Point{T(0) - s,\
+    \ T(0) - x};\n        }\n    };\n\n    struct Path {\n        T a;\n        T\
+    \ b;\n        T s;\n        T x;\n\n        Path() = delete;\n\n        Path(T\
+    \ a_, T b_, T s_, T x_) : a(a_), b(b_), s(s_), x(x_) {}\n    };\n\n    struct\
+    \ VertexValue {\n        T x;\n\n        VertexValue() = delete;\n\n        explicit\
+    \ VertexValue(T x_) : x(x_) {}\n    };\n\n    struct EdgeValue {\n        T a;\n\
+    \        T b;\n\n        EdgeValue() = delete;\n\n        EdgeValue(T a_, T b_)\
+    \ : a(a_), b(b_) {}\n    };\n\n    static Path make_vertex_path(const Point& d,\
+    \ const VertexValue& vertex) {\n        return Path{T(1), T(0), d.s + vertex.x,\
+    \ d.x + T(1)};\n    }\n\n    static Path make_edge_path(const Point& d, const\
+    \ EdgeValue& edge) {\n        return Path{edge.a, edge.b, d.s * edge.a + d.x *\
+    \ edge.b, d.x};\n    }\n\n    static Point to_point(const Path& path) {\n    \
+    \    return Point{path.s, path.x};\n    }\n\n    static Point rake(const Point&\
+    \ a, const Point& b) {\n        return Point{a.s + b.s, a.x + b.x};\n    }\n\n\
+    \    static Path compress(const Path& parent_side, const Path& child_side) {\n\
+    \        return Path{\n            parent_side.a * child_side.a,\n           \
+    \ parent_side.a * child_side.b + parent_side.b,\n            parent_side.s + parent_side.a\
+    \ * child_side.s + parent_side.b * child_side.x,\n            parent_side.x +\
+    \ child_side.x\n        };\n    }\n};\n\nstruct Edge {\n    int u;\n    int v;\n\
+    \    mint a;\n    mint b;\n};\n\nstruct AdjEdge {\n    int to;\n    int id;\n\
+    };\n\nstd::pair<mint, int> naive_dfs(\n    int v,\n    int parent,\n    const\
+    \ std::vector<mint>& value,\n    const std::vector<Edge>& edges,\n    const std::vector<std::vector<AdjEdge>>&\
+    \ graph\n) {\n    mint sum = value[v];\n    int count = 1;\n    for (const AdjEdge&\
+    \ e : graph[v]) {\n        if (e.to == parent) continue;\n        auto child =\
+    \ naive_dfs(e.to, v, value, edges, graph);\n        const Edge& edge = edges[e.id];\n\
+    \        sum += edge.a * child.first + edge.b * mint(child.second);\n        count\
+    \ += child.second;\n    }\n    return {sum, count};\n}\n\nvoid test_random_updates()\
+    \ {\n    using TreeDP = AffineTreeSum<mint>;\n    using VertexValue = typename\
+    \ TreeDP::VertexValue;\n    using EdgeValue = typename TreeDP::EdgeValue;\n  \
+    \  using LCT = m1une::ds::RakeCompressLinkCutTree<TreeDP>;\n\n    constexpr int\
+    \ n = 12;\n    std::mt19937 rng(712367);\n    std::vector<mint> value(n);\n  \
+    \  std::vector<int> vertex_id(n);\n    std::vector<Edge> edges;\n    std::vector<std::vector<AdjEdge>>\
+    \ graph(n);\n    LCT lct;\n\n    for (int i = 0; i < n; i++) {\n        value[i]\
+    \ = mint(int(rng() % 100));\n        vertex_id[i] = lct.add_vertex(VertexValue{value[i]});\n\
+    \    }\n\n    for (int v = 1; v < n; v++) {\n        int parent = int(rng() %\
+    \ v);\n        mint a = mint(int(rng() % 5));\n        mint b = mint(int(rng()\
+    \ % 100));\n        int id = int(edges.size());\n        edges.push_back(Edge{parent,\
+    \ v, a, b});\n        graph[parent].push_back(AdjEdge{v, id});\n        graph[v].push_back(AdjEdge{parent,\
+    \ id});\n        assert(lct.add_edge(vertex_id[parent], vertex_id[v], EdgeValue{a,\
+    \ b}) == id);\n    }\n\n    for (int step = 0; step < 4000; step++) {\n      \
+    \  int type = int(rng() % 3);\n        if (type == 0) {\n            int v = int(rng()\
+    \ % n);\n            value[v] = mint(int(rng() % 1000));\n            lct.set_vertex(vertex_id[v],\
+    \ VertexValue{value[v]});\n        } else if (type == 1) {\n            int id\
+    \ = int(rng() % edges.size());\n            edges[id].a = mint(int(rng() % 5));\n\
+    \            edges[id].b = mint(int(rng() % 1000));\n            lct.set_edge(id,\
+    \ EdgeValue{edges[id].a, edges[id].b});\n        } else {\n            int root\
+    \ = int(rng() % n);\n            mint expected = naive_dfs(root, -1, value, edges,\
+    \ graph).first;\n            assert(lct.component_prod(vertex_id[root]).s == expected);\n\
+    \        }\n    }\n}\n\nvoid test_cut_and_link() {\n    using TreeDP = AffineTreeSum<mint>;\n\
     \    using VertexValue = typename TreeDP::VertexValue;\n    using EdgeValue =\
     \ typename TreeDP::EdgeValue;\n    using LCT = m1une::ds::RakeCompressLinkCutTree<TreeDP>;\n\
-    \n    constexpr int n = 12;\n    std::mt19937 rng(712367);\n    std::vector<mint>\
-    \ value(n);\n    std::vector<int> vertex_id(n);\n    std::vector<Edge> edges;\n\
-    \    std::vector<std::vector<AdjEdge>> graph(n);\n    LCT lct;\n\n    for (int\
-    \ i = 0; i < n; i++) {\n        value[i] = mint(int(rng() % 100));\n        vertex_id[i]\
-    \ = lct.add_vertex(VertexValue{value[i]});\n    }\n\n    for (int v = 1; v < n;\
-    \ v++) {\n        int parent = int(rng() % v);\n        mint a = mint(int(rng()\
-    \ % 5));\n        mint b = mint(int(rng() % 100));\n        int id = int(edges.size());\n\
-    \        edges.push_back(Edge{parent, v, a, b});\n        graph[parent].push_back(AdjEdge{v,\
-    \ id});\n        graph[v].push_back(AdjEdge{parent, id});\n        assert(lct.add_edge(vertex_id[parent],\
-    \ vertex_id[v], EdgeValue{a, b}) == id);\n    }\n\n    for (int step = 0; step\
-    \ < 4000; step++) {\n        int type = int(rng() % 3);\n        if (type == 0)\
-    \ {\n            int v = int(rng() % n);\n            value[v] = mint(int(rng()\
-    \ % 1000));\n            lct.set_vertex(vertex_id[v], VertexValue{value[v]});\n\
-    \        } else if (type == 1) {\n            int id = int(rng() % edges.size());\n\
-    \            edges[id].a = mint(int(rng() % 5));\n            edges[id].b = mint(int(rng()\
-    \ % 1000));\n            lct.set_edge(id, EdgeValue{edges[id].a, edges[id].b});\n\
-    \        } else {\n            int root = int(rng() % n);\n            mint expected\
-    \ = naive_dfs(root, -1, value, edges, graph).first;\n            assert(lct.component_prod(vertex_id[root]).s\
-    \ == expected);\n        }\n    }\n}\n\nvoid test_cut_and_link() {\n    using\
-    \ TreeDP = AffineTreeSum<mint>;\n    using VertexValue = typename TreeDP::VertexValue;\n\
-    \    using EdgeValue = typename TreeDP::EdgeValue;\n    using LCT = m1une::ds::RakeCompressLinkCutTree<TreeDP>;\n\
     \n    LCT lct;\n    int a = lct.add_vertex(VertexValue{mint(2)});\n    int b =\
     \ lct.add_vertex(VertexValue{mint(3)});\n    int c = lct.add_vertex(VertexValue{mint(5)});\n\
     \    int e0 = lct.add_edge(a, b, EdgeValue{mint(0), mint(7)});\n    int e1 = lct.add_edge(b,\
@@ -352,7 +353,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp

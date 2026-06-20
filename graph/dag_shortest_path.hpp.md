@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/topological_sort.hpp
     title: Topological Sort
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/dag_shortest_path.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -126,7 +126,7 @@ data:
     }  // namespace graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_DAG_SHORTEST_PATH_HPP\n#define M1UNE_GRAPH_DAG_SHORTEST_PATH_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <limits>\n#include <optional>\n\
-    #include <vector>\n\n#include \"graph/graph.hpp\"\n#include \"graph/topological_sort.hpp\"\
+    #include <vector>\n\n#include \"graph.hpp\"\n#include \"topological_sort.hpp\"\
     \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct DagShortestPathResult\
     \ {\n    std::vector<T> dist;\n    std::vector<int> parent;\n    std::vector<int>\
     \ parent_edge;\n    std::vector<int> topological_order;\n    T inf;\n\n    bool\
@@ -161,8 +161,8 @@ data:
   - graph/undirected.hpp
   - graph/directed.hpp
   - graph/shortest_path.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/dag_shortest_path.hpp

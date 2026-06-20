@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   - icon: ':heavy_check_mark:'
@@ -130,27 +130,28 @@ data:
     \ empty;\n    assert(empty.size() == 0);\n    assert(empty.empty());\n\n    long\
     \ long x, y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/dsu/potentialized_dsu.hpp\"\n#include \"monoid/add.hpp\"\n#include \"monoid/xor.hpp\"\
-    \n\n#include <cassert>\n#include <iostream>\n#include <vector>\n\nint main() {\n\
-    \    using Add = m1une::monoid::Add<long long>;\n\n    m1une::ds::PotentializedDsu<Add>\
-    \ add_dsu(5);\n    assert(add_dsu.size() == 5);\n    assert(!add_dsu.empty());\n\
-    \n    assert(add_dsu.merge(0, 1, 3));\n    assert(add_dsu.merge(1, 2, 4));\n \
-    \   assert(add_dsu.same(0, 2));\n    assert(add_dsu.diff(0, 1) == 3);\n    assert(add_dsu.diff(1,\
-    \ 2) == 4);\n    assert(add_dsu.diff(0, 2) == 7);\n    assert(add_dsu.diff(2,\
-    \ 0) == -7);\n    assert(add_dsu.merge(0, 2, 7));\n    assert(!add_dsu.merge(0,\
-    \ 2, 8));\n\n    assert(add_dsu.merge(4, 0, -1));\n    assert(add_dsu.diff(4,\
-    \ 0) == -1);\n    assert(add_dsu.diff(0, 4) == 1);\n    assert(add_dsu.size(1)\
-    \ == 4);\n\n    const auto& const_add_dsu = add_dsu;\n    assert(const_add_dsu.same(4,\
-    \ 2));\n    assert(const_add_dsu.diff(4, 2) == 6);\n\n    std::vector<std::vector<int>>\
-    \ groups = add_dsu.groups();\n    assert(groups.size() == 2);\n\n    using Xor\
-    \ = m1une::monoid::Xor<int>;\n\n    m1une::ds::PotentializedDsu<Xor> xor_dsu(4);\n\
-    \    assert(xor_dsu.merge(0, 1, 5));\n    assert(xor_dsu.merge(1, 2, 6));\n  \
-    \  assert(xor_dsu.diff(0, 1) == 5);\n    assert(xor_dsu.diff(1, 2) == 6);\n  \
-    \  assert(xor_dsu.diff(0, 2) == (5 ^ 6));\n    assert(xor_dsu.merge(0, 2, 5 ^\
-    \ 6));\n    assert(!xor_dsu.merge(0, 2, 2));\n    assert(xor_dsu.merge(3, 0, 9));\n\
-    \    assert(xor_dsu.diff(3, 2) == (9 ^ 5 ^ 6));\n\n    m1une::ds::PotentializedDsu<Add>\
-    \ empty;\n    assert(empty.size() == 0);\n    assert(empty.empty());\n\n    long\
-    \ long x, y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
+    ../../../ds/dsu/potentialized_dsu.hpp\"\n#include \"../../../monoid/add.hpp\"\n\
+    #include \"../../../monoid/xor.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
+    #include <vector>\n\nint main() {\n    using Add = m1une::monoid::Add<long long>;\n\
+    \n    m1une::ds::PotentializedDsu<Add> add_dsu(5);\n    assert(add_dsu.size()\
+    \ == 5);\n    assert(!add_dsu.empty());\n\n    assert(add_dsu.merge(0, 1, 3));\n\
+    \    assert(add_dsu.merge(1, 2, 4));\n    assert(add_dsu.same(0, 2));\n    assert(add_dsu.diff(0,\
+    \ 1) == 3);\n    assert(add_dsu.diff(1, 2) == 4);\n    assert(add_dsu.diff(0,\
+    \ 2) == 7);\n    assert(add_dsu.diff(2, 0) == -7);\n    assert(add_dsu.merge(0,\
+    \ 2, 7));\n    assert(!add_dsu.merge(0, 2, 8));\n\n    assert(add_dsu.merge(4,\
+    \ 0, -1));\n    assert(add_dsu.diff(4, 0) == -1);\n    assert(add_dsu.diff(0,\
+    \ 4) == 1);\n    assert(add_dsu.size(1) == 4);\n\n    const auto& const_add_dsu\
+    \ = add_dsu;\n    assert(const_add_dsu.same(4, 2));\n    assert(const_add_dsu.diff(4,\
+    \ 2) == 6);\n\n    std::vector<std::vector<int>> groups = add_dsu.groups();\n\
+    \    assert(groups.size() == 2);\n\n    using Xor = m1une::monoid::Xor<int>;\n\
+    \n    m1une::ds::PotentializedDsu<Xor> xor_dsu(4);\n    assert(xor_dsu.merge(0,\
+    \ 1, 5));\n    assert(xor_dsu.merge(1, 2, 6));\n    assert(xor_dsu.diff(0, 1)\
+    \ == 5);\n    assert(xor_dsu.diff(1, 2) == 6);\n    assert(xor_dsu.diff(0, 2)\
+    \ == (5 ^ 6));\n    assert(xor_dsu.merge(0, 2, 5 ^ 6));\n    assert(!xor_dsu.merge(0,\
+    \ 2, 2));\n    assert(xor_dsu.merge(3, 0, 9));\n    assert(xor_dsu.diff(3, 2)\
+    \ == (9 ^ 5 ^ 6));\n\n    m1une::ds::PotentializedDsu<Add> empty;\n    assert(empty.size()\
+    \ == 0);\n    assert(empty.empty());\n\n    long long x, y;\n    std::cin >> x\
+    \ >> y;\n    std::cout << x + y << '\\n';\n}\n"
   dependsOn:
   - ds/dsu/potentialized_dsu.hpp
   - monoid/concept.hpp
@@ -159,7 +160,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dsu/potentialized_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/potentialized_dsu.test.cpp

@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/dynamic_segtree_common.hpp
     title: ds/segtree/dynamic_segtree_common.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   - icon: ':heavy_check_mark:'
@@ -16,7 +16,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/affine.hpp
     title: Affine Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -286,32 +286,33 @@ data:
     \ {\n            int p;\n            std::cin >> p;\n            std::cout <<\
     \ seg.get(p).second << '\\n';\n        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_point_get\"\
-    \n\n#include \"ds/segtree/dynamic_dual_segtree.hpp\"\n\n#include <algorithm>\n\
+    \n\n#include \"../../../ds/segtree/dynamic_dual_segtree.hpp\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <utility>\n\
-    #include <vector>\n\n#include \"math/modint.hpp\"\n#include \"monoid/add.hpp\"\
-    \n#include \"monoid/affine.hpp\"\n\nnamespace {\n\nvoid test_randomized() {\n\
-    \    using Add = m1une::monoid::Add<long long>;\n    constexpr int left = -43;\n\
-    \    constexpr int right = 51;\n    m1une::ds::DynamicDualSegtree<Add, int> seg(left,\
-    \ right, 7);\n    std::vector<long long> a(right - left, 7);\n\n    std::uint64_t\
-    \ state = 3;\n    auto random = [&state]() {\n        state ^= state << 7;\n \
-    \       state ^= state >> 9;\n        return state;\n    };\n    auto value_at\
-    \ = [&a](int p) -> long long& {\n        return a[std::size_t(p - left)];\n  \
-    \  };\n\n    for (int step = 0; step < 4000; step++) {\n        int type = int(random()\
-    \ % 3);\n        if (type == 0) {\n            int l = left + int(random() % (a.size()\
-    \ + 1));\n            int r = left + int(random() % (a.size() + 1));\n       \
-    \     if (r < l) std::swap(l, r);\n            long long x = static_cast<long\
-    \ long>(random() % 21);\n            seg.apply(l, r, x);\n            for (int\
-    \ p = l; p < r; p++) value_at(p) += x;\n        } else if (type == 1) {\n    \
-    \        [[maybe_unused]] int p = left + int(random() % a.size());\n         \
-    \   long long x = static_cast<long long>(random() % 100);\n            seg.set(p,\
-    \ x);\n            value_at(p) = x;\n        } else {\n            [[maybe_unused]]\
-    \ int p = left + int(random() % a.size());\n            assert(seg.get(p) == value_at(p));\n\
-    \        }\n    }\n\n    for (int p = left; p < right; p++) assert(seg[p] == value_at(p));\n\
-    \    assert(seg.node_count() != 0);\n    seg.clear();\n    assert(seg.node_count()\
-    \ == 0);\n    for (int p = left; p < right; p++) assert(seg.get(p) == 7);\n}\n\
-    \n}  // namespace\n\nint main() {\n    std::ios::sync_with_stdio(false);\n   \
-    \ std::cin.tie(nullptr);\n\n    test_randomized();\n\n    using mint = m1une::math::modint998244353;\n\
-    \    using Affine = m1une::monoid::Affine<mint>;\n\n    int n, q;\n    std::cin\
+    #include <vector>\n\n#include \"../../../math/modint.hpp\"\n#include \"../../../monoid/add.hpp\"\
+    \n#include \"../../../monoid/affine.hpp\"\n\nnamespace {\n\nvoid test_randomized()\
+    \ {\n    using Add = m1une::monoid::Add<long long>;\n    constexpr int left =\
+    \ -43;\n    constexpr int right = 51;\n    m1une::ds::DynamicDualSegtree<Add,\
+    \ int> seg(left, right, 7);\n    std::vector<long long> a(right - left, 7);\n\n\
+    \    std::uint64_t state = 3;\n    auto random = [&state]() {\n        state ^=\
+    \ state << 7;\n        state ^= state >> 9;\n        return state;\n    };\n \
+    \   auto value_at = [&a](int p) -> long long& {\n        return a[std::size_t(p\
+    \ - left)];\n    };\n\n    for (int step = 0; step < 4000; step++) {\n       \
+    \ int type = int(random() % 3);\n        if (type == 0) {\n            int l =\
+    \ left + int(random() % (a.size() + 1));\n            int r = left + int(random()\
+    \ % (a.size() + 1));\n            if (r < l) std::swap(l, r);\n            long\
+    \ long x = static_cast<long long>(random() % 21);\n            seg.apply(l, r,\
+    \ x);\n            for (int p = l; p < r; p++) value_at(p) += x;\n        } else\
+    \ if (type == 1) {\n            [[maybe_unused]] int p = left + int(random() %\
+    \ a.size());\n            long long x = static_cast<long long>(random() % 100);\n\
+    \            seg.set(p, x);\n            value_at(p) = x;\n        } else {\n\
+    \            [[maybe_unused]] int p = left + int(random() % a.size());\n     \
+    \       assert(seg.get(p) == value_at(p));\n        }\n    }\n\n    for (int p\
+    \ = left; p < right; p++) assert(seg[p] == value_at(p));\n    assert(seg.node_count()\
+    \ != 0);\n    seg.clear();\n    assert(seg.node_count() == 0);\n    for (int p\
+    \ = left; p < right; p++) assert(seg.get(p) == 7);\n}\n\n}  // namespace\n\nint\
+    \ main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    test_randomized();\n\n    using mint = m1une::math::modint998244353;\n \
+    \   using Affine = m1une::monoid::Affine<mint>;\n\n    int n, q;\n    std::cin\
     \ >> n >> q;\n    m1une::ds::DynamicDualSegtree<Affine, int> seg(0, n, Affine::id());\n\
     \    seg.reserve(std::size_t(4) * std::size_t(n + q));\n\n    for (int i = 0;\
     \ i < n; i++) {\n        long long x;\n        std::cin >> x;\n        Affine::value_type\
@@ -333,7 +334,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/dynamic_dual_segtree.test.cpp

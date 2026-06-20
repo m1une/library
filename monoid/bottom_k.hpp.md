@@ -44,7 +44,7 @@ data:
     #include <functional>
 
 
-    #include "monoid/top_k.hpp"
+    #include "top_k.hpp"
 
 
     namespace m1une {
@@ -74,7 +74,7 @@ data:
   isVerificationFile: false
   path: monoid/bottom_k.hpp
   requiredBy: []
-  timestamp: '2026-06-20 02:38:39+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/bottom_k.hpp

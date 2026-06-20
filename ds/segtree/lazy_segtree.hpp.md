@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: acted_monoid/concept.hpp
     title: Acted Monoid Concept
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
   _extendedRequiredBy: []
@@ -169,7 +169,7 @@ data:
     \ namespace ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_LAZY_SEGTREE_HPP\n#define M1UNE_LAZY_SEGTREE_HPP 1\n\n#include\
     \ <bit>\n#include <cassert>\n#include <concepts>\n#include <utility>\n#include\
-    \ <vector>\n\n#include \"acted_monoid/concept.hpp\"\n#include \"math/bit_ceil.hpp\"\
+    \ <vector>\n\n#include \"../../acted_monoid/concept.hpp\"\n#include \"../../math/bit_ceil.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\n// A highly generic Lazy Segment Tree\
     \ utilizing C++20 Concepts for type safety.\n// It operates on any Acted Monoid\
     \ structure satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\ntemplate\
@@ -304,7 +304,7 @@ data:
   isVerificationFile: false
   path: ds/segtree/lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/lazy_segtree.test.cpp

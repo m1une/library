@@ -4,13 +4,13 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/segtree.hpp
     title: Segment Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -143,13 +143,14 @@ data:
     \          std::cout << seg.prod(l, r) << \"\\n\";\n        }\n    }\n\n    return\
     \ 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\
-    \n#include \"ds/segtree/segtree.hpp\"\n#include \"monoid/add.hpp\"\n#include <cassert>\n\
-    #include <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n}\n\nint main() {\n    fast_io();\n    int n, q;\n\
-    \    std::cin >> n >> q;\n\n    std::vector<long long> a(n);\n    for (int i =\
-    \ 0; i < n; i++) {\n        std::cin >> a[i];\n    }\n\n    m1une::ds::Segtree<m1une::monoid::Add<long\
-    \ long>> seg(a);\n    assert(seg.size() == n);\n    assert(seg.empty() == (n ==\
-    \ 0));\n    assert(seg.to_vector() == a);\n    for (int i = 0; i < n; i++) assert(seg[i]\
+    \n#include \"../../../ds/segtree/segtree.hpp\"\n#include \"../../../monoid/add.hpp\"\
+    \n#include <cassert>\n#include <iostream>\n#include <vector>\n\nvoid fast_io()\
+    \ {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    }\n\nint main() {\n    fast_io();\n    int n, q;\n    std::cin >> n >> q;\n\n\
+    \    std::vector<long long> a(n);\n    for (int i = 0; i < n; i++) {\n       \
+    \ std::cin >> a[i];\n    }\n\n    m1une::ds::Segtree<m1une::monoid::Add<long long>>\
+    \ seg(a);\n    assert(seg.size() == n);\n    assert(seg.empty() == (n == 0));\n\
+    \    assert(seg.to_vector() == a);\n    for (int i = 0; i < n; i++) assert(seg[i]\
     \ == a[i]);\n\n    for (int i = 0; i < q; i++) {\n        int type;\n        std::cin\
     \ >> type;\n        if (type == 0) {\n            int p;\n            long long\
     \ x;\n            std::cin >> p >> x;\n            seg.set(p, seg.get(p) + x);\n\
@@ -164,7 +165,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/segtree.test.cpp

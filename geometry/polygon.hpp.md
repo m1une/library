@@ -215,7 +215,7 @@ data:
     \ distance2(polygon[next], polygon[opposite]));\n    }\n    return result;\n}\n\
     \n}  // namespace geometry\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GEOMETRY_POLYGON_HPP\n#define M1UNE_GEOMETRY_POLYGON_HPP 1\n\
-    \n#include <algorithm>\n#include <cmath>\n#include <vector>\n\n#include \"geometry/line.hpp\"\
+    \n#include <algorithm>\n#include <cmath>\n#include <vector>\n\n#include \"line.hpp\"\
     \n\nnamespace m1une {\nnamespace geometry {\n\nenum class PointInPolygon {\n \
     \   Outside = 0,\n    Boundary = 1,\n    Inside = 2,\n};\n\ntemplate <Coordinate\
     \ T>\nwide_type<T> polygon_area2(const std::vector<Point<T>>& polygon) {\n   \
@@ -269,7 +269,7 @@ data:
   path: geometry/polygon.hpp
   requiredBy:
   - geometry/all.hpp
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/geometry/polygon_area.test.cpp

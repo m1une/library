@@ -79,7 +79,7 @@ data:
     \   cout << int(dsus[k + 1].same(u, v)) << '\\n';\n            dsus.push_back(PersistentDsu(0));\n\
     \        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/persistent_unionfind\"\n\
-    \n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"ds/dsu/persistent_dsu.hpp\"\
+    \n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../../ds/dsu/persistent_dsu.hpp\"\
     \nusing namespace m1une::ds;\n\nint main() {\n    ios::sync_with_stdio(false);\n\
     \    cin.tie(nullptr);\n    int N, Q;\n    cin >> N >> Q;\n    vector<PersistentDsu>\
     \ dsus;\n    dsus.push_back(PersistentDsu(N));\n    while (Q--) {\n        int\
@@ -92,7 +92,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/persistent_dsu_library_checker.test.cpp

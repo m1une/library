@@ -179,7 +179,7 @@ data:
     \ to_vector() const {\n        return data.to_vector();\n    }\n};\n\n}  // namespace\
     \ ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_ORDERED_SET_HPP\n#define M1UNE_ORDERED_SET_HPP 1\n\n#include\
-    \ \"ds/ordered_set/ordered_multiset.hpp\"\n\n#include <functional>\n#include <initializer_list>\n\
+    \ \"ordered_multiset.hpp\"\n\n#include <functional>\n#include <initializer_list>\n\
     #include <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace ds {\n\n\
     template <typename T, typename Compare = std::less<T>>\nstruct OrderedSet {\n\
     \   private:\n    OrderedMultiset<T, Compare> data;\n\n   public:\n    explicit\
@@ -220,7 +220,7 @@ data:
   isVerificationFile: false
   path: ds/ordered_set/ordered_set.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/ordered_set/ordered_set.test.cpp

@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -386,8 +386,8 @@ data:
     n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \n#include \"ds/dynamic_tree/link_cut_tree.hpp\"\n#include \"monoid/add.hpp\"\n\
-    \nvoid test_vertex_subtree_sum() {\n    m1une::ds::LinkCutTree<m1une::monoid::Add<long\
+    \n#include \"../../../ds/dynamic_tree/link_cut_tree.hpp\"\n#include \"../../../monoid/add.hpp\"\
+    \n\nvoid test_vertex_subtree_sum() {\n    m1une::ds::LinkCutTree<m1une::monoid::Add<long\
     \ long>> lct(std::vector<int>{1, 2, 3, 4, 5});\n\n    assert(lct.link(0, 1));\n\
     \    assert(lct.link(1, 2));\n    assert(lct.link(1, 3));\n    assert(lct.link(3,\
     \ 4));\n\n    assert(lct.path_prod(2, 4) == 14);\n    assert(lct.subtree_prod(0,\
@@ -488,7 +488,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_tree/link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_tree/link_cut_tree.test.cpp

@@ -1,71 +1,71 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/dsu/dsu.hpp
     title: DSU (Disjoint Set Union)
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bellman_ford.hpp
     title: Bellman-Ford
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bfs.hpp
     title: BFS
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bipartite.hpp
     title: Bipartite Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/connected_components.hpp
     title: Connected Components
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/cycle_detection.hpp
     title: Cycle Detection
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dag_shortest_path.hpp
     title: DAG Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dijkstra.hpp
     title: Dijkstra
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/general_matching.hpp
     title: General Matching
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/grid.hpp
     title: Grid
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/kruskal.hpp
     title: Kruskal
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowlink.hpp
     title: LowLink
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/topological_sort.hpp
     title: Topological Sort
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/undirected.hpp\"\n\n\n\n#line 1 \"graph/bipartite.hpp\"\
@@ -1099,25 +1099,25 @@ data:
     #define M1UNE_GRAPH_UNDIRECTED_HPP 1
 
 
-    #include "graph/bipartite.hpp"
+    #include "bipartite.hpp"
 
-    #include "graph/connected_components.hpp"
+    #include "connected_components.hpp"
 
-    #include "graph/cycle_detection.hpp"
+    #include "cycle_detection.hpp"
 
-    #include "graph/general_matching.hpp"
+    #include "general_matching.hpp"
 
-    #include "graph/graph.hpp"
+    #include "graph.hpp"
 
-    #include "graph/grid.hpp"
+    #include "grid.hpp"
 
-    #include "graph/kruskal.hpp"
+    #include "kruskal.hpp"
 
-    #include "graph/lowlink.hpp"
+    #include "lowlink.hpp"
 
-    #include "graph/maximum_clique.hpp"
+    #include "maximum_clique.hpp"
 
-    #include "graph/shortest_path.hpp"
+    #include "shortest_path.hpp"
 
 
     #endif  // M1UNE_GRAPH_UNDIRECTED_HPP
@@ -1146,8 +1146,8 @@ data:
   path: graph/undirected.hpp
   requiredBy:
   - graph/all.hpp
-  timestamp: '2026-06-20 20:27:35+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/undirected.hpp

@@ -440,7 +440,7 @@ data:
     n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \n#include \"acted_monoid/range_add_range_sum.hpp\"\n#include \"ds/dynamic_tree/lazy_link_cut_tree.hpp\"\
+    \n#include \"../../../acted_monoid/range_add_range_sum.hpp\"\n#include \"../../../ds/dynamic_tree/lazy_link_cut_tree.hpp\"\
     \n\nusing AddSum = m1une::acted_monoid::RangeAddRangeSum<long long>;\nusing Node\
     \ = AddSum::value_type;\n\nvoid test_vertex_path_and_subtree_updates() {\n   \
     \ m1une::ds::LazyLinkCutTree<AddSum> lct(std::vector<long long>{1, 2, 3, 4, 5});\n\
@@ -560,7 +560,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp

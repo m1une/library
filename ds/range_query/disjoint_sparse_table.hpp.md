@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -79,52 +79,53 @@ data:
     \ _st[k][r]);\n    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_DISJOINT_SPARSE_TABLE_HPP\n#define M1UNE_DISJOINT_SPARSE_TABLE_HPP\
     \ 1\n\n#include <algorithm>\n#include <bit>\n#include <cassert>\n#include <concepts>\n\
-    #include <utility>\n#include <vector>\n\n#include \"monoid/concept.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace ds {\n\n// A Disjoint Sparse Table for static range queries.\n\
-    // It supports any associative monoid, including non-idempotent and non-commutative\
-    \ ones.\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct DisjointSparseTable\
-    \ {\n    using T = typename Monoid::value_type;\n\n   private:\n    int _n;\n\
-    \    std::vector<std::vector<T>> _st;\n\n    void build() {\n        if (_n ==\
-    \ 0) return;\n\n        for (int k = 0; k < int(_st.size()); k++) {\n        \
-    \    int half = 1 << k;\n            int block = half << 1;\n            for (int\
-    \ start = 0; start < _n; start += block) {\n                int mid = std::min(start\
-    \ + half, _n);\n                int end = std::min(start + block, _n);\n\n   \
-    \             _st[k][mid - 1] = _st[0][mid - 1];\n                for (int i =\
-    \ mid - 2; i >= start; i--) {\n                    _st[k][i] = Monoid::op(_st[0][i],\
-    \ _st[k][i + 1]);\n                }\n\n                if (mid == end) continue;\n\
-    \                _st[k][mid] = _st[0][mid];\n                for (int i = mid\
-    \ + 1; i < end; i++) {\n                    _st[k][i] = Monoid::op(_st[k][i -\
-    \ 1], _st[0][i]);\n                }\n            }\n        }\n    }\n\n   public:\n\
-    \    // Constructs an empty disjoint sparse table.\n    DisjointSparseTable()\
-    \ : _n(0) {}\n\n    // Constructs a disjoint sparse table from an existing vector\
-    \ in O(N log N) time.\n    explicit DisjointSparseTable(const std::vector<T>&\
-    \ v) : _n(int(v.size())) {\n        if (_n == 0) return;\n\n        int max_log\
-    \ = std::bit_width((unsigned int)_n);\n        _st.assign(max_log, std::vector<T>(_n,\
-    \ Monoid::id()));\n        for (int i = 0; i < _n; i++) {\n            _st[0][i]\
-    \ = v[i];\n        }\n        build();\n    }\n    explicit DisjointSparseTable(std::vector<T>&&\
-    \ v) : _n(int(v.size())) {\n        if (_n == 0) return;\n\n        int max_log\
-    \ = std::bit_width((unsigned int)_n);\n        _st.assign(max_log, std::vector<T>(_n,\
-    \ Monoid::id()));\n        for (int i = 0; i < _n; i++) {\n            _st[0][i]\
-    \ = std::move(v[i]);\n        }\n        build();\n    }\n\n    // Constructs\
-    \ a disjoint sparse table from a vector of a different type U.\n    // It automatically\
-    \ adapts to the Monoid's initialization requirements:\n    // 1. Monoid::make(val)\
-    \ if it exists.\n    // 2. Monoid::make(val, index) if the monoid requires global\
-    \ indices.\n    // 3. static_cast<T>(val) as a fallback for simple monoids.\n\
-    \    template <typename U>\n    requires (!std::same_as<U, T>) && (\n        requires(U\
-    \ x) { Monoid::make(x); } ||\n        requires(U x, int i) { Monoid::make(x, i);\
-    \ } ||\n        std::convertible_to<U, T>\n    )\n    explicit DisjointSparseTable(const\
-    \ std::vector<U>& v) : _n(int(v.size())) {\n        if (_n == 0) return;\n\n \
+    #include <utility>\n#include <vector>\n\n#include \"../../monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace ds {\n\n// A Disjoint Sparse Table for static\
+    \ range queries.\n// It supports any associative monoid, including non-idempotent\
+    \ and non-commutative ones.\ntemplate <m1une::monoid::IsMonoid Monoid>\nstruct\
+    \ DisjointSparseTable {\n    using T = typename Monoid::value_type;\n\n   private:\n\
+    \    int _n;\n    std::vector<std::vector<T>> _st;\n\n    void build() {\n   \
+    \     if (_n == 0) return;\n\n        for (int k = 0; k < int(_st.size()); k++)\
+    \ {\n            int half = 1 << k;\n            int block = half << 1;\n    \
+    \        for (int start = 0; start < _n; start += block) {\n                int\
+    \ mid = std::min(start + half, _n);\n                int end = std::min(start\
+    \ + block, _n);\n\n                _st[k][mid - 1] = _st[0][mid - 1];\n      \
+    \          for (int i = mid - 2; i >= start; i--) {\n                    _st[k][i]\
+    \ = Monoid::op(_st[0][i], _st[k][i + 1]);\n                }\n\n             \
+    \   if (mid == end) continue;\n                _st[k][mid] = _st[0][mid];\n  \
+    \              for (int i = mid + 1; i < end; i++) {\n                    _st[k][i]\
+    \ = Monoid::op(_st[k][i - 1], _st[0][i]);\n                }\n            }\n\
+    \        }\n    }\n\n   public:\n    // Constructs an empty disjoint sparse table.\n\
+    \    DisjointSparseTable() : _n(0) {}\n\n    // Constructs a disjoint sparse table\
+    \ from an existing vector in O(N log N) time.\n    explicit DisjointSparseTable(const\
+    \ std::vector<T>& v) : _n(int(v.size())) {\n        if (_n == 0) return;\n\n \
     \       int max_log = std::bit_width((unsigned int)_n);\n        _st.assign(max_log,\
     \ std::vector<T>(_n, Monoid::id()));\n        for (int i = 0; i < _n; i++) {\n\
-    \            if constexpr (requires(U x) { Monoid::make(x); }) {\n           \
-    \     _st[0][i] = Monoid::make(v[i]);\n            } else if constexpr (requires(U\
-    \ x, int idx) { Monoid::make(x, idx); }) {\n                _st[0][i] = Monoid::make(v[i],\
-    \ i);\n            } else {\n                _st[0][i] = static_cast<T>(v[i]);\n\
-    \            }\n        }\n        build();\n    }\n\n    // Returns the product\
-    \ (result of the monoid operation) in the range [l, r) in O(1) time.\n    T prod(int\
-    \ l, int r) const {\n        assert(0 <= l && l <= r && r <= _n);\n        if\
-    \ (l == r) return Monoid::id();\n\n        r--;\n        if (l == r) return _st[0][l];\n\
-    \n        int k = std::bit_width((unsigned int)(l ^ r)) - 1;\n        return Monoid::op(_st[k][l],\
+    \            _st[0][i] = v[i];\n        }\n        build();\n    }\n    explicit\
+    \ DisjointSparseTable(std::vector<T>&& v) : _n(int(v.size())) {\n        if (_n\
+    \ == 0) return;\n\n        int max_log = std::bit_width((unsigned int)_n);\n \
+    \       _st.assign(max_log, std::vector<T>(_n, Monoid::id()));\n        for (int\
+    \ i = 0; i < _n; i++) {\n            _st[0][i] = std::move(v[i]);\n        }\n\
+    \        build();\n    }\n\n    // Constructs a disjoint sparse table from a vector\
+    \ of a different type U.\n    // It automatically adapts to the Monoid's initialization\
+    \ requirements:\n    // 1. Monoid::make(val) if it exists.\n    // 2. Monoid::make(val,\
+    \ index) if the monoid requires global indices.\n    // 3. static_cast<T>(val)\
+    \ as a fallback for simple monoids.\n    template <typename U>\n    requires (!std::same_as<U,\
+    \ T>) && (\n        requires(U x) { Monoid::make(x); } ||\n        requires(U\
+    \ x, int i) { Monoid::make(x, i); } ||\n        std::convertible_to<U, T>\n  \
+    \  )\n    explicit DisjointSparseTable(const std::vector<U>& v) : _n(int(v.size()))\
+    \ {\n        if (_n == 0) return;\n\n        int max_log = std::bit_width((unsigned\
+    \ int)_n);\n        _st.assign(max_log, std::vector<T>(_n, Monoid::id()));\n \
+    \       for (int i = 0; i < _n; i++) {\n            if constexpr (requires(U x)\
+    \ { Monoid::make(x); }) {\n                _st[0][i] = Monoid::make(v[i]);\n \
+    \           } else if constexpr (requires(U x, int idx) { Monoid::make(x, idx);\
+    \ }) {\n                _st[0][i] = Monoid::make(v[i], i);\n            } else\
+    \ {\n                _st[0][i] = static_cast<T>(v[i]);\n            }\n      \
+    \  }\n        build();\n    }\n\n    // Returns the product (result of the monoid\
+    \ operation) in the range [l, r) in O(1) time.\n    T prod(int l, int r) const\
+    \ {\n        assert(0 <= l && l <= r && r <= _n);\n        if (l == r) return\
+    \ Monoid::id();\n\n        r--;\n        if (l == r) return _st[0][l];\n\n   \
+    \     int k = std::bit_width((unsigned int)(l ^ r)) - 1;\n        return Monoid::op(_st[k][l],\
     \ _st[k][r]);\n    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n#endif\
     \  // M1UNE_DISJOINT_SPARSE_TABLE_HPP\n"
   dependsOn:
@@ -132,7 +133,7 @@ data:
   isVerificationFile: false
   path: ds/range_query/disjoint_sparse_table.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/range_query/disjoint_sparse_table.test.cpp

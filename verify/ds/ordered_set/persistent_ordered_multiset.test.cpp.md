@@ -189,15 +189,15 @@ data:
     \            ok = mid;\n            } else {\n                ng = mid;\n    \
     \        }\n        }\n\n        std::cout << xs[ok] << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_kth_smallest\"\n\n\
-    #include \"ds/ordered_set/persistent_ordered_multiset.hpp\"\n\n#include <algorithm>\n\
-    #include <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n}\n\nint main() {\n    fast_io();\n\n    int N, Q;\n\
-    \    std::cin >> N >> Q;\n\n    std::vector<int> a(N);\n    std::vector<int> xs;\n\
-    \    xs.reserve(N);\n    for (int i = 0; i < N; i++) {\n        std::cin >> a[i];\n\
-    \        xs.push_back(a[i]);\n    }\n\n    std::sort(xs.begin(), xs.end());\n\
-    \    xs.erase(std::unique(xs.begin(), xs.end()), xs.end());\n\n    auto rank =\
-    \ [&](int value) { return int(std::lower_bound(xs.begin(), xs.end(), value) -\
-    \ xs.begin()); };\n\n    std::vector<m1une::ds::PersistentOrderedMultiset<int>>\
+    #include \"../../../ds/ordered_set/persistent_ordered_multiset.hpp\"\n\n#include\
+    \ <algorithm>\n#include <iostream>\n#include <vector>\n\nvoid fast_io() {\n  \
+    \  std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n}\n\nint\
+    \ main() {\n    fast_io();\n\n    int N, Q;\n    std::cin >> N >> Q;\n\n    std::vector<int>\
+    \ a(N);\n    std::vector<int> xs;\n    xs.reserve(N);\n    for (int i = 0; i <\
+    \ N; i++) {\n        std::cin >> a[i];\n        xs.push_back(a[i]);\n    }\n\n\
+    \    std::sort(xs.begin(), xs.end());\n    xs.erase(std::unique(xs.begin(), xs.end()),\
+    \ xs.end());\n\n    auto rank = [&](int value) { return int(std::lower_bound(xs.begin(),\
+    \ xs.end(), value) - xs.begin()); };\n\n    std::vector<m1une::ds::PersistentOrderedMultiset<int>>\
     \ versions(N + 1);\n    for (int i = 0; i < N; i++) {\n        versions[i + 1]\
     \ = versions[i].insert(rank(a[i]));\n    }\n\n    while (Q--) {\n        int l,\
     \ r, k;\n        std::cin >> l >> r >> k;\n\n        int ok = int(xs.size()) -\
@@ -211,7 +211,7 @@ data:
   isVerificationFile: true
   path: verify/ds/ordered_set/persistent_ordered_multiset.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/ordered_set/persistent_ordered_multiset.test.cpp

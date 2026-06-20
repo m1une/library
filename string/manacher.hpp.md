@@ -2,19 +2,19 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/all.hpp
     title: String Algorithms Bundle
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/string/manacher.test.cpp
     title: verify/string/manacher.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/string/string_algorithms.test.cpp
     title: verify/string/string_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"string/manacher.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -91,7 +91,7 @@ data:
   requiredBy:
   - string/all.hpp
   timestamp: '2026-06-21 02:43:08+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/string/manacher.test.cpp
   - verify/string/string_algorithms.test.cpp

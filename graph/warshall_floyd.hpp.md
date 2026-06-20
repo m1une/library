@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/warshall_floyd.hpp\"\n\n\n\n#include <cassert>\n#include\
@@ -128,9 +128,9 @@ data:
     }  // namespace graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_WARSHALL_FLOYD_HPP\n#define M1UNE_GRAPH_WARSHALL_FLOYD_HPP\
     \ 1\n\n#include <cassert>\n#include <limits>\n#include <utility>\n#include <vector>\n\
-    \n#include \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
-    \ <class T>\nstd::vector<std::vector<T>> warshall_floyd(std::vector<std::vector<T>>\
-    \ dist,\n                                           T inf = std::numeric_limits<T>::max()\
+    \n#include \"graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class\
+    \ T>\nstd::vector<std::vector<T>> warshall_floyd(std::vector<std::vector<T>> dist,\n\
+    \                                           T inf = std::numeric_limits<T>::max()\
     \ / T(4)) {\n    int n = int(dist.size());\n    for (int k = 0; k < n; k++) {\n\
     \        for (int i = 0; i < n; i++) {\n            if (dist[i][k] == inf) continue;\n\
     \            for (int j = 0; j < n; j++) {\n                if (dist[k][j] ==\
@@ -182,8 +182,8 @@ data:
   - graph/undirected.hpp
   - graph/directed.hpp
   - graph/shortest_path.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/warshall_floyd.hpp

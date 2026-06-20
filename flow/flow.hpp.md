@@ -274,13 +274,13 @@ data:
     #define M1UNE_FLOW_FLOW_HPP 1
 
 
-    #include "flow/bounded_flow.hpp"
+    #include "bounded_flow.hpp"
 
-    #include "flow/bounded_min_cost_flow.hpp"
+    #include "bounded_min_cost_flow.hpp"
 
-    #include "flow/max_flow.hpp"
+    #include "max_flow.hpp"
 
-    #include "flow/min_cost_flow.hpp"
+    #include "min_cost_flow.hpp"
 
 
     #endif  // M1UNE_FLOW_FLOW_HPP
@@ -294,7 +294,7 @@ data:
   isVerificationFile: false
   path: flow/flow.hpp
   requiredBy: []
-  timestamp: '2026-06-17 01:33:20+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/flow/flow_algorithms.test.cpp

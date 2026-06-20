@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/prime_sieve.hpp
     title: Prime Sieve
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/enumerate_primes
@@ -77,8 +77,8 @@ data:
     \       if (i != offset) std::cout << ' ';\n        std::cout << primes[i];\n\
     \    }\n    std::cout << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/enumerate_primes\"\n\n\
-    #include <iostream>\n#include <vector>\n\n#include \"math/prime_sieve.hpp\"\n\n\
-    int main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    #include <iostream>\n#include <vector>\n\n#include \"../../math/prime_sieve.hpp\"\
+    \n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    int n, step, offset;\n    std::cin >> n >> step >> offset;\n    m1une::math::PrimeSieve\
     \ sieve(n);\n    const std::vector<int>& primes = sieve.primes();\n\n    int selected_count\
     \ = 0;\n    if (offset < int(primes.size())) {\n        selected_count = (int(primes.size())\
@@ -91,8 +91,8 @@ data:
   isVerificationFile: true
   path: verify/math/enumerate_primes.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/math/enumerate_primes.test.cpp
 layout: document

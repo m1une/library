@@ -1,26 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/combinatorics.hpp
     title: Combinatorics
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
+    path: math/modint.hpp
+    title: ModInt
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/stirling_number_of_the_second_kind
@@ -393,8 +396,8 @@ data:
     \ (int i = 0; i <= n; i++) {\n        if (i) std::cout << ' ';\n        std::cout\
     \ << values[i];\n    }\n    std::cout << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/stirling_number_of_the_second_kind\"\
-    \n\n#include <iostream>\n#include <vector>\n\n#include \"math/combinatorial_sequences.hpp\"\
-    \n#include \"math/modint.hpp\"\n\nusing Mint = m1une::math::modint998244353;\n\
+    \n\n#include <iostream>\n#include <vector>\n\n#include \"../../math/combinatorial_sequences.hpp\"\
+    \n#include \"../../math/modint.hpp\"\n\nusing Mint = m1une::math::modint998244353;\n\
     \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    int n;\n    std::cin >> n;\n    const std::vector<Mint> values =\n     \
     \   m1une::math::stirling_numbers_second_kind<Mint>(n);\n    for (int i = 0; i\
@@ -406,11 +409,12 @@ data:
   - fps/convolution.hpp
   - math/modint.hpp
   - math/combinatorics.hpp
+  - math/modint.hpp
   isVerificationFile: true
   path: verify/math/stirling_number_of_the_second_kind.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/math/stirling_number_of_the_second_kind.test.cpp
 layout: document

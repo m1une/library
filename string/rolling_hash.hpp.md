@@ -5,19 +5,19 @@ data:
   - icon: ':warning:'
     path: monoid/rolling_hash.hpp
     title: Rolling Hash Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: string/all.hpp
     title: String Algorithms Bundle
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/string/aoj_alds1_14_b.test.cpp
     title: verify/string/aoj_alds1_14_b.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/string/string_algorithms.test.cpp
     title: verify/string/string_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"string/rolling_hash.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -142,7 +142,7 @@ data:
   - monoid/rolling_hash.hpp
   - string/all.hpp
   timestamp: '2026-06-13 20:51:48+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/string/string_algorithms.test.cpp
   - verify/string/aoj_alds1_14_b.test.cpp

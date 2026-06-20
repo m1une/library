@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -242,9 +242,9 @@ data:
     \    test_edge_nodes();\n\n    long long a, b;\n    std::cin >> a >> b;\n    std::cout\
     \ << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <string>\n#include <vector>\n\n#include \"ds/dynamic_tree/path_link_cut_tree.hpp\"\
-    \n#include \"monoid/add.hpp\"\n\nstruct StringConcat {\n    using value_type =\
-    \ std::string;\n\n    static std::string id() {\n        return \"\";\n    }\n\
+    #include <iostream>\n#include <string>\n#include <vector>\n\n#include \"../../../ds/dynamic_tree/path_link_cut_tree.hpp\"\
+    \n#include \"../../../monoid/add.hpp\"\n\nstruct StringConcat {\n    using value_type\
+    \ = std::string;\n\n    static std::string id() {\n        return \"\";\n    }\n\
     \n    static std::string op(const std::string& a, const std::string& b) {\n  \
     \      return a + b;\n    }\n};\n\nvoid test_vertex_sum() {\n    m1une::ds::PathLinkCutTree<m1une::monoid::Add<long\
     \ long>> lct(std::vector<int>{1, 2, 3, 4, 5});\n\n    assert(lct.size() == 5);\n\
@@ -284,7 +284,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp

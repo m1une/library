@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/bellman_ford.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -122,14 +122,14 @@ data:
     \ namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_BELLMAN_FORD_HPP\n#define M1UNE_GRAPH_BELLMAN_FORD_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <limits>\n#include <queue>\n\
-    #include <vector>\n\n#include \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ graph {\n\ntemplate <class T>\nstruct BellmanFordResult {\n    std::vector<T>\
-    \ dist;\n    std::vector<int> parent;\n    std::vector<int> parent_edge;\n   \
-    \ std::vector<bool> negative;\n    T inf;\n    bool has_negative_cycle;\n\n  \
-    \  bool reachable(int v) const {\n        assert(0 <= v && v < int(dist.size()));\n\
-    \        return dist[v] != inf;\n    }\n\n    bool affected_by_negative_cycle(int\
-    \ v) const {\n        assert(0 <= v && v < int(negative.size()));\n        return\
-    \ negative[v];\n    }\n\n    std::vector<int> path(int t) const {\n        assert(reachable(t));\n\
+    #include <vector>\n\n#include \"graph.hpp\"\n\nnamespace m1une {\nnamespace graph\
+    \ {\n\ntemplate <class T>\nstruct BellmanFordResult {\n    std::vector<T> dist;\n\
+    \    std::vector<int> parent;\n    std::vector<int> parent_edge;\n    std::vector<bool>\
+    \ negative;\n    T inf;\n    bool has_negative_cycle;\n\n    bool reachable(int\
+    \ v) const {\n        assert(0 <= v && v < int(dist.size()));\n        return\
+    \ dist[v] != inf;\n    }\n\n    bool affected_by_negative_cycle(int v) const {\n\
+    \        assert(0 <= v && v < int(negative.size()));\n        return negative[v];\n\
+    \    }\n\n    std::vector<int> path(int t) const {\n        assert(reachable(t));\n\
     \        assert(!affected_by_negative_cycle(t));\n        std::vector<int> result;\n\
     \        for (int v = t; v != -1; v = parent[v]) result.push_back(v);\n      \
     \  std::reverse(result.begin(), result.end());\n        return result;\n    }\n\
@@ -169,8 +169,8 @@ data:
   - graph/undirected.hpp
   - graph/directed.hpp
   - graph/shortest_path.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/bellman_ford.hpp

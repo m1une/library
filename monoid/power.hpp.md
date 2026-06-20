@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -34,8 +34,8 @@ data:
     \ a);\n        }\n        a = M::op(a, a);\n        n >>= 1;\n    }\n    return\
     \ res;\n}\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_MONOID_POWER_HPP\n#define M1UNE_MONOID_POWER_HPP 1\n\n#include\
-    \ \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Computes\
-    \ a^n (a * a * ... * a, n times) for an element 'a' in Monoid 'M'.\n// Uses binary\
+    \ \"concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Computes a^n\
+    \ (a * a * ... * a, n times) for an element 'a' in Monoid 'M'.\n// Uses binary\
     \ exponentiation to achieve O(log n) time complexity.\n// The template parameter\
     \ 'M' is constrained by the 'IsMonoid' concept.\ntemplate <IsMonoid M>\nconstexpr\
     \ typename M::value_type power(typename M::value_type a, long long n) {\n    typename\
@@ -48,7 +48,7 @@ data:
   isVerificationFile: false
   path: monoid/power.hpp
   requiredBy: []
-  timestamp: '2026-06-20 02:38:39+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: monoid/power.hpp

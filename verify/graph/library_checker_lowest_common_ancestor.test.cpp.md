@@ -1,23 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: graph/graph.hpp
+    title: Graph
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/lca
@@ -207,7 +210,7 @@ data:
     \        int u, v;\n        cin >> u >> v;\n        cout << lca.lca(u, v) << '\\\
     n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/lca\"\n\n#include <bits/stdc++.h>\n\
-    using namespace std;\n\n#include \"graph/graph.hpp\"\n#include \"tree/sparse_table_lca.hpp\"\
+    using namespace std;\n\n#include \"../../graph/graph.hpp\"\n#include \"../../tree/sparse_table_lca.hpp\"\
     \n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n  \
     \  int N, Q;\n    cin >> N >> Q;\n    m1une::graph::Graph<> g(N);\n    for (int\
     \ i = 1; i < N; ++i) {\n        int p;\n        cin >> p;\n        g.add_edge(p,\
@@ -219,11 +222,12 @@ data:
   - tree/sparse_table_lca.hpp
   - ds/range_query/sparse_table.hpp
   - monoid/concept.hpp
+  - graph/graph.hpp
   isVerificationFile: true
   path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/graph/library_checker_lowest_common_ancestor.test.cpp
 layout: document

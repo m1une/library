@@ -7,7 +7,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []
@@ -257,9 +257,9 @@ data:
     \        } else {\n            --x;\n            cout << a.prod(x, y) << '\\n';\n\
     \        }\n    }\n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/DSL_2_B\"\n\n\
-    #include <bits/stdc++.h>\nusing namespace std;\n\n#include \"ds/dynamic_array/dynamic_monoid_array.hpp\"\
-    \n#include \"monoid/add.hpp\"\n\nint main() {\n    int n, q;\n    cin >> n >>\
-    \ q;\n    using Monoid = m1une::monoid::Add<int>;\n    using Array = m1une::ds::DynamicMonoidArray<Monoid>;\n\
+    #include <bits/stdc++.h>\nusing namespace std;\n\n#include \"../../../ds/dynamic_array/dynamic_monoid_array.hpp\"\
+    \n#include \"../../../monoid/add.hpp\"\n\nint main() {\n    int n, q;\n    cin\
+    \ >> n >> q;\n    using Monoid = m1une::monoid::Add<int>;\n    using Array = m1une::ds::DynamicMonoidArray<Monoid>;\n\
     \    Array a(n);\n    while (q--) {\n        int com, x, y;\n        cin >> com\
     \ >> x >> y;\n        if (com == 0) {\n            --x;\n            a.set(x,\
     \ a.get(x) + y);\n        } else {\n            --x;\n            cout << a.prod(x,\
@@ -271,7 +271,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp

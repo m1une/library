@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/all.hpp
     title: Formal Power Series All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/fps_algorithms.test.cpp
     title: verify/fps/fps_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
     title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"fps/linear_recurrence.hpp\"\n\n\n\n#include <cassert>\n\
@@ -337,9 +337,9 @@ data:
     \ index);\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_FPS_LINEAR_RECURRENCE_HPP\n#define M1UNE_FPS_LINEAR_RECURRENCE_HPP\
     \ 1\n\n#include <cassert>\n#include <cstdint>\n#include <vector>\n\n#include \"\
-    fps/formal_power_series.hpp\"\n\nnamespace m1une {\nnamespace fps {\n\ntemplate\
-    \ <class Mint>\nMint coefficient_of_rational(FormalPowerSeries<Mint> numerator,\n\
-    \                             FormalPowerSeries<Mint> denominator, uint64_t index)\
+    formal_power_series.hpp\"\n\nnamespace m1une {\nnamespace fps {\n\ntemplate <class\
+    \ Mint>\nMint coefficient_of_rational(FormalPowerSeries<Mint> numerator,\n   \
+    \                          FormalPowerSeries<Mint> denominator, uint64_t index)\
     \ {\n    using Fps = FormalPowerSeries<Mint>;\n    assert(!denominator.empty()\
     \ && denominator[0] != Mint(0));\n\n    while (index > 0) {\n        Fps denominator_negative\
     \ = denominator;\n        for (int i = 1; i < int(denominator_negative.size());\
@@ -372,8 +372,8 @@ data:
   path: fps/linear_recurrence.hpp
   requiredBy:
   - fps/all.hpp
-  timestamp: '2026-06-19 07:30:52+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
   - verify/fps/fps_algorithms.test.cpp

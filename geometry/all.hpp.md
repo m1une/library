@@ -260,13 +260,13 @@ data:
     #define M1UNE_GEOMETRY_ALL_HPP 1
 
 
-    #include "geometry/circle.hpp"
+    #include "circle.hpp"
 
-    #include "geometry/line.hpp"
+    #include "line.hpp"
 
-    #include "geometry/point.hpp"
+    #include "point.hpp"
 
-    #include "geometry/polygon.hpp"
+    #include "polygon.hpp"
 
 
     #endif  // M1UNE_GEOMETRY_ALL_HPP
@@ -280,7 +280,7 @@ data:
   isVerificationFile: false
   path: geometry/all.hpp
   requiredBy: []
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/geometry/geometry_algorithms.test.cpp

@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/two_sat.hpp
     title: Two-Satisfiability
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/two_sat
@@ -137,18 +137,19 @@ data:
     \ << \" \" << (answer[i] ? i + 1 : -(i + 1));\n    }\n    std::cout << \" 0\\\
     n\";\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/two_sat\"\n\n#include \"\
-    graph/two_sat.hpp\"\n\n#include <cassert>\n#include <cstdint>\n#include <cstdlib>\n\
-    #include <iostream>\n#include <tuple>\n#include <vector>\n\nnamespace {\n\nstruct\
-    \ Clause {\n    int i;\n    bool f;\n    int j;\n    bool g;\n};\n\nbool satisfies(const\
-    \ std::vector<bool>& assignment, const Clause& clause) {\n    return assignment[clause.i]\
-    \ == clause.f ||\n           assignment[clause.j] == clause.g;\n}\n\nvoid test_helpers()\
-    \ {\n    m1une::graph::TwoSat sat(4);\n    assert(sat.size() == 4);\n    assert(!sat.empty());\n\
-    \    sat.reserve(8);\n\n    sat.set_value(0, true);\n    sat.add_implication(0,\
-    \ true, 1, false);\n    sat.add_equal(1, 2);\n    sat.add_not_equal(2, 3);\n \
-    \   assert(sat.satisfiable());\n    assert(sat.satisfiable());\n    assert(sat.value(0));\n\
-    \    assert(!sat.value(1));\n    assert(!sat.value(2));\n    assert(sat.value(3));\n\
-    \n    sat.set_value(3, false);\n    assert(!sat.satisfiable());\n\n    m1une::graph::TwoSat\
-    \ empty;\n    assert(empty.empty());\n    assert(empty.satisfiable());\n    assert(empty.answer().empty());\n\
+    ../../graph/two_sat.hpp\"\n\n#include <cassert>\n#include <cstdint>\n#include\
+    \ <cstdlib>\n#include <iostream>\n#include <tuple>\n#include <vector>\n\nnamespace\
+    \ {\n\nstruct Clause {\n    int i;\n    bool f;\n    int j;\n    bool g;\n};\n\
+    \nbool satisfies(const std::vector<bool>& assignment, const Clause& clause) {\n\
+    \    return assignment[clause.i] == clause.f ||\n           assignment[clause.j]\
+    \ == clause.g;\n}\n\nvoid test_helpers() {\n    m1une::graph::TwoSat sat(4);\n\
+    \    assert(sat.size() == 4);\n    assert(!sat.empty());\n    sat.reserve(8);\n\
+    \n    sat.set_value(0, true);\n    sat.add_implication(0, true, 1, false);\n \
+    \   sat.add_equal(1, 2);\n    sat.add_not_equal(2, 3);\n    assert(sat.satisfiable());\n\
+    \    assert(sat.satisfiable());\n    assert(sat.value(0));\n    assert(!sat.value(1));\n\
+    \    assert(!sat.value(2));\n    assert(sat.value(3));\n\n    sat.set_value(3,\
+    \ false);\n    assert(!sat.satisfiable());\n\n    m1une::graph::TwoSat empty;\n\
+    \    assert(empty.empty());\n    assert(empty.satisfiable());\n    assert(empty.answer().empty());\n\
     }\n\nvoid test_randomized() {\n    std::uint64_t state = 29;\n    auto random\
     \ = [&state]() {\n        state ^= state << 7;\n        state ^= state >> 9;\n\
     \        return state;\n    };\n\n    for (int trial = 0; trial < 3000; trial++)\
@@ -188,8 +189,8 @@ data:
   isVerificationFile: true
   path: verify/graph/two_sat.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:34:20+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/graph/two_sat.test.cpp
 layout: document

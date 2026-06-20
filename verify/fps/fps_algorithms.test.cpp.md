@@ -1,29 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/all.hpp
     title: Formal Power Series All
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
+    path: math/modint.hpp
+    title: ModInt
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -442,40 +445,40 @@ data:
     }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <cstdint>\n#include <iostream>\n#include <random>\n#include <vector>\n\
-    \n#include \"fps/all.hpp\"\n#include \"math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
-    using mint1e9 = m1une::math::modint1000000007;\nusing Fps = m1une::fps::FormalPowerSeries<mint>;\n\
-    \ntemplate <class Mint>\nvoid assert_equal(const std::vector<Mint>& lhs, const\
-    \ std::vector<Mint>& rhs) {\n    assert(lhs.size() == rhs.size());\n    for (int\
-    \ i = 0; i < int(lhs.size()); i++) assert(lhs[i] == rhs[i]);\n}\n\nvoid test_convolution()\
-    \ {\n    std::mt19937 rng(712367);\n    for (int iteration = 0; iteration < 30;\
-    \ iteration++) {\n        int n = 33 + int(rng() % 70);\n        int m = 33 +\
-    \ int(rng() % 70);\n        std::vector<mint> a(n), b(m);\n        for (mint&\
-    \ value : a) value = mint(static_cast<uint32_t>(rng()));\n        for (mint& value\
-    \ : b) value = mint(static_cast<uint32_t>(rng()));\n        assert_equal(m1une::fps::convolution(a,\
-    \ b), m1une::fps::convolution_naive(a, b));\n    }\n\n    std::vector<mint1e9>\
-    \ a(70), b(65);\n    for (mint1e9& value : a) value = mint1e9(static_cast<uint32_t>(rng()));\n\
-    \    for (mint1e9& value : b) value = mint1e9(static_cast<uint32_t>(rng()));\n\
-    \    assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a,\
-    \ b));\n}\n\nvoid test_series_functions() {\n    Fps f(96);\n    f[0] = 1;\n \
-    \   for (int i = 1; i < int(f.size()); i++) f[i] = mint(i * i + 7);\n\n    Fps\
-    \ inverse = f.inv();\n    Fps identity = (f * inverse).pre(int(f.size()));\n \
-    \   assert(identity[0] == mint(1));\n    for (int i = 1; i < int(identity.size());\
-    \ i++) assert(identity[i] == mint(0));\n\n    Fps logarithm = f.log();\n    assert_equal(logarithm.exp(),\
-    \ f);\n    assert_equal(f.derivative().integral().pre(int(f.size())) + Fps(1,\
-    \ f[0]), f);\n\n    Fps cube = f.pow(3);\n    assert_equal(cube, ((f * f) * f).pre(int(f.size())));\n\
-    \n    Fps shifted(40);\n    shifted[4] = 9;\n    for (int i = 5; i < int(shifted.size());\
-    \ i++) shifted[i] = mint(i + 11);\n    auto root = (shifted * shifted).pre(70).sqrt(70);\n\
-    \    assert(root.has_value());\n    assert_equal(((*root) * (*root)).pre(70),\
-    \ (shifted * shifted).pre(70));\n\n    Fps beyond_precision(8);\n    beyond_precision[5]\
-    \ = 1;\n    auto zero_root = beyond_precision.sqrt(5);\n    assert(zero_root.has_value());\n\
-    \    assert_equal(*zero_root, Fps(5));\n\n    Fps odd_leading(8);\n    odd_leading[3]\
-    \ = 1;\n    assert(!odd_leading.sqrt(8).has_value());\n\n    Fps zero(20);\n \
-    \   Fps one(20);\n    one[0] = 1;\n    assert_equal(zero.pow(0), one);\n    assert_equal(zero.pow(7),\
-    \ zero);\n}\n\nvoid test_polynomial_operations() {\n    Fps dividend(80), divisor(35);\n\
-    \    for (int i = 0; i < int(dividend.size()); i++) dividend[i] = mint(i * 17\
-    \ + 3);\n    for (int i = 0; i < int(divisor.size()); i++) divisor[i] = mint(i\
-    \ * 5 + 1);\n    auto division = dividend.divmod(divisor);\n    Fps restored =\
-    \ division.first * divisor + division.second;\n    restored.resize(dividend.size());\n\
+    \n#include \"../../fps/all.hpp\"\n#include \"../../math/modint.hpp\"\n\nusing\
+    \ mint = m1une::math::modint998244353;\nusing mint1e9 = m1une::math::modint1000000007;\n\
+    using Fps = m1une::fps::FormalPowerSeries<mint>;\n\ntemplate <class Mint>\nvoid\
+    \ assert_equal(const std::vector<Mint>& lhs, const std::vector<Mint>& rhs) {\n\
+    \    assert(lhs.size() == rhs.size());\n    for (int i = 0; i < int(lhs.size());\
+    \ i++) assert(lhs[i] == rhs[i]);\n}\n\nvoid test_convolution() {\n    std::mt19937\
+    \ rng(712367);\n    for (int iteration = 0; iteration < 30; iteration++) {\n \
+    \       int n = 33 + int(rng() % 70);\n        int m = 33 + int(rng() % 70);\n\
+    \        std::vector<mint> a(n), b(m);\n        for (mint& value : a) value =\
+    \ mint(static_cast<uint32_t>(rng()));\n        for (mint& value : b) value = mint(static_cast<uint32_t>(rng()));\n\
+    \        assert_equal(m1une::fps::convolution(a, b), m1une::fps::convolution_naive(a,\
+    \ b));\n    }\n\n    std::vector<mint1e9> a(70), b(65);\n    for (mint1e9& value\
+    \ : a) value = mint1e9(static_cast<uint32_t>(rng()));\n    for (mint1e9& value\
+    \ : b) value = mint1e9(static_cast<uint32_t>(rng()));\n    assert_equal(m1une::fps::convolution(a,\
+    \ b), m1une::fps::convolution_naive(a, b));\n}\n\nvoid test_series_functions()\
+    \ {\n    Fps f(96);\n    f[0] = 1;\n    for (int i = 1; i < int(f.size()); i++)\
+    \ f[i] = mint(i * i + 7);\n\n    Fps inverse = f.inv();\n    Fps identity = (f\
+    \ * inverse).pre(int(f.size()));\n    assert(identity[0] == mint(1));\n    for\
+    \ (int i = 1; i < int(identity.size()); i++) assert(identity[i] == mint(0));\n\
+    \n    Fps logarithm = f.log();\n    assert_equal(logarithm.exp(), f);\n    assert_equal(f.derivative().integral().pre(int(f.size()))\
+    \ + Fps(1, f[0]), f);\n\n    Fps cube = f.pow(3);\n    assert_equal(cube, ((f\
+    \ * f) * f).pre(int(f.size())));\n\n    Fps shifted(40);\n    shifted[4] = 9;\n\
+    \    for (int i = 5; i < int(shifted.size()); i++) shifted[i] = mint(i + 11);\n\
+    \    auto root = (shifted * shifted).pre(70).sqrt(70);\n    assert(root.has_value());\n\
+    \    assert_equal(((*root) * (*root)).pre(70), (shifted * shifted).pre(70));\n\
+    \n    Fps beyond_precision(8);\n    beyond_precision[5] = 1;\n    auto zero_root\
+    \ = beyond_precision.sqrt(5);\n    assert(zero_root.has_value());\n    assert_equal(*zero_root,\
+    \ Fps(5));\n\n    Fps odd_leading(8);\n    odd_leading[3] = 1;\n    assert(!odd_leading.sqrt(8).has_value());\n\
+    \n    Fps zero(20);\n    Fps one(20);\n    one[0] = 1;\n    assert_equal(zero.pow(0),\
+    \ one);\n    assert_equal(zero.pow(7), zero);\n}\n\nvoid test_polynomial_operations()\
+    \ {\n    Fps dividend(80), divisor(35);\n    for (int i = 0; i < int(dividend.size());\
+    \ i++) dividend[i] = mint(i * 17 + 3);\n    for (int i = 0; i < int(divisor.size());\
+    \ i++) divisor[i] = mint(i * 5 + 1);\n    auto division = dividend.divmod(divisor);\n\
+    \    Fps restored = division.first * divisor + division.second;\n    restored.resize(dividend.size());\n\
     \    assert_equal(restored, dividend);\n    assert(division.second.size() < divisor.size());\n\
     \n    mint shift = 12345;\n    Fps translated = dividend.taylor_shift(shift);\n\
     \    for (int x = 0; x < 10; x++) {\n        assert(translated.evaluate(mint(x))\
@@ -507,11 +510,12 @@ data:
   - fps/formal_power_series.hpp
   - fps/linear_recurrence.hpp
   - fps/multipoint_evaluation.hpp
+  - math/modint.hpp
   isVerificationFile: true
   path: verify/fps/fps_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 11:46:09+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/fps/fps_algorithms.test.cpp
 layout: document

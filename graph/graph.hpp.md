@@ -2,115 +2,127 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bellman_ford.hpp
     title: Bellman-Ford
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bfs.hpp
     title: BFS
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/bipartite.hpp
     title: Bipartite Graph
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/connected_components.hpp
     title: Connected Components
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/cycle_detection.hpp
     title: Cycle Detection
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dag_shortest_path.hpp
     title: DAG Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/dijkstra.hpp
     title: Dijkstra
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/general_matching.hpp
     title: General Matching
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/grid.hpp
     title: Grid
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/kruskal.hpp
     title: Kruskal
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowlink.hpp
     title: LowLink
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/scc.hpp
     title: Strongly Connected Components
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/topological_sort.hpp
     title: Topological Sort
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/warshall_floyd.hpp
     title: Warshall-Floyd
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/centroid_decomposition.hpp
     title: Centroid Decomposition
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/diameter.hpp
     title: Tree Diameter
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/heavy_light_decomposition.hpp
     title: Heavy Light Decomposition
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rerooting_dp.hpp
     title: Rerooting DP
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rerooting_static_top_tree.hpp
     title: Rerooting Static Top Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/static_top_tree.hpp
     title: Static Top Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/library_checker_general_matching.test.cpp
     title: verify/graph/library_checker_general_matching.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/graph/library_checker_general_matching.test.cpp
+    title: verify/graph/library_checker_general_matching.test.cpp
+  - icon: ':x:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+    title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
+  - icon: ':x:'
     path: verify/graph/library_checker_maximum_independent_set.test.cpp
     title: verify/graph/library_checker_maximum_independent_set.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/graph/library_checker_maximum_independent_set.test.cpp
+    title: verify/graph/library_checker_maximum_independent_set.test.cpp
+  - icon: ':x:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: false
+  - icon: ':x:'
+    path: verify/tree/tree_algorithms.test.cpp
+    title: verify/tree/tree_algorithms.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/graph.hpp\"\n\n\n\n#include <cassert>\n#include <utility>\n\
@@ -258,11 +270,15 @@ data:
   - graph/shortest_path.hpp
   - graph/general_matching.hpp
   timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
+  - verify/tree/tree_algorithms.test.cpp
+  - verify/graph/library_checker_maximum_independent_set.test.cpp
   - verify/graph/library_checker_maximum_independent_set.test.cpp
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp
+  - verify/graph/library_checker_lowest_common_ancestor.test.cpp
+  - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/graph.hpp

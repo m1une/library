@@ -180,8 +180,8 @@ data:
     \ namespace m1une\n\n\n"
   code: "#ifndef M1UNE_PERSISTENT_LAZY_SEGTREE_HPP\n#define M1UNE_PERSISTENT_LAZY_SEGTREE_HPP\
     \ 1\n\n#include <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n\
-    #include <vector>\n\n#include \"acted_monoid/concept.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace ds {\n\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\n\
+    #include <vector>\n\n#include \"../../acted_monoid/concept.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace ds {\n\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\n\
     struct PersistentLazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
     \ Node {\n        T val;\n        F lazy;\n        int l, r;\n        bool has_lazy;\n\
@@ -331,7 +331,7 @@ data:
   isVerificationFile: false
   path: ds/segtree/persistent_lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:27:35+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/persistent_lazy_segtree.test.cpp

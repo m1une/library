@@ -10,7 +10,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
     title: Add Monoid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
   - icon: ':heavy_check_mark:'
@@ -252,10 +252,10 @@ data:
     \    test_randomized();\n\n    long long a, b;\n    std::cin >> a >> b;\n    std::cout\
     \ << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/segtree/persistent_dynamic_dual_segtree.hpp\"\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <optional>\n#include\
-    \ <vector>\n\n#include \"monoid/add.hpp\"\n#include \"monoid/update.hpp\"\n\n\
-    namespace {\n\nvoid test_versions() {\n    using Add = m1une::monoid::Add<long\
+    ../../../ds/segtree/persistent_dynamic_dual_segtree.hpp\"\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <optional>\n\
+    #include <vector>\n\n#include \"../../../monoid/add.hpp\"\n#include \"../../../monoid/update.hpp\"\
+    \n\nnamespace {\n\nvoid test_versions() {\n    using Add = m1une::monoid::Add<long\
     \ long>;\n    using Seg = m1une::ds::PersistentDynamicDualSegtree<Add, int>;\n\
     \n    Seg base(-50, 60, 5);\n    base.reserve(20000);\n    Seg first = base.apply(-10,\
     \ 20, 3);\n    Seg second = first.set(0, 100);\n    Seg branch = base.apply(5,\
@@ -301,7 +301,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 02:09:58+09:00'
+  timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp

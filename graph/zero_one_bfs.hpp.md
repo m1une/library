@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: Graph
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/all.hpp
     title: Graph All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/directed.hpp
     title: Directed Graph Algorithms
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/shortest_path.hpp
     title: Shortest Path
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/undirected.hpp
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/zero_one_bfs.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -112,8 +112,8 @@ data:
     \n\n"
   code: "#ifndef M1UNE_GRAPH_ZERO_ONE_BFS_HPP\n#define M1UNE_GRAPH_ZERO_ONE_BFS_HPP\
     \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <deque>\n#include <limits>\n\
-    #include <vector>\n\n#include \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ graph {\n\nstruct ZeroOneBfsResult {\n    std::vector<int> dist;\n    std::vector<int>\
+    #include <vector>\n\n#include \"graph.hpp\"\n\nnamespace m1une {\nnamespace graph\
+    \ {\n\nstruct ZeroOneBfsResult {\n    std::vector<int> dist;\n    std::vector<int>\
     \ parent;\n    std::vector<int> parent_edge;\n    int inf;\n\n    bool reachable(int\
     \ v) const {\n        assert(0 <= v && v < int(dist.size()));\n        return\
     \ dist[v] != inf;\n    }\n\n    std::vector<int> path(int t) const {\n       \
@@ -149,8 +149,8 @@ data:
   - graph/undirected.hpp
   - graph/directed.hpp
   - graph/shortest_path.hpp
-  timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-06-21 04:34:53+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/zero_one_bfs.hpp
