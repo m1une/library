@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/zalgorithm"
 
-#include "../../string/rolling_hash.hpp"
+#include "string/z_algorithm.hpp"
 #include <iostream>
 #include <string>
 
@@ -9,18 +9,13 @@ void fast_io() {
     std::cin.tie(nullptr);
 }
 
-using RH = m1une::string::RollingHash<10007, 2305843009213693951LL>;
-
 int main() {
     fast_io();
     std::string S;
     std::cin >> S;
-    int N = S.size();
-
-    RH rh(S);
-
-    for (int i = 0; i < N; ++i) {
-        std::cout << rh.lcp(0, N, i, N) << (i == N - 1 ? "" : " ");
+    std::vector<int> z = m1une::string::z_algorithm(S);
+    for (int i = 0; i < int(z.size()); ++i) {
+        std::cout << z[i] << (i + 1 == int(z.size()) ? "" : " ");
     }
     std::cout << "\n";
 
