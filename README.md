@@ -31,8 +31,8 @@ contest.
 
 | Directory | Use it for |
 | --- | --- |
-| `ds/union_find/` | Connectivity, component aggregation, potentials, and persistent union-find. |
-| `ds/segment_tree/` | Segment trees, lazy propagation, dual segment trees, and persistent variants. |
+| `ds/dsu/` | Connectivity, component aggregation, potentials, and persistent union-find. |
+| `ds/segtree/` | Segment trees, lazy propagation, dual segment trees, and persistent variants. |
 | `ds/range_query/` | Fenwick trees and static sparse-table queries. |
 | `ds/dynamic_array/` | Implicit-treap sequences with insertion, deletion, reversal, aggregation, or persistence. |
 | `ds/ordered_set/` | Ordered sets and multisets, including persistent variants and a binary trie. |
@@ -46,7 +46,7 @@ See [`ds/README.md`](ds/README.md) for the complete header index.
 Include headers directly from the repository root and compile with C++20:
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/add.hpp"
 ```
 
@@ -76,5 +76,5 @@ long long answer = seg.prod(0, 3);  // 1 + 10 + 3
 The repository is configured for `online-judge-verify-helper`. Locally, the core verification files can also be compiled with:
 
 ```sh
-g++ -std=c++20 -O2 -Wall -Wextra -I. verify/ds/segment_tree/segtree.test.cpp
+g++ -std=c++20 -O2 -Wall -Wextra -I. verify/ds/segtree/segtree.test.cpp
 ```

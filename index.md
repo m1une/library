@@ -78,6 +78,20 @@ data:
     - icon: ':warning:'
       path: acted_monoid/wrapper.hpp
       title: Acted Monoid Wrapper
+  - name: ds/dsu
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: ds/dsu/dsu.hpp
+      title: DSU (Disjoint Set Union)
+    - icon: ':heavy_check_mark:'
+      path: ds/dsu/dsu_monoid.hpp
+      title: DSU with Monoid
+    - icon: ':heavy_check_mark:'
+      path: ds/dsu/persistent_dsu.hpp
+      title: Persistent DSU
+    - icon: ':heavy_check_mark:'
+      path: ds/dsu/potentialized_dsu.hpp
+      title: Potentialized DSU
   - name: ds/dynamic_array
     pages:
     - icon: ':heavy_check_mark:'
@@ -154,40 +168,26 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/range_query/sparse_table.hpp
       title: Sparse Table
-  - name: ds/segment_tree
+  - name: ds/segtree
     pages:
     - icon: ':heavy_check_mark:'
-      path: ds/segment_tree/dual_segtree.hpp
+      path: ds/segtree/dual_segtree.hpp
       title: Dual Segment Tree
     - icon: ':heavy_check_mark:'
-      path: ds/segment_tree/lazy_segtree.hpp
+      path: ds/segtree/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
-      path: ds/segment_tree/persistent_dual_segtree.hpp
+      path: ds/segtree/persistent_dual_segtree.hpp
       title: Persistent Dual Segment Tree
     - icon: ':heavy_check_mark:'
-      path: ds/segment_tree/persistent_lazy_segtree.hpp
+      path: ds/segtree/persistent_lazy_segtree.hpp
       title: Persistent Lazy Segment Tree
     - icon: ':heavy_check_mark:'
-      path: ds/segment_tree/persistent_segtree.hpp
+      path: ds/segtree/persistent_segtree.hpp
       title: Persistent Segment Tree
     - icon: ':heavy_check_mark:'
-      path: ds/segment_tree/segtree.hpp
+      path: ds/segtree/segtree.hpp
       title: Segment Tree
-  - name: ds/union_find
-    pages:
-    - icon: ':heavy_check_mark:'
-      path: ds/union_find/dsu.hpp
-      title: DSU (Disjoint Set Union)
-    - icon: ':heavy_check_mark:'
-      path: ds/union_find/dsu_monoid.hpp
-      title: DSU with Monoid
-    - icon: ':heavy_check_mark:'
-      path: ds/union_find/persistent_dsu.hpp
-      title: Persistent DSU
-    - icon: ':heavy_check_mark:'
-      path: ds/union_find/potentialized_dsu.hpp
-      title: Potentialized DSU
   - name: flow
     pages:
     - icon: ':heavy_check_mark:'
@@ -512,6 +512,23 @@ data:
       path: utilities/y_combinator.hpp
       title: Y Combinator
   verificationCategories:
+  - name: verify/ds/dsu
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/dsu/dsu.test.cpp
+      title: verify/ds/dsu/dsu.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/dsu/dsu_monoid.test.cpp
+      title: verify/ds/dsu/dsu_monoid.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/dsu/persistent_dsu.test.cpp
+      title: verify/ds/dsu/persistent_dsu.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
+      title: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/dsu/potentialized_dsu.test.cpp
+      title: verify/ds/dsu/potentialized_dsu.test.cpp
   - name: verify/ds/dynamic_array
     pages:
     - icon: ':heavy_check_mark:'
@@ -597,43 +614,26 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/range_query/sparse_table.test.cpp
       title: verify/ds/range_query/sparse_table.test.cpp
-  - name: verify/ds/segment_tree
+  - name: verify/ds/segtree
     pages:
     - icon: ':heavy_check_mark:'
-      path: verify/ds/segment_tree/dual_segtree.test.cpp
-      title: verify/ds/segment_tree/dual_segtree.test.cpp
+      path: verify/ds/segtree/dual_segtree.test.cpp
+      title: verify/ds/segtree/dual_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/ds/segment_tree/lazy_segtree.test.cpp
-      title: verify/ds/segment_tree/lazy_segtree.test.cpp
+      path: verify/ds/segtree/lazy_segtree.test.cpp
+      title: verify/ds/segtree/lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
-      title: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
+      path: verify/ds/segtree/persistent_dual_segtree.test.cpp
+      title: verify/ds/segtree/persistent_dual_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
-      title: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
+      path: verify/ds/segtree/persistent_lazy_segtree.test.cpp
+      title: verify/ds/segtree/persistent_lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/ds/segment_tree/persistent_segtree.test.cpp
-      title: verify/ds/segment_tree/persistent_segtree.test.cpp
+      path: verify/ds/segtree/persistent_segtree.test.cpp
+      title: verify/ds/segtree/persistent_segtree.test.cpp
     - icon: ':heavy_check_mark:'
-      path: verify/ds/segment_tree/segtree.test.cpp
-      title: verify/ds/segment_tree/segtree.test.cpp
-  - name: verify/ds/union_find
-    pages:
-    - icon: ':heavy_check_mark:'
-      path: verify/ds/union_find/dsu.test.cpp
-      title: verify/ds/union_find/dsu.test.cpp
-    - icon: ':heavy_check_mark:'
-      path: verify/ds/union_find/dsu_monoid.test.cpp
-      title: verify/ds/union_find/dsu_monoid.test.cpp
-    - icon: ':heavy_check_mark:'
-      path: verify/ds/union_find/persistent_dsu.test.cpp
-      title: verify/ds/union_find/persistent_dsu.test.cpp
-    - icon: ':heavy_check_mark:'
-      path: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
-      title: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
-    - icon: ':heavy_check_mark:'
-      path: verify/ds/union_find/potentialized_dsu.test.cpp
-      title: verify/ds/union_find/potentialized_dsu.test.cpp
+      path: verify/ds/segtree/segtree.test.cpp
+      title: verify/ds/segtree/segtree.test.cpp
   - name: verify/flow
     pages:
     - icon: ':heavy_check_mark:'

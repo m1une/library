@@ -105,7 +105,7 @@ When initializing the lazy segment tree, you must transform the raw binary value
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_flip_range_binary_inversion.hpp"
 #include <iostream>
 #include <vector>

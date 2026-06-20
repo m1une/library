@@ -57,7 +57,7 @@ Use the `make(val)` method to construct a leaf node from a single scalar value.
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/min_max.hpp"
 #include <iostream>
 #include <vector>

@@ -74,7 +74,7 @@ For the maximum counterpart, see `monoid/strict_max2.hpp`.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/strict_min2.hpp"
 #include <iostream>
 #include <vector>

@@ -10,17 +10,17 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/lazy_segtree.test.cpp
-    title: verify/ds/segment_tree/lazy_segtree.test.cpp
+    path: verify/ds/segtree/lazy_segtree.test.cpp
+    title: verify/ds/segtree/lazy_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/segment_tree/lazy_segtree.hpp\"\n\n\n\n#include <bit>\n\
-    #include <cassert>\n#include <concepts>\n#include <utility>\n#include <vector>\n\
-    \n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
-    \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
+  bundledCode: "#line 1 \"ds/segtree/lazy_segtree.hpp\"\n\n\n\n#include <bit>\n#include\
+    \ <cassert>\n#include <concepts>\n#include <utility>\n#include <vector>\n\n#line\
+    \ 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\n\
+    \nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
     \ for an Acted Monoid.\ntemplate <typename AM>\nconcept IsActedMonoid = requires(typename\
     \ AM::value_type a, typename AM::value_type b, typename AM::operator_type f,\n\
     \                                 typename AM::operator_type g) {\n    // 1. Value\
@@ -38,43 +38,43 @@ data:
     \n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace math {\n\
     \ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1) return 1;\n\
     \    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n}  // namespace\
-    \ math\n}  // namespace m1une\n\n\n#line 12 \"ds/segment_tree/lazy_segtree.hpp\"\
-    \n\nnamespace m1une {\nnamespace ds {\n\n// A highly generic Lazy Segment Tree\
-    \ utilizing C++20 Concepts for type safety.\n// It operates on any Acted Monoid\
-    \ structure satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\ntemplate\
-    \ <m1une::acted_monoid::IsActedMonoid ActedMonoid>\nstruct LazySegtree {\n   \
-    \ using T = typename ActedMonoid::value_type;\n    using F = typename ActedMonoid::operator_type;\n\
-    \n   private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n    std::vector<F>\
-    \ _lz;\n\n    // Recalculates the value of the node k from its children.\n   \
-    \ void update(int k) {\n        _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k +\
-    \ 1]);\n    }\n\n    static T mapping_at(const F& f, const T& value, long long\
-    \ ord) {\n        if constexpr (requires(F g, T x, long long i) { ActedMonoid::mapping(g,\
-    \ x, i); }) {\n            return ActedMonoid::mapping(f, value, ord);\n     \
-    \   } else {\n            return ActedMonoid::mapping(f, value);\n        }\n\
-    \    }\n\n    static F shift_operator(const F& f, long long ord) {\n        if\
-    \ constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g, i); }) {\n\
-    \            return ActedMonoid::op_shift(f, ord);\n        } else {\n       \
-    \     return f;\n        }\n    }\n\n    int node_length(int k) const {\n    \
-    \    int level = std::bit_width((unsigned int)k) - 1;\n        return _size >>\
-    \ level;\n    }\n\n    int node_left(int k) const {\n        int level = std::bit_width((unsigned\
-    \ int)k) - 1;\n        int len = _size >> level;\n        return (k - (1 << level))\
-    \ * len;\n    }\n\n    // Applies the operator f to the node k and updates its\
-    \ lazy tag if it's an internal node.\n    void all_apply(int k, F f) {\n     \
-    \   _d[k] = mapping_at(f, _d[k], 0);\n        if (k < _size) {\n            _lz[k]\
-    \ = ActedMonoid::op_comp(f, _lz[k]);\n        }\n    }\n\n    // Propagates the\
-    \ lazy tag of the node k down to its children.\n    void push(int k) {\n     \
-    \   all_apply(2 * k, _lz[k]);\n        all_apply(2 * k + 1, shift_operator(_lz[k],\
-    \ node_length(k) / 2));\n        _lz[k] = ActedMonoid::op_id();\n    }\n\n   public:\n\
-    \    // Constructs an empty lazy segment tree.\n    LazySegtree() : LazySegtree(0)\
-    \ {}\n\n    // Constructs a lazy segment tree of size `n`, initialized with the\
-    \ identity element.\n    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n,\
-    \ ActedMonoid::id())) {}\n\n    // Constructs a lazy segment tree from an existing\
-    \ vector.\n    explicit LazySegtree(const std::vector<T>& v) : _n(int(v.size()))\
-    \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
-    \ = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n       \
-    \ _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
-    \        for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n        for (int\
-    \ i = _size - 1; i >= 1; i--) update(i);\n    }\n    explicit LazySegtree(std::vector<T>&&\
+    \ math\n}  // namespace m1une\n\n\n#line 12 \"ds/segtree/lazy_segtree.hpp\"\n\n\
+    namespace m1une {\nnamespace ds {\n\n// A highly generic Lazy Segment Tree utilizing\
+    \ C++20 Concepts for type safety.\n// It operates on any Acted Monoid structure\
+    \ satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\ntemplate <m1une::acted_monoid::IsActedMonoid\
+    \ ActedMonoid>\nstruct LazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
+    \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    int _n,\
+    \ _size, _log;\n    std::vector<T> _d;\n    std::vector<F> _lz;\n\n    // Recalculates\
+    \ the value of the node k from its children.\n    void update(int k) {\n     \
+    \   _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n    static T\
+    \ mapping_at(const F& f, const T& value, long long ord) {\n        if constexpr\
+    \ (requires(F g, T x, long long i) { ActedMonoid::mapping(g, x, i); }) {\n   \
+    \         return ActedMonoid::mapping(f, value, ord);\n        } else {\n    \
+    \        return ActedMonoid::mapping(f, value);\n        }\n    }\n\n    static\
+    \ F shift_operator(const F& f, long long ord) {\n        if constexpr (requires(F\
+    \ g, long long i) { ActedMonoid::op_shift(g, i); }) {\n            return ActedMonoid::op_shift(f,\
+    \ ord);\n        } else {\n            return f;\n        }\n    }\n\n    int\
+    \ node_length(int k) const {\n        int level = std::bit_width((unsigned int)k)\
+    \ - 1;\n        return _size >> level;\n    }\n\n    int node_left(int k) const\
+    \ {\n        int level = std::bit_width((unsigned int)k) - 1;\n        int len\
+    \ = _size >> level;\n        return (k - (1 << level)) * len;\n    }\n\n    //\
+    \ Applies the operator f to the node k and updates its lazy tag if it's an internal\
+    \ node.\n    void all_apply(int k, F f) {\n        _d[k] = mapping_at(f, _d[k],\
+    \ 0);\n        if (k < _size) {\n            _lz[k] = ActedMonoid::op_comp(f,\
+    \ _lz[k]);\n        }\n    }\n\n    // Propagates the lazy tag of the node k down\
+    \ to its children.\n    void push(int k) {\n        all_apply(2 * k, _lz[k]);\n\
+    \        all_apply(2 * k + 1, shift_operator(_lz[k], node_length(k) / 2));\n \
+    \       _lz[k] = ActedMonoid::op_id();\n    }\n\n   public:\n    // Constructs\
+    \ an empty lazy segment tree.\n    LazySegtree() : LazySegtree(0) {}\n\n    //\
+    \ Constructs a lazy segment tree of size `n`, initialized with the identity element.\n\
+    \    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n, ActedMonoid::id()))\
+    \ {}\n\n    // Constructs a lazy segment tree from an existing vector.\n    explicit\
+    \ LazySegtree(const std::vector<T>& v) : _n(int(v.size())) {\n        _size =\
+    \ m1une::math::bit_ceil((unsigned int)(_n));\n        _log = 0;\n        while\
+    \ ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2 * _size,\
+    \ ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n    \
+    \    for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n        for (int i =\
+    \ _size - 1; i >= 1; i--) update(i);\n    }\n    explicit LazySegtree(std::vector<T>&&\
     \ v) : _n(int(v.size())) {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n\
     \        _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n\
     \        _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
@@ -302,13 +302,13 @@ data:
   - acted_monoid/concept.hpp
   - math/bit_ceil.hpp
   isVerificationFile: false
-  path: ds/segment_tree/lazy_segtree.hpp
+  path: ds/segtree/lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/segment_tree/lazy_segtree.test.cpp
-documentation_of: ds/segment_tree/lazy_segtree.hpp
+  - verify/ds/segtree/lazy_segtree.test.cpp
+documentation_of: ds/segtree/lazy_segtree.hpp
 layout: document
 title: Lazy Segment Tree
 ---
@@ -371,7 +371,7 @@ All non-empty constructors build the tree in $O(N)$ time.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_min.hpp"
 #include <iostream>
 #include <vector>

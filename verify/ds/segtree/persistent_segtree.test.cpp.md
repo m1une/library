@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/persistent_segtree.hpp
+    path: ds/segtree/persistent_segtree.hpp
     title: Persistent Segment Tree
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
@@ -20,8 +20,8 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/ds/segment_tree/persistent_segtree.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/segment_tree/persistent_segtree.hpp\"\
+  bundledCode: "#line 1 \"verify/ds/segtree/persistent_segtree.test.cpp\"\n#define\
+    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/segtree/persistent_segtree.hpp\"\
     \n\n\n\n#include <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n\
     #include <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
@@ -36,7 +36,7 @@ data:
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segment_tree/persistent_segtree.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segtree/persistent_segtree.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
     struct PersistentSegtree {\n    using T = typename Monoid::value_type;\n\n   private:\n\
     \    struct Node {\n        T val;\n        int l, r;\n\n        Node() : val(Monoid::id()),\
@@ -136,17 +136,17 @@ data:
     \ F f) const {\n        assert(0 <= r && r <= _n);\n        assert(f(Monoid::id()));\n\
     \        if (r == 0) return 0;\n        T sm = Monoid::id();\n        return min_left_node(_root,\
     \ 0, _n, r, sm, f);\n    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n\
-    \n#line 4 \"verify/ds/segment_tree/persistent_segtree.test.cpp\"\n\n#line 6 \"\
-    verify/ds/segment_tree/persistent_segtree.test.cpp\"\n#include <iostream>\n#line\
-    \ 8 \"verify/ds/segment_tree/persistent_segtree.test.cpp\"\n\n#line 1 \"monoid/add.hpp\"\
-    \n\n\n\nnamespace m1une {\nnamespace monoid {\n\n// Monoid for addition (Range\
-    \ Sum).\ntemplate <typename T>\nstruct Add {\n    using value_type = T;\n\n  \
-    \  // Returns the identity element for addition, which is 0.\n    static constexpr\
-    \ T id() {\n        return T(0);\n    }\n\n    // Returns the sum of a and b.\n\
-    \    static constexpr T op(const T& a, const T& b) {\n        return a + b;\n\
-    \    }\n\n    static constexpr T inv(const T& x) {\n        return -x;\n    }\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 10 \"verify/ds/segment_tree/persistent_segtree.test.cpp\"\
-    \n\nint main() {\n    using Seg = m1une::ds::PersistentSegtree<m1une::monoid::Add<long\
+    \n#line 4 \"verify/ds/segtree/persistent_segtree.test.cpp\"\n\n#line 6 \"verify/ds/segtree/persistent_segtree.test.cpp\"\
+    \n#include <iostream>\n#line 8 \"verify/ds/segtree/persistent_segtree.test.cpp\"\
+    \n\n#line 1 \"monoid/add.hpp\"\n\n\n\nnamespace m1une {\nnamespace monoid {\n\n\
+    // Monoid for addition (Range Sum).\ntemplate <typename T>\nstruct Add {\n   \
+    \ using value_type = T;\n\n    // Returns the identity element for addition, which\
+    \ is 0.\n    static constexpr T id() {\n        return T(0);\n    }\n\n    //\
+    \ Returns the sum of a and b.\n    static constexpr T op(const T& a, const T&\
+    \ b) {\n        return a + b;\n    }\n\n    static constexpr T inv(const T& x)\
+    \ {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n}  // namespace\
+    \ m1une\n\n\n#line 10 \"verify/ds/segtree/persistent_segtree.test.cpp\"\n\nint\
+    \ main() {\n    using Seg = m1une::ds::PersistentSegtree<m1une::monoid::Add<long\
     \ long>>;\n\n    Seg seg(std::vector<long long>{1, 2, 3, 4, 5});\n    Seg seg1\
     \ = seg.set(2, 10);\n    Seg seg2 = seg1.set(0, -1);\n\n    auto check = [](const\
     \ Seg& tree, const std::vector<long long>& a) {\n        assert(tree.size() ==\
@@ -168,7 +168,7 @@ data:
     \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
     n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/segment_tree/persistent_segtree.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
+    ds/segtree/persistent_segtree.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
     #include <vector>\n\n#include \"monoid/add.hpp\"\n\nint main() {\n    using Seg\
     \ = m1une::ds::PersistentSegtree<m1une::monoid::Add<long long>>;\n\n    Seg seg(std::vector<long\
     \ long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.set(2, 10);\n    Seg seg2 = seg1.set(0,\
@@ -191,19 +191,19 @@ data:
     \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
     n';\n}\n"
   dependsOn:
-  - ds/segment_tree/persistent_segtree.hpp
+  - ds/segtree/persistent_segtree.hpp
   - monoid/concept.hpp
   - monoid/add.hpp
   isVerificationFile: true
-  path: verify/ds/segment_tree/persistent_segtree.test.cpp
+  path: verify/ds/segtree/persistent_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/segment_tree/persistent_segtree.test.cpp
+documentation_of: verify/ds/segtree/persistent_segtree.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/segment_tree/persistent_segtree.test.cpp
-- /verify/verify/ds/segment_tree/persistent_segtree.test.cpp.html
-title: verify/ds/segment_tree/persistent_segtree.test.cpp
+- /verify/verify/ds/segtree/persistent_segtree.test.cpp
+- /verify/verify/ds/segtree/persistent_segtree.test.cpp.html
+title: verify/ds/segtree/persistent_segtree.test.cpp
 ---

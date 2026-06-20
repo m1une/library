@@ -7,29 +7,29 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/persistent_segtree.test.cpp
-    title: verify/ds/segment_tree/persistent_segtree.test.cpp
+    path: verify/ds/segtree/persistent_segtree.test.cpp
+    title: verify/ds/segtree/persistent_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/segment_tree/persistent_segtree.hpp\"\n\n\n\n#include\
-    \ <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n#include\
-    \ <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
-    \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
-    \ the requirements of a Monoid.\n// A Monoid must have a `value_type`, an identity\
-    \ element `id()`, and an associative binary operation `op()`.\ntemplate <typename\
-    \ M>\nconcept IsMonoid = requires(typename M::value_type a, typename M::value_type\
-    \ b) {\n    // 1. Must define `value_type`\n    typename M::value_type;\n\n  \
-    \  // 2. Must have a static method `id()` returning `value_type`\n    { M::id()\
-    \ } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
+  bundledCode: "#line 1 \"ds/segtree/persistent_segtree.hpp\"\n\n\n\n#include <cassert>\n\
+    #include <concepts>\n#include <memory>\n#include <utility>\n#include <vector>\n\
+    \n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies the requirements\
+    \ of a Monoid.\n// A Monoid must have a `value_type`, an identity element `id()`,\
+    \ and an associative binary operation `op()`.\ntemplate <typename M>\nconcept\
+    \ IsMonoid = requires(typename M::value_type a, typename M::value_type b) {\n\
+    \    // 1. Must define `value_type`\n    typename M::value_type;\n\n    // 2.\
+    \ Must have a static method `id()` returning `value_type`\n    { M::id() } ->\
+    \ std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
     \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segment_tree/persistent_segtree.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segtree/persistent_segtree.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
     struct PersistentSegtree {\n    using T = typename Monoid::value_type;\n\n   private:\n\
     \    struct Node {\n        T val;\n        int l, r;\n\n        Node() : val(Monoid::id()),\
@@ -236,13 +236,13 @@ data:
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
-  path: ds/segment_tree/persistent_segtree.hpp
+  path: ds/segtree/persistent_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/segment_tree/persistent_segtree.test.cpp
-documentation_of: ds/segment_tree/persistent_segtree.hpp
+  - verify/ds/segtree/persistent_segtree.test.cpp
+documentation_of: ds/segtree/persistent_segtree.hpp
 layout: document
 title: Persistent Segment Tree
 ---
@@ -273,7 +273,7 @@ Point updates return a new tree while keeping older versions available.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/persistent_segtree.hpp"
+#include "ds/segtree/persistent_segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>

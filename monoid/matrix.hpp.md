@@ -54,7 +54,7 @@ Merging two matrices takes $O(N^3)$ time, so $N$ should be small (typically $N \
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/matrix.hpp"
 #include <iostream>
 #include <vector>

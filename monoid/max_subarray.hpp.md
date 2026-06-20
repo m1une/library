@@ -110,7 +110,7 @@ To initialize a leaf node for a single value $x$, use the `make(val, allow_empty
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/max_subarray.hpp"
 #include <iostream>
 #include <vector>

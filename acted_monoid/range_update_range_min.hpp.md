@@ -69,7 +69,7 @@ This implementation uses `std::optional<T>` as the `operator_type` to safely rep
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_update_range_min.hpp"
 #include <iostream>
 #include <vector>

@@ -10,15 +10,15 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/segtree.test.cpp
-    title: verify/ds/segment_tree/segtree.test.cpp
+    path: verify/ds/segtree/segtree.test.cpp
+    title: verify/ds/segtree/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/segment_tree/segtree.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <concepts>\n#include <utility>\n#include <vector>\n\n#line 1 \"math/bit_ceil.hpp\"\
+  bundledCode: "#line 1 \"ds/segtree/segtree.hpp\"\n\n\n\n#include <cassert>\n#include\
+    \ <concepts>\n#include <utility>\n#include <vector>\n\n#line 1 \"math/bit_ceil.hpp\"\
     \n\n\n\nnamespace m1une {\nnamespace math {\n\ntemplate <typename T>\nconstexpr\
     \ T bit_ceil(T n) {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n)\
     \ x <<= 1;\n    return x;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
@@ -35,7 +35,7 @@ data:
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segment_tree/segtree.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segtree/segtree.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\n// A generic Segment Tree utilizing C++20\
     \ Concepts for type safety.\n// It requires a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\n\
     template <m1une::monoid::IsMonoid Monoid>\nstruct Segtree {\n    using T = typename\
@@ -200,13 +200,13 @@ data:
   - math/bit_ceil.hpp
   - monoid/concept.hpp
   isVerificationFile: false
-  path: ds/segment_tree/segtree.hpp
+  path: ds/segtree/segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/segment_tree/segtree.test.cpp
-documentation_of: ds/segment_tree/segtree.hpp
+  - verify/ds/segtree/segtree.test.cpp
+documentation_of: ds/segtree/segtree.hpp
 layout: document
 title: Segment Tree
 ---
@@ -264,7 +264,7 @@ All non-empty constructors build the tree in $O(N)$ time.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>

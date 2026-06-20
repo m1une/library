@@ -7,8 +7,8 @@ data:
     path: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
     title: verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/lazy_segtree.test.cpp
-    title: verify/ds/segment_tree/lazy_segtree.test.cpp
+    path: verify/ds/segtree/lazy_segtree.test.cpp
+    title: verify/ds/segtree/lazy_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -62,7 +62,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
-  - verify/ds/segment_tree/lazy_segtree.test.cpp
+  - verify/ds/segtree/lazy_segtree.test.cpp
 documentation_of: acted_monoid/range_affine_range_sum.hpp
 layout: document
 title: Range Affine Range Sum
@@ -83,7 +83,7 @@ When initializing a Lazy Segment Tree, you must initialize the leaf nodes with `
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_affine_range_sum.hpp"
 #include <iostream>
 #include <vector>

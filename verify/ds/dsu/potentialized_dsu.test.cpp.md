@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/union_find/potentialized_dsu.hpp
+    path: ds/dsu/potentialized_dsu.hpp
     title: Potentialized DSU
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
@@ -23,8 +23,8 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/ds/union_find/potentialized_dsu.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/union_find/potentialized_dsu.hpp\"\
+  bundledCode: "#line 1 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/dsu/potentialized_dsu.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <concepts>\n#include\
     \ <utility>\n#include <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line\
     \ 5 \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept\
@@ -39,7 +39,7 @@ data:
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/union_find/potentialized_dsu.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/dsu/potentialized_dsu.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
     \ Group>\nrequires std::equality_comparable<typename Group::value_type>\nstruct\
     \ PotentializedDsu {\n    using T = typename Group::value_type;\n\n   private:\n\
@@ -107,10 +107,10 @@ data:
     \ T(0);\n    }\n\n    // Returns the bitwise XOR of a and b.\n    static constexpr\
     \ T op(const T& a, const T& b) {\n        return a ^ b;\n    }\n\n    static constexpr\
     \ T inv(const T& x) {\n        return x;\n    }\n};\n\n}  // namespace monoid\n\
-    }  // namespace m1une\n\n\n#line 6 \"verify/ds/union_find/potentialized_dsu.test.cpp\"\
-    \n\n#line 8 \"verify/ds/union_find/potentialized_dsu.test.cpp\"\n#include <iostream>\n\
-    #line 10 \"verify/ds/union_find/potentialized_dsu.test.cpp\"\n\nint main() {\n\
-    \    using Add = m1une::monoid::Add<long long>;\n\n    m1une::ds::PotentializedDsu<Add>\
+    }  // namespace m1une\n\n\n#line 6 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\
+    \n\n#line 8 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\n#include <iostream>\n\
+    #line 10 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\n\nint main() {\n    using\
+    \ Add = m1une::monoid::Add<long long>;\n\n    m1une::ds::PotentializedDsu<Add>\
     \ add_dsu(5);\n    assert(add_dsu.size() == 5);\n    assert(!add_dsu.empty());\n\
     \n    assert(add_dsu.merge(0, 1, 3));\n    assert(add_dsu.merge(1, 2, 4));\n \
     \   assert(add_dsu.same(0, 2));\n    assert(add_dsu.diff(0, 1) == 3);\n    assert(add_dsu.diff(1,\
@@ -130,9 +130,9 @@ data:
     \ empty;\n    assert(empty.size() == 0);\n    assert(empty.empty());\n\n    long\
     \ long x, y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/union_find/potentialized_dsu.hpp\"\n#include \"monoid/add.hpp\"\n#include \"\
-    monoid/xor.hpp\"\n\n#include <cassert>\n#include <iostream>\n#include <vector>\n\
-    \nint main() {\n    using Add = m1une::monoid::Add<long long>;\n\n    m1une::ds::PotentializedDsu<Add>\
+    ds/dsu/potentialized_dsu.hpp\"\n#include \"monoid/add.hpp\"\n#include \"monoid/xor.hpp\"\
+    \n\n#include <cassert>\n#include <iostream>\n#include <vector>\n\nint main() {\n\
+    \    using Add = m1une::monoid::Add<long long>;\n\n    m1une::ds::PotentializedDsu<Add>\
     \ add_dsu(5);\n    assert(add_dsu.size() == 5);\n    assert(!add_dsu.empty());\n\
     \n    assert(add_dsu.merge(0, 1, 3));\n    assert(add_dsu.merge(1, 2, 4));\n \
     \   assert(add_dsu.same(0, 2));\n    assert(add_dsu.diff(0, 1) == 3);\n    assert(add_dsu.diff(1,\
@@ -152,20 +152,20 @@ data:
     \ empty;\n    assert(empty.size() == 0);\n    assert(empty.empty());\n\n    long\
     \ long x, y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   dependsOn:
-  - ds/union_find/potentialized_dsu.hpp
+  - ds/dsu/potentialized_dsu.hpp
   - monoid/concept.hpp
   - monoid/add.hpp
   - monoid/xor.hpp
   isVerificationFile: true
-  path: verify/ds/union_find/potentialized_dsu.test.cpp
+  path: verify/ds/dsu/potentialized_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/union_find/potentialized_dsu.test.cpp
+documentation_of: verify/ds/dsu/potentialized_dsu.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/union_find/potentialized_dsu.test.cpp
-- /verify/verify/ds/union_find/potentialized_dsu.test.cpp.html
-title: verify/ds/union_find/potentialized_dsu.test.cpp
+- /verify/verify/ds/dsu/potentialized_dsu.test.cpp
+- /verify/verify/ds/dsu/potentialized_dsu.test.cpp.html
+title: verify/ds/dsu/potentialized_dsu.test.cpp
 ---

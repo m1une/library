@@ -4,6 +4,12 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/ds/dsu/dsu_monoid.test.cpp
+    title: verify/ds/dsu/dsu_monoid.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/dsu/potentialized_dsu.test.cpp
+    title: verify/ds/dsu/potentialized_dsu.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
     title: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - icon: ':heavy_check_mark:'
@@ -16,20 +22,14 @@ data:
     path: verify/ds/range_query/disjoint_sparse_table.test.cpp
     title: verify/ds/range_query/disjoint_sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
-    title: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
+    path: verify/ds/segtree/persistent_dual_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/persistent_segtree.test.cpp
-    title: verify/ds/segment_tree/persistent_segtree.test.cpp
+    path: verify/ds/segtree/persistent_segtree.test.cpp
+    title: verify/ds/segtree/persistent_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/segtree.test.cpp
-    title: verify/ds/segment_tree/segtree.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/dsu_monoid.test.cpp
-    title: verify/ds/union_find/dsu_monoid.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/potentialized_dsu.test.cpp
-    title: verify/ds/union_find/potentialized_dsu.test.cpp
+    path: verify/ds/segtree/segtree.test.cpp
+    title: verify/ds/segtree/segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -62,11 +62,11 @@ data:
   - verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
-  - verify/ds/segment_tree/persistent_dual_segtree.test.cpp
-  - verify/ds/segment_tree/persistent_segtree.test.cpp
-  - verify/ds/segment_tree/segtree.test.cpp
-  - verify/ds/union_find/dsu_monoid.test.cpp
-  - verify/ds/union_find/potentialized_dsu.test.cpp
+  - verify/ds/segtree/persistent_dual_segtree.test.cpp
+  - verify/ds/segtree/persistent_segtree.test.cpp
+  - verify/ds/segtree/segtree.test.cpp
+  - verify/ds/dsu/dsu_monoid.test.cpp
+  - verify/ds/dsu/potentialized_dsu.test.cpp
 documentation_of: monoid/add.hpp
 layout: document
 title: Add Monoid

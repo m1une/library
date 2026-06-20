@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/union_find/dsu_monoid.hpp
+    path: ds/dsu/dsu_monoid.hpp
     title: DSU with Monoid
   - icon: ':heavy_check_mark:'
     path: monoid/add.hpp
@@ -20,9 +20,9 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/ds/union_find/dsu_monoid.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/union_find/dsu_monoid.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <concepts>\n#include\
+  bundledCode: "#line 1 \"verify/ds/dsu/dsu_monoid.test.cpp\"\n#define PROBLEM \"\
+    https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/dsu/dsu_monoid.hpp\"\n\
+    \n\n\n#include <algorithm>\n#include <cassert>\n#include <concepts>\n#include\
     \ <initializer_list>\n#include <utility>\n#include <vector>\n\n#line 1 \"monoid/concept.hpp\"\
     \n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid\
     \ {\n\n// Concept to check if a type satisfies the requirements of a Monoid.\n\
@@ -37,8 +37,8 @@ data:
     \ and inverse laws.\ntemplate <typename M>\nconcept IsCommutativeGroup = IsMonoid<M>\
     \ && requires(typename M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 12 \"ds/union_find/dsu_monoid.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\n\
-    template <m1une::monoid::IsMonoid Monoid>\nstruct DsuMonoid {\n    using T = typename\
+    \ 12 \"ds/dsu/dsu_monoid.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\ntemplate\
+    \ <m1une::monoid::IsMonoid Monoid>\nstruct DsuMonoid {\n    using T = typename\
     \ Monoid::value_type;\n\n   private:\n    int _n;\n    std::vector<int> parent_or_size;\n\
     \    std::vector<T> _prod;\n\n    static int check_size(int n) {\n        assert(0\
     \ <= n);\n        return n;\n    }\n\n    template <typename U>\n    static T\
@@ -103,17 +103,17 @@ data:
     \    }\n\n    // Returns the sum of a and b.\n    static constexpr T op(const\
     \ T& a, const T& b) {\n        return a + b;\n    }\n\n    static constexpr T\
     \ inv(const T& x) {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n\
-    }  // namespace m1une\n\n\n#line 5 \"verify/ds/union_find/dsu_monoid.test.cpp\"\
-    \n\n#line 7 \"verify/ds/union_find/dsu_monoid.test.cpp\"\n#include <iostream>\n\
-    #include <string>\n#line 10 \"verify/ds/union_find/dsu_monoid.test.cpp\"\n\nstruct\
-    \ StringMonoid {\n    using value_type = std::string;\n\n    static std::string\
-    \ id() {\n        return \"\";\n    }\n\n    static std::string op(const std::string&\
-    \ a, const std::string& b) {\n        return a + b;\n    }\n};\n\nint main() {\n\
-    \    using Sum = m1une::monoid::Add<long long>;\n\n    m1une::ds::DsuMonoid<Sum>\
-    \ dsu(std::vector<int>{1, 2, 3, 4, 5});\n    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n\
-    \    for (int i = 0; i < dsu.size(); i++) {\n        assert(dsu.size(i) == 1);\n\
-    \        assert(dsu.prod(i) == i + 1);\n    }\n\n    dsu.merge(0, 1);\n    assert(dsu.same(0,\
-    \ 1));\n    assert(dsu.size(0) == 2);\n    assert(dsu.prod(0) == 3);\n    assert(dsu.prod(1)\
+    }  // namespace m1une\n\n\n#line 5 \"verify/ds/dsu/dsu_monoid.test.cpp\"\n\n#line\
+    \ 7 \"verify/ds/dsu/dsu_monoid.test.cpp\"\n#include <iostream>\n#include <string>\n\
+    #line 10 \"verify/ds/dsu/dsu_monoid.test.cpp\"\n\nstruct StringMonoid {\n    using\
+    \ value_type = std::string;\n\n    static std::string id() {\n        return \"\
+    \";\n    }\n\n    static std::string op(const std::string& a, const std::string&\
+    \ b) {\n        return a + b;\n    }\n};\n\nint main() {\n    using Sum = m1une::monoid::Add<long\
+    \ long>;\n\n    m1une::ds::DsuMonoid<Sum> dsu(std::vector<int>{1, 2, 3, 4, 5});\n\
+    \    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n    for (int i = 0;\
+    \ i < dsu.size(); i++) {\n        assert(dsu.size(i) == 1);\n        assert(dsu.prod(i)\
+    \ == i + 1);\n    }\n\n    dsu.merge(0, 1);\n    assert(dsu.same(0, 1));\n   \
+    \ assert(dsu.size(0) == 2);\n    assert(dsu.prod(0) == 3);\n    assert(dsu.prod(1)\
     \ == 3);\n\n    dsu.merge(2, 3);\n    assert(dsu.prod(2) == 7);\n    dsu.merge(1,\
     \ 2);\n    assert(dsu.same(0, 3));\n    assert(!dsu.same(0, 4));\n    assert(dsu.size(3)\
     \ == 4);\n    assert(dsu.prod(3) == 10);\n\n    dsu.set(4, 100);\n    assert(dsu.prod(4)\
@@ -128,14 +128,14 @@ data:
     \ == 0);\n    assert(empty.empty());\n\n    long long x, y;\n    std::cin >> x\
     \ >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/union_find/dsu_monoid.hpp\"\n#include \"monoid/add.hpp\"\n\n#include <cassert>\n\
-    #include <iostream>\n#include <string>\n#include <vector>\n\nstruct StringMonoid\
-    \ {\n    using value_type = std::string;\n\n    static std::string id() {\n  \
-    \      return \"\";\n    }\n\n    static std::string op(const std::string& a,\
-    \ const std::string& b) {\n        return a + b;\n    }\n};\n\nint main() {\n\
-    \    using Sum = m1une::monoid::Add<long long>;\n\n    m1une::ds::DsuMonoid<Sum>\
-    \ dsu(std::vector<int>{1, 2, 3, 4, 5});\n    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n\
-    \    for (int i = 0; i < dsu.size(); i++) {\n        assert(dsu.size(i) == 1);\n\
+    ds/dsu/dsu_monoid.hpp\"\n#include \"monoid/add.hpp\"\n\n#include <cassert>\n#include\
+    \ <iostream>\n#include <string>\n#include <vector>\n\nstruct StringMonoid {\n\
+    \    using value_type = std::string;\n\n    static std::string id() {\n      \
+    \  return \"\";\n    }\n\n    static std::string op(const std::string& a, const\
+    \ std::string& b) {\n        return a + b;\n    }\n};\n\nint main() {\n    using\
+    \ Sum = m1une::monoid::Add<long long>;\n\n    m1une::ds::DsuMonoid<Sum> dsu(std::vector<int>{1,\
+    \ 2, 3, 4, 5});\n    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n   \
+    \ for (int i = 0; i < dsu.size(); i++) {\n        assert(dsu.size(i) == 1);\n\
     \        assert(dsu.prod(i) == i + 1);\n    }\n\n    dsu.merge(0, 1);\n    assert(dsu.same(0,\
     \ 1));\n    assert(dsu.size(0) == 2);\n    assert(dsu.prod(0) == 3);\n    assert(dsu.prod(1)\
     \ == 3);\n\n    dsu.merge(2, 3);\n    assert(dsu.prod(2) == 7);\n    dsu.merge(1,\
@@ -152,19 +152,19 @@ data:
     \ == 0);\n    assert(empty.empty());\n\n    long long x, y;\n    std::cin >> x\
     \ >> y;\n    std::cout << x + y << '\\n';\n}\n"
   dependsOn:
-  - ds/union_find/dsu_monoid.hpp
+  - ds/dsu/dsu_monoid.hpp
   - monoid/concept.hpp
   - monoid/add.hpp
   isVerificationFile: true
-  path: verify/ds/union_find/dsu_monoid.test.cpp
+  path: verify/ds/dsu/dsu_monoid.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/union_find/dsu_monoid.test.cpp
+documentation_of: verify/ds/dsu/dsu_monoid.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/union_find/dsu_monoid.test.cpp
-- /verify/verify/ds/union_find/dsu_monoid.test.cpp.html
-title: verify/ds/union_find/dsu_monoid.test.cpp
+- /verify/verify/ds/dsu/dsu_monoid.test.cpp
+- /verify/verify/ds/dsu/dsu_monoid.test.cpp.html
+title: verify/ds/dsu/dsu_monoid.test.cpp
 ---

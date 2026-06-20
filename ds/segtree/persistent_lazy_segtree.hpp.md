@@ -7,14 +7,14 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
-    title: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
+    path: verify/ds/segtree/persistent_lazy_segtree.test.cpp
+    title: verify/ds/segtree/persistent_lazy_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/segment_tree/persistent_lazy_segtree.hpp\"\n\n\n\n#include\
+  bundledCode: "#line 1 \"ds/segtree/persistent_lazy_segtree.hpp\"\n\n\n\n#include\
     \ <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n#include\
     \ <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
@@ -32,8 +32,8 @@ data:
     \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
     \ && requires(typename AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
-    \n\n#line 11 \"ds/segment_tree/persistent_lazy_segtree.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace ds {\n\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\n\
+    \n\n#line 11 \"ds/segtree/persistent_lazy_segtree.hpp\"\n\nnamespace m1une {\n\
+    namespace ds {\n\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\n\
     struct PersistentLazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
     \ Node {\n        T val;\n        F lazy;\n        int l, r;\n        bool has_lazy;\n\
@@ -329,13 +329,13 @@ data:
   dependsOn:
   - acted_monoid/concept.hpp
   isVerificationFile: false
-  path: ds/segment_tree/persistent_lazy_segtree.hpp
+  path: ds/segtree/persistent_lazy_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
-documentation_of: ds/segment_tree/persistent_lazy_segtree.hpp
+  - verify/ds/segtree/persistent_lazy_segtree.test.cpp
+documentation_of: ds/segtree/persistent_lazy_segtree.hpp
 layout: document
 title: Persistent Lazy Segment Tree
 ---
@@ -369,7 +369,7 @@ new versions while older versions remain available.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/persistent_lazy_segtree.hpp"
+#include "ds/segtree/persistent_lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_sum.hpp"
 #include <iostream>
 #include <vector>

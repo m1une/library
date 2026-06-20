@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/potentialized_dsu.test.cpp
-    title: verify/ds/union_find/potentialized_dsu.test.cpp
+    path: verify/ds/dsu/potentialized_dsu.test.cpp
+    title: verify/ds/dsu/potentialized_dsu.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -34,7 +34,7 @@ data:
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/union_find/potentialized_dsu.test.cpp
+  - verify/ds/dsu/potentialized_dsu.test.cpp
 documentation_of: monoid/xor.hpp
 layout: document
 title: Bitwise XOR Monoid

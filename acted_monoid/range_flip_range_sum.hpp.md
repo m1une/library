@@ -70,7 +70,7 @@ The `operator_type` is a boolean, where `true` indicates that the range should b
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_flip_range_sum.hpp"
 #include <iostream>
 #include <vector>

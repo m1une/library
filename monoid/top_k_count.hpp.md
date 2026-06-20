@@ -75,7 +75,7 @@ Use the `make(val)` method to construct a leaf node containing a single value wi
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/top_k_count.hpp"
 #include <iostream>
 #include <vector>

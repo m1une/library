@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/segtree.hpp
+    path: ds/segtree/segtree.hpp
     title: Segment Tree
   - icon: ':heavy_check_mark:'
     path: math/bit_ceil.hpp
@@ -23,8 +23,8 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/point_add_range_sum
     links:
     - https://judge.yosupo.jp/problem/point_add_range_sum
-  bundledCode: "#line 1 \"verify/ds/segment_tree/segtree.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\n#line 1 \"ds/segment_tree/segtree.hpp\"\
+  bundledCode: "#line 1 \"verify/ds/segtree/segtree.test.cpp\"\n#define PROBLEM \"\
+    https://judge.yosupo.jp/problem/point_add_range_sum\"\n\n#line 1 \"ds/segtree/segtree.hpp\"\
     \n\n\n\n#include <cassert>\n#include <concepts>\n#include <utility>\n#include\
     \ <vector>\n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace\
     \ math {\n\ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1)\
@@ -43,9 +43,9 @@ data:
     \ and inverse laws.\ntemplate <typename M>\nconcept IsCommutativeGroup = IsMonoid<M>\
     \ && requires(typename M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 11 \"ds/segment_tree/segtree.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\n\
-    // A generic Segment Tree utilizing C++20 Concepts for type safety.\n// It requires\
-    \ a Monoid struct that satisfies `m1une::monoid::IsMonoid`.\ntemplate <m1une::monoid::IsMonoid\
+    \ 11 \"ds/segtree/segtree.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\n// A generic\
+    \ Segment Tree utilizing C++20 Concepts for type safety.\n// It requires a Monoid\
+    \ struct that satisfies `m1une::monoid::IsMonoid`.\ntemplate <m1une::monoid::IsMonoid\
     \ Monoid>\nstruct Segtree {\n    using T = typename Monoid::value_type;\n\n  \
     \ private:\n    int _n, _size, _log;\n    std::vector<T> _d;\n\n    void update(int\
     \ k) {\n        _d[k] = Monoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n   public:\n\
@@ -128,9 +128,9 @@ data:
     \    }\n\n    // Returns the sum of a and b.\n    static constexpr T op(const\
     \ T& a, const T& b) {\n        return a + b;\n    }\n\n    static constexpr T\
     \ inv(const T& x) {\n        return -x;\n    }\n};\n\n}  // namespace monoid\n\
-    }  // namespace m1une\n\n\n#line 6 \"verify/ds/segment_tree/segtree.test.cpp\"\
-    \n#include <iostream>\n#line 8 \"verify/ds/segment_tree/segtree.test.cpp\"\n\n\
-    void fast_io() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    }  // namespace m1une\n\n\n#line 6 \"verify/ds/segtree/segtree.test.cpp\"\n#include\
+    \ <iostream>\n#line 8 \"verify/ds/segtree/segtree.test.cpp\"\n\nvoid fast_io()\
+    \ {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     }\n\nint main() {\n    fast_io();\n    int n, q;\n    std::cin >> n >> q;\n\n\
     \    std::vector<long long> a(n);\n    for (int i = 0; i < n; i++) {\n       \
     \ std::cin >> a[i];\n    }\n\n    m1une::ds::Segtree<m1une::monoid::Add<long long>>\
@@ -143,8 +143,8 @@ data:
     \          std::cout << seg.prod(l, r) << \"\\n\";\n        }\n    }\n\n    return\
     \ 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\
-    \n#include \"ds/segment_tree/segtree.hpp\"\n#include \"monoid/add.hpp\"\n#include\
-    \ <cassert>\n#include <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
+    \n#include \"ds/segtree/segtree.hpp\"\n#include \"monoid/add.hpp\"\n#include <cassert>\n\
+    #include <iostream>\n#include <vector>\n\nvoid fast_io() {\n    std::ios_base::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n}\n\nint main() {\n    fast_io();\n    int n, q;\n\
     \    std::cin >> n >> q;\n\n    std::vector<long long> a(n);\n    for (int i =\
     \ 0; i < n; i++) {\n        std::cin >> a[i];\n    }\n\n    m1une::ds::Segtree<m1une::monoid::Add<long\
@@ -157,20 +157,20 @@ data:
     \          std::cout << seg.prod(l, r) << \"\\n\";\n        }\n    }\n\n    return\
     \ 0;\n}\n"
   dependsOn:
-  - ds/segment_tree/segtree.hpp
+  - ds/segtree/segtree.hpp
   - math/bit_ceil.hpp
   - monoid/concept.hpp
   - monoid/add.hpp
   isVerificationFile: true
-  path: verify/ds/segment_tree/segtree.test.cpp
+  path: verify/ds/segtree/segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/segment_tree/segtree.test.cpp
+documentation_of: verify/ds/segtree/segtree.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/segment_tree/segtree.test.cpp
-- /verify/verify/ds/segment_tree/segtree.test.cpp.html
-title: verify/ds/segment_tree/segtree.test.cpp
+- /verify/verify/ds/segtree/segtree.test.cpp
+- /verify/verify/ds/segtree/segtree.test.cpp.html
+title: verify/ds/segtree/segtree.test.cpp
 ---

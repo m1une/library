@@ -62,7 +62,7 @@ Since the sum of a range updated to a single value $f$ becomes $f \times \text{s
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_update_range_sum.hpp"
 #include <iostream>
 #include <vector>

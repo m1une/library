@@ -3,27 +3,27 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/dual_segtree.hpp
+    path: ds/segtree/dual_segtree.hpp
     title: Dual Segment Tree
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/lazy_segtree.hpp
+    path: ds/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/segtree.hpp
+    path: ds/segtree/segtree.hpp
     title: Segment Tree
   - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/dual_segtree.test.cpp
-    title: verify/ds/segment_tree/dual_segtree.test.cpp
+    path: verify/ds/segtree/dual_segtree.test.cpp
+    title: verify/ds/segtree/dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/lazy_segtree.test.cpp
-    title: verify/ds/segment_tree/lazy_segtree.test.cpp
+    path: verify/ds/segtree/lazy_segtree.test.cpp
+    title: verify/ds/segtree/lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/segtree.test.cpp
-    title: verify/ds/segment_tree/segtree.test.cpp
+    path: verify/ds/segtree/segtree.test.cpp
+    title: verify/ds/segtree/segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
@@ -44,16 +44,16 @@ data:
   isVerificationFile: false
   path: math/bit_ceil.hpp
   requiredBy:
-  - ds/segment_tree/segtree.hpp
-  - ds/segment_tree/lazy_segtree.hpp
-  - ds/segment_tree/dual_segtree.hpp
+  - ds/segtree/segtree.hpp
+  - ds/segtree/lazy_segtree.hpp
+  - ds/segtree/dual_segtree.hpp
   - math/all.hpp
   timestamp: '2026-06-15 01:47:39+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/segment_tree/dual_segtree.test.cpp
-  - verify/ds/segment_tree/lazy_segtree.test.cpp
-  - verify/ds/segment_tree/segtree.test.cpp
+  - verify/ds/segtree/dual_segtree.test.cpp
+  - verify/ds/segtree/lazy_segtree.test.cpp
+  - verify/ds/segtree/segtree.test.cpp
   - verify/math/math_algorithms.test.cpp
 documentation_of: math/bit_ceil.hpp
 layout: document

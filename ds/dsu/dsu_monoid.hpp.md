@@ -7,29 +7,29 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/dsu_monoid.test.cpp
-    title: verify/ds/union_find/dsu_monoid.test.cpp
+    path: verify/ds/dsu/dsu_monoid.test.cpp
+    title: verify/ds/dsu/dsu_monoid.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/union_find/dsu_monoid.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <concepts>\n#include <initializer_list>\n#include\
-    \ <utility>\n#include <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line\
-    \ 5 \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept\
-    \ to check if a type satisfies the requirements of a Monoid.\n// A Monoid must\
-    \ have a `value_type`, an identity element `id()`, and an associative binary operation\
-    \ `op()`.\ntemplate <typename M>\nconcept IsMonoid = requires(typename M::value_type\
-    \ a, typename M::value_type b) {\n    // 1. Must define `value_type`\n    typename\
-    \ M::value_type;\n\n    // 2. Must have a static method `id()` returning `value_type`\n\
-    \    { M::id() } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have\
-    \ a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
+  bundledCode: "#line 1 \"ds/dsu/dsu_monoid.hpp\"\n\n\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <concepts>\n#include <initializer_list>\n#include <utility>\n\
+    #include <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
+    \ the requirements of a Monoid.\n// A Monoid must have a `value_type`, an identity\
+    \ element `id()`, and an associative binary operation `op()`.\ntemplate <typename\
+    \ M>\nconcept IsMonoid = requires(typename M::value_type a, typename M::value_type\
+    \ b) {\n    // 1. Must define `value_type`\n    typename M::value_type;\n\n  \
+    \  // 2. Must have a static method `id()` returning `value_type`\n    { M::id()\
+    \ } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
+    \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
     \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 12 \"ds/union_find/dsu_monoid.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 12 \"ds/dsu/dsu_monoid.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
     struct DsuMonoid {\n    using T = typename Monoid::value_type;\n\n   private:\n\
     \    int _n;\n    std::vector<int> parent_or_size;\n    std::vector<T> _prod;\n\
@@ -156,13 +156,13 @@ data:
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
-  path: ds/union_find/dsu_monoid.hpp
+  path: ds/dsu/dsu_monoid.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/union_find/dsu_monoid.test.cpp
-documentation_of: ds/union_find/dsu_monoid.hpp
+  - verify/ds/dsu/dsu_monoid.test.cpp
+documentation_of: ds/dsu/dsu_monoid.hpp
 layout: document
 title: DSU with Monoid
 ---
@@ -220,7 +220,7 @@ The monoid must provide:
 ## Example
 
 ```cpp
-#include "ds/union_find/dsu_monoid.hpp"
+#include "ds/dsu/dsu_monoid.hpp"
 #include "monoid/add.hpp"
 
 #include <iostream>

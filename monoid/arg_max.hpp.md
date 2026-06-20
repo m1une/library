@@ -88,7 +88,7 @@ This is defined as a type alias of `ArgMin` using `std::greater`. For the minimu
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/arg_max.hpp"
 #include <iostream>
 #include <vector>

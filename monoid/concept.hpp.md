@@ -3,6 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
+    path: ds/dsu/dsu_monoid.hpp
+    title: DSU with Monoid
+  - icon: ':heavy_check_mark:'
+    path: ds/dsu/potentialized_dsu.hpp
+    title: Potentialized DSU
+  - icon: ':heavy_check_mark:'
     path: ds/dynamic_array/dynamic_monoid_array.hpp
     title: Dynamic Monoid Array
   - icon: ':heavy_check_mark:'
@@ -21,23 +27,17 @@ data:
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/dual_segtree.hpp
+    path: ds/segtree/dual_segtree.hpp
     title: Dual Segment Tree
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/persistent_dual_segtree.hpp
+    path: ds/segtree/persistent_dual_segtree.hpp
     title: Persistent Dual Segment Tree
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/persistent_segtree.hpp
+    path: ds/segtree/persistent_segtree.hpp
     title: Persistent Segment Tree
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/segtree.hpp
+    path: ds/segtree/segtree.hpp
     title: Segment Tree
-  - icon: ':heavy_check_mark:'
-    path: ds/union_find/dsu_monoid.hpp
-    title: DSU with Monoid
-  - icon: ':heavy_check_mark:'
-    path: ds/union_find/potentialized_dsu.hpp
-    title: Potentialized DSU
   - icon: ':warning:'
     path: monoid/power.hpp
     title: Monoid Power
@@ -51,6 +51,12 @@ data:
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/dsu/dsu_monoid.test.cpp
+    title: verify/ds/dsu/dsu_monoid.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/dsu/potentialized_dsu.test.cpp
+    title: verify/ds/dsu/potentialized_dsu.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
     title: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
@@ -70,23 +76,17 @@ data:
     path: verify/ds/range_query/sparse_table.test.cpp
     title: verify/ds/range_query/sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/dual_segtree.test.cpp
-    title: verify/ds/segment_tree/dual_segtree.test.cpp
+    path: verify/ds/segtree/dual_segtree.test.cpp
+    title: verify/ds/segtree/dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
-    title: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
+    path: verify/ds/segtree/persistent_dual_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/persistent_segtree.test.cpp
-    title: verify/ds/segment_tree/persistent_segtree.test.cpp
+    path: verify/ds/segtree/persistent_segtree.test.cpp
+    title: verify/ds/segtree/persistent_segtree.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/segtree.test.cpp
-    title: verify/ds/segment_tree/segtree.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/dsu_monoid.test.cpp
-    title: verify/ds/union_find/dsu_monoid.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/potentialized_dsu.test.cpp
-    title: verify/ds/union_find/potentialized_dsu.test.cpp
+    path: verify/ds/segtree/segtree.test.cpp
+    title: verify/ds/segtree/segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
@@ -139,12 +139,12 @@ data:
   - ds/dynamic_array/persistent_dynamic_monoid_array.hpp
   - ds/range_query/disjoint_sparse_table.hpp
   - ds/range_query/sparse_table.hpp
-  - ds/segment_tree/segtree.hpp
-  - ds/segment_tree/persistent_segtree.hpp
-  - ds/segment_tree/dual_segtree.hpp
-  - ds/segment_tree/persistent_dual_segtree.hpp
-  - ds/union_find/dsu_monoid.hpp
-  - ds/union_find/potentialized_dsu.hpp
+  - ds/segtree/segtree.hpp
+  - ds/segtree/persistent_segtree.hpp
+  - ds/segtree/dual_segtree.hpp
+  - ds/segtree/persistent_dual_segtree.hpp
+  - ds/dsu/dsu_monoid.hpp
+  - ds/dsu/potentialized_dsu.hpp
   - monoid/power.hpp
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
@@ -156,12 +156,12 @@ data:
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/range_query/sparse_table.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
-  - verify/ds/segment_tree/persistent_dual_segtree.test.cpp
-  - verify/ds/segment_tree/dual_segtree.test.cpp
-  - verify/ds/segment_tree/persistent_segtree.test.cpp
-  - verify/ds/segment_tree/segtree.test.cpp
-  - verify/ds/union_find/dsu_monoid.test.cpp
-  - verify/ds/union_find/potentialized_dsu.test.cpp
+  - verify/ds/segtree/persistent_dual_segtree.test.cpp
+  - verify/ds/segtree/dual_segtree.test.cpp
+  - verify/ds/segtree/persistent_segtree.test.cpp
+  - verify/ds/segtree/segtree.test.cpp
+  - verify/ds/dsu/dsu_monoid.test.cpp
+  - verify/ds/dsu/potentialized_dsu.test.cpp
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp
 documentation_of: monoid/concept.hpp
 layout: document

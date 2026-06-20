@@ -56,7 +56,7 @@ It uses `std::numeric_limits<T>::lowest()` as the default identity element for t
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_max.hpp"
 #include <iostream>
 #include <vector>

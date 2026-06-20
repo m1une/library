@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/dual_segtree.test.cpp
-    title: verify/ds/segment_tree/dual_segtree.test.cpp
+    path: verify/ds/segtree/dual_segtree.test.cpp
+    title: verify/ds/segtree/dual_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -48,7 +48,7 @@ data:
   timestamp: '2026-06-13 20:51:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/segment_tree/dual_segtree.test.cpp
+  - verify/ds/segtree/dual_segtree.test.cpp
 documentation_of: monoid/affine.hpp
 layout: document
 title: Affine Monoid
@@ -72,7 +72,7 @@ You can create operations directly using pairs, or use the provided helper funct
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/affine.hpp"
 #include <iostream>
 

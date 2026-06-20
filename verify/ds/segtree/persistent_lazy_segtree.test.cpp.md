@@ -8,7 +8,7 @@ data:
     path: acted_monoid/range_add_range_sum.hpp
     title: Range Add Range Sum
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/persistent_lazy_segtree.hpp
+    path: ds/segtree/persistent_lazy_segtree.hpp
     title: Persistent Lazy Segment Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
@@ -20,8 +20,8 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/ds/segment_tree/persistent_lazy_segtree.test.cpp\"\
-    \n#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/segment_tree/persistent_lazy_segtree.hpp\"\
+  bundledCode: "#line 1 \"verify/ds/segtree/persistent_lazy_segtree.test.cpp\"\n#define\
+    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/segtree/persistent_lazy_segtree.hpp\"\
     \n\n\n\n#include <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n\
     #include <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
@@ -39,8 +39,8 @@ data:
     \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
     \ && requires(typename AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename\
     \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
-    \n\n#line 11 \"ds/segment_tree/persistent_lazy_segtree.hpp\"\n\nnamespace m1une\
-    \ {\nnamespace ds {\n\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\n\
+    \n\n#line 11 \"ds/segtree/persistent_lazy_segtree.hpp\"\n\nnamespace m1une {\n\
+    namespace ds {\n\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\n\
     struct PersistentLazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
     \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    struct\
     \ Node {\n        T val;\n        F lazy;\n        int l, r;\n        bool has_lazy;\n\
@@ -184,33 +184,32 @@ data:
     \ r && r <= _n);\n        assert(g(ActedMonoid::id()));\n        if (r == 0) return\
     \ 0;\n        T sm = ActedMonoid::id();\n        return min_left_node(_root, 0,\
     \ _n, r, sm, ActedMonoid::op_id(), g);\n    }\n};\n\n}  // namespace ds\n}  //\
-    \ namespace m1une\n\n\n#line 4 \"verify/ds/segment_tree/persistent_lazy_segtree.test.cpp\"\
-    \n\n#line 6 \"verify/ds/segment_tree/persistent_lazy_segtree.test.cpp\"\n#include\
-    \ <iostream>\n#line 8 \"verify/ds/segment_tree/persistent_lazy_segtree.test.cpp\"\
-    \n\n#line 1 \"acted_monoid/range_add_range_sum.hpp\"\n\n\n\nnamespace m1une {\n\
-    namespace acted_monoid {\n\ntemplate <typename T>\nstruct RangeAddRangeSumNode\
-    \ {\n    T sum;\n    long long size;\n};\n\ntemplate <typename T>\nstruct RangeAddRangeSum\
-    \ {\n    using value_type = RangeAddRangeSumNode<T>;\n    using operator_type\
-    \ = T;\n\n    // Value Monoid (Sum)\n    static constexpr value_type id() {\n\
-    \        return {T(0), 0};\n    }\n    static constexpr value_type op(const value_type&\
-    \ a, const value_type& b) {\n        return {a.sum + b.sum, a.size + b.size};\n\
-    \    }\n    static constexpr value_type inv(const value_type& x) {\n        return\
-    \ {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n    static constexpr\
-    \ operator_type op_id() {\n        return 0;\n    }\n    static constexpr operator_type\
-    \ op_comp(const operator_type& f, const operator_type& g) {\n        return f\
-    \ + g;\n    }\n\n    // Mapping (sum + f * size)\n    static constexpr value_type\
-    \ mapping(const operator_type& f, const value_type& x) {\n        return {x.sum\
-    \ + f * x.size, x.size};\n    }\n\n    // Helper for initializing a leaf node\n\
-    \    static constexpr value_type make(const T& val) {\n        return {val, 1};\n\
-    \    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 10\
-    \ \"verify/ds/segment_tree/persistent_lazy_segtree.test.cpp\"\n\nint main() {\n\
-    \    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n    using Seg\
-    \ = m1une::ds::PersistentLazySegtree<AM>;\n\n    Seg seg(std::vector<long long>{1,\
-    \ 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1, 4, 10);\n    Seg seg2 = seg1.set(2,\
-    \ AM::make(100));\n    Seg seg3 = seg2.apply(0, 5, -1);\n\n    auto check = [](const\
-    \ Seg& tree, const std::vector<long long>& a) {\n        assert(tree.size() ==\
-    \ int(a.size()));\n        assert(tree.empty() == a.empty());\n        auto values\
-    \ = tree.to_vector();\n        assert(int(values.size()) == int(a.size()));\n\
+    \ namespace m1une\n\n\n#line 4 \"verify/ds/segtree/persistent_lazy_segtree.test.cpp\"\
+    \n\n#line 6 \"verify/ds/segtree/persistent_lazy_segtree.test.cpp\"\n#include <iostream>\n\
+    #line 8 \"verify/ds/segtree/persistent_lazy_segtree.test.cpp\"\n\n#line 1 \"acted_monoid/range_add_range_sum.hpp\"\
+    \n\n\n\nnamespace m1une {\nnamespace acted_monoid {\n\ntemplate <typename T>\n\
+    struct RangeAddRangeSumNode {\n    T sum;\n    long long size;\n};\n\ntemplate\
+    \ <typename T>\nstruct RangeAddRangeSum {\n    using value_type = RangeAddRangeSumNode<T>;\n\
+    \    using operator_type = T;\n\n    // Value Monoid (Sum)\n    static constexpr\
+    \ value_type id() {\n        return {T(0), 0};\n    }\n    static constexpr value_type\
+    \ op(const value_type& a, const value_type& b) {\n        return {a.sum + b.sum,\
+    \ a.size + b.size};\n    }\n    static constexpr value_type inv(const value_type&\
+    \ x) {\n        return {-x.sum, -x.size};\n    }\n\n    // Operator Monoid (Add)\n\
+    \    static constexpr operator_type op_id() {\n        return 0;\n    }\n    static\
+    \ constexpr operator_type op_comp(const operator_type& f, const operator_type&\
+    \ g) {\n        return f + g;\n    }\n\n    // Mapping (sum + f * size)\n    static\
+    \ constexpr value_type mapping(const operator_type& f, const value_type& x) {\n\
+    \        return {x.sum + f * x.size, x.size};\n    }\n\n    // Helper for initializing\
+    \ a leaf node\n    static constexpr value_type make(const T& val) {\n        return\
+    \ {val, 1};\n    }\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
+    \n\n#line 10 \"verify/ds/segtree/persistent_lazy_segtree.test.cpp\"\n\nint main()\
+    \ {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n    using\
+    \ Seg = m1une::ds::PersistentLazySegtree<AM>;\n\n    Seg seg(std::vector<long\
+    \ long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1, 4, 10);\n    Seg seg2 =\
+    \ seg1.set(2, AM::make(100));\n    Seg seg3 = seg2.apply(0, 5, -1);\n\n    auto\
+    \ check = [](const Seg& tree, const std::vector<long long>& a) {\n        assert(tree.size()\
+    \ == int(a.size()));\n        assert(tree.empty() == a.empty());\n        auto\
+    \ values = tree.to_vector();\n        assert(int(values.size()) == int(a.size()));\n\
     \        auto middle = tree.to_vector(1, 4);\n        assert(int(middle.size())\
     \ == 3);\n        long long total = 0;\n        for (long long x : a) total +=\
     \ x;\n        assert(tree.all_prod().sum == total);\n        for (int l = 0; l\
@@ -231,9 +230,9 @@ data:
     \ return x.sum <= 19; }) == 3);\n\n    long long a, b;\n    std::cin >> a >> b;\n\
     \    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/segment_tree/persistent_lazy_segtree.hpp\"\n\n#include <cassert>\n#include\
-    \ <iostream>\n#include <vector>\n\n#include \"acted_monoid/range_add_range_sum.hpp\"\
-    \n\nint main() {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n\
+    ds/segtree/persistent_lazy_segtree.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
+    #include <vector>\n\n#include \"acted_monoid/range_add_range_sum.hpp\"\n\nint\
+    \ main() {\n    using AM = m1une::acted_monoid::RangeAddRangeSum<long long>;\n\
     \    using Seg = m1une::ds::PersistentLazySegtree<AM>;\n\n    Seg seg(std::vector<long\
     \ long>{1, 2, 3, 4, 5});\n    Seg seg1 = seg.apply(1, 4, 10);\n    Seg seg2 =\
     \ seg1.set(2, AM::make(100));\n    Seg seg3 = seg2.apply(0, 5, -1);\n\n    auto\
@@ -260,19 +259,19 @@ data:
     \ return x.sum <= 19; }) == 3);\n\n    long long a, b;\n    std::cin >> a >> b;\n\
     \    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
-  - ds/segment_tree/persistent_lazy_segtree.hpp
+  - ds/segtree/persistent_lazy_segtree.hpp
   - acted_monoid/concept.hpp
   - acted_monoid/range_add_range_sum.hpp
   isVerificationFile: true
-  path: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
+  path: verify/ds/segtree/persistent_lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
+documentation_of: verify/ds/segtree/persistent_lazy_segtree.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
-- /verify/verify/ds/segment_tree/persistent_lazy_segtree.test.cpp.html
-title: verify/ds/segment_tree/persistent_lazy_segtree.test.cpp
+- /verify/verify/ds/segtree/persistent_lazy_segtree.test.cpp
+- /verify/verify/ds/segtree/persistent_lazy_segtree.test.cpp.html
+title: verify/ds/segtree/persistent_lazy_segtree.test.cpp
 ---

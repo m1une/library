@@ -366,7 +366,7 @@ contiguously as `[tin[1], tout[1]) == [1, 4)`.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "graph/graph.hpp"
 #include "monoid/add.hpp"
 #include "tree/heavy_light_decomposition.hpp"

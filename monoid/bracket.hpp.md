@@ -61,7 +61,7 @@ A sequence is considered a "valid bracket sequence" if both `unmatched_right` an
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/bracket.hpp"
 #include <iostream>
 #include <string>

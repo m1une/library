@@ -94,7 +94,7 @@ When building or updating individual elements, use the `make(val)` helper functi
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_affine_range_min_max.hpp"
 #include <iostream>
 #include <vector>

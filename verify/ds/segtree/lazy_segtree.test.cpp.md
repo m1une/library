@@ -8,7 +8,7 @@ data:
     path: acted_monoid/range_affine_range_sum.hpp
     title: Range Affine Range Sum
   - icon: ':heavy_check_mark:'
-    path: ds/segment_tree/lazy_segtree.hpp
+    path: ds/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: math/bit_ceil.hpp
@@ -26,65 +26,65 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/range_affine_range_sum
     links:
     - https://judge.yosupo.jp/problem/range_affine_range_sum
-  bundledCode: "#line 1 \"verify/ds/segment_tree/lazy_segtree.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\n\n#line\
-    \ 1 \"ds/segment_tree/lazy_segtree.hpp\"\n\n\n\n#include <bit>\n#include <cassert>\n\
-    #include <concepts>\n#include <utility>\n#include <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\
-    \n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace acted_monoid\
-    \ {\n\n// Concept defining the requirements for an Acted Monoid.\ntemplate <typename\
-    \ AM>\nconcept IsActedMonoid = requires(typename AM::value_type a, typename AM::value_type\
-    \ b, typename AM::operator_type f,\n                                 typename\
-    \ AM::operator_type g) {\n    // 1. Value Monoid\n    typename AM::value_type;\n\
-    \    { AM::id() } -> std::same_as<typename AM::value_type>;\n    { AM::op(a, b)\
-    \ } -> std::same_as<typename AM::value_type>;\n\n    // 2. Operator Monoid\n \
-    \   typename AM::operator_type;\n    { AM::op_id() } -> std::same_as<typename\
-    \ AM::operator_type>;\n    { AM::op_comp(f, g) } -> std::same_as<typename AM::operator_type>;\
-    \  // Composition order: f(g(x))\n\n    // 3. Mapping: Operator x Value -> Value\n\
-    \    { AM::mapping(f, a) } -> std::same_as<typename AM::value_type>;\n};\n\n//\
-    \ Concept for acted monoids whose value monoid is a commutative group.\n// The\
-    \ value operation must obey commutativity and inverse laws.\ntemplate <typename\
-    \ AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM> && requires(typename\
-    \ AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename AM::value_type>;\n\
-    };\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\n\n#line 1 \"math/bit_ceil.hpp\"\
-    \n\n\n\nnamespace m1une {\nnamespace math {\n\ntemplate <typename T>\nconstexpr\
-    \ T bit_ceil(T n) {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n)\
-    \ x <<= 1;\n    return x;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 12 \"ds/segment_tree/lazy_segtree.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ ds {\n\n// A highly generic Lazy Segment Tree utilizing C++20 Concepts for type\
-    \ safety.\n// It operates on any Acted Monoid structure satisfying the `m1une::acted_monoid::IsActedMonoid`\
-    \ concept.\ntemplate <m1une::acted_monoid::IsActedMonoid ActedMonoid>\nstruct\
-    \ LazySegtree {\n    using T = typename ActedMonoid::value_type;\n    using F\
-    \ = typename ActedMonoid::operator_type;\n\n   private:\n    int _n, _size, _log;\n\
-    \    std::vector<T> _d;\n    std::vector<F> _lz;\n\n    // Recalculates the value\
-    \ of the node k from its children.\n    void update(int k) {\n        _d[k] =\
-    \ ActedMonoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n    static T mapping_at(const\
-    \ F& f, const T& value, long long ord) {\n        if constexpr (requires(F g,\
-    \ T x, long long i) { ActedMonoid::mapping(g, x, i); }) {\n            return\
-    \ ActedMonoid::mapping(f, value, ord);\n        } else {\n            return ActedMonoid::mapping(f,\
-    \ value);\n        }\n    }\n\n    static F shift_operator(const F& f, long long\
-    \ ord) {\n        if constexpr (requires(F g, long long i) { ActedMonoid::op_shift(g,\
-    \ i); }) {\n            return ActedMonoid::op_shift(f, ord);\n        } else\
-    \ {\n            return f;\n        }\n    }\n\n    int node_length(int k) const\
-    \ {\n        int level = std::bit_width((unsigned int)k) - 1;\n        return\
-    \ _size >> level;\n    }\n\n    int node_left(int k) const {\n        int level\
-    \ = std::bit_width((unsigned int)k) - 1;\n        int len = _size >> level;\n\
-    \        return (k - (1 << level)) * len;\n    }\n\n    // Applies the operator\
-    \ f to the node k and updates its lazy tag if it's an internal node.\n    void\
-    \ all_apply(int k, F f) {\n        _d[k] = mapping_at(f, _d[k], 0);\n        if\
-    \ (k < _size) {\n            _lz[k] = ActedMonoid::op_comp(f, _lz[k]);\n     \
-    \   }\n    }\n\n    // Propagates the lazy tag of the node k down to its children.\n\
-    \    void push(int k) {\n        all_apply(2 * k, _lz[k]);\n        all_apply(2\
-    \ * k + 1, shift_operator(_lz[k], node_length(k) / 2));\n        _lz[k] = ActedMonoid::op_id();\n\
-    \    }\n\n   public:\n    // Constructs an empty lazy segment tree.\n    LazySegtree()\
-    \ : LazySegtree(0) {}\n\n    // Constructs a lazy segment tree of size `n`, initialized\
-    \ with the identity element.\n    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n,\
-    \ ActedMonoid::id())) {}\n\n    // Constructs a lazy segment tree from an existing\
-    \ vector.\n    explicit LazySegtree(const std::vector<T>& v) : _n(int(v.size()))\
-    \ {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n        _log\
-    \ = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n       \
-    \ _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
-    \        for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n        for (int\
-    \ i = _size - 1; i >= 1; i--) update(i);\n    }\n    explicit LazySegtree(std::vector<T>&&\
+  bundledCode: "#line 1 \"verify/ds/segtree/lazy_segtree.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\n\n#line 1 \"ds/segtree/lazy_segtree.hpp\"\
+    \n\n\n\n#include <bit>\n#include <cassert>\n#include <concepts>\n#include <utility>\n\
+    #include <vector>\n\n#line 1 \"acted_monoid/concept.hpp\"\n\n\n\n#line 5 \"acted_monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace acted_monoid {\n\n// Concept defining the requirements\
+    \ for an Acted Monoid.\ntemplate <typename AM>\nconcept IsActedMonoid = requires(typename\
+    \ AM::value_type a, typename AM::value_type b, typename AM::operator_type f,\n\
+    \                                 typename AM::operator_type g) {\n    // 1. Value\
+    \ Monoid\n    typename AM::value_type;\n    { AM::id() } -> std::same_as<typename\
+    \ AM::value_type>;\n    { AM::op(a, b) } -> std::same_as<typename AM::value_type>;\n\
+    \n    // 2. Operator Monoid\n    typename AM::operator_type;\n    { AM::op_id()\
+    \ } -> std::same_as<typename AM::operator_type>;\n    { AM::op_comp(f, g) } ->\
+    \ std::same_as<typename AM::operator_type>;  // Composition order: f(g(x))\n\n\
+    \    // 3. Mapping: Operator x Value -> Value\n    { AM::mapping(f, a) } -> std::same_as<typename\
+    \ AM::value_type>;\n};\n\n// Concept for acted monoids whose value monoid is a\
+    \ commutative group.\n// The value operation must obey commutativity and inverse\
+    \ laws.\ntemplate <typename AM>\nconcept IsCommutativeActedGroup = IsActedMonoid<AM>\
+    \ && requires(typename AM::value_type a) {\n    { AM::inv(a) } -> std::same_as<typename\
+    \ AM::value_type>;\n};\n\n}  // namespace acted_monoid\n}  // namespace m1une\n\
+    \n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\nnamespace m1une {\nnamespace math {\n\
+    \ntemplate <typename T>\nconstexpr T bit_ceil(T n) {\n    if (n <= 1) return 1;\n\
+    \    T x = 1;\n    while (x < n) x <<= 1;\n    return x;\n}\n\n}  // namespace\
+    \ math\n}  // namespace m1une\n\n\n#line 12 \"ds/segtree/lazy_segtree.hpp\"\n\n\
+    namespace m1une {\nnamespace ds {\n\n// A highly generic Lazy Segment Tree utilizing\
+    \ C++20 Concepts for type safety.\n// It operates on any Acted Monoid structure\
+    \ satisfying the `m1une::acted_monoid::IsActedMonoid` concept.\ntemplate <m1une::acted_monoid::IsActedMonoid\
+    \ ActedMonoid>\nstruct LazySegtree {\n    using T = typename ActedMonoid::value_type;\n\
+    \    using F = typename ActedMonoid::operator_type;\n\n   private:\n    int _n,\
+    \ _size, _log;\n    std::vector<T> _d;\n    std::vector<F> _lz;\n\n    // Recalculates\
+    \ the value of the node k from its children.\n    void update(int k) {\n     \
+    \   _d[k] = ActedMonoid::op(_d[2 * k], _d[2 * k + 1]);\n    }\n\n    static T\
+    \ mapping_at(const F& f, const T& value, long long ord) {\n        if constexpr\
+    \ (requires(F g, T x, long long i) { ActedMonoid::mapping(g, x, i); }) {\n   \
+    \         return ActedMonoid::mapping(f, value, ord);\n        } else {\n    \
+    \        return ActedMonoid::mapping(f, value);\n        }\n    }\n\n    static\
+    \ F shift_operator(const F& f, long long ord) {\n        if constexpr (requires(F\
+    \ g, long long i) { ActedMonoid::op_shift(g, i); }) {\n            return ActedMonoid::op_shift(f,\
+    \ ord);\n        } else {\n            return f;\n        }\n    }\n\n    int\
+    \ node_length(int k) const {\n        int level = std::bit_width((unsigned int)k)\
+    \ - 1;\n        return _size >> level;\n    }\n\n    int node_left(int k) const\
+    \ {\n        int level = std::bit_width((unsigned int)k) - 1;\n        int len\
+    \ = _size >> level;\n        return (k - (1 << level)) * len;\n    }\n\n    //\
+    \ Applies the operator f to the node k and updates its lazy tag if it's an internal\
+    \ node.\n    void all_apply(int k, F f) {\n        _d[k] = mapping_at(f, _d[k],\
+    \ 0);\n        if (k < _size) {\n            _lz[k] = ActedMonoid::op_comp(f,\
+    \ _lz[k]);\n        }\n    }\n\n    // Propagates the lazy tag of the node k down\
+    \ to its children.\n    void push(int k) {\n        all_apply(2 * k, _lz[k]);\n\
+    \        all_apply(2 * k + 1, shift_operator(_lz[k], node_length(k) / 2));\n \
+    \       _lz[k] = ActedMonoid::op_id();\n    }\n\n   public:\n    // Constructs\
+    \ an empty lazy segment tree.\n    LazySegtree() : LazySegtree(0) {}\n\n    //\
+    \ Constructs a lazy segment tree of size `n`, initialized with the identity element.\n\
+    \    explicit LazySegtree(int n) : LazySegtree(std::vector<T>(n, ActedMonoid::id()))\
+    \ {}\n\n    // Constructs a lazy segment tree from an existing vector.\n    explicit\
+    \ LazySegtree(const std::vector<T>& v) : _n(int(v.size())) {\n        _size =\
+    \ m1une::math::bit_ceil((unsigned int)(_n));\n        _log = 0;\n        while\
+    \ ((1U << _log) < (unsigned int)(_size)) _log++;\n        _d.assign(2 * _size,\
+    \ ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n    \
+    \    for (int i = 0; i < _n; i++) _d[_size + i] = v[i];\n        for (int i =\
+    \ _size - 1; i >= 1; i--) update(i);\n    }\n    explicit LazySegtree(std::vector<T>&&\
     \ v) : _n(int(v.size())) {\n        _size = m1une::math::bit_ceil((unsigned int)(_n));\n\
     \        _log = 0;\n        while ((1U << _log) < (unsigned int)(_size)) _log++;\n\
     \        _d.assign(2 * _size, ActedMonoid::id());\n        _lz.assign(_size, ActedMonoid::op_id());\n\
@@ -176,7 +176,7 @@ data:
     \                r--;\n                    }\n                }\n            \
     \    return r + 1 - _size;\n            }\n            sm = ActedMonoid::op(_d[r],\
     \ sm);\n        } while ((r & -r) != r);\n        return 0;\n    }\n};\n\n}  //\
-    \ namespace ds\n}  // namespace m1une\n\n\n#line 4 \"verify/ds/segment_tree/lazy_segtree.test.cpp\"\
+    \ namespace ds\n}  // namespace m1une\n\n\n#line 4 \"verify/ds/segtree/lazy_segtree.test.cpp\"\
     \n\n#include <bits/stdc++.h>\n\n#line 1 \"acted_monoid/range_affine_range_sum.hpp\"\
     \n\n\n\n#line 5 \"acted_monoid/range_affine_range_sum.hpp\"\n\nnamespace m1une\
     \ {\nnamespace acted_monoid {\n\ntemplate <typename T>\nstruct RangeAffineRangeSumNode\
@@ -245,8 +245,8 @@ data:
     \ ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
     \        return is;\n    }\n};\n\nusing modint998244353 = ModInt<998244353>;\n\
     using modint1000000007 = ModInt<1000000007>;\n\n}  // namespace math\n}  // namespace\
-    \ m1une\n\n\n#line 9 \"verify/ds/segment_tree/lazy_segtree.test.cpp\"\n\nusing\
-    \ mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
+    \ m1une\n\n\n#line 9 \"verify/ds/segtree/lazy_segtree.test.cpp\"\n\nusing mint\
+    \ = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
     \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
     \    cin >> N >> Q;\n    vector<ll> a(N);\n    for (int i = 0; i < N; ++i) cin\
     \ >> a[i];\n\n    m1une::ds::LazySegtree<AM> seg(a);\n    assert(seg.size() ==\
@@ -261,9 +261,9 @@ data:
     \ {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    solve();\n \
     \   return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/range_affine_range_sum\"\
-    \n\n#include \"ds/segment_tree/lazy_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\
-    \n#include \"acted_monoid/range_affine_range_sum.hpp\"\n#include \"math/modint.hpp\"\
-    \n\nusing mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
+    \n\n#include \"ds/segtree/lazy_segtree.hpp\"\n\n#include <bits/stdc++.h>\n\n#include\
+    \ \"acted_monoid/range_affine_range_sum.hpp\"\n#include \"math/modint.hpp\"\n\n\
+    using mint = m1une::math::modint998244353;\n\nusing AM = m1une::acted_monoid::RangeAffineRangeSum<mint>;\n\
     \nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    ll N, Q;\n\
     \    cin >> N >> Q;\n    vector<ll> a(N);\n    for (int i = 0; i < N; ++i) cin\
     \ >> a[i];\n\n    m1une::ds::LazySegtree<AM> seg(a);\n    assert(seg.size() ==\
@@ -278,21 +278,21 @@ data:
     \ {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    solve();\n \
     \   return 0;\n}\n"
   dependsOn:
-  - ds/segment_tree/lazy_segtree.hpp
+  - ds/segtree/lazy_segtree.hpp
   - acted_monoid/concept.hpp
   - math/bit_ceil.hpp
   - acted_monoid/range_affine_range_sum.hpp
   - math/modint.hpp
   isVerificationFile: true
-  path: verify/ds/segment_tree/lazy_segtree.test.cpp
+  path: verify/ds/segtree/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/segment_tree/lazy_segtree.test.cpp
+documentation_of: verify/ds/segtree/lazy_segtree.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/segment_tree/lazy_segtree.test.cpp
-- /verify/verify/ds/segment_tree/lazy_segtree.test.cpp.html
-title: verify/ds/segment_tree/lazy_segtree.test.cpp
+- /verify/verify/ds/segtree/lazy_segtree.test.cpp
+- /verify/verify/ds/segtree/lazy_segtree.test.cpp.html
+title: verify/ds/segtree/lazy_segtree.test.cpp
 ---

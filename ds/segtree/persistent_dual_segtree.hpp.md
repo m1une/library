@@ -7,14 +7,14 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
-    title: verify/ds/segment_tree/persistent_dual_segtree.test.cpp
+    path: verify/ds/segtree/persistent_dual_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dual_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/segment_tree/persistent_dual_segtree.hpp\"\n\n\n\n#include\
+  bundledCode: "#line 1 \"ds/segtree/persistent_dual_segtree.hpp\"\n\n\n\n#include\
     \ <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n#include\
     \ <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
     \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
@@ -29,7 +29,7 @@ data:
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segment_tree/persistent_dual_segtree.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/segtree/persistent_dual_segtree.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsMonoid Monoid>\n\
     struct PersistentDualSegtree {\n    using T = typename Monoid::value_type;\n\n\
     \   private:\n    struct Node {\n        T val;\n        int l, r;\n        bool\
@@ -236,13 +236,13 @@ data:
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
-  path: ds/segment_tree/persistent_dual_segtree.hpp
+  path: ds/segtree/persistent_dual_segtree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/segment_tree/persistent_dual_segtree.test.cpp
-documentation_of: ds/segment_tree/persistent_dual_segtree.hpp
+  - verify/ds/segtree/persistent_dual_segtree.test.cpp
+documentation_of: ds/segtree/persistent_dual_segtree.hpp
 layout: document
 title: Persistent Dual Segment Tree
 ---
@@ -279,7 +279,7 @@ range products on each version, use `PersistentLazySegtree`.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/persistent_dual_segtree.hpp"
+#include "ds/segtree/persistent_dual_segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>

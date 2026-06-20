@@ -95,7 +95,7 @@ When initializing a Lazy Segment Tree, you must use the `make(val)` helper funct
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_xor_range_sum.hpp"
 #include <iostream>
 #include <vector>

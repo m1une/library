@@ -128,7 +128,7 @@ Leaf nodes are initialized with `make(val)` or by constructing a data structure 
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_ap_update_range_min_max.hpp"
 #include <iostream>
 #include <vector>

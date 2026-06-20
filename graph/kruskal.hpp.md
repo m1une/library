@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/union_find/dsu.hpp
+    path: ds/dsu/dsu.hpp
     title: DSU (Disjoint Set Union)
   - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
@@ -24,10 +24,10 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/kruskal.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <vector>\n\n#line 1 \"ds/union_find/dsu.hpp\"\n\n\n\n#line 5 \"ds/union_find/dsu.hpp\"\
-    \n#include <numeric>\n#line 7 \"ds/union_find/dsu.hpp\"\n\nnamespace m1une {\n\
-    namespace ds {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i]\
-    \ is the parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
+    \ <vector>\n\n#line 1 \"ds/dsu/dsu.hpp\"\n\n\n\n#line 5 \"ds/dsu/dsu.hpp\"\n#include\
+    \ <numeric>\n#line 7 \"ds/dsu/dsu.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\
+    \nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i] is the parent\
+    \ of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
     \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
     \    Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1)\
     \ {}\n\n    // Merges the group containing 'a' with the group containing 'b'.\n\
@@ -119,29 +119,28 @@ data:
     \        result.components--;\n    }\n\n    return result;\n}\n\n}  // namespace\
     \ graph\n}  // namespace m1une\n\n\n"
   code: "#ifndef M1UNE_GRAPH_KRUSKAL_HPP\n#define M1UNE_GRAPH_KRUSKAL_HPP 1\n\n#include\
-    \ <algorithm>\n#include <vector>\n\n#include \"ds/union_find/dsu.hpp\"\n#include\
-    \ \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class\
-    \ T>\nstruct MinimumSpanningForest {\n    T cost;\n    std::vector<Edge<T>> edges;\n\
-    \    int components;\n\n    bool is_spanning_tree(int n) const {\n        return\
-    \ components <= 1 && int(edges.size()) == std::max(0, n - 1);\n    }\n};\n\ntemplate\
-    \ <class T>\nMinimumSpanningForest<T> kruskal(const Graph<T>& g) {\n    int n\
-    \ = g.size();\n    auto edges = g.edges();\n    std::sort(edges.begin(), edges.end(),\
-    \ [](const auto& a, const auto& b) {\n        return a.cost < b.cost;\n    });\n\
-    \n    m1une::ds::Dsu dsu(n);\n    MinimumSpanningForest<T> result;\n    result.cost\
-    \ = T(0);\n    result.components = n;\n\n    for (const auto& e : edges) {\n \
-    \       if (dsu.same(e.from, e.to)) continue;\n        dsu.merge(e.from, e.to);\n\
-    \        result.cost += e.cost;\n        result.edges.push_back(e);\n        result.components--;\n\
-    \    }\n\n    return result;\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n#endif  // M1UNE_GRAPH_KRUSKAL_HPP\n"
+    \ <algorithm>\n#include <vector>\n\n#include \"ds/dsu/dsu.hpp\"\n#include \"graph/graph.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct MinimumSpanningForest\
+    \ {\n    T cost;\n    std::vector<Edge<T>> edges;\n    int components;\n\n   \
+    \ bool is_spanning_tree(int n) const {\n        return components <= 1 && int(edges.size())\
+    \ == std::max(0, n - 1);\n    }\n};\n\ntemplate <class T>\nMinimumSpanningForest<T>\
+    \ kruskal(const Graph<T>& g) {\n    int n = g.size();\n    auto edges = g.edges();\n\
+    \    std::sort(edges.begin(), edges.end(), [](const auto& a, const auto& b) {\n\
+    \        return a.cost < b.cost;\n    });\n\n    m1une::ds::Dsu dsu(n);\n    MinimumSpanningForest<T>\
+    \ result;\n    result.cost = T(0);\n    result.components = n;\n\n    for (const\
+    \ auto& e : edges) {\n        if (dsu.same(e.from, e.to)) continue;\n        dsu.merge(e.from,\
+    \ e.to);\n        result.cost += e.cost;\n        result.edges.push_back(e);\n\
+    \        result.components--;\n    }\n\n    return result;\n}\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n#endif  // M1UNE_GRAPH_KRUSKAL_HPP\n"
   dependsOn:
-  - ds/union_find/dsu.hpp
+  - ds/dsu/dsu.hpp
   - graph/graph.hpp
   isVerificationFile: false
   path: graph/kruskal.hpp
   requiredBy:
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp

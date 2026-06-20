@@ -52,7 +52,7 @@ When two permutations $A$ and $B$ are merged (i.e., `op(A, B)`), it corresponds 
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/permutation.hpp"
 #include <iostream>
 #include <vector>

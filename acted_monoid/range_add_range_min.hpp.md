@@ -59,7 +59,7 @@ An Acted Monoid representing Range Addition operations and Range Minimum queries
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_min.hpp"
 #include <iostream>
 #include <vector>

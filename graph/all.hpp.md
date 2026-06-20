@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/union_find/dsu.hpp
+    path: ds/dsu/dsu.hpp
     title: DSU (Disjoint Set Union)
   - icon: ':heavy_check_mark:'
     path: graph/bellman_ford.hpp
@@ -602,17 +602,17 @@ data:
     \ <= id) result.original_edge_id.resize(id + 1);\n        result.original_edge_id[id]\
     \ = e.id;\n    }\n\n    return result;\n}\n\n}  // namespace graph\n}  // namespace\
     \ m1une\n\n\n#line 1 \"graph/connected_components.hpp\"\n\n\n\n#line 6 \"graph/connected_components.hpp\"\
-    \n\n#line 1 \"ds/union_find/dsu.hpp\"\n\n\n\n#line 5 \"ds/union_find/dsu.hpp\"\
-    \n#include <numeric>\n#line 7 \"ds/union_find/dsu.hpp\"\n\nnamespace m1une {\n\
-    namespace ds {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i]\
-    \ is the parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
-    \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
-    \    Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1)\
-    \ {}\n\n    // Merges the group containing 'a' with the group containing 'b'.\n\
-    \    // Returns the leader of the merged group.\n    int merge(int a, int b) {\n\
-    \        int x = leader(a), y = leader(b);\n        if (x == y) return x;\n  \
-    \      // Union by size\n        if (-parent_or_size[x] < -parent_or_size[y])\
-    \ std::swap(x, y);\n        parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y]\
+    \n\n#line 1 \"ds/dsu/dsu.hpp\"\n\n\n\n#line 5 \"ds/dsu/dsu.hpp\"\n#include <numeric>\n\
+    #line 7 \"ds/dsu/dsu.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\nstruct Dsu\
+    \ {\n   private:\n    int _n;\n    // parent_or_size[i] is the parent of i if\
+    \ it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i] is the\
+    \ size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n   \
+    \ Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1) {}\n\
+    \n    // Merges the group containing 'a' with the group containing 'b'.\n    //\
+    \ Returns the leader of the merged group.\n    int merge(int a, int b) {\n   \
+    \     int x = leader(a), y = leader(b);\n        if (x == y) return x;\n     \
+    \   // Union by size\n        if (-parent_or_size[x] < -parent_or_size[y]) std::swap(x,\
+    \ y);\n        parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y]\
     \ = x;\n        return x;\n    }\n\n    // Returns true if 'a' and 'b' belong\
     \ to the same group.\n    bool same(int a, int b) {\n        return leader(a)\
     \ == leader(b);\n    }\n\n    // Returns the leader (representative) of the group\
@@ -1171,7 +1171,7 @@ data:
   - graph/undirected.hpp
   - graph/bipartite.hpp
   - graph/connected_components.hpp
-  - ds/union_find/dsu.hpp
+  - ds/dsu/dsu.hpp
   - graph/general_matching.hpp
   - graph/kruskal.hpp
   - graph/lowlink.hpp
@@ -1179,7 +1179,7 @@ data:
   isVerificationFile: false
   path: graph/all.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/graph_algorithms.test.cpp

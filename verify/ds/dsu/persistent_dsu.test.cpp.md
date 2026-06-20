@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/union_find/persistent_dsu.hpp
+    path: ds/dsu/persistent_dsu.hpp
     title: Persistent DSU
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
@@ -14,8 +14,8 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/ds/union_find/persistent_dsu.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/union_find/persistent_dsu.hpp\"\
+  bundledCode: "#line 1 \"verify/ds/dsu/persistent_dsu.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/dsu/persistent_dsu.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <memory>\n#include\
     \ <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace ds {\n\nstruct\
     \ PersistentDsu {\n   private:\n    struct Node {\n        int val;\n        int\
@@ -70,18 +70,18 @@ data:
     \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
     \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
     \  result.end());\n        return result;\n    }\n};\n\n}  // namespace ds\n}\
-    \  // namespace m1une\n\n\n#line 4 \"verify/ds/union_find/persistent_dsu.test.cpp\"\
-    \n\n#line 7 \"verify/ds/union_find/persistent_dsu.test.cpp\"\n#include <iostream>\n\
-    #include <random>\n#line 11 \"verify/ds/union_find/persistent_dsu.test.cpp\"\n\
-    \nstruct NaiveDsu {\n    std::vector<int> parent_or_size;\n\n    explicit NaiveDsu(int\
-    \ n = 0) : parent_or_size(n, -1) {}\n\n    int leader(int a) const {\n       \
-    \ while (parent_or_size[a] >= 0) a = parent_or_size[a];\n        return a;\n \
-    \   }\n\n    bool same(int a, int b) const {\n        return leader(a) == leader(b);\n\
-    \    }\n\n    int group_size(int a) const {\n        return -parent_or_size[leader(a)];\n\
-    \    }\n\n    NaiveDsu merge(int a, int b) const {\n        NaiveDsu res = *this;\n\
-    \        int x = res.leader(a), y = res.leader(b);\n        if (x == y) return\
-    \ res;\n        if (-res.parent_or_size[x] < -res.parent_or_size[y]) std::swap(x,\
-    \ y);\n        res.parent_or_size[x] += res.parent_or_size[y];\n        res.parent_or_size[y]\
+    \  // namespace m1une\n\n\n#line 4 \"verify/ds/dsu/persistent_dsu.test.cpp\"\n\
+    \n#line 7 \"verify/ds/dsu/persistent_dsu.test.cpp\"\n#include <iostream>\n#include\
+    \ <random>\n#line 11 \"verify/ds/dsu/persistent_dsu.test.cpp\"\n\nstruct NaiveDsu\
+    \ {\n    std::vector<int> parent_or_size;\n\n    explicit NaiveDsu(int n = 0)\
+    \ : parent_or_size(n, -1) {}\n\n    int leader(int a) const {\n        while (parent_or_size[a]\
+    \ >= 0) a = parent_or_size[a];\n        return a;\n    }\n\n    bool same(int\
+    \ a, int b) const {\n        return leader(a) == leader(b);\n    }\n\n    int\
+    \ group_size(int a) const {\n        return -parent_or_size[leader(a)];\n    }\n\
+    \n    NaiveDsu merge(int a, int b) const {\n        NaiveDsu res = *this;\n  \
+    \      int x = res.leader(a), y = res.leader(b);\n        if (x == y) return res;\n\
+    \        if (-res.parent_or_size[x] < -res.parent_or_size[y]) std::swap(x, y);\n\
+    \        res.parent_or_size[x] += res.parent_or_size[y];\n        res.parent_or_size[y]\
     \ = x;\n        return res;\n    }\n\n    std::vector<std::vector<int>> groups()\
     \ const {\n        int n = int(parent_or_size.size());\n        std::vector<int>\
     \ leader_buf(n), group_size(n);\n        for (int i = 0; i < n; i++) {\n     \
@@ -121,9 +121,9 @@ data:
     \        versions.push_back({next, next_expected});\n    }\n\n    long long x,\
     \ y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ds/union_find/persistent_dsu.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
-    #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \nstruct NaiveDsu {\n    std::vector<int> parent_or_size;\n\n    explicit NaiveDsu(int\
+    ds/dsu/persistent_dsu.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include\
+    \ <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\nstruct\
+    \ NaiveDsu {\n    std::vector<int> parent_or_size;\n\n    explicit NaiveDsu(int\
     \ n = 0) : parent_or_size(n, -1) {}\n\n    int leader(int a) const {\n       \
     \ while (parent_or_size[a] >= 0) a = parent_or_size[a];\n        return a;\n \
     \   }\n\n    bool same(int a, int b) const {\n        return leader(a) == leader(b);\n\
@@ -171,17 +171,17 @@ data:
     \        versions.push_back({next, next_expected});\n    }\n\n    long long x,\
     \ y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
   dependsOn:
-  - ds/union_find/persistent_dsu.hpp
+  - ds/dsu/persistent_dsu.hpp
   isVerificationFile: true
-  path: verify/ds/union_find/persistent_dsu.test.cpp
+  path: verify/ds/dsu/persistent_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/union_find/persistent_dsu.test.cpp
+documentation_of: verify/ds/dsu/persistent_dsu.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/union_find/persistent_dsu.test.cpp
-- /verify/verify/ds/union_find/persistent_dsu.test.cpp.html
-title: verify/ds/union_find/persistent_dsu.test.cpp
+- /verify/verify/ds/dsu/persistent_dsu.test.cpp
+- /verify/verify/ds/dsu/persistent_dsu.test.cpp.html
+title: verify/ds/dsu/persistent_dsu.test.cpp
 ---

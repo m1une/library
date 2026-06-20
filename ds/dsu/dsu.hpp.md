@@ -16,8 +16,8 @@ data:
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/dsu.test.cpp
-    title: verify/ds/union_find/dsu.test.cpp
+    path: verify/ds/dsu/dsu.test.cpp
+    title: verify/ds/dsu/dsu.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
@@ -26,22 +26,22 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/union_find/dsu.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <numeric>\n#include <vector>\n\nnamespace m1une {\nnamespace ds {\n\nstruct\
-    \ Dsu {\n   private:\n    int _n;\n    // parent_or_size[i] is the parent of i\
-    \ if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i] is\
-    \ the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
-    \    Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1)\
-    \ {}\n\n    // Merges the group containing 'a' with the group containing 'b'.\n\
-    \    // Returns the leader of the merged group.\n    int merge(int a, int b) {\n\
-    \        int x = leader(a), y = leader(b);\n        if (x == y) return x;\n  \
-    \      // Union by size\n        if (-parent_or_size[x] < -parent_or_size[y])\
-    \ std::swap(x, y);\n        parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y]\
-    \ = x;\n        return x;\n    }\n\n    // Returns true if 'a' and 'b' belong\
-    \ to the same group.\n    bool same(int a, int b) {\n        return leader(a)\
-    \ == leader(b);\n    }\n\n    // Returns the leader (representative) of the group\
-    \ containing 'a'.\n    int leader(int a) {\n        if (parent_or_size[a] < 0)\
-    \ return a;\n        // Path compression\n        return parent_or_size[a] = leader(parent_or_size[a]);\n\
+  bundledCode: "#line 1 \"ds/dsu/dsu.hpp\"\n\n\n\n#include <algorithm>\n#include <numeric>\n\
+    #include <vector>\n\nnamespace m1une {\nnamespace ds {\n\nstruct Dsu {\n   private:\n\
+    \    int _n;\n    // parent_or_size[i] is the parent of i if it's >= 0.\n    //\
+    \ If it's < 0, then i is a root and -parent_or_size[i] is the size of the group.\n\
+    \    std::vector<int> parent_or_size;\n\n   public:\n    Dsu() : _n(0) {}\n  \
+    \  explicit Dsu(int n) : _n(n), parent_or_size(n, -1) {}\n\n    // Merges the\
+    \ group containing 'a' with the group containing 'b'.\n    // Returns the leader\
+    \ of the merged group.\n    int merge(int a, int b) {\n        int x = leader(a),\
+    \ y = leader(b);\n        if (x == y) return x;\n        // Union by size\n  \
+    \      if (-parent_or_size[x] < -parent_or_size[y]) std::swap(x, y);\n       \
+    \ parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y] = x;\n  \
+    \      return x;\n    }\n\n    // Returns true if 'a' and 'b' belong to the same\
+    \ group.\n    bool same(int a, int b) {\n        return leader(a) == leader(b);\n\
+    \    }\n\n    // Returns the leader (representative) of the group containing 'a'.\n\
+    \    int leader(int a) {\n        if (parent_or_size[a] < 0) return a;\n     \
+    \   // Path compression\n        return parent_or_size[a] = leader(parent_or_size[a]);\n\
     \    }\n\n    // Returns the size of the group containing 'a'.\n    int size(int\
     \ a) {\n        return -parent_or_size[leader(a)];\n    }\n\n    // Returns a\
     \ list of all groups, where each group is a vector of its elements.\n    std::vector<std::vector<int>>\
@@ -84,18 +84,18 @@ data:
     \  // namespace m1une\n\n#endif  // M1UNE_DSU_HPP\n"
   dependsOn: []
   isVerificationFile: false
-  path: ds/union_find/dsu.hpp
+  path: ds/dsu/dsu.hpp
   requiredBy:
   - graph/kruskal.hpp
   - graph/connected_components.hpp
   - graph/all.hpp
   - graph/undirected.hpp
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/union_find/dsu.test.cpp
+  - verify/ds/dsu/dsu.test.cpp
   - verify/graph/graph_algorithms.test.cpp
-documentation_of: ds/union_find/dsu.hpp
+documentation_of: ds/dsu/dsu.hpp
 layout: document
 title: DSU (Disjoint Set Union)
 ---
@@ -120,7 +120,7 @@ It is implemented using **Path Compression** and **Union by Size**, achieving an
 ## Example
 
 ```cpp
-#include "ds/union_find/dsu.hpp"
+#include "ds/dsu/dsu.hpp"
 #include <iostream>
 
 int main() {

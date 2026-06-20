@@ -70,7 +70,7 @@ Convert your target elements into booleans and use the `make` method to initiali
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/longest_true.hpp"
 #include <iostream>
 #include <vector>

@@ -7,14 +7,14 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/potentialized_dsu.test.cpp
-    title: verify/ds/union_find/potentialized_dsu.test.cpp
+    path: verify/ds/dsu/potentialized_dsu.test.cpp
+    title: verify/ds/dsu/potentialized_dsu.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/union_find/potentialized_dsu.hpp\"\n\n\n\n#include <algorithm>\n\
+  bundledCode: "#line 1 \"ds/dsu/potentialized_dsu.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <cassert>\n#include <concepts>\n#include <utility>\n#include <vector>\n\
     \n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace\
     \ m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies the requirements\
@@ -29,7 +29,7 @@ data:
     \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
     \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
     \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/union_find/potentialized_dsu.hpp\"\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/dsu/potentialized_dsu.hpp\"\
     \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
     \ Group>\nrequires std::equality_comparable<typename Group::value_type>\nstruct\
     \ PotentializedDsu {\n    using T = typename Group::value_type;\n\n   private:\n\
@@ -144,13 +144,13 @@ data:
   dependsOn:
   - monoid/concept.hpp
   isVerificationFile: false
-  path: ds/union_find/potentialized_dsu.hpp
+  path: ds/dsu/potentialized_dsu.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/union_find/potentialized_dsu.test.cpp
-documentation_of: ds/union_find/potentialized_dsu.hpp
+  - verify/ds/dsu/potentialized_dsu.test.cpp
+documentation_of: ds/dsu/potentialized_dsu.hpp
 layout: document
 title: Potentialized DSU
 ---
@@ -218,7 +218,7 @@ consistency.
 ## Example
 
 ```cpp
-#include "ds/union_find/potentialized_dsu.hpp"
+#include "ds/dsu/potentialized_dsu.hpp"
 #include "monoid/add.hpp"
 #include "monoid/xor.hpp"
 

@@ -2,7 +2,7 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: ds/union_find/persistent_dsu.hpp
+    path: ds/dsu/persistent_dsu.hpp
     title: Persistent DSU
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
@@ -14,10 +14,10 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/persistent_unionfind
     links:
     - https://judge.yosupo.jp/problem/persistent_unionfind
-  bundledCode: "#line 1 \"verify/ds/union_find/persistent_dsu_library_checker.test.cpp\"\
-    \n#define PROBLEM \"https://judge.yosupo.jp/problem/persistent_unionfind\"\n\n\
-    #include <bits/stdc++.h>\nusing namespace std;\n\n#line 1 \"ds/union_find/persistent_dsu.hpp\"\
-    \n\n\n\n#line 9 \"ds/union_find/persistent_dsu.hpp\"\n\nnamespace m1une {\nnamespace\
+  bundledCode: "#line 1 \"verify/ds/dsu/persistent_dsu_library_checker.test.cpp\"\n\
+    #define PROBLEM \"https://judge.yosupo.jp/problem/persistent_unionfind\"\n\n#include\
+    \ <bits/stdc++.h>\nusing namespace std;\n\n#line 1 \"ds/dsu/persistent_dsu.hpp\"\
+    \n\n\n\n#line 9 \"ds/dsu/persistent_dsu.hpp\"\n\nnamespace m1une {\nnamespace\
     \ ds {\n\nstruct PersistentDsu {\n   private:\n    struct Node {\n        int\
     \ val;\n        int l, r;\n\n        Node() : val(0), l(0), r(0) {}\n        explicit\
     \ Node(int value) : val(value), l(0), r(0) {}\n        Node(int value, int left,\
@@ -70,7 +70,7 @@ data:
     \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
     \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
     \  result.end());\n        return result;\n    }\n};\n\n}  // namespace ds\n}\
-    \  // namespace m1une\n\n\n#line 7 \"verify/ds/union_find/persistent_dsu_library_checker.test.cpp\"\
+    \  // namespace m1une\n\n\n#line 7 \"verify/ds/dsu/persistent_dsu_library_checker.test.cpp\"\
     \nusing namespace m1une::ds;\n\nint main() {\n    ios::sync_with_stdio(false);\n\
     \    cin.tie(nullptr);\n    int N, Q;\n    cin >> N >> Q;\n    vector<PersistentDsu>\
     \ dsus;\n    dsus.push_back(PersistentDsu(N));\n    while (Q--) {\n        int\
@@ -79,7 +79,7 @@ data:
     \   cout << int(dsus[k + 1].same(u, v)) << '\\n';\n            dsus.push_back(PersistentDsu(0));\n\
     \        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/persistent_unionfind\"\n\
-    \n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"ds/union_find/persistent_dsu.hpp\"\
+    \n#include <bits/stdc++.h>\nusing namespace std;\n\n#include \"ds/dsu/persistent_dsu.hpp\"\
     \nusing namespace m1une::ds;\n\nint main() {\n    ios::sync_with_stdio(false);\n\
     \    cin.tie(nullptr);\n    int N, Q;\n    cin >> N >> Q;\n    vector<PersistentDsu>\
     \ dsus;\n    dsus.push_back(PersistentDsu(N));\n    while (Q--) {\n        int\
@@ -88,17 +88,17 @@ data:
     \   cout << int(dsus[k + 1].same(u, v)) << '\\n';\n            dsus.push_back(PersistentDsu(0));\n\
     \        }\n    }\n}\n"
   dependsOn:
-  - ds/union_find/persistent_dsu.hpp
+  - ds/dsu/persistent_dsu.hpp
   isVerificationFile: true
-  path: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
+  path: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
+documentation_of: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/ds/union_find/persistent_dsu_library_checker.test.cpp
-- /verify/verify/ds/union_find/persistent_dsu_library_checker.test.cpp.html
-title: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
+- /verify/verify/ds/dsu/persistent_dsu_library_checker.test.cpp
+- /verify/verify/ds/dsu/persistent_dsu_library_checker.test.cpp.html
+title: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
 ---

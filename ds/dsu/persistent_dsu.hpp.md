@@ -4,17 +4,17 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/persistent_dsu.test.cpp
-    title: verify/ds/union_find/persistent_dsu.test.cpp
+    path: verify/ds/dsu/persistent_dsu.test.cpp
+    title: verify/ds/dsu/persistent_dsu.test.cpp
   - icon: ':heavy_check_mark:'
-    path: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
-    title: verify/ds/union_find/persistent_dsu_library_checker.test.cpp
+    path: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
+    title: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"ds/union_find/persistent_dsu.hpp\"\n\n\n\n#include <algorithm>\n\
+  bundledCode: "#line 1 \"ds/dsu/persistent_dsu.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <cassert>\n#include <memory>\n#include <utility>\n#include <vector>\n\
     \nnamespace m1une {\nnamespace ds {\n\nstruct PersistentDsu {\n   private:\n \
     \   struct Node {\n        int val;\n        int l, r;\n\n        Node() : val(0),\
@@ -126,14 +126,14 @@ data:
     \  // namespace m1une\n\n#endif  // M1UNE_PERSISTENT_DSU_HPP\n"
   dependsOn: []
   isVerificationFile: false
-  path: ds/union_find/persistent_dsu.hpp
+  path: ds/dsu/persistent_dsu.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-20 20:27:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - verify/ds/union_find/persistent_dsu.test.cpp
-  - verify/ds/union_find/persistent_dsu_library_checker.test.cpp
-documentation_of: ds/union_find/persistent_dsu.hpp
+  - verify/ds/dsu/persistent_dsu.test.cpp
+  - verify/ds/dsu/persistent_dsu_library_checker.test.cpp
+documentation_of: ds/dsu/persistent_dsu.hpp
 layout: document
 title: Persistent DSU
 ---
@@ -165,7 +165,7 @@ It uses union by size without path compression, because path compression mutates
 ## Example
 
 ```cpp
-#include "ds/union_find/persistent_dsu.hpp"
+#include "ds/dsu/persistent_dsu.hpp"
 
 #include <iostream>
 
