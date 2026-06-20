@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <utility>
+#include <variant>
 #include <vector>
 
 namespace m1une {
@@ -15,7 +16,10 @@ template <class TreeDPInfo>
 struct RakeCompressLinkCutTree {
     using Point = typename TreeDPInfo::Point;
     using Path = typename TreeDPInfo::Path;
-    using NodeValue = typename TreeDPInfo::NodeValue;
+    using VertexValue = typename TreeDPInfo::VertexValue;
+    using EdgeValue = typename TreeDPInfo::EdgeValue;
+    using VertexId = int;
+    using EdgeId = int;
 
    private:
     struct Node {
@@ -23,27 +27,34 @@ struct RakeCompressLinkCutTree {
         int right = -1;
         int parent = -1;
         bool rev = false;
-        NodeValue value;
+        std::variant<VertexValue, EdgeValue> value;
         Point virtual_prod;
         Path prod;
         Path rev_prod;
 
-        explicit Node(const NodeValue& node_value)
-            : value(node_value),
+        explicit Node(const VertexValue& vertex_value)
+            : value(std::in_place_index<0>, vertex_value),
               virtual_prod(Point::id()),
-              prod(TreeDPInfo::add_vertex(virtual_prod, value)),
+              prod(TreeDPInfo::make_vertex_path(virtual_prod, vertex_value)),
+              rev_prod(prod) {}
+
+        explicit Node(std::in_place_index_t<1>, const EdgeValue& edge_value)
+            : value(std::in_place_index<1>, edge_value),
+              virtual_prod(Point::id()),
+              prod(TreeDPInfo::make_edge_path(virtual_prod, edge_value)),
               rev_prod(prod) {}
     };
 
-    struct EdgeInfo {
-        int u = -1;
-        int v = -1;
+    struct OriginalEdge {
+        VertexId u = -1;
+        VertexId v = -1;
         int node = -1;
         bool alive = false;
     };
 
     std::vector<Node> _nodes;
-    std::vector<EdgeInfo> _edges;
+    std::vector<int> _vertex_nodes;
+    std::vector<OriginalEdge> _edges;
     std::vector<int> _path_buffer;
 
     bool is_splay_root(int node) const {
@@ -53,7 +64,9 @@ struct RakeCompressLinkCutTree {
 
     void update(int node) {
         Node& x = _nodes[node];
-        Path self = TreeDPInfo::add_vertex(x.virtual_prod, x.value);
+        Path self = x.value.index() == 0
+            ? TreeDPInfo::make_vertex_path(x.virtual_prod, std::get<0>(x.value))
+            : TreeDPInfo::make_edge_path(x.virtual_prod, std::get<1>(x.value));
         x.prod = self;
         x.rev_prod = self;
 
@@ -69,13 +82,13 @@ struct RakeCompressLinkCutTree {
 
     void add_virtual_child(int node, int child) {
         if (child == -1) return;
-        Point contribution = TreeDPInfo::add_edge(_nodes[child].prod);
+        Point contribution = TreeDPInfo::to_point(_nodes[child].prod);
         _nodes[node].virtual_prod = TreeDPInfo::rake(_nodes[node].virtual_prod, contribution);
     }
 
     void remove_virtual_child(int node, int child) {
         if (child == -1) return;
-        Point contribution = TreeDPInfo::add_edge(_nodes[child].prod);
+        Point contribution = TreeDPInfo::to_point(_nodes[child].prod);
         _nodes[node].virtual_prod = TreeDPInfo::rake(_nodes[node].virtual_prod, contribution.inv());
     }
 
@@ -166,81 +179,48 @@ struct RakeCompressLinkCutTree {
         assert(0 <= node && node < int(_nodes.size()));
     }
 
-    void check_edge(int edge_id) const {
+    void check_vertex(VertexId vertex) const {
+        assert(0 <= vertex && vertex < int(_vertex_nodes.size()));
+    }
+
+    void check_edge(EdgeId edge_id) const {
         assert(0 <= edge_id && edge_id < int(_edges.size()));
     }
 
-   public:
-    RakeCompressLinkCutTree() = default;
-
-    explicit RakeCompressLinkCutTree(const std::vector<NodeValue>& values) {
-        _nodes.reserve(values.size());
-        for (const NodeValue& value : values) add_vertex(value);
+    int vertex_node(VertexId vertex) const {
+        check_vertex(vertex);
+        return _vertex_nodes[vertex];
     }
 
-    int size() const {
-        return int(_nodes.size());
-    }
-
-    bool empty() const {
-        return _nodes.empty();
-    }
-
-    int add_vertex(const NodeValue& node_value) {
-        _nodes.emplace_back(node_value);
+    int add_edge_node(const EdgeValue& edge_value) {
+        _nodes.emplace_back(std::in_place_index<1>, edge_value);
         return int(_nodes.size()) - 1;
     }
 
-    int edge_count() const {
-        return int(_edges.size());
+    void set_vertex_node_value(int node, const VertexValue& vertex_value) {
+        check_node(node);
+        access(node);
+        _nodes[node].value.template emplace<0>(vertex_value);
+        update(node);
     }
 
-    bool edge_alive(int edge_id) const {
-        check_edge(edge_id);
-        return _edges[edge_id].alive;
+    void set_edge_node_value(int node, const EdgeValue& edge_value) {
+        check_node(node);
+        access(node);
+        _nodes[node].value.template emplace<1>(edge_value);
+        update(node);
     }
 
-    int edge_node(int edge_id) const {
-        check_edge(edge_id);
-        return _edges[edge_id].node;
+    void evert_node(int node) {
+        check_node(node);
+        access(node);
+        apply_reverse(node);
     }
 
-    std::pair<int, int> edge_endpoints(int edge_id) const {
-        check_edge(edge_id);
-        return {_edges[edge_id].u, _edges[edge_id].v};
-    }
-
-    const NodeValue& get(int v) const {
-        check_node(v);
-        return _nodes[v].value;
-    }
-
-    const NodeValue& operator[](int v) const {
-        return get(v);
-    }
-
-    void set(int v, const NodeValue& node_value) {
-        check_node(v);
-        access(v);
-        _nodes[v].value = node_value;
-        update(v);
-    }
-
-    // Makes v the represented root of its component.
-    void evert(int v) {
-        check_node(v);
-        access(v);
-        apply_reverse(v);
-    }
-
-    void reroot(int v) {
-        evert(v);
-    }
-
-    int component_root(int v) {
-        check_node(v);
-        access(v);
-        int cur = v;
+    int component_root_node(int node) {
+        check_node(node);
+        access(node);
+        int cur = node;
         push(cur);
         while (_nodes[cur].left != -1) {
             cur = _nodes[cur].left;
@@ -250,28 +230,17 @@ struct RakeCompressLinkCutTree {
         return cur;
     }
 
-    int root(int v) {
-        return component_root(v);
-    }
-
-    bool connected(int u, int v) {
-        check_node(u);
-        check_node(v);
+    bool connected_nodes(int u, int v) {
         if (u == v) return true;
-        return component_root(u) == component_root(v);
+        return component_root_node(u) == component_root_node(v);
     }
 
-    bool same(int u, int v) {
-        return connected(u, v);
-    }
-
-    // Links two different components and returns whether an edge was added.
-    bool link(int u, int v) {
+    bool link_nodes(int u, int v) {
         check_node(u);
         check_node(v);
         if (u == v) return false;
-        evert(u);
-        if (component_root(v) == u) return false;
+        evert_node(u);
+        if (component_root_node(v) == u) return false;
         access(v);
         _nodes[u].parent = v;
         add_virtual_child(v, u);
@@ -279,29 +248,11 @@ struct RakeCompressLinkCutTree {
         return true;
     }
 
-    bool link_parent(int child, int parent) {
-        return link(child, parent);
-    }
-
-    int link_edge(int u, int v, const NodeValue& edge_value) {
-        check_node(u);
-        check_node(v);
-        if (u == v || connected(u, v)) return -1;
-        int edge_id = int(_edges.size());
-        int node = add_vertex(edge_value);
-        _edges.push_back(EdgeInfo{u, v, node, true});
-        bool ok1 = link(u, node);
-        bool ok2 = link(node, v);
-        assert(ok1 && ok2);
-        return edge_id;
-    }
-
-    // Cuts the represented-tree edge (u, v), if it exists.
-    bool cut(int u, int v) {
+    bool cut_nodes(int u, int v) {
         check_node(u);
         check_node(v);
         if (u == v) return false;
-        evert(u);
+        evert_node(u);
         access(v);
         if (_nodes[v].left != u || _nodes[u].right != -1) return false;
         _nodes[v].left = -1;
@@ -310,44 +261,106 @@ struct RakeCompressLinkCutTree {
         return true;
     }
 
-    // Cuts the parent edge of v in the current represented-root orientation.
-    bool cut_parent(int v) {
-        check_node(v);
-        access(v);
-        int left = _nodes[v].left;
-        if (left == -1) return false;
-        _nodes[v].left = -1;
-        _nodes[left].parent = -1;
-        update(v);
-        return true;
+   public:
+    RakeCompressLinkCutTree() = default;
+
+    explicit RakeCompressLinkCutTree(const std::vector<VertexValue>& values) {
+        _nodes.reserve(values.size());
+        _vertex_nodes.reserve(values.size());
+        for (const VertexValue& value : values) add_vertex(value);
     }
 
-    bool cut_edge(int edge_id) {
+    int vertex_count() const {
+        return int(_vertex_nodes.size());
+    }
+
+    bool empty() const {
+        return _vertex_nodes.empty();
+    }
+
+    VertexId add_vertex(const VertexValue& vertex_value) {
+        VertexValue value = vertex_value;
+        int node = int(_nodes.size());
+        _nodes.emplace_back(value);
+        _vertex_nodes.push_back(node);
+        return int(_vertex_nodes.size()) - 1;
+    }
+
+    const VertexValue& get_vertex(VertexId vertex) const {
+        return std::get<0>(_nodes[vertex_node(vertex)].value);
+    }
+
+    void set_vertex(VertexId vertex, const VertexValue& vertex_value) {
+        set_vertex_node_value(vertex_node(vertex), vertex_value);
+    }
+
+    int edge_count() const {
+        return int(_edges.size());
+    }
+
+    bool edge_alive(EdgeId edge_id) const {
         check_edge(edge_id);
-        EdgeInfo& edge = _edges[edge_id];
+        return _edges[edge_id].alive;
+    }
+
+    std::pair<VertexId, VertexId> edge_endpoints(EdgeId edge_id) const {
+        check_edge(edge_id);
+        return {_edges[edge_id].u, _edges[edge_id].v};
+    }
+
+    const EdgeValue& get_edge(EdgeId edge_id) const {
+        check_edge(edge_id);
+        return std::get<1>(_nodes[_edges[edge_id].node].value);
+    }
+
+    void set_edge(EdgeId edge_id, const EdgeValue& edge_value) {
+        check_edge(edge_id);
+        set_edge_node_value(_edges[edge_id].node, edge_value);
+    }
+
+    EdgeId add_edge(VertexId u, VertexId v, const EdgeValue& edge_value) {
+        check_vertex(u);
+        check_vertex(v);
+        if (u == v || connected(u, v)) return -1;
+        EdgeValue value = edge_value;
+        int edge_id = int(_edges.size());
+        int node = add_edge_node(value);
+        _edges.push_back(OriginalEdge{u, v, node, true});
+        bool ok1 = link_nodes(vertex_node(u), node);
+        bool ok2 = link_nodes(node, vertex_node(v));
+        assert(ok1 && ok2);
+        return edge_id;
+    }
+
+    bool cut_edge(EdgeId edge_id) {
+        check_edge(edge_id);
+        OriginalEdge& edge = _edges[edge_id];
         if (!edge.alive) return false;
-        bool ok1 = cut(edge.u, edge.node);
-        bool ok2 = cut(edge.node, edge.v);
+        bool ok1 = cut_nodes(vertex_node(edge.u), edge.node);
+        bool ok2 = cut_nodes(edge.node, vertex_node(edge.v));
         if (ok1 && ok2) edge.alive = false;
         return ok1 && ok2;
     }
 
-    const NodeValue& get_edge(int edge_id) const {
-        return get(edge_node(edge_id));
+    void reroot(VertexId vertex) {
+        evert_node(vertex_node(vertex));
     }
 
-    void set_edge(int edge_id, const NodeValue& edge_value) {
-        set(edge_node(edge_id), edge_value);
+    bool connected(VertexId u, VertexId v) {
+        check_vertex(u);
+        check_vertex(v);
+        return connected_nodes(vertex_node(u), vertex_node(v));
     }
 
-    // Reroots the represented tree at v and returns its whole-tree cluster.
-    Path component_prod(int v) {
-        evert(v);
-        return _nodes[v].prod;
+    // Reroots the represented tree at vertex and returns its whole-tree cluster.
+    Path component_prod(VertexId vertex) {
+        int node = vertex_node(vertex);
+        evert_node(node);
+        return _nodes[node].prod;
     }
 
-    Path query_component(int v) {
-        return component_prod(v);
+    Path query_component(VertexId vertex) {
+        return component_prod(vertex);
     }
 };
 

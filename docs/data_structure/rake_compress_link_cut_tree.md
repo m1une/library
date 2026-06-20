@@ -15,41 +15,56 @@ by subtree-aware link-cut trees:
 Only `Point` needs an inverse. In particular, affine functions on a path do not
 need to be invertible, and `Path` does not need an identity or inverse.
 
-All dynamic-forest operations take amortized $O(\log N)$ time, where $N$ is
-the number of link-cut-tree nodes, including helper edge nodes. The structure
-uses $O(N)$ space.
+All dynamic-forest operations take amortized $O(\log N)$ time. Internally, each
+original edge is represented by a hidden helper node, but helper-node ids and
+operations are not exposed by the public API.
+
+## Two Interface Layers
+
+The public interface describes only the original forest:
+
+* `add_vertex`, `get_vertex`, and `set_vertex` use original vertex ids.
+* `add_edge`, `get_edge`, `set_edge`, and `cut_edge` use original edge ids.
+* `reroot`, `connected`, and `component_prod` accept original vertex ids.
+
+The class names these roles `VertexId` and `EdgeId` (both aliases of `int` for
+contest ergonomics). Internal link-cut-tree node ids are private and have no
+public alias or accessor.
+
+`TreeDPInfo` also keeps original vertex data and original edge data separate.
+This removes the need for a tagged union such as `NodeValue{is_vertex, ...}`.
 
 ## Tree DP Interface
 
-`TreeDPInfo` provides three types:
+`TreeDPInfo` provides four types:
 
 ```cpp
 using Point = ...;
 using Path = ...;
-using NodeValue = ...;
+using VertexValue = ...;
+using EdgeValue = ...;
 ```
 
-These types describe three different levels of the tree DP:
+These types separate local original-tree data from the two aggregate levels:
 
-![Relationship between NodeValue, Point, and Path](../assets/rake_compress_link_cut_tree_types.png)
+![Relationship between original-tree values, Point, and Path](../assets/rake_compress_link_cut_tree_types.png)
 
 The four panels show the operations on explicit before-and-after tree
 drawings. `rake` merges independent virtual branches at the same attachment
-node, `add_vertex` inserts that node's local `NodeValue`, `compress`
-concatenates adjacent ordered `Path` clusters, and `add_edge` converts a child
-branch from `Path` form into a `Point` contribution. These functions change
-the aggregate representation, not the represented-tree topology.
+node, `make_vertex_path` or `make_edge_path` inserts the matching original-tree
+value, `compress` concatenates adjacent ordered `Path` clusters, and
+`to_point` converts a child branch from `Path` form into a `Point`
+contribution. These callbacks change the aggregate representation, not the
+original-tree topology.
 
-### `NodeValue`
+### `VertexValue` and `EdgeValue`
 
-`NodeValue` is the local data stored at one link-cut-tree node. It is not an
-aggregate. For example, it may store the value of an original tree vertex, or
-the affine function of an original edge when that edge is represented by a
-helper node.
+`VertexValue` is the local data stored on an original vertex. `EdgeValue` is
+the local data stored on an original edge. Neither is an aggregate.
 
-`set(v, node_value)` replaces this local data.
-`add_vertex(point, node_value)` combines it with the already-aggregated virtual
-children to create a one-node `Path` cluster.
+`make_vertex_path(point, vertex_value)` combines an original vertex with its
+already-aggregated virtual children. `make_edge_path(point, edge_value)` does
+the analogous operation for an original edge's hidden helper node.
 
 ### `Point`
 
@@ -65,10 +80,10 @@ Conceptually, a node maintains:
 
 ```cpp
 Point virtual_children = Point::id();
-virtual_children = rake(virtual_children, add_edge(child_path));
+virtual_children = rake(virtual_children, to_point(child_path));
 ```
 
-`Point` does not include the local `NodeValue` at the attachment node.
+`Point` does not include the local original-tree object at the attachment node.
 
 ### `Path`
 
@@ -84,24 +99,24 @@ node maintains both the forward and reverse `Path` products.
 
 When a branch is part of the preferred path, its summary is a `Path` because
 its order matters. When that branch becomes a virtual child, it must be stored
-in the parent's unordered `Point` aggregate instead. `add_edge(path)` performs
+in the parent's unordered `Point` aggregate instead. `to_point(path)` performs
 this conversion:
 
 ```cpp
-Point branch = add_edge(child_path);
+Point branch = to_point(child_path);
 virtual_children = rake(virtual_children, branch);
 ```
 
-Despite its name, `add_edge` does not modify the represented tree or create an
-edge. `link` and `link_edge` do that. The name follows the rake-compress
-operation that closes a path cluster at its parent-side boundary.
+`to_point` does not modify the original forest. It only changes the DP
+representation of an existing child branch.
 
 A `Path` needs neither an identity nor an inverse.
 
 At a link-cut-tree node, the aggregate is formed schematically as:
 
 ```cpp
-Path self = add_vertex(virtual_children, node_value);
+Path self = make_vertex_path(virtual_children, vertex_value);
+// or make_edge_path(virtual_children, edge_value) at a hidden edge node
 Path whole = self;
 if (left_path_exists) whole = compress(left_path, whole);
 if (right_path_exists) whole = compress(whole, right_path);
@@ -117,8 +132,15 @@ Point inv() const;
 `TreeDPInfo` provides:
 
 ```cpp
-static Path add_vertex(const Point& virtual_children, const NodeValue& node_value);
-static Point add_edge(const Path& path);
+static Path make_vertex_path(
+    const Point& virtual_children,
+    const VertexValue& vertex_value
+);
+static Path make_edge_path(
+    const Point& virtual_children,
+    const EdgeValue& edge_value
+);
+static Point to_point(const Path& path);
 static Point rake(const Point& a, const Point& b);
 static Path compress(const Path& parent_side, const Path& child_side);
 ```
@@ -129,42 +151,44 @@ The operations have the following meanings:
   associative and commutative.
 * `compress(p, c)` joins an upper parent-side path cluster with a lower
   child-side path cluster. It must be associative, but need not be commutative.
-* `add_vertex(point, node_value)` combines one node with its virtual children.
-* `add_edge(path)` converts an ordered branch summary into the unordered
-  `Point` value that can be raked with the other virtual children.
+* `make_vertex_path(point, value)` adds one original vertex to its virtual
+  children.
+* `make_edge_path(point, value)` adds one original edge to its child-side
+  contribution.
+* `to_point(path)` converts an ordered branch summary into the unordered
+  `Point` value that can be raked with other virtual children.
 
-The inverse of `add_edge(path)` is used only when `access` changes a preferred
+The inverse of `to_point(path)` is used only when `access` changes a preferred
 child back into a virtual child or vice versa.
 
 ## Main Methods
 
 | Method | Description | Time |
 | --- | --- | --- |
-| `int add_vertex(node_value)` | Adds an isolated node and returns its index. | Amortized $O(1)$ |
-| `const NodeValue& get(v)` | Returns the information stored at node `v`. | $O(1)$ |
-| `void set(v, node_value)` | Replaces the information at node `v`. | Amortized $O(\log N)$ |
-| `void evert(v)` | Makes `v` the represented root. | Amortized $O(\log N)$ |
-| `bool connected(u, v)` | Tests whether two nodes are in the same component. | Amortized $O(\log N)$ |
-| `bool link(u, v)` | Links two different components. | Amortized $O(\log N)$ |
-| `bool cut(u, v)` | Cuts the represented-tree edge between adjacent nodes. | Amortized $O(\log N)$ |
-| `bool cut_parent(v)` | Cuts the parent edge of `v` in the current root orientation. | Amortized $O(\log N)$ |
-| `Path component_prod(v)` | Reroots at `v` and returns the whole-component cluster. | Amortized $O(\log N)$ |
+| `VertexId add_vertex(vertex_value)` | Adds an isolated original vertex and returns its vertex id. | Amortized $O(1)$ |
+| `const VertexValue& get_vertex(VertexId v)` | Returns original vertex `v`'s value. | $O(1)$ |
+| `void set_vertex(VertexId v, value)` | Replaces original vertex `v`'s value. | Amortized $O(\log N)$ |
+| `EdgeId add_edge(VertexId u, VertexId v, edge_value)` | Adds an original edge and returns its edge id, or `-1` if it would make a cycle. | Amortized $O(\log N)$ |
+| `const EdgeValue& get_edge(EdgeId e)` | Returns original edge `e`'s value. | $O(1)$ |
+| `void set_edge(EdgeId e, value)` | Replaces original edge `e`'s value. | Amortized $O(\log N)$ |
+| `bool cut_edge(EdgeId e)` | Removes original edge `e`. | Amortized $O(\log N)$ |
+| `void reroot(VertexId v)` | Makes original vertex `v` the represented root. | Amortized $O(\log N)$ |
+| `bool connected(VertexId u, VertexId v)` | Tests whether two original vertices are connected. | Amortized $O(\log N)$ |
+| `Path component_prod(VertexId v)` | Reroots at original vertex `v` and returns the whole-component cluster. | Amortized $O(\log N)$ |
 
 `query_component(v)` is an alias for `component_prod(v)`.
 
-## Edge Values
+`vertex_count()` returns the number of original vertices. `edge_count()` returns
+the number of edge ids issued so far, including cut edges. `edge_alive(e)` and
+`edge_endpoints(e)` inspect an original edge.
 
-`link_edge(u, v, edge_value)` creates a helper node between `u` and `v`, stores
-`edge_value` on it, and returns an edge id. The helper methods `edge_node`,
-`edge_endpoints`, `get_edge`, `set_edge`, and `cut_edge` use that id.
+## Hidden Edge Nodes
 
-`link_edge`, `set_edge`, and `cut_edge` take amortized $O(\log N)$ time.
-`edge_node`, `edge_endpoints`, `get_edge`, `edge_count`, and `edge_alive` take
-$O(1)$ time.
-
-This is useful when original vertices and original edges use different cases of
-the same `NodeValue` type. The Point Set Tree Path Composite Sum verification
-uses vertex nodes for point values and helper edge nodes for affine functions.
+Internally, `add_edge(u, v, value)` subdivides the original edge with one
+helper node. That node lets the link-cut tree put edge data on the same
+preferred-path machinery as vertex data. Its id is deliberately not exposed:
+all public operations continue to use the original vertex id or original edge
+id.
 
 ## Example
 
@@ -199,25 +223,35 @@ struct AffineTreeSum {
         long long count;
     };
 
-    struct NodeValue {
-        bool is_vertex;
+    struct VertexValue {
+        long long value;
+    };
+
+    struct EdgeValue {
         long long a;
         long long b;
     };
 
-    static Path add_vertex(const Point& children, const NodeValue& node_value) {
-        if (node_value.is_vertex) {
-            return Path{1, 0, children.sum + node_value.a, children.count + 1};
-        }
+    static Path make_vertex_path(
+        const Point& children,
+        const VertexValue& vertex
+    ) {
+        return Path{1, 0, children.sum + vertex.value, children.count + 1};
+    }
+
+    static Path make_edge_path(
+        const Point& children,
+        const EdgeValue& edge
+    ) {
         return Path{
-            node_value.a,
-            node_value.b,
-            children.sum * node_value.a + children.count * node_value.b,
+            edge.a,
+            edge.b,
+            children.sum * edge.a + children.count * edge.b,
             children.count
         };
     }
 
-    static Point add_edge(const Path& path) {
+    static Point to_point(const Path& path) {
         return Point{path.sum, path.count};
     }
 
@@ -240,21 +274,21 @@ int main() {
         m1une::data_structure::RakeCompressLinkCutTree<AffineTreeSum>;
 
     LCT lct;
-    int u = lct.add_vertex(AffineTreeSum::NodeValue{true, 2, 0});
-    int v = lct.add_vertex(AffineTreeSum::NodeValue{true, 3, 0});
-    int w = lct.add_vertex(AffineTreeSum::NodeValue{true, 5, 0});
+    int u = lct.add_vertex(AffineTreeSum::VertexValue{2});
+    int v = lct.add_vertex(AffineTreeSum::VertexValue{3});
+    int w = lct.add_vertex(AffineTreeSum::VertexValue{5});
 
     // u --(t -> 2t + 1)--> v --(t -> 3t)--> w
-    int uv = lct.link_edge(u, v, AffineTreeSum::NodeValue{false, 2, 1});
-    lct.link_edge(v, w, AffineTreeSum::NodeValue{false, 3, 0});
+    int uv = lct.add_edge(u, v, AffineTreeSum::EdgeValue{2, 1});
+    lct.add_edge(v, w, AffineTreeSum::EdgeValue{3, 0});
 
     long long rooted_at_u = lct.component_prod(u).sum;
     long long rooted_at_w = lct.component_prod(w).sum;
     std::cout << rooted_at_u << '\n';  // 40
     std::cout << rooted_at_w << '\n';  // 29
 
-    lct.set(v, AffineTreeSum::NodeValue{true, 7, 0});
-    lct.set_edge(uv, AffineTreeSum::NodeValue{false, 0, 4});
+    lct.set_vertex(v, AffineTreeSum::VertexValue{7});
+    lct.set_edge(uv, AffineTreeSum::EdgeValue{0, 4});
 }
 ```
 

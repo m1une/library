@@ -30,18 +30,24 @@ struct PointSetTreePathCompositeSum {
         T x;
     };
 
-    struct NodeValue {
-        bool is_vertex;
+    struct VertexValue {
         T x;
-        T y;
     };
 
-    static Path add_vertex(const Point& d, const NodeValue& u) {
-        if (u.is_vertex) return Path{T(1), T(0), d.s + u.x, d.x + T(1)};
-        return Path{u.x, u.y, d.s * u.x + d.x * u.y, d.x};
+    struct EdgeValue {
+        T a;
+        T b;
+    };
+
+    static Path make_vertex_path(const Point& d, const VertexValue& vertex) {
+        return Path{T(1), T(0), d.s + vertex.x, d.x + T(1)};
     }
 
-    static Point add_edge(const Path& path) {
+    static Path make_edge_path(const Point& d, const EdgeValue& edge) {
+        return Path{edge.a, edge.b, d.s * edge.a + d.x * edge.b, d.x};
+    }
+
+    static Point to_point(const Path& path) {
         return Point{path.s, path.x};
     }
 
@@ -61,7 +67,8 @@ struct PointSetTreePathCompositeSum {
 
 int main() {
     using TreeDP = PointSetTreePathCompositeSum<mint>;
-    using NodeValue = typename TreeDP::NodeValue;
+    using VertexValue = typename TreeDP::VertexValue;
+    using EdgeValue = typename TreeDP::EdgeValue;
     using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;
 
     std::ios::sync_with_stdio(false);
@@ -71,11 +78,11 @@ int main() {
     std::cin >> n >> q;
 
     LCT lct;
-    std::vector<int> vertex_node(n);
+    std::vector<int> vertex_id(n);
     for (int i = 0; i < n; i++) {
         mint a;
         std::cin >> a;
-        vertex_node[i] = lct.add_vertex(NodeValue{true, a, mint(0)});
+        vertex_id[i] = lct.add_vertex(VertexValue{a});
     }
 
     std::vector<int> edge_id(n - 1);
@@ -83,9 +90,7 @@ int main() {
         int u, v;
         mint b, c;
         std::cin >> u >> v >> b >> c;
-        edge_id[i] = lct.link_edge(
-            vertex_node[u], vertex_node[v], NodeValue{false, b, c}
-        );
+        edge_id[i] = lct.add_edge(vertex_id[u], vertex_id[v], EdgeValue{b, c});
     }
 
     for (int i = 0; i < q; i++) {
@@ -96,13 +101,13 @@ int main() {
             int w;
             mint x;
             std::cin >> w >> x >> root;
-            lct.set(vertex_node[w], NodeValue{true, x, mint(0)});
+            lct.set_vertex(vertex_id[w], VertexValue{x});
         } else {
             int e;
             mint y, z;
             std::cin >> e >> y >> z >> root;
-            lct.set_edge(edge_id[e], NodeValue{false, y, z});
+            lct.set_edge(edge_id[e], EdgeValue{y, z});
         }
-        std::cout << lct.component_prod(vertex_node[root]).s << '\n';
+        std::cout << lct.component_prod(vertex_id[root]).s << '\n';
     }
 }

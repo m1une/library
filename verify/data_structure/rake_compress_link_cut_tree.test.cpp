@@ -41,22 +41,32 @@ struct AffineTreeSum {
         Path(T a_, T b_, T s_, T x_) : a(a_), b(b_), s(s_), x(x_) {}
     };
 
-    struct NodeValue {
-        bool is_vertex;
+    struct VertexValue {
         T x;
-        T y;
 
-        NodeValue() = delete;
+        VertexValue() = delete;
 
-        NodeValue(bool is_vertex_, T x_, T y_) : is_vertex(is_vertex_), x(x_), y(y_) {}
+        explicit VertexValue(T x_) : x(x_) {}
     };
 
-    static Path add_vertex(const Point& d, const NodeValue& u) {
-        if (u.is_vertex) return Path{T(1), T(0), d.s + u.x, d.x + T(1)};
-        return Path{u.x, u.y, d.s * u.x + d.x * u.y, d.x};
+    struct EdgeValue {
+        T a;
+        T b;
+
+        EdgeValue() = delete;
+
+        EdgeValue(T a_, T b_) : a(a_), b(b_) {}
+    };
+
+    static Path make_vertex_path(const Point& d, const VertexValue& vertex) {
+        return Path{T(1), T(0), d.s + vertex.x, d.x + T(1)};
     }
 
-    static Point add_edge(const Path& path) {
+    static Path make_edge_path(const Point& d, const EdgeValue& edge) {
+        return Path{edge.a, edge.b, d.s * edge.a + d.x * edge.b, d.x};
+    }
+
+    static Point to_point(const Path& path) {
         return Point{path.s, path.x};
     }
 
@@ -107,20 +117,21 @@ std::pair<mint, int> naive_dfs(
 
 void test_random_updates() {
     using TreeDP = AffineTreeSum<mint>;
-    using NodeValue = typename TreeDP::NodeValue;
+    using VertexValue = typename TreeDP::VertexValue;
+    using EdgeValue = typename TreeDP::EdgeValue;
     using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;
 
     constexpr int n = 12;
     std::mt19937 rng(712367);
     std::vector<mint> value(n);
-    std::vector<int> vertex_node(n);
+    std::vector<int> vertex_id(n);
     std::vector<Edge> edges;
     std::vector<std::vector<AdjEdge>> graph(n);
     LCT lct;
 
     for (int i = 0; i < n; i++) {
         value[i] = mint(int(rng() % 100));
-        vertex_node[i] = lct.add_vertex(NodeValue{true, value[i], mint(0)});
+        vertex_id[i] = lct.add_vertex(VertexValue{value[i]});
     }
 
     for (int v = 1; v < n; v++) {
@@ -131,7 +142,7 @@ void test_random_updates() {
         edges.push_back(Edge{parent, v, a, b});
         graph[parent].push_back(AdjEdge{v, id});
         graph[v].push_back(AdjEdge{parent, id});
-        assert(lct.link_edge(vertex_node[parent], vertex_node[v], NodeValue{false, a, b}) == id);
+        assert(lct.add_edge(vertex_id[parent], vertex_id[v], EdgeValue{a, b}) == id);
     }
 
     for (int step = 0; step < 4000; step++) {
@@ -139,40 +150,47 @@ void test_random_updates() {
         if (type == 0) {
             int v = int(rng() % n);
             value[v] = mint(int(rng() % 1000));
-            lct.set(vertex_node[v], NodeValue{true, value[v], mint(0)});
+            lct.set_vertex(vertex_id[v], VertexValue{value[v]});
         } else if (type == 1) {
             int id = int(rng() % edges.size());
             edges[id].a = mint(int(rng() % 5));
             edges[id].b = mint(int(rng() % 1000));
-            lct.set_edge(id, NodeValue{false, edges[id].a, edges[id].b});
+            lct.set_edge(id, EdgeValue{edges[id].a, edges[id].b});
         } else {
             int root = int(rng() % n);
             mint expected = naive_dfs(root, -1, value, edges, graph).first;
-            assert(lct.component_prod(vertex_node[root]).s == expected);
+            assert(lct.component_prod(vertex_id[root]).s == expected);
         }
     }
 }
 
 void test_cut_and_link() {
     using TreeDP = AffineTreeSum<mint>;
-    using NodeValue = typename TreeDP::NodeValue;
+    using VertexValue = typename TreeDP::VertexValue;
+    using EdgeValue = typename TreeDP::EdgeValue;
     using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;
 
     LCT lct;
-    int a = lct.add_vertex(NodeValue{true, mint(2), mint(0)});
-    int b = lct.add_vertex(NodeValue{true, mint(3), mint(0)});
-    int c = lct.add_vertex(NodeValue{true, mint(5), mint(0)});
-    int e0 = lct.link_edge(a, b, NodeValue{false, mint(0), mint(7)});
-    int e1 = lct.link_edge(b, c, NodeValue{false, mint(2), mint(1)});
+    int a = lct.add_vertex(VertexValue{mint(2)});
+    int b = lct.add_vertex(VertexValue{mint(3)});
+    int c = lct.add_vertex(VertexValue{mint(5)});
+    int e0 = lct.add_edge(a, b, EdgeValue{mint(0), mint(7)});
+    int e1 = lct.add_edge(b, c, EdgeValue{mint(2), mint(1)});
 
+    assert(lct.vertex_count() == 3);
+    assert(lct.edge_count() == 2);
+    assert(lct.get_vertex(a).x == mint(2));
+    assert(lct.get_edge(e0).b == mint(7));
+    assert(lct.edge_endpoints(e0) == std::make_pair(a, b));
     assert(lct.component_prod(a).s == mint(16));
     assert(lct.component_prod(c).s == mint(27));
     assert(lct.cut_edge(e0));
+    assert(!lct.edge_alive(e0));
     assert(!lct.connected(a, c));
     assert(lct.component_prod(a).s == mint(2));
     assert(lct.component_prod(c).s == mint(12));
-    assert(lct.link(a, lct.edge_node(e0)));
-    assert(lct.link(lct.edge_node(e0), b));
+    int e2 = lct.add_edge(a, b, lct.get_edge(e0));
+    assert(e2 != -1);
     assert(lct.connected(a, c));
     assert(lct.component_prod(a).s == mint(16));
     (void)e1;
