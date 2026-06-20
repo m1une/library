@@ -14,7 +14,7 @@ Since the state is a `std::vector<T>`, you can use the `make(val)` helper to aut
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/top_k.hpp"
 #include <iostream>
 #include <vector>

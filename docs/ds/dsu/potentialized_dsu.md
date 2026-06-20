@@ -1,6 +1,6 @@
 ---
 title: Potentialized DSU
-documentation_of: ../../../ds/union_find/potentialized_dsu.hpp
+documentation_of: ../../../ds/dsu/potentialized_dsu.hpp
 ---
 
 ## Overview
@@ -66,7 +66,7 @@ consistency.
 ## Example
 
 ```cpp
-#include "ds/union_find/potentialized_dsu.hpp"
+#include "ds/dsu/potentialized_dsu.hpp"
 #include "monoid/add.hpp"
 #include "monoid/xor.hpp"
 

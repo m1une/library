@@ -1,6 +1,6 @@
 ---
 title: Persistent Dual Segment Tree
-documentation_of: ../../../ds/segment_tree/persistent_dual_segtree.hpp
+documentation_of: ../../../ds/segtree/persistent_dual_segtree.hpp
 ---
 
 ## Overview
@@ -35,7 +35,7 @@ range products on each version, use `PersistentLazySegtree`.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/persistent_dual_segtree.hpp"
+#include "ds/segtree/persistent_dual_segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>

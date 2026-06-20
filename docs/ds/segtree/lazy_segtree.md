@@ -1,6 +1,6 @@
 ---
 title: Lazy Segment Tree
-documentation_of: ../../../ds/segment_tree/lazy_segtree.hpp
+documentation_of: ../../../ds/segtree/lazy_segtree.hpp
 ---
 
 ## Overview
@@ -61,7 +61,7 @@ All non-empty constructors build the tree in $O(N)$ time.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_min.hpp"
 #include <iostream>
 #include <vector>

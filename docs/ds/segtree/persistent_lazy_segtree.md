@@ -1,6 +1,6 @@
 ---
 title: Persistent Lazy Segment Tree
-documentation_of: ../../../ds/segment_tree/persistent_lazy_segtree.hpp
+documentation_of: ../../../ds/segtree/persistent_lazy_segtree.hpp
 ---
 
 ## Overview
@@ -32,7 +32,7 @@ new versions while older versions remain available.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/persistent_lazy_segtree.hpp"
+#include "ds/segtree/persistent_lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_sum.hpp"
 #include <iostream>
 #include <vector>

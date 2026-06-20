@@ -29,7 +29,7 @@ This allows you to perform multiple types of range operations seamlessly:
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_affine_range_sum_of_squares.hpp"
 #include <iostream>
 #include <vector>

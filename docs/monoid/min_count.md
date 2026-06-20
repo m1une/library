@@ -14,7 +14,7 @@ When initializing a segment tree from an array of elements, use the `make(val)` 
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/min_count.hpp"
 #include <iostream>
 #include <vector>

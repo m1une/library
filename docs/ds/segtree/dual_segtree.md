@@ -1,6 +1,6 @@
 ---
 title: Dual Segment Tree
-documentation_of: ../../../ds/segment_tree/dual_segtree.hpp
+documentation_of: ../../../ds/segtree/dual_segtree.hpp
 ---
 
 ## Overview
@@ -54,7 +54,7 @@ Construction takes $O(N)$ time.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/dual_segtree.hpp"
+#include "ds/segtree/dual_segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>

@@ -1,6 +1,6 @@
 ---
 title: DSU (Disjoint Set Union)
-documentation_of: ../../../ds/union_find/dsu.hpp
+documentation_of: ../../../ds/dsu/dsu.hpp
 ---
 
 ## Overview
@@ -23,7 +23,7 @@ It is implemented using **Path Compression** and **Union by Size**, achieving an
 ## Example
 
 ```cpp
-#include "ds/union_find/dsu.hpp"
+#include "ds/dsu/dsu.hpp"
 #include <iostream>
 
 int main() {

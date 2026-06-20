@@ -13,7 +13,7 @@ This is highly effective for solving **Dynamic DP** problems (where state transi
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/max_plus_matrix.hpp"
 #include <iostream>
 #include <vector>

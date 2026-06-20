@@ -1,6 +1,6 @@
 ---
 title: Segment Tree
-documentation_of: ../../../ds/segment_tree/segtree.hpp
+documentation_of: ../../../ds/segtree/segtree.hpp
 ---
 
 ## Overview
@@ -56,7 +56,7 @@ All non-empty constructors build the tree in $O(N)$ time.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>

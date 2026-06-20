@@ -12,7 +12,7 @@ For the maximum counterpart, see `monoid/arg_max.hpp`.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/arg_min.hpp"
 #include <iostream>
 #include <vector>

@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/union_find/potentialized_dsu.hpp"
+#include "ds/dsu/potentialized_dsu.hpp"
 #include "monoid/add.hpp"
 #include "monoid/xor.hpp"
 

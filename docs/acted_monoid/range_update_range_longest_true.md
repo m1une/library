@@ -23,7 +23,7 @@ Because updating an entire segment to `true` simply makes the contiguous length 
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_update_range_longest_true.hpp"
 #include <iostream>
 #include <vector>

@@ -1,6 +1,6 @@
 ---
 title: Persistent Segment Tree
-documentation_of: ../../../ds/segment_tree/persistent_segtree.hpp
+documentation_of: ../../../ds/segtree/persistent_segtree.hpp
 ---
 
 ## Overview
@@ -29,7 +29,7 @@ Point updates return a new tree while keeping older versions available.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/persistent_segtree.hpp"
+#include "ds/segtree/persistent_segtree.hpp"
 #include "monoid/add.hpp"
 #include <iostream>
 #include <vector>

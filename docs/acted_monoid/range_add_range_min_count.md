@@ -20,7 +20,7 @@ By reusing `m1une::monoid::MinCount`, this structure can easily be converted to 
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_add_range_min_count.hpp"
 #include <iostream>
 #include <vector>

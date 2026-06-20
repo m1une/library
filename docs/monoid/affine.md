@@ -21,7 +21,7 @@ You can create operations directly using pairs, or use the provided helper funct
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/affine.hpp"
 #include <iostream>
 

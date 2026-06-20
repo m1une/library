@@ -14,7 +14,7 @@ When initializing a segment tree from an array of elements, you should use the `
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/longest_same.hpp"
 #include <iostream>
 #include <vector>

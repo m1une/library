@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
 
-#include "ds/union_find/dsu_monoid.hpp"
+#include "ds/dsu/dsu_monoid.hpp"
 #include "monoid/add.hpp"
 
 #include <cassert>

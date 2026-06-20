@@ -14,7 +14,7 @@ Use the `make(val)` helper to initialize leaf nodes, passing either `0` or `1`.
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/binary_inversion.hpp"
 #include <iostream>
 #include <vector>

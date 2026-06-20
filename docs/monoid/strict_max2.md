@@ -12,7 +12,7 @@ This is the maximum counterpart to `monoid/strict_min2.hpp`.
 ## Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/strict_max2.hpp"
 #include <iostream>
 #include <vector>

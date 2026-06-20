@@ -16,7 +16,7 @@ Unlike Range Addition or Range Affine transformations, Range Multiplication dist
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_mul_range_sum.hpp"
 #include <iostream>
 #include <vector>

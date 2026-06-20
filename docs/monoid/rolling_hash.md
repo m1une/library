@@ -31,7 +31,7 @@ Generates a valid monoid element for a single character.
 ### Example
 
 ```cpp
-#include "ds/segment_tree/segtree.hpp"
+#include "ds/segtree/segtree.hpp"
 #include "monoid/rolling_hash.hpp"
 #include <iostream>
 #include <string>

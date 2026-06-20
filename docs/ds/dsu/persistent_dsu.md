@@ -1,6 +1,6 @@
 ---
 title: Persistent DSU
-documentation_of: ../../../ds/union_find/persistent_dsu.hpp
+documentation_of: ../../../ds/dsu/persistent_dsu.hpp
 ---
 
 ## Overview
@@ -30,7 +30,7 @@ It uses union by size without path compression, because path compression mutates
 ## Example
 
 ```cpp
-#include "ds/union_find/persistent_dsu.hpp"
+#include "ds/dsu/persistent_dsu.hpp"
 
 #include <iostream>
 

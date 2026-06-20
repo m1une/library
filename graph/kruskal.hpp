@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "ds/union_find/dsu.hpp"
+#include "ds/dsu/dsu.hpp"
 #include "graph/graph.hpp"
 
 namespace m1une {

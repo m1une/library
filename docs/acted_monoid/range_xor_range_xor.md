@@ -14,7 +14,7 @@ When a value $f$ is XORed to all elements in a segment, the total XOR sum of the
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_xor_range_xor.hpp"
 #include <iostream>
 #include <vector>

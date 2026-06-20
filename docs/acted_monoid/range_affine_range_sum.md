@@ -18,7 +18,7 @@ When initializing a Lazy Segment Tree, you must initialize the leaf nodes with `
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_affine_range_sum.hpp"
 #include <iostream>
 #include <vector>

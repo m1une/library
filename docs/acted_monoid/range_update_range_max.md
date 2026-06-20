@@ -17,7 +17,7 @@ Similar to `RangeUpdateRangeMin`, this implementation uses `std::optional<T>` as
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_update_range_max.hpp"
 #include <iostream>
 #include <vector>

@@ -1,6 +1,6 @@
 ---
 title: DSU with Monoid
-documentation_of: ../../../ds/union_find/dsu_monoid.hpp
+documentation_of: ../../../ds/dsu/dsu_monoid.hpp
 ---
 
 ## Overview
@@ -56,7 +56,7 @@ The monoid must provide:
 ## Example
 
 ```cpp
-#include "ds/union_find/dsu_monoid.hpp"
+#include "ds/dsu/dsu_monoid.hpp"
 #include "monoid/add.hpp"
 
 #include <iostream>

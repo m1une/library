@@ -18,7 +18,7 @@ To apply a global formula on `[l, r)`, convert it to range-local form first: `a 
 ## Example
 
 ```cpp
-#include "ds/segment_tree/lazy_segtree.hpp"
+#include "ds/segtree/lazy_segtree.hpp"
 #include "acted_monoid/range_ap_add_range_sum.hpp"
 #include <iostream>
 #include <vector>
