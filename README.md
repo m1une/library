@@ -13,7 +13,7 @@ contest.
 
 | Directory | Contents |
 | --- | --- |
-| `graph/` | General graph container and algorithms for shortest paths, components, cycles, DAGs, lowlink, and MST. |
+| `graph/` | General graph container and algorithms for shortest paths, components, cycles, DAGs, 2-SAT, lowlink, and MST. |
 | `tree/` | Rooted-tree metadata, LCA, HLD, diameter, rerooting DP, static top tree variants, and centroid decomposition. |
 | `flow/` | Flow-network algorithms such as max flow, min-cost flow, and bounded flow. |
 | `optimization/` | Cost-matrix and numeric optimization algorithms such as Hungarian assignment, simplex LP, and integer LP. |

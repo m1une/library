@@ -6,5 +6,6 @@
 #include "graph/scc.hpp"
 #include "graph/shortest_path.hpp"
 #include "graph/topological_sort.hpp"
+#include "graph/two_sat.hpp"
 
 #endif  // M1UNE_GRAPH_DIRECTED_HPP
