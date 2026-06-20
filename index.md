@@ -146,6 +146,9 @@ data:
       path: ds/ordered_set/binary_trie.hpp
       title: Binary Trie
     - icon: ':heavy_check_mark:'
+      path: ds/ordered_set/binary_trie_monoid.hpp
+      title: Binary Trie with Monoid
+    - icon: ':heavy_check_mark:'
       path: ds/ordered_set/ordered_multiset.hpp
       title: Ordered Multiset
     - icon: ':heavy_check_mark:'
@@ -381,7 +384,7 @@ data:
     - icon: ':warning:'
       path: monoid/min_subarray.hpp
       title: Min Subarray Monoid
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/mul.hpp
       title: Multiply Monoid
     - icon: ':warning:'
@@ -591,6 +594,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/ordered_set/binary_trie.test.cpp
       title: verify/ds/ordered_set/binary_trie.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/ordered_set/binary_trie_monoid.test.cpp
+      title: verify/ds/ordered_set/binary_trie_monoid.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/ordered_set/ordered_multiset.test.cpp
       title: verify/ds/ordered_set/ordered_multiset.test.cpp

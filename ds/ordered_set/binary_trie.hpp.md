@@ -86,7 +86,20 @@ data:
     \ position);\n            if (bit(upper, position) == 1) {\n                result\
     \ += subtree_size(nodes[node].child[zero]);\n                node = nodes[node].child[zero\
     \ ^ 1];\n            } else {\n                node = nodes[node].child[zero];\n\
-    \            }\n        }\n        return result;\n    }\n\n    int order_of_key(UInt\
+    \            }\n        }\n        return result;\n    }\n\n    int count_xor_less(UInt\
+    \ value, UInt upper) const {\n        return count_less_xor(value, upper);\n \
+    \   }\n\n    int count_xor_less_equal(UInt value, UInt upper) const {\n      \
+    \  assert(valid_value(value));\n        assert(valid_value(upper));\n        if\
+    \ (upper == value_mask()) return size();\n        return count_xor_less(value,\
+    \ upper + UInt(1));\n    }\n\n    int count_xor_greater(UInt value, UInt lower)\
+    \ const {\n        assert(valid_value(value));\n        assert(valid_value(lower));\n\
+    \        return size() - count_xor_less_equal(value, lower);\n    }\n\n    int\
+    \ count_xor_greater_equal(UInt value, UInt lower) const {\n        assert(valid_value(value));\n\
+    \        assert(valid_value(lower));\n        return size() - count_xor_less(value,\
+    \ lower);\n    }\n\n    int count_xor_range(UInt value, UInt lower, UInt upper)\
+    \ const {\n        assert(valid_value(value));\n        assert(valid_value(lower));\n\
+    \        assert(lower <= upper);\n        return count_xor_less(value, upper)\
+    \ -\n               count_xor_less(value, lower);\n    }\n\n    int order_of_key(UInt\
     \ value) const {\n        return count_less_xor(0, value);\n    }\n\n    int count_less(UInt\
     \ value) const {\n        return order_of_key(value);\n    }\n\n    int count_less_equal(UInt\
     \ value) const {\n        assert(valid_value(value));\n        if (value == value_mask())\
@@ -173,7 +186,20 @@ data:
     \ position);\n            if (bit(upper, position) == 1) {\n                result\
     \ += subtree_size(nodes[node].child[zero]);\n                node = nodes[node].child[zero\
     \ ^ 1];\n            } else {\n                node = nodes[node].child[zero];\n\
-    \            }\n        }\n        return result;\n    }\n\n    int order_of_key(UInt\
+    \            }\n        }\n        return result;\n    }\n\n    int count_xor_less(UInt\
+    \ value, UInt upper) const {\n        return count_less_xor(value, upper);\n \
+    \   }\n\n    int count_xor_less_equal(UInt value, UInt upper) const {\n      \
+    \  assert(valid_value(value));\n        assert(valid_value(upper));\n        if\
+    \ (upper == value_mask()) return size();\n        return count_xor_less(value,\
+    \ upper + UInt(1));\n    }\n\n    int count_xor_greater(UInt value, UInt lower)\
+    \ const {\n        assert(valid_value(value));\n        assert(valid_value(lower));\n\
+    \        return size() - count_xor_less_equal(value, lower);\n    }\n\n    int\
+    \ count_xor_greater_equal(UInt value, UInt lower) const {\n        assert(valid_value(value));\n\
+    \        assert(valid_value(lower));\n        return size() - count_xor_less(value,\
+    \ lower);\n    }\n\n    int count_xor_range(UInt value, UInt lower, UInt upper)\
+    \ const {\n        assert(valid_value(value));\n        assert(valid_value(lower));\n\
+    \        assert(lower <= upper);\n        return count_xor_less(value, upper)\
+    \ -\n               count_xor_less(value, lower);\n    }\n\n    int order_of_key(UInt\
     \ value) const {\n        return count_less_xor(0, value);\n    }\n\n    int count_less(UInt\
     \ value) const {\n        return order_of_key(value);\n    }\n\n    int count_less_equal(UInt\
     \ value) const {\n        assert(valid_value(value));\n        if (value == value_mask())\
@@ -189,7 +215,7 @@ data:
   isVerificationFile: false
   path: ds/ordered_set/binary_trie.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:20:48+09:00'
+  timestamp: '2026-06-20 20:41:47+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/ordered_set/binary_trie.test.cpp
@@ -212,6 +238,10 @@ every value already in the trie.
 * `UInt`: An unsigned integer type. Defaults to `std::uint32_t`.
 * `BitWidth`: The number of low bits used by the trie. Defaults to all bits of
   `UInt`. Every inserted value and xor operand must fit in these bits.
+
+An exclusive `upper` bound may be larger than the largest representable
+`BitWidth`-bit value when that bound fits in `UInt`. For example, with
+`BitWidth == 30`, passing `1U << 30` includes every possible value.
 
 ## Methods
 
@@ -239,8 +269,15 @@ Let $B$ be `BitWidth`.
 | `int count_less_equal(UInt value) const` | Returns the number of stored values less than or equal to `value`. | $O(B)$ |
 | `int count_greater(UInt value) const` | Returns the number of stored values strictly greater than `value`. | $O(B)$ |
 | `int count_greater_equal(UInt value) const` | Returns the number of stored values greater than or equal to `value`. | $O(B)$ |
-| `int count_less_xor(UInt value, UInt upper) const` | Counts stored values for which `(stored_value ^ value) < upper`. | $O(B)$ |
+| `int count_xor_less(UInt value, UInt upper) const` | Counts stored values for which `(stored_value ^ value) < upper`. | $O(B)$ |
+| `int count_xor_less_equal(UInt value, UInt upper) const` | Counts stored values for which `(stored_value ^ value) <= upper`. | $O(B)$ |
+| `int count_xor_greater(UInt value, UInt lower) const` | Counts stored values for which `(stored_value ^ value) > lower`. | $O(B)$ |
+| `int count_xor_greater_equal(UInt value, UInt lower) const` | Counts stored values for which `(stored_value ^ value) >= lower`. | $O(B)$ |
+| `int count_xor_range(UInt value, UInt lower, UInt upper) const` | Counts stored values for which `lower <= (stored_value ^ value) < upper`. | $O(B)$ |
 | `std::vector<UInt> to_vector() const` | Returns all values in sorted order, including duplicates. | $O(NB)$ |
+
+`count_less_xor(value, upper)` is a compatibility alias for
+`count_xor_less(value, upper)`.
 
 ## Example
 

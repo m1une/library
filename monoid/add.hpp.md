@@ -19,6 +19,9 @@ data:
     path: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
     title: verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/ordered_set/binary_trie_monoid.test.cpp
+    title: verify/ds/ordered_set/binary_trie_monoid.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/range_query/disjoint_sparse_table.test.cpp
     title: verify/ds/range_query/disjoint_sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
@@ -61,6 +64,7 @@ data:
   - verify/ds/dynamic_tree/link_cut_tree.test.cpp
   - verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
+  - verify/ds/ordered_set/binary_trie_monoid.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
   - verify/ds/segtree/persistent_dual_segtree.test.cpp
   - verify/ds/segtree/persistent_segtree.test.cpp

@@ -90,7 +90,20 @@ data:
     \ position);\n            if (bit(upper, position) == 1) {\n                result\
     \ += subtree_size(nodes[node].child[zero]);\n                node = nodes[node].child[zero\
     \ ^ 1];\n            } else {\n                node = nodes[node].child[zero];\n\
-    \            }\n        }\n        return result;\n    }\n\n    int order_of_key(UInt\
+    \            }\n        }\n        return result;\n    }\n\n    int count_xor_less(UInt\
+    \ value, UInt upper) const {\n        return count_less_xor(value, upper);\n \
+    \   }\n\n    int count_xor_less_equal(UInt value, UInt upper) const {\n      \
+    \  assert(valid_value(value));\n        assert(valid_value(upper));\n        if\
+    \ (upper == value_mask()) return size();\n        return count_xor_less(value,\
+    \ upper + UInt(1));\n    }\n\n    int count_xor_greater(UInt value, UInt lower)\
+    \ const {\n        assert(valid_value(value));\n        assert(valid_value(lower));\n\
+    \        return size() - count_xor_less_equal(value, lower);\n    }\n\n    int\
+    \ count_xor_greater_equal(UInt value, UInt lower) const {\n        assert(valid_value(value));\n\
+    \        assert(valid_value(lower));\n        return size() - count_xor_less(value,\
+    \ lower);\n    }\n\n    int count_xor_range(UInt value, UInt lower, UInt upper)\
+    \ const {\n        assert(valid_value(value));\n        assert(valid_value(lower));\n\
+    \        assert(lower <= upper);\n        return count_xor_less(value, upper)\
+    \ -\n               count_xor_less(value, lower);\n    }\n\n    int order_of_key(UInt\
     \ value) const {\n        return count_less_xor(0, value);\n    }\n\n    int count_less(UInt\
     \ value) const {\n        return order_of_key(value);\n    }\n\n    int count_less_equal(UInt\
     \ value) const {\n        assert(valid_value(value));\n        if (value == value_mask())\
@@ -136,22 +149,32 @@ data:
     \            assert(trie.min_xor(value) == xor_values.front());\n            assert(trie.max_xor(value)\
     \ == xor_values.back());\n            assert(trie.count_less_xor(value, 512) ==\n\
     \                   int(std::lower_bound(xor_values.begin(), xor_values.end(),\
-    \ 512) -\n                       xor_values.begin()));\n        }\n\n        assert(trie.size()\
-    \ == int(expected.size()));\n        assert(trie.empty() == expected.empty());\n\
-    \        if (!expected.empty()) {\n            assert(trie.min() == *expected.begin());\n\
-    \            assert(trie.max() == *expected.rbegin());\n            const int\
-    \ k = int(seed % expected.size());\n            auto it = expected.begin();\n\
-    \            std::advance(it, k);\n            assert(trie.kth(k) == *it);\n \
-    \       }\n    }\n\n    assert(trie.to_vector() ==\n           std::vector<std::uint32_t>(expected.begin(),\
-    \ expected.end()));\n    trie.clear();\n    assert(trie.empty());\n}\n\nint main()\
-    \ {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n\
-    \    unit_test();\n\n    int query_count;\n    std::cin >> query_count;\n\n  \
-    \  m1une::ds::BinaryTrie<std::uint32_t, 30> trie;\n    while (query_count--) {\n\
-    \        int type;\n        std::uint32_t value;\n        std::cin >> type >>\
-    \ value;\n\n        if (type == 0) {\n            if (!trie.contains(value)) trie.insert(value);\n\
-    \        } else if (type == 1) {\n            trie.erase(value);\n        } else\
-    \ {\n            std::cout << trie.min_xor(value) << '\\n';\n        }\n    }\n\
-    }\n"
+    \ 512) -\n                       xor_values.begin()));\n            assert(trie.count_xor_less(value,\
+    \ 512) ==\n                   int(std::lower_bound(xor_values.begin(), xor_values.end(),\
+    \ 512) -\n                       xor_values.begin()));\n            assert(trie.count_xor_less_equal(value,\
+    \ 512) ==\n                   int(std::upper_bound(xor_values.begin(), xor_values.end(),\
+    \ 512) -\n                       xor_values.begin()));\n            assert(trie.count_xor_greater(value,\
+    \ 512) ==\n                   int(xor_values.end() -\n                       std::upper_bound(xor_values.begin(),\
+    \ xor_values.end(), 512)));\n            assert(trie.count_xor_greater_equal(value,\
+    \ 512) ==\n                   int(xor_values.end() -\n                       std::lower_bound(xor_values.begin(),\
+    \ xor_values.end(), 512)));\n            assert(trie.count_xor_range(value, 200,\
+    \ 800) ==\n                   int(std::lower_bound(xor_values.begin(), xor_values.end(),\
+    \ 800) -\n                       std::lower_bound(xor_values.begin(), xor_values.end(),\
+    \ 200)));\n        }\n\n        assert(trie.size() == int(expected.size()));\n\
+    \        assert(trie.empty() == expected.empty());\n        if (!expected.empty())\
+    \ {\n            assert(trie.min() == *expected.begin());\n            assert(trie.max()\
+    \ == *expected.rbegin());\n            const int k = int(seed % expected.size());\n\
+    \            auto it = expected.begin();\n            std::advance(it, k);\n \
+    \           assert(trie.kth(k) == *it);\n        }\n    }\n\n    assert(trie.to_vector()\
+    \ ==\n           std::vector<std::uint32_t>(expected.begin(), expected.end()));\n\
+    \    trie.clear();\n    assert(trie.empty());\n}\n\nint main() {\n    std::ios_base::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    unit_test();\n\n    int query_count;\n    std::cin\
+    \ >> query_count;\n\n    m1une::ds::BinaryTrie<std::uint32_t, 30> trie;\n    while\
+    \ (query_count--) {\n        int type;\n        std::uint32_t value;\n       \
+    \ std::cin >> type >> value;\n\n        if (type == 0) {\n            if (!trie.contains(value))\
+    \ trie.insert(value);\n        } else if (type == 1) {\n            trie.erase(value);\n\
+    \        } else {\n            std::cout << trie.min_xor(value) << '\\n';\n  \
+    \      }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/set_xor_min\"\n\n#include\
     \ \"ds/ordered_set/binary_trie.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
     #include <cstdint>\n#include <iostream>\n#include <iterator>\n#include <set>\n\
@@ -187,28 +210,38 @@ data:
     \            assert(trie.min_xor(value) == xor_values.front());\n            assert(trie.max_xor(value)\
     \ == xor_values.back());\n            assert(trie.count_less_xor(value, 512) ==\n\
     \                   int(std::lower_bound(xor_values.begin(), xor_values.end(),\
-    \ 512) -\n                       xor_values.begin()));\n        }\n\n        assert(trie.size()\
-    \ == int(expected.size()));\n        assert(trie.empty() == expected.empty());\n\
-    \        if (!expected.empty()) {\n            assert(trie.min() == *expected.begin());\n\
-    \            assert(trie.max() == *expected.rbegin());\n            const int\
-    \ k = int(seed % expected.size());\n            auto it = expected.begin();\n\
-    \            std::advance(it, k);\n            assert(trie.kth(k) == *it);\n \
-    \       }\n    }\n\n    assert(trie.to_vector() ==\n           std::vector<std::uint32_t>(expected.begin(),\
-    \ expected.end()));\n    trie.clear();\n    assert(trie.empty());\n}\n\nint main()\
-    \ {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n\
-    \    unit_test();\n\n    int query_count;\n    std::cin >> query_count;\n\n  \
-    \  m1une::ds::BinaryTrie<std::uint32_t, 30> trie;\n    while (query_count--) {\n\
-    \        int type;\n        std::uint32_t value;\n        std::cin >> type >>\
-    \ value;\n\n        if (type == 0) {\n            if (!trie.contains(value)) trie.insert(value);\n\
-    \        } else if (type == 1) {\n            trie.erase(value);\n        } else\
-    \ {\n            std::cout << trie.min_xor(value) << '\\n';\n        }\n    }\n\
-    }\n"
+    \ 512) -\n                       xor_values.begin()));\n            assert(trie.count_xor_less(value,\
+    \ 512) ==\n                   int(std::lower_bound(xor_values.begin(), xor_values.end(),\
+    \ 512) -\n                       xor_values.begin()));\n            assert(trie.count_xor_less_equal(value,\
+    \ 512) ==\n                   int(std::upper_bound(xor_values.begin(), xor_values.end(),\
+    \ 512) -\n                       xor_values.begin()));\n            assert(trie.count_xor_greater(value,\
+    \ 512) ==\n                   int(xor_values.end() -\n                       std::upper_bound(xor_values.begin(),\
+    \ xor_values.end(), 512)));\n            assert(trie.count_xor_greater_equal(value,\
+    \ 512) ==\n                   int(xor_values.end() -\n                       std::lower_bound(xor_values.begin(),\
+    \ xor_values.end(), 512)));\n            assert(trie.count_xor_range(value, 200,\
+    \ 800) ==\n                   int(std::lower_bound(xor_values.begin(), xor_values.end(),\
+    \ 800) -\n                       std::lower_bound(xor_values.begin(), xor_values.end(),\
+    \ 200)));\n        }\n\n        assert(trie.size() == int(expected.size()));\n\
+    \        assert(trie.empty() == expected.empty());\n        if (!expected.empty())\
+    \ {\n            assert(trie.min() == *expected.begin());\n            assert(trie.max()\
+    \ == *expected.rbegin());\n            const int k = int(seed % expected.size());\n\
+    \            auto it = expected.begin();\n            std::advance(it, k);\n \
+    \           assert(trie.kth(k) == *it);\n        }\n    }\n\n    assert(trie.to_vector()\
+    \ ==\n           std::vector<std::uint32_t>(expected.begin(), expected.end()));\n\
+    \    trie.clear();\n    assert(trie.empty());\n}\n\nint main() {\n    std::ios_base::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    unit_test();\n\n    int query_count;\n    std::cin\
+    \ >> query_count;\n\n    m1une::ds::BinaryTrie<std::uint32_t, 30> trie;\n    while\
+    \ (query_count--) {\n        int type;\n        std::uint32_t value;\n       \
+    \ std::cin >> type >> value;\n\n        if (type == 0) {\n            if (!trie.contains(value))\
+    \ trie.insert(value);\n        } else if (type == 1) {\n            trie.erase(value);\n\
+    \        } else {\n            std::cout << trie.min_xor(value) << '\\n';\n  \
+    \      }\n    }\n}\n"
   dependsOn:
   - ds/ordered_set/binary_trie.hpp
   isVerificationFile: true
   path: verify/ds/ordered_set/binary_trie.test.cpp
   requiredBy: []
-  timestamp: '2026-06-20 20:20:48+09:00'
+  timestamp: '2026-06-20 20:41:47+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/ordered_set/binary_trie.test.cpp
