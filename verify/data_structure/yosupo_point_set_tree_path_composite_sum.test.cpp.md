@@ -20,35 +20,44 @@ data:
   bundledCode: "#line 1 \"verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp\"\
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum\"\
     \n\n#include <iostream>\n#include <vector>\n\n#line 1 \"data_structure/rake_compress_link_cut_tree.hpp\"\
-    \n\n\n\n#include <cassert>\n#include <utility>\n#line 7 \"data_structure/rake_compress_link_cut_tree.hpp\"\
-    \n\nnamespace m1une {\nnamespace data_structure {\n\n// Maintains a dynamic forest\
-    \ whose tree DP uses two different aggregate types.\n// Point is a commutative\
-    \ group for virtual children, while Path is an ordered\n// preferred-path cluster\
-    \ and does not need an inverse.\ntemplate <class TreeDPInfo>\nstruct RakeCompressLinkCutTree\
-    \ {\n    using Point = typename TreeDPInfo::Point;\n    using Path = typename\
-    \ TreeDPInfo::Path;\n    using Vertex = typename TreeDPInfo::Vertex;\n\n   private:\n\
-    \    struct Node {\n        int left = -1;\n        int right = -1;\n        int\
-    \ parent = -1;\n        bool rev = false;\n        Vertex value;\n        Point\
-    \ virtual_prod;\n        Path prod;\n        Path rev_prod;\n\n        explicit\
-    \ Node(const Vertex& vertex)\n            : value(vertex),\n              virtual_prod(Point::id()),\n\
-    \              prod(TreeDPInfo::add_vertex(virtual_prod, value)),\n          \
-    \    rev_prod(prod) {}\n    };\n\n    struct EdgeInfo {\n        int u = -1;\n\
-    \        int v = -1;\n        int node = -1;\n        bool alive = false;\n  \
-    \  };\n\n    std::vector<Node> _nodes;\n    std::vector<EdgeInfo> _edges;\n  \
-    \  std::vector<int> _path_buffer;\n\n    bool is_splay_root(int node) const {\n\
-    \        int parent = _nodes[node].parent;\n        return parent == -1 || (_nodes[parent].left\
+    \n\n\n\n#include <cassert>\n#include <utility>\n#include <variant>\n#line 8 \"\
+    data_structure/rake_compress_link_cut_tree.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ data_structure {\n\n// Maintains a dynamic forest whose tree DP uses two different\
+    \ aggregate types.\n// Point is a commutative group for virtual children, while\
+    \ Path is an ordered\n// preferred-path cluster and does not need an inverse.\n\
+    template <class TreeDPInfo>\nstruct RakeCompressLinkCutTree {\n    using Point\
+    \ = typename TreeDPInfo::Point;\n    using Path = typename TreeDPInfo::Path;\n\
+    \    using VertexValue = typename TreeDPInfo::VertexValue;\n    using EdgeValue\
+    \ = typename TreeDPInfo::EdgeValue;\n    using VertexId = int;\n    using EdgeId\
+    \ = int;\n\n   private:\n    struct Node {\n        int left = -1;\n        int\
+    \ right = -1;\n        int parent = -1;\n        bool rev = false;\n        std::variant<VertexValue,\
+    \ EdgeValue> value;\n        Point virtual_prod;\n        Path prod;\n       \
+    \ Path rev_prod;\n\n        explicit Node(const VertexValue& vertex_value)\n \
+    \           : value(std::in_place_index<0>, vertex_value),\n              virtual_prod(Point::id()),\n\
+    \              prod(TreeDPInfo::make_vertex_path(virtual_prod, vertex_value)),\n\
+    \              rev_prod(prod) {}\n\n        explicit Node(std::in_place_index_t<1>,\
+    \ const EdgeValue& edge_value)\n            : value(std::in_place_index<1>, edge_value),\n\
+    \              virtual_prod(Point::id()),\n              prod(TreeDPInfo::make_edge_path(virtual_prod,\
+    \ edge_value)),\n              rev_prod(prod) {}\n    };\n\n    struct OriginalEdge\
+    \ {\n        VertexId u = -1;\n        VertexId v = -1;\n        int node = -1;\n\
+    \        bool alive = false;\n    };\n\n    std::vector<Node> _nodes;\n    std::vector<int>\
+    \ _vertex_nodes;\n    std::vector<OriginalEdge> _edges;\n    std::vector<int>\
+    \ _path_buffer;\n\n    bool is_splay_root(int node) const {\n        int parent\
+    \ = _nodes[node].parent;\n        return parent == -1 || (_nodes[parent].left\
     \ != node && _nodes[parent].right != node);\n    }\n\n    void update(int node)\
-    \ {\n        Node& x = _nodes[node];\n        Path self = TreeDPInfo::add_vertex(x.virtual_prod,\
-    \ x.value);\n        x.prod = self;\n        x.rev_prod = self;\n\n        if\
-    \ (x.left != -1) {\n            x.prod = TreeDPInfo::compress(_nodes[x.left].prod,\
-    \ x.prod);\n            x.rev_prod = TreeDPInfo::compress(x.rev_prod, _nodes[x.left].rev_prod);\n\
+    \ {\n        Node& x = _nodes[node];\n        Path self = x.value.index() == 0\n\
+    \            ? TreeDPInfo::make_vertex_path(x.virtual_prod, std::get<0>(x.value))\n\
+    \            : TreeDPInfo::make_edge_path(x.virtual_prod, std::get<1>(x.value));\n\
+    \        x.prod = self;\n        x.rev_prod = self;\n\n        if (x.left != -1)\
+    \ {\n            x.prod = TreeDPInfo::compress(_nodes[x.left].prod, x.prod);\n\
+    \            x.rev_prod = TreeDPInfo::compress(x.rev_prod, _nodes[x.left].rev_prod);\n\
     \        }\n        if (x.right != -1) {\n            x.prod = TreeDPInfo::compress(x.prod,\
     \ _nodes[x.right].prod);\n            x.rev_prod = TreeDPInfo::compress(_nodes[x.right].rev_prod,\
     \ x.rev_prod);\n        }\n    }\n\n    void add_virtual_child(int node, int child)\
-    \ {\n        if (child == -1) return;\n        Point contribution = TreeDPInfo::add_edge(_nodes[child].prod);\n\
+    \ {\n        if (child == -1) return;\n        Point contribution = TreeDPInfo::to_point(_nodes[child].prod);\n\
     \        _nodes[node].virtual_prod = TreeDPInfo::rake(_nodes[node].virtual_prod,\
     \ contribution);\n    }\n\n    void remove_virtual_child(int node, int child)\
-    \ {\n        if (child == -1) return;\n        Point contribution = TreeDPInfo::add_edge(_nodes[child].prod);\n\
+    \ {\n        if (child == -1) return;\n        Point contribution = TreeDPInfo::to_point(_nodes[child].prod);\n\
     \        _nodes[node].virtual_prod = TreeDPInfo::rake(_nodes[node].virtual_prod,\
     \ contribution.inv());\n    }\n\n    void apply_reverse(int node) {\n        if\
     \ (node == -1) return;\n        Node& x = _nodes[node];\n        std::swap(x.left,\
@@ -81,66 +90,73 @@ data:
     \            remove_virtual_child(cur, last);\n            _nodes[cur].right =\
     \ last;\n            if (last != -1) _nodes[last].parent = cur;\n            update(cur);\n\
     \            last = cur;\n        }\n        splay(node);\n        return last;\n\
-    \    }\n\n    void check_vertex(int v) const {\n        assert(0 <= v && v < int(_nodes.size()));\n\
-    \    }\n\n    void check_edge(int edge_id) const {\n        assert(0 <= edge_id\
-    \ && edge_id < int(_edges.size()));\n    }\n\n   public:\n    RakeCompressLinkCutTree()\
-    \ = default;\n\n    explicit RakeCompressLinkCutTree(const std::vector<Vertex>&\
-    \ values) {\n        _nodes.reserve(values.size());\n        for (const Vertex&\
-    \ value : values) add_vertex(value);\n    }\n\n    int size() const {\n      \
-    \  return int(_nodes.size());\n    }\n\n    bool empty() const {\n        return\
-    \ _nodes.empty();\n    }\n\n    int add_vertex(const Vertex& vertex) {\n     \
-    \   _nodes.emplace_back(vertex);\n        return int(_nodes.size()) - 1;\n   \
-    \ }\n\n    int edge_count() const {\n        return int(_edges.size());\n    }\n\
-    \n    bool edge_alive(int edge_id) const {\n        check_edge(edge_id);\n   \
-    \     return _edges[edge_id].alive;\n    }\n\n    int edge_node(int edge_id) const\
-    \ {\n        check_edge(edge_id);\n        return _edges[edge_id].node;\n    }\n\
-    \n    std::pair<int, int> edge_endpoints(int edge_id) const {\n        check_edge(edge_id);\n\
-    \        return {_edges[edge_id].u, _edges[edge_id].v};\n    }\n\n    const Vertex&\
-    \ get(int v) const {\n        check_vertex(v);\n        return _nodes[v].value;\n\
-    \    }\n\n    const Vertex& operator[](int v) const {\n        return get(v);\n\
-    \    }\n\n    void set(int v, const Vertex& vertex) {\n        check_vertex(v);\n\
-    \        access(v);\n        _nodes[v].value = vertex;\n        update(v);\n \
-    \   }\n\n    // Makes v the represented root of its component.\n    void evert(int\
-    \ v) {\n        check_vertex(v);\n        access(v);\n        apply_reverse(v);\n\
-    \    }\n\n    void reroot(int v) {\n        evert(v);\n    }\n\n    int component_root(int\
-    \ v) {\n        check_vertex(v);\n        access(v);\n        int cur = v;\n \
-    \       push(cur);\n        while (_nodes[cur].left != -1) {\n            cur\
-    \ = _nodes[cur].left;\n            push(cur);\n        }\n        splay(cur);\n\
-    \        return cur;\n    }\n\n    int root(int v) {\n        return component_root(v);\n\
-    \    }\n\n    bool connected(int u, int v) {\n        check_vertex(u);\n     \
-    \   check_vertex(v);\n        if (u == v) return true;\n        return component_root(u)\
-    \ == component_root(v);\n    }\n\n    bool same(int u, int v) {\n        return\
-    \ connected(u, v);\n    }\n\n    // Links two different components and returns\
-    \ whether an edge was added.\n    bool link(int u, int v) {\n        check_vertex(u);\n\
-    \        check_vertex(v);\n        if (u == v) return false;\n        evert(u);\n\
-    \        if (component_root(v) == u) return false;\n        access(v);\n     \
-    \   _nodes[u].parent = v;\n        add_virtual_child(v, u);\n        update(v);\n\
-    \        return true;\n    }\n\n    bool link_parent(int child, int parent) {\n\
-    \        return link(child, parent);\n    }\n\n    int link_edge(int u, int v,\
-    \ const Vertex& edge_vertex) {\n        check_vertex(u);\n        check_vertex(v);\n\
-    \        if (u == v || connected(u, v)) return -1;\n        int edge_id = int(_edges.size());\n\
-    \        int node = add_vertex(edge_vertex);\n        _edges.push_back(EdgeInfo{u,\
-    \ v, node, true});\n        bool ok1 = link(u, node);\n        bool ok2 = link(node,\
-    \ v);\n        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    // Cuts\
-    \ the represented-tree edge (u, v), if it exists.\n    bool cut(int u, int v)\
-    \ {\n        check_vertex(u);\n        check_vertex(v);\n        if (u == v) return\
-    \ false;\n        evert(u);\n        access(v);\n        if (_nodes[v].left !=\
-    \ u || _nodes[u].right != -1) return false;\n        _nodes[v].left = -1;\n  \
-    \      _nodes[u].parent = -1;\n        update(v);\n        return true;\n    }\n\
-    \n    // Cuts the parent edge of v in the current represented-root orientation.\n\
-    \    bool cut_parent(int v) {\n        check_vertex(v);\n        access(v);\n\
-    \        int left = _nodes[v].left;\n        if (left == -1) return false;\n \
-    \       _nodes[v].left = -1;\n        _nodes[left].parent = -1;\n        update(v);\n\
-    \        return true;\n    }\n\n    bool cut_edge(int edge_id) {\n        check_edge(edge_id);\n\
-    \        EdgeInfo& edge = _edges[edge_id];\n        if (!edge.alive) return false;\n\
-    \        bool ok1 = cut(edge.u, edge.node);\n        bool ok2 = cut(edge.node,\
-    \ edge.v);\n        if (ok1 && ok2) edge.alive = false;\n        return ok1 &&\
-    \ ok2;\n    }\n\n    const Vertex& get_edge(int edge_id) const {\n        return\
-    \ get(edge_node(edge_id));\n    }\n\n    void set_edge(int edge_id, const Vertex&\
-    \ edge_vertex) {\n        set(edge_node(edge_id), edge_vertex);\n    }\n\n   \
-    \ // Reroots the represented tree at v and returns its whole-tree cluster.\n \
-    \   Path component_prod(int v) {\n        evert(v);\n        return _nodes[v].prod;\n\
-    \    }\n\n    Path query_component(int v) {\n        return component_prod(v);\n\
+    \    }\n\n    void check_node(int node) const {\n        assert(0 <= node && node\
+    \ < int(_nodes.size()));\n    }\n\n    void check_vertex(VertexId vertex) const\
+    \ {\n        assert(0 <= vertex && vertex < int(_vertex_nodes.size()));\n    }\n\
+    \n    void check_edge(EdgeId edge_id) const {\n        assert(0 <= edge_id &&\
+    \ edge_id < int(_edges.size()));\n    }\n\n    int vertex_node(VertexId vertex)\
+    \ const {\n        check_vertex(vertex);\n        return _vertex_nodes[vertex];\n\
+    \    }\n\n    int add_edge_node(const EdgeValue& edge_value) {\n        _nodes.emplace_back(std::in_place_index<1>,\
+    \ edge_value);\n        return int(_nodes.size()) - 1;\n    }\n\n    void set_vertex_node_value(int\
+    \ node, const VertexValue& vertex_value) {\n        check_node(node);\n      \
+    \  access(node);\n        _nodes[node].value.template emplace<0>(vertex_value);\n\
+    \        update(node);\n    }\n\n    void set_edge_node_value(int node, const\
+    \ EdgeValue& edge_value) {\n        check_node(node);\n        access(node);\n\
+    \        _nodes[node].value.template emplace<1>(edge_value);\n        update(node);\n\
+    \    }\n\n    void evert_node(int node) {\n        check_node(node);\n       \
+    \ access(node);\n        apply_reverse(node);\n    }\n\n    int component_root_node(int\
+    \ node) {\n        check_node(node);\n        access(node);\n        int cur =\
+    \ node;\n        push(cur);\n        while (_nodes[cur].left != -1) {\n      \
+    \      cur = _nodes[cur].left;\n            push(cur);\n        }\n        splay(cur);\n\
+    \        return cur;\n    }\n\n    bool connected_nodes(int u, int v) {\n    \
+    \    if (u == v) return true;\n        return component_root_node(u) == component_root_node(v);\n\
+    \    }\n\n    bool link_nodes(int u, int v) {\n        check_node(u);\n      \
+    \  check_node(v);\n        if (u == v) return false;\n        evert_node(u);\n\
+    \        if (component_root_node(v) == u) return false;\n        access(v);\n\
+    \        _nodes[u].parent = v;\n        add_virtual_child(v, u);\n        update(v);\n\
+    \        return true;\n    }\n\n    bool cut_nodes(int u, int v) {\n        check_node(u);\n\
+    \        check_node(v);\n        if (u == v) return false;\n        evert_node(u);\n\
+    \        access(v);\n        if (_nodes[v].left != u || _nodes[u].right != -1)\
+    \ return false;\n        _nodes[v].left = -1;\n        _nodes[u].parent = -1;\n\
+    \        update(v);\n        return true;\n    }\n\n   public:\n    RakeCompressLinkCutTree()\
+    \ = default;\n\n    explicit RakeCompressLinkCutTree(const std::vector<VertexValue>&\
+    \ values) {\n        _nodes.reserve(values.size());\n        _vertex_nodes.reserve(values.size());\n\
+    \        for (const VertexValue& value : values) add_vertex(value);\n    }\n\n\
+    \    int vertex_count() const {\n        return int(_vertex_nodes.size());\n \
+    \   }\n\n    bool empty() const {\n        return _vertex_nodes.empty();\n   \
+    \ }\n\n    VertexId add_vertex(const VertexValue& vertex_value) {\n        VertexValue\
+    \ value = vertex_value;\n        int node = int(_nodes.size());\n        _nodes.emplace_back(value);\n\
+    \        _vertex_nodes.push_back(node);\n        return int(_vertex_nodes.size())\
+    \ - 1;\n    }\n\n    const VertexValue& get_vertex(VertexId vertex) const {\n\
+    \        return std::get<0>(_nodes[vertex_node(vertex)].value);\n    }\n\n   \
+    \ void set_vertex(VertexId vertex, const VertexValue& vertex_value) {\n      \
+    \  set_vertex_node_value(vertex_node(vertex), vertex_value);\n    }\n\n    int\
+    \ edge_count() const {\n        return int(_edges.size());\n    }\n\n    bool\
+    \ edge_alive(EdgeId edge_id) const {\n        check_edge(edge_id);\n        return\
+    \ _edges[edge_id].alive;\n    }\n\n    std::pair<VertexId, VertexId> edge_endpoints(EdgeId\
+    \ edge_id) const {\n        check_edge(edge_id);\n        return {_edges[edge_id].u,\
+    \ _edges[edge_id].v};\n    }\n\n    const EdgeValue& get_edge(EdgeId edge_id)\
+    \ const {\n        check_edge(edge_id);\n        return std::get<1>(_nodes[_edges[edge_id].node].value);\n\
+    \    }\n\n    void set_edge(EdgeId edge_id, const EdgeValue& edge_value) {\n \
+    \       check_edge(edge_id);\n        set_edge_node_value(_edges[edge_id].node,\
+    \ edge_value);\n    }\n\n    EdgeId add_edge(VertexId u, VertexId v, const EdgeValue&\
+    \ edge_value) {\n        check_vertex(u);\n        check_vertex(v);\n        if\
+    \ (u == v || connected(u, v)) return -1;\n        EdgeValue value = edge_value;\n\
+    \        int edge_id = int(_edges.size());\n        int node = add_edge_node(value);\n\
+    \        _edges.push_back(OriginalEdge{u, v, node, true});\n        bool ok1 =\
+    \ link_nodes(vertex_node(u), node);\n        bool ok2 = link_nodes(node, vertex_node(v));\n\
+    \        assert(ok1 && ok2);\n        return edge_id;\n    }\n\n    bool cut_edge(EdgeId\
+    \ edge_id) {\n        check_edge(edge_id);\n        OriginalEdge& edge = _edges[edge_id];\n\
+    \        if (!edge.alive) return false;\n        bool ok1 = cut_nodes(vertex_node(edge.u),\
+    \ edge.node);\n        bool ok2 = cut_nodes(edge.node, vertex_node(edge.v));\n\
+    \        if (ok1 && ok2) edge.alive = false;\n        return ok1 && ok2;\n   \
+    \ }\n\n    void reroot(VertexId vertex) {\n        evert_node(vertex_node(vertex));\n\
+    \    }\n\n    bool connected(VertexId u, VertexId v) {\n        check_vertex(u);\n\
+    \        check_vertex(v);\n        return connected_nodes(vertex_node(u), vertex_node(v));\n\
+    \    }\n\n    // Reroots the represented tree at vertex and returns its whole-tree\
+    \ cluster.\n    Path component_prod(VertexId vertex) {\n        int node = vertex_node(vertex);\n\
+    \        evert_node(node);\n        return _nodes[node].prod;\n    }\n\n    Path\
+    \ query_component(VertexId vertex) {\n        return component_prod(vertex);\n\
     \    }\n};\n\n}  // namespace data_structure\n}  // namespace m1une\n\n\n#line\
     \ 1 \"math/modint.hpp\"\n\n\n\n#include <cstdint>\n#line 7 \"math/modint.hpp\"\
     \n\nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct\
@@ -196,33 +212,34 @@ data:
     \ {\n            return Point{T(0), T(0)};\n        }\n\n        Point inv() const\
     \ {\n            return Point{T(0) - s, T(0) - x};\n        }\n    };\n\n    struct\
     \ Path {\n        T a;\n        T b;\n        T s;\n        T x;\n    };\n\n \
-    \   struct Vertex {\n        bool is_vertex;\n        T x;\n        T y;\n   \
-    \ };\n\n    static Path add_vertex(const Point& d, const Vertex& u) {\n      \
-    \  if (u.is_vertex) return Path{T(1), T(0), d.s + u.x, d.x + T(1)};\n        return\
-    \ Path{u.x, u.y, d.s * u.x + d.x * u.y, d.x};\n    }\n\n    static Point add_edge(const\
-    \ Path& path) {\n        return Point{path.s, path.x};\n    }\n\n    static Point\
-    \ rake(const Point& a, const Point& b) {\n        return Point{a.s + b.s, a.x\
-    \ + b.x};\n    }\n\n    static Path compress(const Path& parent_side, const Path&\
-    \ child_side) {\n        return Path{\n            parent_side.a * child_side.a,\n\
-    \            parent_side.a * child_side.b + parent_side.b,\n            parent_side.s\
-    \ + parent_side.a * child_side.s + parent_side.b * child_side.x,\n           \
-    \ parent_side.x + child_side.x\n        };\n    }\n};\n\nint main() {\n    using\
-    \ TreeDP = PointSetTreePathCompositeSum<mint>;\n    using Vertex = typename TreeDP::Vertex;\n\
-    \    using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;\n\n \
-    \   std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int n,\
-    \ q;\n    std::cin >> n >> q;\n\n    LCT lct;\n    std::vector<int> vertex_node(n);\n\
+    \   struct VertexValue {\n        T x;\n    };\n\n    struct EdgeValue {\n   \
+    \     T a;\n        T b;\n    };\n\n    static Path make_vertex_path(const Point&\
+    \ d, const VertexValue& vertex) {\n        return Path{T(1), T(0), d.s + vertex.x,\
+    \ d.x + T(1)};\n    }\n\n    static Path make_edge_path(const Point& d, const\
+    \ EdgeValue& edge) {\n        return Path{edge.a, edge.b, d.s * edge.a + d.x *\
+    \ edge.b, d.x};\n    }\n\n    static Point to_point(const Path& path) {\n    \
+    \    return Point{path.s, path.x};\n    }\n\n    static Point rake(const Point&\
+    \ a, const Point& b) {\n        return Point{a.s + b.s, a.x + b.x};\n    }\n\n\
+    \    static Path compress(const Path& parent_side, const Path& child_side) {\n\
+    \        return Path{\n            parent_side.a * child_side.a,\n           \
+    \ parent_side.a * child_side.b + parent_side.b,\n            parent_side.s + parent_side.a\
+    \ * child_side.s + parent_side.b * child_side.x,\n            parent_side.x +\
+    \ child_side.x\n        };\n    }\n};\n\nint main() {\n    using TreeDP = PointSetTreePathCompositeSum<mint>;\n\
+    \    using VertexValue = typename TreeDP::VertexValue;\n    using EdgeValue =\
+    \ typename TreeDP::EdgeValue;\n    using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;\n\
+    \n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int\
+    \ n, q;\n    std::cin >> n >> q;\n\n    LCT lct;\n    std::vector<int> vertex_id(n);\n\
     \    for (int i = 0; i < n; i++) {\n        mint a;\n        std::cin >> a;\n\
-    \        vertex_node[i] = lct.add_vertex(Vertex{true, a, mint(0)});\n    }\n\n\
-    \    std::vector<int> edge_id(n - 1);\n    for (int i = 0; i + 1 < n; i++) {\n\
-    \        int u, v;\n        mint b, c;\n        std::cin >> u >> v >> b >> c;\n\
-    \        edge_id[i] = lct.link_edge(\n            vertex_node[u], vertex_node[v],\
-    \ Vertex{false, b, c}\n        );\n    }\n\n    for (int i = 0; i < q; i++) {\n\
-    \        int type;\n        std::cin >> type;\n        int root;\n        if (type\
-    \ == 0) {\n            int w;\n            mint x;\n            std::cin >> w\
-    \ >> x >> root;\n            lct.set(vertex_node[w], Vertex{true, x, mint(0)});\n\
-    \        } else {\n            int e;\n            mint y, z;\n            std::cin\
-    \ >> e >> y >> z >> root;\n            lct.set_edge(edge_id[e], Vertex{false,\
-    \ y, z});\n        }\n        std::cout << lct.component_prod(vertex_node[root]).s\
+    \        vertex_id[i] = lct.add_vertex(VertexValue{a});\n    }\n\n    std::vector<int>\
+    \ edge_id(n - 1);\n    for (int i = 0; i + 1 < n; i++) {\n        int u, v;\n\
+    \        mint b, c;\n        std::cin >> u >> v >> b >> c;\n        edge_id[i]\
+    \ = lct.add_edge(vertex_id[u], vertex_id[v], EdgeValue{b, c});\n    }\n\n    for\
+    \ (int i = 0; i < q; i++) {\n        int type;\n        std::cin >> type;\n  \
+    \      int root;\n        if (type == 0) {\n            int w;\n            mint\
+    \ x;\n            std::cin >> w >> x >> root;\n            lct.set_vertex(vertex_id[w],\
+    \ VertexValue{x});\n        } else {\n            int e;\n            mint y,\
+    \ z;\n            std::cin >> e >> y >> z >> root;\n            lct.set_edge(edge_id[e],\
+    \ EdgeValue{y, z});\n        }\n        std::cout << lct.component_prod(vertex_id[root]).s\
     \ << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum\"\
     \n\n#include <iostream>\n#include <vector>\n\n#include \"data_structure/rake_compress_link_cut_tree.hpp\"\
@@ -231,34 +248,35 @@ data:
     \ {\n        T s;\n        T x;\n\n        static Point id() {\n            return\
     \ Point{T(0), T(0)};\n        }\n\n        Point inv() const {\n            return\
     \ Point{T(0) - s, T(0) - x};\n        }\n    };\n\n    struct Path {\n       \
-    \ T a;\n        T b;\n        T s;\n        T x;\n    };\n\n    struct Vertex\
-    \ {\n        bool is_vertex;\n        T x;\n        T y;\n    };\n\n    static\
-    \ Path add_vertex(const Point& d, const Vertex& u) {\n        if (u.is_vertex)\
-    \ return Path{T(1), T(0), d.s + u.x, d.x + T(1)};\n        return Path{u.x, u.y,\
-    \ d.s * u.x + d.x * u.y, d.x};\n    }\n\n    static Point add_edge(const Path&\
-    \ path) {\n        return Point{path.s, path.x};\n    }\n\n    static Point rake(const\
-    \ Point& a, const Point& b) {\n        return Point{a.s + b.s, a.x + b.x};\n \
-    \   }\n\n    static Path compress(const Path& parent_side, const Path& child_side)\
-    \ {\n        return Path{\n            parent_side.a * child_side.a,\n       \
-    \     parent_side.a * child_side.b + parent_side.b,\n            parent_side.s\
-    \ + parent_side.a * child_side.s + parent_side.b * child_side.x,\n           \
-    \ parent_side.x + child_side.x\n        };\n    }\n};\n\nint main() {\n    using\
-    \ TreeDP = PointSetTreePathCompositeSum<mint>;\n    using Vertex = typename TreeDP::Vertex;\n\
-    \    using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;\n\n \
-    \   std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int n,\
-    \ q;\n    std::cin >> n >> q;\n\n    LCT lct;\n    std::vector<int> vertex_node(n);\n\
+    \ T a;\n        T b;\n        T s;\n        T x;\n    };\n\n    struct VertexValue\
+    \ {\n        T x;\n    };\n\n    struct EdgeValue {\n        T a;\n        T b;\n\
+    \    };\n\n    static Path make_vertex_path(const Point& d, const VertexValue&\
+    \ vertex) {\n        return Path{T(1), T(0), d.s + vertex.x, d.x + T(1)};\n  \
+    \  }\n\n    static Path make_edge_path(const Point& d, const EdgeValue& edge)\
+    \ {\n        return Path{edge.a, edge.b, d.s * edge.a + d.x * edge.b, d.x};\n\
+    \    }\n\n    static Point to_point(const Path& path) {\n        return Point{path.s,\
+    \ path.x};\n    }\n\n    static Point rake(const Point& a, const Point& b) {\n\
+    \        return Point{a.s + b.s, a.x + b.x};\n    }\n\n    static Path compress(const\
+    \ Path& parent_side, const Path& child_side) {\n        return Path{\n       \
+    \     parent_side.a * child_side.a,\n            parent_side.a * child_side.b\
+    \ + parent_side.b,\n            parent_side.s + parent_side.a * child_side.s +\
+    \ parent_side.b * child_side.x,\n            parent_side.x + child_side.x\n  \
+    \      };\n    }\n};\n\nint main() {\n    using TreeDP = PointSetTreePathCompositeSum<mint>;\n\
+    \    using VertexValue = typename TreeDP::VertexValue;\n    using EdgeValue =\
+    \ typename TreeDP::EdgeValue;\n    using LCT = m1une::data_structure::RakeCompressLinkCutTree<TreeDP>;\n\
+    \n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int\
+    \ n, q;\n    std::cin >> n >> q;\n\n    LCT lct;\n    std::vector<int> vertex_id(n);\n\
     \    for (int i = 0; i < n; i++) {\n        mint a;\n        std::cin >> a;\n\
-    \        vertex_node[i] = lct.add_vertex(Vertex{true, a, mint(0)});\n    }\n\n\
-    \    std::vector<int> edge_id(n - 1);\n    for (int i = 0; i + 1 < n; i++) {\n\
-    \        int u, v;\n        mint b, c;\n        std::cin >> u >> v >> b >> c;\n\
-    \        edge_id[i] = lct.link_edge(\n            vertex_node[u], vertex_node[v],\
-    \ Vertex{false, b, c}\n        );\n    }\n\n    for (int i = 0; i < q; i++) {\n\
-    \        int type;\n        std::cin >> type;\n        int root;\n        if (type\
-    \ == 0) {\n            int w;\n            mint x;\n            std::cin >> w\
-    \ >> x >> root;\n            lct.set(vertex_node[w], Vertex{true, x, mint(0)});\n\
-    \        } else {\n            int e;\n            mint y, z;\n            std::cin\
-    \ >> e >> y >> z >> root;\n            lct.set_edge(edge_id[e], Vertex{false,\
-    \ y, z});\n        }\n        std::cout << lct.component_prod(vertex_node[root]).s\
+    \        vertex_id[i] = lct.add_vertex(VertexValue{a});\n    }\n\n    std::vector<int>\
+    \ edge_id(n - 1);\n    for (int i = 0; i + 1 < n; i++) {\n        int u, v;\n\
+    \        mint b, c;\n        std::cin >> u >> v >> b >> c;\n        edge_id[i]\
+    \ = lct.add_edge(vertex_id[u], vertex_id[v], EdgeValue{b, c});\n    }\n\n    for\
+    \ (int i = 0; i < q; i++) {\n        int type;\n        std::cin >> type;\n  \
+    \      int root;\n        if (type == 0) {\n            int w;\n            mint\
+    \ x;\n            std::cin >> w >> x >> root;\n            lct.set_vertex(vertex_id[w],\
+    \ VertexValue{x});\n        } else {\n            int e;\n            mint y,\
+    \ z;\n            std::cin >> e >> y >> z >> root;\n            lct.set_edge(edge_id[e],\
+    \ EdgeValue{y, z});\n        }\n        std::cout << lct.component_prod(vertex_id[root]).s\
     \ << '\\n';\n    }\n}\n"
   dependsOn:
   - data_structure/rake_compress_link_cut_tree.hpp
@@ -266,7 +284,7 @@ data:
   isVerificationFile: true
   path: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 16:14:20+09:00'
+  timestamp: '2026-06-20 16:59:46+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/data_structure/yosupo_point_set_tree_path_composite_sum.test.cpp
