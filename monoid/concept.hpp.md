@@ -33,8 +33,20 @@ data:
     path: ds/segtree/dual_segtree.hpp
     title: Dual Segment Tree
   - icon: ':heavy_check_mark:'
+    path: ds/segtree/dynamic_dual_segtree.hpp
+    title: Dynamic Dual Segment Tree
+  - icon: ':heavy_check_mark:'
+    path: ds/segtree/dynamic_segtree.hpp
+    title: Dynamic Segment Tree
+  - icon: ':heavy_check_mark:'
     path: ds/segtree/persistent_dual_segtree.hpp
     title: Persistent Dual Segment Tree
+  - icon: ':heavy_check_mark:'
+    path: ds/segtree/persistent_dynamic_dual_segtree.hpp
+    title: Persistent Dynamic Dual Segment Tree
+  - icon: ':heavy_check_mark:'
+    path: ds/segtree/persistent_dynamic_segtree.hpp
+    title: Persistent Dynamic Segment Tree
   - icon: ':heavy_check_mark:'
     path: ds/segtree/persistent_segtree.hpp
     title: Persistent Segment Tree
@@ -85,8 +97,20 @@ data:
     path: verify/ds/segtree/dual_segtree.test.cpp
     title: verify/ds/segtree/dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/persistent_dual_segtree.test.cpp
     title: verify/ds/segtree/persistent_dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/persistent_dynamic_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dynamic_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/persistent_segtree.test.cpp
     title: verify/ds/segtree/persistent_segtree.test.cpp
@@ -146,10 +170,14 @@ data:
   - ds/ordered_set/binary_trie_monoid.hpp
   - ds/range_query/disjoint_sparse_table.hpp
   - ds/range_query/sparse_table.hpp
+  - ds/segtree/persistent_dynamic_dual_segtree.hpp
   - ds/segtree/segtree.hpp
   - ds/segtree/persistent_segtree.hpp
   - ds/segtree/dual_segtree.hpp
+  - ds/segtree/persistent_dynamic_segtree.hpp
+  - ds/segtree/dynamic_segtree.hpp
   - ds/segtree/persistent_dual_segtree.hpp
+  - ds/segtree/dynamic_dual_segtree.hpp
   - ds/dsu/dsu_monoid.hpp
   - ds/dsu/potentialized_dsu.hpp
   - monoid/power.hpp
@@ -164,9 +192,13 @@ data:
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp
   - verify/ds/range_query/sparse_table.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
+  - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/persistent_dual_segtree.test.cpp
+  - verify/ds/segtree/dynamic_segtree.test.cpp
+  - verify/ds/segtree/persistent_dynamic_segtree.test.cpp
   - verify/ds/segtree/dual_segtree.test.cpp
   - verify/ds/segtree/persistent_segtree.test.cpp
+  - verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/segtree.test.cpp
   - verify/ds/dsu/dsu_monoid.test.cpp
   - verify/ds/dsu/potentialized_dsu.test.cpp

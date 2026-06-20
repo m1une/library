@@ -177,11 +177,32 @@ data:
       path: ds/segtree/dual_segtree.hpp
       title: Dual Segment Tree
     - icon: ':heavy_check_mark:'
+      path: ds/segtree/dynamic_dual_segtree.hpp
+      title: Dynamic Dual Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segtree/dynamic_lazy_segtree.hpp
+      title: Dynamic Lazy Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segtree/dynamic_segtree.hpp
+      title: Dynamic Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segtree/dynamic_segtree_common.hpp
+      title: ds/segtree/dynamic_segtree_common.hpp
+    - icon: ':heavy_check_mark:'
       path: ds/segtree/lazy_segtree.hpp
       title: Lazy Segment Tree
     - icon: ':heavy_check_mark:'
       path: ds/segtree/persistent_dual_segtree.hpp
       title: Persistent Dual Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segtree/persistent_dynamic_dual_segtree.hpp
+      title: Persistent Dynamic Dual Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segtree/persistent_dynamic_lazy_segtree.hpp
+      title: Persistent Dynamic Lazy Segment Tree
+    - icon: ':heavy_check_mark:'
+      path: ds/segtree/persistent_dynamic_segtree.hpp
+      title: Persistent Dynamic Segment Tree
     - icon: ':heavy_check_mark:'
       path: ds/segtree/persistent_lazy_segtree.hpp
       title: Persistent Lazy Segment Tree
@@ -411,7 +432,7 @@ data:
     - icon: ':warning:'
       path: monoid/top_k_count.hpp
       title: Top K Count Monoid
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: monoid/update.hpp
       title: Update Monoid
     - icon: ':warning:'
@@ -626,11 +647,29 @@ data:
       path: verify/ds/segtree/dual_segtree.test.cpp
       title: verify/ds/segtree/dual_segtree.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+      title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+      title: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/dynamic_segtree.test.cpp
+      title: verify/ds/segtree/dynamic_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/ds/segtree/lazy_segtree.test.cpp
       title: verify/ds/segtree/lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/segtree/persistent_dual_segtree.test.cpp
       title: verify/ds/segtree/persistent_dual_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
+      title: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
+      title: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/persistent_dynamic_segtree.test.cpp
+      title: verify/ds/segtree/persistent_dynamic_segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/segtree/persistent_lazy_segtree.test.cpp
       title: verify/ds/segtree/persistent_lazy_segtree.test.cpp

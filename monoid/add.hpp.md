@@ -25,8 +25,20 @@ data:
     path: verify/ds/range_query/disjoint_sparse_table.test.cpp
     title: verify/ds/range_query/disjoint_sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/persistent_dual_segtree.test.cpp
     title: verify/ds/segtree/persistent_dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/persistent_dynamic_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dynamic_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/persistent_segtree.test.cpp
     title: verify/ds/segtree/persistent_segtree.test.cpp
@@ -66,8 +78,12 @@ data:
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
+  - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/persistent_dual_segtree.test.cpp
+  - verify/ds/segtree/dynamic_segtree.test.cpp
+  - verify/ds/segtree/persistent_dynamic_segtree.test.cpp
   - verify/ds/segtree/persistent_segtree.test.cpp
+  - verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/segtree.test.cpp
   - verify/ds/dsu/dsu_monoid.test.cpp
   - verify/ds/dsu/potentialized_dsu.test.cpp

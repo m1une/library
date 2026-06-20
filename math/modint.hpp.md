@@ -37,8 +37,17 @@ data:
     path: verify/ds/segtree/dual_segtree.test.cpp
     title: verify/ds/segtree/dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/lazy_segtree.test.cpp
     title: verify/ds/segtree/lazy_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/fps/convolution_mod.test.cpp
     title: verify/fps/convolution_mod.test.cpp
@@ -203,7 +212,10 @@ data:
   - verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
   - verify/ds/dynamic_array/dynamic_lazy_monoid_array.test.cpp
   - verify/ds/segtree/dual_segtree.test.cpp
+  - verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/lazy_segtree.test.cpp
+  - verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+  - verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp
   - verify/math/math_algorithms.test.cpp

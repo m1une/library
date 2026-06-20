@@ -6,6 +6,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/dual_segtree.test.cpp
     title: verify/ds/segtree/dual_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -49,6 +52,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/dual_segtree.test.cpp
+  - verify/ds/segtree/dynamic_dual_segtree.test.cpp
 documentation_of: monoid/affine.hpp
 layout: document
 title: Affine Monoid

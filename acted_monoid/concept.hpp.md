@@ -15,8 +15,14 @@ data:
     path: ds/dynamic_tree/lazy_path_link_cut_tree.hpp
     title: Lazy Path Link-Cut Tree
   - icon: ':heavy_check_mark:'
+    path: ds/segtree/dynamic_lazy_segtree.hpp
+    title: Dynamic Lazy Segment Tree
+  - icon: ':heavy_check_mark:'
     path: ds/segtree/lazy_segtree.hpp
     title: Lazy Segment Tree
+  - icon: ':heavy_check_mark:'
+    path: ds/segtree/persistent_dynamic_lazy_segtree.hpp
+    title: Persistent Dynamic Lazy Segment Tree
   - icon: ':heavy_check_mark:'
     path: ds/segtree/persistent_lazy_segtree.hpp
     title: Persistent Lazy Segment Tree
@@ -40,8 +46,14 @@ data:
     path: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
     title: verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/lazy_segtree.test.cpp
     title: verify/ds/segtree/lazy_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
+    title: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/persistent_lazy_segtree.test.cpp
     title: verify/ds/segtree/persistent_lazy_segtree.test.cpp
@@ -93,7 +105,9 @@ data:
   - ds/dynamic_array/persistent_dynamic_lazy_monoid_array.hpp
   - ds/dynamic_array/dynamic_lazy_monoid_array.hpp
   - ds/segtree/lazy_segtree.hpp
+  - ds/segtree/dynamic_lazy_segtree.hpp
   - ds/segtree/persistent_lazy_segtree.hpp
+  - ds/segtree/persistent_dynamic_lazy_segtree.hpp
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -104,7 +118,9 @@ data:
   - verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array.test.cpp
   - verify/ds/dynamic_array/dynamic_lazy_monoid_array_range_ap.test.cpp
   - verify/ds/segtree/lazy_segtree.test.cpp
+  - verify/ds/segtree/dynamic_lazy_segtree.test.cpp
   - verify/ds/segtree/persistent_lazy_segtree.test.cpp
+  - verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
 documentation_of: acted_monoid/concept.hpp
 layout: document
 title: Acted Monoid Concept
