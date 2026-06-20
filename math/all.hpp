@@ -3,6 +3,7 @@
 
 #include "math/bit_ceil.hpp"
 #include "math/combinatorics.hpp"
+#include "math/combinatorial_sequences.hpp"
 #include "math/modint.hpp"
 #include "math/number_theory.hpp"
 #include "math/prime_factorization.hpp"

@@ -154,7 +154,7 @@ void test_large_factorization() {
 
 void test_combinatorics() {
     using Mint = m1une::math::modint998244353;
-    m1une::math::Combinatorics<Mint> combinations(20);
+    m1une::math::Combinatorics<Mint> combinations(100);
 
     assert(combinations.factorial(5) == Mint(120));
     assert(combinations.inverse(5) * Mint(5) == Mint(1));
@@ -163,10 +163,114 @@ void test_combinatorics() {
     assert(combinations.perm(5, 3) == Mint(60));
     assert(combinations.multiset(3, 4) == Mint(15));
     assert(combinations.multiset(0, 0) == Mint(1));
+    assert(combinations.catalan(5) == Mint(42));
 
-    combinations.ensure(100);
     assert(combinations.binom(100, 0) == Mint(1));
     assert(combinations.binom(100, 100) == Mint(1));
+}
+
+void test_combinatorial_sequences() {
+    using Mint = m1une::math::modint998244353;
+
+    const std::vector<Mint> catalan = m1une::math::catalan_numbers<Mint>(10);
+    const std::vector<int> expected_catalan =
+        {1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796};
+    for (int i = 0; i <= 10; i++) assert(catalan[i] == Mint(expected_catalan[i]));
+    m1une::math::Combinatorics<Mint> catalan_combinations(100);
+    const std::vector<Mint> more_catalan =
+        m1une::math::catalan_numbers<Mint>(50);
+    for (int i = 0; i <= 50; i++) {
+        assert(more_catalan[i] == catalan_combinations.catalan(i));
+    }
+
+    const std::vector<Mint> bernoulli = m1une::math::bernoulli_numbers<Mint>(20);
+    assert(bernoulli[0] == Mint(1));
+    assert(bernoulli[1] * Mint(2) == Mint(-1));
+    assert(bernoulli[2] * Mint(6) == Mint(1));
+    assert(bernoulli[4] * Mint(30) == Mint(-1));
+    assert(bernoulli[6] * Mint(42) == Mint(1));
+    for (int i = 3; i <= 19; i += 2) assert(bernoulli[i] == Mint(0));
+
+    m1une::math::Combinatorics<Mint> combinations(21);
+    for (int n = 1; n <= 20; n++) {
+        Mint sum = 0;
+        for (int k = 0; k <= n; k++) {
+            sum += combinations.binom(n + 1, k) * bernoulli[k];
+        }
+        assert(sum == Mint(0));
+    }
+
+    const std::vector<Mint> bell = m1une::math::bell_numbers<Mint>(10);
+    const std::vector<int> expected_bell =
+        {1, 1, 2, 5, 15, 52, 203, 877, 4140, 21147, 115975};
+    for (int i = 0; i <= 10; i++) assert(bell[i] == Mint(expected_bell[i]));
+
+    const std::vector<Mint> stirling_zero =
+        m1une::math::stirling_numbers_second_kind<Mint>(0);
+    assert(stirling_zero == std::vector<Mint>{Mint(1)});
+    const std::vector<Mint> stirling =
+        m1une::math::stirling_numbers_second_kind<Mint>(5);
+    const std::vector<int> expected_stirling = {0, 1, 15, 25, 10, 1};
+    for (int i = 0; i <= 5; i++) {
+        assert(stirling[i] == Mint(expected_stirling[i]));
+    }
+    std::vector<Mint> stirling_dp(1, Mint(1));
+    const std::vector<Mint> more_bell = m1une::math::bell_numbers<Mint>(30);
+    for (int n = 0; n <= 30; n++) {
+        if (n > 0) {
+            std::vector<Mint> next(n + 1);
+            for (int k = 1; k <= n; k++) {
+                next[k] = stirling_dp[k - 1];
+                if (k < int(stirling_dp.size())) {
+                    next[k] += Mint(k) * stirling_dp[k];
+                }
+            }
+            stirling_dp = std::move(next);
+        }
+        const std::vector<Mint> row =
+            m1une::math::stirling_numbers_second_kind<Mint>(n);
+        assert(row == stirling_dp);
+        Mint sum = 0;
+        for (Mint value : row) sum += value;
+        assert(sum == more_bell[n]);
+    }
+
+    const std::vector<Mint> partitions = m1une::math::partition_numbers<Mint>(100);
+    const std::vector<int> expected_partitions =
+        {1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42};
+    for (int i = 0; i <= 10; i++) {
+        assert(partitions[i] == Mint(expected_partitions[i]));
+    }
+    std::vector<Mint> partition_dp(101);
+    partition_dp[0] = 1;
+    for (int part = 1; part <= 100; part++) {
+        for (int sum = part; sum <= 100; sum++) {
+            partition_dp[sum] += partition_dp[sum - part];
+        }
+    }
+    assert(partitions == partition_dp);
+
+    const std::vector<Mint> derangements =
+        m1une::math::derangement_numbers<Mint>(10);
+    const std::vector<int> expected_derangements =
+        {1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, 1334961};
+    for (int i = 0; i <= 10; i++) {
+        assert(derangements[i] == Mint(expected_derangements[i]));
+    }
+    m1une::math::Combinatorics<Mint> derangement_combinations(30);
+    const std::vector<Mint> more_derangements =
+        m1une::math::derangement_numbers<Mint>(30);
+    Mint alternating_sum = 1;
+    for (int n = 0; n <= 30; n++) {
+        if (n > 0) {
+            const Mint term = derangement_combinations.inverse_factorial(n);
+            alternating_sum += (n & 1) ? Mint(0) - term : term;
+        }
+        assert(
+            more_derangements[n] ==
+            derangement_combinations.factorial(n) * alternating_sum
+        );
+    }
 }
 
 int main() {
@@ -174,6 +278,7 @@ int main() {
     test_prime_sieve();
     test_large_factorization();
     test_combinatorics();
+    test_combinatorial_sequences();
 
     long long a, b;
     std::cin >> a >> b;

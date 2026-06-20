@@ -15,8 +15,7 @@ struct Combinatorics {
     std::vector<Mint> _inverse_factorial;
 
    public:
-    explicit Combinatorics(int maximum = 0)
-        : _factorial(1, Mint(1)), _inverse_factorial(1, Mint(1)) {
+    explicit Combinatorics(int maximum = 0) : _factorial(1, Mint(1)), _inverse_factorial(1, Mint(1)) {
         ensure(maximum);
     }
 
@@ -74,6 +73,13 @@ struct Combinatorics {
         const long long total = static_cast<long long>(types) + count - 1;
         assert(total <= maximum());
         return binom(static_cast<int>(total), count);
+    }
+
+    Mint catalan(int n) const {
+        assert(n >= 0);
+        const long long doubled = 2LL * n;
+        assert(doubled <= maximum());
+        return binom(int(doubled), n) - binom(int(doubled), n + 1);
     }
 };
 

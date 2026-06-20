@@ -14,6 +14,7 @@ These operations answer common counting questions:
 * How many ways can `k` objects be chosen from `n` objects?
 * How many ways can `k` distinct positions be filled from `n` choices?
 * How many ways can identical objects be distributed among several kinds?
+* How many balanced parenthesis strings contain `n` pairs?
 
 `Mint` must provide the static-modulus interface used by `ModInt`, and the
 modulus must be prime. The largest prepared index must be smaller than the
@@ -73,6 +74,24 @@ $$
 
 There are `multiset(k, n)` such solutions.
 
+### Catalan Numbers
+
+`catalan(n)` computes
+
+$$
+C_n
+= \frac{1}{n+1}\binom{2n}{n}
+= \binom{2n}{n}-\binom{2n}{n+1}.
+$$
+
+It counts balanced parenthesis strings with `n` pairs, binary tree shapes, and
+many other recursively nested structures. The first values are
+`1, 1, 2, 5, 14, 42`.
+
+This method requires factorials through `2 * n`. To generate every Catalan
+number through a limit in linear time, use `catalan_numbers` from
+`math/combinatorial_sequences.hpp`.
+
 ## Why Inverse Factorials Are Used
 
 Ordinary integer division cannot be used after taking a remainder. Under a
@@ -102,6 +121,7 @@ binom(n, k) = factorial[n]
 | `binom(n, k)` | Returns the binomial coefficient. Invalid `k` returns zero. | $O(1)$ |
 | `perm(n, k)` | Returns the number of ordered selections. Invalid `k` returns zero. | $O(1)$ |
 | `multiset(types, count)` | Returns the number of multisets of size `count` from `types` kinds. | $O(1)$ |
+| `catalan(n)` | Returns the `n`-th Catalan number. | $O(1)$ |
 
 ## Preconditions and Common Pitfalls
 
@@ -129,5 +149,6 @@ int main() {
     std::cout << combinations.binom(5, 2) << "\n";     // 10
     std::cout << combinations.perm(5, 2) << "\n";      // 20
     std::cout << combinations.multiset(3, 4) << "\n";  // 15
+    std::cout << combinations.catalan(5) << "\n";      // 42
 }
 ```

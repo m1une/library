@@ -18,12 +18,8 @@ inline long long safe_mod(long long x, long long mod) {
     return x;
 }
 
-inline unsigned __int128 floor_sum_unsigned(
-    unsigned long long n,
-    unsigned long long mod,
-    unsigned long long a,
-    unsigned long long b
-) {
+inline unsigned __int128 floor_sum_unsigned(unsigned long long n, unsigned long long mod, unsigned long long a,
+                                            unsigned long long b) {
     unsigned __int128 answer = 0;
     while (true) {
         if (a >= mod) {
@@ -57,13 +53,9 @@ inline long long pow_mod(long long x, unsigned long long exponent, long long mod
     const unsigned long long unsigned_mod = static_cast<unsigned long long>(mod);
     while (exponent > 0) {
         if (exponent & 1) {
-            result = static_cast<unsigned long long>(
-                static_cast<unsigned __int128>(result) * base % unsigned_mod
-            );
+            result = static_cast<unsigned long long>(static_cast<unsigned __int128>(result) * base % unsigned_mod);
         }
-        base = static_cast<unsigned long long>(
-            static_cast<unsigned __int128>(base) * base % unsigned_mod
-        );
+        base = static_cast<unsigned long long>(static_cast<unsigned __int128>(base) * base % unsigned_mod);
         exponent >>= 1;
     }
     return static_cast<long long>(result);
@@ -104,10 +96,8 @@ inline long long inv_mod(long long x, long long mod) {
 
 // Returns the smallest nonnegative solution and the least common multiple of
 // the moduli. Returns {0, 0} when the system is inconsistent.
-inline std::pair<long long, long long> crt(
-    const std::vector<long long>& remainders,
-    const std::vector<long long>& moduli
-) {
+inline std::pair<long long, long long> crt(const std::vector<long long>& remainders,
+                                           const std::vector<long long>& moduli) {
     assert(remainders.size() == moduli.size());
 
     long long r0 = 0;
@@ -158,15 +148,11 @@ inline long long floor_sum(long long n, long long mod, long long a, long long b)
 
     const long long normalized_a = internal::safe_mod(a, mod);
     const long long normalized_b = internal::safe_mod(b, mod);
-    __int128 answer =
-        (static_cast<__int128>(a) - normalized_a) / mod * n * (n - 1) / 2;
+    __int128 answer = (static_cast<__int128>(a) - normalized_a) / mod * n * (n - 1) / 2;
     answer += (static_cast<__int128>(b) - normalized_b) / mod * n;
-    answer += internal::floor_sum_unsigned(
-        static_cast<unsigned long long>(n),
-        static_cast<unsigned long long>(mod),
-        static_cast<unsigned long long>(normalized_a),
-        static_cast<unsigned long long>(normalized_b)
-    );
+    answer += internal::floor_sum_unsigned(static_cast<unsigned long long>(n), static_cast<unsigned long long>(mod),
+                                           static_cast<unsigned long long>(normalized_a),
+                                           static_cast<unsigned long long>(normalized_b));
 
     assert(answer >= std::numeric_limits<long long>::min());
     assert(answer <= std::numeric_limits<long long>::max());

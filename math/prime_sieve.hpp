@@ -111,9 +111,7 @@ struct PrimeSieve {
         for (int value = 2; value <= _limit; value++) {
             const int prime = _min_prime_factor[value];
             const int reduced = value / prime;
-            result[value] = reduced % prime == 0
-                                ? result[reduced] * prime
-                                : result[reduced] * (prime - 1);
+            result[value] = reduced % prime == 0 ? result[reduced] * prime : result[reduced] * (prime - 1);
         }
         return result;
     }

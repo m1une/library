@@ -40,9 +40,7 @@ inline uint64_t pollard_random() {
 
 inline bool is_prime(uint64_t value) {
     if (value < 2) return false;
-    for (uint64_t prime :
-         {2ULL, 3ULL, 5ULL, 7ULL, 11ULL, 13ULL, 17ULL, 19ULL, 23ULL, 29ULL,
-          31ULL, 37ULL}) {
+    for (uint64_t prime : {2ULL, 3ULL, 5ULL, 7ULL, 11ULL, 13ULL, 17ULL, 19ULL, 23ULL, 29ULL, 31ULL, 37ULL}) {
         if (value % prime == 0) return value == prime;
     }
 
@@ -74,9 +72,7 @@ inline bool is_prime(uint64_t value) {
 namespace internal {
 
 inline uint64_t pollard_rho(uint64_t value) {
-    for (uint64_t prime :
-         {2ULL, 3ULL, 5ULL, 7ULL, 11ULL, 13ULL, 17ULL, 19ULL, 23ULL, 29ULL,
-          31ULL, 37ULL}) {
+    for (uint64_t prime : {2ULL, 3ULL, 5ULL, 7ULL, 11ULL, 13ULL, 17ULL, 19ULL, 23ULL, 29ULL, 31ULL, 37ULL}) {
         if (value % prime == 0) return prime;
     }
 
@@ -90,18 +86,14 @@ inline uint64_t pollard_rho(uint64_t value) {
 
         auto advance = [&](uint64_t current) {
             return static_cast<uint64_t>(
-                (static_cast<unsigned __int128>(multiply_mod(current, current, value)) +
-                 constant) %
-                value
-            );
+                (static_cast<unsigned __int128>(multiply_mod(current, current, value)) + constant) % value);
         };
 
         while (gcd == 1) {
             x = y;
             for (uint64_t i = 0; i < segment_length; i++) y = advance(y);
 
-            for (uint64_t offset = 0; offset < segment_length && gcd == 1;
-                 offset += 128) {
+            for (uint64_t offset = 0; offset < segment_length && gcd == 1; offset += 128) {
                 saved_y = y;
                 uint64_t product = 1;
                 const uint64_t block = std::min<uint64_t>(128, segment_length - offset);

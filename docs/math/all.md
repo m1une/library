@@ -14,6 +14,8 @@ You usually do not need to include this entire bundle:
 * Use `modint.hpp` for arithmetic modulo a fixed number such as `998244353`.
 * Use `combinatorics.hpp` for many factorial, combination, or permutation
   queries under a prime modulus.
+* Use `combinatorial_sequences.hpp` for Catalan, Bernoulli, Bell, Stirling,
+  partition, or derangement numbers.
 * Use `prime_sieve.hpp` when all queried integers are at most a manageable
   limit, usually a few million or tens of millions.
 * Use `prime_factorization.hpp` for isolated 64-bit integers that are too large
@@ -31,6 +33,7 @@ few unused headers do not matter.
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |
+| `math/combinatorial_sequences.hpp` | Fast standard counting sequences and special numbers. |
 | `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
