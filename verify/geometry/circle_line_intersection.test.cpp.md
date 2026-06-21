@@ -20,17 +20,18 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
+    ERROR: '0.000001'
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_D
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_D
   bundledCode: "#line 1 \"verify/geometry/circle_line_intersection.test.cpp\"\n#define\
     \ PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_D\"\
-    \n\n#line 1 \"geometry/circle.hpp\"\n\n\n\n#include <algorithm>\n#include <cassert>\n\
-    #include <cmath>\n#include <optional>\n#include <vector>\n\n#line 1 \"geometry/ray.hpp\"\
-    \n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line 1 \"geometry/line.hpp\"\n\n\n\n\
-    #line 8 \"geometry/line.hpp\"\n\n#line 1 \"geometry/point.hpp\"\n\n\n\n#line 5\
-    \ \"geometry/point.hpp\"\n#include <concepts>\n#line 7 \"geometry/point.hpp\"\n\
-    #include <type_traits>\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate\
+    \n#define ERROR 0.000001\n\n#line 1 \"geometry/circle.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <cmath>\n#include <optional>\n#include <vector>\n\
+    \n#line 1 \"geometry/ray.hpp\"\n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line 1\
+    \ \"geometry/line.hpp\"\n\n\n\n#line 8 \"geometry/line.hpp\"\n\n#line 1 \"geometry/point.hpp\"\
+    \n\n\n\n#line 5 \"geometry/point.hpp\"\n#include <concepts>\n#line 7 \"geometry/point.hpp\"\
+    \n#include <type_traits>\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate\
     \ <typename T>\nconcept Coordinate = std::is_arithmetic_v<T> && !std::same_as<std::remove_cv_t<T>,\
     \ bool>;\n\ntemplate <Coordinate T>\nusing wide_type = std::conditional_t<std::integral<T>,\
     \ __int128_t, long double>;\n\ntemplate <Coordinate T>\nstruct Point {\n    T\
@@ -459,26 +460,27 @@ data:
     \ {base};\n\n    Point<long double> perpendicular(-unit.y, unit.x);\n    Point<long\
     \ double> a = base - perpendicular * height;\n    Point<long double> b = base\
     \ + perpendicular * height;\n    if (b < a) std::swap(a, b);\n    return {a, b};\n\
-    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 4 \"verify/geometry/circle_line_intersection.test.cpp\"\
+    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 5 \"verify/geometry/circle_line_intersection.test.cpp\"\
     \n\n#include <iomanip>\n#include <iostream>\n\nint main() {\n    using namespace\
     \ m1une::geometry;\n    Circle<long double> circle;\n    std::cin >> circle.center.x\
     \ >> circle.center.y >> circle.radius;\n\n    int q;\n    std::cin >> q;\n   \
-    \ std::cout << std::fixed << std::setprecision(8);\n    while (q--) {\n      \
-    \  Line<long double> line;\n        std::cin >> line.a.x >> line.a.y >> line.b.x\
+    \ std::cout << std::fixed << std::setprecision(15);\n    while (q--) {\n     \
+    \   Line<long double> line;\n        std::cin >> line.a.x >> line.a.y >> line.b.x\
     \ >> line.b.y;\n        auto points = circle_line_intersections(circle, line);\n\
     \        if (points.size() == 1) points.push_back(points[0]);\n        std::cout\
     \ << points[0].x << \" \" << points[0].y << \" \"\n                  << points[1].x\
     \ << \" \" << points[1].y << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_D\"\
-    \n\n#include \"../../geometry/circle.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
-    \nint main() {\n    using namespace m1une::geometry;\n    Circle<long double>\
-    \ circle;\n    std::cin >> circle.center.x >> circle.center.y >> circle.radius;\n\
-    \n    int q;\n    std::cin >> q;\n    std::cout << std::fixed << std::setprecision(8);\n\
-    \    while (q--) {\n        Line<long double> line;\n        std::cin >> line.a.x\
-    \ >> line.a.y >> line.b.x >> line.b.y;\n        auto points = circle_line_intersections(circle,\
-    \ line);\n        if (points.size() == 1) points.push_back(points[0]);\n     \
-    \   std::cout << points[0].x << \" \" << points[0].y << \" \"\n              \
-    \    << points[1].x << \" \" << points[1].y << '\\n';\n    }\n}\n"
+    \n#define ERROR 0.000001\n\n#include \"../../geometry/circle.hpp\"\n\n#include\
+    \ <iomanip>\n#include <iostream>\n\nint main() {\n    using namespace m1une::geometry;\n\
+    \    Circle<long double> circle;\n    std::cin >> circle.center.x >> circle.center.y\
+    \ >> circle.radius;\n\n    int q;\n    std::cin >> q;\n    std::cout << std::fixed\
+    \ << std::setprecision(15);\n    while (q--) {\n        Line<long double> line;\n\
+    \        std::cin >> line.a.x >> line.a.y >> line.b.x >> line.b.y;\n        auto\
+    \ points = circle_line_intersections(circle, line);\n        if (points.size()\
+    \ == 1) points.push_back(points[0]);\n        std::cout << points[0].x << \" \"\
+    \ << points[0].y << \" \"\n                  << points[1].x << \" \" << points[1].y\
+    \ << '\\n';\n    }\n}\n"
   dependsOn:
   - geometry/circle.hpp
   - geometry/ray.hpp
@@ -487,7 +489,7 @@ data:
   isVerificationFile: true
   path: verify/geometry/circle_line_intersection.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 12:50:37+09:00'
+  timestamp: '2026-06-21 13:00:29+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/geometry/circle_line_intersection.test.cpp
