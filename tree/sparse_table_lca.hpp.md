@@ -4,7 +4,7 @@ data:
   - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: Graph
   - icon: ':question:'
@@ -18,7 +18,7 @@ data:
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
   - icon: ':x:'
@@ -26,7 +26,7 @@ data:
     title: verify/tree/tree_algorithms.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"tree/sparse_table_lca.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -274,7 +274,7 @@ data:
   - tree/all.hpp
   - tree/tree.hpp
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp

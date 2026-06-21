@@ -4,26 +4,26 @@ data:
   - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':x:'
+  - icon: ':question:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: fps/all.hpp
     title: Formal Power Series All
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/fps/fps_algorithms.test.cpp
     title: verify/fps/fps_algorithms.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
     title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"fps/linear_recurrence.hpp\"\n\n\n\n#include <cassert>\n\
@@ -373,7 +373,7 @@ data:
   requiredBy:
   - fps/all.hpp
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
   - verify/fps/fps_algorithms.test.cpp

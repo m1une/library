@@ -4,10 +4,10 @@ data:
   - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':x:'
+  - icon: ':question:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
   - icon: ':question:'
@@ -18,9 +18,9 @@ data:
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence
@@ -362,7 +362,7 @@ data:
   path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
   requiredBy: []
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
 layout: document

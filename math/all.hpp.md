@@ -4,16 +4,16 @@ data:
   - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':x:'
+  - icon: ':question:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':x:'
+  - icon: ':question:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
-  - icon: ':x:'
+  - icon: ':question:'
     path: math/combinatorics.hpp
     title: Combinatorics
   - icon: ':question:'
@@ -22,23 +22,23 @@ data:
   - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/number_theory.hpp
     title: Number Theory
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/prime_sieve.hpp
     title: Prime Sieve
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bit_ceil.hpp\"\n\n\n\
@@ -635,7 +635,7 @@ data:
   path: math/all.hpp
   requiredBy: []
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
 documentation_of: math/all.hpp

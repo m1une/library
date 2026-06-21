@@ -80,7 +80,7 @@ data:
       title: Acted Monoid Wrapper
   - name: ds/dsu
     pages:
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: ds/dsu/dsu.hpp
       title: DSU (Disjoint Set Union)
     - icon: ':heavy_check_mark:'
@@ -237,19 +237,19 @@ data:
       title: Min Cost Flow
   - name: fps
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: fps/all.hpp
       title: Formal Power Series All
     - icon: ':question:'
       path: fps/convolution.hpp
       title: Convolution
-    - icon: ':x:'
+    - icon: ':question:'
       path: fps/formal_power_series.hpp
       title: Formal Power Series
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: fps/linear_recurrence.hpp
       title: Linear Recurrence and Bostan-Mori
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: fps/multipoint_evaluation.hpp
       title: Multipoint Evaluation and Interpolation
   - name: geometry
@@ -271,96 +271,96 @@ data:
       title: Polygons and Convex Hull
   - name: graph
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/all.hpp
       title: Graph All
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bellman_ford.hpp
       title: Bellman-Ford
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bfs.hpp
       title: BFS
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/bipartite.hpp
       title: Bipartite Graph
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/connected_components.hpp
       title: Connected Components
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/cycle_detection.hpp
       title: Cycle Detection
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/dag_shortest_path.hpp
       title: DAG Shortest Path
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/dijkstra.hpp
       title: Dijkstra
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/directed.hpp
       title: Directed Graph Algorithms
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/general_matching.hpp
       title: General Matching
-    - icon: ':x:'
+    - icon: ':question:'
       path: graph/graph.hpp
       title: Graph
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/grid.hpp
       title: Grid
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/kruskal.hpp
       title: Kruskal
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/lowlink.hpp
       title: LowLink
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/maximum_clique.hpp
       title: Maximum Clique, Independent Set, and Vertex Cover
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/scc.hpp
       title: Strongly Connected Components
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/shortest_path.hpp
       title: Shortest Path
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/topological_sort.hpp
       title: Topological Sort
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/two_sat.hpp
       title: Two-Satisfiability
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/undirected.hpp
       title: Undirected Graph Algorithms
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/warshall_floyd.hpp
       title: Warshall-Floyd
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: graph/zero_one_bfs.hpp
       title: 0-1 BFS
   - name: math
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: math/all.hpp
       title: Math All
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
-    - icon: ':x:'
+    - icon: ':question:'
       path: math/combinatorial_sequences.hpp
       title: Combinatorial Sequences
-    - icon: ':x:'
+    - icon: ':question:'
       path: math/combinatorics.hpp
       title: Combinatorics
     - icon: ':question:'
       path: math/modint.hpp
       title: ModInt
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: math/number_theory.hpp
       title: Number Theory
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: math/prime_factorization.hpp
       title: 64-bit Prime Factorization
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: math/prime_sieve.hpp
       title: Prime Sieve
   - name: monoid
@@ -543,7 +543,7 @@ data:
     - icon: ':x:'
       path: tree/rooted_tree.hpp
       title: Rooted Tree
-    - icon: ':x:'
+    - icon: ':question:'
       path: tree/sparse_table_lca.hpp
       title: Sparse Table LCA
     - icon: ':x:'
@@ -572,6 +572,9 @@ data:
     - icon: ':x:'
       path: utilities/int128.hpp
       title: Int128
+    - icon: ':x:'
+      path: utilities/parser.hpp
+      title: Parser
     - icon: ':x:'
       path: utilities/random.hpp
       title: Random
@@ -747,28 +750,28 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/fps/convolution_mod.test.cpp
       title: verify/fps/convolution_mod.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/exp_of_formal_power_series.test.cpp
       title: verify/fps/exp_of_formal_power_series.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/fps_algorithms.test.cpp
       title: verify/fps/fps_algorithms.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/inv_of_formal_power_series.test.cpp
       title: verify/fps/inv_of_formal_power_series.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
       title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/multipoint_evaluation.test.cpp
       title: verify/fps/multipoint_evaluation.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/polynomial_interpolation.test.cpp
       title: verify/fps/polynomial_interpolation.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/polynomial_taylor_shift.test.cpp
       title: verify/fps/polynomial_taylor_shift.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/pow_of_formal_power_series.test.cpp
       title: verify/fps/pow_of_formal_power_series.test.cpp
   - name: verify/geometry
@@ -796,45 +799,45 @@ data:
       title: verify/geometry/segment_intersection.test.cpp
   - name: verify/graph
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/graph/graph_algorithms.test.cpp
       title: verify/graph/graph_algorithms.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/graph/library_checker_general_matching.test.cpp
       title: verify/graph/library_checker_general_matching.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
       title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/graph/library_checker_maximum_independent_set.test.cpp
       title: verify/graph/library_checker_maximum_independent_set.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/graph/two_sat.test.cpp
       title: verify/graph/two_sat.test.cpp
   - name: verify/math
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/bell_number.test.cpp
       title: verify/math/bell_number.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/bernoulli_number.test.cpp
       title: verify/math/bernoulli_number.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/enumerate_primes.test.cpp
       title: verify/math/enumerate_primes.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/factorize.test.cpp
       title: verify/math/factorize.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/floor_sum.test.cpp
       title: verify/math/floor_sum.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/math_algorithms.test.cpp
       title: verify/math/math_algorithms.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/partition_function.test.cpp
       title: verify/math/partition_function.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/primality_test.test.cpp
       title: verify/math/primality_test.test.cpp
     - icon: ':x:'
@@ -892,6 +895,9 @@ data:
     - icon: ':x:'
       path: verify/utilities/extra_utilities.test.cpp
       title: verify/utilities/extra_utilities.test.cpp
+    - icon: ':x:'
+      path: verify/utilities/parser.test.cpp
+      title: verify/utilities/parser.test.cpp
     - icon: ':x:'
       path: verify/utilities/shifted_array.test.cpp
       title: verify/utilities/shifted_array.test.cpp

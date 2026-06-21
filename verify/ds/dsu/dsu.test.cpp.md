@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: ds/dsu/dsu.hpp
     title: DSU (Disjoint Set Union)
   _extendedRequiredBy: []

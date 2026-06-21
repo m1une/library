@@ -8,7 +8,7 @@ data:
   - icon: ':x:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':x:'
+  - icon: ':question:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
   - icon: ':x:'
@@ -18,7 +18,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/range_query/sparse_table.test.cpp
     title: verify/ds/range_query/sparse_table.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
   - icon: ':x:'

@@ -4,10 +4,10 @@ data:
   - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: Graph
   - icon: ':question:'
@@ -34,7 +34,7 @@ data:
   - icon: ':x:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
-  - icon: ':x:'
+  - icon: ':question:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
   - icon: ':x:'

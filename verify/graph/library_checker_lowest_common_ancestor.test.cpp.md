@@ -4,23 +4,23 @@ data:
   - icon: ':question:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: Graph
   - icon: ':question:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':x:'
+  - icon: ':question:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/lca
@@ -227,7 +227,7 @@ data:
   path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
   requiredBy: []
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/library_checker_lowest_common_ancestor.test.cpp
 layout: document
