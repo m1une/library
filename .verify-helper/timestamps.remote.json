@@ -61,6 +61,7 @@
 "verify/geometry/point_in_polygon.test.cpp": "2026-06-21 12:04:47 +0900",
 "verify/geometry/polygon_area.test.cpp": "2026-06-21 12:04:47 +0900",
 "verify/geometry/polygon_operations.test.cpp": "2026-06-21 12:04:47 +0900",
+"verify/geometry/projection.test.cpp": "2026-06-21 12:57:57 +0900",
 "verify/geometry/ray.test.cpp": "2026-06-21 12:04:47 +0900",
 "verify/geometry/segment_intersection.test.cpp": "2026-06-21 12:04:47 +0900",
 "verify/graph/graph_algorithms.test.cpp": "2026-06-21 04:34:53 +0900",
