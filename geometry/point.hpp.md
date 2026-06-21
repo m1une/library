@@ -14,6 +14,9 @@ data:
   - icon: ':x:'
     path: geometry/polygon.hpp
     title: Polygons and Convex Hull
+  - icon: ':x:'
+    path: geometry/ray.hpp
+    title: Rays
   _extendedVerifiedWith:
   - icon: ':x:'
     path: verify/geometry/circle_line_intersection.test.cpp
@@ -31,8 +34,14 @@ data:
     path: verify/geometry/polygon_area.test.cpp
     title: verify/geometry/polygon_area.test.cpp
   - icon: ':x:'
+    path: verify/geometry/polygon_operations.test.cpp
+    title: verify/geometry/polygon_operations.test.cpp
+  - icon: ':x:'
     path: verify/geometry/projection.test.cpp
     title: verify/geometry/projection.test.cpp
+  - icon: ':x:'
+    path: verify/geometry/ray.test.cpp
+    title: verify/geometry/ray.test.cpp
   - icon: ':x:'
     path: verify/geometry/segment_intersection.test.cpp
     title: verify/geometry/segment_intersection.test.cpp
@@ -89,25 +98,41 @@ data:
     \    );\n}\n\ntemplate <Coordinate T>\nlong double distance(const Point<T>& a,\
     \ const Point<T>& b) {\n    return std::hypotl(\n        static_cast<long double>(a.x)\
     \ - static_cast<long double>(b.x),\n        static_cast<long double>(a.y) - static_cast<long\
-    \ double>(b.y)\n    );\n}\n\ntemplate <Coordinate T>\nconstexpr int sign(wide_type<T>\
-    \ value, long double eps = 1e-12L) {\n    if constexpr (std::integral<T>) {\n\
-    \        return (value > 0) - (value < 0);\n    } else {\n        return (value\
-    \ > eps) - (value < -eps);\n    }\n}\n\ntemplate <Coordinate T>\nconstexpr int\
-    \ orientation(\n    const Point<T>& a,\n    const Point<T>& b,\n    const Point<T>&\
-    \ c,\n    long double eps = 1e-12L\n) {\n    return sign<T>(cross(a, b, c), eps);\n\
-    }\n\ntemplate <Coordinate T>\nconstexpr bool collinear(\n    const Point<T>& a,\n\
-    \    const Point<T>& b,\n    const Point<T>& c,\n    long double eps = 1e-12L\n\
-    ) {\n    return orientation(a, b, c, eps) == 0;\n}\n\ntemplate <Coordinate T>\n\
-    Point<long double> rotate(const Point<T>& point, long double angle) {\n    long\
-    \ double cosine = std::cos(angle);\n    long double sine = std::sin(angle);\n\
-    \    return Point<long double>(\n        static_cast<long double>(point.x) * cosine\
-    \ -\n            static_cast<long double>(point.y) * sine,\n        static_cast<long\
-    \ double>(point.x) * sine +\n            static_cast<long double>(point.y) * cosine\n\
-    \    );\n}\n\ntemplate <Coordinate T>\nPoint<long double> normalized(const Point<T>&\
-    \ point) {\n    long double length = norm(point);\n    assert(length != 0);\n\
-    \    return Point<long double>(\n        static_cast<long double>(point.x) / length,\n\
-    \        static_cast<long double>(point.y) / length\n    );\n}\n\n}  // namespace\
-    \ geometry\n}  // namespace m1une\n\n\n"
+    \ double>(b.y)\n    );\n}\n\ntemplate <Coordinate T, typename M, typename N>\n\
+    requires std::is_arithmetic_v<M> && std::is_arithmetic_v<N>\nconstexpr Point<long\
+    \ double> internal_division_point(\n    const Point<T>& a,\n    const Point<T>&\
+    \ b,\n    M m,\n    N n\n) {\n    long double first_ratio = static_cast<long double>(m);\n\
+    \    long double second_ratio = static_cast<long double>(n);\n    long double\
+    \ denominator = first_ratio + second_ratio;\n    assert(denominator != 0);\n \
+    \   Point<long double> first(a);\n    Point<long double> direction = Point<long\
+    \ double>(b) - first;\n    return first + direction * (first_ratio / denominator);\n\
+    }\n\ntemplate <Coordinate T, typename M, typename N>\nrequires std::is_arithmetic_v<M>\
+    \ && std::is_arithmetic_v<N>\nconstexpr Point<long double> external_division_point(\n\
+    \    const Point<T>& a,\n    const Point<T>& b,\n    M m,\n    N n\n) {\n    long\
+    \ double first_ratio = static_cast<long double>(m);\n    long double second_ratio\
+    \ = static_cast<long double>(n);\n    long double denominator = first_ratio -\
+    \ second_ratio;\n    assert(denominator != 0);\n    Point<long double> first(a);\n\
+    \    Point<long double> direction = Point<long double>(b) - first;\n    return\
+    \ first + direction * (first_ratio / denominator);\n}\n\ntemplate <Coordinate\
+    \ T>\nconstexpr int sign(wide_type<T> value, long double eps = 1e-12L) {\n   \
+    \ if constexpr (std::integral<T>) {\n        return (value > 0) - (value < 0);\n\
+    \    } else {\n        return (value > eps) - (value < -eps);\n    }\n}\n\ntemplate\
+    \ <Coordinate T>\nconstexpr int orientation(\n    const Point<T>& a,\n    const\
+    \ Point<T>& b,\n    const Point<T>& c,\n    long double eps = 1e-12L\n) {\n  \
+    \  return sign<T>(cross(a, b, c), eps);\n}\n\ntemplate <Coordinate T>\nconstexpr\
+    \ bool collinear(\n    const Point<T>& a,\n    const Point<T>& b,\n    const Point<T>&\
+    \ c,\n    long double eps = 1e-12L\n) {\n    return orientation(a, b, c, eps)\
+    \ == 0;\n}\n\ntemplate <Coordinate T>\nPoint<long double> rotate(const Point<T>&\
+    \ point, long double angle) {\n    long double cosine = std::cos(angle);\n   \
+    \ long double sine = std::sin(angle);\n    return Point<long double>(\n      \
+    \  static_cast<long double>(point.x) * cosine -\n            static_cast<long\
+    \ double>(point.y) * sine,\n        static_cast<long double>(point.x) * sine +\n\
+    \            static_cast<long double>(point.y) * cosine\n    );\n}\n\ntemplate\
+    \ <Coordinate T>\nPoint<long double> normalized(const Point<T>& point) {\n   \
+    \ long double length = norm(point);\n    assert(length != 0);\n    return Point<long\
+    \ double>(\n        static_cast<long double>(point.x) / length,\n        static_cast<long\
+    \ double>(point.y) / length\n    );\n}\n\n}  // namespace geometry\n}  // namespace\
+    \ m1une\n\n\n"
   code: "#ifndef M1UNE_GEOMETRY_POINT_HPP\n#define M1UNE_GEOMETRY_POINT_HPP 1\n\n\
     #include <cmath>\n#include <concepts>\n#include <cassert>\n#include <type_traits>\n\
     \nnamespace m1une {\nnamespace geometry {\n\ntemplate <typename T>\nconcept Coordinate\
@@ -156,34 +181,51 @@ data:
     \    );\n}\n\ntemplate <Coordinate T>\nlong double distance(const Point<T>& a,\
     \ const Point<T>& b) {\n    return std::hypotl(\n        static_cast<long double>(a.x)\
     \ - static_cast<long double>(b.x),\n        static_cast<long double>(a.y) - static_cast<long\
-    \ double>(b.y)\n    );\n}\n\ntemplate <Coordinate T>\nconstexpr int sign(wide_type<T>\
-    \ value, long double eps = 1e-12L) {\n    if constexpr (std::integral<T>) {\n\
-    \        return (value > 0) - (value < 0);\n    } else {\n        return (value\
-    \ > eps) - (value < -eps);\n    }\n}\n\ntemplate <Coordinate T>\nconstexpr int\
-    \ orientation(\n    const Point<T>& a,\n    const Point<T>& b,\n    const Point<T>&\
-    \ c,\n    long double eps = 1e-12L\n) {\n    return sign<T>(cross(a, b, c), eps);\n\
-    }\n\ntemplate <Coordinate T>\nconstexpr bool collinear(\n    const Point<T>& a,\n\
-    \    const Point<T>& b,\n    const Point<T>& c,\n    long double eps = 1e-12L\n\
-    ) {\n    return orientation(a, b, c, eps) == 0;\n}\n\ntemplate <Coordinate T>\n\
-    Point<long double> rotate(const Point<T>& point, long double angle) {\n    long\
-    \ double cosine = std::cos(angle);\n    long double sine = std::sin(angle);\n\
-    \    return Point<long double>(\n        static_cast<long double>(point.x) * cosine\
-    \ -\n            static_cast<long double>(point.y) * sine,\n        static_cast<long\
-    \ double>(point.x) * sine +\n            static_cast<long double>(point.y) * cosine\n\
-    \    );\n}\n\ntemplate <Coordinate T>\nPoint<long double> normalized(const Point<T>&\
-    \ point) {\n    long double length = norm(point);\n    assert(length != 0);\n\
-    \    return Point<long double>(\n        static_cast<long double>(point.x) / length,\n\
-    \        static_cast<long double>(point.y) / length\n    );\n}\n\n}  // namespace\
-    \ geometry\n}  // namespace m1une\n\n#endif  // M1UNE_GEOMETRY_POINT_HPP\n"
+    \ double>(b.y)\n    );\n}\n\ntemplate <Coordinate T, typename M, typename N>\n\
+    requires std::is_arithmetic_v<M> && std::is_arithmetic_v<N>\nconstexpr Point<long\
+    \ double> internal_division_point(\n    const Point<T>& a,\n    const Point<T>&\
+    \ b,\n    M m,\n    N n\n) {\n    long double first_ratio = static_cast<long double>(m);\n\
+    \    long double second_ratio = static_cast<long double>(n);\n    long double\
+    \ denominator = first_ratio + second_ratio;\n    assert(denominator != 0);\n \
+    \   Point<long double> first(a);\n    Point<long double> direction = Point<long\
+    \ double>(b) - first;\n    return first + direction * (first_ratio / denominator);\n\
+    }\n\ntemplate <Coordinate T, typename M, typename N>\nrequires std::is_arithmetic_v<M>\
+    \ && std::is_arithmetic_v<N>\nconstexpr Point<long double> external_division_point(\n\
+    \    const Point<T>& a,\n    const Point<T>& b,\n    M m,\n    N n\n) {\n    long\
+    \ double first_ratio = static_cast<long double>(m);\n    long double second_ratio\
+    \ = static_cast<long double>(n);\n    long double denominator = first_ratio -\
+    \ second_ratio;\n    assert(denominator != 0);\n    Point<long double> first(a);\n\
+    \    Point<long double> direction = Point<long double>(b) - first;\n    return\
+    \ first + direction * (first_ratio / denominator);\n}\n\ntemplate <Coordinate\
+    \ T>\nconstexpr int sign(wide_type<T> value, long double eps = 1e-12L) {\n   \
+    \ if constexpr (std::integral<T>) {\n        return (value > 0) - (value < 0);\n\
+    \    } else {\n        return (value > eps) - (value < -eps);\n    }\n}\n\ntemplate\
+    \ <Coordinate T>\nconstexpr int orientation(\n    const Point<T>& a,\n    const\
+    \ Point<T>& b,\n    const Point<T>& c,\n    long double eps = 1e-12L\n) {\n  \
+    \  return sign<T>(cross(a, b, c), eps);\n}\n\ntemplate <Coordinate T>\nconstexpr\
+    \ bool collinear(\n    const Point<T>& a,\n    const Point<T>& b,\n    const Point<T>&\
+    \ c,\n    long double eps = 1e-12L\n) {\n    return orientation(a, b, c, eps)\
+    \ == 0;\n}\n\ntemplate <Coordinate T>\nPoint<long double> rotate(const Point<T>&\
+    \ point, long double angle) {\n    long double cosine = std::cos(angle);\n   \
+    \ long double sine = std::sin(angle);\n    return Point<long double>(\n      \
+    \  static_cast<long double>(point.x) * cosine -\n            static_cast<long\
+    \ double>(point.y) * sine,\n        static_cast<long double>(point.x) * sine +\n\
+    \            static_cast<long double>(point.y) * cosine\n    );\n}\n\ntemplate\
+    \ <Coordinate T>\nPoint<long double> normalized(const Point<T>& point) {\n   \
+    \ long double length = norm(point);\n    assert(length != 0);\n    return Point<long\
+    \ double>(\n        static_cast<long double>(point.x) / length,\n        static_cast<long\
+    \ double>(point.y) / length\n    );\n}\n\n}  // namespace geometry\n}  // namespace\
+    \ m1une\n\n#endif  // M1UNE_GEOMETRY_POINT_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: geometry/point.hpp
   requiredBy:
+  - geometry/ray.hpp
   - geometry/circle.hpp
   - geometry/all.hpp
   - geometry/line.hpp
   - geometry/polygon.hpp
-  timestamp: '2026-06-21 03:01:41+09:00'
+  timestamp: '2026-06-21 11:53:11+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/geometry/polygon_area.test.cpp
@@ -192,7 +234,9 @@ data:
   - verify/geometry/segment_intersection.test.cpp
   - verify/geometry/point_in_polygon.test.cpp
   - verify/geometry/convex_hull.test.cpp
+  - verify/geometry/polygon_operations.test.cpp
   - verify/geometry/projection.test.cpp
+  - verify/geometry/ray.test.cpp
 documentation_of: geometry/point.hpp
 layout: document
 title: 2D Point and Predicates
@@ -235,12 +279,36 @@ subtraction, scalar multiplication, and scalar division.
 | `distance2(a, b)` | Squared Euclidean distance. | $O(1)$ |
 | `norm(p)` | Euclidean norm as `long double`. | $O(1)$ |
 | `distance(a, b)` | Euclidean distance as `long double`. | $O(1)$ |
+| `internal_division_point(a, b, m, n)` | Returns the point internally dividing `AB` in ratio `AP:PB = m:n`. | $O(1)$ |
+| `external_division_point(a, b, m, n)` | Returns the point externally dividing `AB` in ratio `AP:PB = m:n`. | $O(1)$ |
 | `orientation(a, b, c, eps)` | Returns `1` for counterclockwise, `-1` for clockwise, and `0` for collinear. | $O(1)$ |
 | `collinear(a, b, c, eps)` | Returns whether three points are collinear. | $O(1)$ |
 | `rotate(p, angle)` | Rotates `p` counterclockwise by radians. | $O(1)$ |
 | `normalized(p)` | Returns a unit vector in `p`'s direction. | $O(1)$ |
 
 `normalized` requires a nonzero vector.
+
+## Internal and external division
+
+For `internal_division_point(a, b, m, n)`, the returned point $P$ satisfies
+$AP:PB=m:n$ and is computed as
+
+$$
+P = A + \frac{m}{m+n}(B-A).
+$$
+
+For positive `m` and `n`, `P` lies between `a` and `b`. The function requires
+`m + n != 0`.
+
+`external_division_point` uses the same ratio convention:
+
+$$
+P = A + \frac{m}{m-n}(B-A).
+$$
+
+For positive unequal ratios, the point lies outside the segment. It is beyond
+`b` when `m > n` and beyond `a` when `m < n`. The function requires
+`m != n`. Both functions return `Point<long double>`.
 
 ## Example
 

@@ -269,6 +269,9 @@ data:
     - icon: ':x:'
       path: geometry/polygon.hpp
       title: Polygons and Convex Hull
+    - icon: ':x:'
+      path: geometry/ray.hpp
+      title: Rays
   - name: graph
     pages:
     - icon: ':heavy_check_mark:'
@@ -795,8 +798,14 @@ data:
       path: verify/geometry/polygon_area.test.cpp
       title: verify/geometry/polygon_area.test.cpp
     - icon: ':x:'
+      path: verify/geometry/polygon_operations.test.cpp
+      title: verify/geometry/polygon_operations.test.cpp
+    - icon: ':x:'
       path: verify/geometry/projection.test.cpp
       title: verify/geometry/projection.test.cpp
+    - icon: ':x:'
+      path: verify/geometry/ray.test.cpp
+      title: verify/geometry/ray.test.cpp
     - icon: ':x:'
       path: verify/geometry/segment_intersection.test.cpp
       title: verify/geometry/segment_intersection.test.cpp
