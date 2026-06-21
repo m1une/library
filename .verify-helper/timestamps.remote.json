@@ -54,6 +54,7 @@
 "verify/fps/polynomial_interpolation.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/fps/polynomial_taylor_shift.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/fps/pow_of_formal_power_series.test.cpp": "2026-06-21 04:34:53 +0900",
+"verify/geometry/circle_line_intersection.test.cpp": "2026-06-21 12:50:37 +0900",
 "verify/geometry/circle_ray.test.cpp": "2026-06-21 12:04:47 +0900",
 "verify/geometry/convex_hull.test.cpp": "2026-06-21 12:04:47 +0900",
 "verify/geometry/geometry_algorithms.test.cpp": "2026-06-21 12:04:47 +0900",
