@@ -138,7 +138,7 @@ int main() {
 
     int q;
     std::cin >> q;
-    m1une::string::Trie<> trie;
+    m1une::string::Trie<26, 'A'> trie;
     while (q--) {
         std::string command;
         std::string word;
