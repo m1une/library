@@ -22,6 +22,9 @@ data:
     path: verify/geometry/circle_line_intersection.test.cpp
     title: verify/geometry/circle_line_intersection.test.cpp
   - icon: ':x:'
+    path: verify/geometry/circle_ray.test.cpp
+    title: verify/geometry/circle_ray.test.cpp
+  - icon: ':x:'
     path: verify/geometry/convex_hull.test.cpp
     title: verify/geometry/convex_hull.test.cpp
   - icon: ':x:'
@@ -232,6 +235,7 @@ data:
   - verify/geometry/circle_line_intersection.test.cpp
   - verify/geometry/geometry_algorithms.test.cpp
   - verify/geometry/segment_intersection.test.cpp
+  - verify/geometry/circle_ray.test.cpp
   - verify/geometry/point_in_polygon.test.cpp
   - verify/geometry/convex_hull.test.cpp
   - verify/geometry/polygon_operations.test.cpp

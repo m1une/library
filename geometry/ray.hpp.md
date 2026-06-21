@@ -12,9 +12,18 @@ data:
     path: geometry/all.hpp
     title: Geometry Bundle
   - icon: ':x:'
+    path: geometry/circle.hpp
+    title: Circles
+  - icon: ':x:'
     path: geometry/polygon.hpp
     title: Polygons and Convex Hull
   _extendedVerifiedWith:
+  - icon: ':x:'
+    path: verify/geometry/circle_line_intersection.test.cpp
+    title: verify/geometry/circle_line_intersection.test.cpp
+  - icon: ':x:'
+    path: verify/geometry/circle_ray.test.cpp
+    title: verify/geometry/circle_ray.test.cpp
   - icon: ':x:'
     path: verify/geometry/convex_hull.test.cpp
     title: verify/geometry/convex_hull.test.cpp
@@ -549,13 +558,16 @@ data:
   isVerificationFile: false
   path: geometry/ray.hpp
   requiredBy:
+  - geometry/circle.hpp
   - geometry/all.hpp
   - geometry/polygon.hpp
   timestamp: '2026-06-21 11:53:11+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/geometry/polygon_area.test.cpp
+  - verify/geometry/circle_line_intersection.test.cpp
   - verify/geometry/geometry_algorithms.test.cpp
+  - verify/geometry/circle_ray.test.cpp
   - verify/geometry/point_in_polygon.test.cpp
   - verify/geometry/convex_hull.test.cpp
   - verify/geometry/polygon_operations.test.cpp

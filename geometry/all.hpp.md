@@ -27,17 +27,18 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"geometry/all.hpp\"\n\n\n\n#line 1 \"geometry/circle.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <cmath>\n#include <vector>\n\
-    \n#line 1 \"geometry/line.hpp\"\n\n\n\n#line 7 \"geometry/line.hpp\"\n#include\
-    \ <optional>\n\n#line 1 \"geometry/point.hpp\"\n\n\n\n#line 5 \"geometry/point.hpp\"\
-    \n#include <concepts>\n#line 7 \"geometry/point.hpp\"\n#include <type_traits>\n\
-    \nnamespace m1une {\nnamespace geometry {\n\ntemplate <typename T>\nconcept Coordinate\
-    \ = std::is_arithmetic_v<T> && !std::same_as<std::remove_cv_t<T>, bool>;\n\ntemplate\
-    \ <Coordinate T>\nusing wide_type = std::conditional_t<std::integral<T>, __int128_t,\
-    \ long double>;\n\ntemplate <Coordinate T>\nstruct Point {\n    T x;\n    T y;\n\
-    \n    constexpr Point() : x(0), y(0) {}\n    constexpr Point(T x_value, T y_value)\
-    \ : x(x_value), y(y_value) {}\n\n    template <Coordinate U>\n    explicit constexpr\
-    \ Point(const Point<U>& other)\n        : x(static_cast<T>(other.x)), y(static_cast<T>(other.y))\
+    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <cmath>\n#include <optional>\n\
+    #include <vector>\n\n#line 1 \"geometry/ray.hpp\"\n\n\n\n#line 7 \"geometry/ray.hpp\"\
+    \n\n#line 1 \"geometry/line.hpp\"\n\n\n\n#line 8 \"geometry/line.hpp\"\n\n#line\
+    \ 1 \"geometry/point.hpp\"\n\n\n\n#line 5 \"geometry/point.hpp\"\n#include <concepts>\n\
+    #line 7 \"geometry/point.hpp\"\n#include <type_traits>\n\nnamespace m1une {\n\
+    namespace geometry {\n\ntemplate <typename T>\nconcept Coordinate = std::is_arithmetic_v<T>\
+    \ && !std::same_as<std::remove_cv_t<T>, bool>;\n\ntemplate <Coordinate T>\nusing\
+    \ wide_type = std::conditional_t<std::integral<T>, __int128_t, long double>;\n\
+    \ntemplate <Coordinate T>\nstruct Point {\n    T x;\n    T y;\n\n    constexpr\
+    \ Point() : x(0), y(0) {}\n    constexpr Point(T x_value, T y_value) : x(x_value),\
+    \ y(y_value) {}\n\n    template <Coordinate U>\n    explicit constexpr Point(const\
+    \ Point<U>& other)\n        : x(static_cast<T>(other.x)), y(static_cast<T>(other.y))\
     \ {}\n\n    constexpr Point& operator+=(const Point& other) {\n        x += other.x;\n\
     \        y += other.y;\n        return *this;\n    }\n\n    constexpr Point& operator-=(const\
     \ Point& other) {\n        x -= other.x;\n        y -= other.y;\n        return\
@@ -212,63 +213,15 @@ data:
     template <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
     \    const Segment<T>& segment,\n    const Line<T>& line,\n    long double eps\
     \ = 1e-12L\n) {\n    return line_segment_intersection(line, segment, eps);\n}\n\
-    \n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 10 \"geometry/circle.hpp\"\
+    \n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 9 \"geometry/ray.hpp\"\
     \n\nnamespace m1une {\nnamespace geometry {\n\ntemplate <Coordinate T>\nstruct\
-    \ Circle {\n    Point<T> center;\n    T radius;\n};\n\nenum class CircleRelation\
-    \ {\n    Separate,\n    ExternallyTangent,\n    Intersecting,\n    InternallyTangent,\n\
-    \    Contained,\n    Coincident,\n};\n\ntemplate <Coordinate T>\nCircleRelation\
-    \ circle_relation(\n    const Circle<T>& first,\n    const Circle<T>& second,\n\
-    \    long double eps = 1e-12L\n) {\n    assert(first.radius >= 0);\n    assert(second.radius\
-    \ >= 0);\n    long double d = geometry::distance(first.center, second.center);\n\
-    \    long double r1 = static_cast<long double>(first.radius);\n    long double\
-    \ r2 = static_cast<long double>(second.radius);\n    long double sum = r1 + r2;\n\
-    \    long double difference = std::fabsl(r1 - r2);\n    if (d <= eps && difference\
-    \ <= eps) return CircleRelation::Coincident;\n    if (sum < d - eps) return CircleRelation::Separate;\n\
-    \    if (std::fabsl(d - sum) <= eps) return CircleRelation::ExternallyTangent;\n\
-    \    if (d < difference - eps) return CircleRelation::Contained;\n    if (std::fabsl(d\
-    \ - difference) <= eps) return CircleRelation::InternallyTangent;\n    return\
-    \ CircleRelation::Intersecting;\n}\n\ntemplate <Coordinate T>\nstd::vector<Point<long\
-    \ double>> circle_line_intersections(\n    const Circle<T>& circle,\n    const\
-    \ Line<T>& line,\n    long double eps = 1e-12L\n) {\n    assert(circle.radius\
-    \ >= 0);\n    assert(line.a != line.b);\n    Point<long double> foot = projection(line,\
-    \ circle.center);\n    long double radius = static_cast<long double>(circle.radius);\n\
-    \    long double distance_to_line = geometry::distance(line, circle.center);\n\
-    \    if (radius < distance_to_line - eps) return {};\n\n    Point<long double>\
-    \ direction =\n        Point<long double>(line.b) - Point<long double>(line.a);\n\
-    \    direction = normalized(direction);\n    long double offset_squared =\n  \
-    \      std::max(0.0L, radius * radius - distance_to_line * distance_to_line);\n\
-    \    long double offset = std::sqrt(offset_squared);\n    if (offset <= eps) return\
-    \ {foot};\n\n    Point<long double> first = foot - direction * offset;\n    Point<long\
-    \ double> second = foot + direction * offset;\n    if (second < first) std::swap(first,\
-    \ second);\n    return {first, second};\n}\n\ntemplate <Coordinate T>\nstd::vector<Point<long\
-    \ double>> circle_intersections(\n    const Circle<T>& first,\n    const Circle<T>&\
-    \ second,\n    long double eps = 1e-12L\n) {\n    assert(first.radius >= 0);\n\
-    \    assert(second.radius >= 0);\n    CircleRelation relation = circle_relation(first,\
-    \ second, eps);\n    if (\n        relation == CircleRelation::Separate ||\n \
-    \       relation == CircleRelation::Contained ||\n        relation == CircleRelation::Coincident\n\
-    \    ) {\n        return {};\n    }\n\n    Point<long double> c1(first.center);\n\
-    \    Point<long double> c2(second.center);\n    Point<long double> direction =\
-    \ c2 - c1;\n    long double d = norm(direction);\n    long double r1 = static_cast<long\
-    \ double>(first.radius);\n    long double r2 = static_cast<long double>(second.radius);\n\
-    \    long double along = (r1 * r1 - r2 * r2 + d * d) / (2 * d);\n    long double\
-    \ height_squared = std::max(0.0L, r1 * r1 - along * along);\n    Point<long double>\
-    \ unit = direction / d;\n    Point<long double> base = c1 + unit * along;\n  \
-    \  long double height = std::sqrt(height_squared);\n    if (height <= eps) return\
-    \ {base};\n\n    Point<long double> perpendicular(-unit.y, unit.x);\n    Point<long\
-    \ double> a = base - perpendicular * height;\n    Point<long double> b = base\
-    \ + perpendicular * height;\n    if (b < a) std::swap(a, b);\n    return {a, b};\n\
-    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 1 \"geometry/polygon.hpp\"\
-    \n\n\n\n#line 5 \"geometry/polygon.hpp\"\n#include <array>\n#line 8 \"geometry/polygon.hpp\"\
-    \n#include <cstddef>\n#include <limits>\n#line 12 \"geometry/polygon.hpp\"\n\n\
-    #line 1 \"geometry/ray.hpp\"\n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line 9 \"\
-    geometry/ray.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate <Coordinate\
-    \ T>\nstruct Ray {\n    Point<T> origin;\n    Point<T> through;\n};\n\nnamespace\
-    \ ray_detail {\n\ntemplate <Coordinate T>\nstruct Parameters {\n    wide_type<T>\
-    \ denominator;\n    wide_type<T> first_numerator;\n    wide_type<T> second_numerator;\n\
-    };\n\ntemplate <Coordinate T>\nParameters<T> parameters(\n    const Point<T>&\
-    \ first_origin,\n    const Point<T>& first_through,\n    const Point<T>& second_origin,\n\
-    \    const Point<T>& second_through\n) {\n    using W = wide_type<T>;\n    W first_x\
-    \ = W(first_through.x) - W(first_origin.x);\n    W first_y = W(first_through.y)\
+    \ Ray {\n    Point<T> origin;\n    Point<T> through;\n};\n\nnamespace ray_detail\
+    \ {\n\ntemplate <Coordinate T>\nstruct Parameters {\n    wide_type<T> denominator;\n\
+    \    wide_type<T> first_numerator;\n    wide_type<T> second_numerator;\n};\n\n\
+    template <Coordinate T>\nParameters<T> parameters(\n    const Point<T>& first_origin,\n\
+    \    const Point<T>& first_through,\n    const Point<T>& second_origin,\n    const\
+    \ Point<T>& second_through\n) {\n    using W = wide_type<T>;\n    W first_x =\
+    \ W(first_through.x) - W(first_origin.x);\n    W first_y = W(first_through.y)\
     \ - W(first_origin.y);\n    W second_x = W(second_through.x) - W(second_origin.x);\n\
     \    W second_y = W(second_through.y) - W(second_origin.y);\n    W offset_x =\
     \ W(second_origin.x) - W(first_origin.x);\n    W offset_y = W(second_origin.y)\
@@ -418,12 +371,104 @@ data:
     \     values.second_numerator,\n            values.denominator,\n            eps\n\
     \        )\n    ) {\n        return std::nullopt;\n    }\n    return ray_detail::point_at(\n\
     \        first,\n        values.first_numerator,\n        values.denominator\n\
-    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 14 \"\
-    geometry/polygon.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\nenum class\
-    \ PointInPolygon {\n    Outside = 0,\n    Boundary = 1,\n    Inside = 2,\n};\n\
-    \nnamespace polygon_detail {\n\ninline bool close(\n    const Point<long double>&\
-    \ first,\n    const Point<long double>& second,\n    long double eps\n) {\n  \
-    \  return geometry::distance(first, second) <= eps;\n}\n\ninline void push_unique(\n\
+    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 11 \"\
+    geometry/circle.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate <Coordinate\
+    \ T>\nstruct Circle {\n    Point<T> center;\n    T radius;\n};\n\nenum class CircleRelation\
+    \ {\n    Separate,\n    ExternallyTangent,\n    Intersecting,\n    InternallyTangent,\n\
+    \    Contained,\n    Coincident,\n};\n\ntemplate <Coordinate T>\nCircleRelation\
+    \ circle_relation(\n    const Circle<T>& first,\n    const Circle<T>& second,\n\
+    \    long double eps = 1e-12L\n) {\n    assert(first.radius >= 0);\n    assert(second.radius\
+    \ >= 0);\n    long double d = geometry::distance(first.center, second.center);\n\
+    \    long double r1 = static_cast<long double>(first.radius);\n    long double\
+    \ r2 = static_cast<long double>(second.radius);\n    long double sum = r1 + r2;\n\
+    \    long double difference = std::fabsl(r1 - r2);\n    if (d <= eps && difference\
+    \ <= eps) return CircleRelation::Coincident;\n    if (sum < d - eps) return CircleRelation::Separate;\n\
+    \    if (std::fabsl(d - sum) <= eps) return CircleRelation::ExternallyTangent;\n\
+    \    if (d < difference - eps) return CircleRelation::Contained;\n    if (std::fabsl(d\
+    \ - difference) <= eps) return CircleRelation::InternallyTangent;\n    return\
+    \ CircleRelation::Intersecting;\n}\n\ntemplate <Coordinate T>\nstd::vector<Point<long\
+    \ double>> circle_line_intersections(\n    const Circle<T>& circle,\n    const\
+    \ Line<T>& line,\n    long double eps = 1e-12L\n) {\n    assert(circle.radius\
+    \ >= 0);\n    assert(line.a != line.b);\n    Point<long double> foot = projection(line,\
+    \ circle.center);\n    long double radius = static_cast<long double>(circle.radius);\n\
+    \    long double distance_to_line = geometry::distance(line, circle.center);\n\
+    \    if (radius < distance_to_line - eps) return {};\n\n    Point<long double>\
+    \ direction =\n        Point<long double>(line.b) - Point<long double>(line.a);\n\
+    \    direction = normalized(direction);\n    long double offset_squared =\n  \
+    \      std::max(0.0L, radius * radius - distance_to_line * distance_to_line);\n\
+    \    long double offset = std::sqrt(offset_squared);\n    if (offset <= eps) return\
+    \ {foot};\n\n    Point<long double> first = foot - direction * offset;\n    Point<long\
+    \ double> second = foot + direction * offset;\n    if (second < first) std::swap(first,\
+    \ second);\n    return {first, second};\n}\n\ntemplate <Coordinate C, Coordinate\
+    \ R>\nstd::vector<Point<long double>> circle_ray_intersections(\n    const Circle<C>&\
+    \ circle,\n    const Ray<R>& ray,\n    long double eps = 1e-12L\n) {\n    assert(circle.radius\
+    \ >= 0);\n    assert(ray.origin != ray.through);\n\n    Point<long double> origin(ray.origin);\n\
+    \    Point<long double> direction =\n        Point<long double>(ray.through) -\
+    \ origin;\n    Point<long double> offset = origin - Point<long double>(circle.center);\n\
+    \    long double radius = static_cast<long double>(circle.radius);\n    long double\
+    \ quadratic = dot(direction, direction);\n    long double linear = 2.0L * dot(offset,\
+    \ direction);\n    long double constant = dot(offset, offset) - radius * radius;\n\
+    \    long double discriminant =\n        linear * linear - 4.0L * quadratic *\
+    \ constant;\n    if (discriminant < -eps) return {};\n\n    discriminant = std::max(0.0L,\
+    \ discriminant);\n    long double root = std::sqrt(discriminant);\n    long double\
+    \ first_ratio = (-linear - root) / (2.0L * quadratic);\n    long double second_ratio\
+    \ = (-linear + root) / (2.0L * quadratic);\n\n    std::vector<Point<long double>>\
+    \ result;\n    if (first_ratio >= -eps) {\n        if (first_ratio < 0) first_ratio\
+    \ = 0;\n        result.push_back(origin + direction * first_ratio);\n    }\n \
+    \   if (\n        second_ratio >= -eps &&\n        root > eps\n    ) {\n     \
+    \   if (second_ratio < 0) second_ratio = 0;\n        result.push_back(origin +\
+    \ direction * second_ratio);\n    }\n    return result;\n}\n\ntemplate <Coordinate\
+    \ C, Coordinate R>\nstd::vector<Point<long double>> circle_ray_intersections(\n\
+    \    const Ray<R>& ray,\n    const Circle<C>& circle,\n    long double eps = 1e-12L\n\
+    ) {\n    return circle_ray_intersections(circle, ray, eps);\n}\n\ntemplate <Coordinate\
+    \ C, Coordinate R>\nstd::optional<Point<long double>> first_circle_ray_intersection(\n\
+    \    const Circle<C>& circle,\n    const Ray<R>& ray,\n    long double eps = 1e-12L\n\
+    ) {\n    std::vector<Point<long double>> points =\n        circle_ray_intersections(circle,\
+    \ ray, eps);\n    if (points.empty()) return std::nullopt;\n    return points.front();\n\
+    }\n\ntemplate <Coordinate C, Coordinate R>\nbool intersects(\n    const Circle<C>&\
+    \ circle,\n    const Ray<R>& ray,\n    long double eps = 1e-12L\n) {\n    return\
+    \ !circle_ray_intersections(circle, ray, eps).empty();\n}\n\ntemplate <Coordinate\
+    \ C, Coordinate R>\nbool intersects(\n    const Ray<R>& ray,\n    const Circle<C>&\
+    \ circle,\n    long double eps = 1e-12L\n) {\n    return intersects(circle, ray,\
+    \ eps);\n}\n\ntemplate <Coordinate R, Coordinate H, Coordinate C>\nRay<long double>\
+    \ reflected_ray(\n    const Ray<R>& incoming,\n    const Point<H>& hit,\n    const\
+    \ Circle<C>& circle,\n    long double eps = 1e-12L\n) {\n    assert(incoming.origin\
+    \ != incoming.through);\n    assert(static_cast<long double>(circle.radius) >\
+    \ eps);\n    assert(\n        std::fabsl(\n            geometry::distance(\n \
+    \               Point<long double>(hit),\n                Point<long double>(circle.center)\n\
+    \            ) -\n            static_cast<long double>(circle.radius)\n      \
+    \  ) <= eps\n    );\n\n    Point<long double> hit_point(hit);\n    Point<long\
+    \ double> normal =\n        hit_point - Point<long double>(circle.center);\n \
+    \   Point<long double> tangent_direction(-normal.y, normal.x);\n    Line<long\
+    \ double> tangent{\n        hit_point,\n        hit_point + tangent_direction\n\
+    \    };\n    Point<long double> incoming_direction =\n        Point<long double>(incoming.through)\
+    \ -\n        Point<long double>(incoming.origin);\n    Point<long double> translated\
+    \ = hit_point + incoming_direction;\n    return Ray<long double>{\n        hit_point,\n\
+    \        reflection(tangent, translated)\n    };\n}\n\ntemplate <Coordinate T>\n\
+    std::vector<Point<long double>> circle_intersections(\n    const Circle<T>& first,\n\
+    \    const Circle<T>& second,\n    long double eps = 1e-12L\n) {\n    assert(first.radius\
+    \ >= 0);\n    assert(second.radius >= 0);\n    CircleRelation relation = circle_relation(first,\
+    \ second, eps);\n    if (\n        relation == CircleRelation::Separate ||\n \
+    \       relation == CircleRelation::Contained ||\n        relation == CircleRelation::Coincident\n\
+    \    ) {\n        return {};\n    }\n\n    Point<long double> c1(first.center);\n\
+    \    Point<long double> c2(second.center);\n    Point<long double> direction =\
+    \ c2 - c1;\n    long double d = norm(direction);\n    long double r1 = static_cast<long\
+    \ double>(first.radius);\n    long double r2 = static_cast<long double>(second.radius);\n\
+    \    long double along = (r1 * r1 - r2 * r2 + d * d) / (2 * d);\n    long double\
+    \ height_squared = std::max(0.0L, r1 * r1 - along * along);\n    Point<long double>\
+    \ unit = direction / d;\n    Point<long double> base = c1 + unit * along;\n  \
+    \  long double height = std::sqrt(height_squared);\n    if (height <= eps) return\
+    \ {base};\n\n    Point<long double> perpendicular(-unit.y, unit.x);\n    Point<long\
+    \ double> a = base - perpendicular * height;\n    Point<long double> b = base\
+    \ + perpendicular * height;\n    if (b < a) std::swap(a, b);\n    return {a, b};\n\
+    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 1 \"geometry/polygon.hpp\"\
+    \n\n\n\n#line 5 \"geometry/polygon.hpp\"\n#include <array>\n#line 8 \"geometry/polygon.hpp\"\
+    \n#include <cstddef>\n#include <limits>\n#line 12 \"geometry/polygon.hpp\"\n\n\
+    #line 14 \"geometry/polygon.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\
+    \nenum class PointInPolygon {\n    Outside = 0,\n    Boundary = 1,\n    Inside\
+    \ = 2,\n};\n\nnamespace polygon_detail {\n\ninline bool close(\n    const Point<long\
+    \ double>& first,\n    const Point<long double>& second,\n    long double eps\n\
+    ) {\n    return geometry::distance(first, second) <= eps;\n}\n\ninline void push_unique(\n\
     \    std::vector<Point<long double>>& points,\n    const Point<long double>& point,\n\
     \    long double eps\n) {\n    for (const Point<long double>& existing : points)\
     \ {\n        if (close(existing, point, eps)) return;\n    }\n    points.push_back(point);\n\
@@ -768,14 +813,14 @@ data:
     '
   dependsOn:
   - geometry/circle.hpp
+  - geometry/ray.hpp
   - geometry/line.hpp
   - geometry/point.hpp
   - geometry/polygon.hpp
-  - geometry/ray.hpp
   isVerificationFile: false
   path: geometry/all.hpp
   requiredBy: []
-  timestamp: '2026-06-21 11:53:11+09:00'
+  timestamp: '2026-06-21 11:59:00+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/geometry/geometry_algorithms.test.cpp
@@ -796,7 +841,7 @@ title: Geometry Bundle
 | `geometry/line.hpp` | Lines, segments, projection, intersection, and distances. |
 | `geometry/ray.hpp` | Rays, containment, projection, intersections, and distances with other linear objects. |
 | `geometry/polygon.hpp` | Area, centroids, triangulation, hulls, containment, ray queries, intersection, clipping, and Minkowski sums. |
-| `geometry/circle.hpp` | Circle relations and intersection points. |
+| `geometry/circle.hpp` | Circle relations, line/ray intersections, and ray reflection. |
 
 Integral predicates promote to signed 128-bit arithmetic. Constructions that
 may be non-integral return `Point<long double>`.

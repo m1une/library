@@ -786,6 +786,9 @@ data:
       path: verify/geometry/circle_line_intersection.test.cpp
       title: verify/geometry/circle_line_intersection.test.cpp
     - icon: ':x:'
+      path: verify/geometry/circle_ray.test.cpp
+      title: verify/geometry/circle_ray.test.cpp
+    - icon: ':x:'
       path: verify/geometry/convex_hull.test.cpp
       title: verify/geometry/convex_hull.test.cpp
     - icon: ':x:'
