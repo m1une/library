@@ -4,9 +4,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <optional>
 #include <vector>
 
-#include "line.hpp"
+#include "ray.hpp"
 
 namespace m1une {
 namespace geometry {
@@ -72,6 +73,123 @@ std::vector<Point<long double>> circle_line_intersections(
     Point<long double> second = foot + direction * offset;
     if (second < first) std::swap(first, second);
     return {first, second};
+}
+
+template <Coordinate C, Coordinate R>
+std::vector<Point<long double>> circle_ray_intersections(
+    const Circle<C>& circle,
+    const Ray<R>& ray,
+    long double eps = 1e-12L
+) {
+    assert(circle.radius >= 0);
+    assert(ray.origin != ray.through);
+
+    Point<long double> origin(ray.origin);
+    Point<long double> direction =
+        Point<long double>(ray.through) - origin;
+    Point<long double> offset = origin - Point<long double>(circle.center);
+    long double radius = static_cast<long double>(circle.radius);
+    long double quadratic = dot(direction, direction);
+    long double linear = 2.0L * dot(offset, direction);
+    long double constant = dot(offset, offset) - radius * radius;
+    long double discriminant =
+        linear * linear - 4.0L * quadratic * constant;
+    if (discriminant < -eps) return {};
+
+    discriminant = std::max(0.0L, discriminant);
+    long double root = std::sqrt(discriminant);
+    long double first_ratio = (-linear - root) / (2.0L * quadratic);
+    long double second_ratio = (-linear + root) / (2.0L * quadratic);
+
+    std::vector<Point<long double>> result;
+    if (first_ratio >= -eps) {
+        if (first_ratio < 0) first_ratio = 0;
+        result.push_back(origin + direction * first_ratio);
+    }
+    if (
+        second_ratio >= -eps &&
+        root > eps
+    ) {
+        if (second_ratio < 0) second_ratio = 0;
+        result.push_back(origin + direction * second_ratio);
+    }
+    return result;
+}
+
+template <Coordinate C, Coordinate R>
+std::vector<Point<long double>> circle_ray_intersections(
+    const Ray<R>& ray,
+    const Circle<C>& circle,
+    long double eps = 1e-12L
+) {
+    return circle_ray_intersections(circle, ray, eps);
+}
+
+template <Coordinate C, Coordinate R>
+std::optional<Point<long double>> first_circle_ray_intersection(
+    const Circle<C>& circle,
+    const Ray<R>& ray,
+    long double eps = 1e-12L
+) {
+    std::vector<Point<long double>> points =
+        circle_ray_intersections(circle, ray, eps);
+    if (points.empty()) return std::nullopt;
+    return points.front();
+}
+
+template <Coordinate C, Coordinate R>
+bool intersects(
+    const Circle<C>& circle,
+    const Ray<R>& ray,
+    long double eps = 1e-12L
+) {
+    return !circle_ray_intersections(circle, ray, eps).empty();
+}
+
+template <Coordinate C, Coordinate R>
+bool intersects(
+    const Ray<R>& ray,
+    const Circle<C>& circle,
+    long double eps = 1e-12L
+) {
+    return intersects(circle, ray, eps);
+}
+
+template <Coordinate R, Coordinate H, Coordinate C>
+Ray<long double> reflected_ray(
+    const Ray<R>& incoming,
+    const Point<H>& hit,
+    const Circle<C>& circle,
+    long double eps = 1e-12L
+) {
+    assert(incoming.origin != incoming.through);
+    assert(static_cast<long double>(circle.radius) > eps);
+    assert(
+        std::fabsl(
+            geometry::distance(
+                Point<long double>(hit),
+                Point<long double>(circle.center)
+            ) -
+            static_cast<long double>(circle.radius)
+        ) <= eps
+    );
+
+    Point<long double> hit_point(hit);
+    Point<long double> normal =
+        hit_point - Point<long double>(circle.center);
+    Point<long double> tangent_direction(-normal.y, normal.x);
+    Line<long double> tangent{
+        hit_point,
+        hit_point + tangent_direction
+    };
+    Point<long double> incoming_direction =
+        Point<long double>(incoming.through) -
+        Point<long double>(incoming.origin);
+    Point<long double> translated = hit_point + incoming_direction;
+    return Ray<long double>{
+        hit_point,
+        reflection(tangent, translated)
+    };
 }
 
 template <Coordinate T>
