@@ -27,6 +27,23 @@ void test_basic() {
     assert(orientation(a, c, b) == -1);
     assert(collinear(a, P(1, 0), b));
 
+    P division_start(0, 2);
+    P division_end(10, 12);
+    Point<long double> internal =
+        internal_division_point(division_start, division_end, 2, 3);
+    assert(close(internal.x, 4));
+    assert(close(internal.y, 6));
+
+    Point<long double> external_after =
+        external_division_point(division_start, division_end, 2, 1);
+    assert(close(external_after.x, 20));
+    assert(close(external_after.y, 22));
+
+    Point<long double> external_before =
+        external_division_point(division_start, division_end, 1, 2);
+    assert(close(external_before.x, -10));
+    assert(close(external_before.y, -8));
+
     Segment<long long> first;
     first.a = P(0, 0);
     first.b = P(4, 4);
@@ -117,7 +134,7 @@ void test_randomized_hulls() {
         std::vector<P> hull = convex_hull(points);
         if (hull.size() >= 3) {
             assert(polygon_area2(hull) > 0);
-            for (int i = 0; i < int(hull.size()); i++) {
+            for (std::size_t i = 0; i < hull.size(); i++) {
                 assert(orientation(
                     hull[i],
                     hull[(i + 1) % hull.size()],

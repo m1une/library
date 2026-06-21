@@ -13,7 +13,8 @@ documentation_of: ../../geometry/all.hpp
 | --- | --- |
 | `geometry/point.hpp` | Points, vectors, dot/cross products, exact orientation, distance, and rotation. |
 | `geometry/line.hpp` | Lines, segments, projection, intersection, and distances. |
-| `geometry/polygon.hpp` | Area, convex hull, point containment, and convex diameter. |
+| `geometry/ray.hpp` | Rays, containment, projection, intersections, and distances with other linear objects. |
+| `geometry/polygon.hpp` | Area, centroids, triangulation, hulls, containment, ray queries, intersection, clipping, and Minkowski sums. |
 | `geometry/circle.hpp` | Circle relations and intersection points. |
 
 Integral predicates promote to signed 128-bit arithmetic. Constructions that

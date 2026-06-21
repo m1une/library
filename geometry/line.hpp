@@ -24,6 +24,16 @@ struct Segment {
 };
 
 template <Coordinate T>
+bool on_line(
+    const Line<T>& line,
+    const Point<T>& point,
+    long double eps = 1e-12L
+) {
+    assert(line.a != line.b);
+    return orientation(line.a, line.b, point, eps) == 0;
+}
+
+template <Coordinate T>
 bool parallel(const Line<T>& first, const Line<T>& second, long double eps = 1e-12L) {
     using W = wide_type<T>;
     W first_x = W(first.b.x) - W(first.a.x);
@@ -80,6 +90,25 @@ long double distance(const Line<T>& line, const Point<T>& point) {
 }
 
 template <Coordinate T>
+long double distance(const Point<T>& point, const Line<T>& line) {
+    return distance(line, point);
+}
+
+template <Coordinate T>
+bool intersects(
+    const Line<T>& first,
+    const Line<T>& second,
+    long double eps = 1e-12L
+) {
+    return !parallel(first, second, eps) || on_line(first, second.a, eps);
+}
+
+template <Coordinate T>
+long double distance(const Line<T>& first, const Line<T>& second) {
+    return intersects(first, second) ? 0 : distance(first, second.a);
+}
+
+template <Coordinate T>
 bool on_segment(
     const Segment<T>& segment,
     const Point<T>& point,
@@ -120,6 +149,26 @@ bool intersects(
 }
 
 template <Coordinate T>
+bool intersects(
+    const Line<T>& line,
+    const Segment<T>& segment,
+    long double eps = 1e-12L
+) {
+    int first_side = orientation(line.a, line.b, segment.a, eps);
+    int second_side = orientation(line.a, line.b, segment.b, eps);
+    return first_side == 0 || second_side == 0 || first_side != second_side;
+}
+
+template <Coordinate T>
+bool intersects(
+    const Segment<T>& segment,
+    const Line<T>& line,
+    long double eps = 1e-12L
+) {
+    return intersects(line, segment, eps);
+}
+
+template <Coordinate T>
 long double distance(const Segment<T>& segment, const Point<T>& point) {
     Point<long double> a(segment.a);
     Point<long double> b(segment.b);
@@ -134,6 +183,11 @@ long double distance(const Segment<T>& segment, const Point<T>& point) {
 }
 
 template <Coordinate T>
+long double distance(const Point<T>& point, const Segment<T>& segment) {
+    return distance(segment, point);
+}
+
+template <Coordinate T>
 long double distance(const Segment<T>& first, const Segment<T>& second) {
     if (intersects(first, second)) return 0;
     return std::min({
@@ -142,6 +196,17 @@ long double distance(const Segment<T>& first, const Segment<T>& second) {
         distance(second, first.a),
         distance(second, first.b),
     });
+}
+
+template <Coordinate T>
+long double distance(const Line<T>& line, const Segment<T>& segment) {
+    if (intersects(line, segment)) return 0;
+    return std::min(distance(line, segment.a), distance(line, segment.b));
+}
+
+template <Coordinate T>
+long double distance(const Segment<T>& segment, const Line<T>& line) {
+    return distance(line, segment);
 }
 
 template <Coordinate T>
@@ -160,6 +225,33 @@ std::optional<Point<long double>> line_intersection(
     if (std::fabsl(denominator) <= eps) return std::nullopt;
     long double ratio = cross(q - p, s) / denominator;
     return p + r * ratio;
+}
+
+template <Coordinate T>
+std::optional<Point<long double>> line_segment_intersection(
+    const Line<T>& line,
+    const Segment<T>& segment,
+    long double eps = 1e-12L
+) {
+    assert(line.a != line.b);
+    if (segment.a == segment.b) {
+        if (on_line(line, segment.a, eps)) {
+            return Point<long double>(segment.a);
+        }
+        return std::nullopt;
+    }
+    if (!intersects(line, segment, eps)) return std::nullopt;
+    Line<T> supporting_line{segment.a, segment.b};
+    return line_intersection(line, supporting_line, eps);
+}
+
+template <Coordinate T>
+std::optional<Point<long double>> line_segment_intersection(
+    const Segment<T>& segment,
+    const Line<T>& line,
+    long double eps = 1e-12L
+) {
+    return line_segment_intersection(line, segment, eps);
 }
 
 }  // namespace geometry

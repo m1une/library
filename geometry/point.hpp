@@ -144,6 +144,40 @@ long double distance(const Point<T>& a, const Point<T>& b) {
     );
 }
 
+template <Coordinate T, typename M, typename N>
+requires std::is_arithmetic_v<M> && std::is_arithmetic_v<N>
+constexpr Point<long double> internal_division_point(
+    const Point<T>& a,
+    const Point<T>& b,
+    M m,
+    N n
+) {
+    long double first_ratio = static_cast<long double>(m);
+    long double second_ratio = static_cast<long double>(n);
+    long double denominator = first_ratio + second_ratio;
+    assert(denominator != 0);
+    Point<long double> first(a);
+    Point<long double> direction = Point<long double>(b) - first;
+    return first + direction * (first_ratio / denominator);
+}
+
+template <Coordinate T, typename M, typename N>
+requires std::is_arithmetic_v<M> && std::is_arithmetic_v<N>
+constexpr Point<long double> external_division_point(
+    const Point<T>& a,
+    const Point<T>& b,
+    M m,
+    N n
+) {
+    long double first_ratio = static_cast<long double>(m);
+    long double second_ratio = static_cast<long double>(n);
+    long double denominator = first_ratio - second_ratio;
+    assert(denominator != 0);
+    Point<long double> first(a);
+    Point<long double> direction = Point<long double>(b) - first;
+    return first + direction * (first_ratio / denominator);
+}
+
 template <Coordinate T>
 constexpr int sign(wide_type<T> value, long double eps = 1e-12L) {
     if constexpr (std::integral<T>) {

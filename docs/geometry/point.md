@@ -40,12 +40,36 @@ subtraction, scalar multiplication, and scalar division.
 | `distance2(a, b)` | Squared Euclidean distance. | $O(1)$ |
 | `norm(p)` | Euclidean norm as `long double`. | $O(1)$ |
 | `distance(a, b)` | Euclidean distance as `long double`. | $O(1)$ |
+| `internal_division_point(a, b, m, n)` | Returns the point internally dividing `AB` in ratio `AP:PB = m:n`. | $O(1)$ |
+| `external_division_point(a, b, m, n)` | Returns the point externally dividing `AB` in ratio `AP:PB = m:n`. | $O(1)$ |
 | `orientation(a, b, c, eps)` | Returns `1` for counterclockwise, `-1` for clockwise, and `0` for collinear. | $O(1)$ |
 | `collinear(a, b, c, eps)` | Returns whether three points are collinear. | $O(1)$ |
 | `rotate(p, angle)` | Rotates `p` counterclockwise by radians. | $O(1)$ |
 | `normalized(p)` | Returns a unit vector in `p`'s direction. | $O(1)$ |
 
 `normalized` requires a nonzero vector.
+
+## Internal and external division
+
+For `internal_division_point(a, b, m, n)`, the returned point $P$ satisfies
+$AP:PB=m:n$ and is computed as
+
+$$
+P = A + \frac{m}{m+n}(B-A).
+$$
+
+For positive `m` and `n`, `P` lies between `a` and `b`. The function requires
+`m + n != 0`.
+
+`external_division_point` uses the same ratio convention:
+
+$$
+P = A + \frac{m}{m-n}(B-A).
+$$
+
+For positive unequal ratios, the point lies outside the segment. It is beyond
+`b` when `m > n` and beyond `a` when `m < n`. The function requires
+`m != n`. Both functions return `Point<long double>`.
 
 ## Example
 
