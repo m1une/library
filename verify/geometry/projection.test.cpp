@@ -12,7 +12,7 @@ int main() {
 
     int q;
     std::cin >> q;
-    std::cout << std::fixed << std::setprecision(15);
+    std::cout << std::fixed << std::setprecision(10);
     while (q--) {
         Point<long double> point;
         std::cin >> point.x >> point.y;
