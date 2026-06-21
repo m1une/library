@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/circle.hpp
     title: Circles
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/line.hpp
     title: Lines and Segments
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
     title: Polygons and Convex Hull
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/ray.hpp
     title: Rays
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/geometry_algorithms.test.cpp
     title: verify/geometry/geometry_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"geometry/all.hpp\"\n\n\n\n#line 1 \"geometry/circle.hpp\"\
@@ -73,10 +73,10 @@ data:
     }\n\ntemplate <Coordinate T>\nconstexpr wide_type<T> distance2(const Point<T>&\
     \ a, const Point<T>& b) {\n    using W = wide_type<T>;\n    W dx = W(a.x) - W(b.x);\n\
     \    W dy = W(a.y) - W(b.y);\n    return dx * dx + dy * dy;\n}\n\ntemplate <Coordinate\
-    \ T>\nlong double norm(const Point<T>& point) {\n    return std::hypotl(\n   \
-    \     static_cast<long double>(point.x),\n        static_cast<long double>(point.y)\n\
+    \ T>\nlong double norm(const Point<T>& point) {\n    return std::hypot(\n    \
+    \    static_cast<long double>(point.x),\n        static_cast<long double>(point.y)\n\
     \    );\n}\n\ntemplate <Coordinate T>\nlong double distance(const Point<T>& a,\
-    \ const Point<T>& b) {\n    return std::hypotl(\n        static_cast<long double>(a.x)\
+    \ const Point<T>& b) {\n    return std::hypot(\n        static_cast<long double>(a.x)\
     \ - static_cast<long double>(b.x),\n        static_cast<long double>(a.y) - static_cast<long\
     \ double>(b.y)\n    );\n}\n\ntemplate <Coordinate T, typename M, typename N>\n\
     requires std::is_arithmetic_v<M> && std::is_arithmetic_v<N>\nconstexpr Point<long\
@@ -145,14 +145,14 @@ data:
     \ - static_cast<long double>(line.a.y)\n    );\n    Point<long double> offset(\n\
     \        static_cast<long double>(point.x) - static_cast<long double>(line.a.x),\n\
     \        static_cast<long double>(point.y) - static_cast<long double>(line.a.y)\n\
-    \    );\n    return std::fabsl(cross(direction, offset)) / norm(direction);\n\
-    }\n\ntemplate <Coordinate T>\nlong double distance(const Point<T>& point, const\
-    \ Line<T>& line) {\n    return distance(line, point);\n}\n\ntemplate <Coordinate\
-    \ T>\nbool intersects(\n    const Line<T>& first,\n    const Line<T>& second,\n\
-    \    long double eps = 1e-12L\n) {\n    return !parallel(first, second, eps) ||\
-    \ on_line(first, second.a, eps);\n}\n\ntemplate <Coordinate T>\nlong double distance(const\
-    \ Line<T>& first, const Line<T>& second) {\n    return intersects(first, second)\
-    \ ? 0 : distance(first, second.a);\n}\n\ntemplate <Coordinate T>\nbool on_segment(\n\
+    \    );\n    return std::fabs(cross(direction, offset)) / norm(direction);\n}\n\
+    \ntemplate <Coordinate T>\nlong double distance(const Point<T>& point, const Line<T>&\
+    \ line) {\n    return distance(line, point);\n}\n\ntemplate <Coordinate T>\nbool\
+    \ intersects(\n    const Line<T>& first,\n    const Line<T>& second,\n    long\
+    \ double eps = 1e-12L\n) {\n    return !parallel(first, second, eps) || on_line(first,\
+    \ second.a, eps);\n}\n\ntemplate <Coordinate T>\nlong double distance(const Line<T>&\
+    \ first, const Line<T>& second) {\n    return intersects(first, second) ? 0 :\
+    \ distance(first, second.a);\n}\n\ntemplate <Coordinate T>\nbool on_segment(\n\
     \    const Segment<T>& segment,\n    const Point<T>& point,\n    long double eps\
     \ = 1e-12L\n) {\n    if (orientation(segment.a, segment.b, point, eps) != 0) return\
     \ false;\n    using W = wide_type<T>;\n    W px = W(point.x);\n    W py = W(point.y);\n\
@@ -201,9 +201,9 @@ data:
     \ != second.b);\n    Point<long double> p(first.a);\n    Point<long double> q(second.a);\n\
     \    Point<long double> r = Point<long double>(first.b) - p;\n    Point<long double>\
     \ s = Point<long double>(second.b) - q;\n    long double denominator = cross(r,\
-    \ s);\n    if (std::fabsl(denominator) <= eps) return std::nullopt;\n    long\
-    \ double ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\
-    \ntemplate <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
+    \ s);\n    if (std::fabs(denominator) <= eps) return std::nullopt;\n    long double\
+    \ ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\ntemplate\
+    \ <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
     \    const Line<T>& line,\n    const Segment<T>& segment,\n    long double eps\
     \ = 1e-12L\n) {\n    assert(line.a != line.b);\n    if (segment.a == segment.b)\
     \ {\n        if (on_line(line, segment.a, eps)) {\n            return Point<long\
@@ -381,10 +381,10 @@ data:
     \ >= 0);\n    long double d = geometry::distance(first.center, second.center);\n\
     \    long double r1 = static_cast<long double>(first.radius);\n    long double\
     \ r2 = static_cast<long double>(second.radius);\n    long double sum = r1 + r2;\n\
-    \    long double difference = std::fabsl(r1 - r2);\n    if (d <= eps && difference\
+    \    long double difference = std::fabs(r1 - r2);\n    if (d <= eps && difference\
     \ <= eps) return CircleRelation::Coincident;\n    if (sum < d - eps) return CircleRelation::Separate;\n\
-    \    if (std::fabsl(d - sum) <= eps) return CircleRelation::ExternallyTangent;\n\
-    \    if (d < difference - eps) return CircleRelation::Contained;\n    if (std::fabsl(d\
+    \    if (std::fabs(d - sum) <= eps) return CircleRelation::ExternallyTangent;\n\
+    \    if (d < difference - eps) return CircleRelation::Contained;\n    if (std::fabs(d\
     \ - difference) <= eps) return CircleRelation::InternallyTangent;\n    return\
     \ CircleRelation::Intersecting;\n}\n\ntemplate <Coordinate T>\nstd::vector<Point<long\
     \ double>> circle_line_intersections(\n    const Circle<T>& circle,\n    const\
@@ -434,8 +434,8 @@ data:
     \ reflected_ray(\n    const Ray<R>& incoming,\n    const Point<H>& hit,\n    const\
     \ Circle<C>& circle,\n    long double eps = 1e-12L\n) {\n    assert(incoming.origin\
     \ != incoming.through);\n    assert(static_cast<long double>(circle.radius) >\
-    \ eps);\n    assert(\n        std::fabsl(\n            geometry::distance(\n \
-    \               Point<long double>(hit),\n                Point<long double>(circle.center)\n\
+    \ eps);\n    assert(\n        std::fabs(\n            geometry::distance(\n  \
+    \              Point<long double>(hit),\n                Point<long double>(circle.center)\n\
     \            ) -\n            static_cast<long double>(circle.radius)\n      \
     \  ) <= eps\n    );\n\n    Point<long double> hit_point(hit);\n    Point<long\
     \ double> normal =\n        hit_point - Point<long double>(circle.center);\n \
@@ -537,7 +537,7 @@ data:
     \    for (std::size_t i = 0; i < n; i++) {\n        result += cross(polygon[i],\
     \ polygon[(i + 1) % n]);\n    }\n    return result;\n}\n\ntemplate <Coordinate\
     \ T>\nlong double polygon_area(const std::vector<Point<T>>& polygon) {\n    return\
-    \ std::fabsl(static_cast<long double>(polygon_area2(polygon))) / 2;\n}\n\ntemplate\
+    \ std::fabs(static_cast<long double>(polygon_area2(polygon))) / 2;\n}\n\ntemplate\
     \ <Coordinate T>\nstd::optional<Point<long double>> polygon_centroid(\n    const\
     \ std::vector<Point<T>>& polygon,\n    long double eps = 1e-12L\n) {\n    if (polygon.size()\
     \ < 3) return std::nullopt;\n\n    wide_type<T> signed_area2 = polygon_area2(polygon);\n\
@@ -820,8 +820,8 @@ data:
   isVerificationFile: false
   path: geometry/all.hpp
   requiredBy: []
-  timestamp: '2026-06-21 11:59:00+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2026-06-21 12:04:47+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/geometry/geometry_algorithms.test.cpp
 documentation_of: geometry/all.hpp

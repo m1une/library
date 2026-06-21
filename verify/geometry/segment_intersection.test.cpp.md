@@ -1,17 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/line.hpp
     title: Lines and Segments
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_B
@@ -64,10 +64,10 @@ data:
     \ T>\nconstexpr wide_type<T> distance2(const Point<T>& a, const Point<T>& b) {\n\
     \    using W = wide_type<T>;\n    W dx = W(a.x) - W(b.x);\n    W dy = W(a.y) -\
     \ W(b.y);\n    return dx * dx + dy * dy;\n}\n\ntemplate <Coordinate T>\nlong double\
-    \ norm(const Point<T>& point) {\n    return std::hypotl(\n        static_cast<long\
+    \ norm(const Point<T>& point) {\n    return std::hypot(\n        static_cast<long\
     \ double>(point.x),\n        static_cast<long double>(point.y)\n    );\n}\n\n\
     template <Coordinate T>\nlong double distance(const Point<T>& a, const Point<T>&\
-    \ b) {\n    return std::hypotl(\n        static_cast<long double>(a.x) - static_cast<long\
+    \ b) {\n    return std::hypot(\n        static_cast<long double>(a.x) - static_cast<long\
     \ double>(b.x),\n        static_cast<long double>(a.y) - static_cast<long double>(b.y)\n\
     \    );\n}\n\ntemplate <Coordinate T, typename M, typename N>\nrequires std::is_arithmetic_v<M>\
     \ && std::is_arithmetic_v<N>\nconstexpr Point<long double> internal_division_point(\n\
@@ -135,7 +135,7 @@ data:
     \        static_cast<long double>(line.b.y) - static_cast<long double>(line.a.y)\n\
     \    );\n    Point<long double> offset(\n        static_cast<long double>(point.x)\
     \ - static_cast<long double>(line.a.x),\n        static_cast<long double>(point.y)\
-    \ - static_cast<long double>(line.a.y)\n    );\n    return std::fabsl(cross(direction,\
+    \ - static_cast<long double>(line.a.y)\n    );\n    return std::fabs(cross(direction,\
     \ offset)) / norm(direction);\n}\n\ntemplate <Coordinate T>\nlong double distance(const\
     \ Point<T>& point, const Line<T>& line) {\n    return distance(line, point);\n\
     }\n\ntemplate <Coordinate T>\nbool intersects(\n    const Line<T>& first,\n  \
@@ -191,9 +191,9 @@ data:
     \ != second.b);\n    Point<long double> p(first.a);\n    Point<long double> q(second.a);\n\
     \    Point<long double> r = Point<long double>(first.b) - p;\n    Point<long double>\
     \ s = Point<long double>(second.b) - q;\n    long double denominator = cross(r,\
-    \ s);\n    if (std::fabsl(denominator) <= eps) return std::nullopt;\n    long\
-    \ double ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\
-    \ntemplate <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
+    \ s);\n    if (std::fabs(denominator) <= eps) return std::nullopt;\n    long double\
+    \ ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\ntemplate\
+    \ <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
     \    const Line<T>& line,\n    const Segment<T>& segment,\n    long double eps\
     \ = 1e-12L\n) {\n    assert(line.a != line.b);\n    if (segment.a == segment.b)\
     \ {\n        if (on_line(line, segment.a, eps)) {\n            return Point<long\
@@ -223,8 +223,8 @@ data:
   isVerificationFile: true
   path: verify/geometry/segment_intersection.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 11:53:11+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-21 12:04:47+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/geometry/segment_intersection.test.cpp
 layout: document

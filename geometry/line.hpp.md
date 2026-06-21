@@ -1,56 +1,56 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: geometry/all.hpp
     title: Geometry Bundle
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/circle.hpp
     title: Circles
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
     title: Polygons and Convex Hull
-  - icon: ':x:'
+  - icon: ':question:'
     path: geometry/ray.hpp
     title: Rays
   _extendedVerifiedWith:
   - icon: ':x:'
     path: verify/geometry/circle_line_intersection.test.cpp
     title: verify/geometry/circle_line_intersection.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/circle_ray.test.cpp
     title: verify/geometry/circle_ray.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/convex_hull.test.cpp
     title: verify/geometry/convex_hull.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/geometry_algorithms.test.cpp
     title: verify/geometry/geometry_algorithms.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/point_in_polygon.test.cpp
     title: verify/geometry/point_in_polygon.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/polygon_area.test.cpp
     title: verify/geometry/polygon_area.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/polygon_operations.test.cpp
     title: verify/geometry/polygon_operations.test.cpp
   - icon: ':x:'
     path: verify/geometry/projection.test.cpp
     title: verify/geometry/projection.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/ray.test.cpp
     title: verify/geometry/ray.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/segment_intersection.test.cpp
     title: verify/geometry/segment_intersection.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"geometry/line.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -98,10 +98,10 @@ data:
     \ T>\nconstexpr wide_type<T> distance2(const Point<T>& a, const Point<T>& b) {\n\
     \    using W = wide_type<T>;\n    W dx = W(a.x) - W(b.x);\n    W dy = W(a.y) -\
     \ W(b.y);\n    return dx * dx + dy * dy;\n}\n\ntemplate <Coordinate T>\nlong double\
-    \ norm(const Point<T>& point) {\n    return std::hypotl(\n        static_cast<long\
+    \ norm(const Point<T>& point) {\n    return std::hypot(\n        static_cast<long\
     \ double>(point.x),\n        static_cast<long double>(point.y)\n    );\n}\n\n\
     template <Coordinate T>\nlong double distance(const Point<T>& a, const Point<T>&\
-    \ b) {\n    return std::hypotl(\n        static_cast<long double>(a.x) - static_cast<long\
+    \ b) {\n    return std::hypot(\n        static_cast<long double>(a.x) - static_cast<long\
     \ double>(b.x),\n        static_cast<long double>(a.y) - static_cast<long double>(b.y)\n\
     \    );\n}\n\ntemplate <Coordinate T, typename M, typename N>\nrequires std::is_arithmetic_v<M>\
     \ && std::is_arithmetic_v<N>\nconstexpr Point<long double> internal_division_point(\n\
@@ -169,7 +169,7 @@ data:
     \        static_cast<long double>(line.b.y) - static_cast<long double>(line.a.y)\n\
     \    );\n    Point<long double> offset(\n        static_cast<long double>(point.x)\
     \ - static_cast<long double>(line.a.x),\n        static_cast<long double>(point.y)\
-    \ - static_cast<long double>(line.a.y)\n    );\n    return std::fabsl(cross(direction,\
+    \ - static_cast<long double>(line.a.y)\n    );\n    return std::fabs(cross(direction,\
     \ offset)) / norm(direction);\n}\n\ntemplate <Coordinate T>\nlong double distance(const\
     \ Point<T>& point, const Line<T>& line) {\n    return distance(line, point);\n\
     }\n\ntemplate <Coordinate T>\nbool intersects(\n    const Line<T>& first,\n  \
@@ -225,9 +225,9 @@ data:
     \ != second.b);\n    Point<long double> p(first.a);\n    Point<long double> q(second.a);\n\
     \    Point<long double> r = Point<long double>(first.b) - p;\n    Point<long double>\
     \ s = Point<long double>(second.b) - q;\n    long double denominator = cross(r,\
-    \ s);\n    if (std::fabsl(denominator) <= eps) return std::nullopt;\n    long\
-    \ double ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\
-    \ntemplate <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
+    \ s);\n    if (std::fabs(denominator) <= eps) return std::nullopt;\n    long double\
+    \ ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\ntemplate\
+    \ <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
     \    const Line<T>& line,\n    const Segment<T>& segment,\n    long double eps\
     \ = 1e-12L\n) {\n    assert(line.a != line.b);\n    if (segment.a == segment.b)\
     \ {\n        if (on_line(line, segment.a, eps)) {\n            return Point<long\
@@ -272,7 +272,7 @@ data:
     \ double>(line.a.x),\n        static_cast<long double>(line.b.y) - static_cast<long\
     \ double>(line.a.y)\n    );\n    Point<long double> offset(\n        static_cast<long\
     \ double>(point.x) - static_cast<long double>(line.a.x),\n        static_cast<long\
-    \ double>(point.y) - static_cast<long double>(line.a.y)\n    );\n    return std::fabsl(cross(direction,\
+    \ double>(point.y) - static_cast<long double>(line.a.y)\n    );\n    return std::fabs(cross(direction,\
     \ offset)) / norm(direction);\n}\n\ntemplate <Coordinate T>\nlong double distance(const\
     \ Point<T>& point, const Line<T>& line) {\n    return distance(line, point);\n\
     }\n\ntemplate <Coordinate T>\nbool intersects(\n    const Line<T>& first,\n  \
@@ -328,9 +328,9 @@ data:
     \ != second.b);\n    Point<long double> p(first.a);\n    Point<long double> q(second.a);\n\
     \    Point<long double> r = Point<long double>(first.b) - p;\n    Point<long double>\
     \ s = Point<long double>(second.b) - q;\n    long double denominator = cross(r,\
-    \ s);\n    if (std::fabsl(denominator) <= eps) return std::nullopt;\n    long\
-    \ double ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\
-    \ntemplate <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
+    \ s);\n    if (std::fabs(denominator) <= eps) return std::nullopt;\n    long double\
+    \ ratio = cross(q - p, s) / denominator;\n    return p + r * ratio;\n}\n\ntemplate\
+    \ <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
     \    const Line<T>& line,\n    const Segment<T>& segment,\n    long double eps\
     \ = 1e-12L\n) {\n    assert(line.a != line.b);\n    if (segment.a == segment.b)\
     \ {\n        if (on_line(line, segment.a, eps)) {\n            return Point<long\
@@ -350,8 +350,8 @@ data:
   - geometry/circle.hpp
   - geometry/all.hpp
   - geometry/polygon.hpp
-  timestamp: '2026-06-21 11:53:11+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2026-06-21 12:04:47+09:00'
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/geometry/polygon_area.test.cpp
   - verify/geometry/circle_line_intersection.test.cpp

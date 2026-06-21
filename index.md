@@ -254,22 +254,22 @@ data:
       title: Multipoint Evaluation and Interpolation
   - name: geometry
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: geometry/all.hpp
       title: Geometry Bundle
-    - icon: ':x:'
+    - icon: ':question:'
       path: geometry/circle.hpp
       title: Circles
-    - icon: ':x:'
+    - icon: ':question:'
       path: geometry/line.hpp
       title: Lines and Segments
-    - icon: ':x:'
+    - icon: ':question:'
       path: geometry/point.hpp
       title: 2D Point and Predicates
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: geometry/polygon.hpp
       title: Polygons and Convex Hull
-    - icon: ':x:'
+    - icon: ':question:'
       path: geometry/ray.hpp
       title: Rays
   - name: graph
@@ -517,7 +517,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: string/suffix_array.hpp
       title: Suffix Array and LCP Array
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: string/trie.hpp
       title: Trie
     - icon: ':heavy_check_mark:'
@@ -785,31 +785,31 @@ data:
     - icon: ':x:'
       path: verify/geometry/circle_line_intersection.test.cpp
       title: verify/geometry/circle_line_intersection.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/circle_ray.test.cpp
       title: verify/geometry/circle_ray.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/convex_hull.test.cpp
       title: verify/geometry/convex_hull.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/geometry_algorithms.test.cpp
       title: verify/geometry/geometry_algorithms.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/point_in_polygon.test.cpp
       title: verify/geometry/point_in_polygon.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/polygon_area.test.cpp
       title: verify/geometry/polygon_area.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/polygon_operations.test.cpp
       title: verify/geometry/polygon_operations.test.cpp
     - icon: ':x:'
       path: verify/geometry/projection.test.cpp
       title: verify/geometry/projection.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/ray.test.cpp
       title: verify/geometry/ray.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/segment_intersection.test.cpp
       title: verify/geometry/segment_intersection.test.cpp
   - name: verify/graph
@@ -891,7 +891,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/string/suffix_array.test.cpp
       title: verify/string/suffix_array.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/string/trie.test.cpp
       title: verify/string/trie.test.cpp
     - icon: ':heavy_check_mark:'

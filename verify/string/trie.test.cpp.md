@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: string/trie.hpp
     title: Trie
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C
@@ -141,11 +141,11 @@ data:
     \ == 0);\n    assert(trie.node_count() == 1);\n}\n\n}  // namespace\n\nint main()\
     \ {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n   \
     \ test_features();\n    test_randomized();\n\n    int q;\n    std::cin >> q;\n\
-    \    m1une::string::Trie<> trie;\n    while (q--) {\n        std::string command;\n\
-    \        std::string word;\n        std::cin >> command >> word;\n        if (command\
-    \ == \"insert\") {\n            trie.insert(word);\n        } else {\n       \
-    \     std::cout << (trie.contains(word) ? \"yes\" : \"no\") << '\\n';\n      \
-    \  }\n    }\n}\n"
+    \    m1une::string::Trie<26, 'A'> trie;\n    while (q--) {\n        std::string\
+    \ command;\n        std::string word;\n        std::cin >> command >> word;\n\
+    \        if (command == \"insert\") {\n            trie.insert(word);\n      \
+    \  } else {\n            std::cout << (trie.contains(word) ? \"yes\" : \"no\"\
+    ) << '\\n';\n        }\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C\"\
     \n\n#include \"../../string/trie.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
     #include <cstdint>\n#include <iostream>\n#include <map>\n#include <string>\n#include\
@@ -201,18 +201,18 @@ data:
     \ == 0);\n    assert(trie.node_count() == 1);\n}\n\n}  // namespace\n\nint main()\
     \ {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n   \
     \ test_features();\n    test_randomized();\n\n    int q;\n    std::cin >> q;\n\
-    \    m1une::string::Trie<> trie;\n    while (q--) {\n        std::string command;\n\
-    \        std::string word;\n        std::cin >> command >> word;\n        if (command\
-    \ == \"insert\") {\n            trie.insert(word);\n        } else {\n       \
-    \     std::cout << (trie.contains(word) ? \"yes\" : \"no\") << '\\n';\n      \
-    \  }\n    }\n}\n"
+    \    m1une::string::Trie<26, 'A'> trie;\n    while (q--) {\n        std::string\
+    \ command;\n        std::string word;\n        std::cin >> command >> word;\n\
+    \        if (command == \"insert\") {\n            trie.insert(word);\n      \
+    \  } else {\n            std::cout << (trie.contains(word) ? \"yes\" : \"no\"\
+    ) << '\\n';\n        }\n    }\n}\n"
   dependsOn:
   - string/trie.hpp
   isVerificationFile: true
   path: verify/string/trie.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-21 02:56:30+00:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/trie.test.cpp
 layout: document

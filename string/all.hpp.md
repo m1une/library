@@ -13,7 +13,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: string/suffix_array.hpp
     title: Suffix Array and LCP Array
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: string/trie.hpp
     title: Trie
   - icon: ':heavy_check_mark:'
