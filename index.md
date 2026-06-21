@@ -142,7 +142,7 @@ data:
       title: Hash Set
   - name: ds/interval_set
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: ds/interval_set/interval_set.hpp
       title: ds/interval_set/interval_set.hpp
   - name: ds/ordered_set
@@ -356,6 +356,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
+    - icon: ':heavy_check_mark:'
+      path: math/bitwise_convolution.hpp
+      title: Bitwise Convolution
     - icon: ':heavy_check_mark:'
       path: math/combinatorial_sequences.hpp
       title: Combinatorial Sequences
@@ -681,7 +684,7 @@ data:
       title: verify/ds/hash_table/hash_set.test.cpp
   - name: verify/ds/interval_set
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/ds/interval_set/interval_set.test.cpp
       title: verify/ds/interval_set/interval_set.test.cpp
   - name: verify/ds/ordered_set
@@ -850,6 +853,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/bernoulli_number.test.cpp
       title: verify/math/bernoulli_number.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/bitwise_convolution.test.cpp
+      title: verify/math/bitwise_convolution.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/math/enumerate_primes.test.cpp
       title: verify/math/enumerate_primes.test.cpp

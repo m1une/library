@@ -235,8 +235,8 @@ data:
     \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
     \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
     \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
-    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int32_t\
-    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int32_t\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int64_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int64_t\
     \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
     \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
     \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
@@ -286,7 +286,7 @@ data:
   isVerificationFile: true
   path: verify/ds/segtree/lazy_segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-21 17:44:01+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/segtree/lazy_segtree.test.cpp

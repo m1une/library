@@ -1,14 +1,14 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: ds/interval_set/interval_set.hpp
     title: ds/interval_set/interval_set.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -72,29 +72,31 @@ data:
     \n\n#line 4 \"verify/ds/interval_set/interval_set.test.cpp\"\n\n#line 6 \"verify/ds/interval_set/interval_set.test.cpp\"\
     \n#include <iostream>\n\nint main() {\n    long long A, B;\n    std::cin >> A\
     \ >> B;\n\n    m1une::ds::IntervalSet<int> st;\n    st.insert(1, 5);\n    st.insert(5,\
-    \ 8);\n    assert(st.to_vector() == std::vector<std::pair<int, int>>({{1, 8}}));\n\
-    \n    st.erase(3, 6);\n    assert(st.to_vector() == std::vector<std::pair<int,\
-    \ int>>({{1, 3}, {6, 8}}));\n\n    assert(st.contains(2));\n    assert(!st.contains(3));\n\
+    \ 8);\n    std::vector<std::pair<int, int>> expected;\n    expected.emplace_back(1,\
+    \ 8);\n    assert(st.to_vector() == expected);\n\n    st.erase(3, 6);\n    expected.clear();\n\
+    \    expected.emplace_back(1, 3);\n    expected.emplace_back(6, 8);\n    assert(st.to_vector()\
+    \ == expected);\n\n    assert(st.contains(2));\n    assert(!st.contains(3));\n\
     \    assert(st.contains(1, 3));\n    assert(!st.contains(1, 4));\n    assert(st.intersects(4,\
     \ 7));\n    assert(!st.intersects(3, 6));\n    assert(st.mex(1) == 3);\n    assert(st.mex(4)\
     \ == 4);\n    assert(st.mex(6) == 8);\n\n    std::cout << A + B << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
     ../../../ds/interval_set/interval_set.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
     \nint main() {\n    long long A, B;\n    std::cin >> A >> B;\n\n    m1une::ds::IntervalSet<int>\
-    \ st;\n    st.insert(1, 5);\n    st.insert(5, 8);\n    assert(st.to_vector() ==\
-    \ std::vector<std::pair<int, int>>({{1, 8}}));\n\n    st.erase(3, 6);\n    assert(st.to_vector()\
-    \ == std::vector<std::pair<int, int>>({{1, 3}, {6, 8}}));\n\n    assert(st.contains(2));\n\
-    \    assert(!st.contains(3));\n    assert(st.contains(1, 3));\n    assert(!st.contains(1,\
-    \ 4));\n    assert(st.intersects(4, 7));\n    assert(!st.intersects(3, 6));\n\
-    \    assert(st.mex(1) == 3);\n    assert(st.mex(4) == 4);\n    assert(st.mex(6)\
-    \ == 8);\n\n    std::cout << A + B << '\\n';\n}\n"
+    \ st;\n    st.insert(1, 5);\n    st.insert(5, 8);\n    std::vector<std::pair<int,\
+    \ int>> expected;\n    expected.emplace_back(1, 8);\n    assert(st.to_vector()\
+    \ == expected);\n\n    st.erase(3, 6);\n    expected.clear();\n    expected.emplace_back(1,\
+    \ 3);\n    expected.emplace_back(6, 8);\n    assert(st.to_vector() == expected);\n\
+    \n    assert(st.contains(2));\n    assert(!st.contains(3));\n    assert(st.contains(1,\
+    \ 3));\n    assert(!st.contains(1, 4));\n    assert(st.intersects(4, 7));\n  \
+    \  assert(!st.intersects(3, 6));\n    assert(st.mex(1) == 3);\n    assert(st.mex(4)\
+    \ == 4);\n    assert(st.mex(6) == 8);\n\n    std::cout << A + B << '\\n';\n}\n"
   dependsOn:
   - ds/interval_set/interval_set.hpp
   isVerificationFile: true
   path: verify/ds/interval_set/interval_set.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 13:10:40+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-21 17:44:01+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/interval_set/interval_set.test.cpp
 layout: document

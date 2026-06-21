@@ -14,6 +14,9 @@ data:
     path: math/bit_ceil.hpp
     title: Bit Ceil
   - icon: ':heavy_check_mark:'
+    path: math/bitwise_convolution.hpp
+    title: Bitwise Convolution
+  - icon: ':heavy_check_mark:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
   - icon: ':heavy_check_mark:'
@@ -47,7 +50,76 @@ data:
   bundledCode: "#line 1 \"verify/math/math_algorithms.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
     \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <numeric>\n#include\
-    \ <utility>\n#include <vector>\n\n#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bit_ceil.hpp\"\
+    \ <utility>\n#include <vector>\n\n#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bitwise_convolution.hpp\"\
+    \n\n\n\n#line 5 \"math/bitwise_convolution.hpp\"\n#include <cstddef>\n#line 8\
+    \ \"math/bitwise_convolution.hpp\"\n\nnamespace m1une {\nnamespace math {\n\n\
+    namespace bitwise_convolution_detail {\n\ninline bool is_power_of_two(std::size_t\
+    \ size) noexcept {\n    return size != 0 && (size & (size - 1)) == 0;\n}\n\ninline\
+    \ std::size_t common_size(\n    std::size_t first_size,\n    std::size_t second_size\n\
+    ) {\n    std::size_t required = first_size > second_size\n        ? first_size\n\
+    \        : second_size;\n    std::size_t size = 1;\n    while (size < required)\
+    \ size <<= 1;\n    return size;\n}\n\ntemplate <typename T>\nstd::vector<T> pointwise_product(\n\
+    \    std::vector<T> first,\n    const std::vector<T>& second\n) {\n    assert(first.size()\
+    \ == second.size());\n    for (std::size_t index = 0; index < first.size(); ++index)\
+    \ {\n        first[index] *= second[index];\n    }\n    return first;\n}\n\n}\
+    \  // namespace bitwise_convolution_detail\n\ntemplate <typename T>\nvoid subset_zeta_transform(std::vector<T>&\
+    \ values) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
+    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < bit; ++offset) {\n                values[block + bit + offset]\
+    \ += values[block + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename\
+    \ T>\nvoid subset_mobius_transform(std::vector<T>& values) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
+    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < bit; ++offset) {\n                values[block + bit + offset]\
+    \ -= values[block + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename\
+    \ T>\nvoid superset_zeta_transform(std::vector<T>& values) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
+    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < bit; ++offset) {\n                values[block + offset] += values[block\
+    \ + bit + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename T>\n\
+    void superset_mobius_transform(std::vector<T>& values) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
+    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < bit; ++offset) {\n                values[block + offset] -= values[block\
+    \ + bit + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename T>\n\
+    void walsh_hadamard_transform(\n    std::vector<T>& values,\n    bool inverse\
+    \ = false\n) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t length = 1; length < values.size(); length <<= 1) {\n  \
+    \      for (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += length << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < length; ++offset) {\n                T first = values[block +\
+    \ offset];\n                T second = values[block + offset + length];\n    \
+    \            values[block + offset] = first + second;\n                values[block\
+    \ + offset + length] = first - second;\n            }\n        }\n    }\n    if\
+    \ (inverse) {\n        T size = T(static_cast<long long>(values.size()));\n  \
+    \      for (T& value : values) value /= size;\n    }\n}\n\ntemplate <typename\
+    \ T>\nstd::vector<T> bitwise_or_convolution(\n    std::vector<T> first,\n    std::vector<T>\
+    \ second\n) {\n    if (first.empty() || second.empty()) return {};\n    std::size_t\
+    \ size = bitwise_convolution_detail::common_size(\n        first.size(),\n   \
+    \     second.size()\n    );\n    first.resize(size);\n    second.resize(size);\n\
+    \    subset_zeta_transform(first);\n    subset_zeta_transform(second);\n    first\
+    \ = bitwise_convolution_detail::pointwise_product(\n        std::move(first),\n\
+    \        second\n    );\n    subset_mobius_transform(first);\n    return first;\n\
+    }\n\ntemplate <typename T>\nstd::vector<T> bitwise_and_convolution(\n    std::vector<T>\
+    \ first,\n    std::vector<T> second\n) {\n    if (first.empty() || second.empty())\
+    \ return {};\n    std::size_t size = bitwise_convolution_detail::common_size(\n\
+    \        first.size(),\n        second.size()\n    );\n    first.resize(size);\n\
+    \    second.resize(size);\n    superset_zeta_transform(first);\n    superset_zeta_transform(second);\n\
+    \    first = bitwise_convolution_detail::pointwise_product(\n        std::move(first),\n\
+    \        second\n    );\n    superset_mobius_transform(first);\n    return first;\n\
+    }\n\ntemplate <typename T>\nstd::vector<T> bitwise_xor_convolution(\n    std::vector<T>\
+    \ first,\n    std::vector<T> second\n) {\n    if (first.empty() || second.empty())\
+    \ return {};\n    std::size_t size = bitwise_convolution_detail::common_size(\n\
+    \        first.size(),\n        second.size()\n    );\n    first.resize(size);\n\
+    \    second.resize(size);\n    walsh_hadamard_transform(first);\n    walsh_hadamard_transform(second);\n\
+    \    first = bitwise_convolution_detail::pointwise_product(\n        std::move(first),\n\
+    \        second\n    );\n    walsh_hadamard_transform(first, true);\n    return\
+    \ first;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/bit_ceil.hpp\"\
     \n\n\n\nnamespace m1une {\nnamespace math {\n\ntemplate <typename T>\nconstexpr\
     \ T bit_ceil(T n) {\n    if (n <= 1) return 1;\n    T x = 1;\n    while (x < n)\
     \ x <<= 1;\n    return x;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
@@ -125,8 +197,8 @@ data:
     \ noexcept {\n        ModInt res = raw(1), x = *this;\n        while (n > 0) {\n\
     \            if (n & 1) res *= x;\n            x *= x;\n            n >>= 1;\n\
     \        }\n        return res;\n    }\n\n    constexpr ModInt inv() const noexcept\
-    \ {\n        int32_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
-    \            int32_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
+    \ {\n        int64_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
+    \            int64_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
     \ b);\n            u -= t * v;\n            std::swap(u, v);\n        }\n    \
     \    if (u < 0) u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n\
     \    }\n\n    friend std::ostream& operator<<(std::ostream& os, const ModInt&\
@@ -600,7 +672,7 @@ data:
     \            const int prime = _min_prime_factor[value];\n            const int\
     \ reduced = value / prime;\n            result[value] = reduced % prime == 0 ?\
     \ 0 : -result[reduced];\n        }\n        return result;\n    }\n};\n\n}  //\
-    \ namespace math\n}  // namespace m1une\n\n\n#line 11 \"math/all.hpp\"\n\n\n#line\
+    \ namespace math\n}  // namespace m1une\n\n\n#line 12 \"math/all.hpp\"\n\n\n#line\
     \ 12 \"verify/math/math_algorithms.test.cpp\"\n\nlong long floor_div(long long\
     \ numerator, long long denominator) {\n    long long quotient = numerator / denominator;\n\
     \    if (numerator % denominator < 0) quotient--;\n    return quotient;\n}\n\n\
@@ -858,6 +930,7 @@ data:
     \ >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - math/all.hpp
+  - math/bitwise_convolution.hpp
   - math/bit_ceil.hpp
   - math/combinatorics.hpp
   - math/combinatorial_sequences.hpp
@@ -871,7 +944,7 @@ data:
   isVerificationFile: true
   path: verify/math/math_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-21 17:44:01+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/math/math_algorithms.test.cpp

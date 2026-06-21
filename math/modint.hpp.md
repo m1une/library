@@ -118,6 +118,9 @@ data:
     path: verify/math/bernoulli_number.test.cpp
     title: verify/math/bernoulli_number.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/math/bitwise_convolution.test.cpp
+    title: verify/math/bitwise_convolution.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
@@ -179,8 +182,8 @@ data:
     \ noexcept {\n        ModInt res = raw(1), x = *this;\n        while (n > 0) {\n\
     \            if (n & 1) res *= x;\n            x *= x;\n            n >>= 1;\n\
     \        }\n        return res;\n    }\n\n    constexpr ModInt inv() const noexcept\
-    \ {\n        int32_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
-    \            int32_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
+    \ {\n        int64_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
+    \            int64_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
     \ b);\n            u -= t * v;\n            std::swap(u, v);\n        }\n    \
     \    if (u < 0) u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n\
     \    }\n\n    friend std::ostream& operator<<(std::ostream& os, const ModInt&\
@@ -228,8 +231,8 @@ data:
     \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
     \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
     \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
-    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int32_t\
-    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int32_t\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int64_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int64_t\
     \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
     \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
     \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
@@ -251,7 +254,7 @@ data:
   - fps/multipoint_evaluation.hpp
   - fps/linear_recurrence.hpp
   - fps/convolution.hpp
-  timestamp: '2026-06-06 20:32:01+09:00'
+  timestamp: '2026-06-21 17:44:01+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
@@ -262,6 +265,7 @@ data:
   - verify/ds/segtree/lazy_segtree.test.cpp
   - verify/ds/segtree/dynamic_lazy_segtree.test.cpp
   - verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
+  - verify/math/bitwise_convolution.test.cpp
   - verify/math/bell_number.test.cpp
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp
