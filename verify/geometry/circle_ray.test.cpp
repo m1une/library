@@ -15,7 +15,7 @@ using namespace m1une::geometry;
 using P = Point<long long>;
 
 bool close(long double first, long double second) {
-    return std::fabsl(first - second) <= 1e-10L;
+    return std::fabs(first - second) <= 1e-10L;
 }
 
 void test_intersections() {

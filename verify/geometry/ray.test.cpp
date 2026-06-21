@@ -17,7 +17,7 @@ using IntegerLine = Line<long long>;
 using IntegerSegment = Segment<long long>;
 
 bool close(long double first, long double second) {
-    return std::fabsl(first - second) <= 1e-10L;
+    return std::fabs(first - second) <= 1e-10L;
 }
 
 IntegerSegment long_segment(const IntegerRay& ray) {

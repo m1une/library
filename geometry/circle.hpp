@@ -39,12 +39,12 @@ CircleRelation circle_relation(
     long double r1 = static_cast<long double>(first.radius);
     long double r2 = static_cast<long double>(second.radius);
     long double sum = r1 + r2;
-    long double difference = std::fabsl(r1 - r2);
+    long double difference = std::fabs(r1 - r2);
     if (d <= eps && difference <= eps) return CircleRelation::Coincident;
     if (sum < d - eps) return CircleRelation::Separate;
-    if (std::fabsl(d - sum) <= eps) return CircleRelation::ExternallyTangent;
+    if (std::fabs(d - sum) <= eps) return CircleRelation::ExternallyTangent;
     if (d < difference - eps) return CircleRelation::Contained;
-    if (std::fabsl(d - difference) <= eps) return CircleRelation::InternallyTangent;
+    if (std::fabs(d - difference) <= eps) return CircleRelation::InternallyTangent;
     return CircleRelation::Intersecting;
 }
 
@@ -165,7 +165,7 @@ Ray<long double> reflected_ray(
     assert(incoming.origin != incoming.through);
     assert(static_cast<long double>(circle.radius) > eps);
     assert(
-        std::fabsl(
+        std::fabs(
             geometry::distance(
                 Point<long double>(hit),
                 Point<long double>(circle.center)

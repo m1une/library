@@ -210,7 +210,7 @@ wide_type<T> polygon_area2(const std::vector<Point<T>>& polygon) {
 
 template <Coordinate T>
 long double polygon_area(const std::vector<Point<T>>& polygon) {
-    return std::fabsl(static_cast<long double>(polygon_area2(polygon))) / 2;
+    return std::fabs(static_cast<long double>(polygon_area2(polygon))) / 2;
 }
 
 template <Coordinate T>

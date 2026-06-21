@@ -130,7 +130,7 @@ constexpr wide_type<T> distance2(const Point<T>& a, const Point<T>& b) {
 
 template <Coordinate T>
 long double norm(const Point<T>& point) {
-    return std::hypotl(
+    return std::hypot(
         static_cast<long double>(point.x),
         static_cast<long double>(point.y)
     );
@@ -138,7 +138,7 @@ long double norm(const Point<T>& point) {
 
 template <Coordinate T>
 long double distance(const Point<T>& a, const Point<T>& b) {
-    return std::hypotl(
+    return std::hypot(
         static_cast<long double>(a.x) - static_cast<long double>(b.x),
         static_cast<long double>(a.y) - static_cast<long double>(b.y)
     );

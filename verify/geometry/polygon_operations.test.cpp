@@ -16,7 +16,7 @@ using namespace m1une::geometry;
 using P = Point<long long>;
 
 bool close(long double first, long double second) {
-    return std::fabsl(first - second) <= 1e-9L;
+    return std::fabs(first - second) <= 1e-9L;
 }
 
 std::vector<P> square(
@@ -37,7 +37,7 @@ template <typename T>
 long double triangle_area(
     const std::array<Point<T>, 3>& triangle
 ) {
-    return std::fabsl(
+    return std::fabs(
         static_cast<long double>(
             cross(triangle[0], triangle[1], triangle[2])
         )

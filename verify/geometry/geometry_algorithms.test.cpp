@@ -12,7 +12,7 @@
 namespace {
 
 bool close(long double a, long double b) {
-    return std::fabsl(a - b) <= 1e-10L;
+    return std::fabs(a - b) <= 1e-10L;
 }
 
 void test_basic() {

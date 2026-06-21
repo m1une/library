@@ -86,7 +86,7 @@ long double distance(const Line<T>& line, const Point<T>& point) {
         static_cast<long double>(point.x) - static_cast<long double>(line.a.x),
         static_cast<long double>(point.y) - static_cast<long double>(line.a.y)
     );
-    return std::fabsl(cross(direction, offset)) / norm(direction);
+    return std::fabs(cross(direction, offset)) / norm(direction);
 }
 
 template <Coordinate T>
@@ -222,7 +222,7 @@ std::optional<Point<long double>> line_intersection(
     Point<long double> r = Point<long double>(first.b) - p;
     Point<long double> s = Point<long double>(second.b) - q;
     long double denominator = cross(r, s);
-    if (std::fabsl(denominator) <= eps) return std::nullopt;
+    if (std::fabs(denominator) <= eps) return std::nullopt;
     long double ratio = cross(q - p, s) / denominator;
     return p + r * ratio;
 }
