@@ -13,7 +13,7 @@ int main() {
 
     int q;
     std::cin >> q;
-    std::cout << std::fixed << std::setprecision(8);
+    std::cout << std::fixed << std::setprecision(15);
     while (q--) {
         Line<long double> line;
         std::cin >> line.a.x >> line.a.y >> line.b.x >> line.b.y;
