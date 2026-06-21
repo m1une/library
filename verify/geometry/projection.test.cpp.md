@@ -207,7 +207,7 @@ data:
     \n\n#include <iomanip>\n#include <iostream>\n\nint main() {\n    using namespace\
     \ m1une::geometry;\n    Line<long double> line;\n    std::cin >> line.a.x >> line.a.y\
     \ >> line.b.x >> line.b.y;\n\n    int q;\n    std::cin >> q;\n    std::cout <<\
-    \ std::fixed << std::setprecision(15);\n    while (q--) {\n        Point<long\
+    \ std::fixed << std::setprecision(10);\n    while (q--) {\n        Point<long\
     \ double> point;\n        std::cin >> point.x >> point.y;\n        Point<long\
     \ double> result = projection(line, point);\n        std::cout << result.x <<\
     \ \" \" << result.y << '\\n';\n    }\n}\n"
@@ -215,7 +215,7 @@ data:
     \n\n#include \"../../geometry/line.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
     \nint main() {\n    using namespace m1une::geometry;\n    Line<long double> line;\n\
     \    std::cin >> line.a.x >> line.a.y >> line.b.x >> line.b.y;\n\n    int q;\n\
-    \    std::cin >> q;\n    std::cout << std::fixed << std::setprecision(15);\n \
+    \    std::cin >> q;\n    std::cout << std::fixed << std::setprecision(10);\n \
     \   while (q--) {\n        Point<long double> point;\n        std::cin >> point.x\
     \ >> point.y;\n        Point<long double> result = projection(line, point);\n\
     \        std::cout << result.x << \" \" << result.y << '\\n';\n    }\n}\n"
@@ -225,7 +225,7 @@ data:
   isVerificationFile: true
   path: verify/geometry/projection.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 12:04:47+09:00'
+  timestamp: '2026-06-21 12:50:37+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/geometry/projection.test.cpp

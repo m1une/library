@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/circle.hpp
     title: Circles
   - icon: ':question:'
@@ -10,7 +10,7 @@ data:
   - icon: ':question:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
   _extendedRequiredBy: []

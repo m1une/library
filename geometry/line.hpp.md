@@ -8,17 +8,17 @@ data:
   - icon: ':heavy_check_mark:'
     path: geometry/all.hpp
     title: Geometry Bundle
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/circle.hpp
     title: Circles
   - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
     title: Polygons and Convex Hull
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/circle_line_intersection.test.cpp
     title: verify/geometry/circle_line_intersection.test.cpp
   - icon: ':heavy_check_mark:'

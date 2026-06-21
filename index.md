@@ -257,7 +257,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: geometry/all.hpp
       title: Geometry Bundle
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: geometry/circle.hpp
       title: Circles
     - icon: ':question:'
@@ -269,7 +269,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: geometry/polygon.hpp
       title: Polygons and Convex Hull
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: geometry/ray.hpp
       title: Rays
   - name: graph
@@ -782,7 +782,7 @@ data:
       title: verify/fps/pow_of_formal_power_series.test.cpp
   - name: verify/geometry
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/circle_line_intersection.test.cpp
       title: verify/geometry/circle_line_intersection.test.cpp
     - icon: ':heavy_check_mark:'

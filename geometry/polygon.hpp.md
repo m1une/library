@@ -7,7 +7,7 @@ data:
   - icon: ':question:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
   _extendedRequiredBy:

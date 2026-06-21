@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/circle.hpp
     title: Circles
   - icon: ':question:'
@@ -10,14 +10,14 @@ data:
   - icon: ':question:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_D
@@ -463,8 +463,8 @@ data:
     \n\n#include <iomanip>\n#include <iostream>\n\nint main() {\n    using namespace\
     \ m1une::geometry;\n    Circle<long double> circle;\n    std::cin >> circle.center.x\
     \ >> circle.center.y >> circle.radius;\n\n    int q;\n    std::cin >> q;\n   \
-    \ std::cout << std::fixed << std::setprecision(15);\n    while (q--) {\n     \
-    \   Line<long double> line;\n        std::cin >> line.a.x >> line.a.y >> line.b.x\
+    \ std::cout << std::fixed << std::setprecision(8);\n    while (q--) {\n      \
+    \  Line<long double> line;\n        std::cin >> line.a.x >> line.a.y >> line.b.x\
     \ >> line.b.y;\n        auto points = circle_line_intersections(circle, line);\n\
     \        if (points.size() == 1) points.push_back(points[0]);\n        std::cout\
     \ << points[0].x << \" \" << points[0].y << \" \"\n                  << points[1].x\
@@ -473,7 +473,7 @@ data:
     \n\n#include \"../../geometry/circle.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
     \nint main() {\n    using namespace m1une::geometry;\n    Circle<long double>\
     \ circle;\n    std::cin >> circle.center.x >> circle.center.y >> circle.radius;\n\
-    \n    int q;\n    std::cin >> q;\n    std::cout << std::fixed << std::setprecision(15);\n\
+    \n    int q;\n    std::cin >> q;\n    std::cout << std::fixed << std::setprecision(8);\n\
     \    while (q--) {\n        Line<long double> line;\n        std::cin >> line.a.x\
     \ >> line.a.y >> line.b.x >> line.b.y;\n        auto points = circle_line_intersections(circle,\
     \ line);\n        if (points.size() == 1) points.push_back(points[0]);\n     \
@@ -487,8 +487,8 @@ data:
   isVerificationFile: true
   path: verify/geometry/circle_line_intersection.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 12:04:47+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-21 12:50:37+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/geometry/circle_line_intersection.test.cpp
 layout: document

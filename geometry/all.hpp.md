@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/circle.hpp
     title: Circles
   - icon: ':question:'
@@ -13,7 +13,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
     title: Polygons and Convex Hull
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
   _extendedRequiredBy: []
