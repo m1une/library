@@ -11,6 +11,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/segtree.hpp
     title: Segment Tree
+  - icon: ':warning:'
+    path: ds/segtree/segtree_2d.hpp
+    title: ds/segtree/segtree_2d.hpp
   - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
@@ -46,6 +49,7 @@ data:
   requiredBy:
   - ds/segtree/segtree.hpp
   - ds/segtree/lazy_segtree.hpp
+  - ds/segtree/segtree_2d.hpp
   - ds/segtree/dual_segtree.hpp
   - math/all.hpp
   timestamp: '2026-06-15 01:47:39+09:00'

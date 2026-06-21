@@ -223,6 +223,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/segtree/segtree.hpp
       title: Segment Tree
+    - icon: ':warning:'
+      path: ds/segtree/segtree_2d.hpp
+      title: ds/segtree/segtree_2d.hpp
   - name: flow
     pages:
     - icon: ':heavy_check_mark:'

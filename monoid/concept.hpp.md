@@ -54,6 +54,9 @@ data:
     path: ds/segtree/segtree.hpp
     title: Segment Tree
   - icon: ':warning:'
+    path: ds/segtree/segtree_2d.hpp
+    title: ds/segtree/segtree_2d.hpp
+  - icon: ':warning:'
     path: monoid/power.hpp
     title: Monoid Power
   - icon: ':heavy_check_mark:'
@@ -172,6 +175,7 @@ data:
   - ds/range_query/sparse_table.hpp
   - ds/segtree/persistent_dynamic_dual_segtree.hpp
   - ds/segtree/segtree.hpp
+  - ds/segtree/segtree_2d.hpp
   - ds/segtree/persistent_segtree.hpp
   - ds/segtree/dual_segtree.hpp
   - ds/segtree/persistent_dynamic_segtree.hpp
