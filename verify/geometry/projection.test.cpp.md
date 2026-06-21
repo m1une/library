@@ -1,27 +1,28 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/line.hpp
     title: Lines and Segments
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
+    ERROR: 1e-8
     PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A
   bundledCode: "#line 1 \"verify/geometry/projection.test.cpp\"\n#define PROBLEM \"\
-    https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A\"\n\n#line 1\
-    \ \"geometry/line.hpp\"\n\n\n\n#include <algorithm>\n#include <cassert>\n#include\
-    \ <cmath>\n#include <optional>\n\n#line 1 \"geometry/point.hpp\"\n\n\n\n#line\
-    \ 5 \"geometry/point.hpp\"\n#include <concepts>\n#line 7 \"geometry/point.hpp\"\
+    https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A\"\n#define ERROR\
+    \ \"1e-8\"\n\n#line 1 \"geometry/line.hpp\"\n\n\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <cmath>\n#include <optional>\n\n#line 1 \"geometry/point.hpp\"\
+    \n\n\n\n#line 5 \"geometry/point.hpp\"\n#include <concepts>\n#line 7 \"geometry/point.hpp\"\
     \n#include <type_traits>\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate\
     \ <typename T>\nconcept Coordinate = std::is_arithmetic_v<T> && !std::same_as<std::remove_cv_t<T>,\
     \ bool>;\n\ntemplate <Coordinate T>\nusing wide_type = std::conditional_t<std::integral<T>,\
@@ -203,30 +204,31 @@ data:
     template <Coordinate T>\nstd::optional<Point<long double>> line_segment_intersection(\n\
     \    const Segment<T>& segment,\n    const Line<T>& line,\n    long double eps\
     \ = 1e-12L\n) {\n    return line_segment_intersection(line, segment, eps);\n}\n\
-    \n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 4 \"verify/geometry/projection.test.cpp\"\
+    \n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 5 \"verify/geometry/projection.test.cpp\"\
     \n\n#include <iomanip>\n#include <iostream>\n\nint main() {\n    using namespace\
     \ m1une::geometry;\n    Line<long double> line;\n    std::cin >> line.a.x >> line.a.y\
     \ >> line.b.x >> line.b.y;\n\n    int q;\n    std::cin >> q;\n    std::cout <<\
-    \ std::fixed << std::setprecision(10);\n    while (q--) {\n        Point<long\
+    \ std::fixed << std::setprecision(15);\n    while (q--) {\n        Point<long\
     \ double> point;\n        std::cin >> point.x >> point.y;\n        Point<long\
     \ double> result = projection(line, point);\n        std::cout << result.x <<\
     \ \" \" << result.y << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A\"\
-    \n\n#include \"../../geometry/line.hpp\"\n\n#include <iomanip>\n#include <iostream>\n\
-    \nint main() {\n    using namespace m1une::geometry;\n    Line<long double> line;\n\
-    \    std::cin >> line.a.x >> line.a.y >> line.b.x >> line.b.y;\n\n    int q;\n\
-    \    std::cin >> q;\n    std::cout << std::fixed << std::setprecision(10);\n \
-    \   while (q--) {\n        Point<long double> point;\n        std::cin >> point.x\
-    \ >> point.y;\n        Point<long double> result = projection(line, point);\n\
-    \        std::cout << result.x << \" \" << result.y << '\\n';\n    }\n}\n"
+    \n#define ERROR \"1e-8\"\n\n#include \"../../geometry/line.hpp\"\n\n#include <iomanip>\n\
+    #include <iostream>\n\nint main() {\n    using namespace m1une::geometry;\n  \
+    \  Line<long double> line;\n    std::cin >> line.a.x >> line.a.y >> line.b.x >>\
+    \ line.b.y;\n\n    int q;\n    std::cin >> q;\n    std::cout << std::fixed <<\
+    \ std::setprecision(15);\n    while (q--) {\n        Point<long double> point;\n\
+    \        std::cin >> point.x >> point.y;\n        Point<long double> result =\
+    \ projection(line, point);\n        std::cout << result.x << \" \" << result.y\
+    \ << '\\n';\n    }\n}\n"
   dependsOn:
   - geometry/line.hpp
   - geometry/point.hpp
   isVerificationFile: true
   path: verify/geometry/projection.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 12:50:37+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2026-06-21 12:57:57+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/geometry/projection.test.cpp
 layout: document

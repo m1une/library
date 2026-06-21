@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
   _extendedRequiredBy:
@@ -39,7 +39,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/geometry/polygon_operations.test.cpp
     title: verify/geometry/polygon_operations.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/geometry/projection.test.cpp
     title: verify/geometry/projection.test.cpp
   - icon: ':heavy_check_mark:'
@@ -48,9 +48,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/geometry/segment_intersection.test.cpp
     title: verify/geometry/segment_intersection.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"geometry/line.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -351,7 +351,7 @@ data:
   - geometry/all.hpp
   - geometry/polygon.hpp
   timestamp: '2026-06-21 12:04:47+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/geometry/polygon_area.test.cpp
   - verify/geometry/circle_line_intersection.test.cpp

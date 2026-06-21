@@ -4,10 +4,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: geometry/circle.hpp
     title: Circles
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/line.hpp
     title: Lines and Segments
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
   - icon: ':heavy_check_mark:'

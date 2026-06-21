@@ -260,10 +260,10 @@ data:
     - icon: ':heavy_check_mark:'
       path: geometry/circle.hpp
       title: Circles
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: geometry/line.hpp
       title: Lines and Segments
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: geometry/point.hpp
       title: 2D Point and Predicates
     - icon: ':heavy_check_mark:'
@@ -803,7 +803,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/geometry/polygon_operations.test.cpp
       title: verify/geometry/polygon_operations.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/geometry/projection.test.cpp
       title: verify/geometry/projection.test.cpp
     - icon: ':heavy_check_mark:'
