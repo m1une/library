@@ -1,4 +1,5 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A"
+#define ERROR "1e-8"
 
 #include "../../geometry/line.hpp"
 
@@ -12,7 +13,7 @@ int main() {
 
     int q;
     std::cin >> q;
-    std::cout << std::fixed << std::setprecision(10);
+    std::cout << std::fixed << std::setprecision(15);
     while (q--) {
         Point<long double> point;
         std::cin >> point.x >> point.y;
