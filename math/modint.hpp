@@ -124,9 +124,9 @@ struct ModInt {
     }
 
     constexpr ModInt inv() const noexcept {
-        int32_t a = _v, b = Modulus, u = 1, v = 0;
+        int64_t a = _v, b = Modulus, u = 1, v = 0;
         while (b) {
-            int32_t t = a / b;
+            int64_t t = a / b;
             a -= t * b;
             std::swap(a, b);
             u -= t * v;

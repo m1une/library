@@ -23,7 +23,7 @@ contest.
 | `ds/` | Categorized data structures for range queries, connectivity, dynamic sequences and trees, ordered sets, and hash tables. |
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
-| `math/` | Modular arithmetic, combinatorial sequences, sieves, 64-bit factorization, CRT, and floor sums. |
+| `math/` | Modular arithmetic, bitwise convolution, combinatorial sequences, sieves, 64-bit factorization, CRT, and floor sums. |
 | `string/`, `utilities/` | Z/KMP, Manacher, suffix arrays, tries, rolling hashes, parsing, dice, and general helpers. |
 | `verify/` | Online Judge Verify Helper tests. |
 | `docs/` | Markdown documentation for the public headers. |

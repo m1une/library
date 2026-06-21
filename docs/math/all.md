@@ -12,6 +12,8 @@ documentation_of: ../../math/all.hpp
 You usually do not need to include this entire bundle:
 
 * Use `modint.hpp` for arithmetic modulo a fixed number such as `998244353`.
+* Use `bitwise_convolution.hpp` for OR, AND, or XOR convolution over mask
+  indices.
 * Use `combinatorics.hpp` for many factorial, combination, or permutation
   queries under a prime modulus.
 * Use `combinatorial_sequences.hpp` for Catalan, Bernoulli, Bell, Stirling,
@@ -30,6 +32,7 @@ few unused headers do not matter.
 
 | Header | Contents |
 | --- | --- |
+| `math/bitwise_convolution.hpp` | Subset/superset transforms and OR, AND, XOR convolutions. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |

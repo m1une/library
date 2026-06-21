@@ -86,7 +86,10 @@ int main() {
     assert(st.mex(6) == 8);
 
     auto v = st.to_vector();
-    assert((v == std::vector<std::pair<long long, long long>>{{1, 3}, {6, 8}}));
+    std::vector<std::pair<long long, long long>> expected;
+    expected.emplace_back(1, 3);
+    expected.emplace_back(6, 8);
+    assert(v == expected);
 
     for (auto [l, r] : st) {
         std::cout << "[" << l << ", " << r << ")\n";

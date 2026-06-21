@@ -12,10 +12,15 @@ int main() {
     m1une::ds::IntervalSet<int> st;
     st.insert(1, 5);
     st.insert(5, 8);
-    assert(st.to_vector() == std::vector<std::pair<int, int>>({{1, 8}}));
+    std::vector<std::pair<int, int>> expected;
+    expected.emplace_back(1, 8);
+    assert(st.to_vector() == expected);
 
     st.erase(3, 6);
-    assert(st.to_vector() == std::vector<std::pair<int, int>>({{1, 3}, {6, 8}}));
+    expected.clear();
+    expected.emplace_back(1, 3);
+    expected.emplace_back(6, 8);
+    assert(st.to_vector() == expected);
 
     assert(st.contains(2));
     assert(!st.contains(3));
