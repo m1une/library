@@ -140,6 +140,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/hash_table/hash_set.hpp
       title: Hash Set
+  - name: ds/interval_set
+    pages:
+    - icon: ':x:'
+      path: ds/interval_set/interval_set.hpp
+      title: ds/interval_set/interval_set.hpp
   - name: ds/ordered_set
     pages:
     - icon: ':heavy_check_mark:'
@@ -671,6 +676,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/hash_table/hash_set.test.cpp
       title: verify/ds/hash_table/hash_set.test.cpp
+  - name: verify/ds/interval_set
+    pages:
+    - icon: ':x:'
+      path: verify/ds/interval_set/interval_set.test.cpp
+      title: verify/ds/interval_set/interval_set.test.cpp
   - name: verify/ds/ordered_set
     pages:
     - icon: ':heavy_check_mark:'
