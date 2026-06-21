@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: utilities/bisect.hpp
     title: Bisect
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: utilities/chmin_chmax.hpp
     title: Chmin Chmax
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: utilities/compressor.hpp
     title: Compressor
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: utilities/run_length_encoding.hpp
     title: Run Length Encoding
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: utilities/y_combinator.hpp
     title: Y Combinator
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -174,7 +174,7 @@ data:
   path: verify/utilities/extra_utilities.test.cpp
   requiredBy: []
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/utilities/extra_utilities.test.cpp
 layout: document

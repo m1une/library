@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/utilities/basic_utilities.test.cpp
     title: verify/utilities/basic_utilities.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"utilities/bigint.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -207,7 +207,7 @@ data:
   path: utilities/bigint.hpp
   requiredBy: []
   timestamp: '2026-06-20 02:38:39+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/utilities/basic_utilities.test.cpp
 documentation_of: utilities/bigint.hpp

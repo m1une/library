@@ -1,35 +1,35 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/diameter.hpp
     title: Tree Diameter
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/all.hpp
     title: Tree All
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"tree/tree.hpp\"\n\n\n\n#line 1 \"tree/diameter.hpp\"\n\n\
@@ -349,7 +349,7 @@ data:
   requiredBy:
   - tree/all.hpp
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
 documentation_of: tree/tree.hpp

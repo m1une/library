@@ -62,34 +62,34 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/zero_one_bfs.hpp
     title: 0-1 BFS
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/centroid_decomposition.hpp
     title: Centroid Decomposition
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/diameter.hpp
     title: Tree Diameter
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/heavy_light_decomposition.hpp
     title: Heavy Light Decomposition
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/rerooting_dp.hpp
     title: Rerooting DP
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/rerooting_static_top_tree.hpp
     title: Rerooting Static Top Tree
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/static_top_tree.hpp
     title: Static Top Tree
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
   _extendedVerifiedWith:
@@ -114,15 +114,15 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_maximum_independent_set.test.cpp
     title: verify/graph/library_checker_maximum_independent_set.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"graph/graph.hpp\"\n\n\n\n#include <cassert>\n#include <utility>\n\
@@ -270,7 +270,7 @@ data:
   - graph/shortest_path.hpp
   - graph/general_matching.hpp
   timestamp: '2026-06-17 14:06:24+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
   - verify/tree/tree_algorithms.test.cpp

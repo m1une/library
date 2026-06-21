@@ -1,53 +1,53 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/all.hpp
     title: Tree All
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/centroid_decomposition.hpp
     title: Centroid Decomposition
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/diameter.hpp
     title: Tree Diameter
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/heavy_light_decomposition.hpp
     title: Heavy Light Decomposition
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/rerooting_dp.hpp
     title: Rerooting DP
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/rerooting_static_top_tree.hpp
     title: Rerooting Static Top Tree
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/rooted_tree.hpp
     title: Rooted Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: tree/sparse_table_lca.hpp
     title: Sparse Table LCA
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/static_top_tree.hpp
     title: Static Top Tree
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
@@ -1397,7 +1397,7 @@ data:
   path: verify/tree/tree_algorithms.test.cpp
   requiredBy: []
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/tree/tree_algorithms.test.cpp
 layout: document

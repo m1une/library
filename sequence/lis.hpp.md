@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/sequence/sequence_algorithms.test.cpp
     title: verify/sequence/sequence_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"sequence/lis.hpp\"\n\n\n\n#include <algorithm>\n#include\
@@ -56,7 +56,7 @@ data:
   path: sequence/lis.hpp
   requiredBy: []
   timestamp: '2026-06-20 02:38:39+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/sequence/sequence_algorithms.test.cpp
 documentation_of: sequence/lis.hpp

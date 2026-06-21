@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/dynamic_array/persistent_dynamic_monoid_array.hpp
     title: Persistent Dynamic Monoid Array
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
   _extendedRequiredBy: []

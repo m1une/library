@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':question:'
     path: string/trie.hpp
     title: Trie
   _extendedRequiredBy: []

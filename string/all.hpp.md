@@ -1,32 +1,32 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: string/manacher.hpp
     title: Manacher Algorithm
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: string/prefix_function.hpp
     title: Prefix Function and KMP
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: string/rolling_hash.hpp
     title: Static Rolling Hash
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: string/suffix_array.hpp
     title: Suffix Array and LCP Array
-  - icon: ':x:'
+  - icon: ':question:'
     path: string/trie.hpp
     title: Trie
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: string/z_algorithm.hpp
     title: Z Algorithm
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/string/string_algorithms.test.cpp
     title: verify/string/string_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"string/all.hpp\"\n\n\n\n#line 1 \"string/manacher.hpp\"\n\
@@ -306,7 +306,7 @@ data:
   path: string/all.hpp
   requiredBy: []
   timestamp: '2026-06-21 04:34:53+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/string/string_algorithms.test.cpp
 documentation_of: string/all.hpp

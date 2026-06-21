@@ -168,7 +168,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/range_query/fenwick_tree.hpp
       title: Fenwick Tree (Binary Indexed Tree)
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: ds/range_query/sparse_table.hpp
       title: Sparse Table
     - icon: ':heavy_check_mark:'
@@ -240,10 +240,10 @@ data:
     - icon: ':heavy_check_mark:'
       path: fps/all.hpp
       title: Formal Power Series All
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: fps/convolution.hpp
       title: Convolution
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: fps/formal_power_series.hpp
       title: Formal Power Series
     - icon: ':heavy_check_mark:'
@@ -301,7 +301,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: graph/general_matching.hpp
       title: General Matching
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: graph/graph.hpp
       title: Graph
     - icon: ':heavy_check_mark:'
@@ -345,13 +345,13 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: math/combinatorial_sequences.hpp
       title: Combinatorial Sequences
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: math/combinatorics.hpp
       title: Combinatorics
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: math/modint.hpp
       title: ModInt
     - icon: ':heavy_check_mark:'
@@ -389,7 +389,7 @@ data:
     - icon: ':warning:'
       path: monoid/bracket.hpp
       title: Bracket Monoid
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: monoid/concept.hpp
       title: Monoid Concept
     - icon: ':warning:'
@@ -469,16 +469,16 @@ data:
       title: Bitwise XOR Monoid
   - name: optimization
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: optimization/all.hpp
       title: Optimization All
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: optimization/hungarian.hpp
       title: Hungarian Algorithm
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: optimization/integer_lp.hpp
       title: Integer Linear Programming
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: optimization/simplex.hpp
       title: Simplex Algorithm
   - name: scripts
@@ -491,103 +491,106 @@ data:
       title: scripts/revert_md_includes.py
   - name: sequence
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: sequence/inversion_count.hpp
       title: Inversion Count
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: sequence/lis.hpp
       title: Longest Increasing Subsequence (LIS)
   - name: string
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: string/all.hpp
       title: String Algorithms Bundle
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: string/manacher.hpp
       title: Manacher Algorithm
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: string/prefix_function.hpp
       title: Prefix Function and KMP
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: string/rolling_hash.hpp
       title: Static Rolling Hash
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: string/suffix_array.hpp
       title: Suffix Array and LCP Array
-    - icon: ':x:'
+    - icon: ':question:'
       path: string/trie.hpp
       title: Trie
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: string/z_algorithm.hpp
       title: Z Algorithm
   - name: tree
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/all.hpp
       title: Tree All
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/centroid_decomposition.hpp
       title: Centroid Decomposition
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/diameter.hpp
       title: Tree Diameter
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/heavy_light_decomposition.hpp
       title: Heavy Light Decomposition
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/rerooting_dp.hpp
       title: Rerooting DP
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/rerooting_static_top_tree.hpp
       title: Rerooting Static Top Tree
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/rooted_tree.hpp
       title: Rooted Tree
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: tree/sparse_table_lca.hpp
       title: Sparse Table LCA
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/static_top_tree.hpp
       title: Static Top Tree
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: tree/tree.hpp
       title: Tree
   - name: utilities
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/bigint.hpp
       title: BigInt
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/bisect.hpp
       title: Bisect
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/chmin_chmax.hpp
       title: Chmin Chmax
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/compressor.hpp
       title: Compressor
+    - icon: ':heavy_check_mark:'
+      path: utilities/dice.hpp
+      title: Dice
     - icon: ':warning:'
       path: utilities/dynamic_bitset.hpp
       title: Dynamic Bitset
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/int128.hpp
       title: Int128
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/parser.hpp
       title: Parser
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/random.hpp
       title: Random
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/run_length_encoding.hpp
       title: Run Length Encoding
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/shifted_array.hpp
       title: Shifted Array
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/timer.hpp
       title: Timer
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: utilities/y_combinator.hpp
       title: Y Combinator
   verificationCategories:
@@ -840,23 +843,23 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/primality_test.test.cpp
       title: verify/math/primality_test.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/math/stirling_number_of_the_second_kind.test.cpp
       title: verify/math/stirling_number_of_the_second_kind.test.cpp
   - name: verify/optimization
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/optimization/hungarian.test.cpp
       title: verify/optimization/hungarian.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/optimization/integer_lp.test.cpp
       title: verify/optimization/integer_lp.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/optimization/simplex.test.cpp
       title: verify/optimization/simplex.test.cpp
   - name: verify/sequence
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/sequence/sequence_algorithms.test.cpp
       title: verify/sequence/sequence_algorithms.test.cpp
   - name: verify/string
@@ -864,41 +867,47 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/string/aoj_alds1_14_b.test.cpp
       title: verify/string/aoj_alds1_14_b.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/string/manacher.test.cpp
       title: verify/string/manacher.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/string/prefix_function.test.cpp
       title: verify/string/prefix_function.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/string/string_algorithms.test.cpp
       title: verify/string/string_algorithms.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/string/suffix_array.test.cpp
       title: verify/string/suffix_array.test.cpp
     - icon: ':x:'
       path: verify/string/trie.test.cpp
       title: verify/string/trie.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/string/yosupo_zalgorithm.test.cpp
       title: verify/string/yosupo_zalgorithm.test.cpp
   - name: verify/tree
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/tree/tree_algorithms.test.cpp
       title: verify/tree/tree_algorithms.test.cpp
   - name: verify/utilities
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
+      path: verify/utilities/arrow_dice.test.cpp
+      title: verify/utilities/arrow_dice.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/utilities/basic_utilities.test.cpp
       title: verify/utilities/basic_utilities.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
+      path: verify/utilities/dice.test.cpp
+      title: verify/utilities/dice.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/utilities/extra_utilities.test.cpp
       title: verify/utilities/extra_utilities.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/utilities/parser.test.cpp
       title: verify/utilities/parser.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/utilities/shifted_array.test.cpp
       title: verify/utilities/shifted_array.test.cpp
 layout: toppage

@@ -34,7 +34,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/general_matching.hpp
     title: General Matching
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
     title: Graph
   - icon: ':heavy_check_mark:'
