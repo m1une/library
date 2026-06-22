@@ -243,6 +243,9 @@ data:
     - icon: ':warning:'
       path: ds/segtree/segtree_2d.hpp
       title: ds/segtree/segtree_2d.hpp
+    - icon: ':heavy_check_mark:'
+      path: ds/segtree/segtree_beats.hpp
+      title: Segment Tree Beats
   - name: flow
     pages:
     - icon: ':heavy_check_mark:'
@@ -870,6 +873,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/segtree/segtree.test.cpp
       title: verify/ds/segtree/segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/segtree_beats.test.cpp
+      title: verify/ds/segtree/segtree_beats.test.cpp
   - name: verify/flow
     pages:
     - icon: ':heavy_check_mark:'
