@@ -140,6 +140,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/hash_table/hash_set.hpp
       title: Hash Set
+  - name: ds/heap
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: ds/heap/meldable_heap.hpp
+      title: Meldable Heap
   - name: ds/interval_set
     pages:
     - icon: ':heavy_check_mark:'
@@ -759,6 +764,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/hash_table/hash_set.test.cpp
       title: verify/ds/hash_table/hash_set.test.cpp
+  - name: verify/ds/heap
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/heap/meldable_heap.test.cpp
+      title: verify/ds/heap/meldable_heap.test.cpp
   - name: verify/ds/interval_set
     pages:
     - icon: ':heavy_check_mark:'
