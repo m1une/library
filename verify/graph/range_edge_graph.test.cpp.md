@@ -86,11 +86,12 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/graph/cow_game.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\
-    \n\n#include <algorithm>\n#include <cassert>\n#include <iostream>\n#include <limits>\n\
-    #include <vector>\n\n#line 1 \"graph/all.hpp\"\n\n\n\n#line 1 \"graph/directed.hpp\"\
-    \n\n\n\n#line 1 \"graph/cycle_detection.hpp\"\n\n\n\n#line 6 \"graph/cycle_detection.hpp\"\
-    \n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\n#include <utility>\n\
+  bundledCode: "#line 1 \"verify/graph/range_edge_graph.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <iostream>\n#include <limits>\n#include <vector>\n\n#line\
+    \ 1 \"graph/all.hpp\"\n\n\n\n#line 1 \"graph/directed.hpp\"\n\n\n\n#line 1 \"\
+    graph/cycle_detection.hpp\"\n\n\n\n#line 6 \"graph/cycle_detection.hpp\"\n\n#line\
+    \ 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\n#include <utility>\n\
     #line 7 \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\ntemplate\
     \ <class T = int>\nstruct Edge {\n    using cost_type = T;\n\n    int from;\n\
     \    int to;\n    T cost;\n    int id;\n    bool alive;\n\n    Edge() : from(-1),\
@@ -1356,137 +1357,135 @@ data:
     \    }\n    return result;\n}\n\ntemplate <class T>\nint minimum_vertex_cover_size(const\
     \ Graph<T>& g) {\n    return minimum_vertex_cover(g).size();\n}\n\n}  // namespace\
     \ graph\n}  // namespace m1une\n\n\n#line 14 \"graph/undirected.hpp\"\n\n\n#line\
-    \ 10 \"graph/all.hpp\"\n\n\n#line 10 \"verify/graph/cow_game.test.cpp\"\n\nusing\
-    \ CowGame = m1une::graph::CowGame<long long>;\n\nvoid test_basic_constraints()\
-    \ {\n    CowGame game(4);\n    int first = game.add_upper_bound(0, 1, 5);\n  \
-    \  game.add_lower_bound(0, 1, 2);\n    game.add_bounds(1, 2, -1, 4);\n    game.add_equality(2,\
-    \ 3, 3);\n\n    assert(game.size() == 4);\n    assert(game.constraint_count()\
-    \ == 6);\n    assert(game.get_constraint(first).from == 0);\n    assert(game.get_constraint(first).to\
-    \ == 1);\n    assert(game.get_constraint(first).upper_bound == 5);\n\n    auto\
-    \ solution = game.solve();\n    assert(solution.is_feasible());\n    assert(solution.value.size()\
-    \ == 4);\n    for (const auto& constraint : game.constraints()) {\n        assert(solution.value[constraint.to]\
-    \ - solution.value[constraint.from] <=\n               constraint.upper_bound);\n\
-    \    }\n\n    auto bounds = game.difference_bounds(0, 3);\n    assert(bounds.is_feasible());\n\
-    \    assert(bounds.bounded_below());\n    assert(bounds.bounded_above());\n  \
-    \  assert(*bounds.lower_bound == 4);\n    assert(*bounds.upper_bound == 12);\n\
-    \n    auto all = game.tightest_upper_bounds(0);\n    assert(all.is_feasible());\n\
-    \    assert(all.bounded(0));\n    assert(all.bounded(3));\n    assert(all.upper_bound[0]\
-    \ == 0);\n    assert(all.upper_bound[3] == 12);\n}\n\nvoid test_infeasible() {\n\
-    \    CowGame game(2);\n    game.add_lower_bound(0, 1, 5);\n    assert(game.is_feasible());\n\
-    \    assert(game.solve().is_feasible());\n\n    game.add_upper_bound(0, 1, 3);\n\
-    \n    assert(!game.is_feasible());\n    assert(!game.solve().is_feasible());\n\
-    \    assert(!game.tightest_upper_bounds(0).is_feasible());\n    assert(!game.difference_bounds(0,\
-    \ 1).is_feasible());\n}\n\nvoid test_unbounded() {\n    CowGame game(4);\n   \
-    \ game.add_upper_bound(0, 1, 7);\n    game.add_upper_bound(2, 3, 2);\n\n    auto\
-    \ one_way = game.difference_bounds(0, 1);\n    assert(one_way.is_feasible());\n\
-    \    assert(!one_way.bounded_below());\n    assert(one_way.bounded_above());\n\
-    \    assert(*one_way.upper_bound == 7);\n\n    auto disconnected = game.difference_bounds(0,\
-    \ 3);\n    assert(disconnected.is_feasible());\n    assert(!disconnected.bounded_below());\n\
-    \    assert(!disconnected.bounded_above());\n\n    auto all = game.tightest_upper_bounds(0);\n\
-    \    assert(all.bounded(0));\n    assert(all.bounded(1));\n    assert(!all.bounded(2));\n\
-    \    assert(!all.bounded(3));\n}\n\nvoid test_alias_and_empty() {\n    m1une::graph::DifferenceConstraints<long\
-    \ long> constraints(0);\n    auto solution = constraints.solve();\n    assert(solution.is_feasible());\n\
-    \    assert(solution.value.empty());\n}\n\nvoid test_against_warshall_floyd()\
-    \ {\n    constexpr long long inf = std::numeric_limits<long long>::max() / 4;\n\
-    \    for (int n = 1; n <= 7; n++) {\n        for (int test = 0; test < 80; test++)\
-    \ {\n            CowGame game(n);\n            std::vector<std::vector<long long>>\
-    \ dist(\n                n, std::vector<long long>(n, inf));\n            for\
-    \ (int i = 0; i < n; i++) dist[i][i] = 0;\n\n            for (int from = 0; from\
-    \ < n; from++) {\n                for (int to = 0; to < n; to++) {\n         \
-    \           if ((test * 5 + from * 7 + to * 11) % 6 != 0) continue;\n        \
-    \            long long upper_bound = (test * 3 + from * 5 + to * 2) % 13 - 6;\n\
-    \                    game.add_constraint(from, to, upper_bound);\n           \
-    \         dist[from][to] = std::min(dist[from][to], upper_bound);\n          \
-    \      }\n            }\n\n            dist = m1une::graph::warshall_floyd(std::move(dist),\
-    \ inf);\n            bool feasible = !m1une::graph::has_negative_cycle(dist);\n\
-    \            assert(game.is_feasible() == feasible);\n\n            auto solution\
-    \ = game.solve();\n            assert(solution.is_feasible() == feasible);\n \
-    \           if (!feasible) continue;\n            for (const auto& constraint\
-    \ : game.constraints()) {\n                assert(solution.value[constraint.to]\
-    \ - solution.value[constraint.from] <=\n                       constraint.upper_bound);\n\
-    \            }\n\n            for (int source = 0; source < n; source++) {\n \
-    \               auto upper = game.tightest_upper_bounds(source);\n           \
-    \     assert(upper.is_feasible());\n                for (int target = 0; target\
-    \ < n; target++) {\n                    assert(upper.bounded(target) == (dist[source][target]\
-    \ != inf));\n                    if (upper.bounded(target)) {\n              \
-    \          assert(upper.upper_bound[target] == dist[source][target]);\n      \
-    \              }\n\n                    auto bounds = game.difference_bounds(source,\
-    \ target);\n                    assert(bounds.is_feasible());\n              \
-    \      assert(bounds.bounded_above() == (dist[source][target] != inf));\n    \
-    \                assert(bounds.bounded_below() == (dist[target][source] != inf));\n\
-    \                    if (bounds.bounded_above()) {\n                        assert(*bounds.upper_bound\
-    \ == dist[source][target]);\n                    }\n                    if (bounds.bounded_below())\
-    \ {\n                        assert(*bounds.lower_bound == -dist[target][source]);\n\
-    \                    }\n                }\n            }\n        }\n    }\n}\n\
-    \nint main() {\n    test_basic_constraints();\n    test_infeasible();\n    test_unbounded();\n\
-    \    test_alias_and_empty();\n    test_against_warshall_floyd();\n\n    long long\
-    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \ 10 \"graph/all.hpp\"\n\n\n#line 10 \"verify/graph/range_edge_graph.test.cpp\"\
+    \n\nusing RangeEdgeGraph = m1une::graph::RangeEdgeGraph<long long>;\n\nvoid test_basic()\
+    \ {\n    RangeEdgeGraph range_graph(6);\n    assert(range_graph.size() == 6);\n\
+    \    for (int i = 0; i < 6; i++) assert(range_graph.point_vertex(i) == i);\n\n\
+    \    range_graph.add_point_to_point(0, 1, 4);\n    range_graph.add_point_to_range(1,\
+    \ 2, 5, 3);\n    range_graph.add_range_to_point(2, 4, 5, 2);\n    int auxiliary\
+    \ = range_graph.add_range_to_range(0, 2, 4, 6, 7);\n    assert(auxiliary >= 6);\n\
+    \n    auto result = m1une::graph::dijkstra(range_graph.graph(), 0);\n    std::vector<long\
+    \ long> expected = {0, 4, 7, 7, 7, 7};\n    for (int i = 0; i < 6; i++) assert(result.dist[i]\
+    \ == expected[i]);\n}\n\nvoid test_empty_ranges() {\n    RangeEdgeGraph range_graph(3);\n\
+    \    int vertices = range_graph.graph().size();\n    int edges = range_graph.graph().edge_count();\n\
+    \    range_graph.add_point_to_range(0, 1, 1, 5);\n    range_graph.add_range_to_point(2,\
+    \ 2, 1, 5);\n    assert(range_graph.add_range_to_range(0, 0, 0, 3, 5) == -1);\n\
+    \    assert(range_graph.add_range_to_range(0, 3, 2, 2, 5) == -1);\n    assert(range_graph.graph().size()\
+    \ == vertices);\n    assert(range_graph.graph().edge_count() == edges);\n\n  \
+    \  RangeEdgeGraph empty(0);\n    assert(empty.size() == 0);\n    assert(empty.graph().size()\
+    \ == 0);\n    assert(empty.from_range_nodes(0, 0).empty());\n    assert(empty.to_range_nodes(0,\
+    \ 0).empty());\n}\n\nvoid test_cover_nodes() {\n    RangeEdgeGraph range_graph(9);\n\
+    \    auto from_nodes = range_graph.from_range_nodes(2, 8);\n    auto to_nodes\
+    \ = range_graph.to_range_nodes(2, 8);\n    assert(from_nodes.size() == to_nodes.size());\n\
+    \n    std::vector<int> covered(9, 0);\n    for (const auto& node : from_nodes)\
+    \ {\n        assert(2 <= node.left && node.left < node.right && node.right <=\
+    \ 8);\n        for (int i = node.left; i < node.right; i++) covered[i]++;\n  \
+    \  }\n    for (int i = 0; i < 9; i++) assert(covered[i] == (2 <= i && i < 8));\n\
+    \n    int auxiliary = range_graph.add_vertex();\n    for (const auto& node : from_nodes)\
+    \ {\n        long long cost = 20 - node.right;\n        range_graph.graph().add_directed_edge(node.vertex,\
+    \ auxiliary, cost);\n    }\n    for (const auto& node : range_graph.to_range_nodes(0,\
+    \ 2)) {\n        range_graph.graph().add_directed_edge(auxiliary, node.vertex,\
+    \ node.left);\n    }\n\n    auto result = m1une::graph::dijkstra(range_graph.graph(),\
+    \ 4);\n    assert(result.dist[0] == 14);\n    assert(result.dist[1] == 14);\n\
+    }\n\nvoid test_against_naive_graph() {\n    constexpr long long inf = std::numeric_limits<long\
+    \ long>::max() / 4;\n    for (int n = 1; n <= 12; n++) {\n        for (int test\
+    \ = 0; test < 60; test++) {\n            RangeEdgeGraph range_graph(n);\n    \
+    \        m1une::graph::Graph<long long> naive(n);\n\n            for (int query\
+    \ = 0; query < 25; query++) {\n                int type = (test * 7 + query *\
+    \ 11 + n) % 4;\n                int a = (test * 3 + query * 5 + 1) % n;\n    \
+    \            int b = (test * 13 + query * 7 + 2) % n;\n                int c =\
+    \ (test * 5 + query * 3 + 3) % n;\n                int d = (test * 11 + query\
+    \ * 2 + 4) % n;\n                int left = std::min(a, b);\n                int\
+    \ right = std::max(a, b) + 1;\n                int to_left = std::min(c, d);\n\
+    \                int to_right = std::max(c, d) + 1;\n                long long\
+    \ cost = (test * 5 + query * 7 + n) % 17;\n\n                if (type == 0) {\n\
+    \                    range_graph.add_point_to_point(a, c, cost);\n           \
+    \         naive.add_directed_edge(a, c, cost);\n                } else if (type\
+    \ == 1) {\n                    range_graph.add_point_to_range(a, to_left, to_right,\
+    \ cost);\n                    for (int to = to_left; to < to_right; to++) {\n\
+    \                        naive.add_directed_edge(a, to, cost);\n             \
+    \       }\n                } else if (type == 2) {\n                    range_graph.add_range_to_point(left,\
+    \ right, c, cost);\n                    for (int from = left; from < right; from++)\
+    \ {\n                        naive.add_directed_edge(from, c, cost);\n       \
+    \             }\n                } else {\n                    range_graph.add_range_to_range(left,\
+    \ right, to_left, to_right, cost);\n                    for (int from = left;\
+    \ from < right; from++) {\n                        for (int to = to_left; to <\
+    \ to_right; to++) {\n                            naive.add_directed_edge(from,\
+    \ to, cost);\n                        }\n                    }\n             \
+    \   }\n            }\n\n            for (int source = 0; source < n; source++)\
+    \ {\n                auto actual = m1une::graph::dijkstra(range_graph.graph(),\
+    \ source, inf);\n                auto expected = m1une::graph::dijkstra(naive,\
+    \ source, inf);\n                for (int target = 0; target < n; target++) {\n\
+    \                    assert(actual.dist[target] == expected.dist[target]);\n \
+    \               }\n            }\n        }\n    }\n}\n\nint main() {\n    test_basic();\n\
+    \    test_empty_ranges();\n    test_cover_nodes();\n    test_against_naive_graph();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <iostream>\n#include <limits>\n#include <vector>\n\
-    \n#include \"../../graph/all.hpp\"\n\nusing CowGame = m1une::graph::CowGame<long\
-    \ long>;\n\nvoid test_basic_constraints() {\n    CowGame game(4);\n    int first\
-    \ = game.add_upper_bound(0, 1, 5);\n    game.add_lower_bound(0, 1, 2);\n    game.add_bounds(1,\
-    \ 2, -1, 4);\n    game.add_equality(2, 3, 3);\n\n    assert(game.size() == 4);\n\
-    \    assert(game.constraint_count() == 6);\n    assert(game.get_constraint(first).from\
-    \ == 0);\n    assert(game.get_constraint(first).to == 1);\n    assert(game.get_constraint(first).upper_bound\
-    \ == 5);\n\n    auto solution = game.solve();\n    assert(solution.is_feasible());\n\
-    \    assert(solution.value.size() == 4);\n    for (const auto& constraint : game.constraints())\
-    \ {\n        assert(solution.value[constraint.to] - solution.value[constraint.from]\
-    \ <=\n               constraint.upper_bound);\n    }\n\n    auto bounds = game.difference_bounds(0,\
-    \ 3);\n    assert(bounds.is_feasible());\n    assert(bounds.bounded_below());\n\
-    \    assert(bounds.bounded_above());\n    assert(*bounds.lower_bound == 4);\n\
-    \    assert(*bounds.upper_bound == 12);\n\n    auto all = game.tightest_upper_bounds(0);\n\
-    \    assert(all.is_feasible());\n    assert(all.bounded(0));\n    assert(all.bounded(3));\n\
-    \    assert(all.upper_bound[0] == 0);\n    assert(all.upper_bound[3] == 12);\n\
-    }\n\nvoid test_infeasible() {\n    CowGame game(2);\n    game.add_lower_bound(0,\
-    \ 1, 5);\n    assert(game.is_feasible());\n    assert(game.solve().is_feasible());\n\
-    \n    game.add_upper_bound(0, 1, 3);\n\n    assert(!game.is_feasible());\n   \
-    \ assert(!game.solve().is_feasible());\n    assert(!game.tightest_upper_bounds(0).is_feasible());\n\
-    \    assert(!game.difference_bounds(0, 1).is_feasible());\n}\n\nvoid test_unbounded()\
-    \ {\n    CowGame game(4);\n    game.add_upper_bound(0, 1, 7);\n    game.add_upper_bound(2,\
-    \ 3, 2);\n\n    auto one_way = game.difference_bounds(0, 1);\n    assert(one_way.is_feasible());\n\
-    \    assert(!one_way.bounded_below());\n    assert(one_way.bounded_above());\n\
-    \    assert(*one_way.upper_bound == 7);\n\n    auto disconnected = game.difference_bounds(0,\
-    \ 3);\n    assert(disconnected.is_feasible());\n    assert(!disconnected.bounded_below());\n\
-    \    assert(!disconnected.bounded_above());\n\n    auto all = game.tightest_upper_bounds(0);\n\
-    \    assert(all.bounded(0));\n    assert(all.bounded(1));\n    assert(!all.bounded(2));\n\
-    \    assert(!all.bounded(3));\n}\n\nvoid test_alias_and_empty() {\n    m1une::graph::DifferenceConstraints<long\
-    \ long> constraints(0);\n    auto solution = constraints.solve();\n    assert(solution.is_feasible());\n\
-    \    assert(solution.value.empty());\n}\n\nvoid test_against_warshall_floyd()\
-    \ {\n    constexpr long long inf = std::numeric_limits<long long>::max() / 4;\n\
-    \    for (int n = 1; n <= 7; n++) {\n        for (int test = 0; test < 80; test++)\
-    \ {\n            CowGame game(n);\n            std::vector<std::vector<long long>>\
-    \ dist(\n                n, std::vector<long long>(n, inf));\n            for\
-    \ (int i = 0; i < n; i++) dist[i][i] = 0;\n\n            for (int from = 0; from\
-    \ < n; from++) {\n                for (int to = 0; to < n; to++) {\n         \
-    \           if ((test * 5 + from * 7 + to * 11) % 6 != 0) continue;\n        \
-    \            long long upper_bound = (test * 3 + from * 5 + to * 2) % 13 - 6;\n\
-    \                    game.add_constraint(from, to, upper_bound);\n           \
-    \         dist[from][to] = std::min(dist[from][to], upper_bound);\n          \
-    \      }\n            }\n\n            dist = m1une::graph::warshall_floyd(std::move(dist),\
-    \ inf);\n            bool feasible = !m1une::graph::has_negative_cycle(dist);\n\
-    \            assert(game.is_feasible() == feasible);\n\n            auto solution\
-    \ = game.solve();\n            assert(solution.is_feasible() == feasible);\n \
-    \           if (!feasible) continue;\n            for (const auto& constraint\
-    \ : game.constraints()) {\n                assert(solution.value[constraint.to]\
-    \ - solution.value[constraint.from] <=\n                       constraint.upper_bound);\n\
-    \            }\n\n            for (int source = 0; source < n; source++) {\n \
-    \               auto upper = game.tightest_upper_bounds(source);\n           \
-    \     assert(upper.is_feasible());\n                for (int target = 0; target\
-    \ < n; target++) {\n                    assert(upper.bounded(target) == (dist[source][target]\
-    \ != inf));\n                    if (upper.bounded(target)) {\n              \
-    \          assert(upper.upper_bound[target] == dist[source][target]);\n      \
-    \              }\n\n                    auto bounds = game.difference_bounds(source,\
-    \ target);\n                    assert(bounds.is_feasible());\n              \
-    \      assert(bounds.bounded_above() == (dist[source][target] != inf));\n    \
-    \                assert(bounds.bounded_below() == (dist[target][source] != inf));\n\
-    \                    if (bounds.bounded_above()) {\n                        assert(*bounds.upper_bound\
-    \ == dist[source][target]);\n                    }\n                    if (bounds.bounded_below())\
-    \ {\n                        assert(*bounds.lower_bound == -dist[target][source]);\n\
-    \                    }\n                }\n            }\n        }\n    }\n}\n\
-    \nint main() {\n    test_basic_constraints();\n    test_infeasible();\n    test_unbounded();\n\
-    \    test_alias_and_empty();\n    test_against_warshall_floyd();\n\n    long long\
-    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \n#include \"../../graph/all.hpp\"\n\nusing RangeEdgeGraph = m1une::graph::RangeEdgeGraph<long\
+    \ long>;\n\nvoid test_basic() {\n    RangeEdgeGraph range_graph(6);\n    assert(range_graph.size()\
+    \ == 6);\n    for (int i = 0; i < 6; i++) assert(range_graph.point_vertex(i) ==\
+    \ i);\n\n    range_graph.add_point_to_point(0, 1, 4);\n    range_graph.add_point_to_range(1,\
+    \ 2, 5, 3);\n    range_graph.add_range_to_point(2, 4, 5, 2);\n    int auxiliary\
+    \ = range_graph.add_range_to_range(0, 2, 4, 6, 7);\n    assert(auxiliary >= 6);\n\
+    \n    auto result = m1une::graph::dijkstra(range_graph.graph(), 0);\n    std::vector<long\
+    \ long> expected = {0, 4, 7, 7, 7, 7};\n    for (int i = 0; i < 6; i++) assert(result.dist[i]\
+    \ == expected[i]);\n}\n\nvoid test_empty_ranges() {\n    RangeEdgeGraph range_graph(3);\n\
+    \    int vertices = range_graph.graph().size();\n    int edges = range_graph.graph().edge_count();\n\
+    \    range_graph.add_point_to_range(0, 1, 1, 5);\n    range_graph.add_range_to_point(2,\
+    \ 2, 1, 5);\n    assert(range_graph.add_range_to_range(0, 0, 0, 3, 5) == -1);\n\
+    \    assert(range_graph.add_range_to_range(0, 3, 2, 2, 5) == -1);\n    assert(range_graph.graph().size()\
+    \ == vertices);\n    assert(range_graph.graph().edge_count() == edges);\n\n  \
+    \  RangeEdgeGraph empty(0);\n    assert(empty.size() == 0);\n    assert(empty.graph().size()\
+    \ == 0);\n    assert(empty.from_range_nodes(0, 0).empty());\n    assert(empty.to_range_nodes(0,\
+    \ 0).empty());\n}\n\nvoid test_cover_nodes() {\n    RangeEdgeGraph range_graph(9);\n\
+    \    auto from_nodes = range_graph.from_range_nodes(2, 8);\n    auto to_nodes\
+    \ = range_graph.to_range_nodes(2, 8);\n    assert(from_nodes.size() == to_nodes.size());\n\
+    \n    std::vector<int> covered(9, 0);\n    for (const auto& node : from_nodes)\
+    \ {\n        assert(2 <= node.left && node.left < node.right && node.right <=\
+    \ 8);\n        for (int i = node.left; i < node.right; i++) covered[i]++;\n  \
+    \  }\n    for (int i = 0; i < 9; i++) assert(covered[i] == (2 <= i && i < 8));\n\
+    \n    int auxiliary = range_graph.add_vertex();\n    for (const auto& node : from_nodes)\
+    \ {\n        long long cost = 20 - node.right;\n        range_graph.graph().add_directed_edge(node.vertex,\
+    \ auxiliary, cost);\n    }\n    for (const auto& node : range_graph.to_range_nodes(0,\
+    \ 2)) {\n        range_graph.graph().add_directed_edge(auxiliary, node.vertex,\
+    \ node.left);\n    }\n\n    auto result = m1une::graph::dijkstra(range_graph.graph(),\
+    \ 4);\n    assert(result.dist[0] == 14);\n    assert(result.dist[1] == 14);\n\
+    }\n\nvoid test_against_naive_graph() {\n    constexpr long long inf = std::numeric_limits<long\
+    \ long>::max() / 4;\n    for (int n = 1; n <= 12; n++) {\n        for (int test\
+    \ = 0; test < 60; test++) {\n            RangeEdgeGraph range_graph(n);\n    \
+    \        m1une::graph::Graph<long long> naive(n);\n\n            for (int query\
+    \ = 0; query < 25; query++) {\n                int type = (test * 7 + query *\
+    \ 11 + n) % 4;\n                int a = (test * 3 + query * 5 + 1) % n;\n    \
+    \            int b = (test * 13 + query * 7 + 2) % n;\n                int c =\
+    \ (test * 5 + query * 3 + 3) % n;\n                int d = (test * 11 + query\
+    \ * 2 + 4) % n;\n                int left = std::min(a, b);\n                int\
+    \ right = std::max(a, b) + 1;\n                int to_left = std::min(c, d);\n\
+    \                int to_right = std::max(c, d) + 1;\n                long long\
+    \ cost = (test * 5 + query * 7 + n) % 17;\n\n                if (type == 0) {\n\
+    \                    range_graph.add_point_to_point(a, c, cost);\n           \
+    \         naive.add_directed_edge(a, c, cost);\n                } else if (type\
+    \ == 1) {\n                    range_graph.add_point_to_range(a, to_left, to_right,\
+    \ cost);\n                    for (int to = to_left; to < to_right; to++) {\n\
+    \                        naive.add_directed_edge(a, to, cost);\n             \
+    \       }\n                } else if (type == 2) {\n                    range_graph.add_range_to_point(left,\
+    \ right, c, cost);\n                    for (int from = left; from < right; from++)\
+    \ {\n                        naive.add_directed_edge(from, c, cost);\n       \
+    \             }\n                } else {\n                    range_graph.add_range_to_range(left,\
+    \ right, to_left, to_right, cost);\n                    for (int from = left;\
+    \ from < right; from++) {\n                        for (int to = to_left; to <\
+    \ to_right; to++) {\n                            naive.add_directed_edge(from,\
+    \ to, cost);\n                        }\n                    }\n             \
+    \   }\n            }\n\n            for (int source = 0; source < n; source++)\
+    \ {\n                auto actual = m1une::graph::dijkstra(range_graph.graph(),\
+    \ source, inf);\n                auto expected = m1une::graph::dijkstra(naive,\
+    \ source, inf);\n                for (int target = 0; target < n; target++) {\n\
+    \                    assert(actual.dist[target] == expected.dist[target]);\n \
+    \               }\n            }\n        }\n    }\n}\n\nint main() {\n    test_basic();\n\
+    \    test_empty_ranges();\n    test_cover_nodes();\n    test_against_naive_graph();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   dependsOn:
   - graph/all.hpp
   - graph/directed.hpp
@@ -1514,15 +1513,15 @@ data:
   - graph/lowlink.hpp
   - graph/maximum_clique.hpp
   isVerificationFile: true
-  path: verify/graph/cow_game.test.cpp
+  path: verify/graph/range_edge_graph.test.cpp
   requiredBy: []
   timestamp: '2026-06-22 23:50:35+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/graph/cow_game.test.cpp
+documentation_of: verify/graph/range_edge_graph.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/graph/cow_game.test.cpp
-- /verify/verify/graph/cow_game.test.cpp.html
-title: verify/graph/cow_game.test.cpp
+- /verify/verify/graph/range_edge_graph.test.cpp
+- /verify/verify/graph/range_edge_graph.test.cpp.html
+title: verify/graph/range_edge_graph.test.cpp
 ---

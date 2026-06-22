@@ -45,6 +45,9 @@ data:
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
   - icon: ':heavy_check_mark:'
+    path: graph/range_edge_graph.hpp
+    title: Range Edge Graph
+  - icon: ':heavy_check_mark:'
     path: graph/scc.hpp
     title: Strongly Connected Components
   - icon: ':heavy_check_mark:'
@@ -117,6 +120,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_maximum_independent_set.test.cpp
     title: verify/graph/library_checker_maximum_independent_set.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/range_edge_graph.test.cpp
+    title: verify/graph/range_edge_graph.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
@@ -256,6 +262,7 @@ data:
   - graph/dijkstra.hpp
   - graph/scc.hpp
   - graph/kruskal.hpp
+  - graph/range_edge_graph.hpp
   - graph/bipartite.hpp
   - graph/bellman_ford.hpp
   - graph/dag_shortest_path.hpp
@@ -284,6 +291,7 @@ data:
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp
+  - verify/graph/range_edge_graph.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/graph.hpp
 layout: document

@@ -16,6 +16,9 @@ data:
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/graph/range_edge_graph.test.cpp
+    title: verify/graph/range_edge_graph.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/graph/two_sat.test.cpp
     title: verify/graph/two_sat.test.cpp
   _isVerificationFailed: false
@@ -183,6 +186,7 @@ data:
   verifiedWith:
   - verify/graph/cow_game.test.cpp
   - verify/graph/two_sat.test.cpp
+  - verify/graph/range_edge_graph.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/two_sat.hpp
 layout: document

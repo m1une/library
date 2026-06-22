@@ -331,6 +331,9 @@ data:
       path: graph/maximum_clique.hpp
       title: Maximum Clique, Independent Set, and Vertex Cover
     - icon: ':heavy_check_mark:'
+      path: graph/range_edge_graph.hpp
+      title: Range Edge Graph
+    - icon: ':heavy_check_mark:'
       path: graph/scc.hpp
       title: Strongly Connected Components
     - icon: ':heavy_check_mark:'
@@ -865,6 +868,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/graph/library_checker_maximum_independent_set.test.cpp
       title: verify/graph/library_checker_maximum_independent_set.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/graph/range_edge_graph.test.cpp
+      title: verify/graph/range_edge_graph.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/graph/two_sat.test.cpp
       title: verify/graph/two_sat.test.cpp

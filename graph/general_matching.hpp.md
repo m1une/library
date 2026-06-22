@@ -21,6 +21,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_general_matching.test.cpp
     title: verify/graph/library_checker_general_matching.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/range_edge_graph.test.cpp
+    title: verify/graph/range_edge_graph.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -736,6 +739,7 @@ data:
   verifiedWith:
   - verify/graph/cow_game.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp
+  - verify/graph/range_edge_graph.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/general_matching.hpp
 layout: document

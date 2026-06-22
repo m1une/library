@@ -50,6 +50,9 @@ data:
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
   - icon: ':heavy_check_mark:'
+    path: graph/range_edge_graph.hpp
+    title: Range Edge Graph
+  - icon: ':heavy_check_mark:'
     path: graph/scc.hpp
     title: Strongly Connected Components
   - icon: ':heavy_check_mark:'
@@ -78,6 +81,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/range_edge_graph.test.cpp
+    title: verify/graph/range_edge_graph.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -602,37 +608,96 @@ data:
     \  if (!passable(ni, nj)) continue;\n                    int to = id(ni, nj);\n\
     \                    if (v < to) g.add_edge(v, to);\n                }\n     \
     \       }\n        }\n        return g;\n    }\n};\n\n}  // namespace graph\n\
-    }  // namespace m1une\n\n\n#line 1 \"graph/undirected.hpp\"\n\n\n\n#line 1 \"\
-    graph/bipartite.hpp\"\n\n\n\n#line 8 \"graph/bipartite.hpp\"\n\n#line 10 \"graph/bipartite.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\nstruct BipartiteResult {\n    bool\
-    \ is_bipartite;\n    std::vector<int> color;\n    std::vector<int> left_vertices;\n\
-    \    std::vector<int> right_vertices;\n    std::vector<int> left_id;\n    std::vector<int>\
-    \ right_id;\n};\n\ntemplate <class T>\nBipartiteResult bipartite(const Graph<T>&\
-    \ g) {\n    int n = g.size();\n    BipartiteResult result;\n    result.is_bipartite\
-    \ = true;\n    result.color.assign(n, -1);\n    result.left_id.assign(n, -1);\n\
-    \    result.right_id.assign(n, -1);\n\n    std::vector<std::vector<int>> adjacency(n);\n\
-    \    for (const auto& e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n\
-    \        adjacency[e.to].push_back(e.from);\n    }\n\n    std::queue<int> que;\n\
-    \    for (int s = 0; s < n; s++) {\n        if (result.color[s] != -1) continue;\n\
-    \        result.color[s] = 0;\n        que.push(s);\n        while (!que.empty())\
-    \ {\n            int v = que.front();\n            que.pop();\n            for\
-    \ (int to : adjacency[v]) {\n                if (result.color[to] == -1) {\n \
-    \                   result.color[to] = result.color[v] ^ 1;\n                \
-    \    que.push(to);\n                } else if (result.color[to] == result.color[v])\
-    \ {\n                    result.is_bipartite = false;\n                    return\
-    \ result;\n                }\n            }\n        }\n    }\n\n    for (int\
-    \ v = 0; v < n; v++) {\n        if (result.color[v] == 0) {\n            result.left_id[v]\
-    \ = int(result.left_vertices.size());\n            result.left_vertices.push_back(v);\n\
-    \        } else {\n            result.right_id[v] = int(result.right_vertices.size());\n\
-    \            result.right_vertices.push_back(v);\n        }\n    }\n\n    return\
-    \ result;\n}\n\ntemplate <class T>\nbool is_bipartite(const Graph<T>& g) {\n \
-    \   return bipartite(g).is_bipartite;\n}\n\nstruct BipartiteVertexSet {\n    std::vector<int>\
-    \ left;\n    std::vector<int> right;\n\n    int size() const {\n        return\
-    \ int(left.size() + right.size());\n    }\n};\n\nstruct BipartiteMatching {\n\
-    \    struct Edge {\n        int left;\n        int right;\n        int id;\n \
-    \       bool alive;\n    };\n\n    struct Pair {\n        int left;\n        int\
-    \ right;\n        int edge_id;\n    };\n\n   private:\n    int _left_size;\n \
-    \   int _right_size;\n    std::vector<Edge> _edges;\n    std::vector<std::vector<int>>\
+    }  // namespace m1une\n\n\n#line 1 \"graph/range_edge_graph.hpp\"\n\n\n\n#line\
+    \ 6 \"graph/range_edge_graph.hpp\"\n\n#line 8 \"graph/range_edge_graph.hpp\"\n\
+    \nnamespace m1une {\nnamespace graph {\n\nstruct RangeEdgeNode {\n    int vertex;\n\
+    \    int left;\n    int right;\n};\n\ntemplate <class T>\nclass RangeEdgeGraph\
+    \ {\n    struct SegmentNode {\n        int left = 0;\n        int right = 0;\n\
+    \        int from_vertex = -1;\n        int to_vertex = -1;\n    };\n\n    int\
+    \ _n;\n    Graph<T> _graph;\n    std::vector<SegmentNode> _segment;\n\n    void\
+    \ assert_point(int point) const {\n        (void)point;\n        assert(0 <= point\
+    \ && point < _n);\n    }\n\n    void assert_range(int left, int right) const {\n\
+    \        (void)left;\n        (void)right;\n        assert(0 <= left && left <=\
+    \ right && right <= _n);\n    }\n\n    void build(int node, int left, int right)\
+    \ {\n        _segment[node].left = left;\n        _segment[node].right = right;\n\
+    \        if (right - left == 1) {\n            _segment[node].from_vertex = left;\n\
+    \            _segment[node].to_vertex = left;\n            return;\n        }\n\
+    \n        int middle = (left + right) / 2;\n        build(node * 2, left, middle);\n\
+    \        build(node * 2 + 1, middle, right);\n\n        int from_vertex = _graph.add_vertex();\n\
+    \        int to_vertex = _graph.add_vertex();\n        _segment[node].from_vertex\
+    \ = from_vertex;\n        _segment[node].to_vertex = to_vertex;\n\n        _graph.add_directed_edge(_segment[node\
+    \ * 2].from_vertex, from_vertex, T());\n        _graph.add_directed_edge(_segment[node\
+    \ * 2 + 1].from_vertex, from_vertex, T());\n        _graph.add_directed_edge(to_vertex,\
+    \ _segment[node * 2].to_vertex, T());\n        _graph.add_directed_edge(to_vertex,\
+    \ _segment[node * 2 + 1].to_vertex, T());\n    }\n\n    void collect(int node,\
+    \ int left, int right, bool from_side,\n                 std::vector<RangeEdgeNode>&\
+    \ result) const {\n        const auto& current = _segment[node];\n        if (right\
+    \ <= current.left || current.right <= left) return;\n        if (left <= current.left\
+    \ && current.right <= right) {\n            int vertex = from_side ? current.from_vertex\
+    \ : current.to_vertex;\n            result.push_back(RangeEdgeNode{vertex, current.left,\
+    \ current.right});\n            return;\n        }\n        collect(node * 2,\
+    \ left, right, from_side, result);\n        collect(node * 2 + 1, left, right,\
+    \ from_side, result);\n    }\n\n   public:\n    RangeEdgeGraph() : RangeEdgeGraph(0)\
+    \ {}\n\n    explicit RangeEdgeGraph(int point_count)\n        : _n(point_count),\n\
+    \          _graph(point_count),\n          _segment(point_count == 0 ? 1 : point_count\
+    \ * 4) {\n        assert(point_count >= 0);\n        if (point_count != 0) build(1,\
+    \ 0, point_count);\n    }\n\n    int size() const {\n        return _n;\n    }\n\
+    \n    int point_vertex(int point) const {\n        assert_point(point);\n    \
+    \    return point;\n    }\n\n    int add_vertex() {\n        return _graph.add_vertex();\n\
+    \    }\n\n    Graph<T>& graph() {\n        return _graph;\n    }\n\n    const\
+    \ Graph<T>& graph() const {\n        return _graph;\n    }\n\n    std::vector<RangeEdgeNode>\
+    \ from_range_nodes(int left, int right) const {\n        assert_range(left, right);\n\
+    \        std::vector<RangeEdgeNode> result;\n        if (left != right) collect(1,\
+    \ left, right, true, result);\n        return result;\n    }\n\n    std::vector<RangeEdgeNode>\
+    \ to_range_nodes(int left, int right) const {\n        assert_range(left, right);\n\
+    \        std::vector<RangeEdgeNode> result;\n        if (left != right) collect(1,\
+    \ left, right, false, result);\n        return result;\n    }\n\n    int add_point_to_point(int\
+    \ from, int to, T cost) {\n        assert_point(from);\n        assert_point(to);\n\
+    \        return _graph.add_directed_edge(from, to, cost);\n    }\n\n    void add_point_to_range(int\
+    \ from, int left, int right, T cost) {\n        assert_point(from);\n        for\
+    \ (const auto& node : to_range_nodes(left, right)) {\n            _graph.add_directed_edge(from,\
+    \ node.vertex, cost);\n        }\n    }\n\n    void add_range_to_point(int left,\
+    \ int right, int to, T cost) {\n        assert_point(to);\n        for (const\
+    \ auto& node : from_range_nodes(left, right)) {\n            _graph.add_directed_edge(node.vertex,\
+    \ to, cost);\n        }\n    }\n\n    int add_range_to_range(int from_left, int\
+    \ from_right, int to_left, int to_right,\n                           T cost) {\n\
+    \        assert_range(from_left, from_right);\n        assert_range(to_left, to_right);\n\
+    \        if (from_left == from_right || to_left == to_right) return -1;\n\n  \
+    \      int auxiliary = add_vertex();\n        for (const auto& node : from_range_nodes(from_left,\
+    \ from_right)) {\n            _graph.add_directed_edge(node.vertex, auxiliary,\
+    \ cost);\n        }\n        for (const auto& node : to_range_nodes(to_left, to_right))\
+    \ {\n            _graph.add_directed_edge(auxiliary, node.vertex, T());\n    \
+    \    }\n        return auxiliary;\n    }\n};\n\n}  // namespace graph\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"graph/undirected.hpp\"\n\n\n\n#line 1 \"graph/bipartite.hpp\"\
+    \n\n\n\n#line 8 \"graph/bipartite.hpp\"\n\n#line 10 \"graph/bipartite.hpp\"\n\n\
+    namespace m1une {\nnamespace graph {\n\nstruct BipartiteResult {\n    bool is_bipartite;\n\
+    \    std::vector<int> color;\n    std::vector<int> left_vertices;\n    std::vector<int>\
+    \ right_vertices;\n    std::vector<int> left_id;\n    std::vector<int> right_id;\n\
+    };\n\ntemplate <class T>\nBipartiteResult bipartite(const Graph<T>& g) {\n   \
+    \ int n = g.size();\n    BipartiteResult result;\n    result.is_bipartite = true;\n\
+    \    result.color.assign(n, -1);\n    result.left_id.assign(n, -1);\n    result.right_id.assign(n,\
+    \ -1);\n\n    std::vector<std::vector<int>> adjacency(n);\n    for (const auto&\
+    \ e : g.edges()) {\n        adjacency[e.from].push_back(e.to);\n        adjacency[e.to].push_back(e.from);\n\
+    \    }\n\n    std::queue<int> que;\n    for (int s = 0; s < n; s++) {\n      \
+    \  if (result.color[s] != -1) continue;\n        result.color[s] = 0;\n      \
+    \  que.push(s);\n        while (!que.empty()) {\n            int v = que.front();\n\
+    \            que.pop();\n            for (int to : adjacency[v]) {\n         \
+    \       if (result.color[to] == -1) {\n                    result.color[to] =\
+    \ result.color[v] ^ 1;\n                    que.push(to);\n                } else\
+    \ if (result.color[to] == result.color[v]) {\n                    result.is_bipartite\
+    \ = false;\n                    return result;\n                }\n          \
+    \  }\n        }\n    }\n\n    for (int v = 0; v < n; v++) {\n        if (result.color[v]\
+    \ == 0) {\n            result.left_id[v] = int(result.left_vertices.size());\n\
+    \            result.left_vertices.push_back(v);\n        } else {\n          \
+    \  result.right_id[v] = int(result.right_vertices.size());\n            result.right_vertices.push_back(v);\n\
+    \        }\n    }\n\n    return result;\n}\n\ntemplate <class T>\nbool is_bipartite(const\
+    \ Graph<T>& g) {\n    return bipartite(g).is_bipartite;\n}\n\nstruct BipartiteVertexSet\
+    \ {\n    std::vector<int> left;\n    std::vector<int> right;\n\n    int size()\
+    \ const {\n        return int(left.size() + right.size());\n    }\n};\n\nstruct\
+    \ BipartiteMatching {\n    struct Edge {\n        int left;\n        int right;\n\
+    \        int id;\n        bool alive;\n    };\n\n    struct Pair {\n        int\
+    \ left;\n        int right;\n        int edge_id;\n    };\n\n   private:\n   \
+    \ int _left_size;\n    int _right_size;\n    std::vector<Edge> _edges;\n    std::vector<std::vector<int>>\
     \ _adj;\n    std::vector<std::vector<int>> _radj;\n    std::vector<int> _left_match;\n\
     \    std::vector<int> _right_match;\n    std::vector<int> _left_match_edge;\n\
     \    std::vector<int> _right_match_edge;\n    bool _calculated;\n\n    void invalidate()\
@@ -1292,7 +1357,7 @@ data:
     \    }\n    return result;\n}\n\ntemplate <class T>\nint minimum_vertex_cover_size(const\
     \ Graph<T>& g) {\n    return minimum_vertex_cover(g).size();\n}\n\n}  // namespace\
     \ graph\n}  // namespace m1une\n\n\n#line 14 \"graph/undirected.hpp\"\n\n\n#line\
-    \ 9 \"graph/all.hpp\"\n\n\n"
+    \ 10 \"graph/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_GRAPH_ALL_HPP
 
     #define M1UNE_GRAPH_ALL_HPP 1
@@ -1303,6 +1368,8 @@ data:
     #include "graph.hpp"
 
     #include "grid.hpp"
+
+    #include "range_edge_graph.hpp"
 
     #include "shortest_path.hpp"
 
@@ -1328,6 +1395,7 @@ data:
   - graph/zero_one_bfs.hpp
   - graph/two_sat.hpp
   - graph/grid.hpp
+  - graph/range_edge_graph.hpp
   - graph/undirected.hpp
   - graph/bipartite.hpp
   - graph/connected_components.hpp
@@ -1339,10 +1407,11 @@ data:
   isVerificationFile: false
   path: graph/all.hpp
   requiredBy: []
-  timestamp: '2026-06-22 23:27:23+09:00'
+  timestamp: '2026-06-22 23:50:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/cow_game.test.cpp
+  - verify/graph/range_edge_graph.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/all.hpp
 layout: document
@@ -1361,6 +1430,7 @@ individual graph includes. Flow-network algorithms live separately under
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
 | `graph/graph.hpp` | Container | `Graph<T>` and `Edge<T>` adjacency-list container. |
+| `graph/range_edge_graph.hpp` | Directed graph builder | Compact point-to-range, range-to-point, and range-to-range edges using segment trees. |
 | `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | Cow game difference constraints, BFS, 0-1 BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
 | `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths. |
 | `graph/undirected.hpp` | Undirected-oriented bundle | Undirected algorithms plus shortest paths and grid helpers. |
