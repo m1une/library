@@ -6,14 +6,12 @@
 #include <utility>
 #include <vector>
 
+#include "zeta_mobius_transform.hpp"
+
 namespace m1une {
 namespace math {
 
 namespace bitwise_convolution_detail {
-
-inline bool is_power_of_two(std::size_t size) noexcept {
-    return size != 0 && (size & (size - 1)) == 0;
-}
 
 inline std::size_t common_size(
     std::size_t first_size,
@@ -42,75 +40,11 @@ std::vector<T> pointwise_product(
 }  // namespace bitwise_convolution_detail
 
 template <typename T>
-void subset_zeta_transform(std::vector<T>& values) {
-    assert(bitwise_convolution_detail::is_power_of_two(values.size()));
-    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {
-        for (
-            std::size_t block = 0;
-            block < values.size();
-            block += bit << 1
-        ) {
-            for (std::size_t offset = 0; offset < bit; ++offset) {
-                values[block + bit + offset] += values[block + offset];
-            }
-        }
-    }
-}
-
-template <typename T>
-void subset_mobius_transform(std::vector<T>& values) {
-    assert(bitwise_convolution_detail::is_power_of_two(values.size()));
-    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {
-        for (
-            std::size_t block = 0;
-            block < values.size();
-            block += bit << 1
-        ) {
-            for (std::size_t offset = 0; offset < bit; ++offset) {
-                values[block + bit + offset] -= values[block + offset];
-            }
-        }
-    }
-}
-
-template <typename T>
-void superset_zeta_transform(std::vector<T>& values) {
-    assert(bitwise_convolution_detail::is_power_of_two(values.size()));
-    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {
-        for (
-            std::size_t block = 0;
-            block < values.size();
-            block += bit << 1
-        ) {
-            for (std::size_t offset = 0; offset < bit; ++offset) {
-                values[block + offset] += values[block + bit + offset];
-            }
-        }
-    }
-}
-
-template <typename T>
-void superset_mobius_transform(std::vector<T>& values) {
-    assert(bitwise_convolution_detail::is_power_of_two(values.size()));
-    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {
-        for (
-            std::size_t block = 0;
-            block < values.size();
-            block += bit << 1
-        ) {
-            for (std::size_t offset = 0; offset < bit; ++offset) {
-                values[block + offset] -= values[block + bit + offset];
-            }
-        }
-    }
-}
-
-template <typename T>
 void walsh_hadamard_transform(
     std::vector<T>& values,
     bool inverse = false
 ) {
-    assert(bitwise_convolution_detail::is_power_of_two(values.size()));
+    assert(zeta_mobius_transform_detail::is_power_of_two(values.size()));
     for (std::size_t length = 1; length < values.size(); length <<= 1) {
         for (
             std::size_t block = 0;

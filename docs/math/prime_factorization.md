@@ -114,6 +114,25 @@ when a piece is already prime.
 
 ## API
 
+```cpp
+bool is_prime(uint64_t value);
+
+std::vector<uint64_t> prime_factors(uint64_t value);
+
+std::vector<std::pair<uint64_t, int>> prime_factorize(uint64_t value);
+
+std::vector<uint64_t> divisors(uint64_t value);
+
+uint64_t euler_phi(uint64_t value);
+
+int mobius(uint64_t value);
+```
+
+Inputs use `uint64_t`, so negative integers are not accepted.
+`prime_factorize` stores each prime as `uint64_t` and its exponent as `int`.
+The Mobius function returns `int` because its result is always `-1`, `0`, or
+`1`; the other numeric result uses `uint64_t`.
+
 | Function | Description |
 | --- | --- |
 | `is_prime(x)` | Deterministically tests whether `x` is prime. |

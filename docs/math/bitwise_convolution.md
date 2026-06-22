@@ -11,8 +11,9 @@ Bitwise convolutions indexed by masks:
 - AND convolution groups pairs by `i & j`;
 - XOR convolution groups pairs by `i ^ j`.
 
-The header also exposes the underlying subset, superset, and
-Walsh-Hadamard transforms.
+The header also exposes the underlying subset, superset, and Walsh-Hadamard
+transforms. The subset and superset transforms are defined in
+`zeta_mobius_transform.hpp`, which this header includes.
 
 ```cpp
 #include "math/bitwise_convolution.hpp"
@@ -27,6 +28,30 @@ For input arrays `a` and `b`, the functions compute:
 $$
 c_k = \sum_{i \mathbin{\mathrm{op}} j = k} a_i b_j.
 $$
+
+```cpp
+template <typename T>
+std::vector<T> bitwise_or_convolution(
+    std::vector<T> first,
+    std::vector<T> second
+);
+
+template <typename T>
+std::vector<T> bitwise_and_convolution(
+    std::vector<T> first,
+    std::vector<T> second
+);
+
+template <typename T>
+std::vector<T> bitwise_xor_convolution(
+    std::vector<T> first,
+    std::vector<T> second
+);
+```
+
+The input vectors are passed by value, so they may be moved into the functions.
+The originals passed by the caller are otherwise unchanged. The return type is
+`std::vector<T>`.
 
 | Function | Operation | Complexity |
 | --- | --- | --- |
@@ -48,6 +73,18 @@ power-of-two transform size to be invertible.
 ## Transforms
 
 All transforms operate in place and require a nonempty power-of-two length.
+
+```cpp
+template <typename T>
+void walsh_hadamard_transform(
+    std::vector<T>& values,
+    bool inverse = false
+);
+```
+
+The subset and superset transform signatures and their requirements on `T` are
+documented in `zeta_mobius_transform.hpp`. The Walsh-Hadamard transform modifies
+`values` directly and returns `void`.
 
 | Function | Description | Complexity |
 | --- | --- | --- |

@@ -121,6 +121,38 @@ Floor sums appear when:
 
 ## API
 
+```cpp
+long long pow_mod(
+    long long x,
+    unsigned long long exponent,
+    long long mod
+);
+
+std::pair<long long, long long> inv_gcd(
+    long long x,
+    long long mod
+);
+
+long long inv_mod(long long x, long long mod);
+
+std::pair<long long, long long> crt(
+    const std::vector<long long>& remainders,
+    const std::vector<long long>& moduli
+);
+
+long long floor_sum(
+    long long n,
+    long long mod,
+    long long a,
+    long long b
+);
+```
+
+All scalar inputs and outputs use `long long`, except that `pow_mod` accepts an
+`unsigned long long` exponent. Pair-valued functions return
+`std::pair<long long, long long>`. `crt` reads its two vectors by const
+reference and does not modify them.
+
 | Function | Description | Complexity |
 | --- | --- | --- |
 | `pow_mod(x, exponent, mod)` | Returns `x` raised to `exponent` modulo `mod`. | $O(\log(\text{exponent}))$ |

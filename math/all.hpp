@@ -9,5 +9,6 @@
 #include "number_theory.hpp"
 #include "prime_factorization.hpp"
 #include "prime_sieve.hpp"
+#include "zeta_mobius_transform.hpp"
 
 #endif  // M1UNE_MATH_ALL_HPP

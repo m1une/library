@@ -31,7 +31,13 @@ moduli such as `998244353` and `1000000007` are common in counting problems.
 
 ## Template Parameters
 
-* `Modulus`: A `uint32_t` representing the modulo value (e.g., `998244353` or `1000000007`).
+```cpp
+template <uint32_t Modulus>
+struct ModInt;
+```
+
+`Modulus` is a compile-time `uint32_t` value. `ModInt<Modulus>` is the value
+type returned by arithmetic operators and by `pow`, `inv`, and `raw`.
 
 ## Type Aliases
 
@@ -57,6 +63,12 @@ For convenience, the library provides the following common type aliases:
 | `static ModInt raw(uint32_t v)` | Constructs directly from `v` without applying `% Modulus`. Use only when `v < Modulus`. | $O(1)$ |
 
 ## Operators
+
+Binary arithmetic and comparison operators take another
+`const ModInt<Modulus>&`. Compound assignment returns `ModInt<Modulus>&`;
+ordinary arithmetic returns a new `ModInt<Modulus>` by value. Prefix increment
+and decrement return a reference, while postfix increment and decrement return
+the previous value.
 
 | Operators | Description | Complexity |
 | --- | --- | --- |

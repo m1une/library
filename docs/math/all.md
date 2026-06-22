@@ -14,6 +14,8 @@ You usually do not need to include this entire bundle:
 * Use `modint.hpp` for arithmetic modulo a fixed number such as `998244353`.
 * Use `bitwise_convolution.hpp` for OR, AND, or XOR convolution over mask
   indices.
+* Use `zeta_mobius_transform.hpp` for subset, superset, divisor, and multiple
+  transforms.
 * Use `combinatorics.hpp` for many factorial, combination, or permutation
   queries under a prime modulus.
 * Use `combinatorial_sequences.hpp` for Catalan, Bernoulli, Bell, Stirling,
@@ -32,7 +34,7 @@ few unused headers do not matter.
 
 | Header | Contents |
 | --- | --- |
-| `math/bitwise_convolution.hpp` | Subset/superset transforms and OR, AND, XOR convolutions. |
+| `math/bitwise_convolution.hpp` | OR, AND, XOR convolutions and the Walsh-Hadamard transform. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |
@@ -40,3 +42,4 @@ few unused headers do not matter.
 | `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
+| `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |
