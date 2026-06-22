@@ -397,6 +397,32 @@ data:
     - icon: ':heavy_check_mark:'
       path: matrix/matrix.hpp
       title: Dense Matrix
+  - name: monge
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: monge/all.hpp
+      title: Monge All
+    - icon: ':heavy_check_mark:'
+      path: monge/check.hpp
+      title: Monge Checks
+    - icon: ':heavy_check_mark:'
+      path: monge/divide_and_conquer_optimization.hpp
+      title: Divide-and-Conquer DP Optimization
+    - icon: ':heavy_check_mark:'
+      path: monge/knuth_optimization.hpp
+      title: Knuth Optimization
+    - icon: ':heavy_check_mark:'
+      path: monge/larsch.hpp
+      title: LARSCH
+    - icon: ':heavy_check_mark:'
+      path: monge/min_plus_convolution.hpp
+      title: Structured Min-Plus Convolution
+    - icon: ':heavy_check_mark:'
+      path: monge/monotone_minima.hpp
+      title: Monotone Minima
+    - icon: ':heavy_check_mark:'
+      path: monge/smawk.hpp
+      title: SMAWK
   - name: monoid
     pages:
     - icon: ':heavy_check_mark:'
@@ -920,6 +946,14 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/matrix/matrix_product.test.cpp
       title: verify/matrix/matrix_product.test.cpp
+  - name: verify/monge
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/monge/monge_algorithms.test.cpp
+      title: verify/monge/monge_algorithms.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/monge/monge_dp_optimization.test.cpp
+      title: verify/monge/monge_dp_optimization.test.cpp
   - name: verify/optimization
     pages:
     - icon: ':heavy_check_mark:'
