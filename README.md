@@ -17,6 +17,7 @@ contest.
 | `tree/` | Rooted-tree metadata, LCA, HLD, diameter, rerooting DP, static top tree variants, and centroid decomposition. |
 | `flow/` | Flow-network algorithms such as max flow, min-cost flow, and bounded flow. |
 | `optimization/` | Cost-matrix and numeric optimization algorithms such as Hungarian assignment, simplex LP, and integer LP. |
+| `matrix/` | Dense row-major matrices, fast multiplication and powers, Gaussian elimination, determinant, inverse, and linear systems. |
 | `fps/` | Fast convolution, formal power series operations, multipoint evaluation, interpolation, and linear recurrences. |
 | `sequence/` | Sequence algorithms such as longest increasing subsequence and inversion counting. |
 | `geometry/` | 2D points, lines, rays, segments, polygons, convex hulls, and circles. |
