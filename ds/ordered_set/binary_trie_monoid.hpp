@@ -26,15 +26,18 @@ struct BinaryTrieMonoid {
     static_assert(0 < BitWidth);
     static_assert(BitWidth <= std::numeric_limits<UInt>::digits);
 
-   private:
+    using node_id = int;
+    static constexpr node_id null_node = -1;
+
     struct Node {
-        int child[2];
+        node_id child[2];
         int count;
         T prod;
 
-        Node() : child{-1, -1}, count(0), prod(Monoid::id()) {}
+        Node() : child{null_node, null_node}, count(0), prod(Monoid::id()) {}
     };
 
+   private:
     struct Aggregate {
         int count;
         T prod;
@@ -59,17 +62,17 @@ struct BinaryTrieMonoid {
         return (value & ~value_mask()) == UInt(0);
     }
 
-    int new_node() {
+    node_id new_node() {
         nodes.emplace_back();
         return int(nodes.size()) - 1;
     }
 
-    int subtree_size(int node) const {
-        return node == -1 ? 0 : nodes[node].count;
+    int subtree_size(node_id node) const {
+        return node == null_node ? 0 : nodes[node].count;
     }
 
-    T subtree_prod(int node) const {
-        return node == -1 ? Monoid::id() : nodes[node].prod;
+    T subtree_prod(node_id node) const {
+        return node == null_node ? Monoid::id() : nodes[node].prod;
     }
 
     void update(int node) {
@@ -81,12 +84,14 @@ struct BinaryTrieMonoid {
                        subtree_prod(nodes[node].child[1]));
     }
 
-    int find_node(UInt key) const {
+    node_id find_node(UInt key) const {
         key ^= lazy_xor;
-        int node = 0;
+        node_id node = 0;
         for (int position = BitWidth - 1; position >= 0; --position) {
             node = nodes[node].child[bit(key, position)];
-            if (node == -1 || nodes[node].count == 0) return -1;
+            if (node == null_node || nodes[node].count == 0) {
+                return null_node;
+            }
         }
         return node;
     }
@@ -204,34 +209,61 @@ struct BinaryTrieMonoid {
         return size() == 0;
     }
 
+    node_id root() const {
+        return 0;
+    }
+
+    const Node& node(node_id id) const {
+        assert(0 <= id && std::size_t(id) < nodes.size());
+        return nodes[id];
+    }
+
+    node_id find(UInt key) const {
+        assert(valid_value(key));
+        return find_node(key);
+    }
+
+    std::size_t node_count() const {
+        return nodes.size();
+    }
+
+    void reserve(std::size_t node_capacity) {
+        nodes.reserve(node_capacity);
+    }
+
+    UInt xor_mask() const {
+        return lazy_xor;
+    }
+
     void clear() {
         nodes.clear();
         nodes.emplace_back();
         lazy_xor = 0;
     }
 
-    void insert(UInt key, const T& value) {
+    node_id insert(UInt key, const T& value) {
         assert(valid_value(key));
         key ^= lazy_xor;
-        int node = 0;
+        node_id node = 0;
         ++nodes[node].count;
         nodes[node].prod = Monoid::op(nodes[node].prod, value);
         for (int position = BitWidth - 1; position >= 0; --position) {
             const int direction = bit(key, position);
-            if (nodes[node].child[direction] == -1) {
-                const int child = new_node();
+            if (nodes[node].child[direction] == null_node) {
+                const node_id child = new_node();
                 nodes[node].child[direction] = child;
             }
             node = nodes[node].child[direction];
             ++nodes[node].count;
             nodes[node].prod = Monoid::op(nodes[node].prod, value);
         }
+        return node;
     }
 
     int count(UInt key) const {
         assert(valid_value(key));
-        const int node = find_node(key);
-        return node == -1 ? 0 : nodes[node].count;
+        const node_id node = find_node(key);
+        return node == null_node ? 0 : nodes[node].count;
     }
 
     bool contains(UInt key) const {
@@ -240,8 +272,8 @@ struct BinaryTrieMonoid {
 
     T prod(UInt key) const {
         assert(valid_value(key));
-        const int node = find_node(key);
-        return node == -1 ? Monoid::id() : nodes[node].prod;
+        const node_id node = find_node(key);
+        return node == null_node ? Monoid::id() : nodes[node].prod;
     }
 
     T all_prod() const {

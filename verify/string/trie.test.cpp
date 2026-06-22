@@ -13,16 +13,29 @@
 namespace {
 
 void test_features() {
-    m1une::string::Trie<> trie;
+    using Trie = m1une::string::Trie<>;
+    Trie trie;
     assert(trie.empty());
     assert(trie.node_count() == 1);
     trie.reserve(128);
 
-    trie.insert(std::string());
-    trie.insert(std::string("app"), 2);
+    const auto empty_node = trie.insert(std::string());
+    const auto app_node = trie.insert(std::string("app"), 2);
     trie.insert(std::string("apple"));
     trie.insert(std::string("apt"));
 
+    assert(empty_node == trie.root());
+    assert(app_node == trie.find(std::string("app")));
+    assert(trie.find(std::string("absent")) == Trie::null_node);
+    const auto ap_node = trie.find(std::string("ap"));
+    assert(ap_node != Trie::null_node);
+    assert(trie.node(trie.root()).subtree_count == 5);
+    assert(trie.node(app_node).terminal_count == 2);
+    assert(trie.node(ap_node).terminal_count == 0);
+    assert(trie.node(ap_node).subtree_count == 4);
+    const auto a_node = trie.node(trie.root()).child[0];
+    assert(a_node != Trie::null_node);
+    assert(trie.node(a_node).subtree_count == 4);
     assert(trie.size() == 5);
     assert(trie.distinct_size() == 4);
     assert(trie.count(std::string("app")) == 2);

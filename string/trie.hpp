@@ -15,17 +15,20 @@ template <int AlphabetSize = 26, int FirstCharacter = 'a'>
 struct Trie {
     static_assert(0 < AlphabetSize);
 
-   private:
+    using node_id = int;
+    static constexpr node_id null_node = -1;
+
     struct Node {
-        std::array<int, AlphabetSize> child;
+        std::array<node_id, AlphabetSize> child;
         int subtree_count;
         int terminal_count;
 
         Node() : subtree_count(0), terminal_count(0) {
-            child.fill(-1);
+            child.fill(null_node);
         }
     };
 
+   private:
     std::vector<Node> _nodes;
     int _distinct_size;
 
@@ -36,18 +39,20 @@ struct Trie {
         return index;
     }
 
-    int new_node() {
+    node_id new_node() {
         assert(_nodes.size() < std::size_t(std::numeric_limits<int>::max()));
         _nodes.emplace_back();
         return int(_nodes.size()) - 1;
     }
 
     template <class Sequence>
-    int find_node(const Sequence& sequence) const {
-        int node = 0;
+    node_id find_node(const Sequence& sequence) const {
+        node_id node = 0;
         for (const auto& symbol : sequence) {
             node = _nodes[node].child[symbol_index(symbol)];
-            if (node == -1 || _nodes[node].subtree_count == 0) return -1;
+            if (node == null_node || _nodes[node].subtree_count == 0) {
+                return null_node;
+            }
         }
         return node;
     }
@@ -67,6 +72,20 @@ struct Trie {
         return size() == 0;
     }
 
+    node_id root() const {
+        return 0;
+    }
+
+    const Node& node(node_id id) const {
+        assert(0 <= id && std::size_t(id) < _nodes.size());
+        return _nodes[id];
+    }
+
+    template <class Sequence>
+    node_id find(const Sequence& sequence) const {
+        return find_node(sequence);
+    }
+
     std::size_t node_count() const {
         return _nodes.size();
     }
@@ -82,14 +101,14 @@ struct Trie {
     }
 
     template <class Sequence>
-    void insert(const Sequence& sequence, int multiplicity = 1) {
+    node_id insert(const Sequence& sequence, int multiplicity = 1) {
         assert(0 < multiplicity);
-        int node = 0;
+        node_id node = 0;
         _nodes[node].subtree_count += multiplicity;
         for (const auto& symbol : sequence) {
             int index = symbol_index(symbol);
-            int child = _nodes[node].child[index];
-            if (child == -1) {
+            node_id child = _nodes[node].child[index];
+            if (child == null_node) {
                 child = new_node();
                 _nodes[node].child[index] = child;
             }
@@ -98,12 +117,13 @@ struct Trie {
         }
         if (_nodes[node].terminal_count == 0) _distinct_size++;
         _nodes[node].terminal_count += multiplicity;
+        return node;
     }
 
     template <class Sequence>
     int count(const Sequence& sequence) const {
-        int node = find_node(sequence);
-        return node == -1 ? 0 : _nodes[node].terminal_count;
+        node_id node = find_node(sequence);
+        return node == null_node ? 0 : _nodes[node].terminal_count;
     }
 
     template <class Sequence>
@@ -114,8 +134,8 @@ struct Trie {
     // Returns the number of stored strings beginning with prefix.
     template <class Sequence>
     int prefix_count(const Sequence& prefix) const {
-        int node = find_node(prefix);
-        return node == -1 ? 0 : _nodes[node].subtree_count;
+        node_id node = find_node(prefix);
+        return node == null_node ? 0 : _nodes[node].subtree_count;
     }
 
     template <class Sequence>
@@ -125,8 +145,10 @@ struct Trie {
 
     template <class Sequence>
     bool erase_one(const Sequence& sequence) {
-        int terminal = find_node(sequence);
-        if (terminal == -1 || _nodes[terminal].terminal_count == 0) return false;
+        node_id terminal = find_node(sequence);
+        if (terminal == null_node || _nodes[terminal].terminal_count == 0) {
+            return false;
+        }
 
         int node = 0;
         _nodes[node].subtree_count--;
@@ -172,7 +194,7 @@ struct Trie {
         int length = 0;
         for (const auto& symbol : sequence) {
             node = _nodes[node].child[symbol_index(symbol)];
-            if (node == -1 || _nodes[node].subtree_count == 0) return;
+            if (node == null_node || _nodes[node].subtree_count == 0) return;
             length++;
             if (_nodes[node].terminal_count != 0) {
                 callback(length, _nodes[node].terminal_count);

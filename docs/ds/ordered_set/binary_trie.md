@@ -33,8 +33,14 @@ Let $B$ be `BitWidth`.
 | `BinaryTrie(Iterator first, Iterator last)` | Constructs a trie from a range. | $O(NB)$ |
 | `int size() const` | Returns the number of values, including duplicates. | $O(1)$ |
 | `bool empty() const` | Returns whether the trie is empty. | $O(1)$ |
+| `node_id root() const` | Returns the root node handle. | $O(1)$ |
+| `node_id find(UInt value) const` | Returns the leaf handle for `value`, or `null_node` if absent. | $O(B)$ |
+| `const Node& node(node_id id) const` | Returns a read-only view of a node. | $O(1)$ |
+| `size_t node_count() const` | Returns allocated nodes, including the root. | $O(1)$ |
+| `void reserve(size_t n)` | Reserves storage for approximately `n` nodes. | $O(K)$ |
+| `UInt xor_mask() const` | Returns the current lazy xor mask. | $O(1)$ |
 | `void clear()` | Removes every value and resets the lazy xor. | $O(1)$ |
-| `void insert(UInt value, int multiplicity = 1)` | Inserts `multiplicity` copies of `value`. | $O(B)$ |
+| `node_id insert(UInt value, int multiplicity = 1)` | Inserts copies of `value` and returns its leaf handle. | $O(B)$ |
 | `bool erase_one(UInt value)`, `bool erase(UInt value)` | Removes one copy and returns whether one existed. | $O(B)$ |
 | `int erase_all(UInt value)` | Removes every copy and returns the number removed. | $O(B)$ |
 | `int count(UInt value) const` | Returns the multiplicity of `value`. | $O(B)$ |
@@ -57,6 +63,18 @@ Let $B$ be `BitWidth`.
 
 `count_less_xor(value, upper)` is a compatibility alias for
 `count_xor_less(value, upper)`.
+
+`node_id` is an integer handle and `null_node` is its invalid value. A `Node`
+exposes `child[2]` and `count`. Handles remain valid across insertions and
+erasures and can index user-owned metadata; `clear()` invalidates every old
+handle except the root. References returned by `node()` may be invalidated by
+insertion, `reserve()`, or `clear()`.
+
+The child links describe the physically stored bit paths. After `xor_all`,
+logical values differ by `xor_mask()`; `find(value)` accounts for this mask
+automatically.
+
+Here $K$ is the allocated node count. Erasing does not reclaim nodes.
 
 ## Example
 

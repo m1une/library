@@ -35,10 +35,13 @@ Let $L$ be the sequence length.
 | `int size()` | Returns the number of stored strings including duplicates. | $O(1)$ |
 | `int distinct_size()` | Returns the number of distinct stored strings. | $O(1)$ |
 | `bool empty()` | Returns whether no strings are stored. | $O(1)$ |
+| `node_id root()` | Returns the root node handle. | $O(1)$ |
+| `node_id find(sequence)` | Returns the node reached by an active path, or `null_node` if it is absent. | $O(L)$ |
+| `const Node& node(node_id id)` | Returns a read-only view of a node. | $O(1)$ |
 | `size_t node_count()` | Returns allocated nodes, including the root. | $O(1)$ |
 | `void reserve(size_t n)` | Reserves storage for approximately `n` nodes. | $O(K)$ |
 | `void clear()` | Removes all strings. | $O(K)$ |
-| `void insert(sequence, int multiplicity = 1)` | Inserts copies of `sequence`. | $O(L)$ |
+| `node_id insert(sequence, int multiplicity = 1)` | Inserts copies of `sequence` and returns its endpoint node handle. | $O(L)$ |
 | `int count(sequence)` | Returns the sequence multiplicity. | $O(L)$ |
 | `bool contains(sequence)` | Returns whether the sequence is stored. | $O(L)$ |
 | `int prefix_count(prefix)` | Counts stored strings beginning with `prefix`, including duplicates. | $O(L)$ |
@@ -50,6 +53,13 @@ Let $L$ be the sequence length.
 
 Here $K$ is the allocated node count. Erasing does not reclaim nodes; `clear`
 releases all logical contents at once.
+
+`node_id` is an integer handle and `null_node` is its invalid value. A `Node`
+exposes `child`, `subtree_count`, and `terminal_count`. Node handles remain
+valid across insertions and erasures, so they can also index user-owned
+metadata. `clear()` invalidates every old handle except the root. References
+returned by `node()` may be invalidated by insertion, `reserve()`, or `clear()`;
+keep the handle rather than the reference.
 
 The empty string is supported. When stored, it is reported by
 `for_each_prefix` with length `0`, and `prefix_count("")` equals `size()`.

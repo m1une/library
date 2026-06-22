@@ -17,11 +17,21 @@ void basic_test() {
         m1une::ds::BinaryTrieMonoid<Product, std::uint32_t, 10>;
 
     ProductTrie product;
-    product.insert(1, 2);
+    product.reserve(64);
+    const auto one_node = product.insert(1, 2);
     product.insert(2, 3);
     product.insert(7, 5);
-    product.insert(7, 11);
+    const auto seven_node = product.insert(7, 11);
 
+    assert(product.root() == 0);
+    assert(product.find(1) == one_node);
+    assert(product.find(7) == seven_node);
+    assert(product.find(6) == ProductTrie::null_node);
+    assert(product.node(product.root()).count == 4);
+    assert(product.node(product.root()).prod == 330);
+    assert(product.node(seven_node).count == 2);
+    assert(product.node(seven_node).prod == 55);
+    assert(product.node_count() == 1 + 10 + 2 + 3);
     assert(product.size() == 4);
     assert(product.count(7) == 2);
     assert(product.prod(7) == 55);
@@ -62,12 +72,16 @@ void basic_test() {
     assert(product.prod_range(2, 7) == 3);
 
     product.xor_all(6);
+    assert(product.xor_mask() == 6);
+    assert(product.find(7 ^ 6) == seven_node);
     assert(product.prod(7 ^ 6) == 55);
     assert(product.prod_xor_less(5, 4) == 6);
     assert(product.erase_all(7 ^ 6) == 2);
     assert(product.all_prod() == 6);
     product.clear();
     assert(product.empty());
+    assert(product.node_count() == 1);
+    assert(product.xor_mask() == 0);
 
     std::vector<std::pair<std::uint32_t, long long>> entries;
     entries.emplace_back(4, 2);

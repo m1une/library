@@ -46,14 +46,31 @@ Let $B$ be `BitWidth`.
 | `BinaryTrieMonoid(keys, values)` | Constructs from parallel key and value vectors. | $O(NB)$ |
 | `int size() const` | Returns the number of inserted pairs. | $O(1)$ |
 | `bool empty() const` | Returns whether the trie is empty. | $O(1)$ |
+| `node_id root() const` | Returns the root node handle. | $O(1)$ |
+| `node_id find(UInt key) const` | Returns the leaf handle for `key`, or `null_node` if absent. | $O(B)$ |
+| `const Node& node(node_id id) const` | Returns a read-only view of a node. | $O(1)$ |
+| `size_t node_count() const` | Returns allocated nodes, including the root. | $O(1)$ |
+| `void reserve(size_t n)` | Reserves storage for approximately `n` nodes. | $O(K)$ |
+| `UInt xor_mask() const` | Returns the current lazy xor mask. | $O(1)$ |
 | `void clear()` | Removes every pair and resets the lazy xor. | $O(1)$ |
-| `void insert(UInt key, const T& value)` | Inserts one `(key, value)` pair. Duplicate keys are allowed. | $O(B)$ |
+| `node_id insert(UInt key, const T& value)` | Inserts one pair and returns its leaf handle. Duplicate keys are allowed. | $O(B)$ |
 | `int count(UInt key) const` | Returns the number of pairs with this key. | $O(B)$ |
 | `bool contains(UInt key) const` | Returns whether this key exists. | $O(B)$ |
 | `T prod(UInt key) const` | Returns the product of values with exactly this key. | $O(B)$ |
 | `T all_prod() const` | Returns the product of all stored values. | $O(1)$ |
 | `int erase_all(UInt key)` | Removes all pairs with this key and returns their count. | $O(B)$ |
 | `void xor_all(UInt value)` | Applies xor with `value` to every stored key. | $O(1)$ |
+
+`node_id` is an integer handle and `null_node` is its invalid value. A `Node`
+exposes `child[2]`, `count`, and `prod`. Handles remain valid across insertions
+and erasures and can index user-owned metadata; `clear()` invalidates every old
+handle except the root. References returned by `node()` may be invalidated by
+insertion, `reserve()`, or `clear()`.
+
+The child links describe the physically stored bit paths. After `xor_all`,
+logical keys differ by `xor_mask()`; `find(key)` accounts for this mask
+automatically. Here $K$ is the allocated node count. Erasing does not reclaim
+nodes.
 
 ### XOR order statistics
 

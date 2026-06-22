@@ -19,14 +19,17 @@ struct BinaryTrie {
     static_assert(0 < BitWidth);
     static_assert(BitWidth <= std::numeric_limits<UInt>::digits);
 
-   private:
+    using node_id = int;
+    static constexpr node_id null_node = -1;
+
     struct Node {
-        int child[2];
+        node_id child[2];
         int count;
 
-        Node() : child{-1, -1}, count(0) {}
+        Node() : child{null_node, null_node}, count(0) {}
     };
 
+   private:
     std::vector<Node> nodes;
     UInt lazy_xor;
 
@@ -46,21 +49,23 @@ struct BinaryTrie {
         return (value & ~value_mask()) == UInt(0);
     }
 
-    int new_node() {
+    node_id new_node() {
         nodes.emplace_back();
         return int(nodes.size()) - 1;
     }
 
-    int subtree_size(int node) const {
-        return node == -1 ? 0 : nodes[node].count;
+    int subtree_size(node_id node) const {
+        return node == null_node ? 0 : nodes[node].count;
     }
 
-    int find_node(UInt value) const {
-        int node = 0;
+    node_id find_node(UInt value) const {
+        node_id node = 0;
         value ^= lazy_xor;
         for (int position = BitWidth - 1; position >= 0; --position) {
             node = nodes[node].child[bit(value, position)];
-            if (node == -1 || nodes[node].count == 0) return -1;
+            if (node == null_node || nodes[node].count == 0) {
+                return null_node;
+            }
         }
         return node;
     }
@@ -88,33 +93,60 @@ struct BinaryTrie {
         return size() == 0;
     }
 
+    node_id root() const {
+        return 0;
+    }
+
+    const Node& node(node_id id) const {
+        assert(0 <= id && std::size_t(id) < nodes.size());
+        return nodes[id];
+    }
+
+    node_id find(UInt value) const {
+        assert(valid_value(value));
+        return find_node(value);
+    }
+
+    std::size_t node_count() const {
+        return nodes.size();
+    }
+
+    void reserve(std::size_t node_capacity) {
+        nodes.reserve(node_capacity);
+    }
+
+    UInt xor_mask() const {
+        return lazy_xor;
+    }
+
     void clear() {
         nodes.clear();
         nodes.emplace_back();
         lazy_xor = 0;
     }
 
-    void insert(UInt value, int multiplicity = 1) {
+    node_id insert(UInt value, int multiplicity = 1) {
         assert(valid_value(value));
         assert(multiplicity > 0);
         value ^= lazy_xor;
-        int node = 0;
+        node_id node = 0;
         nodes[node].count += multiplicity;
         for (int position = BitWidth - 1; position >= 0; --position) {
             const int direction = bit(value, position);
-            if (nodes[node].child[direction] == -1) {
-                const int child = new_node();
+            if (nodes[node].child[direction] == null_node) {
+                const node_id child = new_node();
                 nodes[node].child[direction] = child;
             }
             node = nodes[node].child[direction];
             nodes[node].count += multiplicity;
         }
+        return node;
     }
 
     int count(UInt value) const {
         assert(valid_value(value));
-        const int node = find_node(value);
-        return node == -1 ? 0 : nodes[node].count;
+        const node_id node = find_node(value);
+        return node == null_node ? 0 : nodes[node].count;
     }
 
     bool contains(UInt value) const {

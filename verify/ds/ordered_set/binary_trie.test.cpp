@@ -15,15 +15,26 @@ void unit_test() {
     using Trie = m1une::ds::BinaryTrie<std::uint32_t, 10>;
 
     Trie basic;
-    basic.insert(5, 3);
+    basic.reserve(64);
+    const auto five_node = basic.insert(5, 3);
     basic.insert(9);
+    assert(basic.root() == 0);
+    assert(basic.find(5) == five_node);
+    assert(basic.find(7) == Trie::null_node);
+    assert(basic.node(basic.root()).count == 4);
+    assert(basic.node(five_node).count == 3);
+    assert(basic.node_count() == 1 + 10 + 4);
     assert(basic.count(5) == 3);
     assert(basic.kth_xor(0, 7) == (5U ^ 7U));
     assert(basic.erase_one(5));
     assert(basic.erase_all(5) == 2);
     basic.xor_all(6);
+    assert(basic.xor_mask() == 6);
+    assert(basic.find(9U ^ 6U) != Trie::null_node);
     assert(basic.contains(9U ^ 6U));
     basic.clear();
+    assert(basic.node_count() == 1);
+    assert(basic.xor_mask() == 0);
     basic.insert(1023);
     assert(basic.count_less_equal(1023) == 1);
     assert(basic.count_less_xor(0, 1024) == 1);
