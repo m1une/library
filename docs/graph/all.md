@@ -28,6 +28,7 @@ individual graph includes. Flow-network algorithms live separately under
 | `graph/warshall_floyd.hpp` | Direction-respecting | All-pairs shortest paths. |
 | `graph/grid.hpp` | Undirected graph builder | Helper for converting 2D grid cells to graph vertex ids. |
 | `graph/topological_sort.hpp` | Directed only | DAG ordering and cycle check. |
+| `graph/dominator_tree.hpp` | Directed rooted graph | Lengauer-Tarjan immediate dominators and dominator tree. |
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
 | `graph/two_sat.hpp` | Implication graph | 2-SAT clauses, satisfiability, and one assignment. |
 | `graph/lowlink.hpp` | Undirected only | Articulation points and bridges. |

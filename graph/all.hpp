@@ -2,6 +2,7 @@
 #define M1UNE_GRAPH_ALL_HPP 1
 
 #include "directed.hpp"
+#include "dominator_tree.hpp"
 #include "graph.hpp"
 #include "grid.hpp"
 #include "range_edge_graph.hpp"
