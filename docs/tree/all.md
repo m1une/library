@@ -18,6 +18,7 @@ existing graph library.
 | `tree/sparse_table_lca.hpp` | Euler-tour sparse-table LCA with $O(1)$ queries. |
 | `tree/heavy_light_decomposition.hpp` | HLD order, path segments, subtree ranges, LCA, and jumps. |
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
+| `tree/dsu_on_tree.hpp` | Iterative small-to-large subtree processing with user callbacks. |
 | `tree/rerooting_dp.hpp` | Generic rerooting DP helper. |
 | `tree/static_top_tree.hpp` | Dynamic one-root tree DP on a fixed tree using static top-tree clusters. |
 | `tree/rerooting_static_top_tree.hpp` | Bidirectional static top-tree clusters for dynamic rerooting-DP solutions. |
