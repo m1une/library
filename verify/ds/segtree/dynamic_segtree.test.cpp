@@ -64,10 +64,32 @@ void test_library_features() {
     assert(seg.all_prod() == 0);
     assert(seg.get(-3) == 0);
 
+    m1une::ds::DynamicSegtree<Sum, int> uniform(-5, 6, 3);
+    assert(uniform.initial_value() == 3);
+    assert(uniform.node_count() == 0);
+    assert(uniform.get(0) == 3);
+    assert(uniform.all_prod() == 33);
+    assert(uniform.prod(-2, 4) == 18);
+    assert(uniform.max_right(-5, [](long long x) { return x <= 14; }) == -1);
+    assert(uniform.min_left(6, [](long long x) { return x <= 14; }) == 2);
+    uniform.set(0, 10);
+    assert(uniform.all_prod() == 40);
+    assert(uniform.prod(-2, 4) == 25);
+    uniform.clear();
+    assert(uniform.node_count() == 0);
+    assert(uniform.get(0) == 3);
+    assert(uniform.all_prod() == 33);
+
     m1une::ds::DynamicSegtree<Concat, int> text(-4, 5);
     text.set(2, "b");
     text.set(-1, "a");
     assert(text.prod(-4, 5) == "ab");
+
+    m1une::ds::DynamicSegtree<Concat, int> uniform_text(-2, 3, "x");
+    assert(uniform_text.all_prod() == "xxxxx");
+    uniform_text.set(1, "a");
+    uniform_text.set(-1, "b");
+    assert(uniform_text.all_prod() == "xbxax");
 
     Seg extreme(std::numeric_limits<long long>::min(), std::numeric_limits<long long>::max());
     extreme.set(std::numeric_limits<long long>::min(), 3);

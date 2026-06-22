@@ -15,8 +15,9 @@ The implementation uses one contiguous node pool rather than a separate heap
 allocation per node. Call `reserve` when the approximate number of nodes is
 known to avoid vector reallocations.
 
-Unassigned coordinates have value `Monoid::id()`. Products preserve coordinate
-order, so non-commutative monoids are supported.
+By default, unassigned coordinates have value `Monoid::id()`. A uniform
+arbitrary initial value can instead be supplied to the constructor. Products
+preserve coordinate order, so non-commutative monoids are supported.
 
 ## Template Parameters
 
@@ -35,9 +36,12 @@ The monoid must provide:
 * `DynamicSegtree(Index n)`: creates a tree over `[0, n)`.
 * `DynamicSegtree(Index left, Index right)`: creates a tree over
   `[left, right)`.
+* `DynamicSegtree(Index left, Index right, T initial_value)`: creates a tree
+  over `[left, right)` with every coordinate initialized to `initial_value`.
 
-The coordinate domain is fixed at construction. Its storage is initially
-$O(1)$ regardless of the domain size.
+The coordinate domain is fixed at construction. Construction caches untouched
+products for the possible segment lengths at each depth, using $O(\log U)$
+memory and $O(\log^2 U)$ monoid operations. It does not create tree nodes.
 
 ## Methods
 
@@ -49,11 +53,12 @@ Let $U$ be the number of integer coordinates in the domain.
 | `bool empty()` | Returns whether the coordinate domain is empty. | $O(1)$ |
 | `Index left_bound()` | Returns the left endpoint of the domain. | $O(1)$ |
 | `Index right_bound()` | Returns the right endpoint of the domain. | $O(1)$ |
+| `const T& initial_value()` | Returns the value assigned to untouched coordinates. | $O(1)$ |
 | `void reserve(size_t n)` | Reserves storage for `n` allocated nodes, excluding the sentinel. | $O(K)$ |
 | `size_t node_count()` | Returns the number of nodes allocated by updates. | $O(1)$ |
-| `void clear()` | Restores every coordinate to the identity and keeps pool capacity. | $O(K)$ to destroy stored node values |
+| `void clear()` | Restores every coordinate to the initial value and keeps pool capacity. | $O(K)$ to destroy stored node values |
 | `void set(Index p, T x)` | Assigns `x` to coordinate `p`. | $O(\log U)$ |
-| `T get(Index p)` | Returns the value at `p`, or the identity if `p` was never assigned. | $O(\log U)$ |
+| `T get(Index p)` | Returns the value at `p`, or the initial value if `p` was never assigned. | $O(\log U)$ |
 | `T operator[](Index p)` | Equivalent to `get(p)`. | $O(\log U)$ |
 | `T prod(Index l, Index r)` | Returns the monoid product over `[l, r)`. | $O(\log U)$ |
 | `T all_prod()` | Returns the product over the entire domain. | $O(1)$ |
@@ -79,15 +84,15 @@ int main() {
     using Sum = m1une::monoid::Add<long long>;
     using Seg = m1une::ds::DynamicSegtree<Sum>;
 
-    Seg seg(-1'000'000'000LL, 1'000'000'001LL);
+    Seg seg(-1'000'000'000LL, 1'000'000'001LL, 1);
     seg.reserve(256);
 
     seg.set(-500'000'000LL, 7);
     seg.set(900'000'000LL, 11);
     seg.set(-500'000'000LL, seg.get(-500'000'000LL) + 3);
 
-    std::cout << seg.prod(-600'000'000LL, 0) << "\n";  // 10
-    std::cout << seg.all_prod() << "\n";                // 21
+    std::cout << seg.get(0) << "\n";                    // 1
+    std::cout << seg.prod(-600'000'000LL, 0) << "\n";  // 600000009
 }
 ```
 
