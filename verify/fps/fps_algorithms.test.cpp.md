@@ -8,6 +8,9 @@ data:
     path: fps/convolution.hpp
     title: Convolution
   - icon: ':heavy_check_mark:'
+    path: fps/floating_point_convolution.hpp
+    title: Floating-Point Convolution
+  - icon: ':heavy_check_mark:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':heavy_check_mark:'
@@ -179,91 +182,149 @@ data:
     \        value = (value + mod1_target * (first % target_mod)) % target_mod;\n\
     \        value = (value + mod1_mod2_target * (second % target_mod)) % target_mod;\n\
     \        result[i] = Mint::raw(uint32_t(value));\n    }\n    return result;\n\
-    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 1 \"fps/formal_power_series.hpp\"\
-    \n\n\n\n#line 7 \"fps/formal_power_series.hpp\"\n#include <optional>\n#line 10\
-    \ \"fps/formal_power_series.hpp\"\n\n#line 12 \"fps/formal_power_series.hpp\"\n\
-    \nnamespace m1une {\nnamespace fps {\n\nnamespace internal {\n\ntemplate <class\
-    \ Mint>\nstd::optional<Mint> modular_square_root(Mint value) {\n    const uint32_t\
-    \ mod = Mint::mod();\n    if (value == Mint(0)) return Mint(0);\n    if (mod ==\
-    \ 2) return value;\n    if (value.pow((mod - 1) / 2) != Mint(1)) return std::nullopt;\n\
-    \    if (mod % 4 == 3) return value.pow((mod + 1) / 4);\n\n    uint32_t q = mod\
-    \ - 1;\n    int s = 0;\n    while ((q & 1) == 0) {\n        q >>= 1;\n       \
-    \ s++;\n    }\n\n    Mint z = 2;\n    while (z.pow((mod - 1) / 2) == Mint(1))\
-    \ ++z;\n    Mint c = z.pow(q);\n    Mint x = value.pow((q + 1) / 2);\n    Mint\
-    \ t = value.pow(q);\n    int m = s;\n    while (t != Mint(1)) {\n        int i\
-    \ = 1;\n        Mint squared = t * t;\n        while (squared != Mint(1)) {\n\
-    \            squared *= squared;\n            i++;\n        }\n        Mint b\
-    \ = c.pow(uint64_t(1) << (m - i - 1));\n        x *= b;\n        c = b * b;\n\
-    \        t *= c;\n        m = i;\n    }\n    return x;\n}\n\n}  // namespace internal\n\
-    \ntemplate <class Mint>\nstruct FormalPowerSeries : std::vector<Mint> {\n    using\
-    \ std::vector<Mint>::vector;\n    using Fps = FormalPowerSeries;\n\n    FormalPowerSeries()\
-    \ = default;\n    FormalPowerSeries(const std::vector<Mint>& values) : std::vector<Mint>(values)\
-    \ {}\n    FormalPowerSeries(std::vector<Mint>&& values) : std::vector<Mint>(std::move(values))\
-    \ {}\n\n    Fps& shrink() {\n        while (!this->empty() && this->back() ==\
-    \ Mint(0)) this->pop_back();\n        return *this;\n    }\n\n    Fps pre(int\
-    \ degree) const {\n        assert(degree >= 0);\n        Fps result(this->begin(),\
-    \ this->begin() + std::min<int>(degree, this->size()));\n        result.resize(degree);\n\
-    \        return result;\n    }\n\n    Fps reversed(int size = -1) const {\n  \
-    \      Fps result = *this;\n        if (size >= 0) result.resize(size);\n    \
-    \    std::reverse(result.begin(), result.end());\n        return result;\n   \
-    \ }\n\n    Fps& operator+=(const Fps& rhs) {\n        if (this->size() < rhs.size())\
-    \ this->resize(rhs.size());\n        for (int i = 0; i < int(rhs.size()); i++)\
-    \ (*this)[i] += rhs[i];\n        return *this;\n    }\n\n    Fps& operator-=(const\
-    \ Fps& rhs) {\n        if (this->size() < rhs.size()) this->resize(rhs.size());\n\
-    \        for (int i = 0; i < int(rhs.size()); i++) (*this)[i] -= rhs[i];\n   \
-    \     return *this;\n    }\n\n    Fps& operator*=(const Fps& rhs) {\n        std::vector<Mint>\
-    \ lhs(this->begin(), this->end());\n        *this = convolution(lhs, rhs);\n \
-    \       return *this;\n    }\n\n    Fps& operator*=(Mint rhs) {\n        for (Mint&\
-    \ value : *this) value *= rhs;\n        return *this;\n    }\n\n    Fps& operator/=(Mint\
-    \ rhs) {\n        return *this *= rhs.inv();\n    }\n\n    Fps& operator<<=(int\
-    \ shift) {\n        assert(shift >= 0);\n        this->insert(this->begin(), shift,\
-    \ Mint(0));\n        return *this;\n    }\n\n    Fps& operator>>=(int shift) {\n\
-    \        assert(shift >= 0);\n        if (shift >= int(this->size())) {\n    \
-    \        this->clear();\n        } else {\n            this->erase(this->begin(),\
-    \ this->begin() + shift);\n        }\n        return *this;\n    }\n\n    Fps\
-    \ operator+() const {\n        return *this;\n    }\n\n    Fps operator-() const\
-    \ {\n        Fps result = *this;\n        for (Mint& value : result) value = Mint(0)\
-    \ - value;\n        return result;\n    }\n\n    friend Fps operator+(Fps lhs,\
-    \ const Fps& rhs) {\n        return lhs += rhs;\n    }\n\n    friend Fps operator-(Fps\
-    \ lhs, const Fps& rhs) {\n        return lhs -= rhs;\n    }\n\n    friend Fps\
-    \ operator*(Fps lhs, const Fps& rhs) {\n        return lhs *= rhs;\n    }\n\n\
-    \    friend Fps operator*(Fps lhs, Mint rhs) {\n        return lhs *= rhs;\n \
-    \   }\n\n    friend Fps operator*(Mint lhs, Fps rhs) {\n        return rhs *=\
-    \ lhs;\n    }\n\n    friend Fps operator/(Fps lhs, Mint rhs) {\n        return\
-    \ lhs /= rhs;\n    }\n\n    friend Fps operator<<(Fps lhs, int shift) {\n    \
-    \    return lhs <<= shift;\n    }\n\n    friend Fps operator>>(Fps lhs, int shift)\
-    \ {\n        return lhs >>= shift;\n    }\n\n    Fps derivative() const {\n  \
-    \      if (this->empty()) return {};\n        Fps result(this->size() - 1);\n\
-    \        for (int i = 1; i < int(this->size()); i++) result[i - 1] = (*this)[i]\
-    \ * Mint(i);\n        return result;\n    }\n\n    Fps integral() const {\n  \
-    \      Fps result(this->size() + 1);\n        if (this->empty()) return result;\n\
-    \        assert(this->size() < Mint::mod());\n\n        std::vector<Mint> inverse(this->size()\
-    \ + 1);\n        inverse[1] = 1;\n        for (int i = 2; i <= int(this->size());\
-    \ i++) {\n            inverse[i] = Mint(0) - Mint(Mint::mod() / uint32_t(i)) *\
-    \ inverse[Mint::mod() % uint32_t(i)];\n        }\n        for (int i = 0; i <\
-    \ int(this->size()); i++) result[i + 1] = (*this)[i] * inverse[i + 1];\n     \
-    \   return result;\n    }\n\n    Mint evaluate(Mint x) const {\n        Mint result\
-    \ = 0;\n        for (auto it = this->rbegin(); it != this->rend(); ++it) result\
-    \ = result * x + *it;\n        return result;\n    }\n\n    Fps inv(int degree\
-    \ = -1) const {\n        if (degree < 0) degree = int(this->size());\n       \
-    \ assert(degree >= 0);\n        if (degree == 0) return {};\n        assert(!this->empty()\
-    \ && (*this)[0] != Mint(0));\n\n        Fps result(1, (*this)[0].inv());\n   \
-    \     for (int size = 1; size < degree; size <<= 1) {\n            const int next_size\
-    \ = std::min(size << 1, degree);\n            Fps product = this->pre(next_size)\
-    \ * result;\n            product.resize(next_size);\n            for (Mint& value\
-    \ : product) value = Mint(0) - value;\n            product[0] += Mint(2);\n  \
-    \          result = (result * product).pre(next_size);\n        }\n        return\
-    \ result.pre(degree);\n    }\n\n    Fps log(int degree = -1) const {\n       \
-    \ if (degree < 0) degree = int(this->size());\n        assert(degree >= 0);\n\
+    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 1 \"fps/floating_point_convolution.hpp\"\
+    \n\n\n\n#line 5 \"fps/floating_point_convolution.hpp\"\n#include <bit>\n#include\
+    \ <cmath>\n#include <complex>\n#include <concepts>\n#include <numbers>\n#include\
+    \ <type_traits>\n#line 12 \"fps/floating_point_convolution.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace fps {\n\nnamespace floating_point_convolution_detail {\n\n\
+    template <std::floating_point Real>\nvoid fft(std::vector<std::complex<Real>>&\
+    \ values, bool inverse) {\n    int size = int(values.size());\n    for (int index\
+    \ = 1, reversed = 0; index < size; ++index) {\n        int bit = size >> 1;\n\
+    \        while (reversed & bit) {\n            reversed ^= bit;\n            bit\
+    \ >>= 1;\n        }\n        reversed ^= bit;\n        if (index < reversed) std::swap(values[index],\
+    \ values[reversed]);\n    }\n\n    for (int length = 2; length <= size; length\
+    \ <<= 1) {\n        Real angle = Real(2) * std::numbers::pi_v<Real> / Real(length);\n\
+    \        if (inverse) angle = -angle;\n        std::complex<Real> step(std::cos(angle),\
+    \ std::sin(angle));\n        int half = length >> 1;\n        for (int offset\
+    \ = 0; offset < size; offset += length) {\n            std::complex<Real> root(1,\
+    \ 0);\n            for (int index = 0; index < half; ++index) {\n            \
+    \    std::complex<Real> even = values[offset + index];\n                std::complex<Real>\
+    \ odd = values[offset + index + half] * root;\n                values[offset +\
+    \ index] = even + odd;\n                values[offset + index + half] = even -\
+    \ odd;\n                root *= step;\n            }\n        }\n    }\n\n   \
+    \ if (inverse) {\n        Real inverse_size = Real(1) / Real(size);\n        for\
+    \ (auto& value : values) value *= inverse_size;\n    }\n}\n\ntemplate <std::floating_point\
+    \ Real>\nstd::vector<std::complex<Real>> complex_convolution(const std::vector<std::complex<Real>>&\
+    \ first,\n                                                    const std::vector<std::complex<Real>>&\
+    \ second) {\n    if (first.empty() || second.empty()) return {};\n    std::size_t\
+    \ result_size = first.size() + second.size() - 1;\n    std::size_t size = std::bit_ceil(result_size);\n\
+    \    std::vector<std::complex<Real>> transformed_first(size);\n    std::vector<std::complex<Real>>\
+    \ transformed_second(size);\n    std::copy(first.begin(), first.end(), transformed_first.begin());\n\
+    \    std::copy(second.begin(), second.end(), transformed_second.begin());\n\n\
+    \    fft(transformed_first, false);\n    fft(transformed_second, false);\n   \
+    \ for (std::size_t index = 0; index < size; ++index) {\n        transformed_first[index]\
+    \ *= transformed_second[index];\n    }\n    fft(transformed_first, true);\n  \
+    \  transformed_first.resize(result_size);\n    return transformed_first;\n}\n\n\
+    }  // namespace floating_point_convolution_detail\n\n// Convolution of complex\
+    \ floating-point coefficients.\ntemplate <std::floating_point Real>\nstd::vector<std::complex<Real>>\
+    \ convolution_fft(const std::vector<std::complex<Real>>& first,\n            \
+    \                                    const std::vector<std::complex<Real>>& second)\
+    \ {\n    return floating_point_convolution_detail::complex_convolution(first,\
+    \ second);\n}\n\n// Convolution of real floating-point coefficients.\ntemplate\
+    \ <std::floating_point Real>\nstd::vector<Real> convolution_fft(const std::vector<Real>&\
+    \ first, const std::vector<Real>& second) {\n    if (first.empty() || second.empty())\
+    \ return {};\n    std::vector<std::complex<Real>> complex_first(first.size());\n\
+    \    std::vector<std::complex<Real>> complex_second(second.size());\n    for (std::size_t\
+    \ index = 0; index < first.size(); ++index) {\n        complex_first[index] =\
+    \ std::complex<Real>(first[index], 0);\n    }\n    for (std::size_t index = 0;\
+    \ index < second.size(); ++index) {\n        complex_second[index] = std::complex<Real>(second[index],\
+    \ 0);\n    }\n    auto result = floating_point_convolution_detail::complex_convolution(complex_first,\
+    \ complex_second);\n    std::vector<Real> real_result(result.size());\n    for\
+    \ (std::size_t index = 0; index < result.size(); ++index) {\n        real_result[index]\
+    \ = result[index].real();\n    }\n    return real_result;\n}\n\n// Uses long-double\
+    \ FFT and rounds each coefficient to the nearest integer.\ntemplate <std::integral\
+    \ Integer>\nstd::vector<Integer> convolution_round(const std::vector<Integer>&\
+    \ first, const std::vector<Integer>& second) {\n    if (first.empty() || second.empty())\
+    \ return {};\n    std::vector<long double> real_first(first.begin(), first.end());\n\
+    \    std::vector<long double> real_second(second.begin(), second.end());\n   \
+    \ std::vector<long double> real_result = convolution_fft(real_first, real_second);\n\
+    \    std::vector<Integer> result(real_result.size());\n    for (std::size_t index\
+    \ = 0; index < result.size(); ++index) {\n        result[index] = static_cast<Integer>(std::round(real_result[index]));\n\
+    \    }\n    return result;\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n\
+    \n#line 1 \"fps/formal_power_series.hpp\"\n\n\n\n#line 7 \"fps/formal_power_series.hpp\"\
+    \n#include <optional>\n#line 10 \"fps/formal_power_series.hpp\"\n\n#line 12 \"\
+    fps/formal_power_series.hpp\"\n\nnamespace m1une {\nnamespace fps {\n\nnamespace\
+    \ internal {\n\ntemplate <class Mint>\nstd::optional<Mint> modular_square_root(Mint\
+    \ value) {\n    const uint32_t mod = Mint::mod();\n    if (value == Mint(0)) return\
+    \ Mint(0);\n    if (mod == 2) return value;\n    if (value.pow((mod - 1) / 2)\
+    \ != Mint(1)) return std::nullopt;\n    if (mod % 4 == 3) return value.pow((mod\
+    \ + 1) / 4);\n\n    uint32_t q = mod - 1;\n    int s = 0;\n    while ((q & 1)\
+    \ == 0) {\n        q >>= 1;\n        s++;\n    }\n\n    Mint z = 2;\n    while\
+    \ (z.pow((mod - 1) / 2) == Mint(1)) ++z;\n    Mint c = z.pow(q);\n    Mint x =\
+    \ value.pow((q + 1) / 2);\n    Mint t = value.pow(q);\n    int m = s;\n    while\
+    \ (t != Mint(1)) {\n        int i = 1;\n        Mint squared = t * t;\n      \
+    \  while (squared != Mint(1)) {\n            squared *= squared;\n           \
+    \ i++;\n        }\n        Mint b = c.pow(uint64_t(1) << (m - i - 1));\n     \
+    \   x *= b;\n        c = b * b;\n        t *= c;\n        m = i;\n    }\n    return\
+    \ x;\n}\n\n}  // namespace internal\n\ntemplate <class Mint>\nstruct FormalPowerSeries\
+    \ : std::vector<Mint> {\n    using std::vector<Mint>::vector;\n    using Fps =\
+    \ FormalPowerSeries;\n\n    FormalPowerSeries() = default;\n    FormalPowerSeries(const\
+    \ std::vector<Mint>& values) : std::vector<Mint>(values) {}\n    FormalPowerSeries(std::vector<Mint>&&\
+    \ values) : std::vector<Mint>(std::move(values)) {}\n\n    Fps& shrink() {\n \
+    \       while (!this->empty() && this->back() == Mint(0)) this->pop_back();\n\
+    \        return *this;\n    }\n\n    Fps pre(int degree) const {\n        assert(degree\
+    \ >= 0);\n        Fps result(this->begin(), this->begin() + std::min<int>(degree,\
+    \ this->size()));\n        result.resize(degree);\n        return result;\n  \
+    \  }\n\n    Fps reversed(int size = -1) const {\n        Fps result = *this;\n\
+    \        if (size >= 0) result.resize(size);\n        std::reverse(result.begin(),\
+    \ result.end());\n        return result;\n    }\n\n    Fps& operator+=(const Fps&\
+    \ rhs) {\n        if (this->size() < rhs.size()) this->resize(rhs.size());\n \
+    \       for (int i = 0; i < int(rhs.size()); i++) (*this)[i] += rhs[i];\n    \
+    \    return *this;\n    }\n\n    Fps& operator-=(const Fps& rhs) {\n        if\
+    \ (this->size() < rhs.size()) this->resize(rhs.size());\n        for (int i =\
+    \ 0; i < int(rhs.size()); i++) (*this)[i] -= rhs[i];\n        return *this;\n\
+    \    }\n\n    Fps& operator*=(const Fps& rhs) {\n        std::vector<Mint> lhs(this->begin(),\
+    \ this->end());\n        *this = convolution(lhs, rhs);\n        return *this;\n\
+    \    }\n\n    Fps& operator*=(Mint rhs) {\n        for (Mint& value : *this) value\
+    \ *= rhs;\n        return *this;\n    }\n\n    Fps& operator/=(Mint rhs) {\n \
+    \       return *this *= rhs.inv();\n    }\n\n    Fps& operator<<=(int shift) {\n\
+    \        assert(shift >= 0);\n        this->insert(this->begin(), shift, Mint(0));\n\
+    \        return *this;\n    }\n\n    Fps& operator>>=(int shift) {\n        assert(shift\
+    \ >= 0);\n        if (shift >= int(this->size())) {\n            this->clear();\n\
+    \        } else {\n            this->erase(this->begin(), this->begin() + shift);\n\
+    \        }\n        return *this;\n    }\n\n    Fps operator+() const {\n    \
+    \    return *this;\n    }\n\n    Fps operator-() const {\n        Fps result =\
+    \ *this;\n        for (Mint& value : result) value = Mint(0) - value;\n      \
+    \  return result;\n    }\n\n    friend Fps operator+(Fps lhs, const Fps& rhs)\
+    \ {\n        return lhs += rhs;\n    }\n\n    friend Fps operator-(Fps lhs, const\
+    \ Fps& rhs) {\n        return lhs -= rhs;\n    }\n\n    friend Fps operator*(Fps\
+    \ lhs, const Fps& rhs) {\n        return lhs *= rhs;\n    }\n\n    friend Fps\
+    \ operator*(Fps lhs, Mint rhs) {\n        return lhs *= rhs;\n    }\n\n    friend\
+    \ Fps operator*(Mint lhs, Fps rhs) {\n        return rhs *= lhs;\n    }\n\n  \
+    \  friend Fps operator/(Fps lhs, Mint rhs) {\n        return lhs /= rhs;\n   \
+    \ }\n\n    friend Fps operator<<(Fps lhs, int shift) {\n        return lhs <<=\
+    \ shift;\n    }\n\n    friend Fps operator>>(Fps lhs, int shift) {\n        return\
+    \ lhs >>= shift;\n    }\n\n    Fps derivative() const {\n        if (this->empty())\
+    \ return {};\n        Fps result(this->size() - 1);\n        for (int i = 1; i\
+    \ < int(this->size()); i++) result[i - 1] = (*this)[i] * Mint(i);\n        return\
+    \ result;\n    }\n\n    Fps integral() const {\n        Fps result(this->size()\
+    \ + 1);\n        if (this->empty()) return result;\n        assert(this->size()\
+    \ < Mint::mod());\n\n        std::vector<Mint> inverse(this->size() + 1);\n  \
+    \      inverse[1] = 1;\n        for (int i = 2; i <= int(this->size()); i++) {\n\
+    \            inverse[i] = Mint(0) - Mint(Mint::mod() / uint32_t(i)) * inverse[Mint::mod()\
+    \ % uint32_t(i)];\n        }\n        for (int i = 0; i < int(this->size()); i++)\
+    \ result[i + 1] = (*this)[i] * inverse[i + 1];\n        return result;\n    }\n\
+    \n    Mint evaluate(Mint x) const {\n        Mint result = 0;\n        for (auto\
+    \ it = this->rbegin(); it != this->rend(); ++it) result = result * x + *it;\n\
+    \        return result;\n    }\n\n    Fps inv(int degree = -1) const {\n     \
+    \   if (degree < 0) degree = int(this->size());\n        assert(degree >= 0);\n\
     \        if (degree == 0) return {};\n        assert(!this->empty() && (*this)[0]\
-    \ == Mint(1));\n        return (derivative() * inv(degree)).pre(degree - 1).integral();\n\
-    \    }\n\n    Fps exp(int degree = -1) const {\n        if (degree < 0) degree\
+    \ != Mint(0));\n\n        Fps result(1, (*this)[0].inv());\n        for (int size\
+    \ = 1; size < degree; size <<= 1) {\n            const int next_size = std::min(size\
+    \ << 1, degree);\n            Fps product = this->pre(next_size) * result;\n \
+    \           product.resize(next_size);\n            for (Mint& value : product)\
+    \ value = Mint(0) - value;\n            product[0] += Mint(2);\n            result\
+    \ = (result * product).pre(next_size);\n        }\n        return result.pre(degree);\n\
+    \    }\n\n    Fps log(int degree = -1) const {\n        if (degree < 0) degree\
     \ = int(this->size());\n        assert(degree >= 0);\n        if (degree == 0)\
-    \ return {};\n        assert(this->empty() || (*this)[0] == Mint(0));\n\n    \
-    \    Fps result(1, Mint(1));\n        for (int size = 1; size < degree; size <<=\
-    \ 1) {\n            const int next_size = std::min(size << 1, degree);\n     \
-    \       Fps correction = this->pre(next_size) - result.log(next_size);\n     \
-    \       correction[0] += Mint(1);\n            result = (result * correction).pre(next_size);\n\
+    \ return {};\n        assert(!this->empty() && (*this)[0] == Mint(1));\n     \
+    \   return (derivative() * inv(degree)).pre(degree - 1).integral();\n    }\n\n\
+    \    Fps exp(int degree = -1) const {\n        if (degree < 0) degree = int(this->size());\n\
+    \        assert(degree >= 0);\n        if (degree == 0) return {};\n        assert(this->empty()\
+    \ || (*this)[0] == Mint(0));\n\n        Fps result(1, Mint(1));\n        for (int\
+    \ size = 1; size < degree; size <<= 1) {\n            const int next_size = std::min(size\
+    \ << 1, degree);\n            Fps correction = this->pre(next_size) - result.log(next_size);\n\
+    \            correction[0] += Mint(1);\n            result = (result * correction).pre(next_size);\n\
     \        }\n        return result.pre(degree);\n    }\n\n    Fps pow(long long\
     \ exponent, int degree = -1) const {\n        if (degree < 0) degree = int(this->size());\n\
     \        assert(exponent >= 0 && degree >= 0);\n        if (degree == 0) return\
@@ -384,7 +445,7 @@ data:
     }\n\ntemplate <class Mint>\nFormalPowerSeries<Mint> polynomial_interpolate(const\
     \ std::vector<Mint>& points,\n                                               const\
     \ std::vector<Mint>& values) {\n    return SubproductTree<Mint>(points).interpolate(values);\n\
-    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 8 \"fps/all.hpp\"\n\
+    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 9 \"fps/all.hpp\"\n\
     \n\n#line 11 \"verify/fps/fps_algorithms.test.cpp\"\n\nusing mint = m1une::math::modint998244353;\n\
     using mint1e9 = m1une::math::modint1000000007;\nusing Fps = m1une::fps::FormalPowerSeries<mint>;\n\
     \ntemplate <class Mint>\nvoid assert_equal(const std::vector<Mint>& lhs, const\
@@ -507,6 +568,7 @@ data:
   - fps/all.hpp
   - fps/convolution.hpp
   - math/modint.hpp
+  - fps/floating_point_convolution.hpp
   - fps/formal_power_series.hpp
   - fps/linear_recurrence.hpp
   - fps/multipoint_evaluation.hpp
@@ -514,7 +576,7 @@ data:
   isVerificationFile: true
   path: verify/fps/fps_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 17:44:01+09:00'
+  timestamp: '2026-06-23 03:05:18+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/fps/fps_algorithms.test.cpp

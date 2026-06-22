@@ -272,6 +272,9 @@ data:
       path: fps/convolution.hpp
       title: Convolution
     - icon: ':heavy_check_mark:'
+      path: fps/floating_point_convolution.hpp
+      title: Floating-Point Convolution
+    - icon: ':heavy_check_mark:'
       path: fps/formal_power_series.hpp
       title: Formal Power Series
     - icon: ':heavy_check_mark:'
@@ -892,6 +895,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/fps/exp_of_formal_power_series.test.cpp
       title: verify/fps/exp_of_formal_power_series.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/fps/floating_point_convolution.test.cpp
+      title: verify/fps/floating_point_convolution.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/fps/fps_algorithms.test.cpp
       title: verify/fps/fps_algorithms.test.cpp
