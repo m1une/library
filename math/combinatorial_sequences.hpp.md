@@ -702,6 +702,32 @@ $O(\text{maximum})$ time.
 
 ## API
 
+```cpp
+template <class Mint>
+std::vector<Mint> catalan_numbers(int maximum);
+
+template <class Mint>
+std::vector<Mint> bernoulli_numbers(int maximum);
+
+template <class Mint>
+std::vector<Mint> bell_numbers(int maximum);
+
+template <class Mint>
+std::vector<Mint> stirling_numbers_second_kind(int n);
+
+template <class Mint>
+std::vector<Mint> partition_numbers(int maximum);
+
+template <class Mint>
+std::vector<Mint> derangement_numbers(int maximum);
+```
+
+The template argument `Mint` is the element type of the returned
+`std::vector<Mint>`. The function argument is an `int` and must be
+nonnegative. Except for Stirling numbers, a call with `maximum` returns a
+vector of length `maximum + 1`. The Stirling function returns a vector of
+length `n + 1`.
+
 | Function | Returned values | Complexity |
 | --- | --- | --- |
 | `catalan_numbers<Mint>(maximum)` | `C_0` through `C_maximum` | $O(n)$ |

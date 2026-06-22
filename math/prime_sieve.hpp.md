@@ -224,6 +224,31 @@ for the Mobius inversion formula.
 
 ## API
 
+```cpp
+struct PrimeSieve {
+    explicit PrimeSieve(int limit = 0);
+
+    int limit() const;
+    const std::vector<int>& primes() const;
+    const std::vector<int>& min_prime_factors() const;
+
+    bool is_prime(int value) const;
+    int min_prime_factor(int value) const;
+    std::vector<std::pair<int, int>> factorize(int value) const;
+    std::vector<int> divisors(int value) const;
+    int totient(int value) const;
+    int mobius(int value) const;
+
+    std::vector<int> totient_table() const;
+    std::vector<int> mobius_table() const;
+};
+```
+
+The limit, query arguments, primes, exponents, totients, and Mobius values all
+use `int`. `is_prime` returns `bool`. The two stored-table accessors return
+`const std::vector<int>&`; the reference remains valid while the sieve object
+exists. Other vector-valued methods return new vectors by value.
+
 | Method | Description | Complexity |
 | --- | --- | --- |
 | `limit()` | Returns the sieve limit. | $O(1)$ |

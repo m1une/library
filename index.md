@@ -377,6 +377,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/prime_sieve.hpp
       title: Prime Sieve
+    - icon: ':heavy_check_mark:'
+      path: math/zeta_mobius_transform.hpp
+      title: Zeta and Mobius Transform
   - name: matrix
     pages:
     - icon: ':heavy_check_mark:'
@@ -888,6 +891,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/stirling_number_of_the_second_kind.test.cpp
       title: verify/math/stirling_number_of_the_second_kind.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/zeta_mobius_transform.test.cpp
+      title: verify/math/zeta_mobius_transform.test.cpp
   - name: verify/matrix
     pages:
     - icon: ':heavy_check_mark:'

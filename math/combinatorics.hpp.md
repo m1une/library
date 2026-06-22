@@ -220,6 +220,28 @@ binom(n, k) = factorial[n]
 
 ## API
 
+```cpp
+template <class Mint>
+struct Combinatorics {
+    explicit Combinatorics(int maximum = 0);
+
+    int maximum() const;
+    void ensure(int maximum);
+
+    Mint factorial(int n) const;
+    Mint inverse_factorial(int n) const;
+    Mint inverse(int n) const;
+    Mint binom(int n, int k) const;
+    Mint perm(int n, int k) const;
+    Mint multiset(int types, int count) const;
+    Mint catalan(int n) const;
+};
+```
+
+`Mint` is the return type of every arithmetic query. All indices and counts use
+`int`. `ensure` modifies the precomputed tables and returns `void`; the other
+methods shown as `const` do not modify the object.
+
 | Method | Description | Complexity |
 | --- | --- | --- |
 | `Combinatorics(maximum)` | Prepares every value through `maximum`. | $O(\text{maximum} + \log \text{mod})$ |

@@ -34,6 +34,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/prime_sieve.hpp
     title: Prime Sieve
+  - icon: ':heavy_check_mark:'
+    path: math/zeta_mobius_transform.hpp
+    title: Zeta and Mobius Transform
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
@@ -46,43 +49,77 @@ data:
     links: []
   bundledCode: "#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bitwise_convolution.hpp\"\
     \n\n\n\n#include <cassert>\n#include <cstddef>\n#include <utility>\n#include <vector>\n\
-    \nnamespace m1une {\nnamespace math {\n\nnamespace bitwise_convolution_detail\
+    \n#line 1 \"math/zeta_mobius_transform.hpp\"\n\n\n\n#line 7 \"math/zeta_mobius_transform.hpp\"\
+    \n\nnamespace m1une {\nnamespace math {\n\nnamespace zeta_mobius_transform_detail\
     \ {\n\ninline bool is_power_of_two(std::size_t size) noexcept {\n    return size\
-    \ != 0 && (size & (size - 1)) == 0;\n}\n\ninline std::size_t common_size(\n  \
-    \  std::size_t first_size,\n    std::size_t second_size\n) {\n    std::size_t\
+    \ != 0 && (size & (size - 1)) == 0;\n}\n\ninline std::vector<std::size_t> primes_up_to(std::size_t\
+    \ limit) {\n    std::vector<std::size_t> primes;\n    std::vector<bool> is_prime(limit\
+    \ + 1, true);\n    if (!is_prime.empty()) is_prime[0] = false;\n    if (limit\
+    \ >= 1) is_prime[1] = false;\n    for (std::size_t value = 2; value <= limit;\
+    \ ++value) {\n        if (!is_prime[value]) continue;\n        primes.emplace_back(value);\n\
+    \        if (value > limit / value) continue;\n        for (\n            std::size_t\
+    \ multiple = value * value;\n            multiple <= limit;\n            multiple\
+    \ += value\n        ) {\n            is_prime[multiple] = false;\n        }\n\
+    \    }\n    return primes;\n}\n\n}  // namespace zeta_mobius_transform_detail\n\
+    \ntemplate <typename T>\nvoid subset_zeta_transform(std::vector<T>& values) {\n\
+    \    assert(zeta_mobius_transform_detail::is_power_of_two(values.size()));\n \
+    \   for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for (\n\
+    \            std::size_t block = 0;\n            block < values.size();\n    \
+    \        block += bit << 1\n        ) {\n            for (std::size_t offset =\
+    \ 0; offset < bit; ++offset) {\n                values[block + bit + offset] +=\
+    \ values[block + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename\
+    \ T>\nvoid subset_mobius_transform(std::vector<T>& values) {\n    assert(zeta_mobius_transform_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
+    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < bit; ++offset) {\n                values[block + bit + offset]\
+    \ -= values[block + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename\
+    \ T>\nvoid superset_zeta_transform(std::vector<T>& values) {\n    assert(zeta_mobius_transform_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
+    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < bit; ++offset) {\n                values[block + offset] += values[block\
+    \ + bit + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename T>\n\
+    void superset_mobius_transform(std::vector<T>& values) {\n    assert(zeta_mobius_transform_detail::is_power_of_two(values.size()));\n\
+    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
+    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
+    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
+    \ = 0; offset < bit; ++offset) {\n                values[block + offset] -= values[block\
+    \ + bit + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename T>\n\
+    void divisor_zeta_transform(std::vector<T>& values) {\n    if (values.size() <=\
+    \ 2) return;\n    const std::size_t limit = values.size() - 1;\n    const std::vector<std::size_t>\
+    \ primes =\n        zeta_mobius_transform_detail::primes_up_to(limit);\n    for\
+    \ (std::size_t prime : primes) {\n        for (std::size_t value = 1; value <=\
+    \ limit / prime; ++value) {\n            values[value * prime] += values[value];\n\
+    \        }\n    }\n}\n\ntemplate <typename T>\nvoid divisor_mobius_transform(std::vector<T>&\
+    \ values) {\n    if (values.size() <= 2) return;\n    const std::size_t limit\
+    \ = values.size() - 1;\n    const std::vector<std::size_t> primes =\n        zeta_mobius_transform_detail::primes_up_to(limit);\n\
+    \    for (std::size_t prime : primes) {\n        for (\n            std::size_t\
+    \ value = limit / prime;\n            value >= 1;\n            --value\n     \
+    \   ) {\n            values[value * prime] -= values[value];\n        }\n    }\n\
+    }\n\ntemplate <typename T>\nvoid multiple_zeta_transform(std::vector<T>& values)\
+    \ {\n    if (values.size() <= 2) return;\n    const std::size_t limit = values.size()\
+    \ - 1;\n    const std::vector<std::size_t> primes =\n        zeta_mobius_transform_detail::primes_up_to(limit);\n\
+    \    for (std::size_t prime : primes) {\n        for (\n            std::size_t\
+    \ value = limit / prime;\n            value >= 1;\n            --value\n     \
+    \   ) {\n            values[value] += values[value * prime];\n        }\n    }\n\
+    }\n\ntemplate <typename T>\nvoid multiple_mobius_transform(std::vector<T>& values)\
+    \ {\n    if (values.size() <= 2) return;\n    const std::size_t limit = values.size()\
+    \ - 1;\n    const std::vector<std::size_t> primes =\n        zeta_mobius_transform_detail::primes_up_to(limit);\n\
+    \    for (std::size_t prime : primes) {\n        for (std::size_t value = 1; value\
+    \ <= limit / prime; ++value) {\n            values[value] -= values[value * prime];\n\
+    \        }\n    }\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line\
+    \ 10 \"math/bitwise_convolution.hpp\"\n\nnamespace m1une {\nnamespace math {\n\
+    \nnamespace bitwise_convolution_detail {\n\ninline std::size_t common_size(\n\
+    \    std::size_t first_size,\n    std::size_t second_size\n) {\n    std::size_t\
     \ required = first_size > second_size\n        ? first_size\n        : second_size;\n\
     \    std::size_t size = 1;\n    while (size < required) size <<= 1;\n    return\
     \ size;\n}\n\ntemplate <typename T>\nstd::vector<T> pointwise_product(\n    std::vector<T>\
     \ first,\n    const std::vector<T>& second\n) {\n    assert(first.size() == second.size());\n\
     \    for (std::size_t index = 0; index < first.size(); ++index) {\n        first[index]\
     \ *= second[index];\n    }\n    return first;\n}\n\n}  // namespace bitwise_convolution_detail\n\
-    \ntemplate <typename T>\nvoid subset_zeta_transform(std::vector<T>& values) {\n\
-    \    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n   \
-    \ for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for (\n\
-    \            std::size_t block = 0;\n            block < values.size();\n    \
-    \        block += bit << 1\n        ) {\n            for (std::size_t offset =\
-    \ 0; offset < bit; ++offset) {\n                values[block + bit + offset] +=\
-    \ values[block + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename\
-    \ T>\nvoid subset_mobius_transform(std::vector<T>& values) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
-    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
-    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
-    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
-    \ = 0; offset < bit; ++offset) {\n                values[block + bit + offset]\
-    \ -= values[block + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename\
-    \ T>\nvoid superset_zeta_transform(std::vector<T>& values) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
-    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
-    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
-    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
-    \ = 0; offset < bit; ++offset) {\n                values[block + offset] += values[block\
-    \ + bit + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename T>\n\
-    void superset_mobius_transform(std::vector<T>& values) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
-    \    for (std::size_t bit = 1; bit < values.size(); bit <<= 1) {\n        for\
-    \ (\n            std::size_t block = 0;\n            block < values.size();\n\
-    \            block += bit << 1\n        ) {\n            for (std::size_t offset\
-    \ = 0; offset < bit; ++offset) {\n                values[block + offset] -= values[block\
-    \ + bit + offset];\n            }\n        }\n    }\n}\n\ntemplate <typename T>\n\
-    void walsh_hadamard_transform(\n    std::vector<T>& values,\n    bool inverse\
-    \ = false\n) {\n    assert(bitwise_convolution_detail::is_power_of_two(values.size()));\n\
+    \ntemplate <typename T>\nvoid walsh_hadamard_transform(\n    std::vector<T>& values,\n\
+    \    bool inverse = false\n) {\n    assert(zeta_mobius_transform_detail::is_power_of_two(values.size()));\n\
     \    for (std::size_t length = 1; length < values.size(); length <<= 1) {\n  \
     \      for (\n            std::size_t block = 0;\n            block < values.size();\n\
     \            block += length << 1\n        ) {\n            for (std::size_t offset\
@@ -668,7 +705,7 @@ data:
     \            const int prime = _min_prime_factor[value];\n            const int\
     \ reduced = value / prime;\n            result[value] = reduced % prime == 0 ?\
     \ 0 : -result[reduced];\n        }\n        return result;\n    }\n};\n\n}  //\
-    \ namespace math\n}  // namespace m1une\n\n\n#line 12 \"math/all.hpp\"\n\n\n"
+    \ namespace math\n}  // namespace m1une\n\n\n#line 13 \"math/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_MATH_ALL_HPP
 
     #define M1UNE_MATH_ALL_HPP 1
@@ -690,12 +727,15 @@ data:
 
     #include "prime_sieve.hpp"
 
+    #include "zeta_mobius_transform.hpp"
+
 
     #endif  // M1UNE_MATH_ALL_HPP
 
     '
   dependsOn:
   - math/bitwise_convolution.hpp
+  - math/zeta_mobius_transform.hpp
   - math/bit_ceil.hpp
   - math/combinatorics.hpp
   - math/combinatorial_sequences.hpp
@@ -709,7 +749,7 @@ data:
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-21 17:44:01+09:00'
+  timestamp: '2026-06-22 22:56:57+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
@@ -729,6 +769,8 @@ You usually do not need to include this entire bundle:
 * Use `modint.hpp` for arithmetic modulo a fixed number such as `998244353`.
 * Use `bitwise_convolution.hpp` for OR, AND, or XOR convolution over mask
   indices.
+* Use `zeta_mobius_transform.hpp` for subset, superset, divisor, and multiple
+  transforms.
 * Use `combinatorics.hpp` for many factorial, combination, or permutation
   queries under a prime modulus.
 * Use `combinatorial_sequences.hpp` for Catalan, Bernoulli, Bell, Stirling,
@@ -747,7 +789,7 @@ few unused headers do not matter.
 
 | Header | Contents |
 | --- | --- |
-| `math/bitwise_convolution.hpp` | Subset/superset transforms and OR, AND, XOR convolutions. |
+| `math/bitwise_convolution.hpp` | OR, AND, XOR convolutions and the Walsh-Hadamard transform. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |
@@ -755,3 +797,4 @@ few unused headers do not matter.
 | `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
+| `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |
