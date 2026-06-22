@@ -138,6 +138,15 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/matrix/inverse_matrix.test.cpp
+    title: verify/matrix/inverse_matrix.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/matrix/matrix.test.cpp
+    title: verify/matrix/matrix.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/matrix/matrix_product.test.cpp
+    title: verify/matrix/matrix_product.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -294,6 +303,9 @@ data:
   - verify/fps/polynomial_taylor_shift.test.cpp
   - verify/fps/fps_algorithms.test.cpp
   - verify/fps/fps_algorithms.test.cpp
+  - verify/matrix/inverse_matrix.test.cpp
+  - verify/matrix/matrix.test.cpp
+  - verify/matrix/matrix_product.test.cpp
 documentation_of: math/modint.hpp
 layout: document
 title: ModInt

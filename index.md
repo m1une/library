@@ -377,6 +377,17 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/prime_sieve.hpp
       title: Prime Sieve
+  - name: matrix
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: matrix/all.hpp
+      title: Matrix Bundle
+    - icon: ':heavy_check_mark:'
+      path: matrix/linear_algebra.hpp
+      title: Matrix Linear Algebra
+    - icon: ':heavy_check_mark:'
+      path: matrix/matrix.hpp
+      title: Dense Matrix
   - name: monoid
     pages:
     - icon: ':heavy_check_mark:'
@@ -877,6 +888,17 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/stirling_number_of_the_second_kind.test.cpp
       title: verify/math/stirling_number_of_the_second_kind.test.cpp
+  - name: verify/matrix
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/matrix/inverse_matrix.test.cpp
+      title: verify/matrix/inverse_matrix.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/matrix/matrix.test.cpp
+      title: verify/matrix/matrix.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/matrix/matrix_product.test.cpp
+      title: verify/matrix/matrix_product.test.cpp
   - name: verify/optimization
     pages:
     - icon: ':heavy_check_mark:'
