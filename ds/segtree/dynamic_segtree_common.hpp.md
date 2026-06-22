@@ -9,6 +9,9 @@ data:
     path: ds/segtree/dynamic_lazy_segtree.hpp
     title: Dynamic Lazy Segment Tree
   - icon: ':heavy_check_mark:'
+    path: ds/segtree/dynamic_segtree.hpp
+    title: Dynamic Segment Tree
+  - icon: ':heavy_check_mark:'
     path: ds/segtree/persistent_dynamic_dual_segtree.hpp
     title: Persistent Dynamic Dual Segment Tree
   - icon: ':heavy_check_mark:'
@@ -24,6 +27,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
     title: verify/ds/segtree/dynamic_lazy_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dynamic_segtree.test.cpp
+    title: verify/ds/segtree/dynamic_segtree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
     title: verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
@@ -153,12 +159,14 @@ data:
   - ds/segtree/persistent_dynamic_dual_segtree.hpp
   - ds/segtree/dynamic_lazy_segtree.hpp
   - ds/segtree/persistent_dynamic_segtree.hpp
+  - ds/segtree/dynamic_segtree.hpp
   - ds/segtree/persistent_dynamic_lazy_segtree.hpp
   - ds/segtree/dynamic_dual_segtree.hpp
   timestamp: '2026-06-21 02:09:58+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
+  - verify/ds/segtree/dynamic_segtree.test.cpp
   - verify/ds/segtree/persistent_dynamic_segtree.test.cpp
   - verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/dynamic_lazy_segtree.test.cpp
