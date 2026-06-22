@@ -1,8 +1,7 @@
 ---
-
 title: Segtree 2D
 documentation_of: ../../../ds/segtree/segtree_2d.hpp
-----------------------------------------------------
+---
 
 ## Overview
 

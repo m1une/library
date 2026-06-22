@@ -1,8 +1,7 @@
 ---
-
 title: Interval Set
 documentation_of: ../../../ds/interval_set/interval_set.hpp
------------------------------------------------------------
+---
 
 ## Overview
 
