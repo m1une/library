@@ -75,6 +75,9 @@ data:
     path: tree/diameter.hpp
     title: Tree Diameter
   - icon: ':heavy_check_mark:'
+    path: tree/dsu_on_tree.hpp
+    title: DSU on Tree
+  - icon: ':heavy_check_mark:'
     path: tree/heavy_light_decomposition.hpp
     title: Heavy Light Decomposition
   - icon: ':heavy_check_mark:'
@@ -123,6 +126,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/range_edge_graph.test.cpp
     title: verify/graph/range_edge_graph.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/tree/dsu_on_tree.test.cpp
+    title: verify/tree/dsu_on_tree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/tree/dsu_on_tree.test.cpp
+    title: verify/tree/dsu_on_tree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
@@ -256,6 +265,7 @@ data:
   - tree/rerooting_static_top_tree.hpp
   - tree/heavy_light_decomposition.hpp
   - tree/static_top_tree.hpp
+  - tree/dsu_on_tree.hpp
   - tree/tree.hpp
   - tree/diameter.hpp
   - graph/maximum_clique.hpp
@@ -284,6 +294,8 @@ data:
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
   - verify/tree/tree_algorithms.test.cpp
+  - verify/tree/dsu_on_tree.test.cpp
+  - verify/tree/dsu_on_tree.test.cpp
   - verify/graph/library_checker_maximum_independent_set.test.cpp
   - verify/graph/library_checker_maximum_independent_set.test.cpp
   - verify/graph/cow_game.test.cpp

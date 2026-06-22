@@ -605,6 +605,9 @@ data:
       path: tree/diameter.hpp
       title: Tree Diameter
     - icon: ':heavy_check_mark:'
+      path: tree/dsu_on_tree.hpp
+      title: DSU on Tree
+    - icon: ':heavy_check_mark:'
       path: tree/heavy_light_decomposition.hpp
       title: Heavy Light Decomposition
     - icon: ':heavy_check_mark:'
@@ -1026,6 +1029,9 @@ data:
       title: verify/string/yosupo_zalgorithm.test.cpp
   - name: verify/tree
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/tree/dsu_on_tree.test.cpp
+      title: verify/tree/dsu_on_tree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/tree/tree_algorithms.test.cpp
       title: verify/tree/tree_algorithms.test.cpp

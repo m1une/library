@@ -23,6 +23,9 @@ data:
     path: tree/diameter.hpp
     title: Tree Diameter
   - icon: ':heavy_check_mark:'
+    path: tree/dsu_on_tree.hpp
+    title: DSU on Tree
+  - icon: ':heavy_check_mark:'
     path: tree/heavy_light_decomposition.hpp
     title: Heavy Light Decomposition
   - icon: ':heavy_check_mark:'
@@ -186,7 +189,76 @@ data:
     \        }\n        std::reverse(best.vertices.begin(), best.vertices.end());\n\
     \        std::reverse(best.edge_ids.begin(), best.edge_ids.end());\n        best.edge_count\
     \ = int(best.edge_ids.size());\n    }\n\n    return best;\n}\n\n}  // namespace\
-    \ tree\n}  // namespace m1une\n\n\n#line 1 \"tree/heavy_light_decomposition.hpp\"\
+    \ tree\n}  // namespace m1une\n\n\n#line 1 \"tree/dsu_on_tree.hpp\"\n\n\n\n#line\
+    \ 7 \"tree/dsu_on_tree.hpp\"\n\n#line 9 \"tree/dsu_on_tree.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace tree {\n\ntemplate <class T = int>\nstruct DsuOnTree {\n\
+    \    int n;\n    int root;\n    std::vector<int> parent;\n    std::vector<int>\
+    \ parent_edge;\n    std::vector<int> depth;\n    std::vector<int> subtree_size;\n\
+    \    std::vector<int> heavy_child;\n    std::vector<int> tin;\n    std::vector<int>\
+    \ tout;\n    std::vector<int> order;\n    std::vector<std::vector<int>> children;\n\
+    \n    DsuOnTree() : n(0), root(-1) {}\n\n    explicit DsuOnTree(\n        const\
+    \ m1une::graph::Graph<T>& graph,\n        int root_vertex = 0\n    ) {\n     \
+    \   build(graph, root_vertex);\n    }\n\n    void build(\n        const m1une::graph::Graph<T>&\
+    \ graph,\n        int root_vertex = 0\n    ) {\n        n = graph.size();\n  \
+    \      root = n == 0 ? -1 : root_vertex;\n        parent.assign(n, -2);\n    \
+    \    parent_edge.assign(n, -1);\n        depth.assign(n, 0);\n        subtree_size.assign(n,\
+    \ 1);\n        heavy_child.assign(n, -1);\n        tin.assign(n, -1);\n      \
+    \  tout.assign(n, -1);\n        order.clear();\n        order.reserve(n);\n  \
+    \      children.assign(n, {});\n        if (n == 0) return;\n\n        assert(0\
+    \ <= root && root < n);\n        std::vector<int> stack;\n        stack.push_back(root);\n\
+    \        parent[root] = -1;\n        while (!stack.empty()) {\n            int\
+    \ vertex = stack.back();\n            stack.pop_back();\n            tin[vertex]\
+    \ = int(order.size());\n            order.push_back(vertex);\n\n            for\
+    \ (const auto& edge : graph[vertex]) {\n                if (!edge.alive || parent[edge.to]\
+    \ != -2) continue;\n                parent[edge.to] = vertex;\n              \
+    \  parent_edge[edge.to] = edge.id;\n                depth[edge.to] = depth[vertex]\
+    \ + 1;\n                children[vertex].push_back(edge.to);\n               \
+    \ stack.push_back(edge.to);\n            }\n        }\n        assert(int(order.size())\
+    \ == n);\n\n        for (int index = n - 1; index >= 0; --index) {\n         \
+    \   int vertex = order[index];\n            for (int child : children[vertex])\
+    \ {\n                subtree_size[vertex] += subtree_size[child];\n          \
+    \      if (\n                    heavy_child[vertex] == -1 ||\n              \
+    \      subtree_size[heavy_child[vertex]] < subtree_size[child]\n             \
+    \   ) {\n                    heavy_child[vertex] = child;\n                }\n\
+    \            }\n            tout[vertex] = tin[vertex] + subtree_size[vertex];\n\
+    \        }\n    }\n\n    int size() const {\n        return n;\n    }\n\n    bool\
+    \ empty() const {\n        return n == 0;\n    }\n\n    std::pair<int, int> subtree_range(int\
+    \ vertex) const {\n        assert(0 <= vertex && vertex < n);\n        return\
+    \ {tin[vertex], tout[vertex]};\n    }\n\n    // Runs DSU on tree. `add(v)` inserts\
+    \ one vertex into the maintained state,\n    // `remove(v)` erases it, and `answer(v)`\
+    \ observes the state for subtree(v).\n    template <class Add, class Remove, class\
+    \ Answer>\n    void run(Add add, Remove remove, Answer answer) const {\n     \
+    \   if (n == 0) return;\n\n        enum ActionType {\n            Process,\n \
+    \           AddSubtree,\n            AddVertex,\n            AnswerVertex,\n \
+    \           RemoveSubtree,\n        };\n        struct Action {\n            ActionType\
+    \ type;\n            int vertex;\n            bool keep;\n        };\n\n     \
+    \   std::vector<Action> actions;\n        actions.reserve(3 * std::size_t(n));\n\
+    \        actions.push_back(Action{Process, root, true});\n\n        while (!actions.empty())\
+    \ {\n            Action action = actions.back();\n            actions.pop_back();\n\
+    \            int vertex = action.vertex;\n\n            if (action.type == AddSubtree)\
+    \ {\n                for (int index = tin[vertex]; index < tout[vertex]; ++index)\
+    \ {\n                    add(order[index]);\n                }\n            }\
+    \ else if (action.type == AddVertex) {\n                add(vertex);\n       \
+    \     } else if (action.type == AnswerVertex) {\n                answer(vertex);\n\
+    \            } else if (action.type == RemoveSubtree) {\n                for (int\
+    \ index = tin[vertex]; index < tout[vertex]; ++index) {\n                    remove(order[index]);\n\
+    \                }\n            } else {\n                if (!action.keep) {\n\
+    \                    actions.push_back(Action{\n                        RemoveSubtree,\n\
+    \                        vertex,\n                        false,\n           \
+    \         });\n                }\n                actions.push_back(Action{AnswerVertex,\
+    \ vertex, false});\n                actions.push_back(Action{AddVertex, vertex,\
+    \ false});\n\n                for (int child : children[vertex]) {\n         \
+    \           if (child != heavy_child[vertex]) {\n                        actions.push_back(Action{\n\
+    \                            AddSubtree,\n                            child,\n\
+    \                            false,\n                        });\n           \
+    \         }\n                }\n                if (heavy_child[vertex] != -1)\
+    \ {\n                    actions.push_back(Action{\n                        Process,\n\
+    \                        heavy_child[vertex],\n                        true,\n\
+    \                    });\n                }\n                for (int child :\
+    \ children[vertex]) {\n                    if (child != heavy_child[vertex]) {\n\
+    \                        actions.push_back(Action{Process, child, false});\n \
+    \                   }\n                }\n            }\n        }\n    }\n};\n\
+    \n}  // namespace tree\n}  // namespace m1une\n\n\n#line 1 \"tree/heavy_light_decomposition.hpp\"\
     \n\n\n\n#line 8 \"tree/heavy_light_decomposition.hpp\"\n\n#line 10 \"tree/heavy_light_decomposition.hpp\"\
     \n\nnamespace m1une {\nnamespace tree {\n\nstruct HldPathSegment {\n    int l;\n\
     \    int r;\n    bool reversed;\n};\n\ntemplate <class T = int>\nstruct HeavyLightDecomposition\
@@ -849,7 +921,7 @@ data:
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, Compress,\
     \ Rake,\n                     AddEdge, AddVertex>;\n\n}  // namespace tree\n}\
     \  // namespace m1une\n\n\n#line 1 \"tree/tree.hpp\"\n\n\n\n#line 7 \"tree/tree.hpp\"\
-    \n\n\n#line 13 \"tree/all.hpp\"\n\n\n#line 13 \"verify/tree/tree_algorithms.test.cpp\"\
+    \n\n\n#line 14 \"tree/all.hpp\"\n\n\n#line 13 \"verify/tree/tree_algorithms.test.cpp\"\
     \n\nusing m1une::graph::Graph;\n\ntemplate <class Hld>\nstd::vector<int> expand_segments(const\
     \ Hld& hld, const std::vector<m1une::tree::HldPathSegment>& segments) {\n    std::vector<int>\
     \ result;\n    for (auto seg : segments) {\n        if (seg.reversed) {\n    \
@@ -1384,6 +1456,7 @@ data:
   - tree/centroid_decomposition.hpp
   - graph/graph.hpp
   - tree/diameter.hpp
+  - tree/dsu_on_tree.hpp
   - tree/heavy_light_decomposition.hpp
   - tree/rerooting_dp.hpp
   - tree/rerooting_static_top_tree.hpp
@@ -1396,7 +1469,7 @@ data:
   isVerificationFile: true
   path: verify/tree/tree_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-23 02:14:46+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/tree/tree_algorithms.test.cpp
