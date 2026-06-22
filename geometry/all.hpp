@@ -2,6 +2,7 @@
 #define M1UNE_GEOMETRY_ALL_HPP 1
 
 #include "circle.hpp"
+#include "farthest_pair.hpp"
 #include "line.hpp"
 #include "manhattan_mst.hpp"
 #include "point.hpp"
