@@ -13,6 +13,7 @@ contest when convenience matters more.
 
 | Header | Contents |
 | --- | --- |
+| `string/aho_corasick.hpp` | Multi-pattern matching with failure links and occurrence counting. |
 | `string/z_algorithm.hpp` | Linear-time Z array. |
 | `string/prefix_function.hpp` | Prefix function and KMP occurrence search. |
 | `string/manacher.hpp` | Odd/even palindrome radii and substring checks. |
