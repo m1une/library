@@ -196,48 +196,55 @@ data:
     #line 6 \"string/trie.hpp\"\n#include <cstddef>\n#include <limits>\n#line 9 \"\
     string/trie.hpp\"\n\nnamespace m1une {\nnamespace string {\n\n// A multiset trie\
     \ for a contiguous character alphabet.\ntemplate <int AlphabetSize = 26, int FirstCharacter\
-    \ = 'a'>\nstruct Trie {\n    static_assert(0 < AlphabetSize);\n\n   private:\n\
-    \    struct Node {\n        std::array<int, AlphabetSize> child;\n        int\
-    \ subtree_count;\n        int terminal_count;\n\n        Node() : subtree_count(0),\
-    \ terminal_count(0) {\n            child.fill(-1);\n        }\n    };\n\n    std::vector<Node>\
-    \ _nodes;\n    int _distinct_size;\n\n    template <class Symbol>\n    static\
-    \ int symbol_index(const Symbol& symbol) {\n        int index = int(symbol) -\
-    \ FirstCharacter;\n        assert(0 <= index && index < AlphabetSize);\n     \
-    \   return index;\n    }\n\n    int new_node() {\n        assert(_nodes.size()\
+    \ = 'a'>\nstruct Trie {\n    static_assert(0 < AlphabetSize);\n\n    using node_id\
+    \ = int;\n    static constexpr node_id null_node = -1;\n\n    struct Node {\n\
+    \        std::array<node_id, AlphabetSize> child;\n        int subtree_count;\n\
+    \        int terminal_count;\n\n        Node() : subtree_count(0), terminal_count(0)\
+    \ {\n            child.fill(null_node);\n        }\n    };\n\n   private:\n  \
+    \  std::vector<Node> _nodes;\n    int _distinct_size;\n\n    template <class Symbol>\n\
+    \    static int symbol_index(const Symbol& symbol) {\n        int index = int(symbol)\
+    \ - FirstCharacter;\n        assert(0 <= index && index < AlphabetSize);\n   \
+    \     return index;\n    }\n\n    node_id new_node() {\n        assert(_nodes.size()\
     \ < std::size_t(std::numeric_limits<int>::max()));\n        _nodes.emplace_back();\n\
     \        return int(_nodes.size()) - 1;\n    }\n\n    template <class Sequence>\n\
-    \    int find_node(const Sequence& sequence) const {\n        int node = 0;\n\
-    \        for (const auto& symbol : sequence) {\n            node = _nodes[node].child[symbol_index(symbol)];\n\
-    \            if (node == -1 || _nodes[node].subtree_count == 0) return -1;\n \
-    \       }\n        return node;\n    }\n\n   public:\n    Trie() : _nodes(1),\
-    \ _distinct_size(0) {}\n\n    int size() const {\n        return _nodes[0].subtree_count;\n\
-    \    }\n\n    int distinct_size() const {\n        return _distinct_size;\n  \
-    \  }\n\n    bool empty() const {\n        return size() == 0;\n    }\n\n    std::size_t\
-    \ node_count() const {\n        return _nodes.size();\n    }\n\n    void reserve(std::size_t\
+    \    node_id find_node(const Sequence& sequence) const {\n        node_id node\
+    \ = 0;\n        for (const auto& symbol : sequence) {\n            node = _nodes[node].child[symbol_index(symbol)];\n\
+    \            if (node == null_node || _nodes[node].subtree_count == 0) {\n   \
+    \             return null_node;\n            }\n        }\n        return node;\n\
+    \    }\n\n   public:\n    Trie() : _nodes(1), _distinct_size(0) {}\n\n    int\
+    \ size() const {\n        return _nodes[0].subtree_count;\n    }\n\n    int distinct_size()\
+    \ const {\n        return _distinct_size;\n    }\n\n    bool empty() const {\n\
+    \        return size() == 0;\n    }\n\n    node_id root() const {\n        return\
+    \ 0;\n    }\n\n    const Node& node(node_id id) const {\n        assert(0 <= id\
+    \ && std::size_t(id) < _nodes.size());\n        return _nodes[id];\n    }\n\n\
+    \    template <class Sequence>\n    node_id find(const Sequence& sequence) const\
+    \ {\n        return find_node(sequence);\n    }\n\n    std::size_t node_count()\
+    \ const {\n        return _nodes.size();\n    }\n\n    void reserve(std::size_t\
     \ node_capacity) {\n        _nodes.reserve(node_capacity);\n    }\n\n    void\
     \ clear() {\n        _nodes.clear();\n        _nodes.emplace_back();\n       \
-    \ _distinct_size = 0;\n    }\n\n    template <class Sequence>\n    void insert(const\
+    \ _distinct_size = 0;\n    }\n\n    template <class Sequence>\n    node_id insert(const\
     \ Sequence& sequence, int multiplicity = 1) {\n        assert(0 < multiplicity);\n\
-    \        int node = 0;\n        _nodes[node].subtree_count += multiplicity;\n\
+    \        node_id node = 0;\n        _nodes[node].subtree_count += multiplicity;\n\
     \        for (const auto& symbol : sequence) {\n            int index = symbol_index(symbol);\n\
-    \            int child = _nodes[node].child[index];\n            if (child ==\
-    \ -1) {\n                child = new_node();\n                _nodes[node].child[index]\
+    \            node_id child = _nodes[node].child[index];\n            if (child\
+    \ == null_node) {\n                child = new_node();\n                _nodes[node].child[index]\
     \ = child;\n            }\n            node = child;\n            _nodes[node].subtree_count\
     \ += multiplicity;\n        }\n        if (_nodes[node].terminal_count == 0) _distinct_size++;\n\
-    \        _nodes[node].terminal_count += multiplicity;\n    }\n\n    template <class\
-    \ Sequence>\n    int count(const Sequence& sequence) const {\n        int node\
-    \ = find_node(sequence);\n        return node == -1 ? 0 : _nodes[node].terminal_count;\n\
-    \    }\n\n    template <class Sequence>\n    bool contains(const Sequence& sequence)\
-    \ const {\n        return count(sequence) != 0;\n    }\n\n    // Returns the number\
-    \ of stored strings beginning with prefix.\n    template <class Sequence>\n  \
-    \  int prefix_count(const Sequence& prefix) const {\n        int node = find_node(prefix);\n\
-    \        return node == -1 ? 0 : _nodes[node].subtree_count;\n    }\n\n    template\
-    \ <class Sequence>\n    bool starts_with(const Sequence& prefix) const {\n   \
-    \     return prefix_count(prefix) != 0;\n    }\n\n    template <class Sequence>\n\
-    \    bool erase_one(const Sequence& sequence) {\n        int terminal = find_node(sequence);\n\
-    \        if (terminal == -1 || _nodes[terminal].terminal_count == 0) return false;\n\
-    \n        int node = 0;\n        _nodes[node].subtree_count--;\n        for (const\
-    \ auto& symbol : sequence) {\n            node = _nodes[node].child[symbol_index(symbol)];\n\
+    \        _nodes[node].terminal_count += multiplicity;\n        return node;\n\
+    \    }\n\n    template <class Sequence>\n    int count(const Sequence& sequence)\
+    \ const {\n        node_id node = find_node(sequence);\n        return node ==\
+    \ null_node ? 0 : _nodes[node].terminal_count;\n    }\n\n    template <class Sequence>\n\
+    \    bool contains(const Sequence& sequence) const {\n        return count(sequence)\
+    \ != 0;\n    }\n\n    // Returns the number of stored strings beginning with prefix.\n\
+    \    template <class Sequence>\n    int prefix_count(const Sequence& prefix) const\
+    \ {\n        node_id node = find_node(prefix);\n        return node == null_node\
+    \ ? 0 : _nodes[node].subtree_count;\n    }\n\n    template <class Sequence>\n\
+    \    bool starts_with(const Sequence& prefix) const {\n        return prefix_count(prefix)\
+    \ != 0;\n    }\n\n    template <class Sequence>\n    bool erase_one(const Sequence&\
+    \ sequence) {\n        node_id terminal = find_node(sequence);\n        if (terminal\
+    \ == null_node || _nodes[terminal].terminal_count == 0) {\n            return\
+    \ false;\n        }\n\n        int node = 0;\n        _nodes[node].subtree_count--;\n\
+    \        for (const auto& symbol : sequence) {\n            node = _nodes[node].child[symbol_index(symbol)];\n\
     \            _nodes[node].subtree_count--;\n        }\n        _nodes[node].terminal_count--;\n\
     \        if (_nodes[node].terminal_count == 0) _distinct_size--;\n        return\
     \ true;\n    }\n\n    template <class Sequence>\n    bool erase(const Sequence&\
@@ -255,8 +262,8 @@ data:
     \ != 0) {\n            callback(0, _nodes[node].terminal_count);\n        }\n\n\
     \        int length = 0;\n        for (const auto& symbol : sequence) {\n    \
     \        node = _nodes[node].child[symbol_index(symbol)];\n            if (node\
-    \ == -1 || _nodes[node].subtree_count == 0) return;\n            length++;\n \
-    \           if (_nodes[node].terminal_count != 0) {\n                callback(length,\
+    \ == null_node || _nodes[node].subtree_count == 0) return;\n            length++;\n\
+    \            if (_nodes[node].terminal_count != 0) {\n                callback(length,\
     \ _nodes[node].terminal_count);\n            }\n        }\n    }\n\n    // Returns\
     \ the length of the longest stored string that is a prefix.\n    // Returns -1\
     \ when no stored prefix exists.\n    template <class Sequence>\n    int longest_prefix(const\
@@ -305,7 +312,7 @@ data:
   isVerificationFile: false
   path: string/all.hpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-22 15:33:45+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/string/string_algorithms.test.cpp

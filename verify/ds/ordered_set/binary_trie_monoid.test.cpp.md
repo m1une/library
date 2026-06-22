@@ -46,42 +46,44 @@ data:
     struct BinaryTrieMonoid {\n    using T = typename Monoid::value_type;\n\n    static_assert(std::is_integral_v<UInt>);\n\
     \    static_assert(std::is_unsigned_v<UInt>);\n    static_assert(!std::is_same_v<UInt,\
     \ bool>);\n    static_assert(0 < BitWidth);\n    static_assert(BitWidth <= std::numeric_limits<UInt>::digits);\n\
-    \n   private:\n    struct Node {\n        int child[2];\n        int count;\n\
-    \        T prod;\n\n        Node() : child{-1, -1}, count(0), prod(Monoid::id())\
-    \ {}\n    };\n\n    struct Aggregate {\n        int count;\n        T prod;\n\
-    \    };\n\n    std::vector<Node> nodes;\n    UInt lazy_xor;\n\n    static constexpr\
-    \ int bit(UInt value, int position) {\n        return int((value >> position)\
-    \ & UInt(1));\n    }\n\n    static constexpr UInt value_mask() {\n        if constexpr\
-    \ (BitWidth == std::numeric_limits<UInt>::digits) {\n            return std::numeric_limits<UInt>::max();\n\
-    \        } else {\n            return (UInt(1) << BitWidth) - UInt(1);\n     \
-    \   }\n    }\n\n    static constexpr bool valid_value(UInt value) {\n        return\
-    \ (value & ~value_mask()) == UInt(0);\n    }\n\n    int new_node() {\n       \
-    \ nodes.emplace_back();\n        return int(nodes.size()) - 1;\n    }\n\n    int\
-    \ subtree_size(int node) const {\n        return node == -1 ? 0 : nodes[node].count;\n\
-    \    }\n\n    T subtree_prod(int node) const {\n        return node == -1 ? Monoid::id()\
-    \ : nodes[node].prod;\n    }\n\n    void update(int node) {\n        nodes[node].count\
-    \ =\n            subtree_size(nodes[node].child[0]) +\n            subtree_size(nodes[node].child[1]);\n\
+    \n    using node_id = int;\n    static constexpr node_id null_node = -1;\n\n \
+    \   struct Node {\n        node_id child[2];\n        int count;\n        T prod;\n\
+    \n        Node() : child{null_node, null_node}, count(0), prod(Monoid::id()) {}\n\
+    \    };\n\n   private:\n    struct Aggregate {\n        int count;\n        T\
+    \ prod;\n    };\n\n    std::vector<Node> nodes;\n    UInt lazy_xor;\n\n    static\
+    \ constexpr int bit(UInt value, int position) {\n        return int((value >>\
+    \ position) & UInt(1));\n    }\n\n    static constexpr UInt value_mask() {\n \
+    \       if constexpr (BitWidth == std::numeric_limits<UInt>::digits) {\n     \
+    \       return std::numeric_limits<UInt>::max();\n        } else {\n         \
+    \   return (UInt(1) << BitWidth) - UInt(1);\n        }\n    }\n\n    static constexpr\
+    \ bool valid_value(UInt value) {\n        return (value & ~value_mask()) == UInt(0);\n\
+    \    }\n\n    node_id new_node() {\n        nodes.emplace_back();\n        return\
+    \ int(nodes.size()) - 1;\n    }\n\n    int subtree_size(node_id node) const {\n\
+    \        return node == null_node ? 0 : nodes[node].count;\n    }\n\n    T subtree_prod(node_id\
+    \ node) const {\n        return node == null_node ? Monoid::id() : nodes[node].prod;\n\
+    \    }\n\n    void update(int node) {\n        nodes[node].count =\n         \
+    \   subtree_size(nodes[node].child[0]) +\n            subtree_size(nodes[node].child[1]);\n\
     \        nodes[node].prod =\n            Monoid::op(subtree_prod(nodes[node].child[0]),\n\
-    \                       subtree_prod(nodes[node].child[1]));\n    }\n\n    int\
-    \ find_node(UInt key) const {\n        key ^= lazy_xor;\n        int node = 0;\n\
-    \        for (int position = BitWidth - 1; position >= 0; --position) {\n    \
-    \        node = nodes[node].child[bit(key, position)];\n            if (node ==\
-    \ -1 || nodes[node].count == 0) return -1;\n        }\n        return node;\n\
-    \    }\n\n    static int extend_comparison(int relation,\n                   \
-    \              int digit,\n                                 int bound_digit) {\n\
-    \        if (relation != 0) return relation;\n        if (digit < bound_digit)\
-    \ return -1;\n        if (digit > bound_digit) return 1;\n        return 0;\n\
-    \    }\n\n    Aggregate xor_range_impl(int node,\n                           \
-    \  int position,\n                             UInt effective_xor,\n         \
-    \                    UInt lower,\n                             UInt upper,\n \
-    \                            int lower_relation,\n                           \
-    \  int upper_relation) const {\n        if (node == -1 || nodes[node].count ==\
-    \ 0 ||\n            lower_relation < 0 || upper_relation > 0) {\n            return\
-    \ {0, Monoid::id()};\n        }\n        if (lower_relation > 0 && upper_relation\
-    \ < 0) {\n            return {nodes[node].count, nodes[node].prod};\n        }\n\
-    \        if (position < 0) {\n            if (lower_relation >= 0 && upper_relation\
-    \ < 0) {\n                return {nodes[node].count, nodes[node].prod};\n    \
-    \        }\n            return {0, Monoid::id()};\n        }\n\n        Aggregate\
+    \                       subtree_prod(nodes[node].child[1]));\n    }\n\n    node_id\
+    \ find_node(UInt key) const {\n        key ^= lazy_xor;\n        node_id node\
+    \ = 0;\n        for (int position = BitWidth - 1; position >= 0; --position) {\n\
+    \            node = nodes[node].child[bit(key, position)];\n            if (node\
+    \ == null_node || nodes[node].count == 0) {\n                return null_node;\n\
+    \            }\n        }\n        return node;\n    }\n\n    static int extend_comparison(int\
+    \ relation,\n                                 int digit,\n                   \
+    \              int bound_digit) {\n        if (relation != 0) return relation;\n\
+    \        if (digit < bound_digit) return -1;\n        if (digit > bound_digit)\
+    \ return 1;\n        return 0;\n    }\n\n    Aggregate xor_range_impl(int node,\n\
+    \                             int position,\n                             UInt\
+    \ effective_xor,\n                             UInt lower,\n                 \
+    \            UInt upper,\n                             int lower_relation,\n \
+    \                            int upper_relation) const {\n        if (node ==\
+    \ -1 || nodes[node].count == 0 ||\n            lower_relation < 0 || upper_relation\
+    \ > 0) {\n            return {0, Monoid::id()};\n        }\n        if (lower_relation\
+    \ > 0 && upper_relation < 0) {\n            return {nodes[node].count, nodes[node].prod};\n\
+    \        }\n        if (position < 0) {\n            if (lower_relation >= 0 &&\
+    \ upper_relation < 0) {\n                return {nodes[node].count, nodes[node].prod};\n\
+    \            }\n            return {0, Monoid::id()};\n        }\n\n        Aggregate\
     \ result{0, Monoid::id()};\n        const int xor_digit = bit(effective_xor, position);\n\
     \        const int lower_digit = bit(lower, position);\n        const int upper_digit\
     \ = bit(upper, position);\n        for (int xor_result_digit = 0;\n          \
@@ -116,33 +118,41 @@ data:
     \ {\n        assert(keys.size() == values.size());\n        for (int i = 0; i\
     \ < int(keys.size()); ++i) {\n            insert(keys[i], values[i]);\n      \
     \  }\n    }\n\n    int size() const {\n        return nodes[0].count;\n    }\n\
-    \n    bool empty() const {\n        return size() == 0;\n    }\n\n    void clear()\
-    \ {\n        nodes.clear();\n        nodes.emplace_back();\n        lazy_xor =\
-    \ 0;\n    }\n\n    void insert(UInt key, const T& value) {\n        assert(valid_value(key));\n\
-    \        key ^= lazy_xor;\n        int node = 0;\n        ++nodes[node].count;\n\
-    \        nodes[node].prod = Monoid::op(nodes[node].prod, value);\n        for\
-    \ (int position = BitWidth - 1; position >= 0; --position) {\n            const\
-    \ int direction = bit(key, position);\n            if (nodes[node].child[direction]\
-    \ == -1) {\n                const int child = new_node();\n                nodes[node].child[direction]\
+    \n    bool empty() const {\n        return size() == 0;\n    }\n\n    node_id\
+    \ root() const {\n        return 0;\n    }\n\n    const Node& node(node_id id)\
+    \ const {\n        assert(0 <= id && std::size_t(id) < nodes.size());\n      \
+    \  return nodes[id];\n    }\n\n    node_id find(UInt key) const {\n        assert(valid_value(key));\n\
+    \        return find_node(key);\n    }\n\n    std::size_t node_count() const {\n\
+    \        return nodes.size();\n    }\n\n    void reserve(std::size_t node_capacity)\
+    \ {\n        nodes.reserve(node_capacity);\n    }\n\n    UInt xor_mask() const\
+    \ {\n        return lazy_xor;\n    }\n\n    void clear() {\n        nodes.clear();\n\
+    \        nodes.emplace_back();\n        lazy_xor = 0;\n    }\n\n    node_id insert(UInt\
+    \ key, const T& value) {\n        assert(valid_value(key));\n        key ^= lazy_xor;\n\
+    \        node_id node = 0;\n        ++nodes[node].count;\n        nodes[node].prod\
+    \ = Monoid::op(nodes[node].prod, value);\n        for (int position = BitWidth\
+    \ - 1; position >= 0; --position) {\n            const int direction = bit(key,\
+    \ position);\n            if (nodes[node].child[direction] == null_node) {\n \
+    \               const node_id child = new_node();\n                nodes[node].child[direction]\
     \ = child;\n            }\n            node = nodes[node].child[direction];\n\
     \            ++nodes[node].count;\n            nodes[node].prod = Monoid::op(nodes[node].prod,\
-    \ value);\n        }\n    }\n\n    int count(UInt key) const {\n        assert(valid_value(key));\n\
-    \        const int node = find_node(key);\n        return node == -1 ? 0 : nodes[node].count;\n\
-    \    }\n\n    bool contains(UInt key) const {\n        return count(key) > 0;\n\
-    \    }\n\n    T prod(UInt key) const {\n        assert(valid_value(key));\n  \
-    \      const int node = find_node(key);\n        return node == -1 ? Monoid::id()\
-    \ : nodes[node].prod;\n    }\n\n    T all_prod() const {\n        return nodes[0].prod;\n\
-    \    }\n\n    int erase_all(UInt key) {\n        assert(valid_value(key));\n \
-    \       key ^= lazy_xor;\n\n        int path[BitWidth + 1];\n        path[0] =\
-    \ 0;\n        int node = 0;\n        for (int position = BitWidth - 1, depth =\
-    \ 1;\n             position >= 0;\n             --position, ++depth) {\n     \
-    \       node = nodes[node].child[bit(key, position)];\n            if (node ==\
-    \ -1 || nodes[node].count == 0) return 0;\n            path[depth] = node;\n \
-    \       }\n\n        const int erased = nodes[node].count;\n        nodes[node].count\
-    \ = 0;\n        nodes[node].prod = Monoid::id();\n        for (int depth = BitWidth\
-    \ - 1; depth >= 0; --depth) {\n            update(path[depth]);\n        }\n \
-    \       return erased;\n    }\n\n    void xor_all(UInt value) {\n        assert(valid_value(value));\n\
-    \        lazy_xor ^= value;\n    }\n\n    UInt kth_xor(int k, UInt value) const\
+    \ value);\n        }\n        return node;\n    }\n\n    int count(UInt key) const\
+    \ {\n        assert(valid_value(key));\n        const node_id node = find_node(key);\n\
+    \        return node == null_node ? 0 : nodes[node].count;\n    }\n\n    bool\
+    \ contains(UInt key) const {\n        return count(key) > 0;\n    }\n\n    T prod(UInt\
+    \ key) const {\n        assert(valid_value(key));\n        const node_id node\
+    \ = find_node(key);\n        return node == null_node ? Monoid::id() : nodes[node].prod;\n\
+    \    }\n\n    T all_prod() const {\n        return nodes[0].prod;\n    }\n\n \
+    \   int erase_all(UInt key) {\n        assert(valid_value(key));\n        key\
+    \ ^= lazy_xor;\n\n        int path[BitWidth + 1];\n        path[0] = 0;\n    \
+    \    int node = 0;\n        for (int position = BitWidth - 1, depth = 1;\n   \
+    \          position >= 0;\n             --position, ++depth) {\n            node\
+    \ = nodes[node].child[bit(key, position)];\n            if (node == -1 || nodes[node].count\
+    \ == 0) return 0;\n            path[depth] = node;\n        }\n\n        const\
+    \ int erased = nodes[node].count;\n        nodes[node].count = 0;\n        nodes[node].prod\
+    \ = Monoid::id();\n        for (int depth = BitWidth - 1; depth >= 0; --depth)\
+    \ {\n            update(path[depth]);\n        }\n        return erased;\n   \
+    \ }\n\n    void xor_all(UInt value) {\n        assert(valid_value(value));\n \
+    \       lazy_xor ^= value;\n    }\n\n    UInt kth_xor(int k, UInt value) const\
     \ {\n        assert(0 <= k && k < size());\n        assert(valid_value(value));\n\
     \        const UInt effective_xor = lazy_xor ^ value;\n        UInt result = 0;\n\
     \        int node = 0;\n        for (int position = BitWidth - 1; position >=\
@@ -239,8 +249,14 @@ data:
     \n#include <iostream>\n#line 13 \"verify/ds/ordered_set/binary_trie_monoid.test.cpp\"\
     \n\nvoid basic_test() {\n    using Product = m1une::monoid::Mul<long long>;\n\
     \    using ProductTrie =\n        m1une::ds::BinaryTrieMonoid<Product, std::uint32_t,\
-    \ 10>;\n\n    ProductTrie product;\n    product.insert(1, 2);\n    product.insert(2,\
-    \ 3);\n    product.insert(7, 5);\n    product.insert(7, 11);\n\n    assert(product.size()\
+    \ 10>;\n\n    ProductTrie product;\n    product.reserve(64);\n    const auto one_node\
+    \ = product.insert(1, 2);\n    product.insert(2, 3);\n    product.insert(7, 5);\n\
+    \    const auto seven_node = product.insert(7, 11);\n\n    assert(product.root()\
+    \ == 0);\n    assert(product.find(1) == one_node);\n    assert(product.find(7)\
+    \ == seven_node);\n    assert(product.find(6) == ProductTrie::null_node);\n  \
+    \  assert(product.node(product.root()).count == 4);\n    assert(product.node(product.root()).prod\
+    \ == 330);\n    assert(product.node(seven_node).count == 2);\n    assert(product.node(seven_node).prod\
+    \ == 55);\n    assert(product.node_count() == 1 + 10 + 2 + 3);\n    assert(product.size()\
     \ == 4);\n    assert(product.count(7) == 2);\n    assert(product.prod(7) == 55);\n\
     \    assert(product.kth(0) == 1);\n    assert(product.kth(2) == 7);\n    assert(product.min()\
     \ == 1);\n    assert(product.max() == 7);\n    assert(product.kth_xor(0, 3) ==\
@@ -260,9 +276,11 @@ data:
     \ 7) == 1);\n    assert(product.prod_less(7) == 6);\n    assert(product.prod_less_equal(7)\
     \ == 330);\n    assert(product.prod_greater(2) == 55);\n    assert(product.prod_greater_equal(2)\
     \ == 165);\n    assert(product.prod_range(2, 7) == 3);\n\n    product.xor_all(6);\n\
+    \    assert(product.xor_mask() == 6);\n    assert(product.find(7 ^ 6) == seven_node);\n\
     \    assert(product.prod(7 ^ 6) == 55);\n    assert(product.prod_xor_less(5, 4)\
     \ == 6);\n    assert(product.erase_all(7 ^ 6) == 2);\n    assert(product.all_prod()\
-    \ == 6);\n    product.clear();\n    assert(product.empty());\n\n    std::vector<std::pair<std::uint32_t,\
+    \ == 6);\n    product.clear();\n    assert(product.empty());\n    assert(product.node_count()\
+    \ == 1);\n    assert(product.xor_mask() == 0);\n\n    std::vector<std::pair<std::uint32_t,\
     \ long long>> entries;\n    entries.emplace_back(4, 2);\n    entries.emplace_back(9,\
     \ 3);\n    ProductTrie from_range(entries.begin(), entries.end());\n    assert(from_range.all_prod()\
     \ == 6);\n}\n\nvoid randomized_test() {\n    using Sum = m1une::monoid::Add<long\
@@ -346,8 +364,14 @@ data:
     #include <cstdint>\n#include <iostream>\n#include <utility>\n#include <vector>\n\
     \nvoid basic_test() {\n    using Product = m1une::monoid::Mul<long long>;\n  \
     \  using ProductTrie =\n        m1une::ds::BinaryTrieMonoid<Product, std::uint32_t,\
-    \ 10>;\n\n    ProductTrie product;\n    product.insert(1, 2);\n    product.insert(2,\
-    \ 3);\n    product.insert(7, 5);\n    product.insert(7, 11);\n\n    assert(product.size()\
+    \ 10>;\n\n    ProductTrie product;\n    product.reserve(64);\n    const auto one_node\
+    \ = product.insert(1, 2);\n    product.insert(2, 3);\n    product.insert(7, 5);\n\
+    \    const auto seven_node = product.insert(7, 11);\n\n    assert(product.root()\
+    \ == 0);\n    assert(product.find(1) == one_node);\n    assert(product.find(7)\
+    \ == seven_node);\n    assert(product.find(6) == ProductTrie::null_node);\n  \
+    \  assert(product.node(product.root()).count == 4);\n    assert(product.node(product.root()).prod\
+    \ == 330);\n    assert(product.node(seven_node).count == 2);\n    assert(product.node(seven_node).prod\
+    \ == 55);\n    assert(product.node_count() == 1 + 10 + 2 + 3);\n    assert(product.size()\
     \ == 4);\n    assert(product.count(7) == 2);\n    assert(product.prod(7) == 55);\n\
     \    assert(product.kth(0) == 1);\n    assert(product.kth(2) == 7);\n    assert(product.min()\
     \ == 1);\n    assert(product.max() == 7);\n    assert(product.kth_xor(0, 3) ==\
@@ -367,9 +391,11 @@ data:
     \ 7) == 1);\n    assert(product.prod_less(7) == 6);\n    assert(product.prod_less_equal(7)\
     \ == 330);\n    assert(product.prod_greater(2) == 55);\n    assert(product.prod_greater_equal(2)\
     \ == 165);\n    assert(product.prod_range(2, 7) == 3);\n\n    product.xor_all(6);\n\
+    \    assert(product.xor_mask() == 6);\n    assert(product.find(7 ^ 6) == seven_node);\n\
     \    assert(product.prod(7 ^ 6) == 55);\n    assert(product.prod_xor_less(5, 4)\
     \ == 6);\n    assert(product.erase_all(7 ^ 6) == 2);\n    assert(product.all_prod()\
-    \ == 6);\n    product.clear();\n    assert(product.empty());\n\n    std::vector<std::pair<std::uint32_t,\
+    \ == 6);\n    product.clear();\n    assert(product.empty());\n    assert(product.node_count()\
+    \ == 1);\n    assert(product.xor_mask() == 0);\n\n    std::vector<std::pair<std::uint32_t,\
     \ long long>> entries;\n    entries.emplace_back(4, 2);\n    entries.emplace_back(9,\
     \ 3);\n    ProductTrie from_range(entries.begin(), entries.end());\n    assert(from_range.all_prod()\
     \ == 6);\n}\n\nvoid randomized_test() {\n    using Sum = m1une::monoid::Add<long\
@@ -455,7 +481,7 @@ data:
   isVerificationFile: true
   path: verify/ds/ordered_set/binary_trie_monoid.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-22 15:33:45+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/ordered_set/binary_trie_monoid.test.cpp

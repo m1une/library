@@ -17,44 +17,54 @@ data:
     \ = std::uint32_t, int BitWidth = std::numeric_limits<UInt>::digits>\nstruct BinaryTrie\
     \ {\n    static_assert(std::is_integral_v<UInt>);\n    static_assert(std::is_unsigned_v<UInt>);\n\
     \    static_assert(!std::is_same_v<UInt, bool>);\n    static_assert(0 < BitWidth);\n\
-    \    static_assert(BitWidth <= std::numeric_limits<UInt>::digits);\n\n   private:\n\
-    \    struct Node {\n        int child[2];\n        int count;\n\n        Node()\
-    \ : child{-1, -1}, count(0) {}\n    };\n\n    std::vector<Node> nodes;\n    UInt\
-    \ lazy_xor;\n\n    static constexpr int bit(UInt value, int position) {\n    \
-    \    return int((value >> position) & UInt(1));\n    }\n\n    static constexpr\
+    \    static_assert(BitWidth <= std::numeric_limits<UInt>::digits);\n\n    using\
+    \ node_id = int;\n    static constexpr node_id null_node = -1;\n\n    struct Node\
+    \ {\n        node_id child[2];\n        int count;\n\n        Node() : child{null_node,\
+    \ null_node}, count(0) {}\n    };\n\n   private:\n    std::vector<Node> nodes;\n\
+    \    UInt lazy_xor;\n\n    static constexpr int bit(UInt value, int position)\
+    \ {\n        return int((value >> position) & UInt(1));\n    }\n\n    static constexpr\
     \ UInt value_mask() {\n        if constexpr (BitWidth == std::numeric_limits<UInt>::digits)\
     \ {\n            return std::numeric_limits<UInt>::max();\n        } else {\n\
     \            return (UInt(1) << BitWidth) - UInt(1);\n        }\n    }\n\n   \
     \ static constexpr bool valid_value(UInt value) {\n        return (value & ~value_mask())\
-    \ == UInt(0);\n    }\n\n    int new_node() {\n        nodes.emplace_back();\n\
-    \        return int(nodes.size()) - 1;\n    }\n\n    int subtree_size(int node)\
-    \ const {\n        return node == -1 ? 0 : nodes[node].count;\n    }\n\n    int\
-    \ find_node(UInt value) const {\n        int node = 0;\n        value ^= lazy_xor;\n\
-    \        for (int position = BitWidth - 1; position >= 0; --position) {\n    \
-    \        node = nodes[node].child[bit(value, position)];\n            if (node\
-    \ == -1 || nodes[node].count == 0) return -1;\n        }\n        return node;\n\
-    \    }\n\n   public:\n    BinaryTrie() : nodes(1), lazy_xor(0) {}\n\n    BinaryTrie(std::initializer_list<UInt>\
+    \ == UInt(0);\n    }\n\n    node_id new_node() {\n        nodes.emplace_back();\n\
+    \        return int(nodes.size()) - 1;\n    }\n\n    int subtree_size(node_id\
+    \ node) const {\n        return node == null_node ? 0 : nodes[node].count;\n \
+    \   }\n\n    node_id find_node(UInt value) const {\n        node_id node = 0;\n\
+    \        value ^= lazy_xor;\n        for (int position = BitWidth - 1; position\
+    \ >= 0; --position) {\n            node = nodes[node].child[bit(value, position)];\n\
+    \            if (node == null_node || nodes[node].count == 0) {\n            \
+    \    return null_node;\n            }\n        }\n        return node;\n    }\n\
+    \n   public:\n    BinaryTrie() : nodes(1), lazy_xor(0) {}\n\n    BinaryTrie(std::initializer_list<UInt>\
     \ init) : BinaryTrie() {\n        for (UInt value : init) insert(value);\n   \
     \ }\n\n    template <typename Iterator>\n    BinaryTrie(Iterator first, Iterator\
     \ last) : BinaryTrie() {\n        while (first != last) {\n            insert(*first);\n\
     \            ++first;\n        }\n    }\n\n    int size() const {\n        return\
     \ nodes[0].count;\n    }\n\n    bool empty() const {\n        return size() ==\
-    \ 0;\n    }\n\n    void clear() {\n        nodes.clear();\n        nodes.emplace_back();\n\
-    \        lazy_xor = 0;\n    }\n\n    void insert(UInt value, int multiplicity\
-    \ = 1) {\n        assert(valid_value(value));\n        assert(multiplicity > 0);\n\
-    \        value ^= lazy_xor;\n        int node = 0;\n        nodes[node].count\
+    \ 0;\n    }\n\n    node_id root() const {\n        return 0;\n    }\n\n    const\
+    \ Node& node(node_id id) const {\n        assert(0 <= id && std::size_t(id) <\
+    \ nodes.size());\n        return nodes[id];\n    }\n\n    node_id find(UInt value)\
+    \ const {\n        assert(valid_value(value));\n        return find_node(value);\n\
+    \    }\n\n    std::size_t node_count() const {\n        return nodes.size();\n\
+    \    }\n\n    void reserve(std::size_t node_capacity) {\n        nodes.reserve(node_capacity);\n\
+    \    }\n\n    UInt xor_mask() const {\n        return lazy_xor;\n    }\n\n   \
+    \ void clear() {\n        nodes.clear();\n        nodes.emplace_back();\n    \
+    \    lazy_xor = 0;\n    }\n\n    node_id insert(UInt value, int multiplicity =\
+    \ 1) {\n        assert(valid_value(value));\n        assert(multiplicity > 0);\n\
+    \        value ^= lazy_xor;\n        node_id node = 0;\n        nodes[node].count\
     \ += multiplicity;\n        for (int position = BitWidth - 1; position >= 0; --position)\
     \ {\n            const int direction = bit(value, position);\n            if (nodes[node].child[direction]\
-    \ == -1) {\n                const int child = new_node();\n                nodes[node].child[direction]\
-    \ = child;\n            }\n            node = nodes[node].child[direction];\n\
-    \            nodes[node].count += multiplicity;\n        }\n    }\n\n    int count(UInt\
-    \ value) const {\n        assert(valid_value(value));\n        const int node\
-    \ = find_node(value);\n        return node == -1 ? 0 : nodes[node].count;\n  \
-    \  }\n\n    bool contains(UInt value) const {\n        return count(value) > 0;\n\
-    \    }\n\n    bool erase_one(UInt value) {\n        assert(valid_value(value));\n\
-    \        if (!contains(value)) return false;\n        value ^= lazy_xor;\n   \
-    \     int node = 0;\n        --nodes[node].count;\n        for (int position =\
-    \ BitWidth - 1; position >= 0; --position) {\n            node = nodes[node].child[bit(value,\
+    \ == null_node) {\n                const node_id child = new_node();\n       \
+    \         nodes[node].child[direction] = child;\n            }\n            node\
+    \ = nodes[node].child[direction];\n            nodes[node].count += multiplicity;\n\
+    \        }\n        return node;\n    }\n\n    int count(UInt value) const {\n\
+    \        assert(valid_value(value));\n        const node_id node = find_node(value);\n\
+    \        return node == null_node ? 0 : nodes[node].count;\n    }\n\n    bool\
+    \ contains(UInt value) const {\n        return count(value) > 0;\n    }\n\n  \
+    \  bool erase_one(UInt value) {\n        assert(valid_value(value));\n       \
+    \ if (!contains(value)) return false;\n        value ^= lazy_xor;\n        int\
+    \ node = 0;\n        --nodes[node].count;\n        for (int position = BitWidth\
+    \ - 1; position >= 0; --position) {\n            node = nodes[node].child[bit(value,\
     \ position)];\n            --nodes[node].count;\n        }\n        return true;\n\
     \    }\n\n    bool erase(UInt value) {\n        return erase_one(value);\n   \
     \ }\n\n    int erase_all(UInt value) {\n        assert(valid_value(value));\n\
@@ -117,44 +127,54 @@ data:
     \ ds {\n\ntemplate <typename UInt = std::uint32_t, int BitWidth = std::numeric_limits<UInt>::digits>\n\
     struct BinaryTrie {\n    static_assert(std::is_integral_v<UInt>);\n    static_assert(std::is_unsigned_v<UInt>);\n\
     \    static_assert(!std::is_same_v<UInt, bool>);\n    static_assert(0 < BitWidth);\n\
-    \    static_assert(BitWidth <= std::numeric_limits<UInt>::digits);\n\n   private:\n\
-    \    struct Node {\n        int child[2];\n        int count;\n\n        Node()\
-    \ : child{-1, -1}, count(0) {}\n    };\n\n    std::vector<Node> nodes;\n    UInt\
-    \ lazy_xor;\n\n    static constexpr int bit(UInt value, int position) {\n    \
-    \    return int((value >> position) & UInt(1));\n    }\n\n    static constexpr\
+    \    static_assert(BitWidth <= std::numeric_limits<UInt>::digits);\n\n    using\
+    \ node_id = int;\n    static constexpr node_id null_node = -1;\n\n    struct Node\
+    \ {\n        node_id child[2];\n        int count;\n\n        Node() : child{null_node,\
+    \ null_node}, count(0) {}\n    };\n\n   private:\n    std::vector<Node> nodes;\n\
+    \    UInt lazy_xor;\n\n    static constexpr int bit(UInt value, int position)\
+    \ {\n        return int((value >> position) & UInt(1));\n    }\n\n    static constexpr\
     \ UInt value_mask() {\n        if constexpr (BitWidth == std::numeric_limits<UInt>::digits)\
     \ {\n            return std::numeric_limits<UInt>::max();\n        } else {\n\
     \            return (UInt(1) << BitWidth) - UInt(1);\n        }\n    }\n\n   \
     \ static constexpr bool valid_value(UInt value) {\n        return (value & ~value_mask())\
-    \ == UInt(0);\n    }\n\n    int new_node() {\n        nodes.emplace_back();\n\
-    \        return int(nodes.size()) - 1;\n    }\n\n    int subtree_size(int node)\
-    \ const {\n        return node == -1 ? 0 : nodes[node].count;\n    }\n\n    int\
-    \ find_node(UInt value) const {\n        int node = 0;\n        value ^= lazy_xor;\n\
-    \        for (int position = BitWidth - 1; position >= 0; --position) {\n    \
-    \        node = nodes[node].child[bit(value, position)];\n            if (node\
-    \ == -1 || nodes[node].count == 0) return -1;\n        }\n        return node;\n\
-    \    }\n\n   public:\n    BinaryTrie() : nodes(1), lazy_xor(0) {}\n\n    BinaryTrie(std::initializer_list<UInt>\
+    \ == UInt(0);\n    }\n\n    node_id new_node() {\n        nodes.emplace_back();\n\
+    \        return int(nodes.size()) - 1;\n    }\n\n    int subtree_size(node_id\
+    \ node) const {\n        return node == null_node ? 0 : nodes[node].count;\n \
+    \   }\n\n    node_id find_node(UInt value) const {\n        node_id node = 0;\n\
+    \        value ^= lazy_xor;\n        for (int position = BitWidth - 1; position\
+    \ >= 0; --position) {\n            node = nodes[node].child[bit(value, position)];\n\
+    \            if (node == null_node || nodes[node].count == 0) {\n            \
+    \    return null_node;\n            }\n        }\n        return node;\n    }\n\
+    \n   public:\n    BinaryTrie() : nodes(1), lazy_xor(0) {}\n\n    BinaryTrie(std::initializer_list<UInt>\
     \ init) : BinaryTrie() {\n        for (UInt value : init) insert(value);\n   \
     \ }\n\n    template <typename Iterator>\n    BinaryTrie(Iterator first, Iterator\
     \ last) : BinaryTrie() {\n        while (first != last) {\n            insert(*first);\n\
     \            ++first;\n        }\n    }\n\n    int size() const {\n        return\
     \ nodes[0].count;\n    }\n\n    bool empty() const {\n        return size() ==\
-    \ 0;\n    }\n\n    void clear() {\n        nodes.clear();\n        nodes.emplace_back();\n\
-    \        lazy_xor = 0;\n    }\n\n    void insert(UInt value, int multiplicity\
-    \ = 1) {\n        assert(valid_value(value));\n        assert(multiplicity > 0);\n\
-    \        value ^= lazy_xor;\n        int node = 0;\n        nodes[node].count\
+    \ 0;\n    }\n\n    node_id root() const {\n        return 0;\n    }\n\n    const\
+    \ Node& node(node_id id) const {\n        assert(0 <= id && std::size_t(id) <\
+    \ nodes.size());\n        return nodes[id];\n    }\n\n    node_id find(UInt value)\
+    \ const {\n        assert(valid_value(value));\n        return find_node(value);\n\
+    \    }\n\n    std::size_t node_count() const {\n        return nodes.size();\n\
+    \    }\n\n    void reserve(std::size_t node_capacity) {\n        nodes.reserve(node_capacity);\n\
+    \    }\n\n    UInt xor_mask() const {\n        return lazy_xor;\n    }\n\n   \
+    \ void clear() {\n        nodes.clear();\n        nodes.emplace_back();\n    \
+    \    lazy_xor = 0;\n    }\n\n    node_id insert(UInt value, int multiplicity =\
+    \ 1) {\n        assert(valid_value(value));\n        assert(multiplicity > 0);\n\
+    \        value ^= lazy_xor;\n        node_id node = 0;\n        nodes[node].count\
     \ += multiplicity;\n        for (int position = BitWidth - 1; position >= 0; --position)\
     \ {\n            const int direction = bit(value, position);\n            if (nodes[node].child[direction]\
-    \ == -1) {\n                const int child = new_node();\n                nodes[node].child[direction]\
-    \ = child;\n            }\n            node = nodes[node].child[direction];\n\
-    \            nodes[node].count += multiplicity;\n        }\n    }\n\n    int count(UInt\
-    \ value) const {\n        assert(valid_value(value));\n        const int node\
-    \ = find_node(value);\n        return node == -1 ? 0 : nodes[node].count;\n  \
-    \  }\n\n    bool contains(UInt value) const {\n        return count(value) > 0;\n\
-    \    }\n\n    bool erase_one(UInt value) {\n        assert(valid_value(value));\n\
-    \        if (!contains(value)) return false;\n        value ^= lazy_xor;\n   \
-    \     int node = 0;\n        --nodes[node].count;\n        for (int position =\
-    \ BitWidth - 1; position >= 0; --position) {\n            node = nodes[node].child[bit(value,\
+    \ == null_node) {\n                const node_id child = new_node();\n       \
+    \         nodes[node].child[direction] = child;\n            }\n            node\
+    \ = nodes[node].child[direction];\n            nodes[node].count += multiplicity;\n\
+    \        }\n        return node;\n    }\n\n    int count(UInt value) const {\n\
+    \        assert(valid_value(value));\n        const node_id node = find_node(value);\n\
+    \        return node == null_node ? 0 : nodes[node].count;\n    }\n\n    bool\
+    \ contains(UInt value) const {\n        return count(value) > 0;\n    }\n\n  \
+    \  bool erase_one(UInt value) {\n        assert(valid_value(value));\n       \
+    \ if (!contains(value)) return false;\n        value ^= lazy_xor;\n        int\
+    \ node = 0;\n        --nodes[node].count;\n        for (int position = BitWidth\
+    \ - 1; position >= 0; --position) {\n            node = nodes[node].child[bit(value,\
     \ position)];\n            --nodes[node].count;\n        }\n        return true;\n\
     \    }\n\n    bool erase(UInt value) {\n        return erase_one(value);\n   \
     \ }\n\n    int erase_all(UInt value) {\n        assert(valid_value(value));\n\
@@ -215,7 +235,7 @@ data:
   isVerificationFile: false
   path: ds/ordered_set/binary_trie.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:41:47+09:00'
+  timestamp: '2026-06-22 15:33:45+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/ordered_set/binary_trie.test.cpp
@@ -254,8 +274,14 @@ Let $B$ be `BitWidth`.
 | `BinaryTrie(Iterator first, Iterator last)` | Constructs a trie from a range. | $O(NB)$ |
 | `int size() const` | Returns the number of values, including duplicates. | $O(1)$ |
 | `bool empty() const` | Returns whether the trie is empty. | $O(1)$ |
+| `node_id root() const` | Returns the root node handle. | $O(1)$ |
+| `node_id find(UInt value) const` | Returns the leaf handle for `value`, or `null_node` if absent. | $O(B)$ |
+| `const Node& node(node_id id) const` | Returns a read-only view of a node. | $O(1)$ |
+| `size_t node_count() const` | Returns allocated nodes, including the root. | $O(1)$ |
+| `void reserve(size_t n)` | Reserves storage for approximately `n` nodes. | $O(K)$ |
+| `UInt xor_mask() const` | Returns the current lazy xor mask. | $O(1)$ |
 | `void clear()` | Removes every value and resets the lazy xor. | $O(1)$ |
-| `void insert(UInt value, int multiplicity = 1)` | Inserts `multiplicity` copies of `value`. | $O(B)$ |
+| `node_id insert(UInt value, int multiplicity = 1)` | Inserts copies of `value` and returns its leaf handle. | $O(B)$ |
 | `bool erase_one(UInt value)`, `bool erase(UInt value)` | Removes one copy and returns whether one existed. | $O(B)$ |
 | `int erase_all(UInt value)` | Removes every copy and returns the number removed. | $O(B)$ |
 | `int count(UInt value) const` | Returns the multiplicity of `value`. | $O(B)$ |
@@ -278,6 +304,18 @@ Let $B$ be `BitWidth`.
 
 `count_less_xor(value, upper)` is a compatibility alias for
 `count_xor_less(value, upper)`.
+
+`node_id` is an integer handle and `null_node` is its invalid value. A `Node`
+exposes `child[2]` and `count`. Handles remain valid across insertions and
+erasures and can index user-owned metadata; `clear()` invalidates every old
+handle except the root. References returned by `node()` may be invalidated by
+insertion, `reserve()`, or `clear()`.
+
+The child links describe the physically stored bit paths. After `xor_all`,
+logical values differ by `xor_mask()`; `find(value)` accounts for this mask
+automatically.
+
+Here $K$ is the allocated node count. Erasing does not reclaim nodes.
 
 ## Example
 
