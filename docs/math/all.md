@@ -26,6 +26,7 @@ You usually do not need to include this entire bundle:
   for a sieve.
 * Use `number_theory.hpp` for modular inverses, simultaneous remainder
   constraints, and sums involving floor division.
+* Use `integer_arithmetic.hpp` for exact integer square roots and powers.
 
 `math/all.hpp` is convenient during a contest when compile time and including a
 few unused headers do not matter.
@@ -36,6 +37,7 @@ few unused headers do not matter.
 | --- | --- |
 | `math/bitwise_convolution.hpp` | OR, AND, XOR convolutions and the Walsh-Hadamard transform. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
+| `math/integer_arithmetic.hpp` | Exact integer square roots and overflow-aware powers. |
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |
 | `math/combinatorial_sequences.hpp` | Fast standard counting sequences and special numbers. |
