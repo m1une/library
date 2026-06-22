@@ -565,11 +565,17 @@ data:
       path: optimization/all.hpp
       title: Optimization All
     - icon: ':heavy_check_mark:'
+      path: optimization/convex_hull_trick.hpp
+      title: Convex Hull Trick
+    - icon: ':heavy_check_mark:'
       path: optimization/hungarian.hpp
       title: Hungarian Algorithm
     - icon: ':heavy_check_mark:'
       path: optimization/integer_lp.hpp
       title: Integer Linear Programming
+    - icon: ':heavy_check_mark:'
+      path: optimization/li_chao_tree.hpp
+      title: Li Chao Tree
     - icon: ':heavy_check_mark:'
       path: optimization/project_selection.hpp
       title: Project Selection
@@ -1022,11 +1028,17 @@ data:
       path: verify/optimization/alien_trick.test.cpp
       title: verify/optimization/alien_trick.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/optimization/convex_hull_trick.test.cpp
+      title: verify/optimization/convex_hull_trick.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/optimization/hungarian.test.cpp
       title: verify/optimization/hungarian.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/optimization/integer_lp.test.cpp
       title: verify/optimization/integer_lp.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/optimization/li_chao_tree.test.cpp
+      title: verify/optimization/li_chao_tree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/optimization/project_selection.test.cpp
       title: verify/optimization/project_selection.test.cpp
