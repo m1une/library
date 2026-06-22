@@ -11,6 +11,7 @@ documentation_of: ../../geometry/all.hpp
 
 | Header | Contents |
 | --- | --- |
+| `geometry/angle_sort.hpp` | Atan-free counterclockwise angle sorting around an arbitrary origin. |
 | `geometry/point.hpp` | Points, vectors, dot/cross products, exact orientation, distance, and rotation. |
 | `geometry/farthest_pair.hpp` | Euclidean farthest pair with original indices in $O(N\log N)$. |
 | `geometry/manhattan_mst.hpp` | Manhattan minimum spanning tree for integral points in $O(N\log N)$. |

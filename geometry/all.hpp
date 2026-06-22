@@ -1,6 +1,7 @@
 #ifndef M1UNE_GEOMETRY_ALL_HPP
 #define M1UNE_GEOMETRY_ALL_HPP 1
 
+#include "angle_sort.hpp"
 #include "circle.hpp"
 #include "farthest_pair.hpp"
 #include "line.hpp"
