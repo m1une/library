@@ -5,5 +5,6 @@
 #include "integer_lp.hpp"
 #include "project_selection.hpp"
 #include "simplex.hpp"
+#include "slope_trick.hpp"
 
 #endif  // M1UNE_OPTIMIZATION_ALL_HPP
