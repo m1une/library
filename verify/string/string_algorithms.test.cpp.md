@@ -42,68 +42,87 @@ data:
     namespace m1une {\nnamespace string {\n\n// Aho-Corasick automaton for a contiguous\
     \ character alphabet.\ntemplate <int AlphabetSize = 26, int FirstCharacter = 'a'>\n\
     struct AhoCorasick {\n    static_assert(0 < AlphabetSize);\n\n    using node_id\
-    \ = int;\n\n    struct Node {\n        std::array<node_id, AlphabetSize> next;\n\
-    \        node_id failure;\n        node_id output_link;\n        std::vector<int>\
-    \ pattern_ids;\n\n        Node() : failure(0), output_link(-1) {\n           \
-    \ next.fill(-1);\n        }\n    };\n\n   private:\n    std::vector<Node> _nodes;\n\
-    \    std::vector<int> _pattern_length;\n    std::vector<node_id> _bfs_order;\n\
-    \    bool _built;\n\n    template <class Symbol>\n    static int symbol_index(const\
-    \ Symbol& symbol) {\n        int index = int(symbol) - FirstCharacter;\n     \
-    \   assert(0 <= index && index < AlphabetSize);\n        return index;\n    }\n\
-    \n    node_id new_node() {\n        assert(_nodes.size() < std::size_t(std::numeric_limits<int>::max()));\n\
-    \        _nodes.emplace_back();\n        return int(_nodes.size()) - 1;\n    }\n\
-    \n   public:\n    AhoCorasick() : _nodes(1), _built(false) {}\n\n    node_id root()\
+    \ = int;\n    static constexpr node_id null_node = -1;\n\n    struct Node {\n\
+    \        // Completed automaton transitions. Valid after build().\n        std::array<node_id,\
+    \ AlphabetSize> next;\n        node_id failure;\n        node_id output_link;\n\
+    \        node_id parent;\n        int parent_symbol;\n        int depth;\n   \
+    \     std::vector<node_id> children;\n        std::vector<node_id> failure_children;\n\
+    \        std::vector<int> pattern_ids;\n\n        Node(\n            node_id parent_value\
+    \ = null_node,\n            int parent_symbol_value = -1,\n            int depth_value\
+    \ = 0\n        ) : failure(0),\n            output_link(null_node),\n        \
+    \    parent(parent_value),\n            parent_symbol(parent_symbol_value),\n\
+    \            depth(depth_value) {\n            next.fill(null_node);\n       \
+    \ }\n    };\n\n   private:\n    std::vector<Node> _nodes;\n    std::vector<int>\
+    \ _pattern_length;\n    std::vector<node_id> _pattern_node;\n    std::vector<node_id>\
+    \ _bfs_order;\n    bool _built;\n\n    template <class Symbol>\n    static int\
+    \ symbol_index(const Symbol& symbol) {\n        int index = int(symbol) - FirstCharacter;\n\
+    \        assert(0 <= index && index < AlphabetSize);\n        return index;\n\
+    \    }\n\n    node_id new_node(node_id parent, int parent_symbol) {\n        assert(_nodes.size()\
+    \ < std::size_t(std::numeric_limits<int>::max()));\n        assert(_nodes[parent].depth\
+    \ < std::numeric_limits<int>::max());\n        _nodes.emplace_back(parent, parent_symbol,\
+    \ _nodes[parent].depth + 1);\n        return int(_nodes.size()) - 1;\n    }\n\n\
+    \   public:\n    AhoCorasick() : _nodes(1), _built(false) {}\n\n    node_id root()\
     \ const {\n        return 0;\n    }\n\n    bool built() const {\n        return\
     \ _built;\n    }\n\n    int pattern_count() const {\n        return int(_pattern_length.size());\n\
     \    }\n\n    int pattern_length(int pattern_id) const {\n        assert(0 <=\
     \ pattern_id && pattern_id < pattern_count());\n        return _pattern_length[pattern_id];\n\
+    \    }\n\n    node_id pattern_node(int pattern_id) const {\n        assert(0 <=\
+    \ pattern_id && pattern_id < pattern_count());\n        return _pattern_node[pattern_id];\n\
     \    }\n\n    std::size_t node_count() const {\n        return _nodes.size();\n\
+    \    }\n\n    const std::vector<Node>& nodes() const {\n        return _nodes;\n\
     \    }\n\n    const Node& node(node_id id) const {\n        assert(0 <= id &&\
     \ std::size_t(id) < _nodes.size());\n        return _nodes[id];\n    }\n\n   \
-    \ void reserve(std::size_t node_capacity) {\n        assert(!_built);\n      \
-    \  _nodes.reserve(node_capacity);\n    }\n\n    void clear() {\n        _nodes.clear();\n\
-    \        _nodes.emplace_back();\n        _pattern_length.clear();\n        _bfs_order.clear();\n\
+    \ // Returns nodes in failure-link BFS order, beginning with the root.\n    const\
+    \ std::vector<node_id>& bfs_order() const {\n        assert(_built);\n       \
+    \ return _bfs_order;\n    }\n\n    void reserve(std::size_t node_capacity) {\n\
+    \        assert(!_built);\n        _nodes.reserve(node_capacity);\n    }\n\n \
+    \   void clear() {\n        _nodes.clear();\n        _nodes.emplace_back();\n\
+    \        _pattern_length.clear();\n        _pattern_node.clear();\n        _bfs_order.clear();\n\
     \        _built = false;\n    }\n\n    // Inserts a pattern and returns its insertion-order\
     \ ID.\n    template <class Sequence>\n    int insert(const Sequence& pattern)\
     \ {\n        assert(!_built);\n        int pattern_id = pattern_count();\n   \
     \     int length = 0;\n        node_id state = root();\n        for (const auto&\
     \ symbol : pattern) {\n            assert(length < std::numeric_limits<int>::max());\n\
     \            int index = symbol_index(symbol);\n            if (_nodes[state].next[index]\
-    \ == -1) {\n                node_id child = new_node();\n                _nodes[state].next[index]\
-    \ = child;\n            }\n            state = _nodes[state].next[index];\n  \
-    \          length++;\n        }\n        _nodes[state].pattern_ids.push_back(pattern_id);\n\
-    \        _pattern_length.push_back(length);\n        return pattern_id;\n    }\n\
-    \n    // Builds failure links and completes every automaton transition.\n    void\
-    \ build() {\n        assert(!_built);\n        std::queue<node_id> queue;\n  \
-    \      _bfs_order.clear();\n        _bfs_order.reserve(_nodes.size());\n     \
-    \   _bfs_order.push_back(root());\n\n        for (int symbol = 0; symbol < AlphabetSize;\
-    \ ++symbol) {\n            node_id child = _nodes[root()].next[symbol];\n    \
-    \        if (child == -1) {\n                _nodes[root()].next[symbol] = root();\n\
-    \            } else {\n                _nodes[child].failure = root();\n     \
-    \           _nodes[child].output_link =\n                    _nodes[root()].pattern_ids.empty()\
-    \ ? -1 : root();\n                queue.push(child);\n            }\n        }\n\
-    \n        while (!queue.empty()) {\n            node_id state = queue.front();\n\
-    \            queue.pop();\n            _bfs_order.push_back(state);\n\n      \
-    \      for (int symbol = 0; symbol < AlphabetSize; ++symbol) {\n             \
-    \   node_id child = _nodes[state].next[symbol];\n                if (child ==\
-    \ -1) {\n                    _nodes[state].next[symbol] =\n                  \
-    \      _nodes[_nodes[state].failure].next[symbol];\n                    continue;\n\
-    \                }\n\n                node_id failure =\n                    _nodes[_nodes[state].failure].next[symbol];\n\
+    \ == null_node) {\n                node_id child = new_node(state, index);\n \
+    \               _nodes[state].next[index] = child;\n                _nodes[state].children.push_back(child);\n\
+    \            }\n            state = _nodes[state].next[index];\n            length++;\n\
+    \        }\n        _nodes[state].pattern_ids.push_back(pattern_id);\n       \
+    \ _pattern_length.push_back(length);\n        _pattern_node.push_back(state);\n\
+    \        return pattern_id;\n    }\n\n    // Builds failure links and completes\
+    \ every automaton transition.\n    void build() {\n        assert(!_built);\n\
+    \        std::queue<node_id> queue;\n        _bfs_order.clear();\n        _bfs_order.reserve(_nodes.size());\n\
+    \        _bfs_order.push_back(root());\n\n        for (int symbol = 0; symbol\
+    \ < AlphabetSize; ++symbol) {\n            node_id child = _nodes[root()].next[symbol];\n\
+    \            if (child == null_node) {\n                _nodes[root()].next[symbol]\
+    \ = root();\n            } else {\n                _nodes[root()].next[symbol]\
+    \ = child;\n                _nodes[child].failure = root();\n                _nodes[child].output_link\
+    \ =\n                    _nodes[root()].pattern_ids.empty() ? null_node : root();\n\
+    \                _nodes[root()].failure_children.push_back(child);\n         \
+    \       queue.push(child);\n            }\n        }\n\n        while (!queue.empty())\
+    \ {\n            node_id state = queue.front();\n            queue.pop();\n  \
+    \          _bfs_order.push_back(state);\n\n            for (int symbol = 0; symbol\
+    \ < AlphabetSize; ++symbol) {\n                node_id child = _nodes[state].next[symbol];\n\
+    \                if (child == null_node) {\n                    _nodes[state].next[symbol]\
+    \ =\n                        _nodes[_nodes[state].failure].next[symbol];\n   \
+    \                 continue;\n                }\n\n                _nodes[state].next[symbol]\
+    \ = child;\n                node_id failure =\n                    _nodes[_nodes[state].failure].next[symbol];\n\
     \                _nodes[child].failure = failure;\n                _nodes[child].output_link\
     \ =\n                    _nodes[failure].pattern_ids.empty()\n               \
     \         ? _nodes[failure].output_link\n                        : failure;\n\
-    \                queue.push(child);\n            }\n        }\n        _built\
-    \ = true;\n    }\n\n    template <class Symbol>\n    node_id transition(node_id\
-    \ state, const Symbol& symbol) const {\n        assert(_built);\n        assert(0\
-    \ <= state && std::size_t(state) < _nodes.size());\n        return _nodes[state].next[symbol_index(symbol)];\n\
+    \                _nodes[failure].failure_children.push_back(child);\n        \
+    \        queue.push(child);\n            }\n        }\n        _built = true;\n\
+    \    }\n\n    template <class Symbol>\n    node_id transition(node_id state, const\
+    \ Symbol& symbol) const {\n        assert(_built);\n        assert(0 <= state\
+    \ && std::size_t(state) < _nodes.size());\n        return _nodes[state].next[symbol_index(symbol)];\n\
     \    }\n\n    // Calls callback(pattern_id) for every pattern ending at `state`.\n\
     \    template <class Callback>\n    void for_each_output(node_id state, Callback\
     \ callback) const {\n        assert(_built);\n        assert(0 <= state && std::size_t(state)\
-    \ < _nodes.size());\n        while (state != -1) {\n            for (int pattern_id\
-    \ : _nodes[state].pattern_ids) {\n                callback(pattern_id);\n    \
-    \        }\n            state = _nodes[state].output_link;\n        }\n    }\n\
-    \n    // Calls callback(end, pattern_id) for every occurrence. `end` is the\n\
-    \    // exclusive end position. Empty patterns occur at every text boundary.\n\
+    \ < _nodes.size());\n        while (state != null_node) {\n            for (int\
+    \ pattern_id : _nodes[state].pattern_ids) {\n                callback(pattern_id);\n\
+    \            }\n            state = _nodes[state].output_link;\n        }\n  \
+    \  }\n\n    // Calls callback(end, pattern_id) for every occurrence. `end` is\
+    \ the\n    // exclusive end position. Empty patterns occur at every text boundary.\n\
     \    template <class Sequence, class Callback>\n    void match(const Sequence&\
     \ text, Callback callback) const {\n        assert(_built);\n        node_id state\
     \ = root();\n        for_each_output(state, [&callback](int pattern_id) {\n  \
@@ -513,7 +532,7 @@ data:
   isVerificationFile: true
   path: verify/string/string_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 01:53:49+09:00'
+  timestamp: '2026-06-23 02:00:16+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/string_algorithms.test.cpp
