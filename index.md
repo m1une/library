@@ -544,6 +544,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: optimization/simplex.hpp
       title: Simplex Algorithm
+    - icon: ':heavy_check_mark:'
+      path: optimization/slope_trick.hpp
+      title: Slope Trick
   - name: sequence
     pages:
     - icon: ':heavy_check_mark:'
@@ -960,6 +963,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/optimization/simplex.test.cpp
       title: verify/optimization/simplex.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/optimization/slope_trick.test.cpp
+      title: verify/optimization/slope_trick.test.cpp
   - name: verify/sequence
     pages:
     - icon: ':heavy_check_mark:'

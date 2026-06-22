@@ -18,6 +18,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/optimization/simplex.test.cpp
     title: verify/optimization/simplex.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/optimization/slope_trick.test.cpp
+    title: verify/optimization/slope_trick.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -278,6 +281,7 @@ data:
   verifiedWith:
   - verify/optimization/project_selection.test.cpp
   - verify/optimization/integer_lp.test.cpp
+  - verify/optimization/slope_trick.test.cpp
   - verify/optimization/simplex.test.cpp
 documentation_of: optimization/project_selection.hpp
 layout: document
