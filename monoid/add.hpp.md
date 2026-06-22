@@ -25,6 +25,9 @@ data:
     path: verify/ds/range_query/disjoint_sparse_table.test.cpp
     title: verify/ds/range_query/disjoint_sparse_table.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/range_query/sqrt_tree.test.cpp
+    title: verify/ds/range_query/sqrt_tree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
     title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
@@ -77,6 +80,7 @@ data:
   - verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp
+  - verify/ds/range_query/sqrt_tree.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
   - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/persistent_dual_segtree.test.cpp

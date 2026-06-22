@@ -30,6 +30,9 @@ data:
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
   - icon: ':heavy_check_mark:'
+    path: ds/range_query/sqrt_tree.hpp
+    title: Sqrt Tree
+  - icon: ':heavy_check_mark:'
     path: ds/segtree/dual_segtree.hpp
     title: Dual Segment Tree
   - icon: ':heavy_check_mark:'
@@ -96,6 +99,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/range_query/sparse_table.test.cpp
     title: verify/ds/range_query/sparse_table.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/range_query/sqrt_tree.test.cpp
+    title: verify/ds/range_query/sqrt_tree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/dual_segtree.test.cpp
     title: verify/ds/segtree/dual_segtree.test.cpp
@@ -173,6 +179,7 @@ data:
   - ds/ordered_set/binary_trie_monoid.hpp
   - ds/range_query/disjoint_sparse_table.hpp
   - ds/range_query/sparse_table.hpp
+  - ds/range_query/sqrt_tree.hpp
   - ds/segtree/persistent_dynamic_dual_segtree.hpp
   - ds/segtree/segtree.hpp
   - ds/segtree/segtree_2d.hpp
@@ -194,6 +201,7 @@ data:
   - verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp
+  - verify/ds/range_query/sqrt_tree.test.cpp
   - verify/ds/range_query/sparse_table.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
   - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
