@@ -94,6 +94,9 @@ data:
     title: Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/graph/cow_game.test.cpp
+    title: verify/graph/cow_game.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
@@ -276,6 +279,7 @@ data:
   - verify/tree/tree_algorithms.test.cpp
   - verify/graph/library_checker_maximum_independent_set.test.cpp
   - verify/graph/library_checker_maximum_independent_set.test.cpp
+  - verify/graph/cow_game.test.cpp
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp

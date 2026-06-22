@@ -17,6 +17,9 @@ data:
     path: graph/connected_components.hpp
     title: Connected Components
   - icon: ':heavy_check_mark:'
+    path: graph/cow_game.hpp
+    title: Cow Game (Difference Constraints)
+  - icon: ':heavy_check_mark:'
     path: graph/cycle_detection.hpp
     title: Cycle Detection
   - icon: ':heavy_check_mark:'
@@ -60,6 +63,9 @@ data:
     path: graph/all.hpp
     title: Graph All
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/cow_game.test.cpp
+    title: verify/graph/cow_game.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
@@ -953,23 +959,98 @@ data:
     \ result.parent[e.to] = v;\n            result.parent_edge[e.to] = e.id;\n   \
     \         que.push(e.to);\n        }\n    }\n\n    return result;\n}\n\ntemplate\
     \ <class T>\nBfsResult bfs(const Graph<T>& g, int s) {\n    return bfs(g, std::vector<int>{s});\n\
-    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/dag_shortest_path.hpp\"\
-    \n\n\n\n#line 9 \"graph/dag_shortest_path.hpp\"\n\n#line 1 \"graph/topological_sort.hpp\"\
-    \n\n\n\n#line 7 \"graph/topological_sort.hpp\"\n\n#line 9 \"graph/topological_sort.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstd::optional<std::vector<int>>\
-    \ topological_sort(const Graph<T>& g) {\n    int n = g.size();\n    std::vector<int>\
-    \ indeg(n, 0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& e\
-    \ : g[v]) {\n            if (!e.alive) continue;\n            indeg[e.to]++;\n\
-    \        }\n    }\n\n    std::queue<int> que;\n    for (int v = 0; v < n; v++)\
-    \ {\n        if (indeg[v] == 0) que.push(v);\n    }\n\n    std::vector<int> order;\n\
-    \    order.reserve(n);\n    while (!que.empty()) {\n        int v = que.front();\n\
-    \        que.pop();\n        order.push_back(v);\n        for (const auto& e :\
-    \ g[v]) {\n            if (!e.alive) continue;\n            indeg[e.to]--;\n \
-    \           if (indeg[e.to] == 0) que.push(e.to);\n        }\n    }\n\n    if\
-    \ (int(order.size()) != n) return std::nullopt;\n    return order;\n}\n\ntemplate\
-    \ <class T>\nbool is_dag(const Graph<T>& g) {\n    return topological_sort(g).has_value();\n\
-    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 12 \"graph/dag_shortest_path.hpp\"\
-    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct DagShortestPathResult\
+    }\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"graph/cow_game.hpp\"\
+    \n\n\n\n#line 7 \"graph/cow_game.hpp\"\n#include <type_traits>\n#line 10 \"graph/cow_game.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct CowGameConstraint\
+    \ {\n    int from;\n    int to;\n    T upper_bound;\n};\n\ntemplate <class T>\n\
+    struct CowGameSolution {\n    bool feasible = false;\n    std::vector<T> value;\n\
+    \n    bool is_feasible() const {\n        return feasible;\n    }\n};\n\ntemplate\
+    \ <class T>\nstruct CowGameUpperBounds {\n    bool feasible;\n    std::vector<T>\
+    \ upper_bound;\n    T inf;\n\n    bool is_feasible() const {\n        return feasible;\n\
+    \    }\n\n    bool bounded(int variable) const {\n        assert(0 <= variable\
+    \ && variable < int(upper_bound.size()));\n        return feasible && upper_bound[variable]\
+    \ != inf;\n    }\n};\n\ntemplate <class T>\nstruct CowGameDifferenceBounds {\n\
+    \    bool feasible;\n    std::optional<T> lower_bound;\n    std::optional<T> upper_bound;\n\
+    \n    bool is_feasible() const {\n        return feasible;\n    }\n\n    bool\
+    \ bounded_below() const {\n        return feasible && lower_bound.has_value();\n\
+    \    }\n\n    bool bounded_above() const {\n        return feasible && upper_bound.has_value();\n\
+    \    }\n};\n\ntemplate <class T>\nclass CowGame {\n    static_assert(std::is_arithmetic_v<T>\
+    \ && std::is_signed_v<T>);\n\n    struct RelaxationResult {\n        bool has_negative_cycle;\n\
+    \        std::vector<T> dist;\n    };\n\n    int _n;\n    std::vector<CowGameConstraint<T>>\
+    \ _constraints;\n    mutable bool _solution_cached = false;\n    mutable CowGameSolution<T>\
+    \ _cached_solution;\n\n    void assert_variable(int variable) const {\n      \
+    \  (void)variable;\n        assert(0 <= variable && variable < _n);\n    }\n\n\
+    \    T negate(T value) const {\n        assert(value != std::numeric_limits<T>::lowest());\n\
+    \        return -value;\n    }\n\n    RelaxationResult relax(std::vector<T> dist,\
+    \ T inf, bool skip_unreachable) const {\n        for (int iteration = 0; iteration\
+    \ < _n; iteration++) {\n            bool updated = false;\n            for (const\
+    \ auto& constraint : _constraints) {\n                if (skip_unreachable &&\
+    \ dist[constraint.from] == inf) continue;\n                T candidate = dist[constraint.from]\
+    \ + constraint.upper_bound;\n                if (dist[constraint.to] <= candidate)\
+    \ continue;\n                dist[constraint.to] = candidate;\n              \
+    \  updated = true;\n                if (iteration == _n - 1) return RelaxationResult{true,\
+    \ std::move(dist)};\n            }\n            if (!updated) break;\n       \
+    \ }\n        return RelaxationResult{false, std::move(dist)};\n    }\n\n    RelaxationResult\
+    \ check_feasibility() const {\n        return relax(std::vector<T>(_n, T()), T(),\
+    \ false);\n    }\n\n    RelaxationResult shortest_paths(int source, T inf) const\
+    \ {\n        std::vector<T> dist(_n, inf);\n        dist[source] = T();\n    \
+    \    return relax(std::move(dist), inf, true);\n    }\n\n   public:\n    CowGame()\
+    \ : CowGame(0) {}\n\n    explicit CowGame(int variable_count) : _n(variable_count)\
+    \ {\n        assert(variable_count >= 0);\n    }\n\n    int size() const {\n \
+    \       return _n;\n    }\n\n    int constraint_count() const {\n        return\
+    \ int(_constraints.size());\n    }\n\n    const CowGameConstraint<T>& get_constraint(int\
+    \ id) const {\n        assert(0 <= id && id < int(_constraints.size()));\n   \
+    \     return _constraints[id];\n    }\n\n    const std::vector<CowGameConstraint<T>>&\
+    \ constraints() const {\n        return _constraints;\n    }\n\n    int add_upper_bound(int\
+    \ from, int to, T upper_bound) {\n        assert_variable(from);\n        assert_variable(to);\n\
+    \        int id = int(_constraints.size());\n        _constraints.push_back(CowGameConstraint<T>{from,\
+    \ to, upper_bound});\n        _solution_cached = false;\n        return id;\n\
+    \    }\n\n    int add_constraint(int from, int to, T upper_bound) {\n        return\
+    \ add_upper_bound(from, to, upper_bound);\n    }\n\n    int add_lower_bound(int\
+    \ from, int to, T lower_bound) {\n        return add_upper_bound(to, from, negate(lower_bound));\n\
+    \    }\n\n    void add_bounds(int from, int to, T lower_bound, T upper_bound)\
+    \ {\n        assert(lower_bound <= upper_bound);\n        add_lower_bound(from,\
+    \ to, lower_bound);\n        add_upper_bound(from, to, upper_bound);\n    }\n\n\
+    \    void add_equality(int from, int to, T difference) {\n        add_bounds(from,\
+    \ to, difference, difference);\n    }\n\n    CowGameSolution<T> solve() const\
+    \ {\n        if (_solution_cached) return _cached_solution;\n\n        auto result\
+    \ = check_feasibility();\n        _cached_solution.feasible = !result.has_negative_cycle;\n\
+    \        _cached_solution.value.clear();\n        if (_cached_solution.feasible)\
+    \ _cached_solution.value = std::move(result.dist);\n        _solution_cached =\
+    \ true;\n        return _cached_solution;\n    }\n\n    bool is_feasible() const\
+    \ {\n        if (!_solution_cached) (void)solve();\n        return _cached_solution.feasible;\n\
+    \    }\n\n    CowGameUpperBounds<T> tightest_upper_bounds(int source) const {\n\
+    \        assert_variable(source);\n        T inf = std::numeric_limits<T>::max()\
+    \ / T(4);\n        CowGameUpperBounds<T> result;\n        result.feasible = is_feasible();\n\
+    \        result.inf = inf;\n        result.upper_bound.assign(_n, inf);\n    \
+    \    if (!result.feasible) return result;\n\n        result.upper_bound = shortest_paths(source,\
+    \ inf).dist;\n        return result;\n    }\n\n    CowGameDifferenceBounds<T>\
+    \ difference_bounds(int from, int to) const {\n        assert_variable(from);\n\
+    \        assert_variable(to);\n        T inf = std::numeric_limits<T>::max() /\
+    \ T(4);\n        CowGameDifferenceBounds<T> result;\n        result.feasible =\
+    \ is_feasible();\n        if (!result.feasible) return result;\n\n        auto\
+    \ forward = shortest_paths(from, inf);\n        if (forward.dist[to] != inf) result.upper_bound\
+    \ = forward.dist[to];\n\n        auto backward = shortest_paths(to, inf);\n  \
+    \      if (backward.dist[from] != inf) result.lower_bound = negate(backward.dist[from]);\n\
+    \        return result;\n    }\n};\n\ntemplate <class T>\nusing DifferenceConstraints\
+    \ = CowGame<T>;\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 1 \"\
+    graph/dag_shortest_path.hpp\"\n\n\n\n#line 9 \"graph/dag_shortest_path.hpp\"\n\
+    \n#line 1 \"graph/topological_sort.hpp\"\n\n\n\n#line 7 \"graph/topological_sort.hpp\"\
+    \n\n#line 9 \"graph/topological_sort.hpp\"\n\nnamespace m1une {\nnamespace graph\
+    \ {\n\ntemplate <class T>\nstd::optional<std::vector<int>> topological_sort(const\
+    \ Graph<T>& g) {\n    int n = g.size();\n    std::vector<int> indeg(n, 0);\n \
+    \   for (int v = 0; v < n; v++) {\n        for (const auto& e : g[v]) {\n    \
+    \        if (!e.alive) continue;\n            indeg[e.to]++;\n        }\n    }\n\
+    \n    std::queue<int> que;\n    for (int v = 0; v < n; v++) {\n        if (indeg[v]\
+    \ == 0) que.push(v);\n    }\n\n    std::vector<int> order;\n    order.reserve(n);\n\
+    \    while (!que.empty()) {\n        int v = que.front();\n        que.pop();\n\
+    \        order.push_back(v);\n        for (const auto& e : g[v]) {\n         \
+    \   if (!e.alive) continue;\n            indeg[e.to]--;\n            if (indeg[e.to]\
+    \ == 0) que.push(e.to);\n        }\n    }\n\n    if (int(order.size()) != n) return\
+    \ std::nullopt;\n    return order;\n}\n\ntemplate <class T>\nbool is_dag(const\
+    \ Graph<T>& g) {\n    return topological_sort(g).has_value();\n}\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n\n#line 12 \"graph/dag_shortest_path.hpp\"\n\
+    \nnamespace m1une {\nnamespace graph {\n\ntemplate <class T>\nstruct DagShortestPathResult\
     \ {\n    std::vector<T> dist;\n    std::vector<int> parent;\n    std::vector<int>\
     \ parent_edge;\n    std::vector<int> topological_order;\n    T inf;\n\n    bool\
     \ reachable(int v) const {\n        assert(0 <= v && v < int(dist.size()));\n\
@@ -1092,7 +1173,7 @@ data:
     }\n\ntemplate <class T>\nZeroOneBfsResult zero_one_bfs(const Graph<T>& g, int\
     \ s, int inf = std::numeric_limits<int>::max() / 2) {\n    return zero_one_bfs(g,\
     \ std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 10 \"graph/shortest_path.hpp\"\n\n\n#line 14 \"graph/undirected.hpp\"\
+    \n\n#line 11 \"graph/shortest_path.hpp\"\n\n\n#line 14 \"graph/undirected.hpp\"\
     \n\n\n"
   code: '#ifndef M1UNE_GRAPH_UNDIRECTED_HPP
 
@@ -1137,6 +1218,7 @@ data:
   - graph/shortest_path.hpp
   - graph/bellman_ford.hpp
   - graph/bfs.hpp
+  - graph/cow_game.hpp
   - graph/dag_shortest_path.hpp
   - graph/topological_sort.hpp
   - graph/dijkstra.hpp
@@ -1146,9 +1228,10 @@ data:
   path: graph/undirected.hpp
   requiredBy:
   - graph/all.hpp
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-22 23:27:23+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/graph/cow_game.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/undirected.hpp
 layout: document

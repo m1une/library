@@ -19,6 +19,9 @@ data:
     path: verify/ds/dsu/dsu.test.cpp
     title: verify/ds/dsu/dsu.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/graph/cow_game.test.cpp
+    title: verify/graph/cow_game.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
   _isVerificationFailed: false
@@ -94,6 +97,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dsu/dsu.test.cpp
+  - verify/graph/cow_game.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: ds/dsu/dsu.hpp
 layout: document

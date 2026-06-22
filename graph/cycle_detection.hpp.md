@@ -16,6 +16,9 @@ data:
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/graph/cow_game.test.cpp
+    title: verify/graph/cow_game.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
   _isVerificationFailed: false
@@ -164,6 +167,7 @@ data:
   timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/graph/cow_game.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/cycle_detection.hpp
 layout: document

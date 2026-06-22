@@ -13,6 +13,9 @@ data:
     title: Undirected Graph Algorithms
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/graph/cow_game.test.cpp
+    title: verify/graph/cow_game.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
@@ -356,6 +359,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/library_checker_maximum_independent_set.test.cpp
+  - verify/graph/cow_game.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/maximum_clique.hpp
 layout: document
