@@ -43,9 +43,12 @@ occurrences.
 | `built()` | Returns whether `build()` has been called. | $O(1)$ |
 | `pattern_count()` | Returns the number of inserted patterns. | $O(1)$ |
 | `pattern_length(id)` | Returns a pattern's length. | $O(1)$ |
+| `pattern_node(id)` | Returns the terminal node of a pattern. | $O(1)$ |
 | `node_count()` | Returns the number of trie nodes. | $O(1)$ |
 | `root()` | Returns the root node ID. | $O(1)$ |
 | `node(id)` | Returns a read-only node view. | $O(1)$ |
+| `nodes()` | Returns a read-only view of the complete node array. | $O(1)$ |
+| `bfs_order()` | Returns node IDs in failure-link BFS order. | $O(1)$ |
 | `transition(state, symbol)` | Takes one automaton transition. | $O(1)$ |
 | `for_each_output(state, callback)` | Reports patterns ending at a state. | $O(1 + output)$ |
 | `match(text, callback)` | Reports every occurrence in the text. | $O(N+Z)$ |
@@ -64,14 +67,31 @@ An empty pattern occurs at every text boundary, including positions zero and
 
 Each `Node` exposes:
 
-* `next`: completed transitions after `build()`
+* `next`: completed automaton transitions after `build()`
 * `failure`: the failure-link node
-* `output_link`: the nearest failure ancestor containing patterns, or `-1`
+* `output_link`: the nearest failure ancestor containing patterns, or
+  `null_node`
+* `parent`: parent in the original trie, or `null_node` for the root
+* `parent_symbol`: alphabet index of the edge from `parent`, or `-1` for the
+  root
+* `depth`: trie depth, equal to the represented prefix length
+* `children`: children in the original trie
+* `failure_children`: children in the failure-link tree
 * `pattern_ids`: patterns ending exactly at this trie node
 
-Node IDs remain valid until `clear()`. References returned by `node()` may be
-invalidated before construction finishes, so retain the ID rather than the
-reference.
+`nodes()` and `bfs_order()` make graph algorithms convenient without repeated
+accessor calls. For example, iterate `bfs_order()` in reverse to aggregate
+values from a node into its failure parent, or traverse `failure_children` to
+run a tree DP.
+
+`children`, `parent`, and `parent_symbol` describe the sparse trie graph, while
+`next` describes the complete deterministic automaton graph. This distinction
+remains available after `build()` without storing two full transition tables
+per node.
+
+Node IDs remain valid until `clear()`. References and iterators into `nodes()`
+may be invalidated by `insert()` or `reserve()` before construction finishes,
+so retain node IDs across insertions.
 
 ## Example
 

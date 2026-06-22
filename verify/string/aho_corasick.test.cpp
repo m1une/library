@@ -29,6 +29,46 @@ void check(
     automaton.build();
     assert(automaton.built());
     assert(automaton.pattern_count() == int(patterns.size()));
+    assert(automaton.nodes().size() == automaton.node_count());
+    assert(automaton.bfs_order().size() == automaton.node_count());
+    assert(automaton.bfs_order().front() == automaton.root());
+
+    std::vector<int> failure_parent_count(automaton.node_count(), 0);
+    for (const auto& node : automaton.nodes()) {
+        for (int child : node.failure_children) {
+            failure_parent_count[child]++;
+        }
+    }
+    for (int node = 1; node < int(automaton.node_count()); ++node) {
+        assert(failure_parent_count[node] == 1);
+        assert(
+            automaton.node(automaton.node(node).failure).depth
+            < automaton.node(node).depth
+        );
+        assert(
+            std::find(
+                automaton.node(automaton.node(node).parent).children.begin(),
+                automaton.node(automaton.node(node).parent).children.end(),
+                node
+            ) != automaton.node(automaton.node(node).parent).children.end()
+        );
+        assert(
+            automaton.node(automaton.node(node).parent)
+                .next[automaton.node(node).parent_symbol]
+            == node
+        );
+    }
+    for (int id = 0; id < int(patterns.size()); ++id) {
+        [[maybe_unused]] int terminal = automaton.pattern_node(id);
+        assert(automaton.node(terminal).depth == int(patterns[id].size()));
+        assert(
+            std::find(
+                automaton.node(terminal).pattern_ids.begin(),
+                automaton.node(terminal).pattern_ids.end(),
+                id
+            ) != automaton.node(terminal).pattern_ids.end()
+        );
+    }
 
     std::vector<std::tuple<int, int>> actual;
     automaton.match(text, [&actual](int end, int pattern_id) {

@@ -17,21 +17,37 @@ struct AhoCorasick {
     static_assert(0 < AlphabetSize);
 
     using node_id = int;
+    static constexpr node_id null_node = -1;
 
     struct Node {
+        // Completed automaton transitions. Valid after build().
         std::array<node_id, AlphabetSize> next;
         node_id failure;
         node_id output_link;
+        node_id parent;
+        int parent_symbol;
+        int depth;
+        std::vector<node_id> children;
+        std::vector<node_id> failure_children;
         std::vector<int> pattern_ids;
 
-        Node() : failure(0), output_link(-1) {
-            next.fill(-1);
+        Node(
+            node_id parent_value = null_node,
+            int parent_symbol_value = -1,
+            int depth_value = 0
+        ) : failure(0),
+            output_link(null_node),
+            parent(parent_value),
+            parent_symbol(parent_symbol_value),
+            depth(depth_value) {
+            next.fill(null_node);
         }
     };
 
    private:
     std::vector<Node> _nodes;
     std::vector<int> _pattern_length;
+    std::vector<node_id> _pattern_node;
     std::vector<node_id> _bfs_order;
     bool _built;
 
@@ -42,9 +58,10 @@ struct AhoCorasick {
         return index;
     }
 
-    node_id new_node() {
+    node_id new_node(node_id parent, int parent_symbol) {
         assert(_nodes.size() < std::size_t(std::numeric_limits<int>::max()));
-        _nodes.emplace_back();
+        assert(_nodes[parent].depth < std::numeric_limits<int>::max());
+        _nodes.emplace_back(parent, parent_symbol, _nodes[parent].depth + 1);
         return int(_nodes.size()) - 1;
     }
 
@@ -68,13 +85,28 @@ struct AhoCorasick {
         return _pattern_length[pattern_id];
     }
 
+    node_id pattern_node(int pattern_id) const {
+        assert(0 <= pattern_id && pattern_id < pattern_count());
+        return _pattern_node[pattern_id];
+    }
+
     std::size_t node_count() const {
         return _nodes.size();
+    }
+
+    const std::vector<Node>& nodes() const {
+        return _nodes;
     }
 
     const Node& node(node_id id) const {
         assert(0 <= id && std::size_t(id) < _nodes.size());
         return _nodes[id];
+    }
+
+    // Returns nodes in failure-link BFS order, beginning with the root.
+    const std::vector<node_id>& bfs_order() const {
+        assert(_built);
+        return _bfs_order;
     }
 
     void reserve(std::size_t node_capacity) {
@@ -86,6 +118,7 @@ struct AhoCorasick {
         _nodes.clear();
         _nodes.emplace_back();
         _pattern_length.clear();
+        _pattern_node.clear();
         _bfs_order.clear();
         _built = false;
     }
@@ -100,15 +133,17 @@ struct AhoCorasick {
         for (const auto& symbol : pattern) {
             assert(length < std::numeric_limits<int>::max());
             int index = symbol_index(symbol);
-            if (_nodes[state].next[index] == -1) {
-                node_id child = new_node();
+            if (_nodes[state].next[index] == null_node) {
+                node_id child = new_node(state, index);
                 _nodes[state].next[index] = child;
+                _nodes[state].children.push_back(child);
             }
             state = _nodes[state].next[index];
             length++;
         }
         _nodes[state].pattern_ids.push_back(pattern_id);
         _pattern_length.push_back(length);
+        _pattern_node.push_back(state);
         return pattern_id;
     }
 
@@ -122,12 +157,14 @@ struct AhoCorasick {
 
         for (int symbol = 0; symbol < AlphabetSize; ++symbol) {
             node_id child = _nodes[root()].next[symbol];
-            if (child == -1) {
+            if (child == null_node) {
                 _nodes[root()].next[symbol] = root();
             } else {
+                _nodes[root()].next[symbol] = child;
                 _nodes[child].failure = root();
                 _nodes[child].output_link =
-                    _nodes[root()].pattern_ids.empty() ? -1 : root();
+                    _nodes[root()].pattern_ids.empty() ? null_node : root();
+                _nodes[root()].failure_children.push_back(child);
                 queue.push(child);
             }
         }
@@ -139,12 +176,13 @@ struct AhoCorasick {
 
             for (int symbol = 0; symbol < AlphabetSize; ++symbol) {
                 node_id child = _nodes[state].next[symbol];
-                if (child == -1) {
+                if (child == null_node) {
                     _nodes[state].next[symbol] =
                         _nodes[_nodes[state].failure].next[symbol];
                     continue;
                 }
 
+                _nodes[state].next[symbol] = child;
                 node_id failure =
                     _nodes[_nodes[state].failure].next[symbol];
                 _nodes[child].failure = failure;
@@ -152,6 +190,7 @@ struct AhoCorasick {
                     _nodes[failure].pattern_ids.empty()
                         ? _nodes[failure].output_link
                         : failure;
+                _nodes[failure].failure_children.push_back(child);
                 queue.push(child);
             }
         }
@@ -170,7 +209,7 @@ struct AhoCorasick {
     void for_each_output(node_id state, Callback callback) const {
         assert(_built);
         assert(0 <= state && std::size_t(state) < _nodes.size());
-        while (state != -1) {
+        while (state != null_node) {
             for (int pattern_id : _nodes[state].pattern_ids) {
                 callback(pattern_id);
             }
