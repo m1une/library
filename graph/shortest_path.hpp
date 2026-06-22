@@ -3,6 +3,7 @@
 
 #include "bellman_ford.hpp"
 #include "bfs.hpp"
+#include "cow_game.hpp"
 #include "dag_shortest_path.hpp"
 #include "dijkstra.hpp"
 #include "warshall_floyd.hpp"

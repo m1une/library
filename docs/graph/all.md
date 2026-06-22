@@ -15,7 +15,7 @@ individual graph includes. Flow-network algorithms live separately under
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
 | `graph/graph.hpp` | Container | `Graph<T>` and `Edge<T>` adjacency-list container. |
-| `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | BFS, 0-1 BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
+| `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | Cow game difference constraints, BFS, 0-1 BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
 | `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths. |
 | `graph/undirected.hpp` | Undirected-oriented bundle | Undirected algorithms plus shortest paths and grid helpers. |
 | `graph/bfs.hpp` | Direction-respecting | Unweighted shortest paths. |
@@ -23,6 +23,7 @@ individual graph includes. Flow-network algorithms live separately under
 | `graph/dag_shortest_path.hpp` | Directed DAG only | Shortest paths in a DAG, including negative edge costs. |
 | `graph/dijkstra.hpp` | Direction-respecting | Non-negative weighted shortest paths. |
 | `graph/bellman_ford.hpp` | Direction-respecting | Shortest paths with negative edges and negative-cycle marking. |
+| `graph/cow_game.hpp` | Difference constraints | Feasibility, assignments, and tight bounds for systems of difference inequalities. |
 | `graph/warshall_floyd.hpp` | Direction-respecting | All-pairs shortest paths. |
 | `graph/grid.hpp` | Undirected graph builder | Helper for converting 2D grid cells to graph vertex ids. |
 | `graph/topological_sort.hpp` | Directed only | DAG ordering and cycle check. |
