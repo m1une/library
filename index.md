@@ -530,6 +530,9 @@ data:
   - name: optimization
     pages:
     - icon: ':heavy_check_mark:'
+      path: optimization/alien_trick.hpp
+      title: Alien Trick
+    - icon: ':heavy_check_mark:'
       path: optimization/all.hpp
       title: Optimization All
     - icon: ':heavy_check_mark:'
@@ -951,6 +954,9 @@ data:
       title: verify/monge/monge_dp_optimization.test.cpp
   - name: verify/optimization
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/optimization/alien_trick.test.cpp
+      title: verify/optimization/alien_trick.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/optimization/hungarian.test.cpp
       title: verify/optimization/hungarian.test.cpp

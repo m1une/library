@@ -5,6 +5,9 @@ data:
     path: flow/max_flow.hpp
     title: Max Flow
   - icon: ':heavy_check_mark:'
+    path: optimization/alien_trick.hpp
+    title: Alien Trick
+  - icon: ':heavy_check_mark:'
     path: optimization/hungarian.hpp
     title: Hungarian Algorithm
   - icon: ':heavy_check_mark:'
@@ -38,76 +41,103 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"optimization/all.hpp\"\n\n\n\n#line 1 \"optimization/hungarian.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <limits>\n#include\
-    \ <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace optimization {\n\
-    \ntemplate <class T>\nstruct HungarianResult {\n    T cost;\n    std::vector<int>\
-    \ row_to_col;\n    std::vector<int> col_to_row;\n\n    int matching_size() const\
-    \ {\n        int result = 0;\n        for (int col : row_to_col) {\n         \
-    \   if (col != -1) result++;\n        }\n        return result;\n    }\n\n   \
-    \ std::vector<std::pair<int, int>> matching() const {\n        std::vector<std::pair<int,\
-    \ int>> result;\n        for (int row = 0; row < int(row_to_col.size()); row++)\
-    \ {\n            if (row_to_col[row] != -1) result.push_back({row, row_to_col[row]});\n\
-    \        }\n        return result;\n    }\n};\n\nnamespace detail {\n\ntemplate\
-    \ <class T>\nT assignment_cost(const std::vector<std::vector<T>>& cost, const\
-    \ std::vector<int>& row_to_col) {\n    T result = T();\n    for (int row = 0;\
-    \ row < int(row_to_col.size()); row++) {\n        if (row_to_col[row] != -1) result\
-    \ += cost[row][row_to_col[row]];\n    }\n    return result;\n}\n\n}  // namespace\
-    \ detail\n\ntemplate <class T>\nHungarianResult<T> hungarian_min(const std::vector<std::vector<T>>&\
-    \ cost) {\n    int row_count = int(cost.size());\n    int col_count = row_count\
-    \ == 0 ? 0 : int(cost[0].size());\n    for (const auto& row : cost) assert(int(row.size())\
-    \ == col_count);\n\n    HungarianResult<T> result;\n    result.cost = T();\n \
-    \   result.row_to_col.assign(row_count, -1);\n    result.col_to_row.assign(col_count,\
-    \ -1);\n    if (row_count == 0 || col_count == 0) return result;\n\n    bool transposed\
-    \ = row_count > col_count;\n    int n = transposed ? col_count : row_count;\n\
-    \    int m = transposed ? row_count : col_count;\n    T inf = std::numeric_limits<T>::max()\
-    \ / T(4);\n\n    std::vector<T> u(n + 1, T()), v(m + 1, T()), minv(m + 1);\n \
-    \   std::vector<int> p(m + 1, 0), way(m + 1, 0);\n\n    auto value = [&](int i,\
-    \ int j) -> T {\n        return transposed ? cost[j][i] : cost[i][j];\n    };\n\
-    \n    for (int i = 1; i <= n; i++) {\n        p[0] = i;\n        int j0 = 0;\n\
-    \        std::fill(minv.begin(), minv.end(), inf);\n        std::vector<char>\
-    \ used(m + 1, false);\n\n        do {\n            used[j0] = true;\n        \
-    \    int i0 = p[j0];\n            int j1 = 0;\n            T delta = inf;\n\n\
-    \            for (int j = 1; j <= m; j++) {\n                if (used[j]) continue;\n\
-    \                T cur = value(i0 - 1, j - 1) - u[i0] - v[j];\n              \
-    \  if (cur < minv[j]) {\n                    minv[j] = cur;\n                \
-    \    way[j] = j0;\n                }\n                if (minv[j] < delta) {\n\
-    \                    delta = minv[j];\n                    j1 = j;\n         \
-    \       }\n            }\n\n            for (int j = 0; j <= m; j++) {\n     \
-    \           if (used[j]) {\n                    u[p[j]] += delta;\n          \
-    \          v[j] -= delta;\n                } else {\n                    minv[j]\
-    \ -= delta;\n                }\n            }\n            j0 = j1;\n        }\
-    \ while (p[j0] != 0);\n\n        do {\n            int j1 = way[j0];\n       \
-    \     p[j0] = p[j1];\n            j0 = j1;\n        } while (j0 != 0);\n    }\n\
-    \n    for (int j = 1; j <= m; j++) {\n        if (p[j] == 0) continue;\n     \
-    \   int i = p[j] - 1;\n        int matched = j - 1;\n        if (transposed) {\n\
-    \            int row = matched;\n            int col = i;\n            result.row_to_col[row]\
-    \ = col;\n            result.col_to_row[col] = row;\n        } else {\n      \
-    \      int row = i;\n            int col = matched;\n            result.row_to_col[row]\
-    \ = col;\n            result.col_to_row[col] = row;\n        }\n    }\n    result.cost\
-    \ = detail::assignment_cost(cost, result.row_to_col);\n    return result;\n}\n\
-    \ntemplate <class T>\nHungarianResult<T> hungarian_max(const std::vector<std::vector<T>>&\
+  bundledCode: "#line 1 \"optimization/all.hpp\"\n\n\n\n#line 1 \"optimization/alien_trick.hpp\"\
+    \n\n\n\n#include <cassert>\n#include <concepts>\n#include <numeric>\n#include\
+    \ <type_traits>\n#include <utility>\n\nnamespace m1une {\nnamespace optimization\
+    \ {\n\nnamespace detail {\n\ntemplate <std::integral Penalty, std::integral Count,\
+    \ class Oracle>\nPenalty alien_trick_penalty(Penalty lower, Penalty upper, Count\
+    \ target_count, Oracle& oracle) {\n    assert(lower <= upper);\n    assert(oracle(lower).second\
+    \ >= target_count);\n    assert(oracle(upper).second <= target_count);\n\n   \
+    \ while (lower < upper) {\n        Penalty middle = std::midpoint(lower, upper);\n\
+    \        if (middle == lower) ++middle;\n        if (oracle(middle).second >=\
+    \ target_count) {\n            lower = middle;\n        } else {\n           \
+    \ upper = middle - 1;\n        }\n    }\n    return lower;\n}\n\n}  // namespace\
+    \ detail\n\n// Recovers the minimum value among solutions using exactly `target_count`\n\
+    // items. The oracle minimizes value + penalty * count and breaks ties in favor\n\
+    // of the larger count.\ntemplate <std::integral Penalty, std::integral Count,\
+    \ class Oracle>\nauto alien_trick_minimize(Penalty lower, Penalty upper, Count\
+    \ target_count, Oracle oracle) {\n    Penalty penalty = detail::alien_trick_penalty(lower,\
+    \ upper, target_count, oracle);\n    auto result = oracle(penalty);\n    using\
+    \ Value = std::remove_cvref_t<decltype(result.first)>;\n    return result.first\
+    \ - static_cast<Value>(penalty) * static_cast<Value>(target_count);\n}\n\n// Recovers\
+    \ the maximum value among solutions using exactly `target_count`\n// items. The\
+    \ oracle maximizes value - penalty * count and breaks ties in favor\n// of the\
+    \ larger count.\ntemplate <std::integral Penalty, std::integral Count, class Oracle>\n\
+    auto alien_trick_maximize(Penalty lower, Penalty upper, Count target_count, Oracle\
+    \ oracle) {\n    Penalty penalty = detail::alien_trick_penalty(lower, upper, target_count,\
+    \ oracle);\n    auto result = oracle(penalty);\n    using Value = std::remove_cvref_t<decltype(result.first)>;\n\
+    \    return result.first + static_cast<Value>(penalty) * static_cast<Value>(target_count);\n\
+    }\n\n}  // namespace optimization\n}  // namespace m1une\n\n\n#line 1 \"optimization/hungarian.hpp\"\
+    \n\n\n\n#include <algorithm>\n#line 6 \"optimization/hungarian.hpp\"\n#include\
+    \ <limits>\n#line 8 \"optimization/hungarian.hpp\"\n#include <vector>\n\nnamespace\
+    \ m1une {\nnamespace optimization {\n\ntemplate <class T>\nstruct HungarianResult\
+    \ {\n    T cost;\n    std::vector<int> row_to_col;\n    std::vector<int> col_to_row;\n\
+    \n    int matching_size() const {\n        int result = 0;\n        for (int col\
+    \ : row_to_col) {\n            if (col != -1) result++;\n        }\n        return\
+    \ result;\n    }\n\n    std::vector<std::pair<int, int>> matching() const {\n\
+    \        std::vector<std::pair<int, int>> result;\n        for (int row = 0; row\
+    \ < int(row_to_col.size()); row++) {\n            if (row_to_col[row] != -1) result.push_back({row,\
+    \ row_to_col[row]});\n        }\n        return result;\n    }\n};\n\nnamespace\
+    \ detail {\n\ntemplate <class T>\nT assignment_cost(const std::vector<std::vector<T>>&\
+    \ cost, const std::vector<int>& row_to_col) {\n    T result = T();\n    for (int\
+    \ row = 0; row < int(row_to_col.size()); row++) {\n        if (row_to_col[row]\
+    \ != -1) result += cost[row][row_to_col[row]];\n    }\n    return result;\n}\n\
+    \n}  // namespace detail\n\ntemplate <class T>\nHungarianResult<T> hungarian_min(const\
+    \ std::vector<std::vector<T>>& cost) {\n    int row_count = int(cost.size());\n\
+    \    int col_count = row_count == 0 ? 0 : int(cost[0].size());\n    for (const\
+    \ auto& row : cost) assert(int(row.size()) == col_count);\n\n    HungarianResult<T>\
+    \ result;\n    result.cost = T();\n    result.row_to_col.assign(row_count, -1);\n\
+    \    result.col_to_row.assign(col_count, -1);\n    if (row_count == 0 || col_count\
+    \ == 0) return result;\n\n    bool transposed = row_count > col_count;\n    int\
+    \ n = transposed ? col_count : row_count;\n    int m = transposed ? row_count\
+    \ : col_count;\n    T inf = std::numeric_limits<T>::max() / T(4);\n\n    std::vector<T>\
+    \ u(n + 1, T()), v(m + 1, T()), minv(m + 1);\n    std::vector<int> p(m + 1, 0),\
+    \ way(m + 1, 0);\n\n    auto value = [&](int i, int j) -> T {\n        return\
+    \ transposed ? cost[j][i] : cost[i][j];\n    };\n\n    for (int i = 1; i <= n;\
+    \ i++) {\n        p[0] = i;\n        int j0 = 0;\n        std::fill(minv.begin(),\
+    \ minv.end(), inf);\n        std::vector<char> used(m + 1, false);\n\n       \
+    \ do {\n            used[j0] = true;\n            int i0 = p[j0];\n          \
+    \  int j1 = 0;\n            T delta = inf;\n\n            for (int j = 1; j <=\
+    \ m; j++) {\n                if (used[j]) continue;\n                T cur = value(i0\
+    \ - 1, j - 1) - u[i0] - v[j];\n                if (cur < minv[j]) {\n        \
+    \            minv[j] = cur;\n                    way[j] = j0;\n              \
+    \  }\n                if (minv[j] < delta) {\n                    delta = minv[j];\n\
+    \                    j1 = j;\n                }\n            }\n\n           \
+    \ for (int j = 0; j <= m; j++) {\n                if (used[j]) {\n           \
+    \         u[p[j]] += delta;\n                    v[j] -= delta;\n            \
+    \    } else {\n                    minv[j] -= delta;\n                }\n    \
+    \        }\n            j0 = j1;\n        } while (p[j0] != 0);\n\n        do\
+    \ {\n            int j1 = way[j0];\n            p[j0] = p[j1];\n            j0\
+    \ = j1;\n        } while (j0 != 0);\n    }\n\n    for (int j = 1; j <= m; j++)\
+    \ {\n        if (p[j] == 0) continue;\n        int i = p[j] - 1;\n        int\
+    \ matched = j - 1;\n        if (transposed) {\n            int row = matched;\n\
+    \            int col = i;\n            result.row_to_col[row] = col;\n       \
+    \     result.col_to_row[col] = row;\n        } else {\n            int row = i;\n\
+    \            int col = matched;\n            result.row_to_col[row] = col;\n \
+    \           result.col_to_row[col] = row;\n        }\n    }\n    result.cost =\
+    \ detail::assignment_cost(cost, result.row_to_col);\n    return result;\n}\n\n\
+    template <class T>\nHungarianResult<T> hungarian_max(const std::vector<std::vector<T>>&\
     \ cost) {\n    std::vector<std::vector<T>> negated = cost;\n    for (auto& row\
     \ : negated) {\n        for (auto& x : row) x = -x;\n    }\n    auto result =\
     \ hungarian_min(negated);\n    result.cost = detail::assignment_cost(cost, result.row_to_col);\n\
     \    return result;\n}\n\ntemplate <class T>\nHungarianResult<T> hungarian(const\
     \ std::vector<std::vector<T>>& cost) {\n    return hungarian_min(cost);\n}\n\n\
     }  // namespace optimization\n}  // namespace m1une\n\n\n#line 1 \"optimization/integer_lp.hpp\"\
-    \n\n\n\n#line 6 \"optimization/integer_lp.hpp\"\n#include <cmath>\n#line 8 \"\
-    optimization/integer_lp.hpp\"\n#include <type_traits>\n#line 10 \"optimization/integer_lp.hpp\"\
-    \n\n#line 1 \"optimization/simplex.hpp\"\n\n\n\n#line 9 \"optimization/simplex.hpp\"\
-    \n\nnamespace m1une {\nnamespace optimization {\n\nenum class SimplexStatus {\n\
-    \    Optimal,\n    Infeasible,\n    Unbounded,\n};\n\ntemplate <class T>\nstruct\
-    \ SimplexResult {\n    SimplexStatus status;\n    T objective_value;\n    std::vector<T>\
-    \ variables;\n\n    bool is_optimal() const { return status == SimplexStatus::Optimal;\
-    \ }\n    bool is_infeasible() const { return status == SimplexStatus::Infeasible;\
-    \ }\n    bool is_unbounded() const { return status == SimplexStatus::Unbounded;\
-    \ }\n};\n\nnamespace detail {\n\ntemplate <class T>\nT simplex_abs(T x) {\n  \
-    \  return x < T() ? -x : x;\n}\n\ntemplate <class T>\nstruct SimplexTableau {\n\
-    \    int constraint_count;\n    int variable_count;\n    T eps;\n    std::vector<int>\
-    \ basis;\n    std::vector<int> nonbasis;\n    std::vector<std::vector<T>> table;\n\
-    \n    SimplexTableau(const std::vector<std::vector<T>>& a, const std::vector<T>&\
-    \ b,\n                   const std::vector<T>& c, T epsilon)\n        : constraint_count(int(b.size())),\n\
+    \n\n\n\n#line 6 \"optimization/integer_lp.hpp\"\n#include <cmath>\n#line 10 \"\
+    optimization/integer_lp.hpp\"\n\n#line 1 \"optimization/simplex.hpp\"\n\n\n\n\
+    #line 9 \"optimization/simplex.hpp\"\n\nnamespace m1une {\nnamespace optimization\
+    \ {\n\nenum class SimplexStatus {\n    Optimal,\n    Infeasible,\n    Unbounded,\n\
+    };\n\ntemplate <class T>\nstruct SimplexResult {\n    SimplexStatus status;\n\
+    \    T objective_value;\n    std::vector<T> variables;\n\n    bool is_optimal()\
+    \ const { return status == SimplexStatus::Optimal; }\n    bool is_infeasible()\
+    \ const { return status == SimplexStatus::Infeasible; }\n    bool is_unbounded()\
+    \ const { return status == SimplexStatus::Unbounded; }\n};\n\nnamespace detail\
+    \ {\n\ntemplate <class T>\nT simplex_abs(T x) {\n    return x < T() ? -x : x;\n\
+    }\n\ntemplate <class T>\nstruct SimplexTableau {\n    int constraint_count;\n\
+    \    int variable_count;\n    T eps;\n    std::vector<int> basis;\n    std::vector<int>\
+    \ nonbasis;\n    std::vector<std::vector<T>> table;\n\n    SimplexTableau(const\
+    \ std::vector<std::vector<T>>& a, const std::vector<T>& b,\n                 \
+    \  const std::vector<T>& c, T epsilon)\n        : constraint_count(int(b.size())),\n\
     \          variable_count(int(c.size())),\n          eps(epsilon),\n         \
     \ basis(constraint_count),\n          nonbasis(variable_count + 1),\n        \
     \  table(constraint_count + 2, std::vector<T>(variable_count + 2, T())) {\n  \
@@ -512,11 +542,13 @@ data:
     \ {\n            add_a_minus_x(other.left_top());\n            other._left.pop();\n\
     \        }\n        while (!other._right.empty()) {\n            add_x_minus_a(other.right_top());\n\
     \            other._right.pop();\n        }\n    }\n};\n\n}  // namespace optimization\n\
-    }  // namespace m1une\n\n\n#line 9 \"optimization/all.hpp\"\n\n\n"
+    }  // namespace m1une\n\n\n#line 10 \"optimization/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_OPTIMIZATION_ALL_HPP
 
     #define M1UNE_OPTIMIZATION_ALL_HPP 1
 
+
+    #include "alien_trick.hpp"
 
     #include "hungarian.hpp"
 
@@ -533,6 +565,7 @@ data:
 
     '
   dependsOn:
+  - optimization/alien_trick.hpp
   - optimization/hungarian.hpp
   - optimization/integer_lp.hpp
   - optimization/simplex.hpp
@@ -542,7 +575,7 @@ data:
   isVerificationFile: false
   path: optimization/all.hpp
   requiredBy: []
-  timestamp: '2026-06-23 01:12:58+09:00'
+  timestamp: '2026-06-23 01:26:40+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/optimization/project_selection.test.cpp
@@ -563,6 +596,7 @@ is not naturally a graph, data structure, or algebraic object.
 
 | Header | Contents |
 | --- | --- |
+| `optimization/alien_trick.hpp` | Alien Trick helpers for exact-count optimization through Lagrangian relaxation. |
 | `optimization/hungarian.hpp` | Hungarian algorithm for minimum-cost and maximum-cost rectangular assignment. |
 | `optimization/integer_lp.hpp` | Branch-and-bound solver for integer linear programming in standard inequality form. |
 | `optimization/project_selection.hpp` | Minimum-cut solver for binary project selection with gains, implication penalties, and hard constraints. |

@@ -5,6 +5,9 @@ data:
     path: flow/max_flow.hpp
     title: Max Flow
   - icon: ':heavy_check_mark:'
+    path: optimization/alien_trick.hpp
+    title: Alien Trick
+  - icon: ':heavy_check_mark:'
     path: optimization/all.hpp
     title: Optimization All
   - icon: ':heavy_check_mark:'
@@ -35,24 +38,49 @@ data:
   bundledCode: "#line 1 \"verify/optimization/slope_trick.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
     \ <cassert>\n#include <iostream>\n#include <limits>\n#include <vector>\n\n#line\
-    \ 1 \"optimization/all.hpp\"\n\n\n\n#line 1 \"optimization/hungarian.hpp\"\n\n\
-    \n\n#line 7 \"optimization/hungarian.hpp\"\n#include <utility>\n#line 9 \"optimization/hungarian.hpp\"\
-    \n\nnamespace m1une {\nnamespace optimization {\n\ntemplate <class T>\nstruct\
-    \ HungarianResult {\n    T cost;\n    std::vector<int> row_to_col;\n    std::vector<int>\
-    \ col_to_row;\n\n    int matching_size() const {\n        int result = 0;\n  \
-    \      for (int col : row_to_col) {\n            if (col != -1) result++;\n  \
-    \      }\n        return result;\n    }\n\n    std::vector<std::pair<int, int>>\
-    \ matching() const {\n        std::vector<std::pair<int, int>> result;\n     \
-    \   for (int row = 0; row < int(row_to_col.size()); row++) {\n            if (row_to_col[row]\
-    \ != -1) result.push_back({row, row_to_col[row]});\n        }\n        return\
-    \ result;\n    }\n};\n\nnamespace detail {\n\ntemplate <class T>\nT assignment_cost(const\
-    \ std::vector<std::vector<T>>& cost, const std::vector<int>& row_to_col) {\n \
-    \   T result = T();\n    for (int row = 0; row < int(row_to_col.size()); row++)\
-    \ {\n        if (row_to_col[row] != -1) result += cost[row][row_to_col[row]];\n\
-    \    }\n    return result;\n}\n\n}  // namespace detail\n\ntemplate <class T>\n\
-    HungarianResult<T> hungarian_min(const std::vector<std::vector<T>>& cost) {\n\
-    \    int row_count = int(cost.size());\n    int col_count = row_count == 0 ? 0\
-    \ : int(cost[0].size());\n    for (const auto& row : cost) assert(int(row.size())\
+    \ 1 \"optimization/all.hpp\"\n\n\n\n#line 1 \"optimization/alien_trick.hpp\"\n\
+    \n\n\n#line 5 \"optimization/alien_trick.hpp\"\n#include <concepts>\n#include\
+    \ <numeric>\n#include <type_traits>\n#include <utility>\n\nnamespace m1une {\n\
+    namespace optimization {\n\nnamespace detail {\n\ntemplate <std::integral Penalty,\
+    \ std::integral Count, class Oracle>\nPenalty alien_trick_penalty(Penalty lower,\
+    \ Penalty upper, Count target_count, Oracle& oracle) {\n    assert(lower <= upper);\n\
+    \    assert(oracle(lower).second >= target_count);\n    assert(oracle(upper).second\
+    \ <= target_count);\n\n    while (lower < upper) {\n        Penalty middle = std::midpoint(lower,\
+    \ upper);\n        if (middle == lower) ++middle;\n        if (oracle(middle).second\
+    \ >= target_count) {\n            lower = middle;\n        } else {\n        \
+    \    upper = middle - 1;\n        }\n    }\n    return lower;\n}\n\n}  // namespace\
+    \ detail\n\n// Recovers the minimum value among solutions using exactly `target_count`\n\
+    // items. The oracle minimizes value + penalty * count and breaks ties in favor\n\
+    // of the larger count.\ntemplate <std::integral Penalty, std::integral Count,\
+    \ class Oracle>\nauto alien_trick_minimize(Penalty lower, Penalty upper, Count\
+    \ target_count, Oracle oracle) {\n    Penalty penalty = detail::alien_trick_penalty(lower,\
+    \ upper, target_count, oracle);\n    auto result = oracle(penalty);\n    using\
+    \ Value = std::remove_cvref_t<decltype(result.first)>;\n    return result.first\
+    \ - static_cast<Value>(penalty) * static_cast<Value>(target_count);\n}\n\n// Recovers\
+    \ the maximum value among solutions using exactly `target_count`\n// items. The\
+    \ oracle maximizes value - penalty * count and breaks ties in favor\n// of the\
+    \ larger count.\ntemplate <std::integral Penalty, std::integral Count, class Oracle>\n\
+    auto alien_trick_maximize(Penalty lower, Penalty upper, Count target_count, Oracle\
+    \ oracle) {\n    Penalty penalty = detail::alien_trick_penalty(lower, upper, target_count,\
+    \ oracle);\n    auto result = oracle(penalty);\n    using Value = std::remove_cvref_t<decltype(result.first)>;\n\
+    \    return result.first + static_cast<Value>(penalty) * static_cast<Value>(target_count);\n\
+    }\n\n}  // namespace optimization\n}  // namespace m1une\n\n\n#line 1 \"optimization/hungarian.hpp\"\
+    \n\n\n\n#line 9 \"optimization/hungarian.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ optimization {\n\ntemplate <class T>\nstruct HungarianResult {\n    T cost;\n\
+    \    std::vector<int> row_to_col;\n    std::vector<int> col_to_row;\n\n    int\
+    \ matching_size() const {\n        int result = 0;\n        for (int col : row_to_col)\
+    \ {\n            if (col != -1) result++;\n        }\n        return result;\n\
+    \    }\n\n    std::vector<std::pair<int, int>> matching() const {\n        std::vector<std::pair<int,\
+    \ int>> result;\n        for (int row = 0; row < int(row_to_col.size()); row++)\
+    \ {\n            if (row_to_col[row] != -1) result.push_back({row, row_to_col[row]});\n\
+    \        }\n        return result;\n    }\n};\n\nnamespace detail {\n\ntemplate\
+    \ <class T>\nT assignment_cost(const std::vector<std::vector<T>>& cost, const\
+    \ std::vector<int>& row_to_col) {\n    T result = T();\n    for (int row = 0;\
+    \ row < int(row_to_col.size()); row++) {\n        if (row_to_col[row] != -1) result\
+    \ += cost[row][row_to_col[row]];\n    }\n    return result;\n}\n\n}  // namespace\
+    \ detail\n\ntemplate <class T>\nHungarianResult<T> hungarian_min(const std::vector<std::vector<T>>&\
+    \ cost) {\n    int row_count = int(cost.size());\n    int col_count = row_count\
+    \ == 0 ? 0 : int(cost[0].size());\n    for (const auto& row : cost) assert(int(row.size())\
     \ == col_count);\n\n    HungarianResult<T> result;\n    result.cost = T();\n \
     \   result.row_to_col.assign(row_count, -1);\n    result.col_to_row.assign(col_count,\
     \ -1);\n    if (row_count == 0 || col_count == 0) return result;\n\n    bool transposed\
@@ -90,21 +118,21 @@ data:
     \    return result;\n}\n\ntemplate <class T>\nHungarianResult<T> hungarian(const\
     \ std::vector<std::vector<T>>& cost) {\n    return hungarian_min(cost);\n}\n\n\
     }  // namespace optimization\n}  // namespace m1une\n\n\n#line 1 \"optimization/integer_lp.hpp\"\
-    \n\n\n\n#line 6 \"optimization/integer_lp.hpp\"\n#include <cmath>\n#line 8 \"\
-    optimization/integer_lp.hpp\"\n#include <type_traits>\n#line 10 \"optimization/integer_lp.hpp\"\
-    \n\n#line 1 \"optimization/simplex.hpp\"\n\n\n\n#line 9 \"optimization/simplex.hpp\"\
-    \n\nnamespace m1une {\nnamespace optimization {\n\nenum class SimplexStatus {\n\
-    \    Optimal,\n    Infeasible,\n    Unbounded,\n};\n\ntemplate <class T>\nstruct\
-    \ SimplexResult {\n    SimplexStatus status;\n    T objective_value;\n    std::vector<T>\
-    \ variables;\n\n    bool is_optimal() const { return status == SimplexStatus::Optimal;\
-    \ }\n    bool is_infeasible() const { return status == SimplexStatus::Infeasible;\
-    \ }\n    bool is_unbounded() const { return status == SimplexStatus::Unbounded;\
-    \ }\n};\n\nnamespace detail {\n\ntemplate <class T>\nT simplex_abs(T x) {\n  \
-    \  return x < T() ? -x : x;\n}\n\ntemplate <class T>\nstruct SimplexTableau {\n\
-    \    int constraint_count;\n    int variable_count;\n    T eps;\n    std::vector<int>\
-    \ basis;\n    std::vector<int> nonbasis;\n    std::vector<std::vector<T>> table;\n\
-    \n    SimplexTableau(const std::vector<std::vector<T>>& a, const std::vector<T>&\
-    \ b,\n                   const std::vector<T>& c, T epsilon)\n        : constraint_count(int(b.size())),\n\
+    \n\n\n\n#line 6 \"optimization/integer_lp.hpp\"\n#include <cmath>\n#line 10 \"\
+    optimization/integer_lp.hpp\"\n\n#line 1 \"optimization/simplex.hpp\"\n\n\n\n\
+    #line 9 \"optimization/simplex.hpp\"\n\nnamespace m1une {\nnamespace optimization\
+    \ {\n\nenum class SimplexStatus {\n    Optimal,\n    Infeasible,\n    Unbounded,\n\
+    };\n\ntemplate <class T>\nstruct SimplexResult {\n    SimplexStatus status;\n\
+    \    T objective_value;\n    std::vector<T> variables;\n\n    bool is_optimal()\
+    \ const { return status == SimplexStatus::Optimal; }\n    bool is_infeasible()\
+    \ const { return status == SimplexStatus::Infeasible; }\n    bool is_unbounded()\
+    \ const { return status == SimplexStatus::Unbounded; }\n};\n\nnamespace detail\
+    \ {\n\ntemplate <class T>\nT simplex_abs(T x) {\n    return x < T() ? -x : x;\n\
+    }\n\ntemplate <class T>\nstruct SimplexTableau {\n    int constraint_count;\n\
+    \    int variable_count;\n    T eps;\n    std::vector<int> basis;\n    std::vector<int>\
+    \ nonbasis;\n    std::vector<std::vector<T>> table;\n\n    SimplexTableau(const\
+    \ std::vector<std::vector<T>>& a, const std::vector<T>& b,\n                 \
+    \  const std::vector<T>& c, T epsilon)\n        : constraint_count(int(b.size())),\n\
     \          variable_count(int(c.size())),\n          eps(epsilon),\n         \
     \ basis(constraint_count),\n          nonbasis(variable_count + 1),\n        \
     \  table(constraint_count + 2, std::vector<T>(variable_count + 2, T())) {\n  \
@@ -509,9 +537,9 @@ data:
     \ {\n            add_a_minus_x(other.left_top());\n            other._left.pop();\n\
     \        }\n        while (!other._right.empty()) {\n            add_x_minus_a(other.right_top());\n\
     \            other._right.pop();\n        }\n    }\n};\n\n}  // namespace optimization\n\
-    }  // namespace m1une\n\n\n#line 9 \"optimization/all.hpp\"\n\n\n#line 10 \"verify/optimization/slope_trick.test.cpp\"\
-    \n\nusing SlopeTrick = m1une::optimization::SlopeTrick<long long>;\n\nconstexpr\
-    \ int coordinate_limit = 300;\nconstexpr long long inf = std::numeric_limits<long\
+    }  // namespace m1une\n\n\n#line 10 \"optimization/all.hpp\"\n\n\n#line 10 \"\
+    verify/optimization/slope_trick.test.cpp\"\n\nusing SlopeTrick = m1une::optimization::SlopeTrick<long\
+    \ long>;\n\nconstexpr int coordinate_limit = 300;\nconstexpr long long inf = std::numeric_limits<long\
     \ long>::max() / 4;\n\nint index_of(int x) {\n    return x + coordinate_limit;\n\
     }\n\nvoid check_values(const SlopeTrick& slope, const std::vector<long long>&\
     \ value) {\n    long long expected_minimum = *std::min_element(value.begin(),\
@@ -676,6 +704,7 @@ data:
     \ long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - optimization/all.hpp
+  - optimization/alien_trick.hpp
   - optimization/hungarian.hpp
   - optimization/integer_lp.hpp
   - optimization/simplex.hpp
@@ -685,7 +714,7 @@ data:
   isVerificationFile: true
   path: verify/optimization/slope_trick.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 01:12:58+09:00'
+  timestamp: '2026-06-23 01:26:40+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/optimization/slope_trick.test.cpp
