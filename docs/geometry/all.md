@@ -12,6 +12,7 @@ documentation_of: ../../geometry/all.hpp
 | Header | Contents |
 | --- | --- |
 | `geometry/point.hpp` | Points, vectors, dot/cross products, exact orientation, distance, and rotation. |
+| `geometry/manhattan_mst.hpp` | Manhattan minimum spanning tree for integral points in $O(N\log N)$. |
 | `geometry/line.hpp` | Lines, segments, projection, intersection, and distances. |
 | `geometry/ray.hpp` | Rays, containment, projection, intersections, and distances with other linear objects. |
 | `geometry/polygon.hpp` | Area, centroids, triangulation, hulls, containment, ray queries, intersection, clipping, and Minkowski sums. |

@@ -3,6 +3,7 @@
 
 #include "circle.hpp"
 #include "line.hpp"
+#include "manhattan_mst.hpp"
 #include "point.hpp"
 #include "polygon.hpp"
 #include "ray.hpp"
