@@ -15,6 +15,7 @@ individual graph includes. Flow-network algorithms live separately under
 | Header | Graph orientation | Contents |
 | --- | --- | --- |
 | `graph/graph.hpp` | Container | `Graph<T>` and `Edge<T>` adjacency-list container. |
+| `graph/range_edge_graph.hpp` | Directed graph builder | Compact point-to-range, range-to-point, and range-to-range edges using segment trees. |
 | `graph/shortest_path.hpp` | Direction-respecting / DAG-specific | Cow game difference constraints, BFS, 0-1 BFS, DAG shortest path, Dijkstra, Bellman-Ford, and Warshall-Floyd. |
 | `graph/directed.hpp` | Directed-oriented bundle | Directed algorithms plus shortest paths. |
 | `graph/undirected.hpp` | Undirected-oriented bundle | Undirected algorithms plus shortest paths and grid helpers. |
