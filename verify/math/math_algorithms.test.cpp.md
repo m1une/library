@@ -23,6 +23,9 @@ data:
     path: math/combinatorics.hpp
     title: Combinatorics
   - icon: ':heavy_check_mark:'
+    path: math/integer_arithmetic.hpp
+    title: Integer Square Root and Power
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
   - icon: ':heavy_check_mark:'
@@ -515,14 +518,65 @@ data:
     \n    std::vector<Mint> result(maximum + 1);\n    result[0] = 1;\n    if (maximum\
     \ >= 1) result[1] = 0;\n    for (int n = 2; n <= maximum; n++) {\n        result[n]\
     \ = Mint(n - 1) * (result[n - 1] + result[n - 2]);\n    }\n    return result;\n\
-    }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/number_theory.hpp\"\
-    \n\n\n\n#line 6 \"math/number_theory.hpp\"\n#include <limits>\n#line 9 \"math/number_theory.hpp\"\
-    \n\nnamespace m1une {\nnamespace math {\n\nnamespace internal {\n\ninline long\
-    \ long safe_mod(long long x, long long mod) {\n    x %= mod;\n    if (x < 0) x\
-    \ += mod;\n    return x;\n}\n\ninline unsigned __int128 floor_sum_unsigned(unsigned\
-    \ long long n, unsigned long long mod, unsigned long long a,\n               \
-    \                             unsigned long long b) {\n    unsigned __int128 answer\
-    \ = 0;\n    while (true) {\n        if (a >= mod) {\n            answer += static_cast<unsigned\
+    }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/integer_arithmetic.hpp\"\
+    \n\n\n\n#line 5 \"math/integer_arithmetic.hpp\"\n#include <concepts>\n#include\
+    \ <limits>\n#line 8 \"math/integer_arithmetic.hpp\"\n#include <type_traits>\n\n\
+    namespace m1une {\nnamespace math {\n\nnamespace integer_arithmetic_detail {\n\
+    \ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\n\
+    constexpr std::optional<T> checked_multiply(T first, T second) {\n    constexpr\
+    \ T minimum = std::numeric_limits<T>::min();\n    constexpr T maximum = std::numeric_limits<T>::max();\n\
+    \n    if constexpr (std::unsigned_integral<T>) {\n        if (second != 0 && maximum\
+    \ / second < first) return std::nullopt;\n    } else {\n        if (0 < first)\
+    \ {\n            if (0 < second) {\n                if (maximum / second < first)\
+    \ return std::nullopt;\n            } else if (second < minimum / first) {\n \
+    \               return std::nullopt;\n            }\n        } else if (first\
+    \ < 0) {\n            if (0 < second) {\n                if (first < minimum /\
+    \ second) return std::nullopt;\n            } else if (second < maximum / first)\
+    \ {\n                return std::nullopt;\n            }\n        }\n    }\n \
+    \   return T(first * second);\n}\n\n}  // namespace integer_arithmetic_detail\n\
+    \n// Returns floor(sqrt(value)) exactly, without floating-point arithmetic.\n\
+    template <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\n\
+    constexpr T isqrt(T value) {\n    if constexpr (std::signed_integral<T>) assert(0\
+    \ <= value);\n    if (value <= 1) return value;\n\n    T low = 1;\n    T high\
+    \ = value / 2 + 1;\n    while (low < high) {\n        T middle = low + (high -\
+    \ low + 1) / 2;\n        if (middle <= value / middle) {\n            low = middle;\n\
+    \        } else {\n            high = middle - 1;\n        }\n    }\n    return\
+    \ low;\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nconstexpr T floor_sqrt(T value) {\n    return isqrt(value);\n}\n\n//\
+    \ Returns ceil(sqrt(value)) exactly, without floating-point arithmetic.\ntemplate\
+    \ <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\nconstexpr\
+    \ T ceil_sqrt(T value) {\n    T result = isqrt(value);\n    if (result == 0) return\
+    \ 0;\n    if (result != 0 && value / result == result && value % result == 0)\
+    \ {\n        return result;\n    }\n    return result + 1;\n}\n\n// Returns base^exponent,\
+    \ or nullopt when the result does not fit in T.\ntemplate <std::integral T, std::unsigned_integral\
+    \ Exponent>\nrequires(\n    !std::same_as<std::remove_cv_t<T>, bool>\n    && !std::same_as<std::remove_cv_t<Exponent>,\
+    \ bool>\n)\nconstexpr std::optional<T> checked_ipow(T base, Exponent exponent)\
+    \ {\n    T result = 1;\n    while (exponent != 0) {\n        if (exponent & 1)\
+    \ {\n            auto product =\n                integer_arithmetic_detail::checked_multiply(result,\
+    \ base);\n            if (!product.has_value()) return std::nullopt;\n       \
+    \     result = *product;\n        }\n        exponent >>= 1;\n        if (exponent\
+    \ != 0) {\n            auto square =\n                integer_arithmetic_detail::checked_multiply(base,\
+    \ base);\n            if (!square.has_value()) return std::nullopt;\n        \
+    \    base = *square;\n        }\n    }\n    return result;\n}\n\ntemplate <std::integral\
+    \ T, std::unsigned_integral Exponent>\nrequires(\n    !std::same_as<std::remove_cv_t<T>,\
+    \ bool>\n    && !std::same_as<std::remove_cv_t<Exponent>, bool>\n)\nconstexpr\
+    \ std::optional<T> checked_integer_pow(T base, Exponent exponent) {\n    return\
+    \ checked_ipow(base, exponent);\n}\n\n// Returns base^exponent. The result must\
+    \ be representable by T.\ntemplate <std::integral T, std::unsigned_integral Exponent>\n\
+    requires(\n    !std::same_as<std::remove_cv_t<T>, bool>\n    && !std::same_as<std::remove_cv_t<Exponent>,\
+    \ bool>\n)\nconstexpr T ipow(T base, Exponent exponent) {\n    std::optional<T>\
+    \ result = checked_ipow(base, exponent);\n    assert(result.has_value());\n  \
+    \  return result.value_or(T());\n}\n\ntemplate <std::integral T, std::unsigned_integral\
+    \ Exponent>\nrequires(\n    !std::same_as<std::remove_cv_t<T>, bool>\n    && !std::same_as<std::remove_cv_t<Exponent>,\
+    \ bool>\n)\nconstexpr T integer_pow(T base, Exponent exponent) {\n    return ipow(base,\
+    \ exponent);\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"\
+    math/number_theory.hpp\"\n\n\n\n#line 9 \"math/number_theory.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace math {\n\nnamespace internal {\n\ninline long long safe_mod(long\
+    \ long x, long long mod) {\n    x %= mod;\n    if (x < 0) x += mod;\n    return\
+    \ x;\n}\n\ninline unsigned __int128 floor_sum_unsigned(unsigned long long n, unsigned\
+    \ long long mod, unsigned long long a,\n                                     \
+    \       unsigned long long b) {\n    unsigned __int128 answer = 0;\n    while\
+    \ (true) {\n        if (a >= mod) {\n            answer += static_cast<unsigned\
     \ __int128>(n) * (n - 1) / 2 * (a / mod);\n            a %= mod;\n        }\n\
     \        if (b >= mod) {\n            answer += static_cast<unsigned __int128>(n)\
     \ * (b / mod);\n            b %= mod;\n        }\n\n        const unsigned __int128\
@@ -709,7 +763,7 @@ data:
     \            const int prime = _min_prime_factor[value];\n            const int\
     \ reduced = value / prime;\n            result[value] = reduced % prime == 0 ?\
     \ 0 : -result[reduced];\n        }\n        return result;\n    }\n};\n\n}  //\
-    \ namespace math\n}  // namespace m1une\n\n\n#line 13 \"math/all.hpp\"\n\n\n#line\
+    \ namespace math\n}  // namespace m1une\n\n\n#line 14 \"math/all.hpp\"\n\n\n#line\
     \ 12 \"verify/math/math_algorithms.test.cpp\"\n\nlong long floor_div(long long\
     \ numerator, long long denominator) {\n    long long quotient = numerator / denominator;\n\
     \    if (numerator % denominator < 0) quotient--;\n    return quotient;\n}\n\n\
@@ -975,6 +1029,7 @@ data:
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
+  - math/integer_arithmetic.hpp
   - math/modint.hpp
   - math/number_theory.hpp
   - math/prime_factorization.hpp
@@ -982,7 +1037,7 @@ data:
   isVerificationFile: true
   path: verify/math/math_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-22 22:56:57+09:00'
+  timestamp: '2026-06-23 02:33:09+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/math/math_algorithms.test.cpp
