@@ -9,6 +9,9 @@ data:
     path: geometry/circle.hpp
     title: Circles
   - icon: ':heavy_check_mark:'
+    path: geometry/farthest_pair.hpp
+    title: Farthest Pair of Points
+  - icon: ':heavy_check_mark:'
     path: geometry/line.hpp
     title: Lines and Segments
   - icon: ':heavy_check_mark:'
@@ -30,6 +33,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/geometry/convex_hull.test.cpp
     title: verify/geometry/convex_hull.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/farthest_pair.test.cpp
+    title: verify/geometry/farthest_pair.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/geometry/geometry_algorithms.test.cpp
     title: verify/geometry/geometry_algorithms.test.cpp
@@ -233,6 +239,7 @@ data:
   - geometry/circle.hpp
   - geometry/all.hpp
   - geometry/line.hpp
+  - geometry/farthest_pair.hpp
   - geometry/manhattan_mst.hpp
   - geometry/polygon.hpp
   timestamp: '2026-06-21 12:04:47+09:00'
@@ -249,6 +256,7 @@ data:
   - verify/geometry/polygon_operations.test.cpp
   - verify/geometry/projection.test.cpp
   - verify/geometry/ray.test.cpp
+  - verify/geometry/farthest_pair.test.cpp
 documentation_of: geometry/point.hpp
 layout: document
 title: 2D Point and Predicates

@@ -14,10 +14,16 @@ data:
   - icon: ':heavy_check_mark:'
     path: geometry/all.hpp
     title: Geometry Bundle
+  - icon: ':heavy_check_mark:'
+    path: geometry/farthest_pair.hpp
+    title: Farthest Pair of Points
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/geometry/convex_hull.test.cpp
     title: verify/geometry/convex_hull.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/farthest_pair.test.cpp
+    title: verify/geometry/farthest_pair.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/geometry/geometry_algorithms.test.cpp
     title: verify/geometry/geometry_algorithms.test.cpp
@@ -1046,6 +1052,7 @@ data:
   path: geometry/polygon.hpp
   requiredBy:
   - geometry/all.hpp
+  - geometry/farthest_pair.hpp
   timestamp: '2026-06-21 12:04:47+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -1054,6 +1061,7 @@ data:
   - verify/geometry/point_in_polygon.test.cpp
   - verify/geometry/convex_hull.test.cpp
   - verify/geometry/polygon_operations.test.cpp
+  - verify/geometry/farthest_pair.test.cpp
 documentation_of: geometry/polygon.hpp
 layout: document
 title: Polygons and Convex Hull
