@@ -50,6 +50,7 @@
 "verify/ds/segtree/persistent_lazy_segtree.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/ds/segtree/persistent_segtree.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/ds/segtree/segtree.test.cpp": "2026-06-21 04:34:53 +0900",
+"verify/ds/segtree/segtree_beats.test.cpp": "2026-06-23 02:55:21 +0900",
 "verify/flow/flow_algorithms.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/fps/convolution_mod.test.cpp": "2026-06-21 17:44:01 +0900",
 "verify/fps/exp_of_formal_power_series.test.cpp": "2026-06-21 17:44:01 +0900",
