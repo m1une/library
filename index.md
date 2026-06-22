@@ -416,6 +416,9 @@ data:
       path: math/prime_sieve.hpp
       title: Prime Sieve
     - icon: ':heavy_check_mark:'
+      path: math/rational.hpp
+      title: Rational Number
+    - icon: ':heavy_check_mark:'
       path: math/zeta_mobius_transform.hpp
       title: Zeta and Mobius Transform
   - name: matrix
@@ -1006,6 +1009,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/primality_test.test.cpp
       title: verify/math/primality_test.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/rational.test.cpp
+      title: verify/math/rational.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/math/stirling_number_of_the_second_kind.test.cpp
       title: verify/math/stirling_number_of_the_second_kind.test.cpp
