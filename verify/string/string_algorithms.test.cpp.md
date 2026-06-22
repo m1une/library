@@ -17,6 +17,9 @@ data:
     path: string/rolling_hash.hpp
     title: Static Rolling Hash
   - icon: ':heavy_check_mark:'
+    path: string/string_hash.hpp
+    title: String Hash
+  - icon: ':heavy_check_mark:'
     path: string/suffix_array.hpp
     title: Suffix Array and LCP Array
   - icon: ':heavy_check_mark:'
@@ -252,12 +255,56 @@ data:
     \ pair {hash_value, base_power} for a single character.\n    static constexpr\
     \ std::pair<long long, long long> make_single(long long c) {\n        return {c\
     \ % Mod, Base % Mod};\n    }\n};\n\n}  // namespace string\n}  // namespace m1une\n\
-    \n\n#line 1 \"string/suffix_array.hpp\"\n\n\n\n#line 6 \"string/suffix_array.hpp\"\
-    \n#include <numeric>\n#line 8 \"string/suffix_array.hpp\"\n#include <type_traits>\n\
-    #line 10 \"string/suffix_array.hpp\"\n\nnamespace m1une {\nnamespace string {\n\
-    namespace detail {\n\ntemplate <class Sequence>\nstd::vector<int> suffix_array_impl(const\
-    \ Sequence& sequence) {\n    int n = int(sequence.size());\n    if (n == 0) return\
-    \ {};\n\n    using Value = std::remove_cv_t<std::remove_reference_t<decltype(sequence[0])>>;\n\
+    \n\n#line 1 \"string/string_hash.hpp\"\n\n\n\n#line 5 \"string/string_hash.hpp\"\
+    \n#include <cstdint>\n#line 7 \"string/string_hash.hpp\"\n#include <string_view>\n\
+    \nnamespace m1une {\nnamespace string {\n\nstruct StringHash {\n    std::uint32_t\
+    \ first;\n    std::uint32_t second;\n    std::uint32_t first_power;\n    std::uint32_t\
+    \ second_power;\n    std::size_t length;\n\n    friend constexpr bool operator==(const\
+    \ StringHash& left, const StringHash& right) {\n        return left.length ==\
+    \ right.length && left.first == right.first && left.second == right.second;\n\
+    \    }\n};\n\nnamespace string_hash_detail {\n\ninline constexpr std::uint64_t\
+    \ first_mod = 1'000'000'007;\ninline constexpr std::uint64_t second_mod = 1'000'000'009;\n\
+    inline constexpr std::uint64_t base = 911'382'323;\n\n}  // namespace string_hash_detail\n\
+    \n// Computes a double polynomial hash. Bytes are interpreted as unsigned.\nconstexpr\
+    \ StringHash hash_string(std::string_view value) {\n    using namespace string_hash_detail;\n\
+    \    std::uint64_t first = 0;\n    std::uint64_t second = 0;\n    std::uint64_t\
+    \ first_power = 1;\n    std::uint64_t second_power = 1;\n    for (char character\
+    \ : value) {\n        std::uint64_t symbol = static_cast<unsigned char>(character)\
+    \ + std::uint64_t(1);\n        first = (first * base + symbol) % first_mod;\n\
+    \        second = (second * base + symbol) % second_mod;\n        first_power\
+    \ = first_power * base % first_mod;\n        second_power = second_power * base\
+    \ % second_mod;\n    }\n    return StringHash{\n        static_cast<std::uint32_t>(first),\n\
+    \        static_cast<std::uint32_t>(second),\n        static_cast<std::uint32_t>(first_power),\n\
+    \        static_cast<std::uint32_t>(second_power),\n        value.size(),\n  \
+    \  };\n}\n\nconstexpr StringHash hash_string(const std::string& value) {\n   \
+    \ return hash_string(std::string_view(value));\n}\n\nconstexpr StringHash hash_string(const\
+    \ char* value) {\n    return hash_string(std::string_view(value));\n}\n\n// Returns\
+    \ the hash of the concatenation represented by `left` and `right`.\nconstexpr\
+    \ StringHash concat_string_hash(const StringHash& left, const StringHash& right)\
+    \ {\n    using namespace string_hash_detail;\n    return StringHash{\n       \
+    \ static_cast<std::uint32_t>((std::uint64_t(left.first) * right.first_power +\
+    \ right.first) % first_mod),\n        static_cast<std::uint32_t>((std::uint64_t(left.second)\
+    \ * right.second_power + right.second) % second_mod),\n        static_cast<std::uint32_t>(std::uint64_t(left.first_power)\
+    \ * right.first_power % first_mod),\n        static_cast<std::uint32_t>(std::uint64_t(left.second_power)\
+    \ * right.second_power % second_mod),\n        left.length + right.length,\n \
+    \   };\n}\n\n// Hash adapter for std::unordered_map and std::unordered_set.\n\
+    struct StringHasher {\n    using is_transparent = void;\n\n    constexpr std::size_t\
+    \ operator()(std::string_view value) const {\n        return operator()(hash_string(value));\n\
+    \    }\n\n    constexpr std::size_t operator()(const std::string& value) const\
+    \ {\n        return operator()(std::string_view(value));\n    }\n\n    constexpr\
+    \ std::size_t operator()(const char* value) const {\n        return operator()(std::string_view(value));\n\
+    \    }\n\n    constexpr std::size_t operator()(const StringHash& value) const\
+    \ {\n        std::uint64_t combined = (std::uint64_t(value.first) << 32) | value.second;\n\
+    \        combined ^= std::uint64_t(value.length) + 0x9e3779b97f4a7c15ULL;\n  \
+    \      combined ^= combined >> 30;\n        combined *= 0xbf58476d1ce4e5b9ULL;\n\
+    \        combined ^= combined >> 27;\n        combined *= 0x94d049bb133111ebULL;\n\
+    \        combined ^= combined >> 31;\n        return static_cast<std::size_t>(combined);\n\
+    \    }\n};\n\n}  // namespace string\n}  // namespace m1une\n\n\n#line 1 \"string/suffix_array.hpp\"\
+    \n\n\n\n#line 6 \"string/suffix_array.hpp\"\n#include <numeric>\n#line 8 \"string/suffix_array.hpp\"\
+    \n#include <type_traits>\n#line 10 \"string/suffix_array.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace string {\nnamespace detail {\n\ntemplate <class Sequence>\nstd::vector<int>\
+    \ suffix_array_impl(const Sequence& sequence) {\n    int n = int(sequence.size());\n\
+    \    if (n == 0) return {};\n\n    using Value = std::remove_cv_t<std::remove_reference_t<decltype(sequence[0])>>;\n\
     \    std::vector<Value> sorted(sequence.begin(), sequence.end());\n    std::sort(sorted.begin(),\
     \ sorted.end());\n    sorted.erase(std::unique(sorted.begin(), sorted.end()),\
     \ sorted.end());\n\n    int length = n + 1;\n    std::vector<int> order(length);\n\
@@ -392,10 +439,10 @@ data:
     \ + z[i] < n && sequence[z[i]] == sequence[i + z[i]]) {\n            z[i]++;\n\
     \        }\n        if (right < i + z[i]) {\n            left = i;\n         \
     \   right = i + z[i];\n        }\n    }\n    return z;\n}\n\n}  // namespace string\n\
-    }  // namespace m1une\n\n\n#line 11 \"string/all.hpp\"\n\n\n#line 4 \"verify/string/string_algorithms.test.cpp\"\
-    \n\n#line 7 \"verify/string/string_algorithms.test.cpp\"\n#include <cstdint>\n\
-    #include <iostream>\n#line 12 \"verify/string/string_algorithms.test.cpp\"\n\n\
-    namespace {\n\nvoid test_edge_cases() {\n    std::string empty;\n    assert(m1une::string::z_algorithm(empty).empty());\n\
+    }  // namespace m1une\n\n\n#line 12 \"string/all.hpp\"\n\n\n#line 4 \"verify/string/string_algorithms.test.cpp\"\
+    \n\n#line 8 \"verify/string/string_algorithms.test.cpp\"\n#include <iostream>\n\
+    #line 12 \"verify/string/string_algorithms.test.cpp\"\n\nnamespace {\n\nvoid test_edge_cases()\
+    \ {\n    std::string empty;\n    assert(m1une::string::z_algorithm(empty).empty());\n\
     \    assert(m1une::string::prefix_function(empty).empty());\n    assert(m1une::string::suffix_array(empty).empty());\n\
     \    assert(m1une::string::lcp_array(empty, std::vector<int>()).empty());\n\n\
     \    auto empty_palindromes = m1une::string::manacher(empty);\n    assert(empty_palindromes.empty());\n\
@@ -526,13 +573,14 @@ data:
   - string/manacher.hpp
   - string/prefix_function.hpp
   - string/rolling_hash.hpp
+  - string/string_hash.hpp
   - string/suffix_array.hpp
   - string/trie.hpp
   - string/z_algorithm.hpp
   isVerificationFile: true
   path: verify/string/string_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 02:00:16+09:00'
+  timestamp: '2026-06-23 02:51:06+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/string_algorithms.test.cpp

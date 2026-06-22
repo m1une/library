@@ -611,6 +611,9 @@ data:
       path: string/rolling_hash.hpp
       title: Static Rolling Hash
     - icon: ':heavy_check_mark:'
+      path: string/string_hash.hpp
+      title: String Hash
+    - icon: ':heavy_check_mark:'
       path: string/suffix_array.hpp
       title: Suffix Array and LCP Array
     - icon: ':heavy_check_mark:'
@@ -1070,6 +1073,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/string/string_algorithms.test.cpp
       title: verify/string/string_algorithms.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/string/string_hash.test.cpp
+      title: verify/string/string_hash.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/string/suffix_array.test.cpp
       title: verify/string/suffix_array.test.cpp
