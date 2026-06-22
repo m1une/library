@@ -6,6 +6,9 @@ data:
     path: geometry/all.hpp
     title: Geometry Bundle
   - icon: ':heavy_check_mark:'
+    path: geometry/angle_sort.hpp
+    title: Angle Sort
+  - icon: ':heavy_check_mark:'
     path: geometry/circle.hpp
     title: Circles
   - icon: ':heavy_check_mark:'
@@ -24,6 +27,9 @@ data:
     path: geometry/ray.hpp
     title: Rays
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/angle_sort.test.cpp
+    title: verify/geometry/angle_sort.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/geometry/circle_line_intersection.test.cpp
     title: verify/geometry/circle_line_intersection.test.cpp
@@ -239,6 +245,7 @@ data:
   - geometry/circle.hpp
   - geometry/all.hpp
   - geometry/line.hpp
+  - geometry/angle_sort.hpp
   - geometry/farthest_pair.hpp
   - geometry/manhattan_mst.hpp
   - geometry/polygon.hpp
@@ -257,6 +264,7 @@ data:
   - verify/geometry/projection.test.cpp
   - verify/geometry/ray.test.cpp
   - verify/geometry/farthest_pair.test.cpp
+  - verify/geometry/angle_sort.test.cpp
 documentation_of: geometry/point.hpp
 layout: document
 title: 2D Point and Predicates

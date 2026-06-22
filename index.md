@@ -266,6 +266,9 @@ data:
       path: geometry/all.hpp
       title: Geometry Bundle
     - icon: ':heavy_check_mark:'
+      path: geometry/angle_sort.hpp
+      title: Angle Sort
+    - icon: ':heavy_check_mark:'
       path: geometry/circle.hpp
       title: Circles
     - icon: ':heavy_check_mark:'
@@ -851,6 +854,9 @@ data:
       title: verify/fps/pow_of_formal_power_series.test.cpp
   - name: verify/geometry
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/geometry/angle_sort.test.cpp
+      title: verify/geometry/angle_sort.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/geometry/circle_line_intersection.test.cpp
       title: verify/geometry/circle_line_intersection.test.cpp
