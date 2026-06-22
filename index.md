@@ -544,14 +544,6 @@ data:
     - icon: ':heavy_check_mark:'
       path: optimization/simplex.hpp
       title: Simplex Algorithm
-  - name: scripts
-    pages:
-    - icon: ':warning:'
-      path: scripts/fix_includes.py
-      title: scripts/fix_includes.py
-    - icon: ':warning:'
-      path: scripts/revert_md_includes.py
-      title: scripts/revert_md_includes.py
   - name: sequence
     pages:
     - icon: ':heavy_check_mark:'
