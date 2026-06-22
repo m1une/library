@@ -35,6 +35,9 @@ data:
     path: graph/directed.hpp
     title: Directed Graph Algorithms
   - icon: ':heavy_check_mark:'
+    path: graph/dominator_tree.hpp
+    title: Dominator Tree
+  - icon: ':heavy_check_mark:'
     path: graph/general_matching.hpp
     title: General Matching
   - icon: ':heavy_check_mark:'
@@ -560,7 +563,76 @@ data:
     \ value(int variable) const {\n        assert(_solved && _satisfiable);\n    \
     \    assert(0 <= variable && variable < _n);\n        return _answer[variable];\n\
     \    }\n};\n\n}  // namespace graph\n}  // namespace m1une\n\n\n#line 10 \"graph/directed.hpp\"\
-    \n\n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\
+    \n\n\n#line 1 \"graph/dominator_tree.hpp\"\n\n\n\n#line 7 \"graph/dominator_tree.hpp\"\
+    \n\n#line 9 \"graph/dominator_tree.hpp\"\n\nnamespace m1une {\nnamespace graph\
+    \ {\n\nstruct DominatorTree {\n    int root;\n    std::vector<int> immediate_dominator;\n\
+    \    std::vector<std::vector<int>> children;\n    std::vector<int> dfs_order;\n\
+    \    std::vector<int> tin;\n    std::vector<int> tout;\n\n    int size() const\
+    \ {\n        return int(immediate_dominator.size());\n    }\n\n    bool reachable(int\
+    \ vertex) const {\n        assert(0 <= vertex && vertex < size());\n        return\
+    \ immediate_dominator[vertex] != -1;\n    }\n\n    bool dominates(int ancestor,\
+    \ int vertex) const {\n        assert(0 <= ancestor && ancestor < size());\n \
+    \       assert(0 <= vertex && vertex < size());\n        return\n            reachable(ancestor)\
+    \ &&\n            reachable(vertex) &&\n            tin[ancestor] <= tin[vertex]\
+    \ &&\n            tin[vertex] < tout[ancestor];\n    }\n};\n\n// Lengauer-Tarjan\
+    \ immediate dominators from one start vertex.\ntemplate <class T>\nDominatorTree\
+    \ dominator_tree(const Graph<T>& graph, int root) {\n    int n = graph.size();\n\
+    \    assert(0 <= root && root < n);\n\n    std::vector<int> dfs_index(n, -1);\n\
+    \    std::vector<int> vertex;\n    std::vector<int> parent_vertex(n, -1);\n  \
+    \  std::vector<std::pair<int, int>> stack;\n    dfs_index[root] = 0;\n    vertex.push_back(root);\n\
+    \    stack.emplace_back(root, 0);\n\n    while (!stack.empty()) {\n        int\
+    \ current = stack.back().first;\n        int& edge_index = stack.back().second;\n\
+    \        if (edge_index == int(graph[current].size())) {\n            stack.pop_back();\n\
+    \            continue;\n        }\n        const auto& edge = graph[current][edge_index++];\n\
+    \        if (!edge.alive || dfs_index[edge.to] != -1) continue;\n        parent_vertex[edge.to]\
+    \ = current;\n        dfs_index[edge.to] = int(vertex.size());\n        vertex.push_back(edge.to);\n\
+    \        stack.emplace_back(edge.to, 0);\n    }\n\n    int reachable_count = int(vertex.size());\n\
+    \    std::vector<std::vector<int>> predecessor(reachable_count);\n    for (int\
+    \ from : vertex) {\n        for (const auto& edge : graph[from]) {\n         \
+    \   if (!edge.alive || dfs_index[edge.to] == -1) continue;\n            predecessor[dfs_index[edge.to]].push_back(dfs_index[from]);\n\
+    \        }\n    }\n\n    std::vector<int> parent(reachable_count, -1);\n    for\
+    \ (int index = 1; index < reachable_count; ++index) {\n        parent[index] =\
+    \ dfs_index[parent_vertex[vertex[index]]];\n    }\n\n    std::vector<int> semi(reachable_count);\n\
+    \    std::vector<int> idom(reachable_count, -1);\n    std::vector<int> ancestor(reachable_count,\
+    \ -1);\n    std::vector<int> label(reachable_count);\n    std::vector<std::vector<int>>\
+    \ bucket(reachable_count);\n    for (int index = 0; index < reachable_count; ++index)\
+    \ {\n        semi[index] = index;\n        label[index] = index;\n    }\n\n  \
+    \  auto compress = [&](int start) {\n        std::vector<int> path;\n        int\
+    \ current = start;\n        while (\n            ancestor[current] != -1 &&\n\
+    \            ancestor[ancestor[current]] != -1\n        ) {\n            path.push_back(current);\n\
+    \            current = ancestor[current];\n        }\n        for (int index =\
+    \ int(path.size()) - 1; index >= 0; --index) {\n            int node = path[index];\n\
+    \            int parent_node = ancestor[node];\n            if (semi[label[parent_node]]\
+    \ < semi[label[node]]) {\n                label[node] = label[parent_node];\n\
+    \            }\n            ancestor[node] = ancestor[parent_node];\n        }\n\
+    \    };\n\n    auto eval = [&](int node) {\n        if (ancestor[node] == -1)\
+    \ return label[node];\n        compress(node);\n        int parent_node = ancestor[node];\n\
+    \        if (semi[label[parent_node]] < semi[label[node]]) {\n            return\
+    \ label[parent_node];\n        }\n        return label[node];\n    };\n\n    for\
+    \ (int current = reachable_count - 1; current >= 1; --current) {\n        for\
+    \ (int previous : predecessor[current]) {\n            semi[current] = std::min(semi[current],\
+    \ semi[eval(previous)]);\n        }\n        bucket[semi[current]].push_back(current);\n\
+    \        ancestor[current] = parent[current];\n\n        int parent_node = parent[current];\n\
+    \        for (int node : bucket[parent_node]) {\n            int best = eval(node);\n\
+    \            idom[node] =\n                semi[best] < semi[node] ? best : parent_node;\n\
+    \        }\n        bucket[parent_node].clear();\n    }\n\n    for (int current\
+    \ = 1; current < reachable_count; ++current) {\n        if (idom[current] != semi[current])\
+    \ {\n            idom[current] = idom[idom[current]];\n        }\n    }\n    idom[0]\
+    \ = 0;\n\n    DominatorTree result;\n    result.root = root;\n    result.immediate_dominator.assign(n,\
+    \ -1);\n    result.children.assign(n, {});\n    result.dfs_order = vertex;\n \
+    \   for (int index = 0; index < reachable_count; ++index) {\n        int current\
+    \ = vertex[index];\n        int dominator = vertex[idom[index]];\n        result.immediate_dominator[current]\
+    \ = dominator;\n        if (current != root) result.children[dominator].push_back(current);\n\
+    \    }\n\n    result.tin.assign(n, -1);\n    result.tout.assign(n, -1);\n    int\
+    \ timer = 0;\n    std::vector<std::pair<int, int>> tree_stack;\n    tree_stack.emplace_back(root,\
+    \ 0);\n    result.tin[root] = timer++;\n    while (!tree_stack.empty()) {\n  \
+    \      int current = tree_stack.back().first;\n        int& child_index = tree_stack.back().second;\n\
+    \        if (child_index == int(result.children[current].size())) {\n        \
+    \    result.tout[current] = timer;\n            tree_stack.pop_back();\n     \
+    \       continue;\n        }\n        int child = result.children[current][child_index++];\n\
+    \        result.tin[child] = timer++;\n        tree_stack.emplace_back(child,\
+    \ 0);\n    }\n    return result;\n}\n\n}  // namespace graph\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"graph/grid.hpp\"\n\n\n\n#include <array>\n#line 8 \"graph/grid.hpp\"\
     \n\n#line 10 \"graph/grid.hpp\"\n\nnamespace m1une {\nnamespace graph {\n\nstruct\
     \ Grid {\n   private:\n    int _h;\n    int _w;\n\n   public:\n    static constexpr\
     \ std::array<int, 4> di4 = {-1, 0, 1, 0};\n    static constexpr std::array<int,\
@@ -1356,7 +1428,7 @@ data:
     \    }\n    return result;\n}\n\ntemplate <class T>\nint minimum_vertex_cover_size(const\
     \ Graph<T>& g) {\n    return minimum_vertex_cover(g).size();\n}\n\n}  // namespace\
     \ graph\n}  // namespace m1une\n\n\n#line 14 \"graph/undirected.hpp\"\n\n\n#line\
-    \ 10 \"graph/all.hpp\"\n\n\n#line 10 \"verify/graph/cow_game.test.cpp\"\n\nusing\
+    \ 11 \"graph/all.hpp\"\n\n\n#line 10 \"verify/graph/cow_game.test.cpp\"\n\nusing\
     \ CowGame = m1une::graph::CowGame<long long>;\n\nvoid test_basic_constraints()\
     \ {\n    CowGame game(4);\n    int first = game.add_upper_bound(0, 1, 5);\n  \
     \  game.add_lower_bound(0, 1, 2);\n    game.add_bounds(1, 2, -1, 4);\n    game.add_equality(2,\
@@ -1503,6 +1575,7 @@ data:
   - graph/warshall_floyd.hpp
   - graph/zero_one_bfs.hpp
   - graph/two_sat.hpp
+  - graph/dominator_tree.hpp
   - graph/grid.hpp
   - graph/range_edge_graph.hpp
   - graph/undirected.hpp
@@ -1516,7 +1589,7 @@ data:
   isVerificationFile: true
   path: verify/graph/cow_game.test.cpp
   requiredBy: []
-  timestamp: '2026-06-22 23:50:35+09:00'
+  timestamp: '2026-06-23 03:14:37+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/graph/cow_game.test.cpp

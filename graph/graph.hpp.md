@@ -30,6 +30,9 @@ data:
     path: graph/directed.hpp
     title: Directed Graph Algorithms
   - icon: ':heavy_check_mark:'
+    path: graph/dominator_tree.hpp
+    title: Dominator Tree
+  - icon: ':heavy_check_mark:'
     path: graph/general_matching.hpp
     title: General Matching
   - icon: ':heavy_check_mark:'
@@ -102,6 +105,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/cow_game.test.cpp
     title: verify/graph/cow_game.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/dominator_tree.test.cpp
+    title: verify/graph/dominator_tree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/dominator_tree.test.cpp
+    title: verify/graph/dominator_tree.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/graph/graph_algorithms.test.cpp
     title: verify/graph/graph_algorithms.test.cpp
@@ -276,6 +285,7 @@ data:
   - graph/bipartite.hpp
   - graph/bellman_ford.hpp
   - graph/dag_shortest_path.hpp
+  - graph/dominator_tree.hpp
   - graph/connected_components.hpp
   - graph/all.hpp
   - graph/lowlink.hpp
@@ -304,6 +314,8 @@ data:
   - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/library_checker_general_matching.test.cpp
   - verify/graph/range_edge_graph.test.cpp
+  - verify/graph/dominator_tree.test.cpp
+  - verify/graph/dominator_tree.test.cpp
   - verify/graph/graph_algorithms.test.cpp
 documentation_of: graph/graph.hpp
 layout: document
