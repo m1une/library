@@ -30,6 +30,9 @@ data:
     path: ds/range_query/sparse_table.hpp
     title: Sparse Table
   - icon: ':heavy_check_mark:'
+    path: ds/range_query/sqrt_decomposition.hpp
+    title: Square-Root Decomposition
+  - icon: ':heavy_check_mark:'
     path: ds/range_query/sqrt_tree.hpp
     title: Sqrt Tree
   - icon: ':heavy_check_mark:'
@@ -99,6 +102,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/range_query/sparse_table.test.cpp
     title: verify/ds/range_query/sparse_table.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/range_query/sqrt_decomposition.test.cpp
+    title: verify/ds/range_query/sqrt_decomposition.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/range_query/sqrt_tree.test.cpp
     title: verify/ds/range_query/sqrt_tree.test.cpp
@@ -177,6 +183,7 @@ data:
   - ds/dynamic_array/dynamic_monoid_array.hpp
   - ds/dynamic_array/persistent_dynamic_monoid_array.hpp
   - ds/ordered_set/binary_trie_monoid.hpp
+  - ds/range_query/sqrt_decomposition.hpp
   - ds/range_query/disjoint_sparse_table.hpp
   - ds/range_query/sparse_table.hpp
   - ds/range_query/sqrt_tree.hpp
@@ -201,6 +208,7 @@ data:
   - verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp
+  - verify/ds/range_query/sqrt_decomposition.test.cpp
   - verify/ds/range_query/sqrt_tree.test.cpp
   - verify/ds/range_query/sparse_table.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp

@@ -180,6 +180,9 @@ data:
       path: ds/range_query/sparse_table.hpp
       title: Sparse Table
     - icon: ':heavy_check_mark:'
+      path: ds/range_query/sqrt_decomposition.hpp
+      title: Square-Root Decomposition
+    - icon: ':heavy_check_mark:'
       path: ds/range_query/sqrt_tree.hpp
       title: Sqrt Tree
     - icon: ':heavy_check_mark:'
@@ -789,6 +792,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/range_query/sparse_table.test.cpp
       title: verify/ds/range_query/sparse_table.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/range_query/sqrt_decomposition.test.cpp
+      title: verify/ds/range_query/sqrt_decomposition.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/range_query/sqrt_tree.test.cpp
       title: verify/ds/range_query/sqrt_tree.test.cpp
