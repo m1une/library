@@ -12,6 +12,9 @@ data:
     path: geometry/line.hpp
     title: Lines and Segments
   - icon: ':heavy_check_mark:'
+    path: geometry/manhattan_mst.hpp
+    title: Manhattan Minimum Spanning Tree
+  - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
     title: Polygons and Convex Hull
   - icon: ':heavy_check_mark:'
@@ -30,6 +33,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/geometry/geometry_algorithms.test.cpp
     title: verify/geometry/geometry_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/manhattan_mst.test.cpp
+    title: verify/geometry/manhattan_mst.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/geometry/point_in_polygon.test.cpp
     title: verify/geometry/point_in_polygon.test.cpp
@@ -227,6 +233,7 @@ data:
   - geometry/circle.hpp
   - geometry/all.hpp
   - geometry/line.hpp
+  - geometry/manhattan_mst.hpp
   - geometry/polygon.hpp
   timestamp: '2026-06-21 12:04:47+09:00'
   verificationStatus: LIBRARY_ALL_AC
@@ -236,6 +243,7 @@ data:
   - verify/geometry/geometry_algorithms.test.cpp
   - verify/geometry/segment_intersection.test.cpp
   - verify/geometry/circle_ray.test.cpp
+  - verify/geometry/manhattan_mst.test.cpp
   - verify/geometry/point_in_polygon.test.cpp
   - verify/geometry/convex_hull.test.cpp
   - verify/geometry/polygon_operations.test.cpp

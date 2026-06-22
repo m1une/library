@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: ds/dsu/dsu.hpp
+    title: DSU (Disjoint Set Union)
+  - icon: ':heavy_check_mark:'
     path: geometry/all.hpp
     title: Geometry Bundle
   - icon: ':heavy_check_mark:'
@@ -10,6 +13,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: geometry/line.hpp
     title: Lines and Segments
+  - icon: ':heavy_check_mark:'
+    path: geometry/manhattan_mst.hpp
+    title: Manhattan Minimum Spanning Tree
   - icon: ':heavy_check_mark:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
@@ -465,44 +471,115 @@ data:
     \ {base};\n\n    Point<long double> perpendicular(-unit.y, unit.x);\n    Point<long\
     \ double> a = base - perpendicular * height;\n    Point<long double> b = base\
     \ + perpendicular * height;\n    if (b < a) std::swap(a, b);\n    return {a, b};\n\
-    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 1 \"geometry/polygon.hpp\"\
-    \n\n\n\n#line 5 \"geometry/polygon.hpp\"\n#include <array>\n#line 8 \"geometry/polygon.hpp\"\
-    \n#include <cstddef>\n#include <limits>\n#line 12 \"geometry/polygon.hpp\"\n\n\
-    #line 14 \"geometry/polygon.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\
-    \nenum class PointInPolygon {\n    Outside = 0,\n    Boundary = 1,\n    Inside\
-    \ = 2,\n};\n\nnamespace polygon_detail {\n\ninline bool close(\n    const Point<long\
-    \ double>& first,\n    const Point<long double>& second,\n    long double eps\n\
-    ) {\n    return geometry::distance(first, second) <= eps;\n}\n\ninline void push_unique(\n\
-    \    std::vector<Point<long double>>& points,\n    const Point<long double>& point,\n\
-    \    long double eps\n) {\n    for (const Point<long double>& existing : points)\
-    \ {\n        if (close(existing, point, eps)) return;\n    }\n    points.push_back(point);\n\
-    }\n\ninline std::vector<Point<long double>> clean_convex_polygon(\n    std::vector<Point<long\
-    \ double>> polygon,\n    long double eps\n) {\n    if (polygon.empty()) return\
-    \ polygon;\n\n    std::vector<Point<long double>> deduplicated;\n    for (const\
-    \ Point<long double>& point : polygon) {\n        if (\n            deduplicated.empty()\
-    \ ||\n            !close(deduplicated.back(), point, eps)\n        ) {\n     \
-    \       deduplicated.push_back(point);\n        }\n    }\n    if (\n        deduplicated.size()\
-    \ >= 2 &&\n        close(deduplicated.front(), deduplicated.back(), eps)\n   \
-    \ ) {\n        deduplicated.pop_back();\n    }\n    if (deduplicated.size() <=\
-    \ 2) return deduplicated;\n\n    bool changed = true;\n    while (changed && deduplicated.size()\
-    \ >= 3) {\n        changed = false;\n        std::vector<Point<long double>> cleaned;\n\
-    \        std::size_t size = deduplicated.size();\n        for (std::size_t index\
-    \ = 0; index < size; ++index) {\n            const Point<long double>& previous\
-    \ =\n                deduplicated[(index + size - 1) % size];\n            const\
-    \ Point<long double>& current = deduplicated[index];\n            const Point<long\
-    \ double>& next =\n                deduplicated[(index + 1) % size];\n       \
-    \     if (\n                orientation(previous, current, next, eps) == 0 &&\n\
-    \                dot(current - previous, next - current) >= -eps\n           \
-    \ ) {\n                changed = true;\n            } else {\n               \
-    \ cleaned.push_back(current);\n            }\n        }\n        deduplicated\
-    \ = std::move(cleaned);\n    }\n    return deduplicated;\n}\n\ntemplate <Coordinate\
-    \ T>\nstd::vector<Point<T>> normalize_convex_polygon(\n    std::vector<Point<T>>\
-    \ polygon\n) {\n    if (\n        polygon.size() >= 2 &&\n        polygon.front()\
-    \ == polygon.back()\n    ) {\n        polygon.pop_back();\n    }\n    if (polygon.size()\
-    \ <= 1) return polygon;\n    if (polygon.size() >= 3 && polygon_area2(polygon)\
-    \ < 0) {\n        std::reverse(polygon.begin(), polygon.end());\n    }\n\n   \
-    \ auto start = std::min_element(\n        polygon.begin(),\n        polygon.end(),\n\
-    \        [](const Point<T>& first, const Point<T>& second) {\n            if (first.y\
+    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 1 \"geometry/manhattan_mst.hpp\"\
+    \n\n\n\n#line 7 \"geometry/manhattan_mst.hpp\"\n#include <limits>\n#include <map>\n\
+    #include <numeric>\n#include <utility>\n#line 12 \"geometry/manhattan_mst.hpp\"\
+    \n\n#line 1 \"ds/dsu/dsu.hpp\"\n\n\n\n#line 7 \"ds/dsu/dsu.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace ds {\n\nstruct Dsu {\n   private:\n    int _n;\n    // parent_or_size[i]\
+    \ is the parent of i if it's >= 0.\n    // If it's < 0, then i is a root and -parent_or_size[i]\
+    \ is the size of the group.\n    std::vector<int> parent_or_size;\n\n   public:\n\
+    \    Dsu() : _n(0) {}\n    explicit Dsu(int n) : _n(n), parent_or_size(n, -1)\
+    \ {}\n\n    // Merges the group containing 'a' with the group containing 'b'.\n\
+    \    // Returns the leader of the merged group.\n    int merge(int a, int b) {\n\
+    \        int x = leader(a), y = leader(b);\n        if (x == y) return x;\n  \
+    \      // Union by size\n        if (-parent_or_size[x] < -parent_or_size[y])\
+    \ std::swap(x, y);\n        parent_or_size[x] += parent_or_size[y];\n        parent_or_size[y]\
+    \ = x;\n        return x;\n    }\n\n    // Returns true if 'a' and 'b' belong\
+    \ to the same group.\n    bool same(int a, int b) {\n        return leader(a)\
+    \ == leader(b);\n    }\n\n    // Returns the leader (representative) of the group\
+    \ containing 'a'.\n    int leader(int a) {\n        if (parent_or_size[a] < 0)\
+    \ return a;\n        // Path compression\n        return parent_or_size[a] = leader(parent_or_size[a]);\n\
+    \    }\n\n    // Returns the size of the group containing 'a'.\n    int size(int\
+    \ a) {\n        return -parent_or_size[leader(a)];\n    }\n\n    // Returns a\
+    \ list of all groups, where each group is a vector of its elements.\n    std::vector<std::vector<int>>\
+    \ groups() {\n        std::vector<int> leader_buf(_n), group_size(_n);\n     \
+    \   for (int i = 0; i < _n; i++) {\n            leader_buf[i] = leader(i);\n \
+    \           group_size[leader_buf[i]]++;\n        }\n        std::vector<std::vector<int>>\
+    \ result(_n);\n        for (int i = 0; i < _n; i++) {\n            result[i].reserve(group_size[i]);\n\
+    \        }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
+    \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
+    \ [&](const std::vector<int>& v) { return v.empty(); }),\n                   \
+    \  result.end());\n        return result;\n    }\n};\n\n}  // namespace ds\n}\
+    \  // namespace m1une\n\n\n#line 15 \"geometry/manhattan_mst.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace geometry {\n\ntemplate <class T>\nstruct ManhattanMstEdge\
+    \ {\n    int from;\n    int to;\n    T cost;\n};\n\ntemplate <class T>\nstruct\
+    \ ManhattanMst {\n    T cost;\n    std::vector<ManhattanMstEdge<T>> edges;\n};\n\
+    \n// Returns O(n) edges containing a Manhattan minimum spanning tree.\ntemplate\
+    \ <std::integral T>\nstd::vector<ManhattanMstEdge<wide_type<T>>> manhattan_mst_edges(const\
+    \ std::vector<Point<T>>& points) {\n    using W = wide_type<T>;\n    assert(points.size()\
+    \ <= std::size_t(std::numeric_limits<int>::max()));\n    int n = int(points.size());\n\
+    \    std::vector<Point<W>> transformed;\n    transformed.reserve(points.size());\n\
+    \    for (const auto& point : points) {\n        transformed.emplace_back(W(point.x),\
+    \ W(point.y));\n    }\n\n    std::vector<int> order(n);\n    std::iota(order.begin(),\
+    \ order.end(), 0);\n    std::vector<ManhattanMstEdge<W>> edges;\n    edges.reserve(std::size_t(4)\
+    \ * points.size());\n\n    for (int direction = 0; direction < 4; direction++)\
+    \ {\n        std::sort(order.begin(), order.end(), [&transformed](int i, int j)\
+    \ {\n            W first = transformed[i].x + transformed[i].y;\n            W\
+    \ second = transformed[j].x + transformed[j].y;\n            if (first != second)\
+    \ return first < second;\n            if (transformed[i].x != transformed[j].x)\
+    \ {\n                return transformed[i].x < transformed[j].x;\n           \
+    \ }\n            return i < j;\n        });\n\n        std::map<W, int> sweep;\n\
+    \        for (int i : order) {\n            auto it = sweep.lower_bound(-transformed[i].y);\n\
+    \            while (it != sweep.end()) {\n                int j = it->second;\n\
+    \                if (transformed[i].x - transformed[j].x < transformed[i].y -\
+    \ transformed[j].y) {\n                    break;\n                }\n\n     \
+    \           W dx = W(points[i].x) - W(points[j].x);\n                W dy = W(points[i].y)\
+    \ - W(points[j].y);\n                if (dx < 0) dx = -dx;\n                if\
+    \ (dy < 0) dy = -dy;\n                edges.push_back(ManhattanMstEdge<W>{i, j,\
+    \ dx + dy});\n                it = sweep.erase(it);\n            }\n         \
+    \   sweep[-transformed[i].y] = i;\n        }\n\n        for (auto& point : transformed)\
+    \ {\n            if (direction & 1) {\n                point.x = -point.x;\n \
+    \           } else {\n                std::swap(point.x, point.y);\n         \
+    \   }\n        }\n    }\n    return edges;\n}\n\n// Returns a Manhattan minimum\
+    \ spanning tree.\ntemplate <std::integral T>\nManhattanMst<wide_type<T>> manhattan_mst(const\
+    \ std::vector<Point<T>>& points) {\n    using W = wide_type<T>;\n    auto candidates\
+    \ = manhattan_mst_edges(points);\n    std::sort(candidates.begin(), candidates.end(),\
+    \ [](const auto& a, const auto& b) { return a.cost < b.cost; });\n\n    m1une::ds::Dsu\
+    \ dsu(int(points.size()));\n    ManhattanMst<W> result;\n    result.cost = W(0);\n\
+    \    result.edges.reserve(points.empty() ? 0 : points.size() - 1);\n    for (const\
+    \ auto& edge : candidates) {\n        if (dsu.same(edge.from, edge.to)) continue;\n\
+    \        dsu.merge(edge.from, edge.to);\n        result.cost += edge.cost;\n \
+    \       result.edges.push_back(edge);\n        if (result.edges.size() + 1 ==\
+    \ points.size()) break;\n    }\n    assert(points.empty() || result.edges.size()\
+    \ + 1 == points.size());\n    return result;\n}\n\n}  // namespace geometry\n\
+    }  // namespace m1une\n\n\n#line 1 \"geometry/polygon.hpp\"\n\n\n\n#line 5 \"\
+    geometry/polygon.hpp\"\n#include <array>\n#line 8 \"geometry/polygon.hpp\"\n#include\
+    \ <cstddef>\n#line 12 \"geometry/polygon.hpp\"\n\n#line 14 \"geometry/polygon.hpp\"\
+    \n\nnamespace m1une {\nnamespace geometry {\n\nenum class PointInPolygon {\n \
+    \   Outside = 0,\n    Boundary = 1,\n    Inside = 2,\n};\n\nnamespace polygon_detail\
+    \ {\n\ninline bool close(\n    const Point<long double>& first,\n    const Point<long\
+    \ double>& second,\n    long double eps\n) {\n    return geometry::distance(first,\
+    \ second) <= eps;\n}\n\ninline void push_unique(\n    std::vector<Point<long double>>&\
+    \ points,\n    const Point<long double>& point,\n    long double eps\n) {\n  \
+    \  for (const Point<long double>& existing : points) {\n        if (close(existing,\
+    \ point, eps)) return;\n    }\n    points.push_back(point);\n}\n\ninline std::vector<Point<long\
+    \ double>> clean_convex_polygon(\n    std::vector<Point<long double>> polygon,\n\
+    \    long double eps\n) {\n    if (polygon.empty()) return polygon;\n\n    std::vector<Point<long\
+    \ double>> deduplicated;\n    for (const Point<long double>& point : polygon)\
+    \ {\n        if (\n            deduplicated.empty() ||\n            !close(deduplicated.back(),\
+    \ point, eps)\n        ) {\n            deduplicated.push_back(point);\n     \
+    \   }\n    }\n    if (\n        deduplicated.size() >= 2 &&\n        close(deduplicated.front(),\
+    \ deduplicated.back(), eps)\n    ) {\n        deduplicated.pop_back();\n    }\n\
+    \    if (deduplicated.size() <= 2) return deduplicated;\n\n    bool changed =\
+    \ true;\n    while (changed && deduplicated.size() >= 3) {\n        changed =\
+    \ false;\n        std::vector<Point<long double>> cleaned;\n        std::size_t\
+    \ size = deduplicated.size();\n        for (std::size_t index = 0; index < size;\
+    \ ++index) {\n            const Point<long double>& previous =\n             \
+    \   deduplicated[(index + size - 1) % size];\n            const Point<long double>&\
+    \ current = deduplicated[index];\n            const Point<long double>& next =\n\
+    \                deduplicated[(index + 1) % size];\n            if (\n       \
+    \         orientation(previous, current, next, eps) == 0 &&\n                dot(current\
+    \ - previous, next - current) >= -eps\n            ) {\n                changed\
+    \ = true;\n            } else {\n                cleaned.push_back(current);\n\
+    \            }\n        }\n        deduplicated = std::move(cleaned);\n    }\n\
+    \    return deduplicated;\n}\n\ntemplate <Coordinate T>\nstd::vector<Point<T>>\
+    \ normalize_convex_polygon(\n    std::vector<Point<T>> polygon\n) {\n    if (\n\
+    \        polygon.size() >= 2 &&\n        polygon.front() == polygon.back()\n \
+    \   ) {\n        polygon.pop_back();\n    }\n    if (polygon.size() <= 1) return\
+    \ polygon;\n    if (polygon.size() >= 3 && polygon_area2(polygon) < 0) {\n   \
+    \     std::reverse(polygon.begin(), polygon.end());\n    }\n\n    auto start =\
+    \ std::min_element(\n        polygon.begin(),\n        polygon.end(),\n      \
+    \  [](const Point<T>& first, const Point<T>& second) {\n            if (first.y\
     \ != second.y) return first.y < second.y;\n            return first.x < second.x;\n\
     \        }\n    );\n    std::rotate(polygon.begin(), start, polygon.end());\n\n\
     \    if (polygon.size() <= 2) return polygon;\n    std::vector<Point<T>> cleaned;\n\
@@ -794,7 +871,7 @@ data:
     \  }\n        current += step;\n        if (\n            first_index < first_edges.size()\
     \ ||\n            second_index < second_edges.size()\n        ) {\n          \
     \  result.push_back(current);\n        }\n    }\n    return polygon_detail::normalize_convex_polygon(std::move(result));\n\
-    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 9 \"geometry/all.hpp\"\
+    }\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 10 \"geometry/all.hpp\"\
     \n\n\n#line 4 \"verify/geometry/geometry_algorithms.test.cpp\"\n\n#line 8 \"verify/geometry/geometry_algorithms.test.cpp\"\
     \n#include <cstdint>\n#include <iostream>\n#line 11 \"verify/geometry/geometry_algorithms.test.cpp\"\
     \n\nnamespace {\n\nbool close(long double a, long double b) {\n    return std::fabs(a\
@@ -944,11 +1021,13 @@ data:
   - geometry/ray.hpp
   - geometry/line.hpp
   - geometry/point.hpp
+  - geometry/manhattan_mst.hpp
+  - ds/dsu/dsu.hpp
   - geometry/polygon.hpp
   isVerificationFile: true
   path: verify/geometry/geometry_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 12:04:47+09:00'
+  timestamp: '2026-06-23 01:30:45+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/geometry/geometry_algorithms.test.cpp
