@@ -6,6 +6,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/range_query/fenwick_tree.test.cpp
     title: verify/ds/range_query/fenwick_tree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/range_query/mo.test.cpp
+    title: verify/ds/range_query/mo.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -71,6 +74,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/range_query/fenwick_tree.test.cpp
+  - verify/ds/range_query/mo.test.cpp
 documentation_of: ds/range_query/fenwick_tree.hpp
 layout: document
 title: Fenwick Tree (Binary Indexed Tree)
