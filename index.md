@@ -149,7 +149,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: ds/interval_set/interval_set.hpp
-      title: ds/interval_set/interval_set.hpp
+      title: Interval Set
   - name: ds/ordered_set
     pages:
     - icon: ':heavy_check_mark:'
@@ -245,7 +245,7 @@ data:
       title: Segment Tree
     - icon: ':warning:'
       path: ds/segtree/segtree_2d.hpp
-      title: ds/segtree/segtree_2d.hpp
+      title: Segtree 2D
     - icon: ':heavy_check_mark:'
       path: ds/segtree/segtree_beats.hpp
       title: Segment Tree Beats

@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: ds/interval_set/interval_set.hpp
-    title: ds/interval_set/interval_set.hpp
+    title: Interval Set
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

@@ -64,7 +64,7 @@ data:
     title: Segment Tree
   - icon: ':warning:'
     path: ds/segtree/segtree_2d.hpp
-    title: ds/segtree/segtree_2d.hpp
+    title: Segtree 2D
   - icon: ':warning:'
     path: monoid/power.hpp
     title: Monoid Power
