@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/segtree_beats.hpp
-    title: Segment Tree Beats
+    title: Segment Tree Beats!
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false

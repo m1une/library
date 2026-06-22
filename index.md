@@ -248,7 +248,7 @@ data:
       title: Segtree 2D
     - icon: ':heavy_check_mark:'
       path: ds/segtree/segtree_beats.hpp
-      title: Segment Tree Beats
+      title: Segment Tree Beats!
   - name: flow
     pages:
     - icon: ':heavy_check_mark:'

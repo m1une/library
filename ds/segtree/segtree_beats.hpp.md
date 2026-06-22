@@ -342,7 +342,7 @@ data:
   - verify/ds/segtree/segtree_beats.test.cpp
 documentation_of: ds/segtree/segtree_beats.hpp
 layout: document
-title: Segment Tree Beats
+title: Segment Tree Beats!
 ---
 
 ## Overview
