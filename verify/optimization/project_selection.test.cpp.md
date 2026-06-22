@@ -29,11 +29,11 @@ data:
     PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
     - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/optimization/integer_lp.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n#include <iostream>\n\
-    #include <limits>\n#include <vector>\n\n#line 1 \"optimization/all.hpp\"\n\n\n\
-    \n#line 1 \"optimization/hungarian.hpp\"\n\n\n\n#include <algorithm>\n#line 7\
-    \ \"optimization/hungarian.hpp\"\n#include <utility>\n#line 9 \"optimization/hungarian.hpp\"\
+  bundledCode: "#line 1 \"verify/optimization/project_selection.test.cpp\"\n#define\
+    \ PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n#include\
+    \ <iostream>\n#include <limits>\n#include <vector>\n\n#line 1 \"optimization/all.hpp\"\
+    \n\n\n\n#line 1 \"optimization/hungarian.hpp\"\n\n\n\n#include <algorithm>\n#line\
+    \ 7 \"optimization/hungarian.hpp\"\n#include <utility>\n#line 9 \"optimization/hungarian.hpp\"\
     \n\nnamespace m1une {\nnamespace optimization {\n\ntemplate <class T>\nstruct\
     \ HungarianResult {\n    T cost;\n    std::vector<int> row_to_col;\n    std::vector<int>\
     \ col_to_row;\n\n    int matching_size() const {\n        int result = 0;\n  \
@@ -461,169 +461,241 @@ data:
     \   for (int project = 0; project < _project_count; project++) {\n           \
     \ result.selected[project] = source_side[project];\n        }\n        return\
     \ result;\n    }\n};\n\n}  // namespace optimization\n}  // namespace m1une\n\n\
-    \n#line 8 \"optimization/all.hpp\"\n\n\n#line 9 \"verify/optimization/integer_lp.test.cpp\"\
-    \n\nlong long evaluate(const std::vector<long long>& c, const std::vector<long\
-    \ long>& x) {\n    long long result = 0;\n    for (int i = 0; i < int(c.size());\
-    \ i++) result += c[i] * x[i];\n    return result;\n}\n\nbool feasible(const std::vector<std::vector<long\
-    \ long>>& a, const std::vector<long long>& b,\n              const std::vector<long\
-    \ long>& x) {\n    for (long long value : x) {\n        if (value < 0) return\
-    \ false;\n    }\n    for (int i = 0; i < int(a.size()); i++) {\n        long long\
-    \ lhs = 0;\n        for (int j = 0; j < int(x.size()); j++) lhs += a[i][j] * x[j];\n\
-    \        if (lhs > b[i]) return false;\n    }\n    return true;\n}\n\nvoid brute_dfs(const\
-    \ std::vector<std::vector<long long>>& a, const std::vector<long long>& b,\n \
-    \              const std::vector<long long>& c, const std::vector<long long>&\
-    \ limits, int index,\n               std::vector<long long>& current, bool maximize,\
-    \ bool& found, long long& best) {\n    if (index == int(c.size())) {\n       \
-    \ if (!feasible(a, b, current)) return;\n        long long value = evaluate(c,\
-    \ current);\n        if (!found || (maximize ? value > best : value < best)) {\n\
-    \            found = true;\n            best = value;\n        }\n        return;\n\
-    \    }\n    for (long long value = 0; value <= limits[index]; value++) {\n   \
-    \     current[index] = value;\n        brute_dfs(a, b, c, limits, index + 1, current,\
-    \ maximize, found, best);\n    }\n}\n\nlong long brute_solve(const std::vector<std::vector<long\
-    \ long>>& a,\n                      const std::vector<long long>& b, const std::vector<long\
-    \ long>& c,\n                      const std::vector<long long>& limits, bool\
-    \ maximize) {\n    bool found = false;\n    long long best = 0;\n    std::vector<long\
-    \ long> current(c.size(), 0);\n    brute_dfs(a, b, c, limits, 0, current, maximize,\
-    \ found, best);\n    assert(found);\n    return best;\n}\n\nvoid check_optimal(const\
-    \ std::vector<std::vector<long long>>& a,\n                   const std::vector<long\
-    \ long>& b, const std::vector<long long>& c,\n                   const m1une::optimization::IntegerLpResult<long\
-    \ long>& result,\n                   long long expected) {\n    assert(result.is_optimal());\n\
-    \    assert(feasible(a, b, result.variables));\n    assert(result.objective_value\
-    \ == expected);\n    assert(evaluate(c, result.variables) == expected);\n}\n\n\
-    void test_basic_maximize() {\n    std::vector<std::vector<long long>> a;\n   \
-    \ a.emplace_back(std::vector<long long>{2, 1});\n    a.emplace_back(std::vector<long\
-    \ long>{1, 2});\n    std::vector<long long> b = {4, 4};\n    std::vector<long\
-    \ long> c = {3, 2};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    check_optimal(a, b, c, result, 6);\n\n    auto alias_result = m1une::optimization::integer_lp(a,\
-    \ b, c);\n    check_optimal(a, b, c, alias_result, 6);\n}\n\nvoid test_minimize()\
-    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
-    \ long>{-1, -1});\n    a.emplace_back(std::vector<long long>{1, 0});\n    a.emplace_back(std::vector<long\
-    \ long>{0, 1});\n    std::vector<long long> b = {-3, 5, 5};\n    std::vector<long\
-    \ long> c = {1, 1};\n\n    auto result = m1une::optimization::integer_lp_minimize(a,\
-    \ b, c);\n    check_optimal(a, b, c, result, 3);\n}\n\nvoid test_integer_infeasible_fractional_relaxation()\
-    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
-    \ long>{2});\n    a.emplace_back(std::vector<long long>{-2});\n    std::vector<long\
-    \ long> b = {1, -1};\n    std::vector<long long> c = {1};\n\n    auto result =\
-    \ m1une::optimization::integer_lp_maximize(a, b, c);\n    assert(result.is_infeasible());\n\
-    }\n\nvoid test_unbounded() {\n    std::vector<std::vector<long long>> a;\n   \
-    \ a.emplace_back(std::vector<long long>{-1});\n    std::vector<long long> b =\
-    \ {-1};\n    std::vector<long long> c = {1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    assert(result.is_unbounded());\n    assert(feasible(a, b, result.variables));\n\
-    }\n\nvoid test_unbounded_relaxation_but_integer_infeasible() {\n    std::vector<std::vector<long\
-    \ long>> a;\n    a.emplace_back(std::vector<long long>{2, 0});\n    a.emplace_back(std::vector<long\
-    \ long>{-2, 0});\n    std::vector<long long> b = {1, -1};\n    std::vector<long\
-    \ long> c = {0, 1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    assert(result.is_infeasible());\n}\n\nvoid test_no_variables() {\n\
-    \    std::vector<std::vector<long long>> a(2);\n    std::vector<long long> b =\
-    \ {0, 3};\n    std::vector<long long> c;\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    assert(result.is_optimal());\n    assert(result.variables.empty());\n\
-    \    assert(result.objective_value == 0);\n\n    std::vector<std::vector<long\
-    \ long>> bad_a(1);\n    std::vector<long long> bad_b = {-1};\n    auto bad_result\
-    \ = m1une::optimization::integer_lp_maximize(bad_a, bad_b, c);\n    assert(bad_result.is_infeasible());\n\
-    }\n\nvoid test_against_bruteforce() {\n    for (int t = 0; t < 20; t++) {\n  \
-    \      std::vector<std::vector<long long>> a;\n        std::vector<long long>\
-    \ b;\n        std::vector<long long> limits;\n        int variable_count = 3;\n\
-    \n        for (int j = 0; j < variable_count; j++) {\n            long long limit\
-    \ = 2 + (t + j * 2) % 4;\n            limits.push_back(limit);\n            std::vector<long\
-    \ long> row(variable_count, 0);\n            row[j] = 1;\n            a.push_back(row);\n\
-    \            b.push_back(limit);\n        }\n\n        for (int i = 0; i < 4;\
-    \ i++) {\n            std::vector<long long> row(variable_count, 0);\n       \
-    \     for (int j = 0; j < variable_count; j++) {\n                row[j] = (t\
-    \ * 3 + i * 5 + j * 7) % 7 - 3;\n            }\n            long long rhs = 3\
-    \ + (t * 2 + i * 4) % 9;\n            a.push_back(row);\n            b.push_back(rhs);\n\
-    \        }\n\n        std::vector<long long> c(variable_count, 0);\n        for\
-    \ (int j = 0; j < variable_count; j++) c[j] = (t * 5 + j * 3) % 11 - 5;\n\n  \
-    \      long long expected_max = brute_solve(a, b, c, limits, true);\n        auto\
-    \ max_result = m1une::optimization::integer_lp_maximize(a, b, c);\n        check_optimal(a,\
-    \ b, c, max_result, expected_max);\n\n        long long expected_min = brute_solve(a,\
-    \ b, c, limits, false);\n        auto min_result = m1une::optimization::integer_lp_minimize(a,\
-    \ b, c);\n        check_optimal(a, b, c, min_result, expected_min);\n    }\n}\n\
-    \nint main() {\n    test_basic_maximize();\n    test_minimize();\n    test_integer_infeasible_fractional_relaxation();\n\
-    \    test_unbounded();\n    test_unbounded_relaxation_but_integer_infeasible();\n\
-    \    test_no_variables();\n    test_against_bruteforce();\n\n    long long a,\
-    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \n#line 8 \"optimization/all.hpp\"\n\n\n#line 9 \"verify/optimization/project_selection.test.cpp\"\
+    \n\nusing ProjectSelection = m1une::optimization::ProjectSelection<long long>;\n\
+    \nvoid test_basic() {\n    ProjectSelection solver(4);\n    solver.add_gain(0,\
+    \ 8);\n    solver.add_gain(1, 5);\n    solver.add_gain(2, -4);\n    solver.add_gain(3,\
+    \ 3, 1);\n    solver.add_penalty(0, 1, 10);\n    solver.add_penalty_if_different(1,\
+    \ 2, 2);\n    solver.add_gain_if_same(0, 3, 4);\n    solver.add_gain_if_all_selected(std::vector<int>{0,\
+    \ 1, 2}, 7);\n    solver.add_gain_if_all_unselected(std::vector<int>{1, 2}, 6);\n\
+    \n    auto result = solver.solve();\n    assert(result.is_feasible());\n\n   \
+    \ long long expected = std::numeric_limits<long long>::lowest();\n    for (int\
+    \ mask = 0; mask < (1 << 4); mask++) {\n        auto selected = [&](int project)\
+    \ {\n            return ((mask >> project) & 1) != 0;\n        };\n\n        long\
+    \ long gain = 0;\n        gain += selected(0) ? 8 : 0;\n        gain += selected(1)\
+    \ ? 5 : 0;\n        gain += selected(2) ? -4 : 0;\n        gain += selected(3)\
+    \ ? 3 : 1;\n        if (selected(0) && !selected(1)) gain -= 10;\n        if (selected(1)\
+    \ != selected(2)) gain -= 2;\n        if (selected(0) == selected(3)) gain +=\
+    \ 4;\n        if (selected(0) && selected(1) && selected(2)) gain += 7;\n    \
+    \    if (!selected(1) && !selected(2)) gain += 6;\n        if (gain > expected)\
+    \ {\n            expected = gain;\n        }\n    }\n\n    assert(result.max_gain\
+    \ == expected);\n    long long returned_mask = 0;\n    for (int project = 0; project\
+    \ < 4; project++) {\n        if (result.selected[project]) returned_mask |= 1LL\
+    \ << project;\n    }\n\n    auto selected = [&](int project) {\n        return\
+    \ ((returned_mask >> project) & 1) != 0;\n    };\n    long long returned_gain\
+    \ = 0;\n    returned_gain += selected(0) ? 8 : 0;\n    returned_gain += selected(1)\
+    \ ? 5 : 0;\n    returned_gain += selected(2) ? -4 : 0;\n    returned_gain += selected(3)\
+    \ ? 3 : 1;\n    if (selected(0) && !selected(1)) returned_gain -= 10;\n    if\
+    \ (selected(1) != selected(2)) returned_gain -= 2;\n    if (selected(0) == selected(3))\
+    \ returned_gain += 4;\n    if (selected(0) && selected(1) && selected(2)) returned_gain\
+    \ += 7;\n    if (!selected(1) && !selected(2)) returned_gain += 6;\n    assert(returned_gain\
+    \ == expected);\n}\n\nvoid test_hard_constraints() {\n    ProjectSelection solver(4);\n\
+    \    solver.add_gain(0, 10);\n    solver.add_gain(1, -2);\n    solver.add_gain(2,\
+    \ 7);\n    solver.add_gain(3, 3);\n    solver.add_hard_implication(0, 1);\n  \
+    \  solver.add_hard_implication(1, 2);\n    solver.force_selected(0);\n    solver.force_unselected(3);\n\
+    \n    auto result = solver.solve();\n    assert(result.is_feasible());\n    assert(result.max_gain\
+    \ == 15);\n    assert(result.selected[0]);\n    assert(result.selected[1]);\n\
+    \    assert(result.selected[2]);\n    assert(!result.selected[3]);\n\n    ProjectSelection\
+    \ impossible(1);\n    impossible.force_selected(0);\n    impossible.force_unselected(0);\n\
+    \    assert(!impossible.solve().is_feasible());\n}\n\nvoid test_empty_groups_and_repeated_solve()\
+    \ {\n    ProjectSelection solver(0);\n    solver.add_gain_if_all_selected({},\
+    \ 3);\n    solver.add_gain_if_all_unselected({}, 4);\n    assert(solver.size()\
+    \ == 0);\n\n    auto first = solver.solve();\n    auto second = solver.solve();\n\
+    \    assert(first.is_feasible() && second.is_feasible());\n    assert(first.max_gain\
+    \ == 7 && second.max_gain == 7);\n    assert(first.selected.empty() && second.selected.empty());\n\
+    }\n\nvoid test_unary_against_bruteforce() {\n    for (int n = 1; n <= 8; n++)\
+    \ {\n        ProjectSelection solver(n);\n        std::vector<long long> selected_gain(n);\n\
+    \        std::vector<long long> unselected_gain(n);\n        for (int i = 0; i\
+    \ < n; i++) {\n            selected_gain[i] = (i * 7 + n * 3) % 13 - 6;\n    \
+    \        unselected_gain[i] = (i * 5 + n * 2) % 11 - 5;\n            solver.add_gain(i,\
+    \ selected_gain[i], unselected_gain[i]);\n        }\n\n        auto result = solver.solve();\n\
+    \        long long expected = std::numeric_limits<long long>::lowest();\n    \
+    \    for (int mask = 0; mask < (1 << n); mask++) {\n            long long gain\
+    \ = 0;\n            for (int i = 0; i < n; i++) {\n                gain += ((mask\
+    \ >> i) & 1) ? selected_gain[i] : unselected_gain[i];\n            }\n       \
+    \     if (gain > expected) expected = gain;\n        }\n        assert(result.is_feasible());\n\
+    \        assert(result.max_gain == expected);\n    }\n}\n\nvoid test_mixed_models_against_bruteforce()\
+    \ {\n    for (int n = 1; n <= 7; n++) {\n        for (int test = 0; test < 24;\
+    \ test++) {\n            ProjectSelection solver(n);\n            std::vector<long\
+    \ long> selected_gain(n);\n            std::vector<long long> unselected_gain(n);\n\
+    \            for (int i = 0; i < n; i++) {\n                selected_gain[i] =\
+    \ (test * 7 + i * 5 + n) % 15 - 7;\n                unselected_gain[i] = (test\
+    \ * 3 + i * 11 + n * 2) % 13 - 6;\n                solver.add_gain(i, selected_gain[i],\
+    \ unselected_gain[i]);\n            }\n\n            for (int i = 0; i < n; i++)\
+    \ {\n                for (int j = 0; j < n; j++) {\n                    if ((test\
+    \ + i * 3 + j * 5) % 7 != 0) continue;\n                    long long penalty\
+    \ = (test + i + j) % 6;\n                    solver.add_penalty(i, j, penalty);\n\
+    \                }\n            }\n\n            for (int i = 0; i < n; i++) {\n\
+    \                for (int j = i + 1; j < n; j++) {\n                    if ((test\
+    \ + i + j) % 5 == 0) {\n                        solver.add_penalty_if_different(i,\
+    \ j, (test + i * 2 + j) % 5);\n                    }\n                    if ((test\
+    \ + i * 2 + j * 3) % 8 == 0) {\n                        solver.add_gain_if_same(i,\
+    \ j, (test + i + j * 2) % 6);\n                    }\n                }\n    \
+    \        }\n\n            std::vector<int> all_selected;\n            std::vector<int>\
+    \ all_unselected;\n            for (int i = 0; i < n; i++) {\n               \
+    \ if ((test + i) % 3 != 0) all_selected.push_back(i);\n                if ((test\
+    \ + i * 2) % 4 != 0) all_unselected.push_back(i);\n            }\n           \
+    \ long long all_selected_gain = test % 7;\n            long long all_unselected_gain\
+    \ = (test * 2 + n) % 8;\n            solver.add_gain_if_all_selected(all_selected,\
+    \ all_selected_gain);\n            solver.add_gain_if_all_unselected(all_unselected,\
+    \ all_unselected_gain);\n\n            for (int i = 0; i < n; i++) {\n       \
+    \         int j = (i + 1) % n;\n                if ((test + i * 4) % 11 == 0)\
+    \ solver.add_hard_implication(i, j);\n            }\n            if (test % 9\
+    \ == 0) solver.force_selected(test % n);\n            if (test % 10 == 0) solver.force_unselected((test\
+    \ * 3 + 1) % n);\n\n            bool found = false;\n            long long expected\
+    \ = std::numeric_limits<long long>::lowest();\n            for (int mask = 0;\
+    \ mask < (1 << n); mask++) {\n                auto selected = [&](int project)\
+    \ {\n                    return ((mask >> project) & 1) != 0;\n              \
+    \  };\n\n                bool feasible = true;\n                for (int i = 0;\
+    \ i < n; i++) {\n                    int j = (i + 1) % n;\n                  \
+    \  if ((test + i * 4) % 11 == 0 && selected(i) && !selected(j)) {\n          \
+    \              feasible = false;\n                    }\n                }\n \
+    \               if (test % 9 == 0 && !selected(test % n)) feasible = false;\n\
+    \                if (test % 10 == 0 && selected((test * 3 + 1) % n)) feasible\
+    \ = false;\n                if (!feasible) continue;\n\n                long long\
+    \ gain = 0;\n                for (int i = 0; i < n; i++) {\n                 \
+    \   gain += selected(i) ? selected_gain[i] : unselected_gain[i];\n           \
+    \     }\n                for (int i = 0; i < n; i++) {\n                    for\
+    \ (int j = 0; j < n; j++) {\n                        if ((test + i * 3 + j * 5)\
+    \ % 7 == 0 && selected(i) && !selected(j)) {\n                            gain\
+    \ -= (test + i + j) % 6;\n                        }\n                    }\n \
+    \               }\n                for (int i = 0; i < n; i++) {\n           \
+    \         for (int j = i + 1; j < n; j++) {\n                        if ((test\
+    \ + i + j) % 5 == 0 && selected(i) != selected(j)) {\n                       \
+    \     gain -= (test + i * 2 + j) % 5;\n                        }\n           \
+    \             if ((test + i * 2 + j * 3) % 8 == 0 && selected(i) == selected(j))\
+    \ {\n                            gain += (test + i + j * 2) % 6;\n           \
+    \             }\n                    }\n                }\n\n                bool\
+    \ every_selected = true;\n                for (int project : all_selected) every_selected\
+    \ &= selected(project);\n                if (every_selected) gain += all_selected_gain;\n\
+    \                bool every_unselected = true;\n                for (int project\
+    \ : all_unselected) every_unselected &= !selected(project);\n                if\
+    \ (every_unselected) gain += all_unselected_gain;\n\n                found = true;\n\
+    \                if (gain > expected) expected = gain;\n            }\n\n    \
+    \        auto result = solver.solve();\n            assert(result.is_feasible()\
+    \ == found);\n            if (found) assert(result.max_gain == expected);\n  \
+    \      }\n    }\n}\n\nint main() {\n    test_basic();\n    test_hard_constraints();\n\
+    \    test_empty_groups_and_repeated_solve();\n    test_unary_against_bruteforce();\n\
+    \    test_mixed_models_against_bruteforce();\n\n    long long a, b;\n    std::cin\
+    \ >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <cassert>\n\
     #include <iostream>\n#include <limits>\n#include <vector>\n\n#include \"../../optimization/all.hpp\"\
-    \n\nlong long evaluate(const std::vector<long long>& c, const std::vector<long\
-    \ long>& x) {\n    long long result = 0;\n    for (int i = 0; i < int(c.size());\
-    \ i++) result += c[i] * x[i];\n    return result;\n}\n\nbool feasible(const std::vector<std::vector<long\
-    \ long>>& a, const std::vector<long long>& b,\n              const std::vector<long\
-    \ long>& x) {\n    for (long long value : x) {\n        if (value < 0) return\
-    \ false;\n    }\n    for (int i = 0; i < int(a.size()); i++) {\n        long long\
-    \ lhs = 0;\n        for (int j = 0; j < int(x.size()); j++) lhs += a[i][j] * x[j];\n\
-    \        if (lhs > b[i]) return false;\n    }\n    return true;\n}\n\nvoid brute_dfs(const\
-    \ std::vector<std::vector<long long>>& a, const std::vector<long long>& b,\n \
-    \              const std::vector<long long>& c, const std::vector<long long>&\
-    \ limits, int index,\n               std::vector<long long>& current, bool maximize,\
-    \ bool& found, long long& best) {\n    if (index == int(c.size())) {\n       \
-    \ if (!feasible(a, b, current)) return;\n        long long value = evaluate(c,\
-    \ current);\n        if (!found || (maximize ? value > best : value < best)) {\n\
-    \            found = true;\n            best = value;\n        }\n        return;\n\
-    \    }\n    for (long long value = 0; value <= limits[index]; value++) {\n   \
-    \     current[index] = value;\n        brute_dfs(a, b, c, limits, index + 1, current,\
-    \ maximize, found, best);\n    }\n}\n\nlong long brute_solve(const std::vector<std::vector<long\
-    \ long>>& a,\n                      const std::vector<long long>& b, const std::vector<long\
-    \ long>& c,\n                      const std::vector<long long>& limits, bool\
-    \ maximize) {\n    bool found = false;\n    long long best = 0;\n    std::vector<long\
-    \ long> current(c.size(), 0);\n    brute_dfs(a, b, c, limits, 0, current, maximize,\
-    \ found, best);\n    assert(found);\n    return best;\n}\n\nvoid check_optimal(const\
-    \ std::vector<std::vector<long long>>& a,\n                   const std::vector<long\
-    \ long>& b, const std::vector<long long>& c,\n                   const m1une::optimization::IntegerLpResult<long\
-    \ long>& result,\n                   long long expected) {\n    assert(result.is_optimal());\n\
-    \    assert(feasible(a, b, result.variables));\n    assert(result.objective_value\
-    \ == expected);\n    assert(evaluate(c, result.variables) == expected);\n}\n\n\
-    void test_basic_maximize() {\n    std::vector<std::vector<long long>> a;\n   \
-    \ a.emplace_back(std::vector<long long>{2, 1});\n    a.emplace_back(std::vector<long\
-    \ long>{1, 2});\n    std::vector<long long> b = {4, 4};\n    std::vector<long\
-    \ long> c = {3, 2};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    check_optimal(a, b, c, result, 6);\n\n    auto alias_result = m1une::optimization::integer_lp(a,\
-    \ b, c);\n    check_optimal(a, b, c, alias_result, 6);\n}\n\nvoid test_minimize()\
-    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
-    \ long>{-1, -1});\n    a.emplace_back(std::vector<long long>{1, 0});\n    a.emplace_back(std::vector<long\
-    \ long>{0, 1});\n    std::vector<long long> b = {-3, 5, 5};\n    std::vector<long\
-    \ long> c = {1, 1};\n\n    auto result = m1une::optimization::integer_lp_minimize(a,\
-    \ b, c);\n    check_optimal(a, b, c, result, 3);\n}\n\nvoid test_integer_infeasible_fractional_relaxation()\
-    \ {\n    std::vector<std::vector<long long>> a;\n    a.emplace_back(std::vector<long\
-    \ long>{2});\n    a.emplace_back(std::vector<long long>{-2});\n    std::vector<long\
-    \ long> b = {1, -1};\n    std::vector<long long> c = {1};\n\n    auto result =\
-    \ m1une::optimization::integer_lp_maximize(a, b, c);\n    assert(result.is_infeasible());\n\
-    }\n\nvoid test_unbounded() {\n    std::vector<std::vector<long long>> a;\n   \
-    \ a.emplace_back(std::vector<long long>{-1});\n    std::vector<long long> b =\
-    \ {-1};\n    std::vector<long long> c = {1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    assert(result.is_unbounded());\n    assert(feasible(a, b, result.variables));\n\
-    }\n\nvoid test_unbounded_relaxation_but_integer_infeasible() {\n    std::vector<std::vector<long\
-    \ long>> a;\n    a.emplace_back(std::vector<long long>{2, 0});\n    a.emplace_back(std::vector<long\
-    \ long>{-2, 0});\n    std::vector<long long> b = {1, -1};\n    std::vector<long\
-    \ long> c = {0, 1};\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    assert(result.is_infeasible());\n}\n\nvoid test_no_variables() {\n\
-    \    std::vector<std::vector<long long>> a(2);\n    std::vector<long long> b =\
-    \ {0, 3};\n    std::vector<long long> c;\n\n    auto result = m1une::optimization::integer_lp_maximize(a,\
-    \ b, c);\n    assert(result.is_optimal());\n    assert(result.variables.empty());\n\
-    \    assert(result.objective_value == 0);\n\n    std::vector<std::vector<long\
-    \ long>> bad_a(1);\n    std::vector<long long> bad_b = {-1};\n    auto bad_result\
-    \ = m1une::optimization::integer_lp_maximize(bad_a, bad_b, c);\n    assert(bad_result.is_infeasible());\n\
-    }\n\nvoid test_against_bruteforce() {\n    for (int t = 0; t < 20; t++) {\n  \
-    \      std::vector<std::vector<long long>> a;\n        std::vector<long long>\
-    \ b;\n        std::vector<long long> limits;\n        int variable_count = 3;\n\
-    \n        for (int j = 0; j < variable_count; j++) {\n            long long limit\
-    \ = 2 + (t + j * 2) % 4;\n            limits.push_back(limit);\n            std::vector<long\
-    \ long> row(variable_count, 0);\n            row[j] = 1;\n            a.push_back(row);\n\
-    \            b.push_back(limit);\n        }\n\n        for (int i = 0; i < 4;\
-    \ i++) {\n            std::vector<long long> row(variable_count, 0);\n       \
-    \     for (int j = 0; j < variable_count; j++) {\n                row[j] = (t\
-    \ * 3 + i * 5 + j * 7) % 7 - 3;\n            }\n            long long rhs = 3\
-    \ + (t * 2 + i * 4) % 9;\n            a.push_back(row);\n            b.push_back(rhs);\n\
-    \        }\n\n        std::vector<long long> c(variable_count, 0);\n        for\
-    \ (int j = 0; j < variable_count; j++) c[j] = (t * 5 + j * 3) % 11 - 5;\n\n  \
-    \      long long expected_max = brute_solve(a, b, c, limits, true);\n        auto\
-    \ max_result = m1une::optimization::integer_lp_maximize(a, b, c);\n        check_optimal(a,\
-    \ b, c, max_result, expected_max);\n\n        long long expected_min = brute_solve(a,\
-    \ b, c, limits, false);\n        auto min_result = m1une::optimization::integer_lp_minimize(a,\
-    \ b, c);\n        check_optimal(a, b, c, min_result, expected_min);\n    }\n}\n\
-    \nint main() {\n    test_basic_maximize();\n    test_minimize();\n    test_integer_infeasible_fractional_relaxation();\n\
-    \    test_unbounded();\n    test_unbounded_relaxation_but_integer_infeasible();\n\
-    \    test_no_variables();\n    test_against_bruteforce();\n\n    long long a,\
-    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \n\nusing ProjectSelection = m1une::optimization::ProjectSelection<long long>;\n\
+    \nvoid test_basic() {\n    ProjectSelection solver(4);\n    solver.add_gain(0,\
+    \ 8);\n    solver.add_gain(1, 5);\n    solver.add_gain(2, -4);\n    solver.add_gain(3,\
+    \ 3, 1);\n    solver.add_penalty(0, 1, 10);\n    solver.add_penalty_if_different(1,\
+    \ 2, 2);\n    solver.add_gain_if_same(0, 3, 4);\n    solver.add_gain_if_all_selected(std::vector<int>{0,\
+    \ 1, 2}, 7);\n    solver.add_gain_if_all_unselected(std::vector<int>{1, 2}, 6);\n\
+    \n    auto result = solver.solve();\n    assert(result.is_feasible());\n\n   \
+    \ long long expected = std::numeric_limits<long long>::lowest();\n    for (int\
+    \ mask = 0; mask < (1 << 4); mask++) {\n        auto selected = [&](int project)\
+    \ {\n            return ((mask >> project) & 1) != 0;\n        };\n\n        long\
+    \ long gain = 0;\n        gain += selected(0) ? 8 : 0;\n        gain += selected(1)\
+    \ ? 5 : 0;\n        gain += selected(2) ? -4 : 0;\n        gain += selected(3)\
+    \ ? 3 : 1;\n        if (selected(0) && !selected(1)) gain -= 10;\n        if (selected(1)\
+    \ != selected(2)) gain -= 2;\n        if (selected(0) == selected(3)) gain +=\
+    \ 4;\n        if (selected(0) && selected(1) && selected(2)) gain += 7;\n    \
+    \    if (!selected(1) && !selected(2)) gain += 6;\n        if (gain > expected)\
+    \ {\n            expected = gain;\n        }\n    }\n\n    assert(result.max_gain\
+    \ == expected);\n    long long returned_mask = 0;\n    for (int project = 0; project\
+    \ < 4; project++) {\n        if (result.selected[project]) returned_mask |= 1LL\
+    \ << project;\n    }\n\n    auto selected = [&](int project) {\n        return\
+    \ ((returned_mask >> project) & 1) != 0;\n    };\n    long long returned_gain\
+    \ = 0;\n    returned_gain += selected(0) ? 8 : 0;\n    returned_gain += selected(1)\
+    \ ? 5 : 0;\n    returned_gain += selected(2) ? -4 : 0;\n    returned_gain += selected(3)\
+    \ ? 3 : 1;\n    if (selected(0) && !selected(1)) returned_gain -= 10;\n    if\
+    \ (selected(1) != selected(2)) returned_gain -= 2;\n    if (selected(0) == selected(3))\
+    \ returned_gain += 4;\n    if (selected(0) && selected(1) && selected(2)) returned_gain\
+    \ += 7;\n    if (!selected(1) && !selected(2)) returned_gain += 6;\n    assert(returned_gain\
+    \ == expected);\n}\n\nvoid test_hard_constraints() {\n    ProjectSelection solver(4);\n\
+    \    solver.add_gain(0, 10);\n    solver.add_gain(1, -2);\n    solver.add_gain(2,\
+    \ 7);\n    solver.add_gain(3, 3);\n    solver.add_hard_implication(0, 1);\n  \
+    \  solver.add_hard_implication(1, 2);\n    solver.force_selected(0);\n    solver.force_unselected(3);\n\
+    \n    auto result = solver.solve();\n    assert(result.is_feasible());\n    assert(result.max_gain\
+    \ == 15);\n    assert(result.selected[0]);\n    assert(result.selected[1]);\n\
+    \    assert(result.selected[2]);\n    assert(!result.selected[3]);\n\n    ProjectSelection\
+    \ impossible(1);\n    impossible.force_selected(0);\n    impossible.force_unselected(0);\n\
+    \    assert(!impossible.solve().is_feasible());\n}\n\nvoid test_empty_groups_and_repeated_solve()\
+    \ {\n    ProjectSelection solver(0);\n    solver.add_gain_if_all_selected({},\
+    \ 3);\n    solver.add_gain_if_all_unselected({}, 4);\n    assert(solver.size()\
+    \ == 0);\n\n    auto first = solver.solve();\n    auto second = solver.solve();\n\
+    \    assert(first.is_feasible() && second.is_feasible());\n    assert(first.max_gain\
+    \ == 7 && second.max_gain == 7);\n    assert(first.selected.empty() && second.selected.empty());\n\
+    }\n\nvoid test_unary_against_bruteforce() {\n    for (int n = 1; n <= 8; n++)\
+    \ {\n        ProjectSelection solver(n);\n        std::vector<long long> selected_gain(n);\n\
+    \        std::vector<long long> unselected_gain(n);\n        for (int i = 0; i\
+    \ < n; i++) {\n            selected_gain[i] = (i * 7 + n * 3) % 13 - 6;\n    \
+    \        unselected_gain[i] = (i * 5 + n * 2) % 11 - 5;\n            solver.add_gain(i,\
+    \ selected_gain[i], unselected_gain[i]);\n        }\n\n        auto result = solver.solve();\n\
+    \        long long expected = std::numeric_limits<long long>::lowest();\n    \
+    \    for (int mask = 0; mask < (1 << n); mask++) {\n            long long gain\
+    \ = 0;\n            for (int i = 0; i < n; i++) {\n                gain += ((mask\
+    \ >> i) & 1) ? selected_gain[i] : unselected_gain[i];\n            }\n       \
+    \     if (gain > expected) expected = gain;\n        }\n        assert(result.is_feasible());\n\
+    \        assert(result.max_gain == expected);\n    }\n}\n\nvoid test_mixed_models_against_bruteforce()\
+    \ {\n    for (int n = 1; n <= 7; n++) {\n        for (int test = 0; test < 24;\
+    \ test++) {\n            ProjectSelection solver(n);\n            std::vector<long\
+    \ long> selected_gain(n);\n            std::vector<long long> unselected_gain(n);\n\
+    \            for (int i = 0; i < n; i++) {\n                selected_gain[i] =\
+    \ (test * 7 + i * 5 + n) % 15 - 7;\n                unselected_gain[i] = (test\
+    \ * 3 + i * 11 + n * 2) % 13 - 6;\n                solver.add_gain(i, selected_gain[i],\
+    \ unselected_gain[i]);\n            }\n\n            for (int i = 0; i < n; i++)\
+    \ {\n                for (int j = 0; j < n; j++) {\n                    if ((test\
+    \ + i * 3 + j * 5) % 7 != 0) continue;\n                    long long penalty\
+    \ = (test + i + j) % 6;\n                    solver.add_penalty(i, j, penalty);\n\
+    \                }\n            }\n\n            for (int i = 0; i < n; i++) {\n\
+    \                for (int j = i + 1; j < n; j++) {\n                    if ((test\
+    \ + i + j) % 5 == 0) {\n                        solver.add_penalty_if_different(i,\
+    \ j, (test + i * 2 + j) % 5);\n                    }\n                    if ((test\
+    \ + i * 2 + j * 3) % 8 == 0) {\n                        solver.add_gain_if_same(i,\
+    \ j, (test + i + j * 2) % 6);\n                    }\n                }\n    \
+    \        }\n\n            std::vector<int> all_selected;\n            std::vector<int>\
+    \ all_unselected;\n            for (int i = 0; i < n; i++) {\n               \
+    \ if ((test + i) % 3 != 0) all_selected.push_back(i);\n                if ((test\
+    \ + i * 2) % 4 != 0) all_unselected.push_back(i);\n            }\n           \
+    \ long long all_selected_gain = test % 7;\n            long long all_unselected_gain\
+    \ = (test * 2 + n) % 8;\n            solver.add_gain_if_all_selected(all_selected,\
+    \ all_selected_gain);\n            solver.add_gain_if_all_unselected(all_unselected,\
+    \ all_unselected_gain);\n\n            for (int i = 0; i < n; i++) {\n       \
+    \         int j = (i + 1) % n;\n                if ((test + i * 4) % 11 == 0)\
+    \ solver.add_hard_implication(i, j);\n            }\n            if (test % 9\
+    \ == 0) solver.force_selected(test % n);\n            if (test % 10 == 0) solver.force_unselected((test\
+    \ * 3 + 1) % n);\n\n            bool found = false;\n            long long expected\
+    \ = std::numeric_limits<long long>::lowest();\n            for (int mask = 0;\
+    \ mask < (1 << n); mask++) {\n                auto selected = [&](int project)\
+    \ {\n                    return ((mask >> project) & 1) != 0;\n              \
+    \  };\n\n                bool feasible = true;\n                for (int i = 0;\
+    \ i < n; i++) {\n                    int j = (i + 1) % n;\n                  \
+    \  if ((test + i * 4) % 11 == 0 && selected(i) && !selected(j)) {\n          \
+    \              feasible = false;\n                    }\n                }\n \
+    \               if (test % 9 == 0 && !selected(test % n)) feasible = false;\n\
+    \                if (test % 10 == 0 && selected((test * 3 + 1) % n)) feasible\
+    \ = false;\n                if (!feasible) continue;\n\n                long long\
+    \ gain = 0;\n                for (int i = 0; i < n; i++) {\n                 \
+    \   gain += selected(i) ? selected_gain[i] : unselected_gain[i];\n           \
+    \     }\n                for (int i = 0; i < n; i++) {\n                    for\
+    \ (int j = 0; j < n; j++) {\n                        if ((test + i * 3 + j * 5)\
+    \ % 7 == 0 && selected(i) && !selected(j)) {\n                            gain\
+    \ -= (test + i + j) % 6;\n                        }\n                    }\n \
+    \               }\n                for (int i = 0; i < n; i++) {\n           \
+    \         for (int j = i + 1; j < n; j++) {\n                        if ((test\
+    \ + i + j) % 5 == 0 && selected(i) != selected(j)) {\n                       \
+    \     gain -= (test + i * 2 + j) % 5;\n                        }\n           \
+    \             if ((test + i * 2 + j * 3) % 8 == 0 && selected(i) == selected(j))\
+    \ {\n                            gain += (test + i + j * 2) % 6;\n           \
+    \             }\n                    }\n                }\n\n                bool\
+    \ every_selected = true;\n                for (int project : all_selected) every_selected\
+    \ &= selected(project);\n                if (every_selected) gain += all_selected_gain;\n\
+    \                bool every_unselected = true;\n                for (int project\
+    \ : all_unselected) every_unselected &= !selected(project);\n                if\
+    \ (every_unselected) gain += all_unselected_gain;\n\n                found = true;\n\
+    \                if (gain > expected) expected = gain;\n            }\n\n    \
+    \        auto result = solver.solve();\n            assert(result.is_feasible()\
+    \ == found);\n            if (found) assert(result.max_gain == expected);\n  \
+    \      }\n    }\n}\n\nint main() {\n    test_basic();\n    test_hard_constraints();\n\
+    \    test_empty_groups_and_repeated_solve();\n    test_unary_against_bruteforce();\n\
+    \    test_mixed_models_against_bruteforce();\n\n    long long a, b;\n    std::cin\
+    \ >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - optimization/all.hpp
   - optimization/hungarian.hpp
@@ -632,15 +704,15 @@ data:
   - optimization/project_selection.hpp
   - flow/max_flow.hpp
   isVerificationFile: true
-  path: verify/optimization/integer_lp.test.cpp
+  path: verify/optimization/project_selection.test.cpp
   requiredBy: []
   timestamp: '2026-06-22 23:16:48+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/optimization/integer_lp.test.cpp
+documentation_of: verify/optimization/project_selection.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/optimization/integer_lp.test.cpp
-- /verify/verify/optimization/integer_lp.test.cpp.html
-title: verify/optimization/integer_lp.test.cpp
+- /verify/verify/optimization/project_selection.test.cpp
+- /verify/verify/optimization/project_selection.test.cpp.html
+title: verify/optimization/project_selection.test.cpp
 ---

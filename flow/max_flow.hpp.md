@@ -8,10 +8,25 @@ data:
   - icon: ':heavy_check_mark:'
     path: flow/flow.hpp
     title: Flow
+  - icon: ':heavy_check_mark:'
+    path: optimization/all.hpp
+    title: Optimization All
+  - icon: ':heavy_check_mark:'
+    path: optimization/project_selection.hpp
+    title: Project Selection
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/flow/flow_algorithms.test.cpp
     title: verify/flow/flow_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/optimization/integer_lp.test.cpp
+    title: verify/optimization/integer_lp.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/optimization/project_selection.test.cpp
+    title: verify/optimization/project_selection.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/optimization/simplex.test.cpp
+    title: verify/optimization/simplex.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -137,11 +152,16 @@ data:
   isVerificationFile: false
   path: flow/max_flow.hpp
   requiredBy:
+  - optimization/project_selection.hpp
+  - optimization/all.hpp
   - flow/flow.hpp
   - flow/bounded_flow.hpp
   timestamp: '2026-06-17 01:33:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/optimization/project_selection.test.cpp
+  - verify/optimization/integer_lp.test.cpp
+  - verify/optimization/simplex.test.cpp
   - verify/flow/flow_algorithms.test.cpp
 documentation_of: flow/max_flow.hpp
 layout: document

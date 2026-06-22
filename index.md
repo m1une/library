@@ -507,6 +507,9 @@ data:
       path: optimization/integer_lp.hpp
       title: Integer Linear Programming
     - icon: ':heavy_check_mark:'
+      path: optimization/project_selection.hpp
+      title: Project Selection
+    - icon: ':heavy_check_mark:'
       path: optimization/simplex.hpp
       title: Simplex Algorithm
   - name: scripts
@@ -913,6 +916,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/optimization/integer_lp.test.cpp
       title: verify/optimization/integer_lp.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/optimization/project_selection.test.cpp
+      title: verify/optimization/project_selection.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/optimization/simplex.test.cpp
       title: verify/optimization/simplex.test.cpp
