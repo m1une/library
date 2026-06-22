@@ -1,0 +1,204 @@
+---
+data:
+  _extendedDependsOn:
+  - icon: ':heavy_check_mark:'
+    path: string/aho_corasick.hpp
+    title: Aho-Corasick
+  _extendedRequiredBy: []
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
+  _pathExtension: cpp
+  _verificationStatusIcon: ':heavy_check_mark:'
+  attributes:
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    links:
+    - https://judge.yosupo.jp/problem/aplusb
+  bundledCode: "#line 1 \"verify/string/aho_corasick.test.cpp\"\n#define PROBLEM \"\
+    https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"string/aho_corasick.hpp\"\
+    \n\n\n\n#include <array>\n#include <cassert>\n#include <cstddef>\n#include <limits>\n\
+    #include <queue>\n#include <vector>\n\nnamespace m1une {\nnamespace string {\n\
+    \n// Aho-Corasick automaton for a contiguous character alphabet.\ntemplate <int\
+    \ AlphabetSize = 26, int FirstCharacter = 'a'>\nstruct AhoCorasick {\n    static_assert(0\
+    \ < AlphabetSize);\n\n    using node_id = int;\n\n    struct Node {\n        std::array<node_id,\
+    \ AlphabetSize> next;\n        node_id failure;\n        node_id output_link;\n\
+    \        std::vector<int> pattern_ids;\n\n        Node() : failure(0), output_link(-1)\
+    \ {\n            next.fill(-1);\n        }\n    };\n\n   private:\n    std::vector<Node>\
+    \ _nodes;\n    std::vector<int> _pattern_length;\n    std::vector<node_id> _bfs_order;\n\
+    \    bool _built;\n\n    template <class Symbol>\n    static int symbol_index(const\
+    \ Symbol& symbol) {\n        int index = int(symbol) - FirstCharacter;\n     \
+    \   assert(0 <= index && index < AlphabetSize);\n        return index;\n    }\n\
+    \n    node_id new_node() {\n        assert(_nodes.size() < std::size_t(std::numeric_limits<int>::max()));\n\
+    \        _nodes.emplace_back();\n        return int(_nodes.size()) - 1;\n    }\n\
+    \n   public:\n    AhoCorasick() : _nodes(1), _built(false) {}\n\n    node_id root()\
+    \ const {\n        return 0;\n    }\n\n    bool built() const {\n        return\
+    \ _built;\n    }\n\n    int pattern_count() const {\n        return int(_pattern_length.size());\n\
+    \    }\n\n    int pattern_length(int pattern_id) const {\n        assert(0 <=\
+    \ pattern_id && pattern_id < pattern_count());\n        return _pattern_length[pattern_id];\n\
+    \    }\n\n    std::size_t node_count() const {\n        return _nodes.size();\n\
+    \    }\n\n    const Node& node(node_id id) const {\n        assert(0 <= id &&\
+    \ std::size_t(id) < _nodes.size());\n        return _nodes[id];\n    }\n\n   \
+    \ void reserve(std::size_t node_capacity) {\n        assert(!_built);\n      \
+    \  _nodes.reserve(node_capacity);\n    }\n\n    void clear() {\n        _nodes.clear();\n\
+    \        _nodes.emplace_back();\n        _pattern_length.clear();\n        _bfs_order.clear();\n\
+    \        _built = false;\n    }\n\n    // Inserts a pattern and returns its insertion-order\
+    \ ID.\n    template <class Sequence>\n    int insert(const Sequence& pattern)\
+    \ {\n        assert(!_built);\n        int pattern_id = pattern_count();\n   \
+    \     int length = 0;\n        node_id state = root();\n        for (const auto&\
+    \ symbol : pattern) {\n            assert(length < std::numeric_limits<int>::max());\n\
+    \            int index = symbol_index(symbol);\n            if (_nodes[state].next[index]\
+    \ == -1) {\n                node_id child = new_node();\n                _nodes[state].next[index]\
+    \ = child;\n            }\n            state = _nodes[state].next[index];\n  \
+    \          length++;\n        }\n        _nodes[state].pattern_ids.push_back(pattern_id);\n\
+    \        _pattern_length.push_back(length);\n        return pattern_id;\n    }\n\
+    \n    // Builds failure links and completes every automaton transition.\n    void\
+    \ build() {\n        assert(!_built);\n        std::queue<node_id> queue;\n  \
+    \      _bfs_order.clear();\n        _bfs_order.reserve(_nodes.size());\n     \
+    \   _bfs_order.push_back(root());\n\n        for (int symbol = 0; symbol < AlphabetSize;\
+    \ ++symbol) {\n            node_id child = _nodes[root()].next[symbol];\n    \
+    \        if (child == -1) {\n                _nodes[root()].next[symbol] = root();\n\
+    \            } else {\n                _nodes[child].failure = root();\n     \
+    \           _nodes[child].output_link =\n                    _nodes[root()].pattern_ids.empty()\
+    \ ? -1 : root();\n                queue.push(child);\n            }\n        }\n\
+    \n        while (!queue.empty()) {\n            node_id state = queue.front();\n\
+    \            queue.pop();\n            _bfs_order.push_back(state);\n\n      \
+    \      for (int symbol = 0; symbol < AlphabetSize; ++symbol) {\n             \
+    \   node_id child = _nodes[state].next[symbol];\n                if (child ==\
+    \ -1) {\n                    _nodes[state].next[symbol] =\n                  \
+    \      _nodes[_nodes[state].failure].next[symbol];\n                    continue;\n\
+    \                }\n\n                node_id failure =\n                    _nodes[_nodes[state].failure].next[symbol];\n\
+    \                _nodes[child].failure = failure;\n                _nodes[child].output_link\
+    \ =\n                    _nodes[failure].pattern_ids.empty()\n               \
+    \         ? _nodes[failure].output_link\n                        : failure;\n\
+    \                queue.push(child);\n            }\n        }\n        _built\
+    \ = true;\n    }\n\n    template <class Symbol>\n    node_id transition(node_id\
+    \ state, const Symbol& symbol) const {\n        assert(_built);\n        assert(0\
+    \ <= state && std::size_t(state) < _nodes.size());\n        return _nodes[state].next[symbol_index(symbol)];\n\
+    \    }\n\n    // Calls callback(pattern_id) for every pattern ending at `state`.\n\
+    \    template <class Callback>\n    void for_each_output(node_id state, Callback\
+    \ callback) const {\n        assert(_built);\n        assert(0 <= state && std::size_t(state)\
+    \ < _nodes.size());\n        while (state != -1) {\n            for (int pattern_id\
+    \ : _nodes[state].pattern_ids) {\n                callback(pattern_id);\n    \
+    \        }\n            state = _nodes[state].output_link;\n        }\n    }\n\
+    \n    // Calls callback(end, pattern_id) for every occurrence. `end` is the\n\
+    \    // exclusive end position. Empty patterns occur at every text boundary.\n\
+    \    template <class Sequence, class Callback>\n    void match(const Sequence&\
+    \ text, Callback callback) const {\n        assert(_built);\n        node_id state\
+    \ = root();\n        for_each_output(state, [&callback](int pattern_id) {\n  \
+    \          callback(0, pattern_id);\n        });\n\n        int end = 0;\n   \
+    \     for (const auto& symbol : text) {\n            state = transition(state,\
+    \ symbol);\n            end++;\n            for_each_output(state, [&callback,\
+    \ end](int pattern_id) {\n                callback(end, pattern_id);\n       \
+    \     });\n        }\n    }\n\n    // Counts occurrences of every inserted pattern\
+    \ in linear time.\n    template <class Sequence>\n    std::vector<long long> count_occurrences(const\
+    \ Sequence& text) const {\n        assert(_built);\n        std::vector<long long>\
+    \ visits(_nodes.size(), 0);\n        node_id state = root();\n        visits[root()]++;\n\
+    \        for (const auto& symbol : text) {\n            state = transition(state,\
+    \ symbol);\n            visits[state]++;\n        }\n\n        for (std::size_t\
+    \ index = _bfs_order.size(); index-- > 1;) {\n            node_id current = _bfs_order[index];\n\
+    \            visits[_nodes[current].failure] += visits[current];\n        }\n\n\
+    \        std::vector<long long> result(pattern_count(), 0);\n        for (node_id\
+    \ current : _bfs_order) {\n            for (int pattern_id : _nodes[current].pattern_ids)\
+    \ {\n                result[pattern_id] = visits[current];\n            }\n  \
+    \      }\n        return result;\n    }\n};\n\n}  // namespace string\n}  // namespace\
+    \ m1une\n\n\n#line 4 \"verify/string/aho_corasick.test.cpp\"\n\n#include <algorithm>\n\
+    #line 7 \"verify/string/aho_corasick.test.cpp\"\n#include <cstdint>\n#include\
+    \ <iostream>\n#include <string>\n#include <tuple>\n#line 12 \"verify/string/aho_corasick.test.cpp\"\
+    \n\nnamespace {\n\nvoid check(\n    const std::vector<std::string>& patterns,\n\
+    \    const std::string& text\n) {\n    m1une::string::AhoCorasick<4, 'a'> automaton;\n\
+    \    std::size_t total_length = 1;\n    for (const std::string& pattern : patterns)\
+    \ {\n        total_length += pattern.size();\n    }\n    automaton.reserve(total_length);\n\
+    \    for (int id = 0; id < int(patterns.size()); ++id) {\n        assert(automaton.insert(patterns[id])\
+    \ == id);\n        assert(automaton.pattern_length(id) == int(patterns[id].size()));\n\
+    \    }\n    automaton.build();\n    assert(automaton.built());\n    assert(automaton.pattern_count()\
+    \ == int(patterns.size()));\n\n    std::vector<std::tuple<int, int>> actual;\n\
+    \    automaton.match(text, [&actual](int end, int pattern_id) {\n        actual.emplace_back(end,\
+    \ pattern_id);\n    });\n    std::sort(actual.begin(), actual.end());\n\n    std::vector<std::tuple<int,\
+    \ int>> expected;\n    std::vector<long long> expected_count(patterns.size(),\
+    \ 0);\n    for (int end = 0; end <= int(text.size()); ++end) {\n        for (int\
+    \ id = 0; id < int(patterns.size()); ++id) {\n            int length = int(patterns[id].size());\n\
+    \            if (\n                length <= end &&\n                text.compare(end\
+    \ - length, length, patterns[id]) == 0\n            ) {\n                expected.emplace_back(end,\
+    \ id);\n                expected_count[id]++;\n            }\n        }\n    }\n\
+    \    std::sort(expected.begin(), expected.end());\n    assert(actual == expected);\n\
+    \    assert(automaton.count_occurrences(text) == expected_count);\n}\n\nvoid test_fixed()\
+    \ {\n    check({}, \"abacaba\");\n    check({\"\"}, \"\");\n    check({\"\", \"\
+    \", \"a\", \"a\", \"aa\", \"ba\"}, \"aaaaba\");\n\n    m1une::string::AhoCorasick<10,\
+    \ '0'> digits;\n    [[maybe_unused]] int first = digits.insert(std::string(\"\
+    12\"));\n    [[maybe_unused]] int second = digits.insert(std::string(\"2\"));\n\
+    \    digits.build();\n    auto count = digits.count_occurrences(std::string(\"\
+    1212\"));\n    assert(count[first] == 2);\n    assert(count[second] == 2);\n\n\
+    \    digits.clear();\n    assert(!digits.built());\n    assert(digits.pattern_count()\
+    \ == 0);\n    assert(digits.node_count() == 1);\n}\n\nvoid test_randomized() {\n\
+    \    std::uint64_t state = 313;\n    auto random = [&state]() {\n        state\
+    \ ^= state << 7;\n        state ^= state >> 9;\n        return state;\n    };\n\
+    \n    for (int trial = 0; trial < 4000; ++trial) {\n        int pattern_count\
+    \ = int(random() % 15);\n        std::vector<std::string> patterns;\n        for\
+    \ (int id = 0; id < pattern_count; ++id) {\n            int length = int(random()\
+    \ % 8);\n            std::string pattern(length, 'a');\n            for (char&\
+    \ symbol : pattern) {\n                symbol = char('a' + random() % 4);\n  \
+    \          }\n            patterns.push_back(std::move(pattern));\n        }\n\
+    \n        int text_length = int(random() % 35);\n        std::string text(text_length,\
+    \ 'a');\n        for (char& symbol : text) {\n            symbol = char('a' +\
+    \ random() % 4);\n        }\n        check(patterns, text);\n    }\n}\n\n}  //\
+    \ namespace\n\nint main() {\n    test_fixed();\n    test_randomized();\n\n   \
+    \ long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n\
+    }\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
+    ../../string/aho_corasick.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
+    #include <cstdint>\n#include <iostream>\n#include <string>\n#include <tuple>\n\
+    #include <vector>\n\nnamespace {\n\nvoid check(\n    const std::vector<std::string>&\
+    \ patterns,\n    const std::string& text\n) {\n    m1une::string::AhoCorasick<4,\
+    \ 'a'> automaton;\n    std::size_t total_length = 1;\n    for (const std::string&\
+    \ pattern : patterns) {\n        total_length += pattern.size();\n    }\n    automaton.reserve(total_length);\n\
+    \    for (int id = 0; id < int(patterns.size()); ++id) {\n        assert(automaton.insert(patterns[id])\
+    \ == id);\n        assert(automaton.pattern_length(id) == int(patterns[id].size()));\n\
+    \    }\n    automaton.build();\n    assert(automaton.built());\n    assert(automaton.pattern_count()\
+    \ == int(patterns.size()));\n\n    std::vector<std::tuple<int, int>> actual;\n\
+    \    automaton.match(text, [&actual](int end, int pattern_id) {\n        actual.emplace_back(end,\
+    \ pattern_id);\n    });\n    std::sort(actual.begin(), actual.end());\n\n    std::vector<std::tuple<int,\
+    \ int>> expected;\n    std::vector<long long> expected_count(patterns.size(),\
+    \ 0);\n    for (int end = 0; end <= int(text.size()); ++end) {\n        for (int\
+    \ id = 0; id < int(patterns.size()); ++id) {\n            int length = int(patterns[id].size());\n\
+    \            if (\n                length <= end &&\n                text.compare(end\
+    \ - length, length, patterns[id]) == 0\n            ) {\n                expected.emplace_back(end,\
+    \ id);\n                expected_count[id]++;\n            }\n        }\n    }\n\
+    \    std::sort(expected.begin(), expected.end());\n    assert(actual == expected);\n\
+    \    assert(automaton.count_occurrences(text) == expected_count);\n}\n\nvoid test_fixed()\
+    \ {\n    check({}, \"abacaba\");\n    check({\"\"}, \"\");\n    check({\"\", \"\
+    \", \"a\", \"a\", \"aa\", \"ba\"}, \"aaaaba\");\n\n    m1une::string::AhoCorasick<10,\
+    \ '0'> digits;\n    [[maybe_unused]] int first = digits.insert(std::string(\"\
+    12\"));\n    [[maybe_unused]] int second = digits.insert(std::string(\"2\"));\n\
+    \    digits.build();\n    auto count = digits.count_occurrences(std::string(\"\
+    1212\"));\n    assert(count[first] == 2);\n    assert(count[second] == 2);\n\n\
+    \    digits.clear();\n    assert(!digits.built());\n    assert(digits.pattern_count()\
+    \ == 0);\n    assert(digits.node_count() == 1);\n}\n\nvoid test_randomized() {\n\
+    \    std::uint64_t state = 313;\n    auto random = [&state]() {\n        state\
+    \ ^= state << 7;\n        state ^= state >> 9;\n        return state;\n    };\n\
+    \n    for (int trial = 0; trial < 4000; ++trial) {\n        int pattern_count\
+    \ = int(random() % 15);\n        std::vector<std::string> patterns;\n        for\
+    \ (int id = 0; id < pattern_count; ++id) {\n            int length = int(random()\
+    \ % 8);\n            std::string pattern(length, 'a');\n            for (char&\
+    \ symbol : pattern) {\n                symbol = char('a' + random() % 4);\n  \
+    \          }\n            patterns.push_back(std::move(pattern));\n        }\n\
+    \n        int text_length = int(random() % 35);\n        std::string text(text_length,\
+    \ 'a');\n        for (char& symbol : text) {\n            symbol = char('a' +\
+    \ random() % 4);\n        }\n        check(patterns, text);\n    }\n}\n\n}  //\
+    \ namespace\n\nint main() {\n    test_fixed();\n    test_randomized();\n\n   \
+    \ long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n\
+    }\n"
+  dependsOn:
+  - string/aho_corasick.hpp
+  isVerificationFile: true
+  path: verify/string/aho_corasick.test.cpp
+  requiredBy: []
+  timestamp: '2026-06-23 01:53:49+09:00'
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: verify/string/aho_corasick.test.cpp
+layout: document
+redirect_from:
+- /verify/verify/string/aho_corasick.test.cpp
+- /verify/verify/string/aho_corasick.test.cpp.html
+title: verify/string/aho_corasick.test.cpp
+---

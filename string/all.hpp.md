@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: string/aho_corasick.hpp
+    title: Aho-Corasick
+  - icon: ':heavy_check_mark:'
     path: string/manacher.hpp
     title: Manacher Algorithm
   - icon: ':heavy_check_mark:'
@@ -29,87 +32,173 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"string/all.hpp\"\n\n\n\n#line 1 \"string/manacher.hpp\"\n\
-    \n\n\n#include <algorithm>\n#include <cassert>\n#include <vector>\n\nnamespace\
-    \ m1une {\nnamespace string {\n\nstruct ManacherResult {\n    // odd[i] is the\
-    \ radius including center i.\n    // The palindrome is [i - odd[i] + 1, i + odd[i]).\n\
-    \    std::vector<int> odd;\n\n    // even[i] is the radius centered between i\
-    \ - 1 and i.\n    // The palindrome is [i - even[i], i + even[i]).\n    std::vector<int>\
-    \ even;\n\n    int size() const {\n        return int(odd.size());\n    }\n\n\
-    \    bool empty() const {\n        return odd.empty();\n    }\n\n    bool is_palindrome(int\
-    \ left, int right) const {\n        int n = size();\n        assert(0 <= left\
-    \ && left <= right && right <= n);\n        int length = right - left;\n     \
-    \   if (length == 0) return true;\n        if (length & 1) {\n            int\
-    \ center = (left + right) / 2;\n            return length / 2 + 1 <= odd[center];\n\
-    \        }\n        int center = (left + right) / 2;\n        return length /\
-    \ 2 <= even[center];\n    }\n\n    int longest_length() const {\n        int result\
-    \ = 0;\n        for (int radius : odd) result = std::max(result, 2 * radius -\
-    \ 1);\n        for (int radius : even) result = std::max(result, 2 * radius);\n\
-    \        return result;\n    }\n};\n\ntemplate <class Sequence>\nManacherResult\
-    \ manacher(const Sequence& sequence) {\n    int n = int(sequence.size());\n  \
-    \  ManacherResult result;\n    result.odd.assign(n, 0);\n    result.even.assign(n,\
-    \ 0);\n\n    int left = 0;\n    int right = -1;\n    for (int i = 0; i < n; i++)\
-    \ {\n        int radius = i > right ? 1 : std::min(result.odd[left + right - i],\
-    \ right - i + 1);\n        while (\n            0 <= i - radius &&\n         \
-    \   i + radius < n &&\n            sequence[i - radius] == sequence[i + radius]\n\
-    \        ) {\n            radius++;\n        }\n        result.odd[i] = radius;\n\
-    \        if (right < i + radius - 1) {\n            left = i - radius + 1;\n \
-    \           right = i + radius - 1;\n        }\n    }\n\n    left = 0;\n    right\
-    \ = -1;\n    for (int i = 0; i < n; i++) {\n        int radius = i > right ? 0\
-    \ : std::min(result.even[left + right - i + 1], right - i + 1);\n        while\
-    \ (\n            0 <= i - radius - 1 &&\n            i + radius < n &&\n     \
-    \       sequence[i - radius - 1] == sequence[i + radius]\n        ) {\n      \
-    \      radius++;\n        }\n        result.even[i] = radius;\n        if (right\
-    \ < i + radius - 1) {\n            left = i - radius;\n            right = i +\
-    \ radius - 1;\n        }\n    }\n    return result;\n}\n\n}  // namespace string\n\
-    }  // namespace m1une\n\n\n#line 1 \"string/prefix_function.hpp\"\n\n\n\n#line\
-    \ 5 \"string/prefix_function.hpp\"\n\nnamespace m1une {\nnamespace string {\n\n\
-    // Returns the KMP prefix function.\ntemplate <class Sequence>\nstd::vector<int>\
-    \ prefix_function(const Sequence& sequence) {\n    int n = int(sequence.size());\n\
-    \    std::vector<int> prefix(n);\n    for (int i = 1; i < n; i++) {\n        int\
-    \ j = prefix[i - 1];\n        while (j > 0 && sequence[i] != sequence[j]) {\n\
-    \            j = prefix[j - 1];\n        }\n        if (sequence[i] == sequence[j])\
-    \ j++;\n        prefix[i] = j;\n    }\n    return prefix;\n}\n\n// Returns every\
-    \ starting position where pattern occurs in text.\n// An empty pattern occurs\
-    \ at every position from 0 through text.size().\ntemplate <class Text, class Pattern>\n\
-    std::vector<int> kmp_search(const Text& text, const Pattern& pattern) {\n    int\
-    \ n = int(text.size());\n    int m = int(pattern.size());\n    if (m == 0) {\n\
-    \        std::vector<int> occurrences(n + 1);\n        for (int i = 0; i <= n;\
-    \ i++) occurrences[i] = i;\n        return occurrences;\n    }\n\n    std::vector<int>\
-    \ prefix = prefix_function(pattern);\n    std::vector<int> occurrences;\n    int\
-    \ matched = 0;\n    for (int i = 0; i < n; i++) {\n        while (matched > 0\
-    \ && text[i] != pattern[matched]) {\n            matched = prefix[matched - 1];\n\
-    \        }\n        if (text[i] == pattern[matched]) matched++;\n        if (matched\
-    \ == m) {\n            occurrences.push_back(i - m + 1);\n            matched\
-    \ = prefix[matched - 1];\n        }\n    }\n    return occurrences;\n}\n\n}  //\
-    \ namespace string\n}  // namespace m1une\n\n\n#line 1 \"string/rolling_hash.hpp\"\
-    \n\n\n\n#line 5 \"string/rolling_hash.hpp\"\n#include <string>\n#include <utility>\n\
-    #line 8 \"string/rolling_hash.hpp\"\n\nnamespace m1une {\nnamespace string {\n\
-    \n// Standard Rolling Hash for static strings.\n// Precomputes hashes to answer\
-    \ substring queries in O(1).\n// Provides advanced operations like LCP, lexicographical\
-    \ comparison, and string repetition in O(log N).\ntemplate <long long Base = 10007,\
-    \ long long Mod = (1LL << 61) - 1>\nstruct RollingHash {\n    std::string s;\n\
-    \    std::vector<long long> hash;\n    std::vector<long long> power;\n\n    RollingHash()\
-    \ = default;\n\n    // Constructs the rolling hash table for the given string.\n\
-    \    explicit RollingHash(const std::string& str) : s(str) {\n        int n =\
-    \ s.size();\n        hash.assign(n + 1, 0);\n        power.assign(n + 1, 1);\n\
-    \        for (int i = 0; i < n; ++i) {\n            // Use __int128_t to prevent\
-    \ overflow during multiplication\n            hash[i + 1] = (static_cast<__int128_t>(hash[i])\
-    \ * Base + s[i]) % Mod;\n            power[i + 1] = (static_cast<__int128_t>(power[i])\
-    \ * Base) % Mod;\n        }\n    }\n\n    // Returns the hash of the substring\
-    \ S[l..r) in O(1).\n    long long get(int l, int r) const {\n        long long\
-    \ res = hash[r] - (static_cast<__int128_t>(hash[l]) * power[r - l]) % Mod;\n \
-    \       if (res < 0) res += Mod;\n        return res;\n    }\n\n    // Returns\
-    \ the hash of the concatenated substrings S[l1..r1) and S[l2..r2).\n    long long\
-    \ concat(int l1, int r1, int l2, int r2) const {\n        long long h1 = get(l1,\
-    \ r1);\n        long long h2 = get(l2, r2);\n        return combine(h1, h2, power[r2\
-    \ - l2]);\n    }\n\n    // Calculates the Longest Common Prefix (LCP) length of\
-    \ S[l1..r1) and S[l2..r2) in O(log N).\n    int lcp(int l1, int r1, int l2, int\
-    \ r2) const {\n        int len = std::min(r1 - l1, r2 - l2);\n        int low\
-    \ = 0, high = len + 1;\n        while (high - low > 1) {\n            int mid\
-    \ = low + (high - low) / 2;\n            if (get(l1, l1 + mid) == get(l2, l2 +\
-    \ mid)) {\n                low = mid;\n            } else {\n                high\
-    \ = mid;\n            }\n        }\n        return low;\n    }\n\n    // Lexicographically\
+  bundledCode: "#line 1 \"string/all.hpp\"\n\n\n\n#line 1 \"string/aho_corasick.hpp\"\
+    \n\n\n\n#include <array>\n#include <cassert>\n#include <cstddef>\n#include <limits>\n\
+    #include <queue>\n#include <vector>\n\nnamespace m1une {\nnamespace string {\n\
+    \n// Aho-Corasick automaton for a contiguous character alphabet.\ntemplate <int\
+    \ AlphabetSize = 26, int FirstCharacter = 'a'>\nstruct AhoCorasick {\n    static_assert(0\
+    \ < AlphabetSize);\n\n    using node_id = int;\n\n    struct Node {\n        std::array<node_id,\
+    \ AlphabetSize> next;\n        node_id failure;\n        node_id output_link;\n\
+    \        std::vector<int> pattern_ids;\n\n        Node() : failure(0), output_link(-1)\
+    \ {\n            next.fill(-1);\n        }\n    };\n\n   private:\n    std::vector<Node>\
+    \ _nodes;\n    std::vector<int> _pattern_length;\n    std::vector<node_id> _bfs_order;\n\
+    \    bool _built;\n\n    template <class Symbol>\n    static int symbol_index(const\
+    \ Symbol& symbol) {\n        int index = int(symbol) - FirstCharacter;\n     \
+    \   assert(0 <= index && index < AlphabetSize);\n        return index;\n    }\n\
+    \n    node_id new_node() {\n        assert(_nodes.size() < std::size_t(std::numeric_limits<int>::max()));\n\
+    \        _nodes.emplace_back();\n        return int(_nodes.size()) - 1;\n    }\n\
+    \n   public:\n    AhoCorasick() : _nodes(1), _built(false) {}\n\n    node_id root()\
+    \ const {\n        return 0;\n    }\n\n    bool built() const {\n        return\
+    \ _built;\n    }\n\n    int pattern_count() const {\n        return int(_pattern_length.size());\n\
+    \    }\n\n    int pattern_length(int pattern_id) const {\n        assert(0 <=\
+    \ pattern_id && pattern_id < pattern_count());\n        return _pattern_length[pattern_id];\n\
+    \    }\n\n    std::size_t node_count() const {\n        return _nodes.size();\n\
+    \    }\n\n    const Node& node(node_id id) const {\n        assert(0 <= id &&\
+    \ std::size_t(id) < _nodes.size());\n        return _nodes[id];\n    }\n\n   \
+    \ void reserve(std::size_t node_capacity) {\n        assert(!_built);\n      \
+    \  _nodes.reserve(node_capacity);\n    }\n\n    void clear() {\n        _nodes.clear();\n\
+    \        _nodes.emplace_back();\n        _pattern_length.clear();\n        _bfs_order.clear();\n\
+    \        _built = false;\n    }\n\n    // Inserts a pattern and returns its insertion-order\
+    \ ID.\n    template <class Sequence>\n    int insert(const Sequence& pattern)\
+    \ {\n        assert(!_built);\n        int pattern_id = pattern_count();\n   \
+    \     int length = 0;\n        node_id state = root();\n        for (const auto&\
+    \ symbol : pattern) {\n            assert(length < std::numeric_limits<int>::max());\n\
+    \            int index = symbol_index(symbol);\n            if (_nodes[state].next[index]\
+    \ == -1) {\n                node_id child = new_node();\n                _nodes[state].next[index]\
+    \ = child;\n            }\n            state = _nodes[state].next[index];\n  \
+    \          length++;\n        }\n        _nodes[state].pattern_ids.push_back(pattern_id);\n\
+    \        _pattern_length.push_back(length);\n        return pattern_id;\n    }\n\
+    \n    // Builds failure links and completes every automaton transition.\n    void\
+    \ build() {\n        assert(!_built);\n        std::queue<node_id> queue;\n  \
+    \      _bfs_order.clear();\n        _bfs_order.reserve(_nodes.size());\n     \
+    \   _bfs_order.push_back(root());\n\n        for (int symbol = 0; symbol < AlphabetSize;\
+    \ ++symbol) {\n            node_id child = _nodes[root()].next[symbol];\n    \
+    \        if (child == -1) {\n                _nodes[root()].next[symbol] = root();\n\
+    \            } else {\n                _nodes[child].failure = root();\n     \
+    \           _nodes[child].output_link =\n                    _nodes[root()].pattern_ids.empty()\
+    \ ? -1 : root();\n                queue.push(child);\n            }\n        }\n\
+    \n        while (!queue.empty()) {\n            node_id state = queue.front();\n\
+    \            queue.pop();\n            _bfs_order.push_back(state);\n\n      \
+    \      for (int symbol = 0; symbol < AlphabetSize; ++symbol) {\n             \
+    \   node_id child = _nodes[state].next[symbol];\n                if (child ==\
+    \ -1) {\n                    _nodes[state].next[symbol] =\n                  \
+    \      _nodes[_nodes[state].failure].next[symbol];\n                    continue;\n\
+    \                }\n\n                node_id failure =\n                    _nodes[_nodes[state].failure].next[symbol];\n\
+    \                _nodes[child].failure = failure;\n                _nodes[child].output_link\
+    \ =\n                    _nodes[failure].pattern_ids.empty()\n               \
+    \         ? _nodes[failure].output_link\n                        : failure;\n\
+    \                queue.push(child);\n            }\n        }\n        _built\
+    \ = true;\n    }\n\n    template <class Symbol>\n    node_id transition(node_id\
+    \ state, const Symbol& symbol) const {\n        assert(_built);\n        assert(0\
+    \ <= state && std::size_t(state) < _nodes.size());\n        return _nodes[state].next[symbol_index(symbol)];\n\
+    \    }\n\n    // Calls callback(pattern_id) for every pattern ending at `state`.\n\
+    \    template <class Callback>\n    void for_each_output(node_id state, Callback\
+    \ callback) const {\n        assert(_built);\n        assert(0 <= state && std::size_t(state)\
+    \ < _nodes.size());\n        while (state != -1) {\n            for (int pattern_id\
+    \ : _nodes[state].pattern_ids) {\n                callback(pattern_id);\n    \
+    \        }\n            state = _nodes[state].output_link;\n        }\n    }\n\
+    \n    // Calls callback(end, pattern_id) for every occurrence. `end` is the\n\
+    \    // exclusive end position. Empty patterns occur at every text boundary.\n\
+    \    template <class Sequence, class Callback>\n    void match(const Sequence&\
+    \ text, Callback callback) const {\n        assert(_built);\n        node_id state\
+    \ = root();\n        for_each_output(state, [&callback](int pattern_id) {\n  \
+    \          callback(0, pattern_id);\n        });\n\n        int end = 0;\n   \
+    \     for (const auto& symbol : text) {\n            state = transition(state,\
+    \ symbol);\n            end++;\n            for_each_output(state, [&callback,\
+    \ end](int pattern_id) {\n                callback(end, pattern_id);\n       \
+    \     });\n        }\n    }\n\n    // Counts occurrences of every inserted pattern\
+    \ in linear time.\n    template <class Sequence>\n    std::vector<long long> count_occurrences(const\
+    \ Sequence& text) const {\n        assert(_built);\n        std::vector<long long>\
+    \ visits(_nodes.size(), 0);\n        node_id state = root();\n        visits[root()]++;\n\
+    \        for (const auto& symbol : text) {\n            state = transition(state,\
+    \ symbol);\n            visits[state]++;\n        }\n\n        for (std::size_t\
+    \ index = _bfs_order.size(); index-- > 1;) {\n            node_id current = _bfs_order[index];\n\
+    \            visits[_nodes[current].failure] += visits[current];\n        }\n\n\
+    \        std::vector<long long> result(pattern_count(), 0);\n        for (node_id\
+    \ current : _bfs_order) {\n            for (int pattern_id : _nodes[current].pattern_ids)\
+    \ {\n                result[pattern_id] = visits[current];\n            }\n  \
+    \      }\n        return result;\n    }\n};\n\n}  // namespace string\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"string/manacher.hpp\"\n\n\n\n#include <algorithm>\n#line\
+    \ 7 \"string/manacher.hpp\"\n\nnamespace m1une {\nnamespace string {\n\nstruct\
+    \ ManacherResult {\n    // odd[i] is the radius including center i.\n    // The\
+    \ palindrome is [i - odd[i] + 1, i + odd[i]).\n    std::vector<int> odd;\n\n \
+    \   // even[i] is the radius centered between i - 1 and i.\n    // The palindrome\
+    \ is [i - even[i], i + even[i]).\n    std::vector<int> even;\n\n    int size()\
+    \ const {\n        return int(odd.size());\n    }\n\n    bool empty() const {\n\
+    \        return odd.empty();\n    }\n\n    bool is_palindrome(int left, int right)\
+    \ const {\n        int n = size();\n        assert(0 <= left && left <= right\
+    \ && right <= n);\n        int length = right - left;\n        if (length == 0)\
+    \ return true;\n        if (length & 1) {\n            int center = (left + right)\
+    \ / 2;\n            return length / 2 + 1 <= odd[center];\n        }\n       \
+    \ int center = (left + right) / 2;\n        return length / 2 <= even[center];\n\
+    \    }\n\n    int longest_length() const {\n        int result = 0;\n        for\
+    \ (int radius : odd) result = std::max(result, 2 * radius - 1);\n        for (int\
+    \ radius : even) result = std::max(result, 2 * radius);\n        return result;\n\
+    \    }\n};\n\ntemplate <class Sequence>\nManacherResult manacher(const Sequence&\
+    \ sequence) {\n    int n = int(sequence.size());\n    ManacherResult result;\n\
+    \    result.odd.assign(n, 0);\n    result.even.assign(n, 0);\n\n    int left =\
+    \ 0;\n    int right = -1;\n    for (int i = 0; i < n; i++) {\n        int radius\
+    \ = i > right ? 1 : std::min(result.odd[left + right - i], right - i + 1);\n \
+    \       while (\n            0 <= i - radius &&\n            i + radius < n &&\n\
+    \            sequence[i - radius] == sequence[i + radius]\n        ) {\n     \
+    \       radius++;\n        }\n        result.odd[i] = radius;\n        if (right\
+    \ < i + radius - 1) {\n            left = i - radius + 1;\n            right =\
+    \ i + radius - 1;\n        }\n    }\n\n    left = 0;\n    right = -1;\n    for\
+    \ (int i = 0; i < n; i++) {\n        int radius = i > right ? 0 : std::min(result.even[left\
+    \ + right - i + 1], right - i + 1);\n        while (\n            0 <= i - radius\
+    \ - 1 &&\n            i + radius < n &&\n            sequence[i - radius - 1]\
+    \ == sequence[i + radius]\n        ) {\n            radius++;\n        }\n   \
+    \     result.even[i] = radius;\n        if (right < i + radius - 1) {\n      \
+    \      left = i - radius;\n            right = i + radius - 1;\n        }\n  \
+    \  }\n    return result;\n}\n\n}  // namespace string\n}  // namespace m1une\n\
+    \n\n#line 1 \"string/prefix_function.hpp\"\n\n\n\n#line 5 \"string/prefix_function.hpp\"\
+    \n\nnamespace m1une {\nnamespace string {\n\n// Returns the KMP prefix function.\n\
+    template <class Sequence>\nstd::vector<int> prefix_function(const Sequence& sequence)\
+    \ {\n    int n = int(sequence.size());\n    std::vector<int> prefix(n);\n    for\
+    \ (int i = 1; i < n; i++) {\n        int j = prefix[i - 1];\n        while (j\
+    \ > 0 && sequence[i] != sequence[j]) {\n            j = prefix[j - 1];\n     \
+    \   }\n        if (sequence[i] == sequence[j]) j++;\n        prefix[i] = j;\n\
+    \    }\n    return prefix;\n}\n\n// Returns every starting position where pattern\
+    \ occurs in text.\n// An empty pattern occurs at every position from 0 through\
+    \ text.size().\ntemplate <class Text, class Pattern>\nstd::vector<int> kmp_search(const\
+    \ Text& text, const Pattern& pattern) {\n    int n = int(text.size());\n    int\
+    \ m = int(pattern.size());\n    if (m == 0) {\n        std::vector<int> occurrences(n\
+    \ + 1);\n        for (int i = 0; i <= n; i++) occurrences[i] = i;\n        return\
+    \ occurrences;\n    }\n\n    std::vector<int> prefix = prefix_function(pattern);\n\
+    \    std::vector<int> occurrences;\n    int matched = 0;\n    for (int i = 0;\
+    \ i < n; i++) {\n        while (matched > 0 && text[i] != pattern[matched]) {\n\
+    \            matched = prefix[matched - 1];\n        }\n        if (text[i] ==\
+    \ pattern[matched]) matched++;\n        if (matched == m) {\n            occurrences.push_back(i\
+    \ - m + 1);\n            matched = prefix[matched - 1];\n        }\n    }\n  \
+    \  return occurrences;\n}\n\n}  // namespace string\n}  // namespace m1une\n\n\
+    \n#line 1 \"string/rolling_hash.hpp\"\n\n\n\n#line 5 \"string/rolling_hash.hpp\"\
+    \n#include <string>\n#include <utility>\n#line 8 \"string/rolling_hash.hpp\"\n\
+    \nnamespace m1une {\nnamespace string {\n\n// Standard Rolling Hash for static\
+    \ strings.\n// Precomputes hashes to answer substring queries in O(1).\n// Provides\
+    \ advanced operations like LCP, lexicographical comparison, and string repetition\
+    \ in O(log N).\ntemplate <long long Base = 10007, long long Mod = (1LL << 61)\
+    \ - 1>\nstruct RollingHash {\n    std::string s;\n    std::vector<long long> hash;\n\
+    \    std::vector<long long> power;\n\n    RollingHash() = default;\n\n    // Constructs\
+    \ the rolling hash table for the given string.\n    explicit RollingHash(const\
+    \ std::string& str) : s(str) {\n        int n = s.size();\n        hash.assign(n\
+    \ + 1, 0);\n        power.assign(n + 1, 1);\n        for (int i = 0; i < n; ++i)\
+    \ {\n            // Use __int128_t to prevent overflow during multiplication\n\
+    \            hash[i + 1] = (static_cast<__int128_t>(hash[i]) * Base + s[i]) %\
+    \ Mod;\n            power[i + 1] = (static_cast<__int128_t>(power[i]) * Base)\
+    \ % Mod;\n        }\n    }\n\n    // Returns the hash of the substring S[l..r)\
+    \ in O(1).\n    long long get(int l, int r) const {\n        long long res = hash[r]\
+    \ - (static_cast<__int128_t>(hash[l]) * power[r - l]) % Mod;\n        if (res\
+    \ < 0) res += Mod;\n        return res;\n    }\n\n    // Returns the hash of the\
+    \ concatenated substrings S[l1..r1) and S[l2..r2).\n    long long concat(int l1,\
+    \ int r1, int l2, int r2) const {\n        long long h1 = get(l1, r1);\n     \
+    \   long long h2 = get(l2, r2);\n        return combine(h1, h2, power[r2 - l2]);\n\
+    \    }\n\n    // Calculates the Longest Common Prefix (LCP) length of S[l1..r1)\
+    \ and S[l2..r2) in O(log N).\n    int lcp(int l1, int r1, int l2, int r2) const\
+    \ {\n        int len = std::min(r1 - l1, r2 - l2);\n        int low = 0, high\
+    \ = len + 1;\n        while (high - low > 1) {\n            int mid = low + (high\
+    \ - low) / 2;\n            if (get(l1, l1 + mid) == get(l2, l2 + mid)) {\n   \
+    \             low = mid;\n            } else {\n                high = mid;\n\
+    \            }\n        }\n        return low;\n    }\n\n    // Lexicographically\
     \ compares S[l1..r1) and S[l2..r2) in O(log N).\n    // Returns -1 if S[l1..r1)\
     \ < S[l2..r2), 0 if equal, and 1 if S[l1..r1) > S[l2..r2).\n    int compare(int\
     \ l1, int r1, int l2, int r2) const {\n        int l = lcp(l1, r1, l2, r2);\n\
@@ -192,27 +281,26 @@ data:
     \ < n &&\n            sequence[i + common] == sequence[j + common]\n        )\
     \ {\n            common++;\n        }\n        lcp[position] = common;\n     \
     \   if (common > 0) common--;\n    }\n    return lcp;\n}\n\n}  // namespace string\n\
-    }  // namespace m1une\n\n\n#line 1 \"string/trie.hpp\"\n\n\n\n#include <array>\n\
-    #line 6 \"string/trie.hpp\"\n#include <cstddef>\n#include <limits>\n#line 9 \"\
-    string/trie.hpp\"\n\nnamespace m1une {\nnamespace string {\n\n// A multiset trie\
-    \ for a contiguous character alphabet.\ntemplate <int AlphabetSize = 26, int FirstCharacter\
-    \ = 'a'>\nstruct Trie {\n    static_assert(0 < AlphabetSize);\n\n    using node_id\
-    \ = int;\n    static constexpr node_id null_node = -1;\n\n    struct Node {\n\
-    \        std::array<node_id, AlphabetSize> child;\n        int subtree_count;\n\
-    \        int terminal_count;\n\n        Node() : subtree_count(0), terminal_count(0)\
-    \ {\n            child.fill(null_node);\n        }\n    };\n\n   private:\n  \
-    \  std::vector<Node> _nodes;\n    int _distinct_size;\n\n    template <class Symbol>\n\
-    \    static int symbol_index(const Symbol& symbol) {\n        int index = int(symbol)\
-    \ - FirstCharacter;\n        assert(0 <= index && index < AlphabetSize);\n   \
-    \     return index;\n    }\n\n    node_id new_node() {\n        assert(_nodes.size()\
-    \ < std::size_t(std::numeric_limits<int>::max()));\n        _nodes.emplace_back();\n\
-    \        return int(_nodes.size()) - 1;\n    }\n\n    template <class Sequence>\n\
-    \    node_id find_node(const Sequence& sequence) const {\n        node_id node\
-    \ = 0;\n        for (const auto& symbol : sequence) {\n            node = _nodes[node].child[symbol_index(symbol)];\n\
-    \            if (node == null_node || _nodes[node].subtree_count == 0) {\n   \
-    \             return null_node;\n            }\n        }\n        return node;\n\
-    \    }\n\n   public:\n    Trie() : _nodes(1), _distinct_size(0) {}\n\n    int\
-    \ size() const {\n        return _nodes[0].subtree_count;\n    }\n\n    int distinct_size()\
+    }  // namespace m1une\n\n\n#line 1 \"string/trie.hpp\"\n\n\n\n#line 9 \"string/trie.hpp\"\
+    \n\nnamespace m1une {\nnamespace string {\n\n// A multiset trie for a contiguous\
+    \ character alphabet.\ntemplate <int AlphabetSize = 26, int FirstCharacter = 'a'>\n\
+    struct Trie {\n    static_assert(0 < AlphabetSize);\n\n    using node_id = int;\n\
+    \    static constexpr node_id null_node = -1;\n\n    struct Node {\n        std::array<node_id,\
+    \ AlphabetSize> child;\n        int subtree_count;\n        int terminal_count;\n\
+    \n        Node() : subtree_count(0), terminal_count(0) {\n            child.fill(null_node);\n\
+    \        }\n    };\n\n   private:\n    std::vector<Node> _nodes;\n    int _distinct_size;\n\
+    \n    template <class Symbol>\n    static int symbol_index(const Symbol& symbol)\
+    \ {\n        int index = int(symbol) - FirstCharacter;\n        assert(0 <= index\
+    \ && index < AlphabetSize);\n        return index;\n    }\n\n    node_id new_node()\
+    \ {\n        assert(_nodes.size() < std::size_t(std::numeric_limits<int>::max()));\n\
+    \        _nodes.emplace_back();\n        return int(_nodes.size()) - 1;\n    }\n\
+    \n    template <class Sequence>\n    node_id find_node(const Sequence& sequence)\
+    \ const {\n        node_id node = 0;\n        for (const auto& symbol : sequence)\
+    \ {\n            node = _nodes[node].child[symbol_index(symbol)];\n          \
+    \  if (node == null_node || _nodes[node].subtree_count == 0) {\n             \
+    \   return null_node;\n            }\n        }\n        return node;\n    }\n\
+    \n   public:\n    Trie() : _nodes(1), _distinct_size(0) {}\n\n    int size() const\
+    \ {\n        return _nodes[0].subtree_count;\n    }\n\n    int distinct_size()\
     \ const {\n        return _distinct_size;\n    }\n\n    bool empty() const {\n\
     \        return size() == 0;\n    }\n\n    node_id root() const {\n        return\
     \ 0;\n    }\n\n    const Node& node(node_id id) const {\n        assert(0 <= id\
@@ -280,11 +368,13 @@ data:
     \ + z[i] < n && sequence[z[i]] == sequence[i + z[i]]) {\n            z[i]++;\n\
     \        }\n        if (right < i + z[i]) {\n            left = i;\n         \
     \   right = i + z[i];\n        }\n    }\n    return z;\n}\n\n}  // namespace string\n\
-    }  // namespace m1une\n\n\n#line 10 \"string/all.hpp\"\n\n\n"
+    }  // namespace m1une\n\n\n#line 11 \"string/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_STRING_ALL_HPP
 
     #define M1UNE_STRING_ALL_HPP 1
 
+
+    #include "aho_corasick.hpp"
 
     #include "manacher.hpp"
 
@@ -303,6 +393,7 @@ data:
 
     '
   dependsOn:
+  - string/aho_corasick.hpp
   - string/manacher.hpp
   - string/prefix_function.hpp
   - string/rolling_hash.hpp
@@ -312,7 +403,7 @@ data:
   isVerificationFile: false
   path: string/all.hpp
   requiredBy: []
-  timestamp: '2026-06-22 15:33:45+09:00'
+  timestamp: '2026-06-23 01:53:49+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/string/string_algorithms.test.cpp
@@ -331,6 +422,7 @@ contest when convenience matters more.
 
 | Header | Contents |
 | --- | --- |
+| `string/aho_corasick.hpp` | Multi-pattern matching with failure links and occurrence counting. |
 | `string/z_algorithm.hpp` | Linear-time Z array. |
 | `string/prefix_function.hpp` | Prefix function and KMP occurrence search. |
 | `string/manacher.hpp` | Odd/even palindrome radii and substring checks. |

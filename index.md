@@ -570,6 +570,9 @@ data:
   - name: string
     pages:
     - icon: ':heavy_check_mark:'
+      path: string/aho_corasick.hpp
+      title: Aho-Corasick
+    - icon: ':heavy_check_mark:'
       path: string/all.hpp
       title: String Algorithms Bundle
     - icon: ':heavy_check_mark:'
@@ -997,6 +1000,9 @@ data:
       title: verify/sequence/sequence_algorithms.test.cpp
   - name: verify/string
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/string/aho_corasick.test.cpp
+      title: verify/string/aho_corasick.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/string/aoj_alds1_14_b.test.cpp
       title: verify/string/aoj_alds1_14_b.test.cpp
