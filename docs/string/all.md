@@ -20,3 +20,4 @@ contest when convenience matters more.
 | `string/suffix_array.hpp` | Suffix array and LCP array. |
 | `string/trie.hpp` | Contiguous-alphabet multiset trie with prefix queries. |
 | `string/rolling_hash.hpp` | Static substring hashing, LCP, and comparison. |
+| `string/string_hash.hpp` | Double whole-string hashing and constant-time hash concatenation. |

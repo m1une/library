@@ -5,6 +5,7 @@
 #include "manacher.hpp"
 #include "prefix_function.hpp"
 #include "rolling_hash.hpp"
+#include "string_hash.hpp"
 #include "suffix_array.hpp"
 #include "trie.hpp"
 #include "z_algorithm.hpp"
