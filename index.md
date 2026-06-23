@@ -631,6 +631,9 @@ data:
       path: string/all.hpp
       title: String Algorithms Bundle
     - icon: ':heavy_check_mark:'
+      path: string/eertree.hpp
+      title: Eertree
+    - icon: ':heavy_check_mark:'
       path: string/manacher.hpp
       title: Manacher Algorithm
     - icon: ':heavy_check_mark:'
@@ -1116,6 +1119,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/string/aoj_alds1_14_b.test.cpp
       title: verify/string/aoj_alds1_14_b.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/string/eertree.test.cpp
+      title: verify/string/eertree.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/string/manacher.test.cpp
       title: verify/string/manacher.test.cpp

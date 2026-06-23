@@ -8,6 +8,9 @@ data:
     path: string/all.hpp
     title: String Algorithms Bundle
   - icon: ':heavy_check_mark:'
+    path: string/eertree.hpp
+    title: Eertree
+  - icon: ':heavy_check_mark:'
     path: string/manacher.hpp
     title: Manacher Algorithm
   - icon: ':heavy_check_mark:'
@@ -145,19 +148,96 @@ data:
     \ current : _bfs_order) {\n            for (int pattern_id : _nodes[current].pattern_ids)\
     \ {\n                result[pattern_id] = visits[current];\n            }\n  \
     \      }\n        return result;\n    }\n};\n\n}  // namespace string\n}  // namespace\
-    \ m1une\n\n\n#line 1 \"string/manacher.hpp\"\n\n\n\n#include <algorithm>\n#line\
-    \ 7 \"string/manacher.hpp\"\n\nnamespace m1une {\nnamespace string {\n\nstruct\
-    \ ManacherResult {\n    // odd[i] is the radius including center i.\n    // The\
-    \ palindrome is [i - odd[i] + 1, i + odd[i]).\n    std::vector<int> odd;\n\n \
-    \   // even[i] is the radius centered between i - 1 and i.\n    // The palindrome\
-    \ is [i - even[i], i + even[i]).\n    std::vector<int> even;\n\n    int size()\
-    \ const {\n        return int(odd.size());\n    }\n\n    bool empty() const {\n\
-    \        return odd.empty();\n    }\n\n    bool is_palindrome(int left, int right)\
-    \ const {\n        int n = size();\n        assert(0 <= left && left <= right\
-    \ && right <= n);\n        int length = right - left;\n        if (length == 0)\
-    \ return true;\n        if (length & 1) {\n            int center = (left + right)\
-    \ / 2;\n            return length / 2 + 1 <= odd[center];\n        }\n       \
-    \ int center = (left + right) / 2;\n        return length / 2 <= even[center];\n\
+    \ m1une\n\n\n#line 1 \"string/eertree.hpp\"\n\n\n\n#line 8 \"string/eertree.hpp\"\
+    \n#include <utility>\n#line 10 \"string/eertree.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ string {\n\ntemplate <int AlphabetSize = 26, int FirstCharacter = 'a'>\nstruct\
+    \ Eertree {\n    static_assert(0 < AlphabetSize);\n\n    using node_id = int;\n\
+    \    static constexpr node_id even_root = 0;\n    static constexpr node_id odd_root\
+    \ = 1;\n    static constexpr node_id null_node = -1;\n\n    struct Node {\n  \
+    \      std::array<node_id, AlphabetSize> next;\n        node_id suffix_link;\n\
+    \        node_id series_link;\n        int length;\n        int diff;\n      \
+    \  int suffix_count;\n        int first_end;\n        long long suffix_occurrences;\n\
+    \n        Node(int length_value = 0, node_id suffix_link_value = even_root, node_id\
+    \ series_link_value = even_root)\n            : suffix_link(suffix_link_value),\n\
+    \              series_link(series_link_value),\n              length(length_value),\n\
+    \              diff(0),\n              suffix_count(0),\n              first_end(0),\n\
+    \              suffix_occurrences(0) {\n            next.fill(null_node);\n  \
+    \      }\n    };\n\n   private:\n    std::vector<Node> _nodes;\n    std::vector<int>\
+    \ _text;\n    std::vector<node_id> _longest_suffix;\n    node_id _last;\n\n  \
+    \  template <class Symbol>\n    static int symbol_index(const Symbol& symbol)\
+    \ {\n        int index = int(symbol) - FirstCharacter;\n        assert(0 <= index\
+    \ && index < AlphabetSize);\n        return index;\n    }\n\n    node_id find_extendable(node_id\
+    \ node, int position, int symbol) const {\n        while (true) {\n          \
+    \  int length = _nodes[node].length;\n            int left = position - length\
+    \ - 1;\n            if (0 <= left && _text[left] == symbol) return node;\n   \
+    \         node = _nodes[node].suffix_link;\n        }\n    }\n\n    node_id new_node(int\
+    \ length) {\n        assert(_nodes.size() < std::size_t(std::numeric_limits<int>::max()));\n\
+    \        _nodes.emplace_back(length);\n        return int(_nodes.size()) - 1;\n\
+    \    }\n\n   public:\n    Eertree() {\n        clear();\n    }\n\n    template\
+    \ <class Sequence>\n    explicit Eertree(const Sequence& sequence) {\n       \
+    \ clear();\n        build(sequence);\n    }\n\n    int size() const {\n      \
+    \  return int(_nodes.size()) - 2;\n    }\n\n    bool empty() const {\n       \
+    \ return size() == 0;\n    }\n\n    int node_count() const {\n        return int(_nodes.size());\n\
+    \    }\n\n    int text_length() const {\n        return int(_text.size());\n \
+    \   }\n\n    node_id last() const {\n        return _last;\n    }\n\n    int longest_suffix_length()\
+    \ const {\n        return _nodes[_last].length;\n    }\n\n    const Node& node(node_id\
+    \ id) const {\n        assert(0 <= id && id < node_count());\n        return _nodes[id];\n\
+    \    }\n\n    const std::vector<Node>& nodes() const {\n        return _nodes;\n\
+    \    }\n\n    node_id longest_suffix_node(int prefix_length) const {\n       \
+    \ assert(1 <= prefix_length && prefix_length <= text_length());\n        return\
+    \ _longest_suffix[prefix_length - 1];\n    }\n\n    const std::vector<node_id>&\
+    \ longest_suffix_nodes() const {\n        return _longest_suffix;\n    }\n\n \
+    \   template <class Callback>\n    void for_each_suffix(node_id id, Callback callback)\
+    \ const {\n        assert(0 <= id && id < node_count());\n        while (id >=\
+    \ 2) {\n            callback(id);\n            id = _nodes[id].suffix_link;\n\
+    \        }\n    }\n\n    template <class Callback>\n    void for_each_suffix(Callback\
+    \ callback) const {\n        for_each_suffix(_last, callback);\n    }\n\n    void\
+    \ reserve(std::size_t text_capacity) {\n        _text.reserve(text_capacity);\n\
+    \        _longest_suffix.reserve(text_capacity);\n        _nodes.reserve(text_capacity\
+    \ + 2);\n    }\n\n    void clear() {\n        _nodes.clear();\n        _nodes.emplace_back(0,\
+    \ odd_root, even_root);\n        _nodes.emplace_back(-1, odd_root, odd_root);\n\
+    \        _text.clear();\n        _longest_suffix.clear();\n        _last = even_root;\n\
+    \    }\n\n    template <class Symbol>\n    node_id add(const Symbol& value) {\n\
+    \        int symbol = symbol_index(value);\n        int position = int(_text.size());\n\
+    \        _text.push_back(symbol);\n\n        node_id current = find_extendable(_last,\
+    \ position, symbol);\n        node_id next = _nodes[current].next[symbol];\n \
+    \       if (next == null_node) {\n            int length = _nodes[current].length\
+    \ + 2;\n            next = new_node(length);\n            _nodes[current].next[symbol]\
+    \ = next;\n\n            node_id suffix_link = even_root;\n            if (length\
+    \ != 1) {\n                node_id candidate = find_extendable(_nodes[current].suffix_link,\
+    \ position, symbol);\n                suffix_link = _nodes[candidate].next[symbol];\n\
+    \                assert(suffix_link != null_node);\n            }\n\n        \
+    \    Node& created = _nodes[next];\n            created.suffix_link = suffix_link;\n\
+    \            created.diff = created.length - _nodes[suffix_link].length;\n   \
+    \         created.series_link =\n                created.diff == _nodes[suffix_link].diff\
+    \ ? _nodes[suffix_link].series_link : suffix_link;\n            created.suffix_count\
+    \ = _nodes[suffix_link].suffix_count + 1;\n            created.first_end = position\
+    \ + 1;\n        }\n\n        _last = next;\n        _nodes[_last].suffix_occurrences++;\n\
+    \        _longest_suffix.push_back(_last);\n        return _last;\n    }\n\n \
+    \   template <class Sequence>\n    void build(const Sequence& sequence) {\n  \
+    \      for (const auto& symbol : sequence) add(symbol);\n    }\n\n    std::vector<long\
+    \ long> occurrence_counts() const {\n        std::vector<long long> result(_nodes.size(),\
+    \ 0);\n        for (node_id id = 0; id < node_count(); id++) {\n            result[id]\
+    \ = _nodes[id].suffix_occurrences;\n        }\n        for (node_id id = node_count()\
+    \ - 1; id >= 2; id--) {\n            result[_nodes[id].suffix_link] += result[id];\n\
+    \        }\n        return result;\n    }\n\n    std::pair<int, int> first_occurrence(node_id\
+    \ id) const {\n        assert(2 <= id && id < node_count());\n        int end\
+    \ = _nodes[id].first_end;\n        return {end - _nodes[id].length, end};\n  \
+    \  }\n};\n\ntemplate <int AlphabetSize = 26, int FirstCharacter = 'a'>\nusing\
+    \ PalindromicTree = Eertree<AlphabetSize, FirstCharacter>;\n\n}  // namespace\
+    \ string\n}  // namespace m1une\n\n\n#line 1 \"string/manacher.hpp\"\n\n\n\n#include\
+    \ <algorithm>\n#line 7 \"string/manacher.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ string {\n\nstruct ManacherResult {\n    // odd[i] is the radius including center\
+    \ i.\n    // The palindrome is [i - odd[i] + 1, i + odd[i]).\n    std::vector<int>\
+    \ odd;\n\n    // even[i] is the radius centered between i - 1 and i.\n    // The\
+    \ palindrome is [i - even[i], i + even[i]).\n    std::vector<int> even;\n\n  \
+    \  int size() const {\n        return int(odd.size());\n    }\n\n    bool empty()\
+    \ const {\n        return odd.empty();\n    }\n\n    bool is_palindrome(int left,\
+    \ int right) const {\n        int n = size();\n        assert(0 <= left && left\
+    \ <= right && right <= n);\n        int length = right - left;\n        if (length\
+    \ == 0) return true;\n        if (length & 1) {\n            int center = (left\
+    \ + right) / 2;\n            return length / 2 + 1 <= odd[center];\n        }\n\
+    \        int center = (left + right) / 2;\n        return length / 2 <= even[center];\n\
     \    }\n\n    int longest_length() const {\n        int result = 0;\n        for\
     \ (int radius : odd) result = std::max(result, 2 * radius - 1);\n        for (int\
     \ radius : even) result = std::max(result, 2 * radius);\n        return result;\n\
@@ -199,91 +279,90 @@ data:
     \ - m + 1);\n            matched = prefix[matched - 1];\n        }\n    }\n  \
     \  return occurrences;\n}\n\n}  // namespace string\n}  // namespace m1une\n\n\
     \n#line 1 \"string/rolling_hash.hpp\"\n\n\n\n#line 5 \"string/rolling_hash.hpp\"\
-    \n#include <string>\n#include <utility>\n#line 8 \"string/rolling_hash.hpp\"\n\
-    \nnamespace m1une {\nnamespace string {\n\n// Standard Rolling Hash for static\
-    \ strings.\n// Precomputes hashes to answer substring queries in O(1).\n// Provides\
-    \ advanced operations like LCP, lexicographical comparison, and string repetition\
-    \ in O(log N).\ntemplate <long long Base = 10007, long long Mod = (1LL << 61)\
-    \ - 1>\nstruct RollingHash {\n    std::string s;\n    std::vector<long long> hash;\n\
-    \    std::vector<long long> power;\n\n    RollingHash() = default;\n\n    // Constructs\
-    \ the rolling hash table for the given string.\n    explicit RollingHash(const\
-    \ std::string& str) : s(str) {\n        int n = s.size();\n        hash.assign(n\
-    \ + 1, 0);\n        power.assign(n + 1, 1);\n        for (int i = 0; i < n; ++i)\
-    \ {\n            // Use __int128_t to prevent overflow during multiplication\n\
-    \            hash[i + 1] = (static_cast<__int128_t>(hash[i]) * Base + s[i]) %\
-    \ Mod;\n            power[i + 1] = (static_cast<__int128_t>(power[i]) * Base)\
-    \ % Mod;\n        }\n    }\n\n    // Returns the hash of the substring S[l..r)\
-    \ in O(1).\n    long long get(int l, int r) const {\n        long long res = hash[r]\
-    \ - (static_cast<__int128_t>(hash[l]) * power[r - l]) % Mod;\n        if (res\
-    \ < 0) res += Mod;\n        return res;\n    }\n\n    // Returns the hash of the\
-    \ concatenated substrings S[l1..r1) and S[l2..r2).\n    long long concat(int l1,\
-    \ int r1, int l2, int r2) const {\n        long long h1 = get(l1, r1);\n     \
-    \   long long h2 = get(l2, r2);\n        return combine(h1, h2, power[r2 - l2]);\n\
-    \    }\n\n    // Calculates the Longest Common Prefix (LCP) length of S[l1..r1)\
-    \ and S[l2..r2) in O(log N).\n    int lcp(int l1, int r1, int l2, int r2) const\
-    \ {\n        int len = std::min(r1 - l1, r2 - l2);\n        int low = 0, high\
-    \ = len + 1;\n        while (high - low > 1) {\n            int mid = low + (high\
-    \ - low) / 2;\n            if (get(l1, l1 + mid) == get(l2, l2 + mid)) {\n   \
-    \             low = mid;\n            } else {\n                high = mid;\n\
-    \            }\n        }\n        return low;\n    }\n\n    // Lexicographically\
-    \ compares S[l1..r1) and S[l2..r2) in O(log N).\n    // Returns -1 if S[l1..r1)\
-    \ < S[l2..r2), 0 if equal, and 1 if S[l1..r1) > S[l2..r2).\n    int compare(int\
-    \ l1, int r1, int l2, int r2) const {\n        int l = lcp(l1, r1, l2, r2);\n\
-    \        bool end1 = (l1 + l == r1);\n        bool end2 = (l2 + l == r2);\n  \
-    \      if (end1 && end2) return 0;\n        if (end1) return -1;\n        if (end2)\
-    \ return 1;\n        return s[l1 + l] < s[l2 + l] ? -1 : 1;\n    }\n\n    // Returns\
-    \ the hash of the substring S[l..r) repeated 'k' times.\n    long long repeat(int\
-    \ l, int r, long long k) const {\n        long long h = get(l, r);\n        long\
-    \ long p = power[r - l];\n        return repeat_hash(h, p, k);\n    }\n\n    //\
-    \ --- Static Helpers for dynamic processing and Monoid integration ---\n\n   \
-    \ // Computes the hash of a single string in O(N) time and O(1) space.\n    static\
-    \ long long compute_hash(const std::string& str) {\n        long long h = 0;\n\
-    \        for (char c : str) {\n            h = (static_cast<__int128_t>(h) * Base\
-    \ + c) % Mod;\n        }\n        return h;\n    }\n\n    // Combines two hashes.\
-    \ Equivalent to concatenating string 'b' to the right of string 'a'.\n    static\
-    \ constexpr long long combine(long long h1, long long h2, long long base_power2)\
-    \ {\n        return (static_cast<__int128_t>(h1) * base_power2 + h2) % Mod;\n\
-    \    }\n\n    // Returns the hash of a string (with hash 'h' and base_power 'p')\
-    \ repeated 'k' times.\n    static constexpr long long repeat_hash(long long h,\
-    \ long long p, long long k) {\n        long long res_h = 0;\n        long long\
-    \ res_p = 1;\n        long long cur_h = h;\n        long long cur_p = p;\n   \
-    \     while (k > 0) {\n            if (k & 1) {\n                res_h = combine(res_h,\
-    \ cur_h, cur_p);\n                res_p = (static_cast<__int128_t>(res_p) * cur_p)\
-    \ % Mod;\n            }\n            cur_h = combine(cur_h, cur_h, cur_p);\n \
-    \           cur_p = (static_cast<__int128_t>(cur_p) * cur_p) % Mod;\n        \
-    \    k >>= 1;\n        }\n        return res_h;\n    }\n\n    // Creates the state\
-    \ pair {hash_value, base_power} for a single character.\n    static constexpr\
-    \ std::pair<long long, long long> make_single(long long c) {\n        return {c\
-    \ % Mod, Base % Mod};\n    }\n};\n\n}  // namespace string\n}  // namespace m1une\n\
-    \n\n#line 1 \"string/string_hash.hpp\"\n\n\n\n#line 5 \"string/string_hash.hpp\"\
-    \n#include <cstdint>\n#line 7 \"string/string_hash.hpp\"\n#include <string_view>\n\
-    \nnamespace m1une {\nnamespace string {\n\nstruct StringHash {\n    std::uint32_t\
-    \ first;\n    std::uint32_t second;\n    std::uint32_t first_power;\n    std::uint32_t\
-    \ second_power;\n    std::size_t length;\n\n    friend constexpr bool operator==(const\
-    \ StringHash& left, const StringHash& right) {\n        return left.length ==\
-    \ right.length && left.first == right.first && left.second == right.second;\n\
-    \    }\n};\n\nnamespace string_hash_detail {\n\ninline constexpr std::uint64_t\
-    \ first_mod = 1'000'000'007;\ninline constexpr std::uint64_t second_mod = 1'000'000'009;\n\
-    inline constexpr std::uint64_t base = 911'382'323;\n\n}  // namespace string_hash_detail\n\
-    \n// Computes a double polynomial hash. Bytes are interpreted as unsigned.\nconstexpr\
-    \ StringHash hash_string(std::string_view value) {\n    using namespace string_hash_detail;\n\
-    \    std::uint64_t first = 0;\n    std::uint64_t second = 0;\n    std::uint64_t\
-    \ first_power = 1;\n    std::uint64_t second_power = 1;\n    for (char character\
-    \ : value) {\n        std::uint64_t symbol = static_cast<unsigned char>(character)\
-    \ + std::uint64_t(1);\n        first = (first * base + symbol) % first_mod;\n\
-    \        second = (second * base + symbol) % second_mod;\n        first_power\
-    \ = first_power * base % first_mod;\n        second_power = second_power * base\
-    \ % second_mod;\n    }\n    return StringHash{\n        static_cast<std::uint32_t>(first),\n\
-    \        static_cast<std::uint32_t>(second),\n        static_cast<std::uint32_t>(first_power),\n\
-    \        static_cast<std::uint32_t>(second_power),\n        value.size(),\n  \
-    \  };\n}\n\nconstexpr StringHash hash_string(const std::string& value) {\n   \
-    \ return hash_string(std::string_view(value));\n}\n\nconstexpr StringHash hash_string(const\
-    \ char* value) {\n    return hash_string(std::string_view(value));\n}\n\n// Returns\
-    \ the hash of the concatenation represented by `left` and `right`.\nconstexpr\
-    \ StringHash concat_string_hash(const StringHash& left, const StringHash& right)\
-    \ {\n    using namespace string_hash_detail;\n    return StringHash{\n       \
-    \ static_cast<std::uint32_t>((std::uint64_t(left.first) * right.first_power +\
-    \ right.first) % first_mod),\n        static_cast<std::uint32_t>((std::uint64_t(left.second)\
+    \n#include <string>\n#line 8 \"string/rolling_hash.hpp\"\n\nnamespace m1une {\n\
+    namespace string {\n\n// Standard Rolling Hash for static strings.\n// Precomputes\
+    \ hashes to answer substring queries in O(1).\n// Provides advanced operations\
+    \ like LCP, lexicographical comparison, and string repetition in O(log N).\ntemplate\
+    \ <long long Base = 10007, long long Mod = (1LL << 61) - 1>\nstruct RollingHash\
+    \ {\n    std::string s;\n    std::vector<long long> hash;\n    std::vector<long\
+    \ long> power;\n\n    RollingHash() = default;\n\n    // Constructs the rolling\
+    \ hash table for the given string.\n    explicit RollingHash(const std::string&\
+    \ str) : s(str) {\n        int n = s.size();\n        hash.assign(n + 1, 0);\n\
+    \        power.assign(n + 1, 1);\n        for (int i = 0; i < n; ++i) {\n    \
+    \        // Use __int128_t to prevent overflow during multiplication\n       \
+    \     hash[i + 1] = (static_cast<__int128_t>(hash[i]) * Base + s[i]) % Mod;\n\
+    \            power[i + 1] = (static_cast<__int128_t>(power[i]) * Base) % Mod;\n\
+    \        }\n    }\n\n    // Returns the hash of the substring S[l..r) in O(1).\n\
+    \    long long get(int l, int r) const {\n        long long res = hash[r] - (static_cast<__int128_t>(hash[l])\
+    \ * power[r - l]) % Mod;\n        if (res < 0) res += Mod;\n        return res;\n\
+    \    }\n\n    // Returns the hash of the concatenated substrings S[l1..r1) and\
+    \ S[l2..r2).\n    long long concat(int l1, int r1, int l2, int r2) const {\n \
+    \       long long h1 = get(l1, r1);\n        long long h2 = get(l2, r2);\n   \
+    \     return combine(h1, h2, power[r2 - l2]);\n    }\n\n    // Calculates the\
+    \ Longest Common Prefix (LCP) length of S[l1..r1) and S[l2..r2) in O(log N).\n\
+    \    int lcp(int l1, int r1, int l2, int r2) const {\n        int len = std::min(r1\
+    \ - l1, r2 - l2);\n        int low = 0, high = len + 1;\n        while (high -\
+    \ low > 1) {\n            int mid = low + (high - low) / 2;\n            if (get(l1,\
+    \ l1 + mid) == get(l2, l2 + mid)) {\n                low = mid;\n            }\
+    \ else {\n                high = mid;\n            }\n        }\n        return\
+    \ low;\n    }\n\n    // Lexicographically compares S[l1..r1) and S[l2..r2) in\
+    \ O(log N).\n    // Returns -1 if S[l1..r1) < S[l2..r2), 0 if equal, and 1 if\
+    \ S[l1..r1) > S[l2..r2).\n    int compare(int l1, int r1, int l2, int r2) const\
+    \ {\n        int l = lcp(l1, r1, l2, r2);\n        bool end1 = (l1 + l == r1);\n\
+    \        bool end2 = (l2 + l == r2);\n        if (end1 && end2) return 0;\n  \
+    \      if (end1) return -1;\n        if (end2) return 1;\n        return s[l1\
+    \ + l] < s[l2 + l] ? -1 : 1;\n    }\n\n    // Returns the hash of the substring\
+    \ S[l..r) repeated 'k' times.\n    long long repeat(int l, int r, long long k)\
+    \ const {\n        long long h = get(l, r);\n        long long p = power[r - l];\n\
+    \        return repeat_hash(h, p, k);\n    }\n\n    // --- Static Helpers for\
+    \ dynamic processing and Monoid integration ---\n\n    // Computes the hash of\
+    \ a single string in O(N) time and O(1) space.\n    static long long compute_hash(const\
+    \ std::string& str) {\n        long long h = 0;\n        for (char c : str) {\n\
+    \            h = (static_cast<__int128_t>(h) * Base + c) % Mod;\n        }\n \
+    \       return h;\n    }\n\n    // Combines two hashes. Equivalent to concatenating\
+    \ string 'b' to the right of string 'a'.\n    static constexpr long long combine(long\
+    \ long h1, long long h2, long long base_power2) {\n        return (static_cast<__int128_t>(h1)\
+    \ * base_power2 + h2) % Mod;\n    }\n\n    // Returns the hash of a string (with\
+    \ hash 'h' and base_power 'p') repeated 'k' times.\n    static constexpr long\
+    \ long repeat_hash(long long h, long long p, long long k) {\n        long long\
+    \ res_h = 0;\n        long long res_p = 1;\n        long long cur_h = h;\n   \
+    \     long long cur_p = p;\n        while (k > 0) {\n            if (k & 1) {\n\
+    \                res_h = combine(res_h, cur_h, cur_p);\n                res_p\
+    \ = (static_cast<__int128_t>(res_p) * cur_p) % Mod;\n            }\n         \
+    \   cur_h = combine(cur_h, cur_h, cur_p);\n            cur_p = (static_cast<__int128_t>(cur_p)\
+    \ * cur_p) % Mod;\n            k >>= 1;\n        }\n        return res_h;\n  \
+    \  }\n\n    // Creates the state pair {hash_value, base_power} for a single character.\n\
+    \    static constexpr std::pair<long long, long long> make_single(long long c)\
+    \ {\n        return {c % Mod, Base % Mod};\n    }\n};\n\n}  // namespace string\n\
+    }  // namespace m1une\n\n\n#line 1 \"string/string_hash.hpp\"\n\n\n\n#line 5 \"\
+    string/string_hash.hpp\"\n#include <cstdint>\n#line 7 \"string/string_hash.hpp\"\
+    \n#include <string_view>\n\nnamespace m1une {\nnamespace string {\n\nstruct StringHash\
+    \ {\n    std::uint32_t first;\n    std::uint32_t second;\n    std::uint32_t first_power;\n\
+    \    std::uint32_t second_power;\n    std::size_t length;\n\n    friend constexpr\
+    \ bool operator==(const StringHash& left, const StringHash& right) {\n       \
+    \ return left.length == right.length && left.first == right.first && left.second\
+    \ == right.second;\n    }\n};\n\nnamespace string_hash_detail {\n\ninline constexpr\
+    \ std::uint64_t first_mod = 1'000'000'007;\ninline constexpr std::uint64_t second_mod\
+    \ = 1'000'000'009;\ninline constexpr std::uint64_t base = 911'382'323;\n\n}  //\
+    \ namespace string_hash_detail\n\n// Computes a double polynomial hash. Bytes\
+    \ are interpreted as unsigned.\nconstexpr StringHash hash_string(std::string_view\
+    \ value) {\n    using namespace string_hash_detail;\n    std::uint64_t first =\
+    \ 0;\n    std::uint64_t second = 0;\n    std::uint64_t first_power = 1;\n    std::uint64_t\
+    \ second_power = 1;\n    for (char character : value) {\n        std::uint64_t\
+    \ symbol = static_cast<unsigned char>(character) + std::uint64_t(1);\n       \
+    \ first = (first * base + symbol) % first_mod;\n        second = (second * base\
+    \ + symbol) % second_mod;\n        first_power = first_power * base % first_mod;\n\
+    \        second_power = second_power * base % second_mod;\n    }\n    return StringHash{\n\
+    \        static_cast<std::uint32_t>(first),\n        static_cast<std::uint32_t>(second),\n\
+    \        static_cast<std::uint32_t>(first_power),\n        static_cast<std::uint32_t>(second_power),\n\
+    \        value.size(),\n    };\n}\n\nconstexpr StringHash hash_string(const std::string&\
+    \ value) {\n    return hash_string(std::string_view(value));\n}\n\nconstexpr StringHash\
+    \ hash_string(const char* value) {\n    return hash_string(std::string_view(value));\n\
+    }\n\n// Returns the hash of the concatenation represented by `left` and `right`.\n\
+    constexpr StringHash concat_string_hash(const StringHash& left, const StringHash&\
+    \ right) {\n    using namespace string_hash_detail;\n    return StringHash{\n\
+    \        static_cast<std::uint32_t>((std::uint64_t(left.first) * right.first_power\
+    \ + right.first) % first_mod),\n        static_cast<std::uint32_t>((std::uint64_t(left.second)\
     \ * right.second_power + right.second) % second_mod),\n        static_cast<std::uint32_t>(std::uint64_t(left.first_power)\
     \ * right.first_power % first_mod),\n        static_cast<std::uint32_t>(std::uint64_t(left.second_power)\
     \ * right.second_power % second_mod),\n        left.length + right.length,\n \
@@ -439,7 +518,7 @@ data:
     \ + z[i] < n && sequence[z[i]] == sequence[i + z[i]]) {\n            z[i]++;\n\
     \        }\n        if (right < i + z[i]) {\n            left = i;\n         \
     \   right = i + z[i];\n        }\n    }\n    return z;\n}\n\n}  // namespace string\n\
-    }  // namespace m1une\n\n\n#line 12 \"string/all.hpp\"\n\n\n#line 4 \"verify/string/string_algorithms.test.cpp\"\
+    }  // namespace m1une\n\n\n#line 13 \"string/all.hpp\"\n\n\n#line 4 \"verify/string/string_algorithms.test.cpp\"\
     \n\n#line 8 \"verify/string/string_algorithms.test.cpp\"\n#include <iostream>\n\
     #line 12 \"verify/string/string_algorithms.test.cpp\"\n\nnamespace {\n\nvoid test_edge_cases()\
     \ {\n    std::string empty;\n    assert(m1une::string::z_algorithm(empty).empty());\n\
@@ -570,6 +649,7 @@ data:
   dependsOn:
   - string/all.hpp
   - string/aho_corasick.hpp
+  - string/eertree.hpp
   - string/manacher.hpp
   - string/prefix_function.hpp
   - string/rolling_hash.hpp
@@ -580,7 +660,7 @@ data:
   isVerificationFile: true
   path: verify/string/string_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 02:51:06+09:00'
+  timestamp: '2026-06-23 11:42:02+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/string_algorithms.test.cpp
