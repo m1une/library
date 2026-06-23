@@ -23,6 +23,9 @@ data:
     path: math/integer_arithmetic.hpp
     title: Integer Square Root and Power
   - icon: ':heavy_check_mark:'
+    path: math/lucas.hpp
+    title: Lucas's Theorem
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
   - icon: ':heavy_check_mark:'
@@ -569,36 +572,58 @@ data:
     \ Exponent>\nrequires(\n    !std::same_as<std::remove_cv_t<T>, bool>\n    && !std::same_as<std::remove_cv_t<Exponent>,\
     \ bool>\n)\nconstexpr T integer_pow(T base, Exponent exponent) {\n    return ipow(base,\
     \ exponent);\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"\
-    math/number_theory.hpp\"\n\n\n\n#line 9 \"math/number_theory.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace math {\n\nnamespace internal {\n\ninline long long safe_mod(long\
-    \ long x, long long mod) {\n    x %= mod;\n    if (x < 0) x += mod;\n    return\
-    \ x;\n}\n\ninline unsigned __int128 floor_sum_unsigned(unsigned long long n, unsigned\
-    \ long long mod, unsigned long long a,\n                                     \
-    \       unsigned long long b) {\n    unsigned __int128 answer = 0;\n    while\
-    \ (true) {\n        if (a >= mod) {\n            answer += static_cast<unsigned\
-    \ __int128>(n) * (n - 1) / 2 * (a / mod);\n            a %= mod;\n        }\n\
-    \        if (b >= mod) {\n            answer += static_cast<unsigned __int128>(n)\
-    \ * (b / mod);\n            b %= mod;\n        }\n\n        const unsigned __int128\
-    \ y_max = static_cast<unsigned __int128>(a) * n + b;\n        if (y_max < mod)\
-    \ break;\n        n = static_cast<unsigned long long>(y_max / mod);\n        b\
-    \ = static_cast<unsigned long long>(y_max % mod);\n        unsigned long long\
-    \ tmp = mod;\n        mod = a;\n        a = tmp;\n    }\n    return answer;\n\
-    }\n\n}  // namespace internal\n\ninline long long pow_mod(long long x, unsigned\
-    \ long long exponent, long long mod) {\n    assert(mod >= 1);\n    if (mod ==\
-    \ 1) return 0;\n\n    unsigned long long base = static_cast<unsigned long long>(internal::safe_mod(x,\
-    \ mod));\n    unsigned long long result = 1;\n    const unsigned long long unsigned_mod\
-    \ = static_cast<unsigned long long>(mod);\n    while (exponent > 0) {\n      \
-    \  if (exponent & 1) {\n            result = static_cast<unsigned long long>(static_cast<unsigned\
-    \ __int128>(result) * base % unsigned_mod);\n        }\n        base = static_cast<unsigned\
-    \ long long>(static_cast<unsigned __int128>(base) * base % unsigned_mod);\n  \
-    \      exponent >>= 1;\n    }\n    return static_cast<long long>(result);\n}\n\
-    \n// Returns gcd(a, mod) and x such that a * x is congruent to gcd(a, mod)\n//\
-    \ modulo mod. The returned x is in [0, mod / gcd(a, mod)).\ninline std::pair<long\
-    \ long, long long> inv_gcd(long long a, long long mod) {\n    assert(mod >= 1);\n\
-    \    a = internal::safe_mod(a, mod);\n    if (a == 0) return {mod, 0};\n\n   \
-    \ long long s = mod;\n    long long t = a;\n    long long m0 = 0;\n    long long\
-    \ m1 = 1;\n    while (t > 0) {\n        const long long quotient = s / t;\n  \
-    \      s -= t * quotient;\n        m0 -= m1 * quotient;\n\n        long long tmp\
+    math/lucas.hpp\"\n\n\n\n#line 7 \"math/lucas.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ math {\n\ntemplate <class Mint>\nstruct Lucas {\n   private:\n    std::vector<Mint>\
+    \ _factorial;\n    std::vector<Mint> _inverse_factorial;\n\n    Mint small_binom(uint32_t\
+    \ n, uint32_t k) const {\n        if (k > n) return Mint(0);\n        return _factorial[n]\
+    \ * _inverse_factorial[k] * _inverse_factorial[n - k];\n    }\n\n   public:\n\
+    \    Lucas() {\n        const uint32_t prime = Mint::mod();\n        assert(2\
+    \ <= prime);\n        _factorial.resize(prime);\n        _inverse_factorial.resize(prime);\n\
+    \        _factorial[0] = Mint(1);\n        for (uint32_t i = 1; i < prime; i++)\
+    \ {\n            _factorial[i] = _factorial[i - 1] * Mint(i);\n        }\n   \
+    \     _inverse_factorial[prime - 1] = _factorial[prime - 1].inv();\n        for\
+    \ (uint32_t i = prime - 1; i > 0; i--) {\n            _inverse_factorial[i - 1]\
+    \ = _inverse_factorial[i] * Mint(i);\n        }\n    }\n\n    uint32_t prime()\
+    \ const {\n        return Mint::mod();\n    }\n\n    Mint binom(uint64_t n, uint64_t\
+    \ k) const {\n        if (k > n) return Mint(0);\n        const uint64_t modulus\
+    \ = Mint::mod();\n        Mint result = Mint(1);\n        while (n > 0 || k >\
+    \ 0) {\n            uint32_t n_digit = uint32_t(n % modulus);\n            uint32_t\
+    \ k_digit = uint32_t(k % modulus);\n            if (k_digit > n_digit) return\
+    \ Mint(0);\n            result *= small_binom(n_digit, k_digit);\n           \
+    \ n /= modulus;\n            k /= modulus;\n        }\n        return result;\n\
+    \    }\n\n    Mint operator()(uint64_t n, uint64_t k) const {\n        return\
+    \ binom(n, k);\n    }\n};\n\ntemplate <class Mint>\nusing LucasTheorem = Lucas<Mint>;\n\
+    \n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/number_theory.hpp\"\
+    \n\n\n\n#line 9 \"math/number_theory.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\nnamespace internal {\n\ninline long long safe_mod(long long x, long long\
+    \ mod) {\n    x %= mod;\n    if (x < 0) x += mod;\n    return x;\n}\n\ninline\
+    \ unsigned __int128 floor_sum_unsigned(unsigned long long n, unsigned long long\
+    \ mod, unsigned long long a,\n                                            unsigned\
+    \ long long b) {\n    unsigned __int128 answer = 0;\n    while (true) {\n    \
+    \    if (a >= mod) {\n            answer += static_cast<unsigned __int128>(n)\
+    \ * (n - 1) / 2 * (a / mod);\n            a %= mod;\n        }\n        if (b\
+    \ >= mod) {\n            answer += static_cast<unsigned __int128>(n) * (b / mod);\n\
+    \            b %= mod;\n        }\n\n        const unsigned __int128 y_max = static_cast<unsigned\
+    \ __int128>(a) * n + b;\n        if (y_max < mod) break;\n        n = static_cast<unsigned\
+    \ long long>(y_max / mod);\n        b = static_cast<unsigned long long>(y_max\
+    \ % mod);\n        unsigned long long tmp = mod;\n        mod = a;\n        a\
+    \ = tmp;\n    }\n    return answer;\n}\n\n}  // namespace internal\n\ninline long\
+    \ long pow_mod(long long x, unsigned long long exponent, long long mod) {\n  \
+    \  assert(mod >= 1);\n    if (mod == 1) return 0;\n\n    unsigned long long base\
+    \ = static_cast<unsigned long long>(internal::safe_mod(x, mod));\n    unsigned\
+    \ long long result = 1;\n    const unsigned long long unsigned_mod = static_cast<unsigned\
+    \ long long>(mod);\n    while (exponent > 0) {\n        if (exponent & 1) {\n\
+    \            result = static_cast<unsigned long long>(static_cast<unsigned __int128>(result)\
+    \ * base % unsigned_mod);\n        }\n        base = static_cast<unsigned long\
+    \ long>(static_cast<unsigned __int128>(base) * base % unsigned_mod);\n       \
+    \ exponent >>= 1;\n    }\n    return static_cast<long long>(result);\n}\n\n//\
+    \ Returns gcd(a, mod) and x such that a * x is congruent to gcd(a, mod)\n// modulo\
+    \ mod. The returned x is in [0, mod / gcd(a, mod)).\ninline std::pair<long long,\
+    \ long long> inv_gcd(long long a, long long mod) {\n    assert(mod >= 1);\n  \
+    \  a = internal::safe_mod(a, mod);\n    if (a == 0) return {mod, 0};\n\n    long\
+    \ long s = mod;\n    long long t = a;\n    long long m0 = 0;\n    long long m1\
+    \ = 1;\n    while (t > 0) {\n        const long long quotient = s / t;\n     \
+    \   s -= t * quotient;\n        m0 -= m1 * quotient;\n\n        long long tmp\
     \ = s;\n        s = t;\n        t = tmp;\n        tmp = m0;\n        m0 = m1;\n\
     \        m1 = tmp;\n    }\n    if (m0 < 0) m0 += mod / s;\n    return {s, m0};\n\
     }\n\ninline long long inv_mod(long long x, long long mod) {\n    const auto result\
@@ -848,7 +873,7 @@ data:
     \ input;\n        }\n        value = Rational(numerator, denominator);\n     \
     \   return input;\n    }\n};\n\ntemplate <std::signed_integral T>\nconstexpr Rational<T>\
     \ abs(const Rational<T>& value) {\n    return value.abs();\n}\n\n}  // namespace\
-    \ math\n}  // namespace m1une\n\n\n#line 15 \"math/all.hpp\"\n\n\n"
+    \ math\n}  // namespace m1une\n\n\n#line 16 \"math/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_MATH_ALL_HPP
 
     #define M1UNE_MATH_ALL_HPP 1
@@ -863,6 +888,8 @@ data:
     #include "combinatorial_sequences.hpp"
 
     #include "integer_arithmetic.hpp"
+
+    #include "lucas.hpp"
 
     #include "modint.hpp"
 
@@ -890,6 +917,7 @@ data:
   - fps/convolution.hpp
   - math/modint.hpp
   - math/integer_arithmetic.hpp
+  - math/lucas.hpp
   - math/modint.hpp
   - math/number_theory.hpp
   - math/prime_factorization.hpp
@@ -898,7 +926,7 @@ data:
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-23 03:01:31+09:00'
+  timestamp: '2026-06-23 12:24:42+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
@@ -922,6 +950,8 @@ You usually do not need to include this entire bundle:
   transforms.
 * Use `combinatorics.hpp` for many factorial, combination, or permutation
   queries under a prime modulus.
+* Use `lucas.hpp` for binomial coefficients with huge arguments modulo a small
+  prime.
 * Use `combinatorial_sequences.hpp` for Catalan, Bernoulli, Bell, Stirling,
   partition, or derangement numbers.
 * Use `prime_sieve.hpp` when all queried integers are at most a manageable
@@ -943,6 +973,7 @@ few unused headers do not matter.
 | `math/bitwise_convolution.hpp` | OR, AND, XOR convolutions and the Walsh-Hadamard transform. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/integer_arithmetic.hpp` | Exact integer square roots and overflow-aware powers. |
+| `math/lucas.hpp` | Lucas's theorem for huge binomial arguments modulo a small prime. |
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |
 | `math/combinatorial_sequences.hpp` | Fast standard counting sequences and special numbers. |

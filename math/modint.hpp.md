@@ -121,6 +121,9 @@ data:
     path: verify/math/bitwise_convolution.test.cpp
     title: verify/math/bitwise_convolution.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/math/lucas.test.cpp
+    title: verify/math/lucas.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
@@ -275,6 +278,7 @@ data:
   - verify/ds/segtree/dynamic_lazy_segtree.test.cpp
   - verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
   - verify/math/bitwise_convolution.test.cpp
+  - verify/math/lucas.test.cpp
   - verify/math/bell_number.test.cpp
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp

@@ -430,6 +430,9 @@ data:
       path: math/integer_arithmetic.hpp
       title: Integer Square Root and Power
     - icon: ':heavy_check_mark:'
+      path: math/lucas.hpp
+      title: Lucas's Theorem
+    - icon: ':heavy_check_mark:'
       path: math/modint.hpp
       title: ModInt
     - icon: ':heavy_check_mark:'
@@ -1052,6 +1055,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/integer_arithmetic.test.cpp
       title: verify/math/integer_arithmetic.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/lucas.test.cpp
+      title: verify/math/lucas.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/math/math_algorithms.test.cpp
       title: verify/math/math_algorithms.test.cpp
