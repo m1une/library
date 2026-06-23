@@ -17,5 +17,6 @@ For an undirected capacity between `u` and `v`, add two directed edges,
 | --- | --- | --- |
 | `flow/bounded_flow.hpp` | Directed flow network | Feasible flow with lower/upper bounds, balances, and negative flow intervals. |
 | `flow/bounded_min_cost_flow.hpp` | Directed flow network | Minimum-cost feasible flow with lower/upper bounds, balances, and negative flow intervals. |
+| `flow/gomory_hu.hpp` | Undirected capacitated graph | Gomory-Hu cut tree and pairwise minimum-cut queries. |
 | `flow/max_flow.hpp` | Directed flow network | Dinic maximum flow and minimum cut. |
 | `flow/min_cost_flow.hpp` | Directed flow network | Minimum-cost flow with potentials. |

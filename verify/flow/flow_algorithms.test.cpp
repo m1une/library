@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <random>
 #include <utility>
 #include <vector>
 
@@ -39,6 +40,71 @@ void test_max_flow() {
     auto changed = mf.get_edge(e0);
     assert(changed.cap == 3);
     assert(changed.flow == 1);
+}
+
+void test_gomory_hu() {
+    m1une::flow::GomoryHu<long long> gh(4);
+    gh.add_edge(0, 1, 3);
+    gh.add_edge(1, 2, 2);
+    gh.add_edge(0, 2, 1);
+    gh.add_edge(2, 3, 4);
+    gh.build();
+    assert(gh.size() == 4);
+    assert(gh.edge_count() == 4);
+    assert(gh.tree_edges().size() == 3);
+    assert(gh.min_cut(0, 1) == 4);
+    assert(gh.min_cut(0, 2) == 3);
+    assert(gh.min_cut(0, 3) == 3);
+    assert(gh.min_cut(2, 3) == 4);
+
+    m1une::flow::GomoryHu<long long> disconnected(3);
+    disconnected.add_edge(0, 1, 5);
+    disconnected.build();
+    assert(disconnected.min_cut(0, 1) == 5);
+    assert(disconnected.min_cut(0, 2) == 0);
+
+    m1une::flow::GomoryHu<long long> rebuilt(2);
+    rebuilt.build();
+    assert(rebuilt.min_cut(0, 1) == 0);
+    rebuilt.add_edge(0, 1, 7);
+    rebuilt.add_edge(0, 0, 100);
+    rebuilt.build();
+    assert(rebuilt.min_cut(0, 1) == 7);
+
+    m1une::flow::GomoryHu<long long> singleton(1);
+    singleton.build();
+    assert(singleton.tree_edges().empty());
+
+    std::mt19937 random(123456789);
+    for (int iteration = 0; iteration < 200; iteration++) {
+        int n = 2 + int(random() % 8);
+        struct InputEdge {
+            int u;
+            int v;
+            long long cap;
+        };
+        std::vector<InputEdge> edges;
+        m1une::flow::GomoryHu<long long> tree(n);
+        int m = random() % (2 * n * n + 1);
+        for (int i = 0; i < m; i++) {
+            int u = random() % n;
+            int v = random() % n;
+            long long cap = random() % 1000001;
+            edges.push_back(InputEdge{u, v, cap});
+            tree.add_edge(u, v, cap);
+        }
+        tree.build();
+        for (int s = 0; s < n; s++) {
+            for (int t = s + 1; t < n; t++) {
+                m1une::flow::MaxFlow<long long> mf(n);
+                for (const auto& edge : edges) {
+                    mf.add_edge(edge.u, edge.v, edge.cap);
+                    mf.add_edge(edge.v, edge.u, edge.cap);
+                }
+                assert(tree.min_cut(s, t) == mf.max_flow(s, t));
+            }
+        }
+    }
 }
 
 void test_bounded_flow() {
@@ -200,6 +266,7 @@ void test_min_cost_flow() {
 
 int main() {
     test_max_flow();
+    test_gomory_hu();
     test_bounded_flow();
     test_bounded_min_cost_flow();
     test_min_cost_flow();

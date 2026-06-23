@@ -3,6 +3,7 @@
 
 #include "bounded_flow.hpp"
 #include "bounded_min_cost_flow.hpp"
+#include "gomory_hu.hpp"
 #include "max_flow.hpp"
 #include "min_cost_flow.hpp"
 
