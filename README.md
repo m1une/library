@@ -22,7 +22,7 @@ contest.
 | `fps/` | Fast convolution, formal power series operations, multipoint evaluation, interpolation, and linear recurrences. |
 | `sequence/` | Sequence algorithms such as longest increasing subsequence and inversion counting. |
 | `geometry/` | 2D points, lines, rays, segments, polygons, convex hulls, and circles. |
-| `ds/` | Categorized data structures for range queries, connectivity, dynamic sequences and trees, ordered sets, and hash tables. |
+| `ds/` | Categorized data structures for range queries, online/offline dynamic connectivity, dynamic sequences and trees, ordered sets, and hash tables. |
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
 | `math/` | Modular arithmetic, bitwise convolution, combinatorial sequences, sieves, 64-bit factorization, CRT, and floor sums. |
@@ -41,6 +41,7 @@ contest.
 | `ds/dynamic_array/` | Implicit-treap sequences with insertion, deletion, reversal, aggregation, or persistence. |
 | `ds/ordered_set/` | Ordered sets and multisets, including persistent variants and binary tries with optional monoid aggregates. |
 | `ds/dynamic_tree/` | Link-cut trees and rake-compress trees for changing forests. |
+| `ds/dynamic_connectivity/` | Online and offline connectivity under edge insertions and deletions. |
 | `ds/hash_table/` | Hash maps and hash sets. |
 
 See [`ds/README.md`](ds/README.md) for the complete header index.

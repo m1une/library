@@ -1,7 +1,13 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: ds/dynamic_connectivity/all.hpp
+    title: Dynamic Connectivity
+  - icon: ':heavy_check_mark:'
+    path: ds/dynamic_connectivity/online_dynamic_connectivity.hpp
+    title: Online Dynamic Connectivity
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/ds/dsu/dsu_monoid.test.cpp
@@ -12,6 +18,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
     title: verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
+    title: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/dynamic_tree/link_cut_tree.test.cpp
     title: verify/ds/dynamic_tree/link_cut_tree.test.cpp
@@ -72,7 +81,9 @@ data:
   dependsOn: []
   isVerificationFile: false
   path: monoid/add.hpp
-  requiredBy: []
+  requiredBy:
+  - ds/dynamic_connectivity/online_dynamic_connectivity.hpp
+  - ds/dynamic_connectivity/all.hpp
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
@@ -80,6 +91,7 @@ data:
   - verify/ds/dynamic_tree/path_link_cut_tree.test.cpp
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp
+  - verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
   - verify/ds/range_query/sqrt_tree.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
   - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp

@@ -112,6 +112,17 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/dynamic_array/persistent_dynamic_monoid_array.hpp
       title: Persistent Dynamic Monoid Array
+  - name: ds/dynamic_connectivity
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: ds/dynamic_connectivity/all.hpp
+      title: Dynamic Connectivity
+    - icon: ':heavy_check_mark:'
+      path: ds/dynamic_connectivity/offline_dynamic_connectivity.hpp
+      title: Offline Dynamic Connectivity
+    - icon: ':heavy_check_mark:'
+      path: ds/dynamic_connectivity/online_dynamic_connectivity.hpp
+      title: Online Dynamic Connectivity
   - name: ds/dynamic_tree
     pages:
     - icon: ':heavy_check_mark:'
@@ -760,6 +771,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
       title: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
+  - name: verify/ds/dynamic_connectivity
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
+      title: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
   - name: verify/ds/dynamic_tree
     pages:
     - icon: ':heavy_check_mark:'

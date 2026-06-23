@@ -4,8 +4,17 @@ data:
   - icon: ':heavy_check_mark:'
     path: monoid/concept.hpp
     title: Monoid Concept
-  _extendedRequiredBy: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: ds/dynamic_connectivity/all.hpp
+    title: Dynamic Connectivity
+  - icon: ':heavy_check_mark:'
+    path: ds/dynamic_connectivity/online_dynamic_connectivity.hpp
+    title: Online Dynamic Connectivity
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
+    title: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/dynamic_tree/link_cut_tree.test.cpp
     title: verify/ds/dynamic_tree/link_cut_tree.test.cpp
@@ -525,11 +534,14 @@ data:
   - monoid/concept.hpp
   isVerificationFile: false
   path: ds/dynamic_tree/link_cut_tree.hpp
-  requiredBy: []
+  requiredBy:
+  - ds/dynamic_connectivity/online_dynamic_connectivity.hpp
+  - ds/dynamic_connectivity/all.hpp
   timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_tree/link_cut_tree.test.cpp
+  - verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
 documentation_of: ds/dynamic_tree/link_cut_tree.hpp
 layout: document
 title: Link-Cut Tree

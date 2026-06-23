@@ -15,6 +15,12 @@ data:
     path: ds/dynamic_array/persistent_dynamic_monoid_array.hpp
     title: Persistent Dynamic Monoid Array
   - icon: ':heavy_check_mark:'
+    path: ds/dynamic_connectivity/all.hpp
+    title: Dynamic Connectivity
+  - icon: ':heavy_check_mark:'
+    path: ds/dynamic_connectivity/online_dynamic_connectivity.hpp
+    title: Online Dynamic Connectivity
+  - icon: ':heavy_check_mark:'
     path: ds/dynamic_tree/link_cut_tree.hpp
     title: Link-Cut Tree
   - icon: ':heavy_check_mark:'
@@ -90,6 +96,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
     title: verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
+    title: verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/dynamic_tree/link_cut_tree.test.cpp
     title: verify/ds/dynamic_tree/link_cut_tree.test.cpp
@@ -189,6 +198,8 @@ data:
   - ds/dynamic_array/dynamic_monoid_array.hpp
   - ds/dynamic_array/persistent_dynamic_monoid_array.hpp
   - ds/ordered_set/binary_trie_monoid.hpp
+  - ds/dynamic_connectivity/online_dynamic_connectivity.hpp
+  - ds/dynamic_connectivity/all.hpp
   - ds/range_query/sqrt_decomposition.hpp
   - ds/range_query/disjoint_sparse_table.hpp
   - ds/range_query/sliding_window_aggregation.hpp
@@ -215,6 +226,7 @@ data:
   - verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp
   - verify/ds/dynamic_array/dynamic_monoid_array.test.cpp
   - verify/ds/ordered_set/binary_trie_monoid.test.cpp
+  - verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
   - verify/ds/range_query/sliding_window_aggregation.test.cpp
   - verify/ds/range_query/sqrt_decomposition.test.cpp
   - verify/ds/range_query/sqrt_tree.test.cpp
