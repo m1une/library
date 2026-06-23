@@ -18,6 +18,8 @@ You usually do not need to include this entire bundle:
   transforms.
 * Use `combinatorics.hpp` for many factorial, combination, or permutation
   queries under a prime modulus.
+* Use `lucas.hpp` for binomial coefficients with huge arguments modulo a small
+  prime.
 * Use `combinatorial_sequences.hpp` for Catalan, Bernoulli, Bell, Stirling,
   partition, or derangement numbers.
 * Use `prime_sieve.hpp` when all queried integers are at most a manageable
@@ -39,6 +41,7 @@ few unused headers do not matter.
 | `math/bitwise_convolution.hpp` | OR, AND, XOR convolutions and the Walsh-Hadamard transform. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/integer_arithmetic.hpp` | Exact integer square roots and overflow-aware powers. |
+| `math/lucas.hpp` | Lucas's theorem for huge binomial arguments modulo a small prime. |
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |
 | `math/combinatorial_sequences.hpp` | Fast standard counting sequences and special numbers. |

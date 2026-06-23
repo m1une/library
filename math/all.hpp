@@ -6,6 +6,7 @@
 #include "combinatorics.hpp"
 #include "combinatorial_sequences.hpp"
 #include "integer_arithmetic.hpp"
+#include "lucas.hpp"
 #include "modint.hpp"
 #include "number_theory.hpp"
 #include "prime_factorization.hpp"
