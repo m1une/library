@@ -5,6 +5,7 @@
 #include <cassert>
 #include <iostream>
 #include <numeric>
+#include <random>
 #include <set>
 #include <vector>
 
@@ -113,6 +114,88 @@ void test_sparse_table_lca() {
     for (int i = l; i < r; i++) subtree.push_back(lca.order[i]);
     std::sort(subtree.begin(), subtree.end());
     assert((subtree == std::vector<int>{2, 5, 6}));
+}
+
+void test_virtual_tree() {
+    auto graph = sample_tree();
+    m1une::tree::VirtualTree<long long> builder(graph, 0);
+
+    auto virtual_tree = builder.build(std::vector<int>{3, 4, 6, 3});
+    std::vector<int> expected_vertices = {0, 1, 3, 4, 6};
+    assert(virtual_tree.vertex == expected_vertices);
+    assert(virtual_tree.parent == std::vector<int>({-1, 0, 1, 1, 0}));
+    assert(virtual_tree.parent_edge_count == std::vector<int>({0, 1, 1, 1, 3}));
+    assert(virtual_tree.parent_cost == std::vector<long long>({0, 3, 4, 1, 10}));
+    assert(virtual_tree.is_key == std::vector<bool>({false, false, true, true, true}));
+    assert(virtual_tree.children[0] == std::vector<int>({1, 4}));
+    assert(virtual_tree.children[1] == std::vector<int>({2, 3}));
+    assert(virtual_tree.root() == 0);
+    assert(virtual_tree.root_vertex() == 0);
+    assert(virtual_tree.edge_count() == 4);
+
+    auto singleton = builder.build(std::vector<int>{5, 5});
+    assert(singleton.size() == 1);
+    assert(singleton.vertex[0] == 5);
+    assert(singleton.parent[0] == -1);
+    assert(singleton.is_key[0]);
+
+    auto empty = builder.build({});
+    assert(empty.empty());
+    assert(empty.root() == -1);
+    assert(empty.root_vertex() == -1);
+    assert(empty.edge_count() == 0);
+
+    std::mt19937 random(123456789);
+    for (int test = 0; test < 100; test++) {
+        int n = 1 + random() % 200;
+        Graph<long long> random_graph(n);
+        for (int v = 1; v < n; v++) {
+            int parent = random() % v;
+            long long cost = 1 + random() % 1000000;
+            random_graph.add_edge(parent, v, cost);
+        }
+        m1une::tree::VirtualTree<long long> random_builder(random_graph, 0);
+        const auto& lca = random_builder.lca_data();
+        for (int query = 0; query < 100; query++) {
+            int k = random() % (2 * n + 1);
+            std::vector<int> keys(k);
+            for (int& v : keys) v = random() % n;
+            auto result = random_builder.build(keys);
+
+            std::sort(keys.begin(), keys.end(), [&](int u, int v) {
+                return lca.tin[u] < lca.tin[v];
+            });
+            keys.erase(std::unique(keys.begin(), keys.end()), keys.end());
+            std::vector<int> expected = keys;
+            for (int i = 1; i < int(keys.size()); i++) expected.push_back(lca.lca(keys[i - 1], keys[i]));
+            std::sort(expected.begin(), expected.end(), [&](int u, int v) {
+                return lca.tin[u] < lca.tin[v];
+            });
+            expected.erase(std::unique(expected.begin(), expected.end()), expected.end());
+            assert(result.vertex == expected);
+
+            int key_index = 0;
+            for (int i = 0; i < result.size(); i++) {
+                while (key_index < int(keys.size()) && lca.tin[keys[key_index]] < lca.tin[result.vertex[i]]) {
+                    key_index++;
+                }
+                bool is_key = key_index < int(keys.size()) && keys[key_index] == result.vertex[i];
+                assert(result.is_key[i] == is_key);
+                if (i == 0) {
+                    assert(result.parent[i] == -1);
+                    continue;
+                }
+                int parent = result.parent[i];
+                assert(0 <= parent && parent < i);
+                assert(lca.is_ancestor(result.vertex[parent], result.vertex[i]));
+                assert(result.parent_edge_count[i] == lca.dist_edges(result.vertex[parent], result.vertex[i]));
+                assert(result.parent_cost[i] == lca.dist_cost(result.vertex[parent], result.vertex[i]));
+                for (int j = parent + 1; j < i; j++) {
+                    assert(!lca.is_ancestor(result.vertex[j], result.vertex[i]));
+                }
+            }
+        }
+    }
 }
 
 void test_hld() {
@@ -618,6 +701,7 @@ void test_forest() {
 int main() {
     test_rooted_tree();
     test_sparse_table_lca();
+    test_virtual_tree();
     test_hld();
     test_diameter();
     test_rerooting();

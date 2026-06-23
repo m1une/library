@@ -11,5 +11,6 @@
 #include "sparse_table_lca.hpp"
 #include "static_top_tree.hpp"
 #include "tree.hpp"
+#include "virtual_tree.hpp"
 
 #endif  // M1UNE_TREE_ALL_HPP
