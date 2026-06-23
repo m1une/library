@@ -47,6 +47,9 @@ data:
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
   - icon: ':heavy_check_mark:'
+    path: graph/namori.hpp
+    title: Namori Graph Decomposition
+  - icon: ':heavy_check_mark:'
     path: graph/shortest_path.hpp
     title: Shortest Path
   - icon: ':heavy_check_mark:'
@@ -903,6 +906,78 @@ data:
     \ v = 0; v < g.size(); v++) {\n        if (!in_independent[v]) result.vertices.push_back(v);\n\
     \    }\n    return result;\n}\n\ntemplate <class T>\nint minimum_vertex_cover_size(const\
     \ Graph<T>& g) {\n    return minimum_vertex_cover(g).size();\n}\n\n}  // namespace\
+    \ graph\n}  // namespace m1une\n\n\n#line 1 \"graph/namori.hpp\"\n\n\n\n#line\
+    \ 9 \"graph/namori.hpp\"\n\n#line 11 \"graph/namori.hpp\"\n\nnamespace m1une {\n\
+    namespace graph {\n\ntemplate <class T>\nstruct NamoriDecomposition {\n    int\
+    \ component_count;\n    std::vector<std::vector<int>> cycles;\n    std::vector<std::vector<int>>\
+    \ cycle_edge_ids;\n    std::vector<std::vector<T>> cycle_edge_costs;\n\n    std::vector<bool>\
+    \ on_cycle;\n    std::vector<int> component;\n    std::vector<int> cycle_root;\n\
+    \    std::vector<int> cycle_position;\n    std::vector<int> parent;\n    std::vector<int>\
+    \ parent_edge;\n    std::vector<int> depth;\n    std::vector<T> dist_to_cycle;\n\
+    \    std::vector<std::vector<int>> children;\n\n    bool same_component(int u,\
+    \ int v) const {\n        assert(0 <= u && u < int(component.size()));\n     \
+    \   assert(0 <= v && v < int(component.size()));\n        return component[u]\
+    \ == component[v];\n    }\n\n    bool same_tree(int u, int v) const {\n      \
+    \  assert(0 <= u && u < int(cycle_root.size()));\n        assert(0 <= v && v <\
+    \ int(cycle_root.size()));\n        return cycle_root[u] == cycle_root[v];\n \
+    \   }\n};\n\ntemplate <class T>\nstd::optional<NamoriDecomposition<T>> namori_decomposition(const\
+    \ Graph<T>& graph) {\n    int n = graph.size();\n    NamoriDecomposition<T> result;\n\
+    \    result.component_count = 0;\n    result.on_cycle.assign(n, false);\n    result.component.assign(n,\
+    \ -1);\n    result.cycle_root.assign(n, -1);\n    result.cycle_position.assign(n,\
+    \ -1);\n    result.parent.assign(n, -1);\n    result.parent_edge.assign(n, -1);\n\
+    \    result.depth.assign(n, 0);\n    result.dist_to_cycle.assign(n, T(0));\n \
+    \   result.children.assign(n, {});\n    if (n == 0) return result;\n\n    std::vector<int>\
+    \ degree(n, 0);\n    for (int v = 0; v < n; v++) {\n        for (const auto& edge\
+    \ : graph[v]) {\n            if (edge.alive) degree[v]++;\n        }\n    }\n\n\
+    \    std::queue<int> queue;\n    std::vector<bool> removed(n, false);\n    for\
+    \ (int v = 0; v < n; v++) {\n        if (degree[v] <= 1) queue.push(v);\n    }\n\
+    \    while (!queue.empty()) {\n        int v = queue.front();\n        queue.pop();\n\
+    \        if (removed[v] || degree[v] > 1) continue;\n        removed[v] = true;\n\
+    \        for (const auto& edge : graph[v]) {\n            if (!edge.alive || removed[edge.to])\
+    \ continue;\n            degree[edge.to]--;\n            if (degree[edge.to] ==\
+    \ 1) queue.push(edge.to);\n        }\n    }\n\n    for (int v = 0; v < n; v++)\
+    \ {\n        result.on_cycle[v] = !removed[v];\n    }\n    for (int v = 0; v <\
+    \ n; v++) {\n        if (!result.on_cycle[v]) continue;\n        int cycle_degree\
+    \ = 0;\n        for (const auto& edge : graph[v]) {\n            if (edge.alive\
+    \ && result.on_cycle[edge.to]) cycle_degree++;\n        }\n        if (cycle_degree\
+    \ != 2) return std::nullopt;\n    }\n\n    std::vector<bool> cycle_visited(n,\
+    \ false);\n    for (int start = 0; start < n; start++) {\n        if (!result.on_cycle[start]\
+    \ || cycle_visited[start]) continue;\n        int component_id = int(result.cycles.size());\n\
+    \        std::vector<int> vertices;\n        std::vector<int> edge_ids;\n    \
+    \    std::vector<T> edge_costs;\n\n        int current = start;\n        int previous_edge\
+    \ = -1;\n        while (true) {\n            if (cycle_visited[current]) return\
+    \ std::nullopt;\n            cycle_visited[current] = true;\n            vertices.push_back(current);\n\
+    \n            int next_vertex = -1;\n            int next_edge = -1;\n       \
+    \     T next_cost = T(0);\n            for (const auto& edge : graph[current])\
+    \ {\n                if (!edge.alive || !result.on_cycle[edge.to] || edge.id ==\
+    \ previous_edge) continue;\n                next_vertex = edge.to;\n         \
+    \       next_edge = edge.id;\n                next_cost = edge.cost;\n       \
+    \         break;\n            }\n            if (next_edge == -1) return std::nullopt;\n\
+    \            edge_ids.push_back(next_edge);\n            edge_costs.push_back(next_cost);\n\
+    \            if (next_vertex == start) break;\n            previous_edge = next_edge;\n\
+    \            current = next_vertex;\n            if (int(vertices.size()) > n)\
+    \ return std::nullopt;\n        }\n\n        for (int position = 0; position <\
+    \ int(vertices.size()); position++) {\n            int v = vertices[position];\n\
+    \            result.component[v] = component_id;\n            result.cycle_root[v]\
+    \ = v;\n            result.cycle_position[v] = position;\n        }\n        result.cycles.push_back(std::move(vertices));\n\
+    \        result.cycle_edge_ids.push_back(std::move(edge_ids));\n        result.cycle_edge_costs.push_back(std::move(edge_costs));\n\
+    \    }\n    if (result.cycles.empty()) return std::nullopt;\n\n    std::vector<int>\
+    \ stack;\n    stack.reserve(n);\n    for (const auto& cycle : result.cycles) {\n\
+    \        for (int v : cycle) stack.push_back(v);\n    }\n    while (!stack.empty())\
+    \ {\n        int v = stack.back();\n        stack.pop_back();\n        for (const\
+    \ auto& edge : graph[v]) {\n            if (!edge.alive || result.on_cycle[edge.to]\
+    \ || edge.id == result.parent_edge[v]) continue;\n            int to = edge.to;\n\
+    \            if (result.component[to] != -1) continue;\n            result.component[to]\
+    \ = result.component[v];\n            result.cycle_root[to] = result.cycle_root[v];\n\
+    \            result.cycle_position[to] = result.cycle_position[v];\n         \
+    \   result.parent[to] = v;\n            result.parent_edge[to] = edge.id;\n  \
+    \          result.depth[to] = result.depth[v] + 1;\n            result.dist_to_cycle[to]\
+    \ = result.dist_to_cycle[v] + edge.cost;\n            result.children[v].push_back(to);\n\
+    \            stack.push_back(to);\n        }\n    }\n    for (int v = 0; v < n;\
+    \ v++) {\n        if (result.component[v] == -1) return std::nullopt;\n    }\n\
+    \n    result.component_count = int(result.cycles.size());\n    return result;\n\
+    }\n\ntemplate <class T>\nstd::optional<NamoriDecomposition<T>> decompose_namori(const\
+    \ Graph<T>& graph) {\n    return namori_decomposition(graph);\n}\n\n}  // namespace\
     \ graph\n}  // namespace m1une\n\n\n#line 1 \"graph/shortest_path.hpp\"\n\n\n\n\
     #line 1 \"graph/bellman_ford.hpp\"\n\n\n\n#line 6 \"graph/bellman_ford.hpp\"\n\
     #include <limits>\n#line 9 \"graph/bellman_ford.hpp\"\n\n#line 11 \"graph/bellman_ford.hpp\"\
@@ -1176,7 +1251,7 @@ data:
     }\n\ntemplate <class T>\nZeroOneBfsResult zero_one_bfs(const Graph<T>& g, int\
     \ s, int inf = std::numeric_limits<int>::max() / 2) {\n    return zero_one_bfs(g,\
     \ std::vector<int>{s}, inf);\n}\n\n}  // namespace graph\n}  // namespace m1une\n\
-    \n\n#line 11 \"graph/shortest_path.hpp\"\n\n\n#line 14 \"graph/undirected.hpp\"\
+    \n\n#line 11 \"graph/shortest_path.hpp\"\n\n\n#line 15 \"graph/undirected.hpp\"\
     \n\n\n"
   code: '#ifndef M1UNE_GRAPH_UNDIRECTED_HPP
 
@@ -1201,6 +1276,8 @@ data:
 
     #include "maximum_clique.hpp"
 
+    #include "namori.hpp"
+
     #include "shortest_path.hpp"
 
 
@@ -1218,6 +1295,7 @@ data:
   - graph/kruskal.hpp
   - graph/lowlink.hpp
   - graph/maximum_clique.hpp
+  - graph/namori.hpp
   - graph/shortest_path.hpp
   - graph/bellman_ford.hpp
   - graph/bfs.hpp
@@ -1231,7 +1309,7 @@ data:
   path: graph/undirected.hpp
   requiredBy:
   - graph/all.hpp
-  timestamp: '2026-06-22 23:27:23+09:00'
+  timestamp: '2026-06-23 12:19:49+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/graph/cow_game.test.cpp
@@ -1262,6 +1340,7 @@ where direction should not matter.
 | `graph/bipartite.hpp` | Direction ignored / explicit bipartite sides | Two-colorability, maximum matching, minimum vertex cover, maximum independent set, and minimum edge cover. |
 | `graph/general_matching.hpp` | Undirected only | Maximum-cardinality matching and minimum edge cover in general undirected graphs. |
 | `graph/maximum_clique.hpp` | Direction ignored | Exact maximum clique, maximum independent set, and minimum vertex cover with bitset branch-and-bound. |
+| `graph/namori.hpp` | Undirected Namori graph | Ordered cycles and the trees attached to them. |
 | `graph/connected_components.hpp` | Direction ignored | Weak/ordinary connected components. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Use `find_undirected_cycle(g)` for undirected graphs. |
 | `graph/grid.hpp` | Undirected graph builder | Builds 4/8-neighbor grid graphs. |

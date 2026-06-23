@@ -48,6 +48,9 @@ data:
     path: graph/maximum_clique.hpp
     title: Maximum Clique, Independent Set, and Vertex Cover
   - icon: ':heavy_check_mark:'
+    path: graph/namori.hpp
+    title: Namori Graph Decomposition
+  - icon: ':heavy_check_mark:'
     path: graph/range_edge_graph.hpp
     title: Range Edge Graph
   - icon: ':heavy_check_mark:'
@@ -135,6 +138,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_maximum_independent_set.test.cpp
     title: verify/graph/library_checker_maximum_independent_set.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/graph/namori.test.cpp
+    title: verify/graph/namori.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/graph/range_edge_graph.test.cpp
     title: verify/graph/range_edge_graph.test.cpp
@@ -289,6 +295,7 @@ data:
   - graph/bipartite.hpp
   - graph/bellman_ford.hpp
   - graph/dag_shortest_path.hpp
+  - graph/namori.hpp
   - graph/dominator_tree.hpp
   - graph/connected_components.hpp
   - graph/all.hpp
@@ -321,6 +328,7 @@ data:
   - verify/graph/dominator_tree.test.cpp
   - verify/graph/dominator_tree.test.cpp
   - verify/graph/graph_algorithms.test.cpp
+  - verify/graph/namori.test.cpp
 documentation_of: graph/graph.hpp
 layout: document
 title: Graph
