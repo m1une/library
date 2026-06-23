@@ -26,7 +26,7 @@ contest.
 | `monoid/` | Reusable monoids for generic data structures such as `Segtree`. |
 | `acted_monoid/` | Acted monoids for lazy propagation data structures such as `LazySegtree`. |
 | `math/` | Modular arithmetic, bitwise convolution, combinatorial sequences, sieves, 64-bit factorization, CRT, and floor sums. |
-| `string/` | Z/KMP, Manacher, eertrees, suffix arrays, tries, Aho-Corasick, and string hashes. |
+| `string/` | Z/KMP, Manacher, eertrees, suffix automata/arrays, tries, Aho-Corasick, and string hashes. |
 | `utilities/` | Parsing, dice, integer helpers, compression, random generation, and general contest utilities. |
 | `verify/` | Online Judge Verify Helper tests. |
 | `docs/` | Markdown documentation for the public headers. |

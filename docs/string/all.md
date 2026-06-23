@@ -18,6 +18,7 @@ contest when convenience matters more.
 | `string/z_algorithm.hpp` | Linear-time Z array. |
 | `string/prefix_function.hpp` | Prefix function and KMP occurrence search. |
 | `string/manacher.hpp` | Odd/even palindrome radii and substring checks. |
+| `string/suffix_automaton.hpp` | Online suffix automaton for substring queries and occurrence classes. |
 | `string/suffix_array.hpp` | Suffix array and LCP array. |
 | `string/trie.hpp` | Contiguous-alphabet multiset trie with prefix queries. |
 | `string/rolling_hash.hpp` | Static substring hashing, LCP, and comparison. |
