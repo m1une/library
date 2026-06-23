@@ -13,7 +13,7 @@ contest.
 
 | Directory | Contents |
 | --- | --- |
-| `graph/` | General graph algorithms and builders, including range edges, shortest paths, difference constraints, components, cycles, DAGs, 2-SAT, lowlink, and MST. |
+| `graph/` | General graph algorithms and builders, including range edges, shortest paths, components, cycles, Namori decomposition, DAGs, 2-SAT, lowlink, and MST. |
 | `tree/` | Rooted-tree metadata, LCA, HLD, virtual trees, diameter, rerooting DP, static top tree variants, and centroid decomposition. |
 | `flow/` | Flow-network algorithms such as max flow, min-cost flow, and bounded flow. |
 | `optimization/` | Project selection, slope trick, Hungarian assignment, simplex LP, and integer LP. |

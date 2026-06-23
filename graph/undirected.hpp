@@ -10,6 +10,7 @@
 #include "kruskal.hpp"
 #include "lowlink.hpp"
 #include "maximum_clique.hpp"
+#include "namori.hpp"
 #include "shortest_path.hpp"
 
 #endif  // M1UNE_GRAPH_UNDIRECTED_HPP
