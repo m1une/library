@@ -101,6 +101,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
+  - icon: ':heavy_check_mark:'
+    path: tree/virtual_tree.hpp
+    title: Virtual Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/cow_game.test.cpp
@@ -275,6 +278,7 @@ data:
   - tree/heavy_light_decomposition.hpp
   - tree/static_top_tree.hpp
   - tree/dsu_on_tree.hpp
+  - tree/virtual_tree.hpp
   - tree/tree.hpp
   - tree/diameter.hpp
   - graph/maximum_clique.hpp

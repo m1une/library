@@ -40,6 +40,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
+  - icon: ':heavy_check_mark:'
+    path: tree/virtual_tree.hpp
+    title: Virtual Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
@@ -913,7 +916,53 @@ data:
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, Compress,\
     \ Rake,\n                     AddEdge, AddVertex>;\n\n}  // namespace tree\n}\
     \  // namespace m1une\n\n\n#line 1 \"tree/tree.hpp\"\n\n\n\n#line 7 \"tree/tree.hpp\"\
-    \n\n\n#line 14 \"tree/all.hpp\"\n\n\n"
+    \n\n\n#line 1 \"tree/virtual_tree.hpp\"\n\n\n\n#line 8 \"tree/virtual_tree.hpp\"\
+    \n\n#line 11 \"tree/virtual_tree.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\
+    \ntemplate <class T = int>\nstruct VirtualTreeResult {\n    std::vector<int> vertex;\n\
+    \    std::vector<int> parent;\n    std::vector<int> parent_edge_count;\n    std::vector<T>\
+    \ parent_cost;\n    std::vector<std::vector<int>> children;\n    std::vector<bool>\
+    \ is_key;\n\n    int size() const {\n        return int(vertex.size());\n    }\n\
+    \n    bool empty() const {\n        return vertex.empty();\n    }\n\n    int edge_count()\
+    \ const {\n        return vertex.empty() ? 0 : int(vertex.size()) - 1;\n    }\n\
+    \n    int root() const {\n        return vertex.empty() ? -1 : 0;\n    }\n\n \
+    \   int root_vertex() const {\n        return vertex.empty() ? -1 : vertex[0];\n\
+    \    }\n};\n\ntemplate <class T = int>\nstruct VirtualTree {\n    using cost_type\
+    \ = T;\n    using result_type = VirtualTreeResult<T>;\n\n   private:\n    SparseTableLca<T>\
+    \ _lca;\n    std::vector<int> _key;\n    std::vector<int> _vertices;\n    std::vector<int>\
+    \ _stack;\n\n   public:\n    VirtualTree() = default;\n\n    explicit VirtualTree(const\
+    \ m1une::graph::Graph<T>& graph, int root = 0) : _lca(graph, root) {}\n\n    void\
+    \ build_lca(const m1une::graph::Graph<T>& graph, int root = 0) {\n        _lca.build(graph,\
+    \ root);\n    }\n\n    int original_size() const {\n        return _lca.size();\n\
+    \    }\n\n    const SparseTableLca<T>& lca_data() const {\n        return _lca;\n\
+    \    }\n\n    result_type build(std::vector<int> key_vertices) {\n        result_type\
+    \ result;\n        if (key_vertices.empty()) return result;\n\n        auto by_tin\
+    \ = [&](int u, int v) { return _lca.tin[u] < _lca.tin[v]; };\n        for (int\
+    \ v : key_vertices) {\n            assert(0 <= v && v < _lca.size());\n      \
+    \      assert(_lca.tin[v] != -1);\n        }\n        std::sort(key_vertices.begin(),\
+    \ key_vertices.end(), by_tin);\n        key_vertices.erase(std::unique(key_vertices.begin(),\
+    \ key_vertices.end()), key_vertices.end());\n\n        _key = key_vertices;\n\
+    \        _vertices = key_vertices;\n        _vertices.reserve(2 * _key.size());\n\
+    \        for (int i = 1; i < int(_key.size()); i++) {\n            _vertices.push_back(_lca.lca(_key[i\
+    \ - 1], _key[i]));\n        }\n        std::sort(_vertices.begin(), _vertices.end(),\
+    \ by_tin);\n        _vertices.erase(std::unique(_vertices.begin(), _vertices.end()),\
+    \ _vertices.end());\n\n        int n = int(_vertices.size());\n        result.vertex\
+    \ = _vertices;\n        result.parent.assign(n, -1);\n        result.parent_edge_count.assign(n,\
+    \ 0);\n        result.parent_cost.assign(n, T(0));\n        result.children.assign(n,\
+    \ {});\n        result.is_key.assign(n, false);\n\n        int key_index = 0;\n\
+    \        for (int i = 0; i < n; i++) {\n            while (key_index < int(_key.size())\
+    \ && _lca.tin[_key[key_index]] < _lca.tin[_vertices[i]]) {\n                key_index++;\n\
+    \            }\n            if (key_index < int(_key.size()) && _key[key_index]\
+    \ == _vertices[i]) result.is_key[i] = true;\n        }\n\n        _stack.clear();\n\
+    \        _stack.reserve(n);\n        for (int i = 0; i < n; i++) {\n         \
+    \   while (!_stack.empty() && !_lca.is_ancestor(_vertices[_stack.back()], _vertices[i]))\
+    \ {\n                _stack.pop_back();\n            }\n            if (!_stack.empty())\
+    \ {\n                int p = _stack.back();\n                result.parent[i]\
+    \ = p;\n                result.parent_edge_count[i] = _lca.depth[_vertices[i]]\
+    \ - _lca.depth[_vertices[p]];\n                result.parent_cost[i] = _lca.dist[_vertices[i]]\
+    \ - _lca.dist[_vertices[p]];\n                result.children[p].push_back(i);\n\
+    \            }\n            _stack.push_back(i);\n        }\n        return result;\n\
+    \    }\n};\n\n}  // namespace tree\n}  // namespace m1une\n\n\n#line 15 \"tree/all.hpp\"\
+    \n\n\n"
   code: '#ifndef M1UNE_TREE_ALL_HPP
 
     #define M1UNE_TREE_ALL_HPP 1
@@ -939,6 +988,8 @@ data:
 
     #include "tree.hpp"
 
+    #include "virtual_tree.hpp"
+
 
     #endif  // M1UNE_TREE_ALL_HPP
 
@@ -957,10 +1008,11 @@ data:
   - monoid/concept.hpp
   - tree/static_top_tree.hpp
   - tree/tree.hpp
+  - tree/virtual_tree.hpp
   isVerificationFile: false
   path: tree/all.hpp
   requiredBy: []
-  timestamp: '2026-06-23 02:14:46+09:00'
+  timestamp: '2026-06-23 11:34:41+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
@@ -989,6 +1041,7 @@ existing graph library.
 | `tree/static_top_tree.hpp` | Dynamic one-root tree DP on a fixed tree using static top-tree clusters. |
 | `tree/rerooting_static_top_tree.hpp` | Bidirectional static top-tree clusters for dynamic rerooting-DP solutions. |
 | `tree/centroid_decomposition.hpp` | Centroid decomposition for trees and forests. |
+| `tree/virtual_tree.hpp` | Virtual-tree compression for a selected vertex set. |
 
 ## Example
 

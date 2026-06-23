@@ -17,6 +17,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
+  - icon: ':heavy_check_mark:'
+    path: tree/virtual_tree.hpp
+    title: Virtual Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
@@ -272,6 +275,7 @@ data:
   path: tree/sparse_table_lca.hpp
   requiredBy:
   - tree/all.hpp
+  - tree/virtual_tree.hpp
   - tree/tree.hpp
   timestamp: '2026-06-21 04:34:53+09:00'
   verificationStatus: LIBRARY_ALL_AC

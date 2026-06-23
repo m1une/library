@@ -46,6 +46,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
+  - icon: ':heavy_check_mark:'
+    path: tree/virtual_tree.hpp
+    title: Virtual Tree
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -59,42 +62,43 @@ data:
   bundledCode: "#line 1 \"verify/tree/tree_algorithms.test.cpp\"\n#define PROBLEM\
     \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
     \ <array>\n#include <cassert>\n#include <iostream>\n#include <numeric>\n#include\
-    \ <set>\n#include <vector>\n\n#line 1 \"graph/graph.hpp\"\n\n\n\n#line 5 \"graph/graph.hpp\"\
-    \n#include <utility>\n#line 7 \"graph/graph.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ graph {\n\ntemplate <class T = int>\nstruct Edge {\n    using cost_type = T;\n\
-    \n    int from;\n    int to;\n    T cost;\n    int id;\n    bool alive;\n\n  \
-    \  Edge() : from(-1), to(-1), cost(T()), id(-1), alive(true) {}\n    Edge(int\
-    \ from_, int to_, T cost_ = T(1), int id_ = -1, bool alive_ = true)\n        :\
-    \ from(from_), to(to_), cost(cost_), id(id_), alive(alive_) {}\n\n    int other(int\
-    \ v) const {\n        assert(v == from || v == to);\n        return from ^ to\
-    \ ^ v;\n    }\n};\n\ntemplate <class T = int>\nstruct Graph {\n    using edge_type\
-    \ = Edge<T>;\n    using cost_type = T;\n\n   private:\n    int _n;\n    int _edge_count;\n\
-    \    std::vector<std::vector<edge_type>> _g;\n    std::vector<std::vector<std::pair<int,\
-    \ int>>> _edge_positions;\n\n   public:\n    Graph() : _n(0), _edge_count(0) {}\n\
-    \    explicit Graph(int n) : _n(n), _edge_count(0), _g(n) {\n        assert(0\
-    \ <= n);\n    }\n\n    int size() const {\n        return _n;\n    }\n\n    bool\
-    \ empty() const {\n        return _n == 0;\n    }\n\n    int edge_count() const\
-    \ {\n        return _edge_count;\n    }\n\n    int add_vertex() {\n        _g.emplace_back();\n\
-    \        return _n++;\n    }\n\n    int add_directed_edge(int from, int to, T\
-    \ cost = T(1)) {\n        assert(0 <= from && from < _n);\n        assert(0 <=\
-    \ to && to < _n);\n        int id = _edge_count++;\n        int idx = int(_g[from].size());\n\
-    \        _g[from].push_back(edge_type(from, to, cost, id));\n        _edge_positions.emplace_back();\n\
-    \        _edge_positions.back().push_back({from, idx});\n        return id;\n\
-    \    }\n\n    int add_edge(int u, int v, T cost = T(1)) {\n        assert(0 <=\
-    \ u && u < _n);\n        assert(0 <= v && v < _n);\n        int id = _edge_count++;\n\
-    \        int u_idx = int(_g[u].size());\n        int v_idx = int(_g[v].size());\n\
-    \        _g[u].push_back(edge_type(u, v, cost, id));\n        _g[v].push_back(edge_type(v,\
-    \ u, cost, id));\n        _edge_positions.emplace_back();\n        _edge_positions.back().push_back({u,\
-    \ u_idx});\n        _edge_positions.back().push_back({v, v_idx});\n        return\
-    \ id;\n    }\n\n    void set_edge_alive(int id, bool alive) {\n        assert(0\
-    \ <= id && id < _edge_count);\n        for (auto [v, idx] : _edge_positions[id])\
-    \ {\n            _g[v][idx].alive = alive;\n        }\n    }\n\n    void erase_edge(int\
-    \ id) {\n        set_edge_alive(id, false);\n    }\n\n    void revive_edge(int\
-    \ id) {\n        set_edge_alive(id, true);\n    }\n\n    bool is_edge_alive(int\
-    \ id) const {\n        assert(0 <= id && id < _edge_count);\n        assert(!_edge_positions[id].empty());\n\
-    \        auto [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n\
-    \    }\n\n    const std::vector<edge_type>& operator[](int v) const {\n      \
-    \  assert(0 <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
+    \ <random>\n#include <set>\n#include <vector>\n\n#line 1 \"graph/graph.hpp\"\n\
+    \n\n\n#line 5 \"graph/graph.hpp\"\n#include <utility>\n#line 7 \"graph/graph.hpp\"\
+    \n\nnamespace m1une {\nnamespace graph {\n\ntemplate <class T = int>\nstruct Edge\
+    \ {\n    using cost_type = T;\n\n    int from;\n    int to;\n    T cost;\n   \
+    \ int id;\n    bool alive;\n\n    Edge() : from(-1), to(-1), cost(T()), id(-1),\
+    \ alive(true) {}\n    Edge(int from_, int to_, T cost_ = T(1), int id_ = -1, bool\
+    \ alive_ = true)\n        : from(from_), to(to_), cost(cost_), id(id_), alive(alive_)\
+    \ {}\n\n    int other(int v) const {\n        assert(v == from || v == to);\n\
+    \        return from ^ to ^ v;\n    }\n};\n\ntemplate <class T = int>\nstruct\
+    \ Graph {\n    using edge_type = Edge<T>;\n    using cost_type = T;\n\n   private:\n\
+    \    int _n;\n    int _edge_count;\n    std::vector<std::vector<edge_type>> _g;\n\
+    \    std::vector<std::vector<std::pair<int, int>>> _edge_positions;\n\n   public:\n\
+    \    Graph() : _n(0), _edge_count(0) {}\n    explicit Graph(int n) : _n(n), _edge_count(0),\
+    \ _g(n) {\n        assert(0 <= n);\n    }\n\n    int size() const {\n        return\
+    \ _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n    }\n\n \
+    \   int edge_count() const {\n        return _edge_count;\n    }\n\n    int add_vertex()\
+    \ {\n        _g.emplace_back();\n        return _n++;\n    }\n\n    int add_directed_edge(int\
+    \ from, int to, T cost = T(1)) {\n        assert(0 <= from && from < _n);\n  \
+    \      assert(0 <= to && to < _n);\n        int id = _edge_count++;\n        int\
+    \ idx = int(_g[from].size());\n        _g[from].push_back(edge_type(from, to,\
+    \ cost, id));\n        _edge_positions.emplace_back();\n        _edge_positions.back().push_back({from,\
+    \ idx});\n        return id;\n    }\n\n    int add_edge(int u, int v, T cost =\
+    \ T(1)) {\n        assert(0 <= u && u < _n);\n        assert(0 <= v && v < _n);\n\
+    \        int id = _edge_count++;\n        int u_idx = int(_g[u].size());\n   \
+    \     int v_idx = int(_g[v].size());\n        _g[u].push_back(edge_type(u, v,\
+    \ cost, id));\n        _g[v].push_back(edge_type(v, u, cost, id));\n        _edge_positions.emplace_back();\n\
+    \        _edge_positions.back().push_back({u, u_idx});\n        _edge_positions.back().push_back({v,\
+    \ v_idx});\n        return id;\n    }\n\n    void set_edge_alive(int id, bool\
+    \ alive) {\n        assert(0 <= id && id < _edge_count);\n        for (auto [v,\
+    \ idx] : _edge_positions[id]) {\n            _g[v][idx].alive = alive;\n     \
+    \   }\n    }\n\n    void erase_edge(int id) {\n        set_edge_alive(id, false);\n\
+    \    }\n\n    void revive_edge(int id) {\n        set_edge_alive(id, true);\n\
+    \    }\n\n    bool is_edge_alive(int id) const {\n        assert(0 <= id && id\
+    \ < _edge_count);\n        assert(!_edge_positions[id].empty());\n        auto\
+    \ [v, idx] = _edge_positions[id][0];\n        return _g[v][idx].alive;\n    }\n\
+    \n    const std::vector<edge_type>& operator[](int v) const {\n        assert(0\
+    \ <= v && v < _n);\n        return _g[v];\n    }\n\n    std::vector<edge_type>&\
     \ operator[](int v) {\n        assert(0 <= v && v < _n);\n        return _g[v];\n\
     \    }\n\n    const std::vector<std::vector<edge_type>>& adjacency() const {\n\
     \        return _g;\n    }\n\n    std::vector<std::vector<edge_type>>& adjacency()\
@@ -921,9 +925,55 @@ data:
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, Compress,\
     \ Rake,\n                     AddEdge, AddVertex>;\n\n}  // namespace tree\n}\
     \  // namespace m1une\n\n\n#line 1 \"tree/tree.hpp\"\n\n\n\n#line 7 \"tree/tree.hpp\"\
-    \n\n\n#line 14 \"tree/all.hpp\"\n\n\n#line 13 \"verify/tree/tree_algorithms.test.cpp\"\
-    \n\nusing m1une::graph::Graph;\n\ntemplate <class Hld>\nstd::vector<int> expand_segments(const\
-    \ Hld& hld, const std::vector<m1une::tree::HldPathSegment>& segments) {\n    std::vector<int>\
+    \n\n\n#line 1 \"tree/virtual_tree.hpp\"\n\n\n\n#line 8 \"tree/virtual_tree.hpp\"\
+    \n\n#line 11 \"tree/virtual_tree.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\
+    \ntemplate <class T = int>\nstruct VirtualTreeResult {\n    std::vector<int> vertex;\n\
+    \    std::vector<int> parent;\n    std::vector<int> parent_edge_count;\n    std::vector<T>\
+    \ parent_cost;\n    std::vector<std::vector<int>> children;\n    std::vector<bool>\
+    \ is_key;\n\n    int size() const {\n        return int(vertex.size());\n    }\n\
+    \n    bool empty() const {\n        return vertex.empty();\n    }\n\n    int edge_count()\
+    \ const {\n        return vertex.empty() ? 0 : int(vertex.size()) - 1;\n    }\n\
+    \n    int root() const {\n        return vertex.empty() ? -1 : 0;\n    }\n\n \
+    \   int root_vertex() const {\n        return vertex.empty() ? -1 : vertex[0];\n\
+    \    }\n};\n\ntemplate <class T = int>\nstruct VirtualTree {\n    using cost_type\
+    \ = T;\n    using result_type = VirtualTreeResult<T>;\n\n   private:\n    SparseTableLca<T>\
+    \ _lca;\n    std::vector<int> _key;\n    std::vector<int> _vertices;\n    std::vector<int>\
+    \ _stack;\n\n   public:\n    VirtualTree() = default;\n\n    explicit VirtualTree(const\
+    \ m1une::graph::Graph<T>& graph, int root = 0) : _lca(graph, root) {}\n\n    void\
+    \ build_lca(const m1une::graph::Graph<T>& graph, int root = 0) {\n        _lca.build(graph,\
+    \ root);\n    }\n\n    int original_size() const {\n        return _lca.size();\n\
+    \    }\n\n    const SparseTableLca<T>& lca_data() const {\n        return _lca;\n\
+    \    }\n\n    result_type build(std::vector<int> key_vertices) {\n        result_type\
+    \ result;\n        if (key_vertices.empty()) return result;\n\n        auto by_tin\
+    \ = [&](int u, int v) { return _lca.tin[u] < _lca.tin[v]; };\n        for (int\
+    \ v : key_vertices) {\n            assert(0 <= v && v < _lca.size());\n      \
+    \      assert(_lca.tin[v] != -1);\n        }\n        std::sort(key_vertices.begin(),\
+    \ key_vertices.end(), by_tin);\n        key_vertices.erase(std::unique(key_vertices.begin(),\
+    \ key_vertices.end()), key_vertices.end());\n\n        _key = key_vertices;\n\
+    \        _vertices = key_vertices;\n        _vertices.reserve(2 * _key.size());\n\
+    \        for (int i = 1; i < int(_key.size()); i++) {\n            _vertices.push_back(_lca.lca(_key[i\
+    \ - 1], _key[i]));\n        }\n        std::sort(_vertices.begin(), _vertices.end(),\
+    \ by_tin);\n        _vertices.erase(std::unique(_vertices.begin(), _vertices.end()),\
+    \ _vertices.end());\n\n        int n = int(_vertices.size());\n        result.vertex\
+    \ = _vertices;\n        result.parent.assign(n, -1);\n        result.parent_edge_count.assign(n,\
+    \ 0);\n        result.parent_cost.assign(n, T(0));\n        result.children.assign(n,\
+    \ {});\n        result.is_key.assign(n, false);\n\n        int key_index = 0;\n\
+    \        for (int i = 0; i < n; i++) {\n            while (key_index < int(_key.size())\
+    \ && _lca.tin[_key[key_index]] < _lca.tin[_vertices[i]]) {\n                key_index++;\n\
+    \            }\n            if (key_index < int(_key.size()) && _key[key_index]\
+    \ == _vertices[i]) result.is_key[i] = true;\n        }\n\n        _stack.clear();\n\
+    \        _stack.reserve(n);\n        for (int i = 0; i < n; i++) {\n         \
+    \   while (!_stack.empty() && !_lca.is_ancestor(_vertices[_stack.back()], _vertices[i]))\
+    \ {\n                _stack.pop_back();\n            }\n            if (!_stack.empty())\
+    \ {\n                int p = _stack.back();\n                result.parent[i]\
+    \ = p;\n                result.parent_edge_count[i] = _lca.depth[_vertices[i]]\
+    \ - _lca.depth[_vertices[p]];\n                result.parent_cost[i] = _lca.dist[_vertices[i]]\
+    \ - _lca.dist[_vertices[p]];\n                result.children[p].push_back(i);\n\
+    \            }\n            _stack.push_back(i);\n        }\n        return result;\n\
+    \    }\n};\n\n}  // namespace tree\n}  // namespace m1une\n\n\n#line 15 \"tree/all.hpp\"\
+    \n\n\n#line 14 \"verify/tree/tree_algorithms.test.cpp\"\n\nusing m1une::graph::Graph;\n\
+    \ntemplate <class Hld>\nstd::vector<int> expand_segments(const Hld& hld, const\
+    \ std::vector<m1une::tree::HldPathSegment>& segments) {\n    std::vector<int>\
     \ result;\n    for (auto seg : segments) {\n        if (seg.reversed) {\n    \
     \        for (int i = seg.r - 1; i >= seg.l; i--) result.push_back(hld.order[i]);\n\
     \        } else {\n            for (int i = seg.l; i < seg.r; i++) result.push_back(hld.order[i]);\n\
@@ -962,9 +1012,55 @@ data:
     \    }\n\n    auto [l, r] = lca.subtree_range(2);\n    assert(r - l == 3);\n \
     \   std::vector<int> subtree;\n    for (int i = l; i < r; i++) subtree.push_back(lca.order[i]);\n\
     \    std::sort(subtree.begin(), subtree.end());\n    assert((subtree == std::vector<int>{2,\
-    \ 5, 6}));\n}\n\nvoid test_hld() {\n    auto g = sample_tree();\n    m1une::tree::HeavyLightDecomposition<long\
-    \ long> hld(g, 0);\n\n    assert(hld.size() == 7);\n    assert(hld.root == 0);\n\
-    \    assert(hld.lca(3, 4) == 1);\n    assert(hld.lca(3, 6) == 0);\n    assert(hld.dist_edges(3,\
+    \ 5, 6}));\n}\n\nvoid test_virtual_tree() {\n    auto graph = sample_tree();\n\
+    \    m1une::tree::VirtualTree<long long> builder(graph, 0);\n\n    auto virtual_tree\
+    \ = builder.build(std::vector<int>{3, 4, 6, 3});\n    std::vector<int> expected_vertices\
+    \ = {0, 1, 3, 4, 6};\n    assert(virtual_tree.vertex == expected_vertices);\n\
+    \    assert(virtual_tree.parent == std::vector<int>({-1, 0, 1, 1, 0}));\n    assert(virtual_tree.parent_edge_count\
+    \ == std::vector<int>({0, 1, 1, 1, 3}));\n    assert(virtual_tree.parent_cost\
+    \ == std::vector<long long>({0, 3, 4, 1, 10}));\n    assert(virtual_tree.is_key\
+    \ == std::vector<bool>({false, false, true, true, true}));\n    assert(virtual_tree.children[0]\
+    \ == std::vector<int>({1, 4}));\n    assert(virtual_tree.children[1] == std::vector<int>({2,\
+    \ 3}));\n    assert(virtual_tree.root() == 0);\n    assert(virtual_tree.root_vertex()\
+    \ == 0);\n    assert(virtual_tree.edge_count() == 4);\n\n    auto singleton =\
+    \ builder.build(std::vector<int>{5, 5});\n    assert(singleton.size() == 1);\n\
+    \    assert(singleton.vertex[0] == 5);\n    assert(singleton.parent[0] == -1);\n\
+    \    assert(singleton.is_key[0]);\n\n    auto empty = builder.build({});\n   \
+    \ assert(empty.empty());\n    assert(empty.root() == -1);\n    assert(empty.root_vertex()\
+    \ == -1);\n    assert(empty.edge_count() == 0);\n\n    std::mt19937 random(123456789);\n\
+    \    for (int test = 0; test < 100; test++) {\n        int n = 1 + random() %\
+    \ 200;\n        Graph<long long> random_graph(n);\n        for (int v = 1; v <\
+    \ n; v++) {\n            int parent = random() % v;\n            long long cost\
+    \ = 1 + random() % 1000000;\n            random_graph.add_edge(parent, v, cost);\n\
+    \        }\n        m1une::tree::VirtualTree<long long> random_builder(random_graph,\
+    \ 0);\n        const auto& lca = random_builder.lca_data();\n        for (int\
+    \ query = 0; query < 100; query++) {\n            int k = random() % (2 * n +\
+    \ 1);\n            std::vector<int> keys(k);\n            for (int& v : keys)\
+    \ v = random() % n;\n            auto result = random_builder.build(keys);\n\n\
+    \            std::sort(keys.begin(), keys.end(), [&](int u, int v) {\n       \
+    \         return lca.tin[u] < lca.tin[v];\n            });\n            keys.erase(std::unique(keys.begin(),\
+    \ keys.end()), keys.end());\n            std::vector<int> expected = keys;\n \
+    \           for (int i = 1; i < int(keys.size()); i++) expected.push_back(lca.lca(keys[i\
+    \ - 1], keys[i]));\n            std::sort(expected.begin(), expected.end(), [&](int\
+    \ u, int v) {\n                return lca.tin[u] < lca.tin[v];\n            });\n\
+    \            expected.erase(std::unique(expected.begin(), expected.end()), expected.end());\n\
+    \            assert(result.vertex == expected);\n\n            int key_index =\
+    \ 0;\n            for (int i = 0; i < result.size(); i++) {\n                while\
+    \ (key_index < int(keys.size()) && lca.tin[keys[key_index]] < lca.tin[result.vertex[i]])\
+    \ {\n                    key_index++;\n                }\n                bool\
+    \ is_key = key_index < int(keys.size()) && keys[key_index] == result.vertex[i];\n\
+    \                assert(result.is_key[i] == is_key);\n                if (i ==\
+    \ 0) {\n                    assert(result.parent[i] == -1);\n                \
+    \    continue;\n                }\n                int parent = result.parent[i];\n\
+    \                assert(0 <= parent && parent < i);\n                assert(lca.is_ancestor(result.vertex[parent],\
+    \ result.vertex[i]));\n                assert(result.parent_edge_count[i] == lca.dist_edges(result.vertex[parent],\
+    \ result.vertex[i]));\n                assert(result.parent_cost[i] == lca.dist_cost(result.vertex[parent],\
+    \ result.vertex[i]));\n                for (int j = parent + 1; j < i; j++) {\n\
+    \                    assert(!lca.is_ancestor(result.vertex[j], result.vertex[i]));\n\
+    \                }\n            }\n        }\n    }\n}\n\nvoid test_hld() {\n\
+    \    auto g = sample_tree();\n    m1une::tree::HeavyLightDecomposition<long long>\
+    \ hld(g, 0);\n\n    assert(hld.size() == 7);\n    assert(hld.root == 0);\n   \
+    \ assert(hld.lca(3, 4) == 1);\n    assert(hld.lca(3, 6) == 0);\n    assert(hld.dist_edges(3,\
     \ 6) == 5);\n    assert(hld.dist_cost(3, 6) == 17);\n    assert(hld.kth_ancestor(6,\
     \ 2) == 2);\n    assert(hld.kth_ancestor(6, 4) == -1);\n    assert(hld.jump(3,\
     \ 6, 4) == 5);\n\n    std::vector<int> expected_path = {3, 1, 0, 2, 5, 6};\n \
@@ -1180,15 +1276,15 @@ data:
     \ dp; });\n    assert(component_size == std::vector<int>(4, 2));\n\n    m1une::tree::CentroidDecomposition<int>\
     \ cd(g);\n    assert(cd.roots.size() == 2);\n    assert(cd.order.size() == 4);\n\
     }\n\nint main() {\n    test_rooted_tree();\n    test_sparse_table_lca();\n   \
-    \ test_hld();\n    test_diameter();\n    test_rerooting();\n    test_static_top_tree();\n\
-    \    test_rerooting_static_top_tree();\n    test_rerooting_static_top_tree_vertex_component();\n\
+    \ test_virtual_tree();\n    test_hld();\n    test_diameter();\n    test_rerooting();\n\
+    \    test_static_top_tree();\n    test_rerooting_static_top_tree();\n    test_rerooting_static_top_tree_vertex_component();\n\
     \    test_centroid_decomposition();\n    test_forest();\n\n    long long a = 0,\
     \ b = 0;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <array>\n#include <cassert>\n#include <iostream>\n#include <numeric>\n\
-    #include <set>\n#include <vector>\n\n#include \"../../graph/graph.hpp\"\n#include\
-    \ \"../../tree/all.hpp\"\n\nusing m1une::graph::Graph;\n\ntemplate <class Hld>\n\
-    std::vector<int> expand_segments(const Hld& hld, const std::vector<m1une::tree::HldPathSegment>&\
+    #include <random>\n#include <set>\n#include <vector>\n\n#include \"../../graph/graph.hpp\"\
+    \n#include \"../../tree/all.hpp\"\n\nusing m1une::graph::Graph;\n\ntemplate <class\
+    \ Hld>\nstd::vector<int> expand_segments(const Hld& hld, const std::vector<m1une::tree::HldPathSegment>&\
     \ segments) {\n    std::vector<int> result;\n    for (auto seg : segments) {\n\
     \        if (seg.reversed) {\n            for (int i = seg.r - 1; i >= seg.l;\
     \ i--) result.push_back(hld.order[i]);\n        } else {\n            for (int\
@@ -1228,9 +1324,55 @@ data:
     \    }\n\n    auto [l, r] = lca.subtree_range(2);\n    assert(r - l == 3);\n \
     \   std::vector<int> subtree;\n    for (int i = l; i < r; i++) subtree.push_back(lca.order[i]);\n\
     \    std::sort(subtree.begin(), subtree.end());\n    assert((subtree == std::vector<int>{2,\
-    \ 5, 6}));\n}\n\nvoid test_hld() {\n    auto g = sample_tree();\n    m1une::tree::HeavyLightDecomposition<long\
-    \ long> hld(g, 0);\n\n    assert(hld.size() == 7);\n    assert(hld.root == 0);\n\
-    \    assert(hld.lca(3, 4) == 1);\n    assert(hld.lca(3, 6) == 0);\n    assert(hld.dist_edges(3,\
+    \ 5, 6}));\n}\n\nvoid test_virtual_tree() {\n    auto graph = sample_tree();\n\
+    \    m1une::tree::VirtualTree<long long> builder(graph, 0);\n\n    auto virtual_tree\
+    \ = builder.build(std::vector<int>{3, 4, 6, 3});\n    std::vector<int> expected_vertices\
+    \ = {0, 1, 3, 4, 6};\n    assert(virtual_tree.vertex == expected_vertices);\n\
+    \    assert(virtual_tree.parent == std::vector<int>({-1, 0, 1, 1, 0}));\n    assert(virtual_tree.parent_edge_count\
+    \ == std::vector<int>({0, 1, 1, 1, 3}));\n    assert(virtual_tree.parent_cost\
+    \ == std::vector<long long>({0, 3, 4, 1, 10}));\n    assert(virtual_tree.is_key\
+    \ == std::vector<bool>({false, false, true, true, true}));\n    assert(virtual_tree.children[0]\
+    \ == std::vector<int>({1, 4}));\n    assert(virtual_tree.children[1] == std::vector<int>({2,\
+    \ 3}));\n    assert(virtual_tree.root() == 0);\n    assert(virtual_tree.root_vertex()\
+    \ == 0);\n    assert(virtual_tree.edge_count() == 4);\n\n    auto singleton =\
+    \ builder.build(std::vector<int>{5, 5});\n    assert(singleton.size() == 1);\n\
+    \    assert(singleton.vertex[0] == 5);\n    assert(singleton.parent[0] == -1);\n\
+    \    assert(singleton.is_key[0]);\n\n    auto empty = builder.build({});\n   \
+    \ assert(empty.empty());\n    assert(empty.root() == -1);\n    assert(empty.root_vertex()\
+    \ == -1);\n    assert(empty.edge_count() == 0);\n\n    std::mt19937 random(123456789);\n\
+    \    for (int test = 0; test < 100; test++) {\n        int n = 1 + random() %\
+    \ 200;\n        Graph<long long> random_graph(n);\n        for (int v = 1; v <\
+    \ n; v++) {\n            int parent = random() % v;\n            long long cost\
+    \ = 1 + random() % 1000000;\n            random_graph.add_edge(parent, v, cost);\n\
+    \        }\n        m1une::tree::VirtualTree<long long> random_builder(random_graph,\
+    \ 0);\n        const auto& lca = random_builder.lca_data();\n        for (int\
+    \ query = 0; query < 100; query++) {\n            int k = random() % (2 * n +\
+    \ 1);\n            std::vector<int> keys(k);\n            for (int& v : keys)\
+    \ v = random() % n;\n            auto result = random_builder.build(keys);\n\n\
+    \            std::sort(keys.begin(), keys.end(), [&](int u, int v) {\n       \
+    \         return lca.tin[u] < lca.tin[v];\n            });\n            keys.erase(std::unique(keys.begin(),\
+    \ keys.end()), keys.end());\n            std::vector<int> expected = keys;\n \
+    \           for (int i = 1; i < int(keys.size()); i++) expected.push_back(lca.lca(keys[i\
+    \ - 1], keys[i]));\n            std::sort(expected.begin(), expected.end(), [&](int\
+    \ u, int v) {\n                return lca.tin[u] < lca.tin[v];\n            });\n\
+    \            expected.erase(std::unique(expected.begin(), expected.end()), expected.end());\n\
+    \            assert(result.vertex == expected);\n\n            int key_index =\
+    \ 0;\n            for (int i = 0; i < result.size(); i++) {\n                while\
+    \ (key_index < int(keys.size()) && lca.tin[keys[key_index]] < lca.tin[result.vertex[i]])\
+    \ {\n                    key_index++;\n                }\n                bool\
+    \ is_key = key_index < int(keys.size()) && keys[key_index] == result.vertex[i];\n\
+    \                assert(result.is_key[i] == is_key);\n                if (i ==\
+    \ 0) {\n                    assert(result.parent[i] == -1);\n                \
+    \    continue;\n                }\n                int parent = result.parent[i];\n\
+    \                assert(0 <= parent && parent < i);\n                assert(lca.is_ancestor(result.vertex[parent],\
+    \ result.vertex[i]));\n                assert(result.parent_edge_count[i] == lca.dist_edges(result.vertex[parent],\
+    \ result.vertex[i]));\n                assert(result.parent_cost[i] == lca.dist_cost(result.vertex[parent],\
+    \ result.vertex[i]));\n                for (int j = parent + 1; j < i; j++) {\n\
+    \                    assert(!lca.is_ancestor(result.vertex[j], result.vertex[i]));\n\
+    \                }\n            }\n        }\n    }\n}\n\nvoid test_hld() {\n\
+    \    auto g = sample_tree();\n    m1une::tree::HeavyLightDecomposition<long long>\
+    \ hld(g, 0);\n\n    assert(hld.size() == 7);\n    assert(hld.root == 0);\n   \
+    \ assert(hld.lca(3, 4) == 1);\n    assert(hld.lca(3, 6) == 0);\n    assert(hld.dist_edges(3,\
     \ 6) == 5);\n    assert(hld.dist_cost(3, 6) == 17);\n    assert(hld.kth_ancestor(6,\
     \ 2) == 2);\n    assert(hld.kth_ancestor(6, 4) == -1);\n    assert(hld.jump(3,\
     \ 6, 4) == 5);\n\n    std::vector<int> expected_path = {3, 1, 0, 2, 5, 6};\n \
@@ -1446,8 +1588,8 @@ data:
     \ dp; });\n    assert(component_size == std::vector<int>(4, 2));\n\n    m1une::tree::CentroidDecomposition<int>\
     \ cd(g);\n    assert(cd.roots.size() == 2);\n    assert(cd.order.size() == 4);\n\
     }\n\nint main() {\n    test_rooted_tree();\n    test_sparse_table_lca();\n   \
-    \ test_hld();\n    test_diameter();\n    test_rerooting();\n    test_static_top_tree();\n\
-    \    test_rerooting_static_top_tree();\n    test_rerooting_static_top_tree_vertex_component();\n\
+    \ test_virtual_tree();\n    test_hld();\n    test_diameter();\n    test_rerooting();\n\
+    \    test_static_top_tree();\n    test_rerooting_static_top_tree();\n    test_rerooting_static_top_tree_vertex_component();\n\
     \    test_centroid_decomposition();\n    test_forest();\n\n    long long a = 0,\
     \ b = 0;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
@@ -1466,10 +1608,11 @@ data:
   - monoid/concept.hpp
   - tree/static_top_tree.hpp
   - tree/tree.hpp
+  - tree/virtual_tree.hpp
   isVerificationFile: true
   path: verify/tree/tree_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 02:14:46+09:00'
+  timestamp: '2026-06-23 11:34:41+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/tree/tree_algorithms.test.cpp

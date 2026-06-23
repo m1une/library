@@ -686,6 +686,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: tree/tree.hpp
       title: Tree
+    - icon: ':heavy_check_mark:'
+      path: tree/virtual_tree.hpp
+      title: Virtual Tree
   - name: utilities
     pages:
     - icon: ':heavy_check_mark:'

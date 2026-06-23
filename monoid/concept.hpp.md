@@ -83,6 +83,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: tree/tree.hpp
     title: Tree
+  - icon: ':heavy_check_mark:'
+    path: tree/virtual_tree.hpp
+    title: Virtual Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/ds/dsu/dsu_monoid.test.cpp
@@ -192,6 +195,7 @@ data:
   requiredBy:
   - tree/sparse_table_lca.hpp
   - tree/all.hpp
+  - tree/virtual_tree.hpp
   - tree/tree.hpp
   - ds/dynamic_tree/link_cut_tree.hpp
   - ds/dynamic_tree/path_link_cut_tree.hpp
