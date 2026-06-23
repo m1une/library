@@ -649,6 +649,9 @@ data:
       path: string/suffix_array.hpp
       title: Suffix Array and LCP Array
     - icon: ':heavy_check_mark:'
+      path: string/suffix_automaton.hpp
+      title: Suffix Automaton
+    - icon: ':heavy_check_mark:'
       path: string/trie.hpp
       title: Trie
     - icon: ':heavy_check_mark:'
@@ -1137,6 +1140,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/string/suffix_array.test.cpp
       title: verify/string/suffix_array.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/string/suffix_automaton.test.cpp
+      title: verify/string/suffix_automaton.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/string/trie.test.cpp
       title: verify/string/trie.test.cpp
