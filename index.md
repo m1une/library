@@ -261,6 +261,9 @@ data:
       path: flow/flow.hpp
       title: Flow
     - icon: ':heavy_check_mark:'
+      path: flow/gomory_hu.hpp
+      title: Gomory-Hu Tree
+    - icon: ':heavy_check_mark:'
       path: flow/max_flow.hpp
       title: Max Flow
     - icon: ':heavy_check_mark:'
