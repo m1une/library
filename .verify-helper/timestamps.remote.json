@@ -12,6 +12,7 @@
 "verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/ds/dynamic_array/persistent_dynamic_lazy_monoid_array_range_ap.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/ds/dynamic_array/persistent_dynamic_monoid_array.test.cpp": "2026-06-21 04:34:53 +0900",
+"verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp": "2026-06-23 11:30:22 +0900",
 "verify/ds/dynamic_tree/lazy_link_cut_tree.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/ds/dynamic_tree/lazy_path_link_cut_tree.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/ds/dynamic_tree/link_cut_tree.test.cpp": "2026-06-21 04:34:53 +0900",
