@@ -445,6 +445,9 @@ data:
       path: math/prime_sieve.hpp
       title: Prime Sieve
     - icon: ':heavy_check_mark:'
+      path: math/primitive_root.hpp
+      title: Primitive Root
+    - icon: ':heavy_check_mark:'
       path: math/rational.hpp
       title: Rational Number
     - icon: ':heavy_check_mark:'

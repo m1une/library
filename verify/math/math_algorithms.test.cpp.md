@@ -44,6 +44,9 @@ data:
     path: math/prime_sieve.hpp
     title: Prime Sieve
   - icon: ':heavy_check_mark:'
+    path: math/primitive_root.hpp
+    title: Primitive Root
+  - icon: ':heavy_check_mark:'
     path: math/rational.hpp
     title: Rational Number
   - icon: ':heavy_check_mark:'
@@ -750,14 +753,31 @@ data:
     \ 1);\n    int result = 1;\n    for (const auto& factor : prime_factorize(value))\
     \ {\n        if (factor.second >= 2) return 0;\n        result = -result;\n  \
     \  }\n    return result;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 1 \"math/prime_sieve.hpp\"\n\n\n\n#line 8 \"math/prime_sieve.hpp\"\n\n\
-    namespace m1une {\nnamespace math {\n\nstruct PrimeSieve {\n   private:\n    int\
-    \ _limit;\n    std::vector<int> _min_prime_factor;\n    std::vector<int> _primes;\n\
-    \n   public:\n    explicit PrimeSieve(int limit = 0) : _limit(0) {\n        assert(limit\
-    \ >= 0);\n        _limit = limit;\n        _min_prime_factor.assign(limit + 1,\
-    \ 0);\n        if (limit >= 1) _min_prime_factor[1] = 1;\n        for (int value\
-    \ = 2; value <= limit; value++) {\n            if (_min_prime_factor[value] ==\
-    \ 0) {\n                _min_prime_factor[value] = value;\n                _primes.push_back(value);\n\
+    \n#line 1 \"math/primitive_root.hpp\"\n\n\n\n#line 9 \"math/primitive_root.hpp\"\
+    \n\n#line 11 \"math/primitive_root.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\ninline bool has_primitive_root(uint64_t mod) {\n    if (mod == 2 || mod\
+    \ == 4) return true;\n    if (mod < 2) return false;\n\n    uint64_t odd_part\
+    \ = mod;\n    if ((odd_part & 1) == 0) {\n        odd_part >>= 1;\n        if\
+    \ ((odd_part & 1) == 0) return false;\n    }\n\n    return prime_factorize(odd_part).size()\
+    \ == 1;\n}\n\n// Returns the smallest positive primitive root modulo mod.\n//\
+    \ Returns 0 when no primitive root exists.\ninline uint64_t primitive_root(uint64_t\
+    \ mod) {\n    assert(mod >= 2);\n    if (mod == 2) return 1;\n    if (!has_primitive_root(mod))\
+    \ return 0;\n\n    const uint64_t phi = euler_phi(mod);\n    const std::vector<std::pair<uint64_t,\
+    \ int>> factors = prime_factorize(phi);\n    for (uint64_t candidate = 2; candidate\
+    \ < mod; candidate++) {\n        if (std::gcd(candidate, mod) != 1) continue;\n\
+    \n        bool generator = true;\n        for (const auto& factor : factors) {\n\
+    \            if (internal::power_mod(candidate, phi / factor.first, mod) == 1)\
+    \ {\n                generator = false;\n                break;\n            }\n\
+    \        }\n        if (generator) return candidate;\n    }\n    return 0;\n}\n\
+    \n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/prime_sieve.hpp\"\
+    \n\n\n\n#line 8 \"math/prime_sieve.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\nstruct PrimeSieve {\n   private:\n    int _limit;\n    std::vector<int>\
+    \ _min_prime_factor;\n    std::vector<int> _primes;\n\n   public:\n    explicit\
+    \ PrimeSieve(int limit = 0) : _limit(0) {\n        assert(limit >= 0);\n     \
+    \   _limit = limit;\n        _min_prime_factor.assign(limit + 1, 0);\n       \
+    \ if (limit >= 1) _min_prime_factor[1] = 1;\n        for (int value = 2; value\
+    \ <= limit; value++) {\n            if (_min_prime_factor[value] == 0) {\n   \
+    \             _min_prime_factor[value] = value;\n                _primes.push_back(value);\n\
     \            }\n            for (int prime : _primes) {\n                if (prime\
     \ > _min_prime_factor[value] || value > limit / prime) break;\n              \
     \  _min_prime_factor[value * prime] = prime;\n            }\n        }\n    }\n\
@@ -1123,7 +1143,7 @@ data:
     \ value) {\n    if (value == 0) return true;\n    for (const auto& factor : prime_factorize(value))\
     \ {\n        if (factor.first % 4 == 3 && (factor.second & 1) != 0) return false;\n\
     \    }\n    return true;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 19 \"math/all.hpp\"\n\n\n#line 12 \"verify/math/math_algorithms.test.cpp\"\
+    \n#line 20 \"math/all.hpp\"\n\n\n#line 12 \"verify/math/math_algorithms.test.cpp\"\
     \n\nlong long floor_div(long long numerator, long long denominator) {\n    long\
     \ long quotient = numerator / denominator;\n    if (numerator % denominator <\
     \ 0) quotient--;\n    return quotient;\n}\n\nvoid test_number_theory() {\n   \
@@ -1189,12 +1209,37 @@ data:
     \ == large_factors.size());\n        for (int i = 0; i < int(small_factors.size());\
     \ i++) {\n            assert(uint64_t(small_factors[i].first) == large_factors[i].first);\n\
     \            assert(small_factors[i].second == large_factors[i].second);\n   \
-    \     }\n    }\n}\n\nvoid test_combinatorics() {\n    using Mint = m1une::math::modint998244353;\n\
-    \    m1une::math::Combinatorics<Mint> combinations(100);\n\n    assert(combinations.factorial(5)\
-    \ == Mint(120));\n    assert(combinations.inverse(5) * Mint(5) == Mint(1));\n\
-    \    assert(combinations.binom(10, 3) == Mint(120));\n    assert(combinations.binom(3,\
-    \ 5) == Mint(0));\n    assert(combinations.perm(5, 3) == Mint(60));\n    assert(combinations.multiset(3,\
-    \ 4) == Mint(15));\n    assert(combinations.multiset(0, 0) == Mint(1));\n    assert(combinations.catalan(5)\
+    \     }\n    }\n}\n\nvoid test_primitive_root() {\n    using m1une::math::euler_phi;\n\
+    \    using m1une::math::has_primitive_root;\n    using m1une::math::primitive_root;\n\
+    \n    assert(primitive_root(2) == 1);\n    assert(primitive_root(4) == 3);\n \
+    \   assert(primitive_root(18) == 5);\n    assert(primitive_root(998244353) ==\
+    \ 3);\n    assert(primitive_root(1000000007) == 5);\n    assert(!has_primitive_root(8));\n\
+    \    assert(!has_primitive_root(12));\n    assert(primitive_root(8) == 0);\n\n\
+    \    for (uint64_t mod = 2; mod <= 200; mod++) {\n        const uint64_t root\
+    \ = primitive_root(mod);\n        const uint64_t phi = euler_phi(mod);\n     \
+    \   if (root == 0) {\n            assert(!has_primitive_root(mod));\n        \
+    \    bool found = false;\n            for (uint64_t candidate = 1; candidate <\
+    \ mod; candidate++) {\n                if (std::gcd(candidate, mod) != 1) continue;\n\
+    \                uint64_t value = 1;\n                uint64_t order = 0;\n  \
+    \              do {\n                    value = value * candidate % mod;\n  \
+    \                  order++;\n                } while (value != 1);\n         \
+    \       if (order == phi) found = true;\n            }\n            assert(!found);\n\
+    \            continue;\n        }\n\n        assert(has_primitive_root(mod));\n\
+    \        assert(std::gcd(root, mod) == 1);\n\n        uint64_t value = 1;\n  \
+    \      for (uint64_t exponent = 1; exponent < phi; exponent++) {\n           \
+    \ value = value * root % mod;\n            assert(value != 1);\n        }\n  \
+    \      value = value * root % mod;\n        assert(value == 1);\n\n        for\
+    \ (uint64_t candidate = 1; candidate < root; candidate++) {\n            if (std::gcd(candidate,\
+    \ mod) != 1) continue;\n            value = 1;\n            uint64_t order = 0;\n\
+    \            do {\n                value = value * candidate % mod;\n        \
+    \        order++;\n            } while (value != 1);\n            assert(order\
+    \ != phi);\n        }\n    }\n}\n\nvoid test_combinatorics() {\n    using Mint\
+    \ = m1une::math::modint998244353;\n    m1une::math::Combinatorics<Mint> combinations(100);\n\
+    \n    assert(combinations.factorial(5) == Mint(120));\n    assert(combinations.inverse(5)\
+    \ * Mint(5) == Mint(1));\n    assert(combinations.binom(10, 3) == Mint(120));\n\
+    \    assert(combinations.binom(3, 5) == Mint(0));\n    assert(combinations.perm(5,\
+    \ 3) == Mint(60));\n    assert(combinations.multiset(3, 4) == Mint(15));\n   \
+    \ assert(combinations.multiset(0, 0) == Mint(1));\n    assert(combinations.catalan(5)\
     \ == Mint(42));\n\n    assert(combinations.binom(100, 0) == Mint(1));\n    assert(combinations.binom(100,\
     \ 100) == Mint(1));\n}\n\nvoid test_combinatorial_sequences() {\n    using Mint\
     \ = m1une::math::modint998244353;\n\n    const std::vector<Mint> catalan = m1une::math::catalan_numbers<Mint>(10);\n\
@@ -1247,9 +1292,9 @@ data:
     \            alternating_sum += (n & 1) ? Mint(0) - term : term;\n        }\n\
     \        assert(\n            more_derangements[n] ==\n            derangement_combinations.factorial(n)\
     \ * alternating_sum\n        );\n    }\n}\n\nint main() {\n    test_number_theory();\n\
-    \    test_prime_sieve();\n    test_large_factorization();\n    test_combinatorics();\n\
-    \    test_combinatorial_sequences();\n\n    long long a, b;\n    std::cin >> a\
-    \ >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \    test_prime_sieve();\n    test_large_factorization();\n    test_primitive_root();\n\
+    \    test_combinatorics();\n    test_combinatorial_sequences();\n\n    long long\
+    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
     #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <numeric>\n\
     #include <utility>\n#include <vector>\n\n#include \"../../math/all.hpp\"\n\nlong\
@@ -1318,12 +1363,37 @@ data:
     \ == large_factors.size());\n        for (int i = 0; i < int(small_factors.size());\
     \ i++) {\n            assert(uint64_t(small_factors[i].first) == large_factors[i].first);\n\
     \            assert(small_factors[i].second == large_factors[i].second);\n   \
-    \     }\n    }\n}\n\nvoid test_combinatorics() {\n    using Mint = m1une::math::modint998244353;\n\
-    \    m1une::math::Combinatorics<Mint> combinations(100);\n\n    assert(combinations.factorial(5)\
-    \ == Mint(120));\n    assert(combinations.inverse(5) * Mint(5) == Mint(1));\n\
-    \    assert(combinations.binom(10, 3) == Mint(120));\n    assert(combinations.binom(3,\
-    \ 5) == Mint(0));\n    assert(combinations.perm(5, 3) == Mint(60));\n    assert(combinations.multiset(3,\
-    \ 4) == Mint(15));\n    assert(combinations.multiset(0, 0) == Mint(1));\n    assert(combinations.catalan(5)\
+    \     }\n    }\n}\n\nvoid test_primitive_root() {\n    using m1une::math::euler_phi;\n\
+    \    using m1une::math::has_primitive_root;\n    using m1une::math::primitive_root;\n\
+    \n    assert(primitive_root(2) == 1);\n    assert(primitive_root(4) == 3);\n \
+    \   assert(primitive_root(18) == 5);\n    assert(primitive_root(998244353) ==\
+    \ 3);\n    assert(primitive_root(1000000007) == 5);\n    assert(!has_primitive_root(8));\n\
+    \    assert(!has_primitive_root(12));\n    assert(primitive_root(8) == 0);\n\n\
+    \    for (uint64_t mod = 2; mod <= 200; mod++) {\n        const uint64_t root\
+    \ = primitive_root(mod);\n        const uint64_t phi = euler_phi(mod);\n     \
+    \   if (root == 0) {\n            assert(!has_primitive_root(mod));\n        \
+    \    bool found = false;\n            for (uint64_t candidate = 1; candidate <\
+    \ mod; candidate++) {\n                if (std::gcd(candidate, mod) != 1) continue;\n\
+    \                uint64_t value = 1;\n                uint64_t order = 0;\n  \
+    \              do {\n                    value = value * candidate % mod;\n  \
+    \                  order++;\n                } while (value != 1);\n         \
+    \       if (order == phi) found = true;\n            }\n            assert(!found);\n\
+    \            continue;\n        }\n\n        assert(has_primitive_root(mod));\n\
+    \        assert(std::gcd(root, mod) == 1);\n\n        uint64_t value = 1;\n  \
+    \      for (uint64_t exponent = 1; exponent < phi; exponent++) {\n           \
+    \ value = value * root % mod;\n            assert(value != 1);\n        }\n  \
+    \      value = value * root % mod;\n        assert(value == 1);\n\n        for\
+    \ (uint64_t candidate = 1; candidate < root; candidate++) {\n            if (std::gcd(candidate,\
+    \ mod) != 1) continue;\n            value = 1;\n            uint64_t order = 0;\n\
+    \            do {\n                value = value * candidate % mod;\n        \
+    \        order++;\n            } while (value != 1);\n            assert(order\
+    \ != phi);\n        }\n    }\n}\n\nvoid test_combinatorics() {\n    using Mint\
+    \ = m1une::math::modint998244353;\n    m1une::math::Combinatorics<Mint> combinations(100);\n\
+    \n    assert(combinations.factorial(5) == Mint(120));\n    assert(combinations.inverse(5)\
+    \ * Mint(5) == Mint(1));\n    assert(combinations.binom(10, 3) == Mint(120));\n\
+    \    assert(combinations.binom(3, 5) == Mint(0));\n    assert(combinations.perm(5,\
+    \ 3) == Mint(60));\n    assert(combinations.multiset(3, 4) == Mint(15));\n   \
+    \ assert(combinations.multiset(0, 0) == Mint(1));\n    assert(combinations.catalan(5)\
     \ == Mint(42));\n\n    assert(combinations.binom(100, 0) == Mint(1));\n    assert(combinations.binom(100,\
     \ 100) == Mint(1));\n}\n\nvoid test_combinatorial_sequences() {\n    using Mint\
     \ = m1une::math::modint998244353;\n\n    const std::vector<Mint> catalan = m1une::math::catalan_numbers<Mint>(10);\n\
@@ -1376,9 +1446,9 @@ data:
     \            alternating_sum += (n & 1) ? Mint(0) - term : term;\n        }\n\
     \        assert(\n            more_derangements[n] ==\n            derangement_combinations.factorial(n)\
     \ * alternating_sum\n        );\n    }\n}\n\nint main() {\n    test_number_theory();\n\
-    \    test_prime_sieve();\n    test_large_factorization();\n    test_combinatorics();\n\
-    \    test_combinatorial_sequences();\n\n    long long a, b;\n    std::cin >> a\
-    \ >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \    test_prime_sieve();\n    test_large_factorization();\n    test_primitive_root();\n\
+    \    test_combinatorics();\n    test_combinatorial_sequences();\n\n    long long\
+    \ a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - math/all.hpp
   - math/bitwise_convolution.hpp
@@ -1394,6 +1464,7 @@ data:
   - math/modint.hpp
   - math/number_theory.hpp
   - math/prime_factorization.hpp
+  - math/primitive_root.hpp
   - math/prime_sieve.hpp
   - math/rational.hpp
   - math/stern_brocot_tree.hpp
@@ -1402,7 +1473,7 @@ data:
   isVerificationFile: true
   path: verify/math/math_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-24 15:07:16+09:00'
+  timestamp: '2026-06-24 15:25:00+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/math/math_algorithms.test.cpp

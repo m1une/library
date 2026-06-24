@@ -6,6 +6,9 @@ data:
     path: math/all.hpp
     title: Math All
   - icon: ':heavy_check_mark:'
+    path: math/primitive_root.hpp
+    title: Primitive Root
+  - icon: ':heavy_check_mark:'
     path: math/tetration.hpp
     title: Tetration
   - icon: ':heavy_check_mark:'
@@ -191,6 +194,7 @@ data:
   isVerificationFile: false
   path: math/prime_factorization.hpp
   requiredBy:
+  - math/primitive_root.hpp
   - math/tetration.hpp
   - math/all.hpp
   - math/two_square_sum.hpp

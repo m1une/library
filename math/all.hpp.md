@@ -41,6 +41,9 @@ data:
     path: math/prime_sieve.hpp
     title: Prime Sieve
   - icon: ':heavy_check_mark:'
+    path: math/primitive_root.hpp
+    title: Primitive Root
+  - icon: ':heavy_check_mark:'
     path: math/rational.hpp
     title: Rational Number
   - icon: ':heavy_check_mark:'
@@ -746,14 +749,31 @@ data:
     \ 1);\n    int result = 1;\n    for (const auto& factor : prime_factorize(value))\
     \ {\n        if (factor.second >= 2) return 0;\n        result = -result;\n  \
     \  }\n    return result;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 1 \"math/prime_sieve.hpp\"\n\n\n\n#line 8 \"math/prime_sieve.hpp\"\n\n\
-    namespace m1une {\nnamespace math {\n\nstruct PrimeSieve {\n   private:\n    int\
-    \ _limit;\n    std::vector<int> _min_prime_factor;\n    std::vector<int> _primes;\n\
-    \n   public:\n    explicit PrimeSieve(int limit = 0) : _limit(0) {\n        assert(limit\
-    \ >= 0);\n        _limit = limit;\n        _min_prime_factor.assign(limit + 1,\
-    \ 0);\n        if (limit >= 1) _min_prime_factor[1] = 1;\n        for (int value\
-    \ = 2; value <= limit; value++) {\n            if (_min_prime_factor[value] ==\
-    \ 0) {\n                _min_prime_factor[value] = value;\n                _primes.push_back(value);\n\
+    \n#line 1 \"math/primitive_root.hpp\"\n\n\n\n#line 9 \"math/primitive_root.hpp\"\
+    \n\n#line 11 \"math/primitive_root.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\ninline bool has_primitive_root(uint64_t mod) {\n    if (mod == 2 || mod\
+    \ == 4) return true;\n    if (mod < 2) return false;\n\n    uint64_t odd_part\
+    \ = mod;\n    if ((odd_part & 1) == 0) {\n        odd_part >>= 1;\n        if\
+    \ ((odd_part & 1) == 0) return false;\n    }\n\n    return prime_factorize(odd_part).size()\
+    \ == 1;\n}\n\n// Returns the smallest positive primitive root modulo mod.\n//\
+    \ Returns 0 when no primitive root exists.\ninline uint64_t primitive_root(uint64_t\
+    \ mod) {\n    assert(mod >= 2);\n    if (mod == 2) return 1;\n    if (!has_primitive_root(mod))\
+    \ return 0;\n\n    const uint64_t phi = euler_phi(mod);\n    const std::vector<std::pair<uint64_t,\
+    \ int>> factors = prime_factorize(phi);\n    for (uint64_t candidate = 2; candidate\
+    \ < mod; candidate++) {\n        if (std::gcd(candidate, mod) != 1) continue;\n\
+    \n        bool generator = true;\n        for (const auto& factor : factors) {\n\
+    \            if (internal::power_mod(candidate, phi / factor.first, mod) == 1)\
+    \ {\n                generator = false;\n                break;\n            }\n\
+    \        }\n        if (generator) return candidate;\n    }\n    return 0;\n}\n\
+    \n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/prime_sieve.hpp\"\
+    \n\n\n\n#line 8 \"math/prime_sieve.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\nstruct PrimeSieve {\n   private:\n    int _limit;\n    std::vector<int>\
+    \ _min_prime_factor;\n    std::vector<int> _primes;\n\n   public:\n    explicit\
+    \ PrimeSieve(int limit = 0) : _limit(0) {\n        assert(limit >= 0);\n     \
+    \   _limit = limit;\n        _min_prime_factor.assign(limit + 1, 0);\n       \
+    \ if (limit >= 1) _min_prime_factor[1] = 1;\n        for (int value = 2; value\
+    \ <= limit; value++) {\n            if (_min_prime_factor[value] == 0) {\n   \
+    \             _min_prime_factor[value] = value;\n                _primes.push_back(value);\n\
     \            }\n            for (int prime : _primes) {\n                if (prime\
     \ > _min_prime_factor[value] || value > limit / prime) break;\n              \
     \  _min_prime_factor[value * prime] = prime;\n            }\n        }\n    }\n\
@@ -1119,7 +1139,7 @@ data:
     \ value) {\n    if (value == 0) return true;\n    for (const auto& factor : prime_factorize(value))\
     \ {\n        if (factor.first % 4 == 3 && (factor.second & 1) != 0) return false;\n\
     \    }\n    return true;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 19 \"math/all.hpp\"\n\n\n"
+    \n#line 20 \"math/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_MATH_ALL_HPP
 
     #define M1UNE_MATH_ALL_HPP 1
@@ -1142,6 +1162,8 @@ data:
     #include "number_theory.hpp"
 
     #include "prime_factorization.hpp"
+
+    #include "primitive_root.hpp"
 
     #include "prime_sieve.hpp"
 
@@ -1173,6 +1195,7 @@ data:
   - math/modint.hpp
   - math/number_theory.hpp
   - math/prime_factorization.hpp
+  - math/primitive_root.hpp
   - math/prime_sieve.hpp
   - math/rational.hpp
   - math/stern_brocot_tree.hpp
@@ -1181,7 +1204,7 @@ data:
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-24 15:07:16+09:00'
+  timestamp: '2026-06-24 15:25:00+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
@@ -1213,6 +1236,8 @@ You usually do not need to include this entire bundle:
   limit, usually a few million or tens of millions.
 * Use `prime_factorization.hpp` for isolated 64-bit integers that are too large
   for a sieve.
+* Use `primitive_root.hpp` to find a generator of the multiplicative group
+  modulo an integer when one exists.
 * Use `two_square_sum.hpp` to enumerate non-negative pairs `(a, b)` satisfying
   `n = a * a + b * b`.
 * Use `number_theory.hpp` for modular inverses, simultaneous remainder
@@ -1240,6 +1265,7 @@ few unused headers do not matter.
 | `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
+| `math/primitive_root.hpp` | Smallest primitive root modulo an integer, when one exists. |
 | `math/two_square_sum.hpp` | Enumerates representations as a sum of two non-negative squares. |
 | `math/tetration.hpp` | Modular tetration, arbitrary power towers, and bounded tower comparison. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
