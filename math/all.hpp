@@ -13,6 +13,7 @@
 #include "prime_sieve.hpp"
 #include "rational.hpp"
 #include "stern_brocot_tree.hpp"
+#include "tetration.hpp"
 #include "zeta_mobius_transform.hpp"
 
 #endif  // M1UNE_MATH_ALL_HPP

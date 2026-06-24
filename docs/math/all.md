@@ -29,6 +29,7 @@ You usually do not need to include this entire bundle:
 * Use `number_theory.hpp` for modular inverses, simultaneous remainder
   constraints, and sums involving floor division.
 * Use `integer_arithmetic.hpp` for exact integer square roots and powers.
+* Use `tetration.hpp` for modular tetration and arbitrary power towers.
 * Use `rational.hpp` for normalized exact fractions.
 * Use `stern_brocot_tree.hpp` for positive rational tree paths, ancestors, and
   LCA operations.
@@ -50,6 +51,7 @@ few unused headers do not matter.
 | `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
+| `math/tetration.hpp` | Modular tetration, arbitrary power towers, and bounded tower comparison. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
 | `math/stern_brocot_tree.hpp` | Compressed Stern-Brocot paths and tree navigation. |
 | `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |
