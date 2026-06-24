@@ -100,6 +100,7 @@
 "verify/math/rational.test.cpp": "2026-06-23 03:01:31 +0900",
 "verify/math/stern_brocot_tree.test.cpp": "2026-06-24 14:07:51 +0900",
 "verify/math/stirling_number_of_the_second_kind.test.cpp": "2026-06-21 17:44:01 +0900",
+"verify/math/yosupo_stern_brocot_tree.test.cpp": "2026-06-24 14:23:23 +0900",
 "verify/math/zeta_mobius_transform.test.cpp": "2026-06-22 22:56:44 +0900",
 "verify/matrix/inverse_matrix.test.cpp": "2026-06-22 14:42:39 +0900",
 "verify/matrix/matrix.test.cpp": "2026-06-22 14:42:39 +0900",
