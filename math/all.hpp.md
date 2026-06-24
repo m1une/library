@@ -44,6 +44,9 @@ data:
     path: math/rational.hpp
     title: Rational Number
   - icon: ':heavy_check_mark:'
+    path: math/stern_brocot_tree.hpp
+    title: Stern-Brocot Tree
+  - icon: ':heavy_check_mark:'
     path: math/zeta_mobius_transform.hpp
     title: Zeta and Mobius Transform
   _extendedRequiredBy: []
@@ -873,7 +876,103 @@ data:
     \ input;\n        }\n        value = Rational(numerator, denominator);\n     \
     \   return input;\n    }\n};\n\ntemplate <std::signed_integral T>\nconstexpr Rational<T>\
     \ abs(const Rational<T>& value) {\n    return value.abs();\n}\n\n}  // namespace\
-    \ math\n}  // namespace m1une\n\n\n#line 16 \"math/all.hpp\"\n\n\n"
+    \ math\n}  // namespace m1une\n\n\n#line 1 \"math/stern_brocot_tree.hpp\"\n\n\n\
+    \n#line 11 \"math/stern_brocot_tree.hpp\"\n\n#line 13 \"math/stern_brocot_tree.hpp\"\
+    \n\nnamespace m1une {\nnamespace math {\n\nenum class SternBrocotDirection {\n\
+    \    Left,\n    Right,\n};\n\nstruct SternBrocotRun {\n    SternBrocotDirection\
+    \ direction;\n    uint64_t count;\n\n    friend bool operator==(const SternBrocotRun&,\
+    \ const SternBrocotRun&) = default;\n};\n\nstruct SternBrocotPath {\n    std::vector<SternBrocotRun>\
+    \ runs;\n\n    bool empty() const {\n        return runs.empty();\n    }\n\n \
+    \   uint64_t depth() const {\n        uint64_t result = 0;\n        for (const\
+    \ SternBrocotRun& run : runs) {\n            assert(run.count <= std::numeric_limits<uint64_t>::max()\
+    \ - result);\n            result += run.count;\n        }\n        return result;\n\
+    \    }\n\n    void push(SternBrocotDirection direction, uint64_t count = 1) {\n\
+    \        if (count == 0) return;\n        if (!runs.empty() && runs.back().direction\
+    \ == direction) {\n            assert(count <= std::numeric_limits<uint64_t>::max()\
+    \ - runs.back().count);\n            runs.back().count += count;\n        } else\
+    \ {\n            runs.push_back(SternBrocotRun{direction, count});\n        }\n\
+    \    }\n\n    bool move_up(uint64_t count = 1) {\n        if (depth() < count)\
+    \ return false;\n        while (count > 0) {\n            SternBrocotRun& run\
+    \ = runs.back();\n            uint64_t removed = run.count < count ? run.count\
+    \ : count;\n            run.count -= removed;\n            count -= removed;\n\
+    \            if (run.count == 0) runs.pop_back();\n        }\n        return true;\n\
+    \    }\n\n    SternBrocotPath ancestor(uint64_t count) const {\n        SternBrocotPath\
+    \ result = *this;\n        bool valid = result.move_up(count);\n        assert(valid);\n\
+    \        return result;\n    }\n\n    friend bool operator==(const SternBrocotPath&,\
+    \ const SternBrocotPath&) = default;\n};\n\ntemplate <std::signed_integral T =\
+    \ long long>\nstruct SternBrocotBounds {\n    std::pair<T, T> left;\n    std::pair<T,\
+    \ T> right;\n};\n\ntemplate <std::signed_integral T>\nSternBrocotPath stern_brocot_path(T\
+    \ numerator, T denominator) {\n    assert(0 < numerator);\n    assert(0 < denominator);\n\
+    \    SternBrocotPath result;\n    while (numerator != denominator) {\n       \
+    \ if (numerator < denominator) {\n            T count = (denominator - 1) / numerator;\n\
+    \            result.push(SternBrocotDirection::Left, uint64_t(count));\n     \
+    \       denominator -= count * numerator;\n        } else {\n            T count\
+    \ = (numerator - 1) / denominator;\n            result.push(SternBrocotDirection::Right,\
+    \ uint64_t(count));\n            numerator -= count * denominator;\n        }\n\
+    \    }\n    assert(numerator == 1);\n    return result;\n}\n\ntemplate <std::signed_integral\
+    \ T = long long>\nstd::optional<Rational<T>> stern_brocot_decode(const SternBrocotPath&\
+    \ path) {\n    using Wide = __int128_t;\n    Wide left_numerator = 0;\n    Wide\
+    \ left_denominator = 1;\n    Wide right_numerator = 1;\n    Wide right_denominator\
+    \ = 0;\n    Wide numerator = 1;\n    Wide denominator = 1;\n    const Wide maximum\
+    \ = std::numeric_limits<T>::max();\n    for (const SternBrocotRun& run : path.runs)\
+    \ {\n        if (run.count == 0) return std::nullopt;\n        Wide count = run.count;\n\
+    \        if (run.direction == SternBrocotDirection::Left) {\n            right_numerator\
+    \ = numerator + (count - 1) * left_numerator;\n            right_denominator =\
+    \ denominator + (count - 1) * left_denominator;\n            numerator += count\
+    \ * left_numerator;\n            denominator += count * left_denominator;\n  \
+    \      } else {\n            left_numerator = numerator + (count - 1) * right_numerator;\n\
+    \            left_denominator = denominator + (count - 1) * right_denominator;\n\
+    \            numerator += count * right_numerator;\n            denominator +=\
+    \ count * right_denominator;\n        }\n        if (\n            maximum < numerator\
+    \ || maximum < denominator ||\n            maximum < left_numerator || maximum\
+    \ < left_denominator ||\n            maximum < right_numerator || maximum < right_denominator\n\
+    \        ) {\n            return std::nullopt;\n        }\n    }\n    return Rational<T>(T(numerator),\
+    \ T(denominator));\n}\n\ntemplate <std::signed_integral T>\nuint64_t stern_brocot_depth(T\
+    \ numerator, T denominator) {\n    return stern_brocot_path(numerator, denominator).depth();\n\
+    }\n\ninline SternBrocotPath stern_brocot_lca_path(\n    const SternBrocotPath&\
+    \ first,\n    const SternBrocotPath& second\n) {\n    SternBrocotPath result;\n\
+    \    int limit = int(first.runs.size() < second.runs.size() ? first.runs.size()\
+    \ : second.runs.size());\n    for (int i = 0; i < limit; i++) {\n        if (first.runs[i].direction\
+    \ != second.runs[i].direction) break;\n        uint64_t common =\n           \
+    \ first.runs[i].count < second.runs[i].count\n                ? first.runs[i].count\n\
+    \                : second.runs[i].count;\n        result.push(first.runs[i].direction,\
+    \ common);\n        if (first.runs[i].count != second.runs[i].count) break;\n\
+    \    }\n    return result;\n}\n\ntemplate <std::signed_integral T>\nRational<T>\
+    \ stern_brocot_lca(\n    T first_numerator,\n    T first_denominator,\n    T second_numerator,\n\
+    \    T second_denominator\n) {\n    SternBrocotPath path = stern_brocot_lca_path(\n\
+    \        stern_brocot_path(first_numerator, first_denominator),\n        stern_brocot_path(second_numerator,\
+    \ second_denominator)\n    );\n    std::optional<Rational<T>> result = stern_brocot_decode<T>(path);\n\
+    \    assert(result.has_value());\n    return result.value_or(Rational<T>());\n\
+    }\n\ntemplate <std::signed_integral T>\nstd::optional<Rational<T>> stern_brocot_ancestor(T\
+    \ numerator, T denominator, uint64_t up) {\n    SternBrocotPath path = stern_brocot_path(numerator,\
+    \ denominator);\n    if (!path.move_up(up)) return std::nullopt;\n    return stern_brocot_decode<T>(path);\n\
+    }\n\ntemplate <std::signed_integral T>\nstd::optional<Rational<T>> stern_brocot_parent(T\
+    \ numerator, T denominator) {\n    return stern_brocot_ancestor(numerator, denominator,\
+    \ 1);\n}\n\ntemplate <std::signed_integral T>\nstd::optional<Rational<T>> stern_brocot_move(\n\
+    \    T numerator,\n    T denominator,\n    SternBrocotDirection direction,\n \
+    \   uint64_t count = 1\n) {\n    SternBrocotPath path = stern_brocot_path(numerator,\
+    \ denominator);\n    path.push(direction, count);\n    return stern_brocot_decode<T>(path);\n\
+    }\n\ntemplate <std::signed_integral T = long long>\nstd::optional<SternBrocotBounds<T>>\
+    \ stern_brocot_bounds(const SternBrocotPath& path) {\n    using Wide = __int128_t;\n\
+    \    Wide left_numerator = 0;\n    Wide left_denominator = 1;\n    Wide right_numerator\
+    \ = 1;\n    Wide right_denominator = 0;\n    Wide numerator = 1;\n    Wide denominator\
+    \ = 1;\n    const Wide maximum = std::numeric_limits<T>::max();\n\n    for (const\
+    \ SternBrocotRun& run : path.runs) {\n        if (run.count == 0) return std::nullopt;\n\
+    \        Wide count = run.count;\n        if (run.direction == SternBrocotDirection::Left)\
+    \ {\n            right_numerator = numerator + (count - 1) * left_numerator;\n\
+    \            right_denominator = denominator + (count - 1) * left_denominator;\n\
+    \            numerator += count * left_numerator;\n            denominator +=\
+    \ count * left_denominator;\n        } else {\n            left_numerator = numerator\
+    \ + (count - 1) * right_numerator;\n            left_denominator = denominator\
+    \ + (count - 1) * right_denominator;\n            numerator += count * right_numerator;\n\
+    \            denominator += count * right_denominator;\n        }\n        if\
+    \ (\n            maximum < numerator || maximum < denominator ||\n           \
+    \ maximum < left_numerator || maximum < left_denominator ||\n            maximum\
+    \ < right_numerator || maximum < right_denominator\n        ) {\n            return\
+    \ std::nullopt;\n        }\n    }\n    SternBrocotBounds<T> result;\n    result.left\
+    \ = {T(left_numerator), T(left_denominator)};\n    result.right = {T(right_numerator),\
+    \ T(right_denominator)};\n    return result;\n}\n\n}  // namespace math\n}  //\
+    \ namespace m1une\n\n\n#line 17 \"math/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_MATH_ALL_HPP
 
     #define M1UNE_MATH_ALL_HPP 1
@@ -901,6 +1000,8 @@ data:
 
     #include "rational.hpp"
 
+    #include "stern_brocot_tree.hpp"
+
     #include "zeta_mobius_transform.hpp"
 
 
@@ -923,10 +1024,11 @@ data:
   - math/prime_factorization.hpp
   - math/prime_sieve.hpp
   - math/rational.hpp
+  - math/stern_brocot_tree.hpp
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-23 12:24:42+09:00'
+  timestamp: '2026-06-24 13:28:44+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
@@ -962,6 +1064,8 @@ You usually do not need to include this entire bundle:
   constraints, and sums involving floor division.
 * Use `integer_arithmetic.hpp` for exact integer square roots and powers.
 * Use `rational.hpp` for normalized exact fractions.
+* Use `stern_brocot_tree.hpp` for positive rational tree paths, ancestors, and
+  LCA operations.
 
 `math/all.hpp` is convenient during a contest when compile time and including a
 few unused headers do not matter.
@@ -981,4 +1085,5 @@ few unused headers do not matter.
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
+| `math/stern_brocot_tree.hpp` | Compressed Stern-Brocot paths and tree navigation. |
 | `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |

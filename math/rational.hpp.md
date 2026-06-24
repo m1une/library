@@ -5,6 +5,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
+  - icon: ':heavy_check_mark:'
+    path: math/stern_brocot_tree.hpp
+    title: Stern-Brocot Tree
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
@@ -12,6 +15,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/rational.test.cpp
     title: verify/math/rational.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/stern_brocot_tree.test.cpp
+    title: verify/math/stern_brocot_tree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -198,11 +204,13 @@ data:
   path: math/rational.hpp
   requiredBy:
   - math/all.hpp
+  - math/stern_brocot_tree.hpp
   timestamp: '2026-06-23 03:01:31+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/rational.test.cpp
   - verify/math/math_algorithms.test.cpp
+  - verify/math/stern_brocot_tree.test.cpp
 documentation_of: math/rational.hpp
 layout: document
 title: Rational Number
