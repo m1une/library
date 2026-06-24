@@ -454,6 +454,9 @@ data:
       path: math/tetration.hpp
       title: Tetration
     - icon: ':heavy_check_mark:'
+      path: math/two_square_sum.hpp
+      title: Sum of Two Squares
+    - icon: ':heavy_check_mark:'
       path: math/zeta_mobius_transform.hpp
       title: Zeta and Mobius Transform
   - name: matrix
@@ -1085,6 +1088,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/tetration.test.cpp
       title: verify/math/tetration.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/two_square_sum.test.cpp
+      title: verify/math/two_square_sum.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/math/yosupo_factorize.test.cpp
       title: verify/math/yosupo_factorize.test.cpp
