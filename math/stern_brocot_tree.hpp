@@ -5,7 +5,6 @@
 #include <concepts>
 #include <cstdint>
 #include <limits>
-#include <optional>
 #include <utility>
 #include <vector>
 
@@ -66,7 +65,7 @@ struct SternBrocotPath {
 
     SternBrocotPath ancestor(uint64_t count) const {
         SternBrocotPath result = *this;
-        bool valid = result.move_up(count);
+        [[maybe_unused]] bool valid = result.move_up(count);
         assert(valid);
         return result;
     }
@@ -101,7 +100,7 @@ SternBrocotPath stern_brocot_path(T numerator, T denominator) {
 }
 
 template <std::signed_integral T = long long>
-std::optional<Rational<T>> stern_brocot_decode(const SternBrocotPath& path) {
+Rational<T> stern_brocot_decode(const SternBrocotPath& path) {
     using Wide = __int128_t;
     Wide left_numerator = 0;
     Wide left_denominator = 1;
@@ -109,9 +108,10 @@ std::optional<Rational<T>> stern_brocot_decode(const SternBrocotPath& path) {
     Wide right_denominator = 0;
     Wide numerator = 1;
     Wide denominator = 1;
-    const Wide maximum = std::numeric_limits<T>::max();
+    [[maybe_unused]] const Wide maximum = std::numeric_limits<T>::max();
     for (const SternBrocotRun& run : path.runs) {
-        if (run.count == 0) return std::nullopt;
+        assert(run.count > 0);
+        assert(Wide(run.count) <= maximum);
         Wide count = run.count;
         if (run.direction == SternBrocotDirection::Left) {
             right_numerator = numerator + (count - 1) * left_numerator;
@@ -124,13 +124,12 @@ std::optional<Rational<T>> stern_brocot_decode(const SternBrocotPath& path) {
             numerator += count * right_numerator;
             denominator += count * right_denominator;
         }
-        if (
-            maximum < numerator || maximum < denominator ||
-            maximum < left_numerator || maximum < left_denominator ||
-            maximum < right_numerator || maximum < right_denominator
-        ) {
-            return std::nullopt;
-        }
+        assert(numerator <= maximum);
+        assert(denominator <= maximum);
+        assert(left_numerator <= maximum);
+        assert(left_denominator <= maximum);
+        assert(right_numerator <= maximum);
+        assert(right_denominator <= maximum);
     }
     return Rational<T>(T(numerator), T(denominator));
 }
@@ -169,25 +168,24 @@ Rational<T> stern_brocot_lca(
         stern_brocot_path(first_numerator, first_denominator),
         stern_brocot_path(second_numerator, second_denominator)
     );
-    std::optional<Rational<T>> result = stern_brocot_decode<T>(path);
-    assert(result.has_value());
-    return result.value_or(Rational<T>());
-}
-
-template <std::signed_integral T>
-std::optional<Rational<T>> stern_brocot_ancestor(T numerator, T denominator, uint64_t up) {
-    SternBrocotPath path = stern_brocot_path(numerator, denominator);
-    if (!path.move_up(up)) return std::nullopt;
     return stern_brocot_decode<T>(path);
 }
 
 template <std::signed_integral T>
-std::optional<Rational<T>> stern_brocot_parent(T numerator, T denominator) {
+Rational<T> stern_brocot_ancestor(T numerator, T denominator, uint64_t up) {
+    SternBrocotPath path = stern_brocot_path(numerator, denominator);
+    [[maybe_unused]] bool valid = path.move_up(up);
+    assert(valid);
+    return stern_brocot_decode<T>(path);
+}
+
+template <std::signed_integral T>
+Rational<T> stern_brocot_parent(T numerator, T denominator) {
     return stern_brocot_ancestor(numerator, denominator, 1);
 }
 
 template <std::signed_integral T>
-std::optional<Rational<T>> stern_brocot_move(
+Rational<T> stern_brocot_move(
     T numerator,
     T denominator,
     SternBrocotDirection direction,
@@ -199,7 +197,7 @@ std::optional<Rational<T>> stern_brocot_move(
 }
 
 template <std::signed_integral T = long long>
-std::optional<SternBrocotBounds<T>> stern_brocot_bounds(const SternBrocotPath& path) {
+SternBrocotBounds<T> stern_brocot_bounds(const SternBrocotPath& path) {
     using Wide = __int128_t;
     Wide left_numerator = 0;
     Wide left_denominator = 1;
@@ -207,10 +205,11 @@ std::optional<SternBrocotBounds<T>> stern_brocot_bounds(const SternBrocotPath& p
     Wide right_denominator = 0;
     Wide numerator = 1;
     Wide denominator = 1;
-    const Wide maximum = std::numeric_limits<T>::max();
+    [[maybe_unused]] const Wide maximum = std::numeric_limits<T>::max();
 
     for (const SternBrocotRun& run : path.runs) {
-        if (run.count == 0) return std::nullopt;
+        assert(run.count > 0);
+        assert(Wide(run.count) <= maximum);
         Wide count = run.count;
         if (run.direction == SternBrocotDirection::Left) {
             right_numerator = numerator + (count - 1) * left_numerator;
@@ -223,13 +222,12 @@ std::optional<SternBrocotBounds<T>> stern_brocot_bounds(const SternBrocotPath& p
             numerator += count * right_numerator;
             denominator += count * right_denominator;
         }
-        if (
-            maximum < numerator || maximum < denominator ||
-            maximum < left_numerator || maximum < left_denominator ||
-            maximum < right_numerator || maximum < right_denominator
-        ) {
-            return std::nullopt;
-        }
+        assert(numerator <= maximum);
+        assert(denominator <= maximum);
+        assert(left_numerator <= maximum);
+        assert(left_denominator <= maximum);
+        assert(right_numerator <= maximum);
+        assert(right_denominator <= maximum);
     }
     SternBrocotBounds<T> result;
     result.left = {T(left_numerator), T(left_denominator)};

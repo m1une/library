@@ -31,10 +31,10 @@ exactly the fractions in the subtree rooted at that path. Boundaries are stored
 as `(numerator, denominator)` pairs because the right boundary of the whole
 tree is positive infinity, represented by `1/0`.
 
-For example, the path to `5/3` is `R L^2`:
+For example, the path to `5/3` is `R L R`:
 
 ```text
-1/1 --R--> 2/1 --L--> 3/2 --L--> 5/3
+1/1 --R--> 2/1 --L--> 3/2 --R--> 5/3
 ```
 
 ## Path Types
@@ -54,25 +54,24 @@ For example, the path to `5/3` is `R L^2`:
 | `SternBrocotPath ancestor(count) const` | Returns an ancestor path; requires sufficient depth. |
 
 `push` accepts `count = 0` and does nothing. A valid stored run has positive
-count; decoding or bound construction returns `nullopt` if a zero-count run is
-manually inserted.
+count; decoding or bound construction asserts this condition.
 
 ## Functions
 
 All functions are in namespace `m1une::math`. Template parameter `T` must be a
-signed integer type, such as `int`, `long long`, or `__int128_t`.
+signed integer type supported by `Rational<T>`, such as `int` or `long long`.
 
 | Function signature | Description | Complexity |
 | --- | --- | --- |
 | `template<class T>`<br>`SternBrocotPath stern_brocot_path(T p, T q)` | Encodes the positive reduced fraction `p/q`. | `O(log max(p,q))` runs |
-| `template<class T = long long>`<br>`std::optional<Rational<T>> stern_brocot_decode(const SternBrocotPath& path)` | Decodes a path, or returns `nullopt` on overflow. | `O(number of runs)` |
+| `template<class T = long long>`<br>`Rational<T> stern_brocot_decode(const SternBrocotPath& path)` | Decodes a path. | `O(number of runs)` |
 | `template<class T>`<br>`uint64_t stern_brocot_depth(T p, T q)` | Returns the expanded tree depth. | `O(log max(p,q))` |
 | `SternBrocotPath stern_brocot_lca_path(const SternBrocotPath& a, const SternBrocotPath& b)` | Returns the compressed common path prefix. | `O(number of runs)` |
 | `template<class T>`<br>`Rational<T> stern_brocot_lca(T a, T b, T c, T d)` | Returns the LCA of `a/b` and `c/d`. | `O(log max values)` |
-| `template<class T>`<br>`std::optional<Rational<T>> stern_brocot_ancestor(T p, T q, uint64_t up)` | Returns an ancestor or `nullopt` above the root. | `O(number of runs)` |
-| `template<class T>`<br>`std::optional<Rational<T>> stern_brocot_parent(T p, T q)` | Returns the parent, or `nullopt` for `1/1`. | `O(log max(p,q))` |
-| `template<class T>`<br>`std::optional<Rational<T>> stern_brocot_move(T p, T q, SternBrocotDirection direction, uint64_t count = 1)` | Descends repeatedly, or returns `nullopt` on overflow. | `O(log max(p,q))` |
-| `template<class T = long long>`<br>`std::optional<SternBrocotBounds<T>> stern_brocot_bounds(const SternBrocotPath& path)` | Returns the open interval boundaries of the path subtree. | `O(number of runs)` |
+| `template<class T>`<br>`Rational<T> stern_brocot_ancestor(T p, T q, uint64_t up)` | Returns the ancestor `up` edges above `p/q`. | `O(number of runs)` |
+| `template<class T>`<br>`Rational<T> stern_brocot_parent(T p, T q)` | Returns the parent. | `O(log max(p,q))` |
+| `template<class T>`<br>`Rational<T> stern_brocot_move(T p, T q, SternBrocotDirection direction, uint64_t count = 1)` | Descends repeatedly. | `O(log max(p,q))` |
+| `template<class T = long long>`<br>`SternBrocotBounds<T> stern_brocot_bounds(const SternBrocotPath& path)` | Returns the open interval boundaries of the path subtree. | `O(number of runs)` |
 
 Here `O(log max(p,q))` means the number of Euclidean divisions, not the expanded
 tree depth. For example, `stern_brocot_path(1, 1000000000000000000)` creates one
@@ -85,7 +84,7 @@ run.
 | `left` | `std::pair<T, T>` | Left boundary fraction `(numerator, denominator)`. |
 | `right` | `std::pair<T, T>` | Right boundary fraction `(numerator, denominator)`. |
 
-## Contracts and Overflow
+## Contracts
 
 Inputs to `stern_brocot_path` and functions that encode a fraction must satisfy:
 
@@ -95,17 +94,15 @@ Inputs to `stern_brocot_path` and functions that encode a fraction must satisfy:
 
 These conditions are asserted in debug builds.
 
-Decoded numerators, denominators, and interval boundaries must fit in `T`.
-Functions that may exceed `T` return `std::nullopt` instead of overflowing:
+Additional preconditions:
 
-- `stern_brocot_decode<T>`
-- `stern_brocot_ancestor`
-- `stern_brocot_parent`
-- `stern_brocot_move`
-- `stern_brocot_bounds<T>`
+- Decoded numerators, denominators, and interval boundaries must fit in `T`.
+- `stern_brocot_ancestor(p, q, up)` requires `up <= stern_brocot_depth(p, q)`.
+- `stern_brocot_parent(p, q)` requires `p/q != 1/1`.
+- A manually created `SternBrocotPath` must contain only positive-count runs.
 
-`stern_brocot_lca` decodes a prefix of already-valid input fractions, so the
-result also fits in the same type.
+These are CP-style direct-return functions. Invalid calls are programmer errors
+and are checked with assertions where practical.
 
 ## Example
 
@@ -118,19 +115,17 @@ int main() {
     std::cout << path.depth() << '\n';  // 3
 
     auto same = m1une::math::stern_brocot_decode<long long>(path);
-    if (same) std::cout << *same << '\n';  // 5/3
+    std::cout << same << '\n';  // 5/3
 
     auto parent = m1une::math::stern_brocot_parent(5LL, 3LL);
-    if (parent) std::cout << *parent << '\n';  // 3/2
+    std::cout << parent << '\n';  // 3/2
 
     auto lca = m1une::math::stern_brocot_lca(5LL, 3LL, 7LL, 4LL);
-    std::cout << lca << '\n';  // 3/2
+    std::cout << lca << '\n';  // 5/3
 
     auto bounds = m1une::math::stern_brocot_bounds<long long>(path);
-    if (bounds) {
-        std::cout << bounds->left.first << '/' << bounds->left.second << '\n';    // 3/2
-        std::cout << bounds->right.first << '/' << bounds->right.second << '\n';  // 2/1
-    }
+    std::cout << bounds.left.first << '/' << bounds.left.second << '\n';    // 3/2
+    std::cout << bounds.right.first << '/' << bounds.right.second << '\n';  // 2/1
 }
 ```
 

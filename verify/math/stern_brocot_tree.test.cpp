@@ -5,9 +5,7 @@
 #include <cassert>
 #include <cstdint>
 #include <iostream>
-#include <limits>
 #include <numeric>
-#include <optional>
 #include <utility>
 #include <vector>
 
@@ -30,7 +28,6 @@ void test_features() {
     assert(root.empty());
     assert(root.depth() == 0);
     assert(m1une::math::stern_brocot_decode<long long>(root) == Fraction(1, 1));
-    assert(!m1une::math::stern_brocot_parent(1LL, 1LL).has_value());
 
     Path path = m1une::math::stern_brocot_path(5LL, 3LL);
     assert(path.depth() == 3);
@@ -44,7 +41,6 @@ void test_features() {
     assert(m1une::math::stern_brocot_parent(5LL, 3LL) == Fraction(3, 2));
     assert(m1une::math::stern_brocot_ancestor(5LL, 3LL, 2) == Fraction(2, 1));
     assert(m1une::math::stern_brocot_ancestor(5LL, 3LL, 3) == Fraction(1, 1));
-    assert(!m1une::math::stern_brocot_ancestor(5LL, 3LL, 4).has_value());
 
     assert(
         m1une::math::stern_brocot_move(1LL, 1LL, Direction::Left, 4)
@@ -58,15 +54,10 @@ void test_features() {
     assert(m1une::math::stern_brocot_lca(2LL, 5LL, 5LL, 2LL) == Fraction(1, 1));
 
     auto bounds = m1une::math::stern_brocot_bounds<long long>(path);
-    assert(bounds.has_value());
     std::pair<long long, long long> expected_left(3, 2);
     std::pair<long long, long long> expected_right(2, 1);
-    assert(bounds->left == expected_left);
-    assert(bounds->right == expected_right);
-
-    Path huge;
-    huge.push(Direction::Right, uint64_t(std::numeric_limits<long long>::max()));
-    assert(!m1une::math::stern_brocot_decode<long long>(huge).has_value());
+    assert(bounds.left == expected_left);
+    assert(bounds.right == expected_right);
 }
 
 void test_exhaustive() {
@@ -76,15 +67,13 @@ void test_exhaustive() {
         for (long long denominator = 1; denominator <= 100; denominator++) {
             if (std::gcd(numerator, denominator) != 1) continue;
             Path path = m1une::math::stern_brocot_path(numerator, denominator);
-            std::optional<Fraction> decoded =
-                m1une::math::stern_brocot_decode<long long>(path);
+            Fraction decoded = m1une::math::stern_brocot_decode<long long>(path);
             assert(decoded == Fraction(numerator, denominator));
             assert(path.depth() == m1une::math::stern_brocot_depth(numerator, denominator));
 
             auto bounds = m1une::math::stern_brocot_bounds<long long>(path);
-            assert(bounds.has_value());
-            auto [left_numerator, left_denominator] = bounds->left;
-            auto [right_numerator, right_denominator] = bounds->right;
+            auto [left_numerator, left_denominator] = bounds.left;
+            auto [right_numerator, right_denominator] = bounds.right;
             assert(
                 __int128(numerator) * left_denominator
                 - __int128(left_numerator) * denominator
@@ -122,15 +111,15 @@ void test_exhaustive() {
             );
             assert(
                 m1une::math::stern_brocot_parent(
-                    left_child->numerator(),
-                    left_child->denominator()
+                    left_child.numerator(),
+                    left_child.denominator()
                 )
                 == Fraction(numerator, denominator)
             );
             assert(
                 m1une::math::stern_brocot_parent(
-                    right_child->numerator(),
-                    right_child->denominator()
+                    right_child.numerator(),
+                    right_child.denominator()
                 )
                 == Fraction(numerator, denominator)
             );
@@ -163,7 +152,7 @@ void test_exhaustive() {
                     fractions[second].numerator(),
                     fractions[second].denominator()
                 )
-                == *m1une::math::stern_brocot_decode<long long>(expected)
+                == m1une::math::stern_brocot_decode<long long>(expected)
             );
         }
     }
