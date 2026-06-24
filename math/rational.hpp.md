@@ -18,6 +18,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/stern_brocot_tree.test.cpp
     title: verify/math/stern_brocot_tree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/yosupo_stern_brocot_tree.test.cpp
+    title: verify/math/yosupo_stern_brocot_tree.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -210,6 +213,7 @@ data:
   verifiedWith:
   - verify/math/rational.test.cpp
   - verify/math/math_algorithms.test.cpp
+  - verify/math/yosupo_stern_brocot_tree.test.cpp
   - verify/math/stern_brocot_tree.test.cpp
 documentation_of: math/rational.hpp
 layout: document

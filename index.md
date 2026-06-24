@@ -1080,6 +1080,9 @@ data:
       path: verify/math/stirling_number_of_the_second_kind.test.cpp
       title: verify/math/stirling_number_of_the_second_kind.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/math/yosupo_stern_brocot_tree.test.cpp
+      title: verify/math/yosupo_stern_brocot_tree.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/math/zeta_mobius_transform.test.cpp
       title: verify/math/zeta_mobius_transform.test.cpp
   - name: verify/matrix
