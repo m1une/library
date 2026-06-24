@@ -152,6 +152,64 @@ void test_large_factorization() {
     }
 }
 
+void test_primitive_root() {
+    using m1une::math::euler_phi;
+    using m1une::math::has_primitive_root;
+    using m1une::math::primitive_root;
+
+    assert(primitive_root(2) == 1);
+    assert(primitive_root(4) == 3);
+    assert(primitive_root(18) == 5);
+    assert(primitive_root(998244353) == 3);
+    assert(primitive_root(1000000007) == 5);
+    assert(!has_primitive_root(8));
+    assert(!has_primitive_root(12));
+    assert(primitive_root(8) == 0);
+
+    for (uint64_t mod = 2; mod <= 200; mod++) {
+        const uint64_t root = primitive_root(mod);
+        const uint64_t phi = euler_phi(mod);
+        if (root == 0) {
+            assert(!has_primitive_root(mod));
+            bool found = false;
+            for (uint64_t candidate = 1; candidate < mod; candidate++) {
+                if (std::gcd(candidate, mod) != 1) continue;
+                uint64_t value = 1;
+                uint64_t order = 0;
+                do {
+                    value = value * candidate % mod;
+                    order++;
+                } while (value != 1);
+                if (order == phi) found = true;
+            }
+            assert(!found);
+            continue;
+        }
+
+        assert(has_primitive_root(mod));
+        assert(std::gcd(root, mod) == 1);
+
+        uint64_t value = 1;
+        for (uint64_t exponent = 1; exponent < phi; exponent++) {
+            value = value * root % mod;
+            assert(value != 1);
+        }
+        value = value * root % mod;
+        assert(value == 1);
+
+        for (uint64_t candidate = 1; candidate < root; candidate++) {
+            if (std::gcd(candidate, mod) != 1) continue;
+            value = 1;
+            uint64_t order = 0;
+            do {
+                value = value * candidate % mod;
+                order++;
+            } while (value != 1);
+            assert(order != phi);
+        }
+    }
+}
+
 void test_combinatorics() {
     using Mint = m1une::math::modint998244353;
     m1une::math::Combinatorics<Mint> combinations(100);
@@ -277,6 +335,7 @@ int main() {
     test_number_theory();
     test_prime_sieve();
     test_large_factorization();
+    test_primitive_root();
     test_combinatorics();
     test_combinatorial_sequences();
 

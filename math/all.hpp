@@ -10,6 +10,7 @@
 #include "modint.hpp"
 #include "number_theory.hpp"
 #include "prime_factorization.hpp"
+#include "primitive_root.hpp"
 #include "prime_sieve.hpp"
 #include "rational.hpp"
 #include "stern_brocot_tree.hpp"

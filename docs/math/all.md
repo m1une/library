@@ -26,6 +26,8 @@ You usually do not need to include this entire bundle:
   limit, usually a few million or tens of millions.
 * Use `prime_factorization.hpp` for isolated 64-bit integers that are too large
   for a sieve.
+* Use `primitive_root.hpp` to find a generator of the multiplicative group
+  modulo an integer when one exists.
 * Use `two_square_sum.hpp` to enumerate non-negative pairs `(a, b)` satisfying
   `n = a * a + b * b`.
 * Use `number_theory.hpp` for modular inverses, simultaneous remainder
@@ -53,6 +55,7 @@ few unused headers do not matter.
 | `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
+| `math/primitive_root.hpp` | Smallest primitive root modulo an integer, when one exists. |
 | `math/two_square_sum.hpp` | Enumerates representations as a sum of two non-negative squares. |
 | `math/tetration.hpp` | Modular tetration, arbitrary power towers, and bounded tower comparison. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
