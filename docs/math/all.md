@@ -30,6 +30,8 @@ You usually do not need to include this entire bundle:
   constraints, and sums involving floor division.
 * Use `integer_arithmetic.hpp` for exact integer square roots and powers.
 * Use `rational.hpp` for normalized exact fractions.
+* Use `stern_brocot_tree.hpp` for positive rational tree paths, ancestors, and
+  LCA operations.
 
 `math/all.hpp` is convenient during a contest when compile time and including a
 few unused headers do not matter.
@@ -49,4 +51,5 @@ few unused headers do not matter.
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
+| `math/stern_brocot_tree.hpp` | Compressed Stern-Brocot paths and tree navigation. |
 | `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |
