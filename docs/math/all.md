@@ -34,6 +34,7 @@ You usually do not need to include this entire bundle:
   constraints, and sums involving floor division.
 * Use `integer_arithmetic.hpp` for exact integer square roots and powers.
 * Use `tetration.hpp` for modular tetration and arbitrary power towers.
+* Use `totient_sum.hpp` for summatory Euler totient queries.
 * Use `rational.hpp` for normalized exact fractions.
 * Use `stern_brocot_tree.hpp` for positive rational tree paths, ancestors, and
   LCA operations.
@@ -58,6 +59,7 @@ few unused headers do not matter.
 | `math/primitive_root.hpp` | Smallest primitive root modulo an integer, when one exists. |
 | `math/two_square_sum.hpp` | Enumerates representations as a sum of two non-negative squares. |
 | `math/tetration.hpp` | Modular tetration, arbitrary power towers, and bounded tower comparison. |
+| `math/totient_sum.hpp` | Summatory Euler totient function. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
 | `math/stern_brocot_tree.hpp` | Compressed Stern-Brocot paths and tree navigation. |
 | `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |

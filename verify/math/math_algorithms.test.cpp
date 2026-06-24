@@ -210,6 +210,38 @@ void test_primitive_root() {
     }
 }
 
+void test_totient_sum() {
+    using m1une::math::totient_sum;
+    using m1une::math::TotientSum;
+
+    TotientSum solver(100);
+    assert(solver.precalculation_limit() == 100);
+    assert(solver.prefix_sum(0) == 0);
+    assert(solver.prefix_sum(1) == 1);
+    assert(solver(10) == 32);
+    assert(totient_sum(100, 10) == 3044);
+
+    m1une::math::PrimeSieve sieve(20000);
+    const std::vector<int> phi = sieve.totient_table();
+    __uint128_t expected = 0;
+    for (int value = 1; value <= 20000; value++) {
+        expected += static_cast<uint64_t>(phi[value]);
+        assert(solver.prefix_sum(value) == expected);
+    }
+
+    for (uint64_t n : std::vector<uint64_t>{1, 2, 10, 100, 1000, 10000}) {
+        __uint128_t left = 0;
+        for (uint64_t q = 1; q <= n;) {
+            const uint64_t quotient = n / q;
+            const uint64_t next = n / quotient + 1;
+            left += static_cast<__uint128_t>(next - q) * solver.prefix_sum(quotient);
+            q = next;
+        }
+        const __uint128_t wide_n = n;
+        assert(left == wide_n * (wide_n + 1) / 2);
+    }
+}
+
 void test_combinatorics() {
     using Mint = m1une::math::modint998244353;
     m1une::math::Combinatorics<Mint> combinations(100);
@@ -336,6 +368,7 @@ int main() {
     test_prime_sieve();
     test_large_factorization();
     test_primitive_root();
+    test_totient_sum();
     test_combinatorics();
     test_combinatorial_sequences();
 

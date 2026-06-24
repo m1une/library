@@ -15,6 +15,7 @@
 #include "rational.hpp"
 #include "stern_brocot_tree.hpp"
 #include "tetration.hpp"
+#include "totient_sum.hpp"
 #include "two_square_sum.hpp"
 #include "zeta_mobius_transform.hpp"
 
