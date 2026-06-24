@@ -47,6 +47,9 @@ data:
     path: math/stern_brocot_tree.hpp
     title: Stern-Brocot Tree
   - icon: ':heavy_check_mark:'
+    path: math/tetration.hpp
+    title: Tetration
+  - icon: ':heavy_check_mark:'
     path: math/zeta_mobius_transform.hpp
     title: Zeta and Mobius Transform
   _extendedRequiredBy: []
@@ -972,7 +975,81 @@ data:
     \ <= maximum);\n        assert(right_denominator <= maximum);\n    }\n    SternBrocotBounds<T>\
     \ result;\n    result.left = {T(left_numerator), T(left_denominator)};\n    result.right\
     \ = {T(right_numerator), T(right_denominator)};\n    return result;\n}\n\n}  //\
-    \ namespace math\n}  // namespace m1une\n\n\n#line 17 \"math/all.hpp\"\n\n\n"
+    \ namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/tetration.hpp\"\n\n\
+    \n\n#line 9 \"math/tetration.hpp\"\n\n#line 11 \"math/tetration.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace math {\n\nnamespace tetration_detail {\n\ntemplate <std::integral\
+    \ T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\nuint64_t to_uint64(T\
+    \ value) {\n    if constexpr (std::signed_integral<T>) {\n        assert(value\
+    \ >= 0);\n    }\n    return static_cast<uint64_t>(value);\n}\n\ninline uint64_t\
+    \ multiply_mod(uint64_t first, uint64_t second, uint64_t mod) {\n    return static_cast<uint64_t>(\n\
+    \        static_cast<__uint128_t>(first) * second % mod\n    );\n}\n\ninline uint64_t\
+    \ pow_mod(uint64_t base, __uint128_t exponent, uint64_t mod) {\n    assert(mod\
+    \ >= 1);\n    if (mod == 1) return 0;\n    base %= mod;\n    uint64_t result =\
+    \ 1 % mod;\n    while (exponent > 0) {\n        if ((exponent & 1) != 0) result\
+    \ = multiply_mod(result, base, mod);\n        base = multiply_mod(base, base,\
+    \ mod);\n        exponent >>= 1;\n    }\n    return result;\n}\n\ninline uint64_t\
+    \ pow_bounded(uint64_t base, uint64_t exponent, uint64_t limit) {\n    if (limit\
+    \ == 0) return 0;\n    __uint128_t result = 1;\n    for (uint64_t i = 0; i < exponent;\
+    \ i++) {\n        result *= base;\n        if (result >= limit) return limit;\n\
+    \    }\n    return static_cast<uint64_t>(result);\n}\n\ninline uint64_t exponent_threshold(uint64_t\
+    \ base, uint64_t limit) {\n    assert(base >= 2);\n    if (limit <= 1) return\
+    \ 0;\n\n    uint64_t exponent = 0;\n    uint64_t value = 1;\n    while (value\
+    \ < limit) {\n        exponent++;\n        if (value > limit / base) return exponent;\n\
+    \        value *= base;\n    }\n    return exponent;\n}\n\ninline uint64_t tetration_bounded_unsigned(uint64_t\
+    \ base, uint64_t height, uint64_t limit) {\n    if (limit == 0) return 0;\n  \
+    \  if (height == 0) return limit < 1 ? limit : 1;\n    if (height == 1) return\
+    \ base < limit ? base : limit;\n\n    if (base == 0) {\n        const uint64_t\
+    \ value = (height & 1) == 0 ? 1 : 0;\n        return value < limit ? value : limit;\n\
+    \    }\n    if (base == 1) return limit < 1 ? limit : 1;\n\n    const uint64_t\
+    \ threshold = exponent_threshold(base, limit);\n    const uint64_t exponent =\
+    \ tetration_bounded_unsigned(base, height - 1, threshold);\n    if (exponent >=\
+    \ threshold) return limit;\n    return pow_bounded(base, exponent, limit);\n}\n\
+    \ninline uint64_t tetration_mod_unsigned(uint64_t base, uint64_t height, uint64_t\
+    \ mod) {\n    assert(mod >= 1);\n    if (mod == 1) return 0;\n    if (height ==\
+    \ 0) return 1 % mod;\n    if (height == 1) return base % mod;\n    if (base ==\
+    \ 0) return (height & 1) == 0 ? 1 % mod : 0;\n    if (base == 1) return 1 % mod;\n\
+    \n    const uint64_t phi = euler_phi(mod);\n    uint64_t reduced_exponent = tetration_mod_unsigned(base,\
+    \ height - 1, phi);\n    __uint128_t exponent = reduced_exponent;\n    if (tetration_bounded_unsigned(base,\
+    \ height - 1, phi) >= phi) {\n        exponent += phi;\n    }\n    return pow_mod(base,\
+    \ exponent, mod);\n}\n\ninline uint64_t power_tower_bounded_unsigned(\n    const\
+    \ std::vector<uint64_t>& bases,\n    int index,\n    uint64_t limit\n) {\n   \
+    \ if (limit == 0) return 0;\n    if (index == int(bases.size())) return limit\
+    \ < 1 ? limit : 1;\n\n    const uint64_t base = bases[index];\n    if (index +\
+    \ 1 == int(bases.size())) return base < limit ? base : limit;\n\n    if (base\
+    \ == 0) {\n        const uint64_t exponent = power_tower_bounded_unsigned(bases,\
+    \ index + 1, 1);\n        const uint64_t value = exponent == 0 ? 1 : 0;\n    \
+    \    return value < limit ? value : limit;\n    }\n    if (base == 1) return limit\
+    \ < 1 ? limit : 1;\n\n    const uint64_t threshold = exponent_threshold(base,\
+    \ limit);\n    const uint64_t exponent = power_tower_bounded_unsigned(bases, index\
+    \ + 1, threshold);\n    if (exponent >= threshold) return limit;\n    return pow_bounded(base,\
+    \ exponent, limit);\n}\n\ninline uint64_t power_tower_mod_unsigned(\n    const\
+    \ std::vector<uint64_t>& bases,\n    int index,\n    uint64_t mod\n) {\n    assert(mod\
+    \ >= 1);\n    if (mod == 1) return 0;\n    if (index == int(bases.size())) return\
+    \ 1 % mod;\n    if (index + 1 == int(bases.size())) return bases[index] % mod;\n\
+    \n    const uint64_t phi = euler_phi(mod);\n    uint64_t reduced_exponent = power_tower_mod_unsigned(bases,\
+    \ index + 1, phi);\n    __uint128_t exponent = reduced_exponent;\n    if (power_tower_bounded_unsigned(bases,\
+    \ index + 1, phi) >= phi) {\n        exponent += phi;\n    }\n    return pow_mod(bases[index],\
+    \ exponent, mod);\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nstd::vector<uint64_t> normalize_bases(const std::vector<T>& bases) {\n\
+    \    std::vector<uint64_t> result;\n    result.reserve(bases.size());\n    for\
+    \ (T base : bases) result.push_back(to_uint64(base));\n    return result;\n}\n\
+    \n}  // namespace tetration_detail\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nuint64_t tetration_mod(T base, uint64_t height, uint64_t mod) {\n  \
+    \  assert(mod >= 1);\n    return tetration_detail::tetration_mod_unsigned(\n \
+    \       tetration_detail::to_uint64(base),\n        height,\n        mod\n   \
+    \ );\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nuint64_t tetration_bounded(T base, uint64_t height, uint64_t limit)\
+    \ {\n    return tetration_detail::tetration_bounded_unsigned(\n        tetration_detail::to_uint64(base),\n\
+    \        height,\n        limit\n    );\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nuint64_t power_tower_mod(const std::vector<T>& bases, uint64_t mod)\
+    \ {\n    assert(mod >= 1);\n    std::vector<uint64_t> normalized = tetration_detail::normalize_bases(bases);\n\
+    \    return tetration_detail::power_tower_mod_unsigned(normalized, 0, mod);\n\
+    }\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\n\
+    uint64_t power_tower_bounded(const std::vector<T>& bases, uint64_t limit) {\n\
+    \    std::vector<uint64_t> normalized = tetration_detail::normalize_bases(bases);\n\
+    \    return tetration_detail::power_tower_bounded_unsigned(normalized, 0, limit);\n\
+    }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 18 \"math/all.hpp\"\
+    \n\n\n"
   code: '#ifndef M1UNE_MATH_ALL_HPP
 
     #define M1UNE_MATH_ALL_HPP 1
@@ -1002,6 +1079,8 @@ data:
 
     #include "stern_brocot_tree.hpp"
 
+    #include "tetration.hpp"
+
     #include "zeta_mobius_transform.hpp"
 
 
@@ -1025,10 +1104,11 @@ data:
   - math/prime_sieve.hpp
   - math/rational.hpp
   - math/stern_brocot_tree.hpp
+  - math/tetration.hpp
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-24 14:07:51+09:00'
+  timestamp: '2026-06-24 14:35:02+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
@@ -1063,6 +1143,7 @@ You usually do not need to include this entire bundle:
 * Use `number_theory.hpp` for modular inverses, simultaneous remainder
   constraints, and sums involving floor division.
 * Use `integer_arithmetic.hpp` for exact integer square roots and powers.
+* Use `tetration.hpp` for modular tetration and arbitrary power towers.
 * Use `rational.hpp` for normalized exact fractions.
 * Use `stern_brocot_tree.hpp` for positive rational tree paths, ancestors, and
   LCA operations.
@@ -1084,6 +1165,7 @@ few unused headers do not matter.
 | `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
+| `math/tetration.hpp` | Modular tetration, arbitrary power towers, and bounded tower comparison. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
 | `math/stern_brocot_tree.hpp` | Compressed Stern-Brocot paths and tree navigation. |
 | `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |

@@ -5,6 +5,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
+  - icon: ':heavy_check_mark:'
+    path: math/tetration.hpp
+    title: Tetration
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/math/factorize.test.cpp
@@ -15,6 +18,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/primality_test.test.cpp
     title: verify/math/primality_test.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/tetration.test.cpp
+    title: verify/math/tetration.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/math/yosupo_factorize.test.cpp
+    title: verify/math/yosupo_factorize.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -176,11 +185,14 @@ data:
   isVerificationFile: false
   path: math/prime_factorization.hpp
   requiredBy:
+  - math/tetration.hpp
   - math/all.hpp
   timestamp: '2026-06-20 09:18:49+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/math/tetration.test.cpp
   - verify/math/primality_test.test.cpp
+  - verify/math/yosupo_factorize.test.cpp
   - verify/math/math_algorithms.test.cpp
   - verify/math/factorize.test.cpp
 documentation_of: math/prime_factorization.hpp

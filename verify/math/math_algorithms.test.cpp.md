@@ -50,6 +50,9 @@ data:
     path: math/stern_brocot_tree.hpp
     title: Stern-Brocot Tree
   - icon: ':heavy_check_mark:'
+    path: math/tetration.hpp
+    title: Tetration
+  - icon: ':heavy_check_mark:'
     path: math/zeta_mobius_transform.hpp
     title: Zeta and Mobius Transform
   _extendedRequiredBy: []
@@ -976,45 +979,119 @@ data:
     \ <= maximum);\n        assert(right_denominator <= maximum);\n    }\n    SternBrocotBounds<T>\
     \ result;\n    result.left = {T(left_numerator), T(left_denominator)};\n    result.right\
     \ = {T(right_numerator), T(right_denominator)};\n    return result;\n}\n\n}  //\
-    \ namespace math\n}  // namespace m1une\n\n\n#line 17 \"math/all.hpp\"\n\n\n#line\
-    \ 12 \"verify/math/math_algorithms.test.cpp\"\n\nlong long floor_div(long long\
-    \ numerator, long long denominator) {\n    long long quotient = numerator / denominator;\n\
-    \    if (numerator % denominator < 0) quotient--;\n    return quotient;\n}\n\n\
-    void test_number_theory() {\n    using m1une::math::crt;\n    using m1une::math::floor_sum;\n\
-    \    using m1une::math::inv_gcd;\n    using m1une::math::inv_mod;\n    using m1une::math::pow_mod;\n\
-    \n    assert(pow_mod(-2, 5, 13) == 7);\n    assert(pow_mod(123, 0, 1) == 0);\n\
-    \    assert(inv_mod(3, 11) == 4);\n\n    const auto inverse = inv_gcd(6, 15);\n\
-    \    assert(inverse.first == 3);\n    assert((6 * inverse.second - inverse.first)\
-    \ % 15 == 0);\n\n    const auto solution = crt(\n        std::vector<long long>{2,\
-    \ 3, 2},\n        std::vector<long long>{3, 5, 7}\n    );\n    assert(solution.first\
-    \ == 23);\n    assert(solution.second == 105);\n    const auto inconsistent =\
-    \ crt(\n        std::vector<long long>{0, 1},\n        std::vector<long long>{2,\
-    \ 4}\n    );\n    assert(inconsistent.second == 0);\n\n    for (long long first_mod\
-    \ = 1; first_mod <= 12; first_mod++) {\n        for (long long second_mod = 1;\
-    \ second_mod <= 12; second_mod++) {\n            const long long combined_mod\
-    \ = std::lcm(first_mod, second_mod);\n            for (long long first_remainder\
-    \ = -5; first_remainder <= 5;\n                 first_remainder++) {\n       \
-    \         for (long long second_remainder = -5; second_remainder <= 5;\n     \
-    \                second_remainder++) {\n                    long long expected\
-    \ = -1;\n                    for (long long value = 0; value < combined_mod; value++)\
-    \ {\n                        if (\n                            (value - first_remainder)\
-    \ % first_mod == 0 &&\n                            (value - second_remainder)\
-    \ % second_mod == 0\n                        ) {\n                           \
-    \ expected = value;\n                            break;\n                    \
-    \    }\n                    }\n                    const auto actual = crt(\n\
-    \                        std::vector<long long>{first_remainder, second_remainder},\n\
-    \                        std::vector<long long>{first_mod, second_mod}\n     \
-    \               );\n                    if (expected == -1) {\n              \
-    \          assert(actual.second == 0);\n                    } else {\n       \
-    \                 assert(actual.first == expected);\n                        assert(actual.second\
-    \ == combined_mod);\n                    }\n                }\n            }\n\
-    \        }\n    }\n\n    for (long long n = 0; n <= 15; n++) {\n        for (long\
-    \ long mod = 1; mod <= 15; mod++) {\n            for (long long a = -15; a <=\
-    \ 15; a++) {\n                for (long long b = -15; b <= 15; b++) {\n      \
-    \              long long expected = 0;\n                    for (long long i =\
-    \ 0; i < n; i++) {\n                        expected += floor_div(a * i + b, mod);\n\
-    \                    }\n                    assert(floor_sum(n, mod, a, b) ==\
-    \ expected);\n                }\n            }\n        }\n    }\n}\n\nvoid test_prime_sieve()\
+    \ namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/tetration.hpp\"\n\n\
+    \n\n#line 9 \"math/tetration.hpp\"\n\n#line 11 \"math/tetration.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace math {\n\nnamespace tetration_detail {\n\ntemplate <std::integral\
+    \ T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\nuint64_t to_uint64(T\
+    \ value) {\n    if constexpr (std::signed_integral<T>) {\n        assert(value\
+    \ >= 0);\n    }\n    return static_cast<uint64_t>(value);\n}\n\ninline uint64_t\
+    \ multiply_mod(uint64_t first, uint64_t second, uint64_t mod) {\n    return static_cast<uint64_t>(\n\
+    \        static_cast<__uint128_t>(first) * second % mod\n    );\n}\n\ninline uint64_t\
+    \ pow_mod(uint64_t base, __uint128_t exponent, uint64_t mod) {\n    assert(mod\
+    \ >= 1);\n    if (mod == 1) return 0;\n    base %= mod;\n    uint64_t result =\
+    \ 1 % mod;\n    while (exponent > 0) {\n        if ((exponent & 1) != 0) result\
+    \ = multiply_mod(result, base, mod);\n        base = multiply_mod(base, base,\
+    \ mod);\n        exponent >>= 1;\n    }\n    return result;\n}\n\ninline uint64_t\
+    \ pow_bounded(uint64_t base, uint64_t exponent, uint64_t limit) {\n    if (limit\
+    \ == 0) return 0;\n    __uint128_t result = 1;\n    for (uint64_t i = 0; i < exponent;\
+    \ i++) {\n        result *= base;\n        if (result >= limit) return limit;\n\
+    \    }\n    return static_cast<uint64_t>(result);\n}\n\ninline uint64_t exponent_threshold(uint64_t\
+    \ base, uint64_t limit) {\n    assert(base >= 2);\n    if (limit <= 1) return\
+    \ 0;\n\n    uint64_t exponent = 0;\n    uint64_t value = 1;\n    while (value\
+    \ < limit) {\n        exponent++;\n        if (value > limit / base) return exponent;\n\
+    \        value *= base;\n    }\n    return exponent;\n}\n\ninline uint64_t tetration_bounded_unsigned(uint64_t\
+    \ base, uint64_t height, uint64_t limit) {\n    if (limit == 0) return 0;\n  \
+    \  if (height == 0) return limit < 1 ? limit : 1;\n    if (height == 1) return\
+    \ base < limit ? base : limit;\n\n    if (base == 0) {\n        const uint64_t\
+    \ value = (height & 1) == 0 ? 1 : 0;\n        return value < limit ? value : limit;\n\
+    \    }\n    if (base == 1) return limit < 1 ? limit : 1;\n\n    const uint64_t\
+    \ threshold = exponent_threshold(base, limit);\n    const uint64_t exponent =\
+    \ tetration_bounded_unsigned(base, height - 1, threshold);\n    if (exponent >=\
+    \ threshold) return limit;\n    return pow_bounded(base, exponent, limit);\n}\n\
+    \ninline uint64_t tetration_mod_unsigned(uint64_t base, uint64_t height, uint64_t\
+    \ mod) {\n    assert(mod >= 1);\n    if (mod == 1) return 0;\n    if (height ==\
+    \ 0) return 1 % mod;\n    if (height == 1) return base % mod;\n    if (base ==\
+    \ 0) return (height & 1) == 0 ? 1 % mod : 0;\n    if (base == 1) return 1 % mod;\n\
+    \n    const uint64_t phi = euler_phi(mod);\n    uint64_t reduced_exponent = tetration_mod_unsigned(base,\
+    \ height - 1, phi);\n    __uint128_t exponent = reduced_exponent;\n    if (tetration_bounded_unsigned(base,\
+    \ height - 1, phi) >= phi) {\n        exponent += phi;\n    }\n    return pow_mod(base,\
+    \ exponent, mod);\n}\n\ninline uint64_t power_tower_bounded_unsigned(\n    const\
+    \ std::vector<uint64_t>& bases,\n    int index,\n    uint64_t limit\n) {\n   \
+    \ if (limit == 0) return 0;\n    if (index == int(bases.size())) return limit\
+    \ < 1 ? limit : 1;\n\n    const uint64_t base = bases[index];\n    if (index +\
+    \ 1 == int(bases.size())) return base < limit ? base : limit;\n\n    if (base\
+    \ == 0) {\n        const uint64_t exponent = power_tower_bounded_unsigned(bases,\
+    \ index + 1, 1);\n        const uint64_t value = exponent == 0 ? 1 : 0;\n    \
+    \    return value < limit ? value : limit;\n    }\n    if (base == 1) return limit\
+    \ < 1 ? limit : 1;\n\n    const uint64_t threshold = exponent_threshold(base,\
+    \ limit);\n    const uint64_t exponent = power_tower_bounded_unsigned(bases, index\
+    \ + 1, threshold);\n    if (exponent >= threshold) return limit;\n    return pow_bounded(base,\
+    \ exponent, limit);\n}\n\ninline uint64_t power_tower_mod_unsigned(\n    const\
+    \ std::vector<uint64_t>& bases,\n    int index,\n    uint64_t mod\n) {\n    assert(mod\
+    \ >= 1);\n    if (mod == 1) return 0;\n    if (index == int(bases.size())) return\
+    \ 1 % mod;\n    if (index + 1 == int(bases.size())) return bases[index] % mod;\n\
+    \n    const uint64_t phi = euler_phi(mod);\n    uint64_t reduced_exponent = power_tower_mod_unsigned(bases,\
+    \ index + 1, phi);\n    __uint128_t exponent = reduced_exponent;\n    if (power_tower_bounded_unsigned(bases,\
+    \ index + 1, phi) >= phi) {\n        exponent += phi;\n    }\n    return pow_mod(bases[index],\
+    \ exponent, mod);\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nstd::vector<uint64_t> normalize_bases(const std::vector<T>& bases) {\n\
+    \    std::vector<uint64_t> result;\n    result.reserve(bases.size());\n    for\
+    \ (T base : bases) result.push_back(to_uint64(base));\n    return result;\n}\n\
+    \n}  // namespace tetration_detail\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nuint64_t tetration_mod(T base, uint64_t height, uint64_t mod) {\n  \
+    \  assert(mod >= 1);\n    return tetration_detail::tetration_mod_unsigned(\n \
+    \       tetration_detail::to_uint64(base),\n        height,\n        mod\n   \
+    \ );\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nuint64_t tetration_bounded(T base, uint64_t height, uint64_t limit)\
+    \ {\n    return tetration_detail::tetration_bounded_unsigned(\n        tetration_detail::to_uint64(base),\n\
+    \        height,\n        limit\n    );\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nuint64_t power_tower_mod(const std::vector<T>& bases, uint64_t mod)\
+    \ {\n    assert(mod >= 1);\n    std::vector<uint64_t> normalized = tetration_detail::normalize_bases(bases);\n\
+    \    return tetration_detail::power_tower_mod_unsigned(normalized, 0, mod);\n\
+    }\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\n\
+    uint64_t power_tower_bounded(const std::vector<T>& bases, uint64_t limit) {\n\
+    \    std::vector<uint64_t> normalized = tetration_detail::normalize_bases(bases);\n\
+    \    return tetration_detail::power_tower_bounded_unsigned(normalized, 0, limit);\n\
+    }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 18 \"math/all.hpp\"\
+    \n\n\n#line 12 \"verify/math/math_algorithms.test.cpp\"\n\nlong long floor_div(long\
+    \ long numerator, long long denominator) {\n    long long quotient = numerator\
+    \ / denominator;\n    if (numerator % denominator < 0) quotient--;\n    return\
+    \ quotient;\n}\n\nvoid test_number_theory() {\n    using m1une::math::crt;\n \
+    \   using m1une::math::floor_sum;\n    using m1une::math::inv_gcd;\n    using\
+    \ m1une::math::inv_mod;\n    using m1une::math::pow_mod;\n\n    assert(pow_mod(-2,\
+    \ 5, 13) == 7);\n    assert(pow_mod(123, 0, 1) == 0);\n    assert(inv_mod(3, 11)\
+    \ == 4);\n\n    const auto inverse = inv_gcd(6, 15);\n    assert(inverse.first\
+    \ == 3);\n    assert((6 * inverse.second - inverse.first) % 15 == 0);\n\n    const\
+    \ auto solution = crt(\n        std::vector<long long>{2, 3, 2},\n        std::vector<long\
+    \ long>{3, 5, 7}\n    );\n    assert(solution.first == 23);\n    assert(solution.second\
+    \ == 105);\n    const auto inconsistent = crt(\n        std::vector<long long>{0,\
+    \ 1},\n        std::vector<long long>{2, 4}\n    );\n    assert(inconsistent.second\
+    \ == 0);\n\n    for (long long first_mod = 1; first_mod <= 12; first_mod++) {\n\
+    \        for (long long second_mod = 1; second_mod <= 12; second_mod++) {\n  \
+    \          const long long combined_mod = std::lcm(first_mod, second_mod);\n \
+    \           for (long long first_remainder = -5; first_remainder <= 5;\n     \
+    \            first_remainder++) {\n                for (long long second_remainder\
+    \ = -5; second_remainder <= 5;\n                     second_remainder++) {\n \
+    \                   long long expected = -1;\n                    for (long long\
+    \ value = 0; value < combined_mod; value++) {\n                        if (\n\
+    \                            (value - first_remainder) % first_mod == 0 &&\n \
+    \                           (value - second_remainder) % second_mod == 0\n   \
+    \                     ) {\n                            expected = value;\n   \
+    \                         break;\n                        }\n                \
+    \    }\n                    const auto actual = crt(\n                       \
+    \ std::vector<long long>{first_remainder, second_remainder},\n               \
+    \         std::vector<long long>{first_mod, second_mod}\n                    );\n\
+    \                    if (expected == -1) {\n                        assert(actual.second\
+    \ == 0);\n                    } else {\n                        assert(actual.first\
+    \ == expected);\n                        assert(actual.second == combined_mod);\n\
+    \                    }\n                }\n            }\n        }\n    }\n\n\
+    \    for (long long n = 0; n <= 15; n++) {\n        for (long long mod = 1; mod\
+    \ <= 15; mod++) {\n            for (long long a = -15; a <= 15; a++) {\n     \
+    \           for (long long b = -15; b <= 15; b++) {\n                    long\
+    \ long expected = 0;\n                    for (long long i = 0; i < n; i++) {\n\
+    \                        expected += floor_div(a * i + b, mod);\n            \
+    \        }\n                    assert(floor_sum(n, mod, a, b) == expected);\n\
+    \                }\n            }\n        }\n    }\n}\n\nvoid test_prime_sieve()\
     \ {\n    m1une::math::PrimeSieve sieve(100);\n    assert(sieve.primes().size()\
     \ == 25);\n    assert(sieve.is_prime(97));\n    assert(!sieve.is_prime(1));\n\
     \    assert(sieve.min_prime_factor(91) == 7);\n\n    std::vector<std::pair<int,\
@@ -1250,10 +1327,11 @@ data:
   - math/prime_sieve.hpp
   - math/rational.hpp
   - math/stern_brocot_tree.hpp
+  - math/tetration.hpp
   isVerificationFile: true
   path: verify/math/math_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-24 14:07:51+09:00'
+  timestamp: '2026-06-24 14:35:02+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/math/math_algorithms.test.cpp

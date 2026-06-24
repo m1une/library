@@ -451,6 +451,9 @@ data:
       path: math/stern_brocot_tree.hpp
       title: Stern-Brocot Tree
     - icon: ':heavy_check_mark:'
+      path: math/tetration.hpp
+      title: Tetration
+    - icon: ':heavy_check_mark:'
       path: math/zeta_mobius_transform.hpp
       title: Zeta and Mobius Transform
   - name: matrix
@@ -1079,6 +1082,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/stirling_number_of_the_second_kind.test.cpp
       title: verify/math/stirling_number_of_the_second_kind.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/tetration.test.cpp
+      title: verify/math/tetration.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/math/yosupo_factorize.test.cpp
+      title: verify/math/yosupo_factorize.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/math/yosupo_stern_brocot_tree.test.cpp
       title: verify/math/yosupo_stern_brocot_tree.test.cpp
