@@ -457,6 +457,9 @@ data:
       path: math/tetration.hpp
       title: Tetration
     - icon: ':heavy_check_mark:'
+      path: math/totient_sum.hpp
+      title: Totient Sum
+    - icon: ':heavy_check_mark:'
       path: math/two_square_sum.hpp
       title: Sum of Two Squares
     - icon: ':heavy_check_mark:'

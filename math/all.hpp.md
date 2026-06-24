@@ -53,6 +53,9 @@ data:
     path: math/tetration.hpp
     title: Tetration
   - icon: ':heavy_check_mark:'
+    path: math/totient_sum.hpp
+    title: Totient Sum
+  - icon: ':heavy_check_mark:'
     path: math/two_square_sum.hpp
     title: Sum of Two Squares
   - icon: ':heavy_check_mark:'
@@ -1071,51 +1074,87 @@ data:
     uint64_t power_tower_bounded(const std::vector<T>& bases, uint64_t limit) {\n\
     \    std::vector<uint64_t> normalized = tetration_detail::normalize_bases(bases);\n\
     \    return tetration_detail::power_tower_bounded_unsigned(normalized, 0, limit);\n\
-    }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/two_square_sum.hpp\"\
-    \n\n\n\n#line 9 \"math/two_square_sum.hpp\"\n\n#line 12 \"math/two_square_sum.hpp\"\
-    \n\nnamespace m1une {\nnamespace math {\n\nnamespace two_square_sum_detail {\n\
-    \nstruct GaussianInteger {\n    __int128_t real;\n    __int128_t imaginary;\n\
-    };\n\ninline GaussianInteger multiply(GaussianInteger first, GaussianInteger second)\
-    \ {\n    return GaussianInteger{first.real * second.real - first.imaginary * second.imaginary,\n\
-    \                           first.real * second.imaginary + first.imaginary *\
-    \ second.real};\n}\n\ninline GaussianInteger power(GaussianInteger base, int exponent)\
-    \ {\n    GaussianInteger result{1, 0};\n    while (exponent > 0) {\n        if\
-    \ ((exponent & 1) != 0) result = multiply(result, base);\n        exponent >>=\
-    \ 1;\n        if (exponent != 0) base = multiply(base, base);\n    }\n    return\
-    \ result;\n}\n\ninline uint64_t absolute_value(__int128_t value) {\n    return\
-    \ static_cast<uint64_t>(value < 0 ? -value : value);\n}\n\ninline uint64_t pow_uint64(uint64_t\
-    \ base, int exponent) {\n    uint64_t result = 1;\n    while (exponent > 0) {\n\
-    \        if ((exponent & 1) != 0) result *= base;\n        exponent >>= 1;\n \
-    \       if (exponent != 0) base *= base;\n    }\n    return result;\n}\n\ninline\
-    \ GaussianInteger prime_one_mod_four_representation(uint64_t prime) {\n    assert(prime\
-    \ % 4 == 1);\n    uint64_t non_residue = 2;\n    while (internal::power_mod(non_residue,\
-    \ (prime - 1) / 2, prime) != prime - 1) {\n        non_residue++;\n    }\n\n \
-    \   uint64_t root = internal::power_mod(non_residue, (prime - 1) / 4, prime);\n\
-    \    uint64_t previous = prime;\n    uint64_t current = root;\n    while (static_cast<__uint128_t>(current)\
-    \ * current > prime) {\n        uint64_t next = previous % current;\n        previous\
-    \ = current;\n        current = next;\n    }\n\n    const uint64_t real = current;\n\
-    \    const uint64_t remaining = prime - real * real;\n    const uint64_t imaginary\
-    \ = isqrt(remaining);\n    assert(imaginary * imaginary == remaining);\n    return\
-    \ GaussianInteger{static_cast<__int128_t>(real), static_cast<__int128_t>(imaginary)};\n\
-    }\n\ninline std::vector<GaussianInteger> prime_power_choices(GaussianInteger factor,\
-    \ int exponent) {\n    GaussianInteger conjugate{factor.real, -factor.imaginary};\n\
-    \n    std::vector<GaussianInteger> positive_powers(exponent + 1);\n    std::vector<GaussianInteger>\
-    \ negative_powers(exponent + 1);\n    positive_powers[0] = GaussianInteger{1,\
-    \ 0};\n    negative_powers[0] = GaussianInteger{1, 0};\n    for (int i = 0; i\
-    \ < exponent; i++) {\n        positive_powers[i + 1] = multiply(positive_powers[i],\
-    \ factor);\n        negative_powers[i + 1] = multiply(negative_powers[i], conjugate);\n\
-    \    }\n\n    std::vector<GaussianInteger> result;\n    result.reserve(exponent\
-    \ + 1);\n    for (int take_positive = 0; take_positive <= exponent; take_positive++)\
-    \ {\n        result.push_back(multiply(positive_powers[take_positive], negative_powers[exponent\
-    \ - take_positive]));\n    }\n    return result;\n}\n\ninline void add_nonnegative_pairs(std::vector<std::pair<uint64_t,\
-    \ uint64_t>>& result, GaussianInteger value,\n                               \
-    \   uint64_t scale) {\n    const uint64_t first = absolute_value(value.real) *\
-    \ scale;\n    const uint64_t second = absolute_value(value.imaginary) * scale;\n\
-    \    result.emplace_back(first, second);\n    result.emplace_back(second, first);\n\
-    }\n\n}  // namespace two_square_sum_detail\n\ninline std::vector<std::pair<uint64_t,\
-    \ uint64_t>> two_square_sum(uint64_t value) {\n    using two_square_sum_detail::GaussianInteger;\n\
-    \n    if (value == 0) return std::vector<std::pair<uint64_t, uint64_t>>{std::pair<uint64_t,\
-    \ uint64_t>(0, 0)};\n\n    uint64_t real_scale = 1;\n    std::vector<std::vector<GaussianInteger>>\
+    }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/totient_sum.hpp\"\
+    \n\n\n\n#line 6 \"math/totient_sum.hpp\"\n#include <unordered_map>\n#line 8 \"\
+    math/totient_sum.hpp\"\n\nnamespace m1une {\nnamespace math {\n\nstruct TotientSum\
+    \ {\n   private:\n    int _precalculation_limit;\n    std::vector<__uint128_t>\
+    \ _prefix_sum;\n    std::unordered_map<uint64_t, __uint128_t> _memo;\n\n    __uint128_t\
+    \ solve(uint64_t n) {\n        if (n <= static_cast<uint64_t>(_precalculation_limit))\
+    \ {\n            return _prefix_sum[static_cast<int>(n)];\n        }\n       \
+    \ if (auto it = _memo.find(n); it != _memo.end()) {\n            return it->second;\n\
+    \        }\n\n        const __uint128_t wide_n = n;\n        __uint128_t result\
+    \ = wide_n * (wide_n + 1) / 2;\n        for (uint64_t left = 2; left <= n;) {\n\
+    \            const uint64_t quotient = n / left;\n            const uint64_t right\
+    \ = n / quotient;\n            result -= static_cast<__uint128_t>(right - left\
+    \ + 1) * solve(quotient);\n            if (right == n) break;\n            left\
+    \ = right + 1;\n        }\n\n        _memo.emplace(n, result);\n        return\
+    \ result;\n    }\n\n   public:\n    explicit TotientSum(int precalculation_limit\
+    \ = 1000000) : _precalculation_limit(precalculation_limit) {\n        assert(precalculation_limit\
+    \ >= 0);\n\n        std::vector<uint64_t> phi(precalculation_limit + 1);\n   \
+    \     std::vector<int> primes;\n        std::vector<bool> is_composite(precalculation_limit\
+    \ + 1);\n        if (precalculation_limit >= 1) {\n            phi[1] = 1;\n \
+    \       }\n        for (int value = 2; value <= precalculation_limit; value++)\
+    \ {\n            if (!is_composite[value]) {\n                primes.push_back(value);\n\
+    \                phi[value] = static_cast<uint64_t>(value - 1);\n            }\n\
+    \            for (int prime : primes) {\n                if (value > precalculation_limit\
+    \ / prime) break;\n                const int next = value * prime;\n         \
+    \       is_composite[next] = true;\n                if (value % prime == 0) {\n\
+    \                    phi[next] = phi[value] * static_cast<uint64_t>(prime);\n\
+    \                    break;\n                }\n                phi[next] = phi[value]\
+    \ * static_cast<uint64_t>(prime - 1);\n            }\n        }\n\n        _prefix_sum.assign(precalculation_limit\
+    \ + 1, 0);\n        for (int value = 1; value <= precalculation_limit; value++)\
+    \ {\n            _prefix_sum[value] = _prefix_sum[value - 1] + phi[value];\n \
+    \       }\n    }\n\n    int precalculation_limit() const {\n        return _precalculation_limit;\n\
+    \    }\n\n    // Returns sum_{i=1}^n phi(i).\n    __uint128_t prefix_sum(uint64_t\
+    \ n) {\n        return solve(n);\n    }\n\n    __uint128_t operator()(uint64_t\
+    \ n) {\n        return prefix_sum(n);\n    }\n};\n\ninline __uint128_t totient_sum(uint64_t\
+    \ n, int precalculation_limit = 1000000) {\n    TotientSum solver(precalculation_limit);\n\
+    \    return solver.prefix_sum(n);\n}\n\n}  // namespace math\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"math/two_square_sum.hpp\"\n\n\n\n#line 9 \"math/two_square_sum.hpp\"\
+    \n\n#line 12 \"math/two_square_sum.hpp\"\n\nnamespace m1une {\nnamespace math\
+    \ {\n\nnamespace two_square_sum_detail {\n\nstruct GaussianInteger {\n    __int128_t\
+    \ real;\n    __int128_t imaginary;\n};\n\ninline GaussianInteger multiply(GaussianInteger\
+    \ first, GaussianInteger second) {\n    return GaussianInteger{first.real * second.real\
+    \ - first.imaginary * second.imaginary,\n                           first.real\
+    \ * second.imaginary + first.imaginary * second.real};\n}\n\ninline GaussianInteger\
+    \ power(GaussianInteger base, int exponent) {\n    GaussianInteger result{1, 0};\n\
+    \    while (exponent > 0) {\n        if ((exponent & 1) != 0) result = multiply(result,\
+    \ base);\n        exponent >>= 1;\n        if (exponent != 0) base = multiply(base,\
+    \ base);\n    }\n    return result;\n}\n\ninline uint64_t absolute_value(__int128_t\
+    \ value) {\n    return static_cast<uint64_t>(value < 0 ? -value : value);\n}\n\
+    \ninline uint64_t pow_uint64(uint64_t base, int exponent) {\n    uint64_t result\
+    \ = 1;\n    while (exponent > 0) {\n        if ((exponent & 1) != 0) result *=\
+    \ base;\n        exponent >>= 1;\n        if (exponent != 0) base *= base;\n \
+    \   }\n    return result;\n}\n\ninline GaussianInteger prime_one_mod_four_representation(uint64_t\
+    \ prime) {\n    assert(prime % 4 == 1);\n    uint64_t non_residue = 2;\n    while\
+    \ (internal::power_mod(non_residue, (prime - 1) / 2, prime) != prime - 1) {\n\
+    \        non_residue++;\n    }\n\n    uint64_t root = internal::power_mod(non_residue,\
+    \ (prime - 1) / 4, prime);\n    uint64_t previous = prime;\n    uint64_t current\
+    \ = root;\n    while (static_cast<__uint128_t>(current) * current > prime) {\n\
+    \        uint64_t next = previous % current;\n        previous = current;\n  \
+    \      current = next;\n    }\n\n    const uint64_t real = current;\n    const\
+    \ uint64_t remaining = prime - real * real;\n    const uint64_t imaginary = isqrt(remaining);\n\
+    \    assert(imaginary * imaginary == remaining);\n    return GaussianInteger{static_cast<__int128_t>(real),\
+    \ static_cast<__int128_t>(imaginary)};\n}\n\ninline std::vector<GaussianInteger>\
+    \ prime_power_choices(GaussianInteger factor, int exponent) {\n    GaussianInteger\
+    \ conjugate{factor.real, -factor.imaginary};\n\n    std::vector<GaussianInteger>\
+    \ positive_powers(exponent + 1);\n    std::vector<GaussianInteger> negative_powers(exponent\
+    \ + 1);\n    positive_powers[0] = GaussianInteger{1, 0};\n    negative_powers[0]\
+    \ = GaussianInteger{1, 0};\n    for (int i = 0; i < exponent; i++) {\n       \
+    \ positive_powers[i + 1] = multiply(positive_powers[i], factor);\n        negative_powers[i\
+    \ + 1] = multiply(negative_powers[i], conjugate);\n    }\n\n    std::vector<GaussianInteger>\
+    \ result;\n    result.reserve(exponent + 1);\n    for (int take_positive = 0;\
+    \ take_positive <= exponent; take_positive++) {\n        result.push_back(multiply(positive_powers[take_positive],\
+    \ negative_powers[exponent - take_positive]));\n    }\n    return result;\n}\n\
+    \ninline void add_nonnegative_pairs(std::vector<std::pair<uint64_t, uint64_t>>&\
+    \ result, GaussianInteger value,\n                                  uint64_t scale)\
+    \ {\n    const uint64_t first = absolute_value(value.real) * scale;\n    const\
+    \ uint64_t second = absolute_value(value.imaginary) * scale;\n    result.emplace_back(first,\
+    \ second);\n    result.emplace_back(second, first);\n}\n\n}  // namespace two_square_sum_detail\n\
+    \ninline std::vector<std::pair<uint64_t, uint64_t>> two_square_sum(uint64_t value)\
+    \ {\n    using two_square_sum_detail::GaussianInteger;\n\n    if (value == 0)\
+    \ return std::vector<std::pair<uint64_t, uint64_t>>{std::pair<uint64_t, uint64_t>(0,\
+    \ 0)};\n\n    uint64_t real_scale = 1;\n    std::vector<std::vector<GaussianInteger>>\
     \ choices_by_prime;\n    for (const auto& factor : prime_factorize(value)) {\n\
     \        const uint64_t prime = factor.first;\n        const int exponent = factor.second;\n\
     \n        if (prime % 4 == 3) {\n            if ((exponent & 1) != 0) return {};\n\
@@ -1139,7 +1178,7 @@ data:
     \ value) {\n    if (value == 0) return true;\n    for (const auto& factor : prime_factorize(value))\
     \ {\n        if (factor.first % 4 == 3 && (factor.second & 1) != 0) return false;\n\
     \    }\n    return true;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 20 \"math/all.hpp\"\n\n\n"
+    \n#line 21 \"math/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_MATH_ALL_HPP
 
     #define M1UNE_MATH_ALL_HPP 1
@@ -1173,6 +1212,8 @@ data:
 
     #include "tetration.hpp"
 
+    #include "totient_sum.hpp"
+
     #include "two_square_sum.hpp"
 
     #include "zeta_mobius_transform.hpp"
@@ -1200,11 +1241,12 @@ data:
   - math/rational.hpp
   - math/stern_brocot_tree.hpp
   - math/tetration.hpp
+  - math/totient_sum.hpp
   - math/two_square_sum.hpp
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-24 15:25:00+09:00'
+  timestamp: '2026-06-24 21:43:10+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
@@ -1244,6 +1286,7 @@ You usually do not need to include this entire bundle:
   constraints, and sums involving floor division.
 * Use `integer_arithmetic.hpp` for exact integer square roots and powers.
 * Use `tetration.hpp` for modular tetration and arbitrary power towers.
+* Use `totient_sum.hpp` for summatory Euler totient queries.
 * Use `rational.hpp` for normalized exact fractions.
 * Use `stern_brocot_tree.hpp` for positive rational tree paths, ancestors, and
   LCA operations.
@@ -1268,6 +1311,7 @@ few unused headers do not matter.
 | `math/primitive_root.hpp` | Smallest primitive root modulo an integer, when one exists. |
 | `math/two_square_sum.hpp` | Enumerates representations as a sum of two non-negative squares. |
 | `math/tetration.hpp` | Modular tetration, arbitrary power towers, and bounded tower comparison. |
+| `math/totient_sum.hpp` | Summatory Euler totient function. |
 | `math/rational.hpp` | Exact normalized rational arithmetic over signed integers. |
 | `math/stern_brocot_tree.hpp` | Compressed Stern-Brocot paths and tree navigation. |
 | `math/zeta_mobius_transform.hpp` | Subset, superset, divisor, and multiple zeta/Mobius transforms. |
