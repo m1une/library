@@ -1,12 +1,81 @@
 #ifndef M1UNE_FAST_IO_HPP
 #define M1UNE_FAST_IO_HPP 1
 
+#include <cstddef>
 #include <cstdio>
+#include <iterator>
 #include <string>
 #include <type_traits>
+#include <utility>
 
 namespace m1une {
 namespace utilities {
+namespace internal {
+
+// Detect std::begin(x), std::end(x).
+template <class T, class = void>
+struct is_range : std::false_type {};
+
+template <class T>
+struct is_range<T, std::void_t<
+    decltype(std::begin(std::declval<T&>())),
+    decltype(std::end(std::declval<T&>()))
+>> : std::true_type {};
+
+template <class T>
+inline constexpr bool is_range_v = is_range<T>::value;
+
+template <class T>
+using range_reference_t = decltype(*std::begin(std::declval<T&>()));
+
+template <class T>
+using range_value_t = std::remove_cv_t<std::remove_reference_t<range_reference_t<T>>>;
+
+template <class T, class = void>
+struct range_stored_value {
+    using type = range_value_t<T>;
+};
+
+template <class T>
+struct range_stored_value<T, std::void_t<typename std::remove_cv_t<std::remove_reference_t<T>>::value_type>> {
+    using type = typename std::remove_cv_t<std::remove_reference_t<T>>::value_type;
+};
+
+template <class T>
+using range_stored_value_t = typename range_stored_value<T>::type;
+
+// Treat strings and C strings as scalar output objects, not as ranges.
+template <class T>
+struct is_char_array : std::false_type {};
+
+template <class T, std::size_t N>
+struct is_char_array<T[N]>
+    : std::bool_constant<std::is_same_v<std::remove_cv_t<T>, char>> {};
+
+template <class T>
+struct is_string_like
+    : std::bool_constant<
+          std::is_same_v<std::decay_t<T>, std::string>
+          || std::is_same_v<std::decay_t<T>, const char*>
+          || std::is_same_v<std::decay_t<T>, char*>
+          || is_char_array<std::remove_reference_t<T>>::value
+      > {};
+
+template <class T>
+inline constexpr bool is_string_like_v = is_string_like<T>::value;
+
+// ModInt-like type: x.val() is printable, and x can be assigned from long long.
+template <class T, class = void>
+struct has_val_method : std::false_type {};
+
+template <class T>
+struct has_val_method<T, std::void_t<decltype(std::declval<const T&>().val())>>
+    : std::true_type {};
+
+template <class T>
+inline constexpr bool has_val_method_v = has_val_method<T>::value;
+
+}  // namespace internal
 
 struct FastInput {
     static constexpr int buffer_size = 1 << 20;
@@ -102,6 +171,43 @@ struct FastInput {
         return true;
     }
 
+    template <class T>
+    std::enable_if_t<
+        internal::has_val_method_v<T>
+            && !std::is_integral_v<T>
+            && !internal::is_range_v<T>,
+        bool
+    >
+    read(T& value) {
+        long long x;
+        if (!read(x)) return false;
+        value = T(x);
+        return true;
+    }
+
+    template <class Range>
+    std::enable_if_t<
+        internal::is_range_v<Range>
+            && !internal::is_string_like_v<Range>,
+        bool
+    >
+    read(Range& range) {
+        using StoredValue = internal::range_stored_value_t<Range>;
+        constexpr bool nested = internal::is_range_v<StoredValue>
+                                && !internal::is_string_like_v<StoredValue>;
+
+        for (auto&& value : range) {
+            if constexpr (std::is_same_v<StoredValue, bool> && !nested) {
+                bool x;
+                if (!read(x)) return false;
+                value = x;
+            } else {
+                if (!read(value)) return false;
+            }
+        }
+        return true;
+    }
+
     template <class First, class Second, class... Rest>
     bool read(First& first, Second& second, Rest&... rest) {
         if (!read(first)) return false;
@@ -189,6 +295,38 @@ struct FastOutput {
             magnitude /= 10;
         }
         while (count--) write_char(digits[count]);
+    }
+
+    template <class T>
+    std::enable_if_t<
+        internal::has_val_method_v<T>
+            && !std::is_integral_v<T>
+            && !internal::is_range_v<T>
+    >
+    write(const T& value) {
+        write(value.val());
+    }
+
+    template <class Range>
+    std::enable_if_t<
+        internal::is_range_v<Range>
+            && !internal::is_string_like_v<Range>
+    >
+    write(const Range& range) {
+        using StoredValue = internal::range_stored_value_t<const Range>;
+        constexpr bool nested = internal::is_range_v<StoredValue>
+                                && !internal::is_string_like_v<StoredValue>;
+
+        bool first = true;
+        for (const auto& value : range) {
+            if (!first) write_char(nested ? '\n' : ' ');
+            first = false;
+            if constexpr (std::is_same_v<StoredValue, bool> && !nested) {
+                write(static_cast<bool>(value));
+            } else {
+                write(value);
+            }
+        }
     }
 
     template <class First, class... Rest>
