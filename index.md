@@ -743,6 +743,9 @@ data:
       path: utilities/dynamic_bitset.hpp
       title: Dynamic Bitset
     - icon: ':heavy_check_mark:'
+      path: utilities/fast_io.hpp
+      title: Fast IO
+    - icon: ':heavy_check_mark:'
       path: utilities/int128.hpp
       title: Int128
     - icon: ':heavy_check_mark:'
@@ -1225,6 +1228,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/utilities/extra_utilities.test.cpp
       title: verify/utilities/extra_utilities.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/utilities/fast_io.test.cpp
+      title: verify/utilities/fast_io.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/utilities/parser.test.cpp
       title: verify/utilities/parser.test.cpp
