@@ -4,7 +4,6 @@
 #include <cassert>
 #include <chrono>
 #include <cstdint>
-#include <deque>
 #include <functional>
 #include <initializer_list>
 #include <memory>
@@ -36,10 +35,37 @@ struct PersistentOrderedMultiset {
               r(right) {}
     };
 
+    static constexpr int pool_block_bits = 16;
+    static constexpr int pool_block_size = 1 << pool_block_bits;
+    static constexpr int pool_block_mask = pool_block_size - 1;
+
+    struct Pool {
+        std::vector<std::vector<Node>> blocks;
+        int node_count = 0;
+
+        Node& operator[](int index) {
+            return blocks[index >> pool_block_bits][index & pool_block_mask];
+        }
+
+        const Node& operator[](int index) const {
+            return blocks[index >> pool_block_bits][index & pool_block_mask];
+        }
+
+        template <class... Args>
+        int emplace_back(Args&&... args) {
+            if ((node_count & pool_block_mask) == 0) {
+                blocks.emplace_back();
+                blocks.back().reserve(pool_block_size);
+            }
+            blocks.back().emplace_back(std::forward<Args>(args)...);
+            return node_count++;
+        }
+    };
+
     int root;
     std::uint32_t rng_state;
     Compare comp;
-    std::shared_ptr<std::deque<Node>> pool;
+    std::shared_ptr<Pool> pool;
 
     int subtree_size(int t) const {
         return t == -1 ? 0 : (*pool)[t].size;
@@ -63,83 +89,82 @@ struct PersistentOrderedMultiset {
     int make_node(T key, int priority, int count, int l, int r) const {
         int size = count + subtree_size(l) + subtree_size(r);
         int distinct_size = 1 + subtree_distinct_size(l) + subtree_distinct_size(r);
-        pool->emplace_back(std::move(key), priority, count, size, distinct_size, l, r);
-        return int(pool->size()) - 1;
+        return pool->emplace_back(std::move(key), priority, count, size, distinct_size, l, r);
     }
 
     int merge(int l, int r) const {
         if (l == -1 || r == -1) return l == -1 ? r : l;
         if ((*pool)[l].priority > (*pool)[r].priority) {
-            Node node = (*pool)[l];
+            const Node& node = (*pool)[l];
             int right = merge(node.r, r);
-            return make_node(std::move(node.key), node.priority, node.count, node.l, right);
+            return make_node(node.key, node.priority, node.count, node.l, right);
         }
-        Node node = (*pool)[r];
+        const Node& node = (*pool)[r];
         int left = merge(l, node.l);
-        return make_node(std::move(node.key), node.priority, node.count, left, node.r);
+        return make_node(node.key, node.priority, node.count, left, node.r);
     }
 
     int rotate_right(int t) const {
-        Node node = (*pool)[t];
-        Node child = (*pool)[node.l];
-        int new_t = make_node(std::move(node.key), node.priority, node.count, child.r, node.r);
-        return make_node(std::move(child.key), child.priority, child.count, child.l, new_t);
+        const Node& node = (*pool)[t];
+        const Node& child = (*pool)[node.l];
+        int new_t = make_node(node.key, node.priority, node.count, child.r, node.r);
+        return make_node(child.key, child.priority, child.count, child.l, new_t);
     }
 
     int rotate_left(int t) const {
-        Node node = (*pool)[t];
-        Node child = (*pool)[node.r];
-        int new_t = make_node(std::move(node.key), node.priority, node.count, node.l, child.l);
-        return make_node(std::move(child.key), child.priority, child.count, new_t, child.r);
+        const Node& node = (*pool)[t];
+        const Node& child = (*pool)[node.r];
+        int new_t = make_node(node.key, node.priority, node.count, node.l, child.l);
+        return make_node(child.key, child.priority, child.count, new_t, child.r);
     }
 
     int insert_impl(int t, T& key, int multiplicity, int priority) const {
         if (t == -1) return make_node(std::move(key), priority, multiplicity, -1, -1);
-        Node node = (*pool)[t];
+        const Node& node = (*pool)[t];
         if (equal(key, node.key)) {
-            return make_node(std::move(node.key), node.priority, node.count + multiplicity, node.l, node.r);
+            return make_node(node.key, node.priority, node.count + multiplicity, node.l, node.r);
         }
         if (comp(key, node.key)) {
             int l = insert_impl(node.l, key, multiplicity, priority);
-            int res = make_node(std::move(node.key), node.priority, node.count, l, node.r);
+            int res = make_node(node.key, node.priority, node.count, l, node.r);
             return (*pool)[l].priority > (*pool)[res].priority ? rotate_right(res) : res;
         }
         int r = insert_impl(node.r, key, multiplicity, priority);
-        int res = make_node(std::move(node.key), node.priority, node.count, node.l, r);
+        int res = make_node(node.key, node.priority, node.count, node.l, r);
         return (*pool)[r].priority > (*pool)[res].priority ? rotate_left(res) : res;
     }
 
     int erase_one_impl(int t, const T& key, bool& erased) const {
         if (t == -1) return -1;
-        Node node = (*pool)[t];
+        const Node& node = (*pool)[t];
         if (equal(key, node.key)) {
             erased = true;
             if (node.count > 1) {
-                return make_node(std::move(node.key), node.priority, node.count - 1, node.l, node.r);
+                return make_node(node.key, node.priority, node.count - 1, node.l, node.r);
             }
             return merge(node.l, node.r);
         }
         if (comp(key, node.key)) {
             int l = erase_one_impl(node.l, key, erased);
-            return erased ? make_node(std::move(node.key), node.priority, node.count, l, node.r) : t;
+            return erased ? make_node(node.key, node.priority, node.count, l, node.r) : t;
         }
         int r = erase_one_impl(node.r, key, erased);
-        return erased ? make_node(std::move(node.key), node.priority, node.count, node.l, r) : t;
+        return erased ? make_node(node.key, node.priority, node.count, node.l, r) : t;
     }
 
     int erase_all_impl(int t, const T& key, int& erased) const {
         if (t == -1) return -1;
-        Node node = (*pool)[t];
+        const Node& node = (*pool)[t];
         if (equal(key, node.key)) {
             erased = node.count;
             return merge(node.l, node.r);
         }
         if (comp(key, node.key)) {
             int l = erase_all_impl(node.l, key, erased);
-            return erased ? make_node(std::move(node.key), node.priority, node.count, l, node.r) : t;
+            return erased ? make_node(node.key, node.priority, node.count, l, node.r) : t;
         }
         int r = erase_all_impl(node.r, key, erased);
-        return erased ? make_node(std::move(node.key), node.priority, node.count, node.l, r) : t;
+        return erased ? make_node(node.key, node.priority, node.count, node.l, r) : t;
     }
 
     const T* kth_impl(int t, int k) const {
@@ -246,8 +271,12 @@ struct PersistentOrderedMultiset {
         dump_impl(node.r, res);
     }
 
-    PersistentOrderedMultiset(int node, std::uint32_t state, Compare compare,
-                              std::shared_ptr<std::deque<Node>> node_pool)
+    PersistentOrderedMultiset(
+        int node,
+        std::uint32_t state,
+        Compare compare,
+        std::shared_ptr<Pool> node_pool
+    )
         : root(node), rng_state(state), comp(std::move(compare)), pool(std::move(node_pool)) {}
 
    public:
@@ -255,7 +284,7 @@ struct PersistentOrderedMultiset {
         : root(-1),
           rng_state(std::uint32_t(std::chrono::steady_clock::now().time_since_epoch().count())),
           comp(std::move(compare)),
-          pool(std::make_shared<std::deque<Node>>()) {
+          pool(std::make_shared<Pool>()) {
         if (rng_state == 0) rng_state = 1;
     }
 

@@ -10,7 +10,7 @@ namespace m1une {
 namespace ds {
 
 // Static range inversion counts with O(N sqrt N) preprocessing and
-// O(sqrt N log N) queries.
+// O(sqrt N) queries.
 template <class T>
 struct RangeInversionCount {
    private:
@@ -21,6 +21,8 @@ struct RangeInversionCount {
     std::vector<int> _rank;
     std::vector<std::vector<int>> _boundary_less;
     std::vector<std::vector<int>> _local_inversion;
+    std::vector<std::vector<int>> _sorted_suffix;
+    std::vector<std::vector<int>> _sorted_prefix;
     std::vector<long long> _block_inversion;
     std::vector<std::vector<long long>> _full_block_inversion;
 
@@ -59,8 +61,25 @@ struct RangeInversionCount {
         return length - count_less_blocks(first_block, last_block, rank + 1);
     }
 
+    static long long cross_inversions(
+        const std::vector<int>& left,
+        const std::vector<int>& right
+    ) {
+        long long result = 0;
+        int smaller = 0;
+        for (int value : left) {
+            while (smaller < int(right.size()) && right[smaller] < value) {
+                ++smaller;
+            }
+            result += smaller;
+        }
+        return result;
+    }
+
     void build_local_data() {
         _local_inversion.resize(_block_count);
+        _sorted_suffix.resize(_n);
+        _sorted_prefix.resize(_n + 1);
         _block_inversion.assign(_block_count, 0);
 
         for (int block = 0; block < _block_count; ++block) {
@@ -90,6 +109,32 @@ struct RangeInversionCount {
             }
             _block_inversion[block] =
                 _local_inversion[block][local_index(block, 0, length)];
+
+            std::vector<int> sorted;
+            for (int index = start; index < end; ++index) {
+                sorted.insert(
+                    std::upper_bound(
+                        sorted.begin(),
+                        sorted.end(),
+                        _rank[index]
+                    ),
+                    _rank[index]
+                );
+                _sorted_prefix[index + 1] = sorted;
+            }
+
+            sorted.clear();
+            for (int index = end - 1; start <= index; --index) {
+                sorted.insert(
+                    std::upper_bound(
+                        sorted.begin(),
+                        sorted.end(),
+                        _rank[index]
+                    ),
+                    _rank[index]
+                );
+                _sorted_suffix[index] = sorted;
+            }
         }
     }
 
@@ -220,19 +265,10 @@ struct RangeInversionCount {
         }
 
         if (left < left_end && right_start < right) {
-            std::vector<int> right_values;
-            right_values.reserve(right - right_start);
-            for (int index = right_start; index < right; ++index) {
-                right_values.push_back(_rank[index]);
-            }
-            std::sort(right_values.begin(), right_values.end());
-            for (int index = left; index < left_end; ++index) {
-                result += std::lower_bound(
-                    right_values.begin(),
-                    right_values.end(),
-                    _rank[index]
-                ) - right_values.begin();
-            }
+            result += cross_inversions(
+                _sorted_suffix[left],
+                _sorted_prefix[right]
+            );
         }
         return result;
     }

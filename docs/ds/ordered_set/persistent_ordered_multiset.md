@@ -7,8 +7,8 @@ documentation_of: ../../../ds/ordered_set/persistent_ordered_multiset.hpp
 
 `PersistentOrderedMultiset` is a path-copying randomized binary search tree for multisets. Updates return a new multiset and leave the old version available, while equal keys are stored as one node with a multiplicity.
 
-Nodes are stored in a shared block-contiguous pool and refer to children by integer index. This avoids per-node allocation and reference-counted child pointers.
-The pool is append-only and is released when the last related version is destroyed.
+Nodes are stored in a shared chunked pool and refer to children by integer index. This avoids per-node allocation and reference-counted child pointers.
+The pool is append-only, preserves node addresses, and is released when the last related version is destroyed.
 
 Pointers returned by bound and predecessor/successor methods remain valid while the version they came from is alive.
 
