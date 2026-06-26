@@ -35,13 +35,17 @@ reading the source. Include:
   returns a new version, advances time, or can fail.
 * A compact example that demonstrates the main workflow.
 
-Before finishing a library addition, prefer verification against a relevant
-problem from Library Checker, AOJ, yukicoder, or another judge already used in
-this repository. Use `aplusb` only as a fallback when no suitable
-library-specific verification problem is available; in that case, include
-focused assertions and randomized tests against a naive implementation when
-practical. Compile the relevant verification files with the repository's C++
-standard, and run local tests when possible.
+Before finishing a library addition, verify against the most relevant judge
+problem available. Library Checker has the best datasets for library testing and
+is the first priority whenever it has a matching problem. If Library Checker
+does not have a suitable target, then prefer AOJ, yukicoder, or another judge
+already used in this repository. Use `aplusb` only as a fallback when no
+suitable library-specific verification problem is available; in that case,
+include focused assertions and randomized tests against a naive implementation
+when practical. When auditing existing tests, replace `aplusb` fallbacks with
+relevant Library Checker tests when such problems exist. Compile the relevant
+verification files with the repository's C++ standard, and run local tests when
+possible.
 
 ## Documentation Rendering
 
