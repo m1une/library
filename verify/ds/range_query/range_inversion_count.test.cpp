@@ -1,6 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/static_range_inversions_query"
 
 #include "../../../ds/range_query/range_inversion_count.hpp"
+#include "../../../utilities/fast_io.hpp"
 
 #include <cassert>
 #include <cstdint>
@@ -52,16 +53,19 @@ void test_randomized() {
 }  // namespace
 
 int main() {
-    test_randomized();
+    // test_randomized();
+
+    m1une::utilities::FastInput input;
+    m1une::utilities::FastOutput output;
 
     int n, query_count;
-    std::cin >> n >> query_count;
+    input.read(n, query_count);
     std::vector<int> values(n);
-    for (int& value : values) std::cin >> value;
+    for (int& value : values) input.read(value);
     m1une::ds::RangeInversionCount<int> structure(values);
     while (query_count--) {
         int left, right;
-        std::cin >> left >> right;
-        std::cout << structure.query(left, right) << '\n';
+        input.read(left, right);
+        output.println(structure.query(left, right));
     }
 }
