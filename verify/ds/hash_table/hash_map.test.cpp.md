@@ -14,11 +14,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.yosupo.jp/problem/associative_array
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.yosupo.jp/problem/associative_array
   bundledCode: "#line 1 \"verify/ds/hash_table/hash_map.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/hash_table/hash_map.hpp\"\
+    \ \"https://judge.yosupo.jp/problem/associative_array\"\n\n#line 1 \"ds/hash_table/hash_map.hpp\"\
     \n\n\n\n#line 1 \"ds/hash_table/hash_common.hpp\"\n\n\n\n#include <algorithm>\n\
     #include <chrono>\n#include <cstddef>\n#include <cstdint>\n#include <new>\n#include\
     \ <type_traits>\n#include <utility>\n\nnamespace m1une {\nnamespace ds {\nnamespace\
@@ -172,8 +172,47 @@ data:
     \ node_at(i)->value);\n        }\n        return result;\n    }\n};\n\n}  // namespace\
     \ ds\n}  // namespace m1une\n\n\n#line 4 \"verify/ds/hash_table/hash_map.test.cpp\"\
     \n\n#include <cassert>\n#include <iostream>\n#include <string>\n#include <unordered_map>\n\
-    \nint main() {\n    std::ios_base::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
-    \n    m1une::ds::HashMap<long long, std::string> mp;\n    assert(mp.empty());\n\
+    \nvoid self_test() {\n    m1une::ds::HashMap<long long, std::string> mp;\n   \
+    \ assert(mp.empty());\n    auto inserted = mp.insert(5, std::string(\"five\"));\n\
+    \    assert(inserted.second);\n    assert(*inserted.first == \"five\");\n    assert(!mp.insert(5,\
+    \ std::string(\"ignored\")).second);\n    assert(mp.insert({6, \"six\"}).second);\n\
+    \    assert(mp.at(6) == \"six\");\n    assert(mp.at(5) == \"five\");\n\n    mp[7]\
+    \ = \"seven\";\n    mp.insert_or_assign(5, \"FIVE\");\n    assert(mp.at(5) ==\
+    \ \"FIVE\");\n    assert(mp.contains(7));\n    assert(mp.erase(7));\n    assert(!mp.contains(7));\n\
+    \n    m1une::ds::HashMap<long long, int> large;\n    large.reserve(1000);\n  \
+    \  for (int i = 0; i < 1000; i++) large[i * 1000000007LL] = i;\n    for (int i\
+    \ = 0; i < 1000; i++) assert(large.at(i * 1000000007LL) == i);\n    for (int i\
+    \ = 0; i < 500; i++) assert(large.erase(i * 1000000007LL));\n    for (int i =\
+    \ 0; i < 500; i++) assert(!large.contains(i * 1000000007LL));\n    for (int i\
+    \ = 500; i < 1000; i++) assert(large.at(i * 1000000007LL) == i);\n    auto copied_large\
+    \ = large;\n    auto moved_large = std::move(copied_large);\n    for (int i =\
+    \ 500; i < 1000; i++) assert(moved_large.at(i * 1000000007LL) == i);\n\n    m1une::ds::HashMap<int,\
+    \ int> tested;\n    std::unordered_map<int, int> expected;\n    unsigned long\
+    \ long seed = 987654321;\n    for (int q = 0; q < 10000; q++) {\n        seed\
+    \ = seed * 6364136223846793005ULL + 1442695040888963407ULL;\n        int x = static_cast<int>((seed\
+    \ >> 32) % 400) - 200;\n        int y = static_cast<int>(seed & 1023);\n     \
+    \   int type = static_cast<int>(seed % 5);\n        if (type == 0) {\n       \
+    \     auto a = tested.insert(x, y);\n            auto b = expected.insert({x,\
+    \ y});\n            assert(a.second == b.second);\n            assert(*a.first\
+    \ == b.first->second);\n        } else if (type == 1) {\n            tested.insert_or_assign(x,\
+    \ y);\n            expected[x] = y;\n        } else if (type == 2) {\n       \
+    \     assert(tested.erase(x) == (expected.erase(x) == 1));\n        } else if\
+    \ (type == 3) {\n            assert(tested.contains(x) == (expected.find(x) !=\
+    \ expected.end()));\n            assert(tested.count(x) == static_cast<int>(expected.count(x)));\n\
+    \        } else {\n            tested[x] += y;\n            expected[x] += y;\n\
+    \        }\n        assert(tested.size() == static_cast<int>(expected.size()));\n\
+    \        for (const auto& [key, value] : expected) assert(tested.at(key) == value);\n\
+    \    }\n}\n\nint main() {\n    self_test();\n\n    std::ios_base::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int q;\n    std::cin >> q;\n    m1une::ds::HashMap<long\
+    \ long, long long> map;\n    while (q--) {\n        int type;\n        long long\
+    \ key;\n        std::cin >> type >> key;\n        if (type == 0) {\n         \
+    \   long long value;\n            std::cin >> value;\n            map[key] = value;\n\
+    \        } else {\n            std::cout << map[key] << '\\n';\n        }\n  \
+    \  }\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/associative_array\"\n\n\
+    #include \"../../../ds/hash_table/hash_map.hpp\"\n\n#include <cassert>\n#include\
+    \ <iostream>\n#include <string>\n#include <unordered_map>\n\nvoid self_test()\
+    \ {\n    m1une::ds::HashMap<long long, std::string> mp;\n    assert(mp.empty());\n\
     \    auto inserted = mp.insert(5, std::string(\"five\"));\n    assert(inserted.second);\n\
     \    assert(*inserted.first == \"five\");\n    assert(!mp.insert(5, std::string(\"\
     ignored\")).second);\n    assert(mp.insert({6, \"six\"}).second);\n    assert(mp.at(6)\
@@ -203,50 +242,20 @@ data:
     \        } else {\n            tested[x] += y;\n            expected[x] += y;\n\
     \        }\n        assert(tested.size() == static_cast<int>(expected.size()));\n\
     \        for (const auto& [key, value] : expected) assert(tested.at(key) == value);\n\
-    \    }\n\n    long long A, B;\n    std::cin >> A >> B;\n    std::cout << A + B\
-    \ << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../../ds/hash_table/hash_map.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
-    #include <string>\n#include <unordered_map>\n\nint main() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    m1une::ds::HashMap<long long, std::string>\
-    \ mp;\n    assert(mp.empty());\n    auto inserted = mp.insert(5, std::string(\"\
-    five\"));\n    assert(inserted.second);\n    assert(*inserted.first == \"five\"\
-    );\n    assert(!mp.insert(5, std::string(\"ignored\")).second);\n    assert(mp.insert({6,\
-    \ \"six\"}).second);\n    assert(mp.at(6) == \"six\");\n    assert(mp.at(5) ==\
-    \ \"five\");\n\n    mp[7] = \"seven\";\n    mp.insert_or_assign(5, \"FIVE\");\n\
-    \    assert(mp.at(5) == \"FIVE\");\n    assert(mp.contains(7));\n    assert(mp.erase(7));\n\
-    \    assert(!mp.contains(7));\n\n    m1une::ds::HashMap<long long, int> large;\n\
-    \    large.reserve(1000);\n    for (int i = 0; i < 1000; i++) large[i * 1000000007LL]\
-    \ = i;\n    for (int i = 0; i < 1000; i++) assert(large.at(i * 1000000007LL) ==\
-    \ i);\n    for (int i = 0; i < 500; i++) assert(large.erase(i * 1000000007LL));\n\
-    \    for (int i = 0; i < 500; i++) assert(!large.contains(i * 1000000007LL));\n\
-    \    for (int i = 500; i < 1000; i++) assert(large.at(i * 1000000007LL) == i);\n\
-    \    auto copied_large = large;\n    auto moved_large = std::move(copied_large);\n\
-    \    for (int i = 500; i < 1000; i++) assert(moved_large.at(i * 1000000007LL)\
-    \ == i);\n\n    m1une::ds::HashMap<int, int> tested;\n    std::unordered_map<int,\
-    \ int> expected;\n    unsigned long long seed = 987654321;\n    for (int q = 0;\
-    \ q < 10000; q++) {\n        seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;\n\
-    \        int x = static_cast<int>((seed >> 32) % 400) - 200;\n        int y =\
-    \ static_cast<int>(seed & 1023);\n        int type = static_cast<int>(seed % 5);\n\
-    \        if (type == 0) {\n            auto a = tested.insert(x, y);\n       \
-    \     auto b = expected.insert({x, y});\n            assert(a.second == b.second);\n\
-    \            assert(*a.first == b.first->second);\n        } else if (type ==\
-    \ 1) {\n            tested.insert_or_assign(x, y);\n            expected[x] =\
-    \ y;\n        } else if (type == 2) {\n            assert(tested.erase(x) == (expected.erase(x)\
-    \ == 1));\n        } else if (type == 3) {\n            assert(tested.contains(x)\
-    \ == (expected.find(x) != expected.end()));\n            assert(tested.count(x)\
-    \ == static_cast<int>(expected.count(x)));\n        } else {\n            tested[x]\
-    \ += y;\n            expected[x] += y;\n        }\n        assert(tested.size()\
-    \ == static_cast<int>(expected.size()));\n        for (const auto& [key, value]\
-    \ : expected) assert(tested.at(key) == value);\n    }\n\n    long long A, B;\n\
-    \    std::cin >> A >> B;\n    std::cout << A + B << '\\n';\n}\n"
+    \    }\n}\n\nint main() {\n    self_test();\n\n    std::ios_base::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int q;\n    std::cin >> q;\n    m1une::ds::HashMap<long\
+    \ long, long long> map;\n    while (q--) {\n        int type;\n        long long\
+    \ key;\n        std::cin >> type >> key;\n        if (type == 0) {\n         \
+    \   long long value;\n            std::cin >> value;\n            map[key] = value;\n\
+    \        } else {\n            std::cout << map[key] << '\\n';\n        }\n  \
+    \  }\n}\n"
   dependsOn:
   - ds/hash_table/hash_map.hpp
   - ds/hash_table/hash_common.hpp
   isVerificationFile: true
   path: verify/ds/hash_table/hash_map.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-27 03:13:10+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/hash_table/hash_map.test.cpp

@@ -11,11 +11,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.yosupo.jp/problem/number_of_substrings
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.yosupo.jp/problem/number_of_substrings
   bundledCode: "#line 1 \"verify/string/suffix_automaton.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"string/suffix_automaton.hpp\"\
+    \ \"https://judge.yosupo.jp/problem/number_of_substrings\"\n\n#line 1 \"string/suffix_automaton.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <array>\n#include <cassert>\n#include <cstddef>\n\
     #include <limits>\n#include <utility>\n#include <vector>\n\nnamespace m1une {\n\
     namespace string {\n\ntemplate <int AlphabetSize = 26, int FirstCharacter = 'a'>\n\
@@ -186,27 +186,30 @@ data:
     \  }\n            }\n        }\n        auto [left, right] = automaton.longest_common_substring(query);\n\
     \        assert(right - left == expected_lcs);\n        assert(automaton.contains(query.substr(left,\
     \ right - left)));\n    }\n}\n\n}  // namespace\n\nint main() {\n    test_features();\n\
-    \    test_randomized();\n\n    long long a, b;\n    std::cin >> a >> b;\n    std::cout\
-    \ << a + b << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../string/suffix_automaton.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
-    #include <cstdint>\n#include <iostream>\n#include <map>\n#include <set>\n#include\
-    \ <string>\n#include <utility>\n#include <vector>\n\nnamespace {\n\nvoid test_features()\
-    \ {\n    using Automaton = m1une::string::SuffixAutomaton<>;\n    Automaton automaton;\n\
-    \    automaton.reserve(16);\n    assert(automaton.empty());\n    assert(automaton.state_count()\
-    \ == 1);\n    assert(automaton.root() == Automaton::root_state);\n    assert(automaton.last()\
-    \ == automaton.root());\n\n    std::string text = \"ababa\";\n    for (char character\
-    \ : text) automaton.add(character);\n    assert(!automaton.empty());\n    assert(automaton.text_length()\
-    \ == 5);\n    assert(automaton.state(automaton.last()).length == 5);\n    assert(automaton.contains(std::string(\"\
-    bab\")));\n    assert(!automaton.contains(std::string(\"abb\")));\n    assert(automaton.contains(std::string()));\n\
-    \    assert(automaton.transition(automaton.root(), 'a') == automaton.find(std::string(\"\
-    a\")));\n    assert(automaton.distinct_substring_count() == 9);\n\n    std::vector<long\
-    \ long> count = automaton.occurrence_counts();\n    assert(count[automaton.root()]\
-    \ == 5);\n    assert(count[automaton.find(std::string(\"a\"))] == 3);\n    assert(count[automaton.find(std::string(\"\
-    b\"))] == 2);\n    assert(count[automaton.find(std::string(\"aba\"))] == 2);\n\
-    \    assert(count[automaton.find(std::string(\"ababa\"))] == 1);\n\n    auto occurrence\
-    \ = automaton.representative_occurrence(std::string(\"bab\"));\n    assert(text.substr(occurrence.first,\
-    \ occurrence.second - occurrence.first) == \"bab\");\n    assert((automaton.representative_occurrence(std::string(\"\
+    \    test_randomized();\n\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    std::string text;\n    std::cin >> text;\n    m1une::string::SuffixAutomaton<>\
+    \ automaton(text);\n    std::cout << automaton.distinct_substring_count() << '\\\
+    n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/number_of_substrings\"\n\
+    \n#include \"../../string/suffix_automaton.hpp\"\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <map>\n#include\
+    \ <set>\n#include <string>\n#include <utility>\n#include <vector>\n\nnamespace\
+    \ {\n\nvoid test_features() {\n    using Automaton = m1une::string::SuffixAutomaton<>;\n\
+    \    Automaton automaton;\n    automaton.reserve(16);\n    assert(automaton.empty());\n\
+    \    assert(automaton.state_count() == 1);\n    assert(automaton.root() == Automaton::root_state);\n\
+    \    assert(automaton.last() == automaton.root());\n\n    std::string text = \"\
+    ababa\";\n    for (char character : text) automaton.add(character);\n    assert(!automaton.empty());\n\
+    \    assert(automaton.text_length() == 5);\n    assert(automaton.state(automaton.last()).length\
+    \ == 5);\n    assert(automaton.contains(std::string(\"bab\")));\n    assert(!automaton.contains(std::string(\"\
+    abb\")));\n    assert(automaton.contains(std::string()));\n    assert(automaton.transition(automaton.root(),\
+    \ 'a') == automaton.find(std::string(\"a\")));\n    assert(automaton.distinct_substring_count()\
+    \ == 9);\n\n    std::vector<long long> count = automaton.occurrence_counts();\n\
+    \    assert(count[automaton.root()] == 5);\n    assert(count[automaton.find(std::string(\"\
+    a\"))] == 3);\n    assert(count[automaton.find(std::string(\"b\"))] == 2);\n \
+    \   assert(count[automaton.find(std::string(\"aba\"))] == 2);\n    assert(count[automaton.find(std::string(\"\
+    ababa\"))] == 1);\n\n    auto occurrence = automaton.representative_occurrence(std::string(\"\
+    bab\"));\n    assert(text.substr(occurrence.first, occurrence.second - occurrence.first)\
+    \ == \"bab\");\n    assert((automaton.representative_occurrence(std::string(\"\
     x\")) == std::pair<int, int>({-1, -1})));\n\n    std::vector<bool> terminal =\
     \ automaton.terminal_states();\n    assert(terminal[automaton.root()]);\n    for\
     \ (int length = 1; length <= int(text.size()); length++) {\n        int id = automaton.find(text.substr(text.size()\
@@ -255,14 +258,16 @@ data:
     \  }\n            }\n        }\n        auto [left, right] = automaton.longest_common_substring(query);\n\
     \        assert(right - left == expected_lcs);\n        assert(automaton.contains(query.substr(left,\
     \ right - left)));\n    }\n}\n\n}  // namespace\n\nint main() {\n    test_features();\n\
-    \    test_randomized();\n\n    long long a, b;\n    std::cin >> a >> b;\n    std::cout\
-    \ << a + b << '\\n';\n}\n"
+    \    test_randomized();\n\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    std::string text;\n    std::cin >> text;\n    m1une::string::SuffixAutomaton<>\
+    \ automaton(text);\n    std::cout << automaton.distinct_substring_count() << '\\\
+    n';\n}\n"
   dependsOn:
   - string/suffix_automaton.hpp
   isVerificationFile: true
   path: verify/string/suffix_automaton.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 12:05:51+09:00'
+  timestamp: '2026-06-27 03:13:10+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/suffix_automaton.test.cpp

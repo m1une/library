@@ -11,10 +11,10 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.yosupo.jp/problem/eertree
     links:
-    - https://judge.yosupo.jp/problem/aplusb
-  bundledCode: "#line 1 \"verify/string/eertree.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\
+    - https://judge.yosupo.jp/problem/eertree
+  bundledCode: "#line 1 \"verify/string/eertree.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/eertree\"\
     \n\n#line 1 \"string/eertree.hpp\"\n\n\n\n#include <array>\n#include <cassert>\n\
     #include <cstddef>\n#include <limits>\n#include <utility>\n#include <vector>\n\
     \nnamespace m1une {\nnamespace string {\n\ntemplate <int AlphabetSize = 26, int\
@@ -150,10 +150,23 @@ data:
     \ < node.length);\n        }\n        assert(represented.size() == expected_count.size());\n\
     \        for (int prefix = 1; prefix <= n; prefix++) {\n            int id = tree.longest_suffix_node(prefix);\n\
     \            assert(tree.node(id).length == expected_longest[prefix - 1]);\n \
-    \       }\n    }\n}\n\n}  // namespace\n\nint main() {\n    test_features();\n\
-    \    test_randomized();\n\n    long long a, b;\n    std::cin >> a >> b;\n    std::cout\
-    \ << a + b << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
+    \       }\n    }\n}\n\nint library_checker_id(int id) {\n    using Eertree = m1une::string::Eertree<>;\n\
+    \    if (id == Eertree::odd_root) return 0;\n    if (id == Eertree::even_root)\
+    \ return 1;\n    return id;\n}\n\n}  // namespace\n\nint main() {\n    test_features();\n\
+    \    test_randomized();\n\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    std::string text;\n    std::cin >> text;\n    m1une::string::Eertree<> tree(text);\n\
+    \n    std::vector<int> parent(tree.node_count(), -1);\n    for (int id = 0; id\
+    \ < tree.node_count(); id++) {\n        const auto& node = tree.node(id);\n  \
+    \      for (int symbol = 0; symbol < 26; symbol++) {\n            int to = node.next[symbol];\n\
+    \            if (to != m1une::string::Eertree<>::null_node) parent[to] = id;\n\
+    \        }\n    }\n\n    std::cout << tree.size() << '\\n';\n    for (int id =\
+    \ 2; id < tree.node_count(); id++) {\n        std::cout << library_checker_id(parent[id])\
+    \ - 1 << ' '\n                  << library_checker_id(tree.node(id).suffix_link)\
+    \ - 1 << '\\n';\n    }\n    const auto& longest_suffix = tree.longest_suffix_nodes();\n\
+    \    for (int i = 0; i < int(longest_suffix.size()); i++) {\n        if (i) std::cout\
+    \ << ' ';\n        std::cout << longest_suffix[i] - 1;\n    }\n    std::cout <<\
+    \ '\\n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/eertree\"\n\n#include \"\
     ../../string/eertree.hpp\"\n\n#include <algorithm>\n#include <cassert>\n#include\
     \ <cstdint>\n#include <iostream>\n#include <map>\n#include <set>\n#include <string>\n\
     #include <utility>\n#include <vector>\n\nnamespace {\n\nbool is_palindrome(const\
@@ -211,15 +224,28 @@ data:
     \ < node.length);\n        }\n        assert(represented.size() == expected_count.size());\n\
     \        for (int prefix = 1; prefix <= n; prefix++) {\n            int id = tree.longest_suffix_node(prefix);\n\
     \            assert(tree.node(id).length == expected_longest[prefix - 1]);\n \
-    \       }\n    }\n}\n\n}  // namespace\n\nint main() {\n    test_features();\n\
-    \    test_randomized();\n\n    long long a, b;\n    std::cin >> a >> b;\n    std::cout\
-    \ << a + b << '\\n';\n}\n"
+    \       }\n    }\n}\n\nint library_checker_id(int id) {\n    using Eertree = m1une::string::Eertree<>;\n\
+    \    if (id == Eertree::odd_root) return 0;\n    if (id == Eertree::even_root)\
+    \ return 1;\n    return id;\n}\n\n}  // namespace\n\nint main() {\n    test_features();\n\
+    \    test_randomized();\n\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    std::string text;\n    std::cin >> text;\n    m1une::string::Eertree<> tree(text);\n\
+    \n    std::vector<int> parent(tree.node_count(), -1);\n    for (int id = 0; id\
+    \ < tree.node_count(); id++) {\n        const auto& node = tree.node(id);\n  \
+    \      for (int symbol = 0; symbol < 26; symbol++) {\n            int to = node.next[symbol];\n\
+    \            if (to != m1une::string::Eertree<>::null_node) parent[to] = id;\n\
+    \        }\n    }\n\n    std::cout << tree.size() << '\\n';\n    for (int id =\
+    \ 2; id < tree.node_count(); id++) {\n        std::cout << library_checker_id(parent[id])\
+    \ - 1 << ' '\n                  << library_checker_id(tree.node(id).suffix_link)\
+    \ - 1 << '\\n';\n    }\n    const auto& longest_suffix = tree.longest_suffix_nodes();\n\
+    \    for (int i = 0; i < int(longest_suffix.size()); i++) {\n        if (i) std::cout\
+    \ << ' ';\n        std::cout << longest_suffix[i] - 1;\n    }\n    std::cout <<\
+    \ '\\n';\n}\n"
   dependsOn:
   - string/eertree.hpp
   isVerificationFile: true
   path: verify/string/eertree.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 11:42:02+09:00'
+  timestamp: '2026-06-27 03:13:10+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/eertree.test.cpp

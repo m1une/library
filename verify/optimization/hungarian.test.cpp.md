@@ -11,11 +11,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.yosupo.jp/problem/assignment
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.yosupo.jp/problem/assignment
   bundledCode: "#line 1 \"verify/optimization/hungarian.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
+    \ \"https://judge.yosupo.jp/problem/assignment\"\n\n#include <algorithm>\n#include\
     \ <cassert>\n#include <iostream>\n#include <limits>\n#include <vector>\n\n#line\
     \ 1 \"optimization/hungarian.hpp\"\n\n\n\n#line 7 \"optimization/hungarian.hpp\"\
     \n#include <utility>\n#line 9 \"optimization/hungarian.hpp\"\n\nnamespace m1une\
@@ -124,22 +124,29 @@ data:
     \        }\n            }\n            check_result(cost, m1une::optimization::hungarian_min(cost),\
     \ brute_min(cost));\n            check_result(cost, m1une::optimization::hungarian_max(cost),\
     \ brute_max(cost));\n        }\n    }\n}\n\nint main() {\n    test_hungarian_min();\n\
-    \    test_hungarian_max();\n    test_against_bruteforce();\n\n    long long a,\
-    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <iostream>\n#include <limits>\n#include <vector>\n\
-    \n#include \"../../optimization/hungarian.hpp\"\n\nlong long brute_min(const std::vector<std::vector<long\
-    \ long>>& cost) {\n    int h = int(cost.size());\n    int w = h == 0 ? 0 : int(cost[0].size());\n\
-    \    if (h == 0 || w == 0) return 0;\n\n    long long best = std::numeric_limits<long\
-    \ long>::max() / 4;\n    if (h <= w) {\n        std::vector<int> perm(w);\n  \
-    \      for (int i = 0; i < w; i++) perm[i] = i;\n        do {\n            long\
-    \ long sum = 0;\n            for (int i = 0; i < h; i++) sum += cost[i][perm[i]];\n\
-    \            best = std::min(best, sum);\n        } while (std::next_permutation(perm.begin(),\
-    \ perm.end()));\n    } else {\n        std::vector<int> perm(h);\n        for\
-    \ (int i = 0; i < h; i++) perm[i] = i;\n        do {\n            long long sum\
-    \ = 0;\n            for (int j = 0; j < w; j++) sum += cost[perm[j]][j];\n   \
-    \         best = std::min(best, sum);\n        } while (std::next_permutation(perm.begin(),\
-    \ perm.end()));\n    }\n    return best;\n}\n\nlong long brute_max(const std::vector<std::vector<long\
+    \    test_hungarian_max();\n    test_against_bruteforce();\n\n    std::ios::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n;\n    std::cin >> n;\n    std::vector<std::vector<long\
+    \ long>> cost(n, std::vector<long long>(n));\n    for (int i = 0; i < n; i++)\
+    \ {\n        for (int j = 0; j < n; j++) {\n            std::cin >> cost[i][j];\n\
+    \        }\n    }\n\n    auto result = m1une::optimization::hungarian_min(cost);\n\
+    \    std::cout << result.cost << '\\n';\n    for (int i = 0; i < n; i++) {\n \
+    \       if (i) std::cout << ' ';\n        std::cout << result.row_to_col[i];\n\
+    \    }\n    std::cout << '\\n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/assignment\"\n\n#include\
+    \ <algorithm>\n#include <cassert>\n#include <iostream>\n#include <limits>\n#include\
+    \ <vector>\n\n#include \"../../optimization/hungarian.hpp\"\n\nlong long brute_min(const\
+    \ std::vector<std::vector<long long>>& cost) {\n    int h = int(cost.size());\n\
+    \    int w = h == 0 ? 0 : int(cost[0].size());\n    if (h == 0 || w == 0) return\
+    \ 0;\n\n    long long best = std::numeric_limits<long long>::max() / 4;\n    if\
+    \ (h <= w) {\n        std::vector<int> perm(w);\n        for (int i = 0; i < w;\
+    \ i++) perm[i] = i;\n        do {\n            long long sum = 0;\n          \
+    \  for (int i = 0; i < h; i++) sum += cost[i][perm[i]];\n            best = std::min(best,\
+    \ sum);\n        } while (std::next_permutation(perm.begin(), perm.end()));\n\
+    \    } else {\n        std::vector<int> perm(h);\n        for (int i = 0; i <\
+    \ h; i++) perm[i] = i;\n        do {\n            long long sum = 0;\n       \
+    \     for (int j = 0; j < w; j++) sum += cost[perm[j]][j];\n            best =\
+    \ std::min(best, sum);\n        } while (std::next_permutation(perm.begin(), perm.end()));\n\
+    \    }\n    return best;\n}\n\nlong long brute_max(const std::vector<std::vector<long\
     \ long>>& cost) {\n    std::vector<std::vector<long long>> negated = cost;\n \
     \   for (auto& row : negated) {\n        for (auto& x : row) x = -x;\n    }\n\
     \    return -brute_min(negated);\n}\n\nvoid check_result(const std::vector<std::vector<long\
@@ -180,14 +187,20 @@ data:
     \        }\n            }\n            check_result(cost, m1une::optimization::hungarian_min(cost),\
     \ brute_min(cost));\n            check_result(cost, m1une::optimization::hungarian_max(cost),\
     \ brute_max(cost));\n        }\n    }\n}\n\nint main() {\n    test_hungarian_min();\n\
-    \    test_hungarian_max();\n    test_against_bruteforce();\n\n    long long a,\
-    \ b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
+    \    test_hungarian_max();\n    test_against_bruteforce();\n\n    std::ios::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n;\n    std::cin >> n;\n    std::vector<std::vector<long\
+    \ long>> cost(n, std::vector<long long>(n));\n    for (int i = 0; i < n; i++)\
+    \ {\n        for (int j = 0; j < n; j++) {\n            std::cin >> cost[i][j];\n\
+    \        }\n    }\n\n    auto result = m1une::optimization::hungarian_min(cost);\n\
+    \    std::cout << result.cost << '\\n';\n    for (int i = 0; i < n; i++) {\n \
+    \       if (i) std::cout << ' ';\n        std::cout << result.row_to_col[i];\n\
+    \    }\n    std::cout << '\\n';\n}\n"
   dependsOn:
   - optimization/hungarian.hpp
   isVerificationFile: true
   path: verify/optimization/hungarian.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-27 03:13:10+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/optimization/hungarian.test.cpp

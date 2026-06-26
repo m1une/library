@@ -11,11 +11,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.yosupo.jp/problem/aho_corasick
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.yosupo.jp/problem/aho_corasick
   bundledCode: "#line 1 \"verify/string/aho_corasick.test.cpp\"\n#define PROBLEM \"\
-    https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"string/aho_corasick.hpp\"\
+    https://judge.yosupo.jp/problem/aho_corasick\"\n\n#line 1 \"string/aho_corasick.hpp\"\
     \n\n\n\n#include <array>\n#include <cassert>\n#include <cstddef>\n#include <limits>\n\
     #include <queue>\n#include <vector>\n\nnamespace m1une {\nnamespace string {\n\
     \n// Aho-Corasick automaton for a contiguous character alphabet.\ntemplate <int\
@@ -181,10 +181,18 @@ data:
     \ 'a');\n        for (char& symbol : text) {\n            symbol = char('a' +\
     \ random() % 4);\n        }\n        check(patterns, text);\n    }\n}\n\n}  //\
     \ namespace\n\nint main() {\n    test_fixed();\n    test_randomized();\n\n   \
-    \ long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n\
-    }\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../string/aho_corasick.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
+    \ std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int n;\n\
+    \    std::cin >> n;\n    m1une::string::AhoCorasick<> automaton;\n    for (int\
+    \ i = 0; i < n; i++) {\n        std::string pattern;\n        std::cin >> pattern;\n\
+    \        automaton.insert(pattern);\n    }\n    automaton.build();\n\n    int\
+    \ node_count = int(automaton.node_count());\n    std::cout << node_count << '\\\
+    n';\n    for (int id = 1; id < node_count; id++) {\n        const auto& node =\
+    \ automaton.node(id);\n        std::cout << node.parent << ' ' << node.failure\
+    \ << '\\n';\n    }\n    for (int i = 0; i < n; i++) {\n        if (i) std::cout\
+    \ << ' ';\n        std::cout << automaton.pattern_node(i);\n    }\n    std::cout\
+    \ << '\\n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aho_corasick\"\n\n#include\
+    \ \"../../string/aho_corasick.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
     #include <cstdint>\n#include <iostream>\n#include <string>\n#include <tuple>\n\
     #include <vector>\n\nnamespace {\n\nvoid check(\n    const std::vector<std::string>&\
     \ patterns,\n    const std::string& text\n) {\n    m1une::string::AhoCorasick<4,\
@@ -243,14 +251,22 @@ data:
     \ 'a');\n        for (char& symbol : text) {\n            symbol = char('a' +\
     \ random() % 4);\n        }\n        check(patterns, text);\n    }\n}\n\n}  //\
     \ namespace\n\nint main() {\n    test_fixed();\n    test_randomized();\n\n   \
-    \ long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\n';\n\
-    }\n"
+    \ std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int n;\n\
+    \    std::cin >> n;\n    m1une::string::AhoCorasick<> automaton;\n    for (int\
+    \ i = 0; i < n; i++) {\n        std::string pattern;\n        std::cin >> pattern;\n\
+    \        automaton.insert(pattern);\n    }\n    automaton.build();\n\n    int\
+    \ node_count = int(automaton.node_count());\n    std::cout << node_count << '\\\
+    n';\n    for (int id = 1; id < node_count; id++) {\n        const auto& node =\
+    \ automaton.node(id);\n        std::cout << node.parent << ' ' << node.failure\
+    \ << '\\n';\n    }\n    for (int i = 0; i < n; i++) {\n        if (i) std::cout\
+    \ << ' ';\n        std::cout << automaton.pattern_node(i);\n    }\n    std::cout\
+    \ << '\\n';\n}\n"
   dependsOn:
   - string/aho_corasick.hpp
   isVerificationFile: true
   path: verify/string/aho_corasick.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 02:00:16+09:00'
+  timestamp: '2026-06-27 03:13:10+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/aho_corasick.test.cpp

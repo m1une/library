@@ -11,11 +11,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.yosupo.jp/problem/persistent_unionfind
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.yosupo.jp/problem/persistent_unionfind
   bundledCode: "#line 1 \"verify/ds/dsu/persistent_dsu.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/dsu/persistent_dsu.hpp\"\
+    \ \"https://judge.yosupo.jp/problem/persistent_unionfind\"\n\n#line 1 \"ds/dsu/persistent_dsu.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <memory>\n#include\
     \ <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace ds {\n\nstruct\
     \ PersistentDsu {\n   private:\n    struct Node {\n        int val;\n        int\
@@ -90,7 +90,7 @@ data:
     \ i = 0; i < n; i++) result[i].reserve(group_size[i]);\n        for (int i = 0;\
     \ i < n; i++) result[leader_buf[i]].push_back(i);\n        result.erase(std::remove_if(result.begin(),\
     \ result.end(), [](const std::vector<int>& v) { return v.empty(); }),\n      \
-    \               result.end());\n        return result;\n    }\n};\n\nint main()\
+    \               result.end());\n        return result;\n    }\n};\n\nvoid self_test()\
     \ {\n    using Dsu = m1une::ds::PersistentDsu;\n\n    Dsu dsu(5);\n    Dsu a =\
     \ dsu.merge(0, 1);\n    Dsu b = a.merge(2, 3);\n    Dsu c = b.merge(1, 2);\n \
     \   Dsu d = c.merge(3, 4);\n\n    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n\
@@ -118,16 +118,22 @@ data:
     \ i = 0; i < N; i++) {\n            assert(cur.group_size(i) == expected.group_size(i));\n\
     \            assert(next.group_size(i) == next_expected.group_size(i));\n    \
     \        assert(next.get(i) == next_expected.parent_or_size[i]);\n        }\n\n\
-    \        versions.push_back({next, next_expected});\n    }\n\n    long long x,\
-    \ y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../../ds/dsu/persistent_dsu.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
-    #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \nstruct NaiveDsu {\n    std::vector<int> parent_or_size;\n\n    explicit NaiveDsu(int\
-    \ n = 0) : parent_or_size(n, -1) {}\n\n    int leader(int a) const {\n       \
-    \ while (parent_or_size[a] >= 0) a = parent_or_size[a];\n        return a;\n \
-    \   }\n\n    bool same(int a, int b) const {\n        return leader(a) == leader(b);\n\
-    \    }\n\n    int group_size(int a) const {\n        return -parent_or_size[leader(a)];\n\
+    \        versions.push_back({next, next_expected});\n    }\n}\n\nint main() {\n\
+    \    self_test();\n\n    using Dsu = m1une::ds::PersistentDsu;\n\n    std::ios::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n, q;\n    std::cin >> n >> q;\n    std::vector<Dsu>\
+    \ dsus;\n    dsus.push_back(Dsu(n));\n    while (q--) {\n        int type, k,\
+    \ u, v;\n        std::cin >> type >> k >> u >> v;\n        const Dsu& base = dsus[k\
+    \ + 1];\n        if (type == 0) {\n            dsus.push_back(base.merge(u, v));\n\
+    \        } else {\n            std::cout << int(base.same(u, v)) << '\\n';\n \
+    \           dsus.push_back(Dsu());\n        }\n    }\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/persistent_unionfind\"\n\
+    \n#include \"../../../ds/dsu/persistent_dsu.hpp\"\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <iostream>\n#include <random>\n#include <utility>\n#include\
+    \ <vector>\n\nstruct NaiveDsu {\n    std::vector<int> parent_or_size;\n\n    explicit\
+    \ NaiveDsu(int n = 0) : parent_or_size(n, -1) {}\n\n    int leader(int a) const\
+    \ {\n        while (parent_or_size[a] >= 0) a = parent_or_size[a];\n        return\
+    \ a;\n    }\n\n    bool same(int a, int b) const {\n        return leader(a) ==\
+    \ leader(b);\n    }\n\n    int group_size(int a) const {\n        return -parent_or_size[leader(a)];\n\
     \    }\n\n    NaiveDsu merge(int a, int b) const {\n        NaiveDsu res = *this;\n\
     \        int x = res.leader(a), y = res.leader(b);\n        if (x == y) return\
     \ res;\n        if (-res.parent_or_size[x] < -res.parent_or_size[y]) std::swap(x,\
@@ -140,7 +146,7 @@ data:
     \ i = 0; i < n; i++) result[i].reserve(group_size[i]);\n        for (int i = 0;\
     \ i < n; i++) result[leader_buf[i]].push_back(i);\n        result.erase(std::remove_if(result.begin(),\
     \ result.end(), [](const std::vector<int>& v) { return v.empty(); }),\n      \
-    \               result.end());\n        return result;\n    }\n};\n\nint main()\
+    \               result.end());\n        return result;\n    }\n};\n\nvoid self_test()\
     \ {\n    using Dsu = m1une::ds::PersistentDsu;\n\n    Dsu dsu(5);\n    Dsu a =\
     \ dsu.merge(0, 1);\n    Dsu b = a.merge(2, 3);\n    Dsu c = b.merge(1, 2);\n \
     \   Dsu d = c.merge(3, 4);\n\n    assert(dsu.size() == 5);\n    assert(!dsu.empty());\n\
@@ -168,14 +174,20 @@ data:
     \ i = 0; i < N; i++) {\n            assert(cur.group_size(i) == expected.group_size(i));\n\
     \            assert(next.group_size(i) == next_expected.group_size(i));\n    \
     \        assert(next.get(i) == next_expected.parent_or_size[i]);\n        }\n\n\
-    \        versions.push_back({next, next_expected});\n    }\n\n    long long x,\
-    \ y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
+    \        versions.push_back({next, next_expected});\n    }\n}\n\nint main() {\n\
+    \    self_test();\n\n    using Dsu = m1une::ds::PersistentDsu;\n\n    std::ios::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n, q;\n    std::cin >> n >> q;\n    std::vector<Dsu>\
+    \ dsus;\n    dsus.push_back(Dsu(n));\n    while (q--) {\n        int type, k,\
+    \ u, v;\n        std::cin >> type >> k >> u >> v;\n        const Dsu& base = dsus[k\
+    \ + 1];\n        if (type == 0) {\n            dsus.push_back(base.merge(u, v));\n\
+    \        } else {\n            std::cout << int(base.same(u, v)) << '\\n';\n \
+    \           dsus.push_back(Dsu());\n        }\n    }\n}\n"
   dependsOn:
   - ds/dsu/persistent_dsu.hpp
   isVerificationFile: true
   path: verify/ds/dsu/persistent_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-27 03:13:10+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/persistent_dsu.test.cpp
