@@ -599,3 +599,8 @@ depends on edge direction.
 | `graph/scc.hpp` | Directed only | Strongly connected components and condensation DAG. |
 | `graph/two_sat.hpp` | Implication graph | 2-SAT clauses, satisfiability, and one assignment. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Use `find_directed_cycle(g)` for directed graphs. |
+
+## Complexity
+
+This header is an include bundle and provides no runtime operation by itself.
+See the included algorithm pages for public interfaces and complexities.

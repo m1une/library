@@ -14,20 +14,20 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C
   bundledCode: "#line 1 \"verify/ds/hash_table/hash_set.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/hash_table/hash_set.hpp\"\
-    \n\n\n\n#line 1 \"ds/hash_table/hash_common.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <chrono>\n#include <cstddef>\n#include <cstdint>\n#include <new>\n#include\
-    \ <type_traits>\n#include <utility>\n\nnamespace m1une {\nnamespace ds {\nnamespace\
-    \ detail {\n\ninline std::uint64_t splitmix64(std::uint64_t x) {\n    x += 0x9e3779b97f4a7c15;\n\
-    \    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;\n    x = (x ^ (x >> 27)) * 0x94d049bb133111eb;\n\
-    \    return x ^ (x >> 31);\n}\n\ntemplate <typename Key, typename Hash>\nstd::size_t\
-    \ mixed_hash(const Key& key, const Hash& hash) {\n    static const std::uint64_t\
-    \ fixed_random =\n        std::chrono::steady_clock::now().time_since_epoch().count();\n\
-    \    return static_cast<std::size_t>(splitmix64(static_cast<std::uint64_t>(hash(key))\
+    \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C\"\n\n\
+    #line 1 \"ds/hash_table/hash_set.hpp\"\n\n\n\n#line 1 \"ds/hash_table/hash_common.hpp\"\
+    \n\n\n\n#include <algorithm>\n#include <chrono>\n#include <cstddef>\n#include\
+    \ <cstdint>\n#include <new>\n#include <type_traits>\n#include <utility>\n\nnamespace\
+    \ m1une {\nnamespace ds {\nnamespace detail {\n\ninline std::uint64_t splitmix64(std::uint64_t\
+    \ x) {\n    x += 0x9e3779b97f4a7c15;\n    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;\n\
+    \    x = (x ^ (x >> 27)) * 0x94d049bb133111eb;\n    return x ^ (x >> 31);\n}\n\
+    \ntemplate <typename Key, typename Hash>\nstd::size_t mixed_hash(const Key& key,\
+    \ const Hash& hash) {\n    static const std::uint64_t fixed_random =\n       \
+    \ std::chrono::steady_clock::now().time_since_epoch().count();\n    return static_cast<std::size_t>(splitmix64(static_cast<std::uint64_t>(hash(key))\
     \ + fixed_random));\n}\n\ninline std::size_t bit_ceil(std::size_t n) {\n    std::size_t\
     \ result = 1;\n    while (result < n) result <<= 1;\n    return result;\n}\n\n\
     inline std::size_t bucket_count_for(std::size_t expected_size) {\n    return bit_ceil(std::max<std::size_t>(16,\
@@ -145,9 +145,38 @@ data:
     \        for (std::size_t i = 0; i < ctrl.size(); i++) {\n            if (occupied(ctrl[i]))\
     \ result.push_back(*value_at(i));\n        }\n        return result;\n    }\n\
     };\n\n}  // namespace ds\n}  // namespace m1une\n\n\n#line 4 \"verify/ds/hash_table/hash_set.test.cpp\"\
-    \n\n#include <cassert>\n#include <iostream>\n#include <unordered_set>\n#line 9\
-    \ \"verify/ds/hash_table/hash_set.test.cpp\"\n\nint main() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    m1une::ds::HashSet<long long> st;\n    assert(st.empty());\n\
+    \n\n#include <cassert>\n#include <iostream>\n#include <string>\n#include <unordered_set>\n\
+    #line 10 \"verify/ds/hash_table/hash_set.test.cpp\"\n\nvoid self_test() {\n  \
+    \  m1une::ds::HashSet<long long> st;\n    assert(st.empty());\n    assert(st.insert(5));\n\
+    \    assert(!st.insert(5));\n    assert(st.insert(1));\n    assert(st.contains(5));\n\
+    \    assert(st.count(1) == 1);\n    assert(st.erase(5));\n    assert(!st.contains(5));\n\
+    \    assert(!st.erase(5));\n\n    std::vector<long long> xs;\n    for (int i =\
+    \ 0; i < 1000; i++) xs.push_back(i * 1000000007LL);\n    m1une::ds::HashSet<long\
+    \ long> large(xs.begin(), xs.end());\n    for (long long x : xs) assert(large.contains(x));\n\
+    \    for (int i = 0; i < 500; i++) assert(large.erase(xs[i]));\n    for (int i\
+    \ = 0; i < 500; i++) assert(!large.contains(xs[i]));\n    for (int i = 500; i\
+    \ < 1000; i++) assert(large.contains(xs[i]));\n    auto copied_large = large;\n\
+    \    auto moved_large = std::move(copied_large);\n    for (int i = 500; i < 1000;\
+    \ i++) assert(moved_large.contains(xs[i]));\n\n    m1une::ds::HashSet<int> tested;\n\
+    \    std::unordered_set<int> expected;\n    unsigned long long seed = 123456789;\n\
+    \    for (int q = 0; q < 10000; q++) {\n        seed = seed * 6364136223846793005ULL\
+    \ + 1442695040888963407ULL;\n        int x = static_cast<int>((seed >> 32) % 400)\
+    \ - 200;\n        int type = static_cast<int>(seed % 4);\n        if (type ==\
+    \ 0) {\n            assert(tested.insert(x) == (expected.insert(x).second));\n\
+    \        } else if (type == 1) {\n            assert(tested.erase(x) == (expected.erase(x)\
+    \ == 1));\n        } else {\n            assert(tested.contains(x) == (expected.find(x)\
+    \ != expected.end()));\n            assert(tested.count(x) == static_cast<int>(expected.count(x)));\n\
+    \        }\n        assert(tested.size() == static_cast<int>(expected.size()));\n\
+    \    }\n}\n\nint main() {\n    self_test();\n\n    std::ios_base::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n;\n    std::cin >> n;\n    m1une::ds::HashSet<std::string>\
+    \ dictionary;\n    while (n--) {\n        std::string command, word;\n       \
+    \ std::cin >> command >> word;\n        if (command == \"insert\") {\n       \
+    \     dictionary.insert(word);\n        } else {\n            std::cout << (dictionary.contains(word)\
+    \ ? \"yes\" : \"no\") << '\\n';\n        }\n    }\n}\n"
+  code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C\"\
+    \n\n#include \"../../../ds/hash_table/hash_set.hpp\"\n\n#include <cassert>\n#include\
+    \ <iostream>\n#include <string>\n#include <unordered_set>\n#include <vector>\n\
+    \nvoid self_test() {\n    m1une::ds::HashSet<long long> st;\n    assert(st.empty());\n\
     \    assert(st.insert(5));\n    assert(!st.insert(5));\n    assert(st.insert(1));\n\
     \    assert(st.contains(5));\n    assert(st.count(1) == 1);\n    assert(st.erase(5));\n\
     \    assert(!st.contains(5));\n    assert(!st.erase(5));\n\n    std::vector<long\
@@ -167,40 +196,19 @@ data:
     \ == 1));\n        } else {\n            assert(tested.contains(x) == (expected.find(x)\
     \ != expected.end()));\n            assert(tested.count(x) == static_cast<int>(expected.count(x)));\n\
     \        }\n        assert(tested.size() == static_cast<int>(expected.size()));\n\
-    \    }\n\n    long long A, B;\n    std::cin >> A >> B;\n    std::cout << A + B\
-    \ << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../../ds/hash_table/hash_set.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
-    #include <unordered_set>\n#include <vector>\n\nint main() {\n    std::ios_base::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    m1une::ds::HashSet<long long> st;\n    assert(st.empty());\n\
-    \    assert(st.insert(5));\n    assert(!st.insert(5));\n    assert(st.insert(1));\n\
-    \    assert(st.contains(5));\n    assert(st.count(1) == 1);\n    assert(st.erase(5));\n\
-    \    assert(!st.contains(5));\n    assert(!st.erase(5));\n\n    std::vector<long\
-    \ long> xs;\n    for (int i = 0; i < 1000; i++) xs.push_back(i * 1000000007LL);\n\
-    \    m1une::ds::HashSet<long long> large(xs.begin(), xs.end());\n    for (long\
-    \ long x : xs) assert(large.contains(x));\n    for (int i = 0; i < 500; i++) assert(large.erase(xs[i]));\n\
-    \    for (int i = 0; i < 500; i++) assert(!large.contains(xs[i]));\n    for (int\
-    \ i = 500; i < 1000; i++) assert(large.contains(xs[i]));\n    auto copied_large\
-    \ = large;\n    auto moved_large = std::move(copied_large);\n    for (int i =\
-    \ 500; i < 1000; i++) assert(moved_large.contains(xs[i]));\n\n    m1une::ds::HashSet<int>\
-    \ tested;\n    std::unordered_set<int> expected;\n    unsigned long long seed\
-    \ = 123456789;\n    for (int q = 0; q < 10000; q++) {\n        seed = seed * 6364136223846793005ULL\
-    \ + 1442695040888963407ULL;\n        int x = static_cast<int>((seed >> 32) % 400)\
-    \ - 200;\n        int type = static_cast<int>(seed % 4);\n        if (type ==\
-    \ 0) {\n            assert(tested.insert(x) == (expected.insert(x).second));\n\
-    \        } else if (type == 1) {\n            assert(tested.erase(x) == (expected.erase(x)\
-    \ == 1));\n        } else {\n            assert(tested.contains(x) == (expected.find(x)\
-    \ != expected.end()));\n            assert(tested.count(x) == static_cast<int>(expected.count(x)));\n\
-    \        }\n        assert(tested.size() == static_cast<int>(expected.size()));\n\
-    \    }\n\n    long long A, B;\n    std::cin >> A >> B;\n    std::cout << A + B\
-    \ << '\\n';\n}\n"
+    \    }\n}\n\nint main() {\n    self_test();\n\n    std::ios_base::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n;\n    std::cin >> n;\n    m1une::ds::HashSet<std::string>\
+    \ dictionary;\n    while (n--) {\n        std::string command, word;\n       \
+    \ std::cin >> command >> word;\n        if (command == \"insert\") {\n       \
+    \     dictionary.insert(word);\n        } else {\n            std::cout << (dictionary.contains(word)\
+    \ ? \"yes\" : \"no\") << '\\n';\n        }\n    }\n}\n"
   dependsOn:
   - ds/hash_table/hash_set.hpp
   - ds/hash_table/hash_common.hpp
   isVerificationFile: true
   path: verify/ds/hash_table/hash_set.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-27 03:02:09+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/hash_table/hash_set.test.cpp

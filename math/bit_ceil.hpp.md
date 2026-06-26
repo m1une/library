@@ -83,4 +83,18 @@ supports comparison, left shift, and construction from `1`.
 The function returns the smallest power of two greater than or equal to `n`.
 If `n <= 1`, it returns `T(1)`. The result must be representable by `T`.
 
+## Complexity
+
 The running time is $O(\log n)$ and the additional memory usage is $O(1)$.
+
+## Example
+
+```cpp
+#include "math/bit_ceil.hpp"
+
+#include <iostream>
+
+int main() {
+    std::cout << m1une::math::bit_ceil(13) << "\n"; // 16
+}
+```

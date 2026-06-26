@@ -309,3 +309,7 @@ struct MinMonoid {
 
 static_assert(m1une::monoid::IsMonoid<MinMonoid>);
 ```
+
+## Complexity
+
+These concepts are compile-time interface checks and have no runtime cost.

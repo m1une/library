@@ -193,6 +193,13 @@ auto sorted = angle_sorted(points, origin, start);
 `sort_by_angle` modifies its argument. `angle_sorted` returns a sorted copy.
 Both take $O(N\log N)$ time.
 
+## Complexity Notation
+
+* `N` is the number of points being sorted.
+
+`sort_by_angle` and `angle_sorted` take $O(N\log N)$ time. The comparator uses
+$O(1)$ additional memory per comparison.
+
 ## Ordering Convention
 
 The default, `AngleSortStart::NegativeXAxis`, sorts by the usual `atan2(y, x)`

@@ -242,6 +242,11 @@ cost $O(F)$, all callbacks together take $O(N\log N\cdot F)$ time.
 The implementation uses an explicit action stack rather than recursion, so it
 is safe on a path-shaped tree with many vertices.
 
+## Complexity Notation
+
+* `N` is the number of vertices.
+* `F` is the cost of one user callback.
+
 ## Construction
 
 ```cpp
@@ -254,7 +259,7 @@ edges are ignored. The chosen root determines every queried subtree.
 
 Construction takes $O(N)$ time and memory.
 
-## Public Metadata
+## Methods and Metadata
 
 The object exposes:
 

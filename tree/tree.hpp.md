@@ -372,6 +372,11 @@ For the full tree toolbox, include `tree/all.hpp`.
 | `tree/sparse_table_lca.hpp` | Euler-tour sparse-table LCA with $O(1)$ queries. |
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
 
+## Complexity
+
+This header is an include bundle and provides no runtime operation by itself.
+See the included helper pages for public interfaces and complexities.
+
 ## Example
 
 ```cpp

@@ -17,11 +17,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.yosupo.jp/problem/bitwise_xor_convolution
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.yosupo.jp/problem/bitwise_xor_convolution
   bundledCode: "#line 1 \"verify/math/bitwise_convolution.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"math/bitwise_convolution.hpp\"\
+    \ \"https://judge.yosupo.jp/problem/bitwise_xor_convolution\"\n\n#line 1 \"math/bitwise_convolution.hpp\"\
     \n\n\n\n#include <cassert>\n#include <cstddef>\n#include <utility>\n#include <vector>\n\
     \n#line 1 \"math/zeta_mobius_transform.hpp\"\n\n\n\n#line 7 \"math/zeta_mobius_transform.hpp\"\
     \n\nnamespace m1une {\nnamespace math {\n\nnamespace zeta_mobius_transform_detail\
@@ -214,12 +214,17 @@ data:
     \    }\n    for (int value = 0; value < 9; ++value) {\n        second.emplace_back(value\
     \ * 3 + 1);\n    }\n    check_convolutions(first, second);\n}\n\n}  // namespace\n\
     \nint main() {\n    test_transforms();\n    test_randomized();\n    test_modint();\n\
-    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
-    n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../math/bitwise_convolution.hpp\"\n#include \"../../math/modint.hpp\"\n\n#include\
-    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\nnamespace\
-    \ {\n\nusing m1une::math::bitwise_and_convolution;\nusing m1une::math::bitwise_or_convolution;\n\
+    \n    int n;\n    std::cin >> n;\n    int size = 1 << n;\n    using mint = m1une::math::modint998244353;\n\
+    \    std::vector<mint> a(size), b(size);\n    for (int i = 0; i < size; i++) {\n\
+    \        long long x;\n        std::cin >> x;\n        a[i] = x;\n    }\n    for\
+    \ (int i = 0; i < size; i++) {\n        long long x;\n        std::cin >> x;\n\
+    \        b[i] = x;\n    }\n    std::vector<mint> c = bitwise_xor_convolution(a,\
+    \ b);\n    for (int i = 0; i < size; i++) {\n        if (i) std::cout << ' ';\n\
+    \        std::cout << c[i].val();\n    }\n    std::cout << '\\n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/bitwise_xor_convolution\"\
+    \n\n#include \"../../math/bitwise_convolution.hpp\"\n#include \"../../math/modint.hpp\"\
+    \n\n#include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\
+    \nnamespace {\n\nusing m1une::math::bitwise_and_convolution;\nusing m1une::math::bitwise_or_convolution;\n\
     using m1une::math::bitwise_xor_convolution;\n\ntemplate <typename T, typename\
     \ Operation>\nstd::vector<T> naive(\n    const std::vector<T>& first,\n    const\
     \ std::vector<T>& second,\n    Operation operation\n) {\n    if (first.empty()\
@@ -259,8 +264,13 @@ data:
     \    }\n    for (int value = 0; value < 9; ++value) {\n        second.emplace_back(value\
     \ * 3 + 1);\n    }\n    check_convolutions(first, second);\n}\n\n}  // namespace\n\
     \nint main() {\n    test_transforms();\n    test_randomized();\n    test_modint();\n\
-    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
-    n';\n}\n"
+    \n    int n;\n    std::cin >> n;\n    int size = 1 << n;\n    using mint = m1une::math::modint998244353;\n\
+    \    std::vector<mint> a(size), b(size);\n    for (int i = 0; i < size; i++) {\n\
+    \        long long x;\n        std::cin >> x;\n        a[i] = x;\n    }\n    for\
+    \ (int i = 0; i < size; i++) {\n        long long x;\n        std::cin >> x;\n\
+    \        b[i] = x;\n    }\n    std::vector<mint> c = bitwise_xor_convolution(a,\
+    \ b);\n    for (int i = 0; i < size; i++) {\n        if (i) std::cout << ' ';\n\
+    \        std::cout << c[i].val();\n    }\n    std::cout << '\\n';\n}\n"
   dependsOn:
   - math/bitwise_convolution.hpp
   - math/zeta_mobius_transform.hpp
@@ -268,7 +278,7 @@ data:
   isVerificationFile: true
   path: verify/math/bitwise_convolution.test.cpp
   requiredBy: []
-  timestamp: '2026-06-22 22:56:57+09:00'
+  timestamp: '2026-06-27 03:02:09+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/math/bitwise_convolution.test.cpp
