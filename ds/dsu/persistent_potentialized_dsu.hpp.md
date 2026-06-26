@@ -230,7 +230,8 @@ checked for consistency.
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `PersistentPotentializedDsu(int n)` | Creates `n` singleton sets with identity potentials. | $O(N)$ |
+| `PersistentPotentializedDsu()` | Creates an empty DSU. | $O(1)$ |
+| `explicit PersistentPotentializedDsu(int n)` | Creates `n` singleton sets with identity potentials. | $O(N)$ |
 | `int size() const` | Returns the number of elements. | $O(1)$ |
 | `bool empty() const` | Returns whether the DSU has no elements. | $O(1)$ |
 | `std::pair<PersistentPotentializedDsu, bool> merge(int a, int b, const T& w) const` | Returns a new version with the constraint `diff(a, b) == w`, and whether the constraint is consistent. If the constraint contradicts an existing component, the returned version is unchanged. | $O(\log^2 N)$ |
@@ -239,7 +240,7 @@ checked for consistency.
 | `int group_size(int a) const`, `int size(int a) const` | Returns the size of the set containing `a`. | $O(\log^2 N)$ |
 | `T potential(int a) const` | Returns the root-relative potential of `a`. | $O(\log^2 N)$ |
 | `T diff(int a, int b) const` | Returns the potential difference from `a` to `b`. Requires `same(a, b)`. | $O(\log^2 N)$ |
-| `auto get(int p) const` | Returns the internal value at index `p`. It has `parent_or_size` and `diff_to_parent` members. | $O(\log N)$ |
+| `Value get(int p) const` | Returns the internal value at index `p`. It has `parent_or_size` and `diff_to_parent` members. | $O(\log N)$ |
 | `int parent_or_size(int p) const` | Returns the internal parent-or-size value at index `p`. | $O(\log N)$ |
 | `std::vector<std::vector<int>> groups() const` | Returns all sets as vectors of element indices. | $O(N \log^2 N)$ |
 

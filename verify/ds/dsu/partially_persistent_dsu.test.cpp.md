@@ -39,19 +39,18 @@ data:
     \ t, int a) const {\n        int r = leader(t, a);\n        const auto& h = size_history[r];\n\
     \        auto it = std::upper_bound(h.begin(), h.end(), std::pair<int, int>(t,\
     \ never));\n        --it;\n        return it->second;\n    }\n\n    int group_size(int\
-    \ a) const {\n        return group_size(_time, a);\n    }\n\n    int size(int\
-    \ t, int a) const {\n        return group_size(t, a);\n    }\n\n    int size(int\
+    \ a) const {\n        return -parent[leader(a)];\n    }\n\n    int size(int t,\
+    \ int a) const {\n        return group_size(t, a);\n    }\n\n    int size(int\
     \ a) const {\n        return group_size(a);\n    }\n\n    bool merge(int a, int\
     \ b) {\n        assert(0 <= a && a < _n);\n        assert(0 <= b && b < _n);\n\
     \        ++_time;\n        int x = leader(a), y = leader(b);\n        if (x ==\
-    \ y) return false;\n        int sx = group_size(x);\n        int sy = group_size(y);\n\
-    \        if (sx < sy) {\n            std::swap(x, y);\n            std::swap(sx,\
-    \ sy);\n        }\n        parent[y] = x;\n        parent_time[y] = _time;\n \
-    \       size_history[x].emplace_back(_time, sx + sy);\n        return true;\n\
-    \    }\n\n    std::vector<std::vector<int>> groups(int t) const {\n        check_time(t);\n\
-    \        std::vector<int> leader_buf(_n), group_size(_n);\n        for (int i\
-    \ = 0; i < _n; i++) {\n            leader_buf[i] = leader(t, i);\n           \
-    \ group_size[leader_buf[i]]++;\n        }\n        std::vector<std::vector<int>>\
+    \ y) return false;\n        if (-parent[x] < -parent[y]) {\n            std::swap(x,\
+    \ y);\n        }\n        parent[x] += parent[y];\n        parent[y] = x;\n  \
+    \      parent_time[y] = _time;\n        size_history[x].emplace_back(_time, -parent[x]);\n\
+    \        return true;\n    }\n\n    std::vector<std::vector<int>> groups(int t)\
+    \ const {\n        check_time(t);\n        std::vector<int> leader_buf(_n), group_size(_n);\n\
+    \        for (int i = 0; i < _n; i++) {\n            leader_buf[i] = leader(t,\
+    \ i);\n            group_size[leader_buf[i]]++;\n        }\n        std::vector<std::vector<int>>\
     \ result(_n);\n        for (int i = 0; i < _n; i++) {\n            result[i].reserve(group_size[i]);\n\
     \        }\n        for (int i = 0; i < _n; i++) {\n            result[leader_buf[i]].push_back(i);\n\
     \        }\n        result.erase(std::remove_if(result.begin(), result.end(),\
@@ -161,7 +160,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dsu/partially_persistent_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-27 02:45:08+09:00'
+  timestamp: '2026-06-27 02:52:37+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/partially_persistent_dsu.test.cpp

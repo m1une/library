@@ -20,33 +20,33 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B
   bundledCode: "#line 1 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/dsu/potentialized_dsu.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <concepts>\n#include\
-    \ <utility>\n#include <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line\
-    \ 5 \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid {\n\n// Concept\
-    \ to check if a type satisfies the requirements of a Monoid.\n// A Monoid must\
-    \ have a `value_type`, an identity element `id()`, and an associative binary operation\
-    \ `op()`.\ntemplate <typename M>\nconcept IsMonoid = requires(typename M::value_type\
-    \ a, typename M::value_type b) {\n    // 1. Must define `value_type`\n    typename\
-    \ M::value_type;\n\n    // 2. Must have a static method `id()` returning `value_type`\n\
-    \    { M::id() } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have\
-    \ a static method `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
-    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
-    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
-    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
-    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 11 \"ds/dsu/potentialized_dsu.hpp\"\
-    \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
-    \ Group>\nrequires std::equality_comparable<typename Group::value_type>\nstruct\
-    \ PotentializedDsu {\n    using T = typename Group::value_type;\n\n   private:\n\
-    \    int _n;\n    std::vector<int> parent_or_size;\n    std::vector<T> diff_to_parent;\n\
-    \n    static int check_size(int n) {\n        assert(0 <= n);\n        return\
-    \ n;\n    }\n\n   public:\n    PotentializedDsu() : PotentializedDsu(0) {}\n\n\
-    \    explicit PotentializedDsu(int n) : _n(check_size(n)), parent_or_size(_n,\
+    \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B\"\n\n#line\
+    \ 1 \"ds/dsu/potentialized_dsu.hpp\"\n\n\n\n#include <algorithm>\n#include <cassert>\n\
+    #include <concepts>\n#include <utility>\n#include <vector>\n\n#line 1 \"monoid/concept.hpp\"\
+    \n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid\
+    \ {\n\n// Concept to check if a type satisfies the requirements of a Monoid.\n\
+    // A Monoid must have a `value_type`, an identity element `id()`, and an associative\
+    \ binary operation `op()`.\ntemplate <typename M>\nconcept IsMonoid = requires(typename\
+    \ M::value_type a, typename M::value_type b) {\n    // 1. Must define `value_type`\n\
+    \    typename M::value_type;\n\n    // 2. Must have a static method `id()` returning\
+    \ `value_type`\n    { M::id() } -> std::same_as<typename M::value_type>;\n\n \
+    \   // 3. Must have a static method `op(a, b)` returning `value_type`\n    { M::op(a,\
+    \ b) } -> std::same_as<typename M::value_type>;\n};\n\n// Concept for commutative\
+    \ group monoids.\n// A type satisfying this concept must also obey commutativity\
+    \ and inverse laws.\ntemplate <typename M>\nconcept IsCommutativeGroup = IsMonoid<M>\
+    \ && requires(typename M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename\
+    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
+    \ 11 \"ds/dsu/potentialized_dsu.hpp\"\n\nnamespace m1une {\nnamespace ds {\n\n\
+    template <m1une::monoid::IsCommutativeGroup Group>\nrequires std::equality_comparable<typename\
+    \ Group::value_type>\nstruct PotentializedDsu {\n    using T = typename Group::value_type;\n\
+    \n   private:\n    int _n;\n    std::vector<int> parent_or_size;\n    std::vector<T>\
+    \ diff_to_parent;\n\n    static int check_size(int n) {\n        assert(0 <= n);\n\
+    \        return n;\n    }\n\n   public:\n    PotentializedDsu() : PotentializedDsu(0)\
+    \ {}\n\n    explicit PotentializedDsu(int n) : _n(check_size(n)), parent_or_size(_n,\
     \ -1), diff_to_parent(_n, Group::id()) {}\n\n    int size() const {\n        return\
     \ _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n    }\n\n \
     \   int leader(int a) {\n        assert(0 <= a && a < _n);\n        if (parent_or_size[a]\
@@ -109,8 +109,8 @@ data:
     \ T inv(const T& x) {\n        return x;\n    }\n};\n\n}  // namespace monoid\n\
     }  // namespace m1une\n\n\n#line 6 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\
     \n\n#line 8 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\n#include <iostream>\n\
-    #line 10 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\n\nint main() {\n    using\
-    \ Add = m1une::monoid::Add<long long>;\n\n    m1une::ds::PotentializedDsu<Add>\
+    #line 10 \"verify/ds/dsu/potentialized_dsu.test.cpp\"\n\nvoid self_test() {\n\
+    \    using Add = m1une::monoid::Add<long long>;\n\n    m1une::ds::PotentializedDsu<Add>\
     \ add_dsu(5);\n    assert(add_dsu.size() == 5);\n    assert(!add_dsu.empty());\n\
     \n    assert(add_dsu.merge(0, 1, 3));\n    assert(add_dsu.merge(1, 2, 4));\n \
     \   assert(add_dsu.same(0, 2));\n    assert(add_dsu.diff(0, 1) == 3);\n    assert(add_dsu.diff(1,\
@@ -127,13 +127,21 @@ data:
     \  assert(xor_dsu.diff(0, 2) == (5 ^ 6));\n    assert(xor_dsu.merge(0, 2, 5 ^\
     \ 6));\n    assert(!xor_dsu.merge(0, 2, 2));\n    assert(xor_dsu.merge(3, 0, 9));\n\
     \    assert(xor_dsu.diff(3, 2) == (9 ^ 5 ^ 6));\n\n    m1une::ds::PotentializedDsu<Add>\
-    \ empty;\n    assert(empty.size() == 0);\n    assert(empty.empty());\n\n    long\
-    \ long x, y;\n    std::cin >> x >> y;\n    std::cout << x + y << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../../ds/dsu/potentialized_dsu.hpp\"\n#include \"../../../monoid/add.hpp\"\n\
-    #include \"../../../monoid/xor.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
-    #include <vector>\n\nint main() {\n    using Add = m1une::monoid::Add<long long>;\n\
-    \n    m1une::ds::PotentializedDsu<Add> add_dsu(5);\n    assert(add_dsu.size()\
+    \ empty;\n    assert(empty.size() == 0);\n    assert(empty.empty());\n}\n\nint\
+    \ main() {\n    self_test();\n\n    using Add = m1une::monoid::Add<long long>;\n\
+    \n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int\
+    \ n, q;\n    std::cin >> n >> q;\n    m1une::ds::PotentializedDsu<Add> dsu(n);\n\
+    \n    while (q--) {\n        int type, x, y;\n        std::cin >> type >> x >>\
+    \ y;\n        if (type == 0) {\n            long long z;\n            std::cin\
+    \ >> z;\n            dsu.merge(x, y, z);\n        } else {\n            if (dsu.same(x,\
+    \ y)) {\n                std::cout << dsu.diff(x, y) << '\\n';\n            }\
+    \ else {\n                std::cout << \"?\\n\";\n            }\n        }\n \
+    \   }\n}\n"
+  code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B\"\
+    \n\n#include \"../../../ds/dsu/potentialized_dsu.hpp\"\n#include \"../../../monoid/add.hpp\"\
+    \n#include \"../../../monoid/xor.hpp\"\n\n#include <cassert>\n#include <iostream>\n\
+    #include <vector>\n\nvoid self_test() {\n    using Add = m1une::monoid::Add<long\
+    \ long>;\n\n    m1une::ds::PotentializedDsu<Add> add_dsu(5);\n    assert(add_dsu.size()\
     \ == 5);\n    assert(!add_dsu.empty());\n\n    assert(add_dsu.merge(0, 1, 3));\n\
     \    assert(add_dsu.merge(1, 2, 4));\n    assert(add_dsu.same(0, 2));\n    assert(add_dsu.diff(0,\
     \ 1) == 3);\n    assert(add_dsu.diff(1, 2) == 4);\n    assert(add_dsu.diff(0,\
@@ -150,8 +158,15 @@ data:
     \ == (5 ^ 6));\n    assert(xor_dsu.merge(0, 2, 5 ^ 6));\n    assert(!xor_dsu.merge(0,\
     \ 2, 2));\n    assert(xor_dsu.merge(3, 0, 9));\n    assert(xor_dsu.diff(3, 2)\
     \ == (9 ^ 5 ^ 6));\n\n    m1une::ds::PotentializedDsu<Add> empty;\n    assert(empty.size()\
-    \ == 0);\n    assert(empty.empty());\n\n    long long x, y;\n    std::cin >> x\
-    \ >> y;\n    std::cout << x + y << '\\n';\n}\n"
+    \ == 0);\n    assert(empty.empty());\n}\n\nint main() {\n    self_test();\n\n\
+    \    using Add = m1une::monoid::Add<long long>;\n\n    std::ios::sync_with_stdio(false);\n\
+    \    std::cin.tie(nullptr);\n\n    int n, q;\n    std::cin >> n >> q;\n    m1une::ds::PotentializedDsu<Add>\
+    \ dsu(n);\n\n    while (q--) {\n        int type, x, y;\n        std::cin >> type\
+    \ >> x >> y;\n        if (type == 0) {\n            long long z;\n           \
+    \ std::cin >> z;\n            dsu.merge(x, y, z);\n        } else {\n        \
+    \    if (dsu.same(x, y)) {\n                std::cout << dsu.diff(x, y) << '\\\
+    n';\n            } else {\n                std::cout << \"?\\n\";\n          \
+    \  }\n        }\n    }\n}\n"
   dependsOn:
   - ds/dsu/potentialized_dsu.hpp
   - monoid/concept.hpp
@@ -160,7 +175,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dsu/potentialized_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-06-27 02:52:37+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/potentialized_dsu.test.cpp

@@ -20,42 +20,43 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/aplusb
+    PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B
     links:
-    - https://judge.yosupo.jp/problem/aplusb
+    - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B
   bundledCode: "#line 1 \"verify/ds/dsu/persistent_potentialized_dsu.test.cpp\"\n\
-    #define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"ds/dsu/persistent_potentialized_dsu.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <concepts>\n#include\
-    \ <memory>\n#include <utility>\n#include <vector>\n\n#line 1 \"monoid/concept.hpp\"\
-    \n\n\n\n#line 5 \"monoid/concept.hpp\"\n\nnamespace m1une {\nnamespace monoid\
-    \ {\n\n// Concept to check if a type satisfies the requirements of a Monoid.\n\
-    // A Monoid must have a `value_type`, an identity element `id()`, and an associative\
-    \ binary operation `op()`.\ntemplate <typename M>\nconcept IsMonoid = requires(typename\
-    \ M::value_type a, typename M::value_type b) {\n    // 1. Must define `value_type`\n\
-    \    typename M::value_type;\n\n    // 2. Must have a static method `id()` returning\
-    \ `value_type`\n    { M::id() } -> std::same_as<typename M::value_type>;\n\n \
-    \   // 3. Must have a static method `op(a, b)` returning `value_type`\n    { M::op(a,\
-    \ b) } -> std::same_as<typename M::value_type>;\n};\n\n// Concept for commutative\
-    \ group monoids.\n// A type satisfying this concept must also obey commutativity\
-    \ and inverse laws.\ntemplate <typename M>\nconcept IsCommutativeGroup = IsMonoid<M>\
-    \ && requires(typename M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename\
-    \ M::value_type>;\n};\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line\
-    \ 12 \"ds/dsu/persistent_potentialized_dsu.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ ds {\n\ntemplate <m1une::monoid::IsCommutativeGroup Group>\n    requires std::equality_comparable<typename\
-    \ Group::value_type>\nstruct PersistentPotentializedDsu {\n    using T = typename\
-    \ Group::value_type;\n\n    struct Value {\n        int parent_or_size;\n    \
-    \    T diff_to_parent;\n\n        Value() : parent_or_size(0), diff_to_parent(Group::id())\
-    \ {}\n        Value(int parent_or_size_, const T& diff_to_parent_)\n         \
-    \   : parent_or_size(parent_or_size_), diff_to_parent(diff_to_parent_) {}\n  \
-    \      Value(int parent_or_size_, T&& diff_to_parent_)\n            : parent_or_size(parent_or_size_),\
-    \ diff_to_parent(std::move(diff_to_parent_)) {}\n    };\n\n   private:\n    struct\
-    \ Node {\n        Value val;\n        int l, r;\n\n        Node() : val(), l(0),\
-    \ r(0) {}\n        explicit Node(const Value& value) : val(value), l(0), r(0)\
-    \ {}\n        explicit Node(Value&& value) : val(std::move(value)), l(0), r(0)\
-    \ {}\n        Node(const Value& value, int left, int right) : val(value), l(left),\
-    \ r(right) {}\n        Node(Value&& value, int left, int right) : val(std::move(value)),\
-    \ l(left), r(right) {}\n    };\n\n    int _n;\n    int _root;\n    std::shared_ptr<std::vector<Node>>\
-    \ _pool;\n\n    explicit PersistentPotentializedDsu(int n, int root, std::shared_ptr<std::vector<Node>>\
+    #define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B\"\
+    \n\n#line 1 \"ds/dsu/persistent_potentialized_dsu.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <concepts>\n#include <memory>\n#include <utility>\n\
+    #include <vector>\n\n#line 1 \"monoid/concept.hpp\"\n\n\n\n#line 5 \"monoid/concept.hpp\"\
+    \n\nnamespace m1une {\nnamespace monoid {\n\n// Concept to check if a type satisfies\
+    \ the requirements of a Monoid.\n// A Monoid must have a `value_type`, an identity\
+    \ element `id()`, and an associative binary operation `op()`.\ntemplate <typename\
+    \ M>\nconcept IsMonoid = requires(typename M::value_type a, typename M::value_type\
+    \ b) {\n    // 1. Must define `value_type`\n    typename M::value_type;\n\n  \
+    \  // 2. Must have a static method `id()` returning `value_type`\n    { M::id()\
+    \ } -> std::same_as<typename M::value_type>;\n\n    // 3. Must have a static method\
+    \ `op(a, b)` returning `value_type`\n    { M::op(a, b) } -> std::same_as<typename\
+    \ M::value_type>;\n};\n\n// Concept for commutative group monoids.\n// A type\
+    \ satisfying this concept must also obey commutativity and inverse laws.\ntemplate\
+    \ <typename M>\nconcept IsCommutativeGroup = IsMonoid<M> && requires(typename\
+    \ M::value_type a) {\n    { M::inv(a) } -> std::same_as<typename M::value_type>;\n\
+    };\n\n}  // namespace monoid\n}  // namespace m1une\n\n\n#line 12 \"ds/dsu/persistent_potentialized_dsu.hpp\"\
+    \n\nnamespace m1une {\nnamespace ds {\n\ntemplate <m1une::monoid::IsCommutativeGroup\
+    \ Group>\n    requires std::equality_comparable<typename Group::value_type>\n\
+    struct PersistentPotentializedDsu {\n    using T = typename Group::value_type;\n\
+    \n    struct Value {\n        int parent_or_size;\n        T diff_to_parent;\n\
+    \n        Value() : parent_or_size(0), diff_to_parent(Group::id()) {}\n      \
+    \  Value(int parent_or_size_, const T& diff_to_parent_)\n            : parent_or_size(parent_or_size_),\
+    \ diff_to_parent(diff_to_parent_) {}\n        Value(int parent_or_size_, T&& diff_to_parent_)\n\
+    \            : parent_or_size(parent_or_size_), diff_to_parent(std::move(diff_to_parent_))\
+    \ {}\n    };\n\n   private:\n    struct Node {\n        Value val;\n        int\
+    \ l, r;\n\n        Node() : val(), l(0), r(0) {}\n        explicit Node(const\
+    \ Value& value) : val(value), l(0), r(0) {}\n        explicit Node(Value&& value)\
+    \ : val(std::move(value)), l(0), r(0) {}\n        Node(const Value& value, int\
+    \ left, int right) : val(value), l(left), r(right) {}\n        Node(Value&& value,\
+    \ int left, int right) : val(std::move(value)), l(left), r(right) {}\n    };\n\
+    \n    int _n;\n    int _root;\n    std::shared_ptr<std::vector<Node>> _pool;\n\
+    \n    explicit PersistentPotentializedDsu(int n, int root, std::shared_ptr<std::vector<Node>>\
     \ pool)\n        : _n(n), _root(root), _pool(std::move(pool)) {}\n\n    int new_node(const\
     \ Node& node) const {\n        _pool->push_back(node);\n        return int(_pool->size())\
     \ - 1;\n    }\n\n    int new_node(Node&& node) const {\n        _pool->push_back(std::move(node));\n\
@@ -159,7 +160,7 @@ data:
     \ i = 0; i < n; i++) result[i].reserve(group_size[i]);\n        for (int i = 0;\
     \ i < n; i++) result[leader_buf[i]].push_back(i);\n        result.erase(std::remove_if(result.begin(),\
     \ result.end(), [](const std::vector<int>& v) { return v.empty(); }),\n      \
-    \               result.end());\n        return result;\n    }\n};\n\nint main()\
+    \               result.end());\n        return result;\n    }\n};\n\nvoid self_test()\
     \ {\n    using Add = m1une::monoid::Add<long long>;\n    using AddDsu = m1une::ds::PersistentPotentializedDsu<Add>;\n\
     \n    AddDsu base(5);\n    auto [a, ok1] = base.merge(0, 1, 3);\n    auto [b,\
     \ ok2] = a.merge(1, 2, 4);\n    auto [c, ok3] = b.merge(3, 4, -2);\n    auto [d,\
@@ -199,22 +200,30 @@ data:
     \       assert(cur.group_size(i) == expected.group_size(i));\n            assert(next.group_size(i)\
     \ == next_expected.group_size(i));\n            assert(next.parent_or_size(i)\
     \ == next_expected.parent_or_size[i]);\n        }\n\n        versions.emplace_back(next,\
-    \ next_expected);\n    }\n\n    long long x, y;\n    std::cin >> x >> y;\n   \
-    \ std::cout << x + y << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
-    ../../../ds/dsu/persistent_potentialized_dsu.hpp\"\n#include \"../../../monoid/add.hpp\"\
-    \n#include \"../../../monoid/xor.hpp\"\n\n#include <algorithm>\n#include <cassert>\n\
-    #include <iostream>\n#include <random>\n#include <utility>\n#include <vector>\n\
-    \ntemplate <class Group>\nstruct NaivePotentializedDsu {\n    using T = typename\
-    \ Group::value_type;\n\n    std::vector<int> parent_or_size;\n    std::vector<T>\
-    \ diff_to_parent;\n\n    explicit NaivePotentializedDsu(int n = 0) : parent_or_size(n,\
-    \ -1), diff_to_parent(n, Group::id()) {}\n\n    std::pair<int, T> leader_and_potential(int\
-    \ a) const {\n        T res = Group::id();\n        while (parent_or_size[a] >=\
-    \ 0) {\n            res = Group::op(diff_to_parent[a], res);\n            a =\
-    \ parent_or_size[a];\n        }\n        return {a, res};\n    }\n\n    int leader(int\
-    \ a) const {\n        return leader_and_potential(a).first;\n    }\n\n    bool\
-    \ same(int a, int b) const {\n        return leader(a) == leader(b);\n    }\n\n\
-    \    int group_size(int a) const {\n        return -parent_or_size[leader(a)];\n\
+    \ next_expected);\n    }\n}\n\nint main() {\n    self_test();\n\n    using Add\
+    \ = m1une::monoid::Add<long long>;\n    using Dsu = m1une::ds::PersistentPotentializedDsu<Add>;\n\
+    \n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int\
+    \ n, q;\n    std::cin >> n >> q;\n    Dsu dsu(n);\n\n    while (q--) {\n     \
+    \   int type, x, y;\n        std::cin >> type >> x >> y;\n        if (type ==\
+    \ 0) {\n            long long z;\n            std::cin >> z;\n            auto\
+    \ [next, ok] = dsu.merge(x, y, z);\n            (void)ok;\n            dsu = next;\n\
+    \        } else {\n            if (dsu.same(x, y)) {\n                std::cout\
+    \ << dsu.diff(x, y) << '\\n';\n            } else {\n                std::cout\
+    \ << \"?\\n\";\n            }\n        }\n    }\n}\n"
+  code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B\"\
+    \n\n#include \"../../../ds/dsu/persistent_potentialized_dsu.hpp\"\n#include \"\
+    ../../../monoid/add.hpp\"\n#include \"../../../monoid/xor.hpp\"\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <iostream>\n#include <random>\n#include <utility>\n\
+    #include <vector>\n\ntemplate <class Group>\nstruct NaivePotentializedDsu {\n\
+    \    using T = typename Group::value_type;\n\n    std::vector<int> parent_or_size;\n\
+    \    std::vector<T> diff_to_parent;\n\n    explicit NaivePotentializedDsu(int\
+    \ n = 0) : parent_or_size(n, -1), diff_to_parent(n, Group::id()) {}\n\n    std::pair<int,\
+    \ T> leader_and_potential(int a) const {\n        T res = Group::id();\n     \
+    \   while (parent_or_size[a] >= 0) {\n            res = Group::op(diff_to_parent[a],\
+    \ res);\n            a = parent_or_size[a];\n        }\n        return {a, res};\n\
+    \    }\n\n    int leader(int a) const {\n        return leader_and_potential(a).first;\n\
+    \    }\n\n    bool same(int a, int b) const {\n        return leader(a) == leader(b);\n\
+    \    }\n\n    int group_size(int a) const {\n        return -parent_or_size[leader(a)];\n\
     \    }\n\n    T potential(int a) const {\n        return leader_and_potential(a).second;\n\
     \    }\n\n    T diff(int a, int b) const {\n        assert(same(a, b));\n    \
     \    return Group::op(Group::inv(potential(a)), potential(b));\n    }\n\n    std::pair<NaivePotentializedDsu,\
@@ -234,7 +243,7 @@ data:
     \ i = 0; i < n; i++) result[i].reserve(group_size[i]);\n        for (int i = 0;\
     \ i < n; i++) result[leader_buf[i]].push_back(i);\n        result.erase(std::remove_if(result.begin(),\
     \ result.end(), [](const std::vector<int>& v) { return v.empty(); }),\n      \
-    \               result.end());\n        return result;\n    }\n};\n\nint main()\
+    \               result.end());\n        return result;\n    }\n};\n\nvoid self_test()\
     \ {\n    using Add = m1une::monoid::Add<long long>;\n    using AddDsu = m1une::ds::PersistentPotentializedDsu<Add>;\n\
     \n    AddDsu base(5);\n    auto [a, ok1] = base.merge(0, 1, 3);\n    auto [b,\
     \ ok2] = a.merge(1, 2, 4);\n    auto [c, ok3] = b.merge(3, 4, -2);\n    auto [d,\
@@ -274,8 +283,16 @@ data:
     \       assert(cur.group_size(i) == expected.group_size(i));\n            assert(next.group_size(i)\
     \ == next_expected.group_size(i));\n            assert(next.parent_or_size(i)\
     \ == next_expected.parent_or_size[i]);\n        }\n\n        versions.emplace_back(next,\
-    \ next_expected);\n    }\n\n    long long x, y;\n    std::cin >> x >> y;\n   \
-    \ std::cout << x + y << '\\n';\n}\n"
+    \ next_expected);\n    }\n}\n\nint main() {\n    self_test();\n\n    using Add\
+    \ = m1une::monoid::Add<long long>;\n    using Dsu = m1une::ds::PersistentPotentializedDsu<Add>;\n\
+    \n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int\
+    \ n, q;\n    std::cin >> n >> q;\n    Dsu dsu(n);\n\n    while (q--) {\n     \
+    \   int type, x, y;\n        std::cin >> type >> x >> y;\n        if (type ==\
+    \ 0) {\n            long long z;\n            std::cin >> z;\n            auto\
+    \ [next, ok] = dsu.merge(x, y, z);\n            (void)ok;\n            dsu = next;\n\
+    \        } else {\n            if (dsu.same(x, y)) {\n                std::cout\
+    \ << dsu.diff(x, y) << '\\n';\n            } else {\n                std::cout\
+    \ << \"?\\n\";\n            }\n        }\n    }\n}\n"
   dependsOn:
   - ds/dsu/persistent_potentialized_dsu.hpp
   - monoid/concept.hpp
@@ -284,7 +301,7 @@ data:
   isVerificationFile: true
   path: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
   requiredBy: []
-  timestamp: '2026-06-27 02:45:08+09:00'
+  timestamp: '2026-06-27 02:52:37+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
