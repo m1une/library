@@ -4,6 +4,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/range_query/range_inversion_count.hpp
     title: Static Range Inversion Count
+  - icon: ':heavy_check_mark:'
+    path: utilities/fast_io.hpp
+    title: Fast IO
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -134,9 +137,75 @@ data:
     \            _sorted_prefix[right]\n            );\n        }\n        return\
     \ result;\n    }\n\n    long long inversion_count(int left, int right) const {\n\
     \        return query(left, right);\n    }\n};\n\n}  // namespace ds\n}  // namespace\
-    \ m1une\n\n\n#line 4 \"verify/ds/range_query/range_inversion_count.test.cpp\"\n\
-    \n#line 6 \"verify/ds/range_query/range_inversion_count.test.cpp\"\n#include <cstdint>\n\
-    #include <iostream>\n#line 9 \"verify/ds/range_query/range_inversion_count.test.cpp\"\
+    \ m1une\n\n\n#line 1 \"utilities/fast_io.hpp\"\n\n\n\n#include <cstdio>\n#include\
+    \ <string>\n#include <type_traits>\n\nnamespace m1une {\nnamespace utilities {\n\
+    \nstruct FastInput {\n    static constexpr int buffer_size = 1 << 20;\n\n   private:\n\
+    \    std::FILE* _stream;\n    char _buffer[buffer_size];\n    int _position;\n\
+    \    int _length;\n\n   public:\n    explicit FastInput(std::FILE* stream = stdin)\n\
+    \        : _stream(stream), _position(0), _length(0) {}\n\n    FastInput(const\
+    \ FastInput&) = delete;\n    FastInput& operator=(const FastInput&) = delete;\n\
+    \n    int read_char_raw() {\n        if (_position == _length) {\n           \
+    \ _length = int(std::fread(_buffer, 1, buffer_size, _stream));\n            _position\
+    \ = 0;\n            if (_length == 0) return EOF;\n        }\n        return _buffer[_position++];\n\
+    \    }\n\n    bool skip_spaces() {\n        int c = read_char_raw();\n       \
+    \ while (c != EOF && c <= ' ') c = read_char_raw();\n        if (c == EOF) return\
+    \ false;\n        --_position;\n        return true;\n    }\n\n    bool read(char&\
+    \ value) {\n        if (!skip_spaces()) return false;\n        value = char(read_char_raw());\n\
+    \        return true;\n    }\n\n    bool read(std::string& value) {\n        if\
+    \ (!skip_spaces()) return false;\n        value.clear();\n        int c = read_char_raw();\n\
+    \        while (c != EOF && c > ' ') {\n            value.push_back(char(c));\n\
+    \            c = read_char_raw();\n        }\n        return true;\n    }\n\n\
+    \    bool read(bool& value) {\n        int x;\n        if (!read(x)) return false;\n\
+    \        value = x != 0;\n        return true;\n    }\n\n    template <class T>\n\
+    \    std::enable_if_t<\n        std::is_integral_v<T>\n            && !std::is_same_v<std::remove_cv_t<T>,\
+    \ bool>\n            && !std::is_same_v<std::remove_cv_t<T>, char>,\n        bool\n\
+    \    >\n    read(T& value) {\n        int c = read_char_raw();\n        while\
+    \ (c != EOF && c <= ' ') c = read_char_raw();\n        if (c == EOF) return false;\n\
+    \n        bool negative = false;\n        if (c == '-') {\n            negative\
+    \ = true;\n            c = read_char_raw();\n        }\n\n        if constexpr\
+    \ (std::is_signed_v<T>) {\n            T result = 0;\n            while ('0' <=\
+    \ c && c <= '9') {\n                int digit = c - '0';\n                result\
+    \ = negative ? result * 10 - digit : result * 10 + digit;\n                c =\
+    \ read_char_raw();\n            }\n            value = result;\n        } else\
+    \ {\n            T result = 0;\n            while ('0' <= c && c <= '9') {\n \
+    \               result = result * 10 + T(c - '0');\n                c = read_char_raw();\n\
+    \            }\n            value = negative ? T(0) - result : result;\n     \
+    \   }\n        return true;\n    }\n\n    template <class First, class Second,\
+    \ class... Rest>\n    bool read(First& first, Second& second, Rest&... rest) {\n\
+    \        if (!read(first)) return false;\n        return read(second, rest...);\n\
+    \    }\n};\n\nstruct FastOutput {\n    static constexpr int buffer_size = 1 <<\
+    \ 20;\n\n   private:\n    std::FILE* _stream;\n    char _buffer[buffer_size];\n\
+    \    int _position;\n\n   public:\n    explicit FastOutput(std::FILE* stream =\
+    \ stdout)\n        : _stream(stream), _position(0) {}\n\n    FastOutput(const\
+    \ FastOutput&) = delete;\n    FastOutput& operator=(const FastOutput&) = delete;\n\
+    \n    ~FastOutput() {\n        flush();\n    }\n\n    void flush() {\n       \
+    \ if (_position == 0) return;\n        std::fwrite(_buffer, 1, _position, _stream);\n\
+    \        _position = 0;\n    }\n\n    void write_char(char c) {\n        if (_position\
+    \ == buffer_size) flush();\n        _buffer[_position++] = c;\n    }\n\n    void\
+    \ write(const char* s) {\n        while (*s != '\\0') write_char(*s++);\n    }\n\
+    \n    void write(const std::string& s) {\n        for (char c : s) write_char(c);\n\
+    \    }\n\n    void write(char c) {\n        write_char(c);\n    }\n\n    void\
+    \ write(bool value) {\n        write_char(value ? '1' : '0');\n    }\n\n    template\
+    \ <class T>\n    std::enable_if_t<\n        std::is_integral_v<T>\n          \
+    \  && !std::is_same_v<std::remove_cv_t<T>, bool>\n            && !std::is_same_v<std::remove_cv_t<T>,\
+    \ char>\n    >\n    write(T value) {\n        using Raw = std::remove_cv_t<T>;\n\
+    \        using Unsigned = std::make_unsigned_t<Raw>;\n\n        Unsigned magnitude;\n\
+    \        if constexpr (std::is_signed_v<Raw>) {\n            if (value < 0) {\n\
+    \                write_char('-');\n                magnitude = Unsigned(0) - Unsigned(value);\n\
+    \            } else {\n                magnitude = Unsigned(value);\n        \
+    \    }\n        } else {\n            magnitude = value;\n        }\n\n      \
+    \  if (magnitude == 0) {\n            write_char('0');\n            return;\n\
+    \        }\n\n        char digits[64];\n        int count = 0;\n        while\
+    \ (magnitude > 0) {\n            digits[count++] = char('0' + magnitude % 10);\n\
+    \            magnitude /= 10;\n        }\n        while (count--) write_char(digits[count]);\n\
+    \    }\n\n    template <class First, class... Rest>\n    void print(const First&\
+    \ first, const Rest&... rest) {\n        write(first);\n        ((write_char('\
+    \ '), write(rest)), ...);\n    }\n\n    void println() {\n        write_char('\\\
+    n');\n    }\n\n    template <class... Args>\n    void println(const Args&... args)\
+    \ {\n        print(args...);\n        write_char('\\n');\n    }\n};\n\n}  // namespace\
+    \ utilities\n}  // namespace m1une\n\n\n#line 5 \"verify/ds/range_query/range_inversion_count.test.cpp\"\
+    \n\n#line 7 \"verify/ds/range_query/range_inversion_count.test.cpp\"\n#include\
+    \ <cstdint>\n#include <iostream>\n#line 10 \"verify/ds/range_query/range_inversion_count.test.cpp\"\
     \n\nnamespace {\n\n[[maybe_unused]] long long brute(\n    const std::vector<int>&\
     \ values,\n    int left,\n    int right\n) {\n    long long result = 0;\n    for\
     \ (int first = left; first < right; ++first) {\n        for (int second = first\
@@ -151,41 +220,44 @@ data:
     \ <= size; ++left) {\n            for (int right = left; right <= size; ++right)\
     \ {\n                assert(\n                    structure.query(left, right)\n\
     \                    == brute(values, left, right)\n                );\n     \
-    \       }\n        }\n    }\n}\n\n}  // namespace\n\nint main() {\n    test_randomized();\n\
-    \n    int n, query_count;\n    std::cin >> n >> query_count;\n    std::vector<int>\
-    \ values(n);\n    for (int& value : values) std::cin >> value;\n    m1une::ds::RangeInversionCount<int>\
+    \       }\n        }\n    }\n}\n\n}  // namespace\n\nint main() {\n    // test_randomized();\n\
+    \n    m1une::utilities::FastInput input;\n    m1une::utilities::FastOutput output;\n\
+    \n    int n, query_count;\n    input.read(n, query_count);\n    std::vector<int>\
+    \ values(n);\n    for (int& value : values) input.read(value);\n    m1une::ds::RangeInversionCount<int>\
     \ structure(values);\n    while (query_count--) {\n        int left, right;\n\
-    \        std::cin >> left >> right;\n        std::cout << structure.query(left,\
-    \ right) << '\\n';\n    }\n}\n"
+    \        input.read(left, right);\n        output.println(structure.query(left,\
+    \ right));\n    }\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/static_range_inversions_query\"\
-    \n\n#include \"../../../ds/range_query/range_inversion_count.hpp\"\n\n#include\
-    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\nnamespace\
-    \ {\n\n[[maybe_unused]] long long brute(\n    const std::vector<int>& values,\n\
-    \    int left,\n    int right\n) {\n    long long result = 0;\n    for (int first\
-    \ = left; first < right; ++first) {\n        for (int second = first + 1; second\
-    \ < right; ++second) {\n            result += values[first] > values[second];\n\
-    \        }\n    }\n    return result;\n}\n\nvoid test_randomized() {\n    std::uint64_t\
-    \ state = 1511;\n    auto random = [&state]() {\n        state ^= state << 7;\n\
-    \        state ^= state >> 9;\n        return state;\n    };\n\n    for (int trial\
-    \ = 0; trial < 3000; ++trial) {\n        int size = int(random() % 100);\n   \
-    \     std::vector<int> values(size);\n        for (int& value : values) value\
-    \ = int(random() % 20);\n        m1une::ds::RangeInversionCount<int> structure(values);\n\
-    \        assert(structure.size() == size);\n\n        for (int left = 0; left\
-    \ <= size; ++left) {\n            for (int right = left; right <= size; ++right)\
-    \ {\n                assert(\n                    structure.query(left, right)\n\
-    \                    == brute(values, left, right)\n                );\n     \
-    \       }\n        }\n    }\n}\n\n}  // namespace\n\nint main() {\n    test_randomized();\n\
-    \n    int n, query_count;\n    std::cin >> n >> query_count;\n    std::vector<int>\
-    \ values(n);\n    for (int& value : values) std::cin >> value;\n    m1une::ds::RangeInversionCount<int>\
+    \n\n#include \"../../../ds/range_query/range_inversion_count.hpp\"\n#include \"\
+    ../../../utilities/fast_io.hpp\"\n\n#include <cassert>\n#include <cstdint>\n#include\
+    \ <iostream>\n#include <vector>\n\nnamespace {\n\n[[maybe_unused]] long long brute(\n\
+    \    const std::vector<int>& values,\n    int left,\n    int right\n) {\n    long\
+    \ long result = 0;\n    for (int first = left; first < right; ++first) {\n   \
+    \     for (int second = first + 1; second < right; ++second) {\n            result\
+    \ += values[first] > values[second];\n        }\n    }\n    return result;\n}\n\
+    \nvoid test_randomized() {\n    std::uint64_t state = 1511;\n    auto random =\
+    \ [&state]() {\n        state ^= state << 7;\n        state ^= state >> 9;\n \
+    \       return state;\n    };\n\n    for (int trial = 0; trial < 3000; ++trial)\
+    \ {\n        int size = int(random() % 100);\n        std::vector<int> values(size);\n\
+    \        for (int& value : values) value = int(random() % 20);\n        m1une::ds::RangeInversionCount<int>\
+    \ structure(values);\n        assert(structure.size() == size);\n\n        for\
+    \ (int left = 0; left <= size; ++left) {\n            for (int right = left; right\
+    \ <= size; ++right) {\n                assert(\n                    structure.query(left,\
+    \ right)\n                    == brute(values, left, right)\n                );\n\
+    \            }\n        }\n    }\n}\n\n}  // namespace\n\nint main() {\n    //\
+    \ test_randomized();\n\n    m1une::utilities::FastInput input;\n    m1une::utilities::FastOutput\
+    \ output;\n\n    int n, query_count;\n    input.read(n, query_count);\n    std::vector<int>\
+    \ values(n);\n    for (int& value : values) input.read(value);\n    m1une::ds::RangeInversionCount<int>\
     \ structure(values);\n    while (query_count--) {\n        int left, right;\n\
-    \        std::cin >> left >> right;\n        std::cout << structure.query(left,\
-    \ right) << '\\n';\n    }\n}\n"
+    \        input.read(left, right);\n        output.println(structure.query(left,\
+    \ right));\n    }\n}\n"
   dependsOn:
   - ds/range_query/range_inversion_count.hpp
+  - utilities/fast_io.hpp
   isVerificationFile: true
   path: verify/ds/range_query/range_inversion_count.test.cpp
   requiredBy: []
-  timestamp: '2026-06-27 03:54:42+09:00'
+  timestamp: '2026-06-27 04:23:41+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/range_query/range_inversion_count.test.cpp
