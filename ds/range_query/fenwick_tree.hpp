@@ -11,15 +11,35 @@ template <typename T>
 struct FenwickTree {
    private:
     int _n;
+    int _max_power;
     std::vector<T> _data;
 
-   public:
-    FenwickTree() : _n(0) {}
+    static int max_power_leq(int n) {
+        int result = 1;
+        while (result <= n / 2) result <<= 1;
+        return result;
+    }
 
-    explicit FenwickTree(int n) : _n(n), _data(n + 1, T{}) {}
+    T prefix_sum(int r) const {
+        T result{};
+        const T* data = _data.data();
+        while (r > 0) {
+            result += data[r];
+            r -= r & -r;
+        }
+        return result;
+    }
+
+   public:
+    FenwickTree() : _n(0), _max_power(0) {}
+
+    explicit FenwickTree(int n)
+        : _n(n), _max_power(max_power_leq(n > 0 ? n : 1)), _data(n + 1, T{}) {}
 
     explicit FenwickTree(const std::vector<T>& a)
-        : _n(int(a.size())), _data(a.size() + 1, T{}) {
+        : _n(int(a.size())),
+          _max_power(max_power_leq(_n > 0 ? _n : 1)),
+          _data(a.size() + 1, T{}) {
         for (int i = 1; i <= _n; ++i) {
             _data[i] += a[i - 1];
             const int p = i + (i & -i);
@@ -41,8 +61,9 @@ struct FenwickTree {
     void add(int p, const T& x) {
         assert(0 <= p && p < _n);
         ++p;
+        T* data = _data.data();
         while (p <= _n) {
-            _data[p] += x;
+            data[p] += x;
             p += p & -p;
         }
     }
@@ -50,18 +71,13 @@ struct FenwickTree {
     // Returns the sum of elements in the range [0, r).
     T sum(int r) const {
         assert(0 <= r && r <= _n);
-        T result{};
-        while (r > 0) {
-            result += _data[r];
-            r -= r & -r;
-        }
-        return result;
+        return prefix_sum(r);
     }
 
     // Returns the sum of elements in the range [l, r).
     T sum(int l, int r) const {
         assert(0 <= l && l <= r && r <= _n);
-        return sum(r) - sum(l);
+        return prefix_sum(r) - prefix_sum(l);
     }
 
     // Returns the minimum index `r` such that the sum of [0, r) >= w.
@@ -69,11 +85,10 @@ struct FenwickTree {
     int lower_bound(T w) const {
         if (w <= 0) return 0;
         int x = 0;
-        int k = 1;
-        while (k <= _n) k <<= 1;
-        for (k >>= 1; k > 0; k >>= 1) {
-            if (x + k <= _n && _data[x + k] < w) {
-                w -= _data[x + k];
+        const T* data = _data.data();
+        for (int k = _max_power; k > 0; k >>= 1) {
+            if (x + k <= _n && data[x + k] < w) {
+                w -= data[x + k];
                 x += k;
             }
         }

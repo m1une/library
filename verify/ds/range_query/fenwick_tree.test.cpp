@@ -1,10 +1,10 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/point_add_range_sum"
 
 #include <cassert>
-#include <iostream>
 #include <vector>
 
 #include "../../../ds/range_query/fenwick_tree.hpp"
+#include "../../../utilities/fast_io.hpp"
 
 void test_fenwick_tree() {
     const std::vector<long long> values = {1, 2, 3};
@@ -29,26 +29,32 @@ void test_fenwick_tree() {
 int main() {
     test_fenwick_tree();
 
+    m1une::utilities::FastInput input;
+    m1une::utilities::FastOutput output;
+
     int n, q;
-    std::cin >> n >> q;
+    if (!input.read(n)) return 0;
+    input.read(q);
     std::vector<long long> values(n);
     for (long long& value : values) {
-        std::cin >> value;
+        input.read(value);
     }
 
     m1une::ds::FenwickTree<long long> tree(values);
     for (int query = 0; query < q; ++query) {
         int type;
-        std::cin >> type;
+        input.read(type);
         if (type == 0) {
             int p;
             long long x;
-            std::cin >> p >> x;
+            input.read(p);
+            input.read(x);
             tree.add(p, x);
         } else {
             int l, r;
-            std::cin >> l >> r;
-            std::cout << tree.sum(l, r) << '\n';
+            input.read(l);
+            input.read(r);
+            output.println(tree.sum(l, r));
         }
     }
 }
