@@ -23,7 +23,7 @@ Equal values are not inversions.
 | Operation | Complexity |
 | --- | --- |
 | Construction | $O(N\sqrt N)$ time and memory |
-| `query(left, right)` | $O(\sqrt N)$ |
+| `query(left, right)` | $O(\sqrt N\log N)$ |
 
 The values only need equality and `<` comparisons. They are compressed during
 construction.
@@ -33,15 +33,15 @@ construction.
 The array is divided into blocks of approximately $\sqrt N$ elements.
 Preprocessing stores:
 
-* inversion counts from every block boundary to every right endpoint,
+* inversion counts for every range of complete blocks,
 * cumulative value-rank counts at block boundaries,
-* inversion counts for all ranges contained in one block,
-* sorted prefixes and suffixes of each block.
+* inversion counts for all ranges contained in one block.
 
-A query begins with the answer from the first complete block boundary. The
-remaining left fringe contributes its internal inversions, inversions against
-complete blocks through rank-count tables, and inversions against the final
-partial block through a linear merge of two sorted boundary pieces.
+A query begins with the precomputed answer for the complete blocks contained in
+the range. The two partial boundary blocks contribute their internal inversions
+from the local table. Their cross inversions against complete blocks are counted
+through rank-count tables, and cross inversions between the two partial blocks
+are counted by sorting the right boundary piece used by the query.
 
 ## Methods
 
