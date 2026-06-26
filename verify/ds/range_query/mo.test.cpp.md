@@ -66,44 +66,50 @@ data:
     \ <iostream>\n#line 10 \"verify/ds/range_query/mo.test.cpp\"\n\n#line 1 \"ds/range_query/fenwick_tree.hpp\"\
     \n\n\n\n#line 6 \"ds/range_query/fenwick_tree.hpp\"\n\nnamespace m1une {\nnamespace\
     \ ds {\n\ntemplate <typename T>\nstruct FenwickTree {\n   private:\n    int _n;\n\
-    \    std::vector<T> _data;\n\n   public:\n    FenwickTree() : _n(0) {}\n\n   \
-    \ explicit FenwickTree(int n) : _n(n), _data(n + 1, T{}) {}\n\n    explicit FenwickTree(const\
-    \ std::vector<T>& a)\n        : _n(int(a.size())), _data(a.size() + 1, T{}) {\n\
-    \        for (int i = 1; i <= _n; ++i) {\n            _data[i] += a[i - 1];\n\
-    \            const int p = i + (i & -i);\n            if (p <= _n) {\n       \
-    \         _data[p] += _data[i];\n            }\n        }\n    }\n\n    int size()\
-    \ const {\n        return _n;\n    }\n\n    bool empty() const {\n        return\
-    \ _n == 0;\n    }\n\n    // Adds `x` to the element at zero-based index `p`.\n\
-    \    void add(int p, const T& x) {\n        assert(0 <= p && p < _n);\n      \
-    \  ++p;\n        while (p <= _n) {\n            _data[p] += x;\n            p\
-    \ += p & -p;\n        }\n    }\n\n    // Returns the sum of elements in the range\
-    \ [0, r).\n    T sum(int r) const {\n        assert(0 <= r && r <= _n);\n    \
-    \    T result{};\n        while (r > 0) {\n            result += _data[r];\n \
-    \           r -= r & -r;\n        }\n        return result;\n    }\n\n    // Returns\
-    \ the sum of elements in the range [l, r).\n    T sum(int l, int r) const {\n\
-    \        assert(0 <= l && l <= r && r <= _n);\n        return sum(r) - sum(l);\n\
-    \    }\n\n    // Returns the minimum index `r` such that the sum of [0, r) >=\
-    \ w.\n    // Requires all elements in the tree to be non-negative.\n    int lower_bound(T\
-    \ w) const {\n        if (w <= 0) return 0;\n        int x = 0;\n        int k\
-    \ = 1;\n        while (k <= _n) k <<= 1;\n        for (k >>= 1; k > 0; k >>= 1)\
-    \ {\n            if (x + k <= _n && _data[x + k] < w) {\n                w -=\
-    \ _data[x + k];\n                x += k;\n            }\n        }\n        return\
-    \ x + 1;\n    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n\n#line 12\
-    \ \"verify/ds/range_query/mo.test.cpp\"\n\nnamespace {\n\nvoid test_randomized()\
-    \ {\n    std::uint64_t state = 503;\n    auto random = [&state]() {\n        state\
-    \ ^= state << 7;\n        state ^= state >> 9;\n        return state;\n    };\n\
-    \n    for (int trial = 0; trial < 2500; ++trial) {\n        int n = int(random()\
-    \ % 60);\n        int query_count = int(random() % 80);\n        std::vector<int>\
-    \ values(n);\n        for (int& value : values) value = int(random() % 12);\n\n\
-    \        m1une::ds::Mo mo(n);\n        mo.reserve(query_count);\n        std::vector<std::pair<int,\
-    \ int>> ranges;\n        for (int query = 0; query < query_count; ++query) {\n\
-    \            int left = int(random() % (n + 1));\n            int right = int(random()\
-    \ % (n + 1));\n            if (right < left) std::swap(left, right);\n       \
-    \     assert(mo.add_query(left, right) == query);\n            ranges.emplace_back(left,\
-    \ right);\n        }\n\n        std::vector<int> frequency(12);\n        std::vector<int>\
-    \ actual(query_count);\n        int distinct = 0;\n        mo.run(\n         \
-    \   [&](int index) {\n                if (frequency[values[index]]++ == 0) distinct++;\n\
-    \            },\n            [&](int index) {\n                if (--frequency[values[index]]\
+    \    int _max_power;\n    std::vector<T> _data;\n\n    static int max_power_leq(int\
+    \ n) {\n        int result = 1;\n        while (result <= n / 2) result <<= 1;\n\
+    \        return result;\n    }\n\n    T prefix_sum(int r) const {\n        T result{};\n\
+    \        const T* data = _data.data();\n        while (r > 0) {\n            result\
+    \ += data[r];\n            r -= r & -r;\n        }\n        return result;\n \
+    \   }\n\n   public:\n    FenwickTree() : _n(0), _max_power(0) {}\n\n    explicit\
+    \ FenwickTree(int n)\n        : _n(n), _max_power(max_power_leq(n > 0 ? n : 1)),\
+    \ _data(n + 1, T{}) {}\n\n    explicit FenwickTree(const std::vector<T>& a)\n\
+    \        : _n(int(a.size())),\n          _max_power(max_power_leq(_n > 0 ? _n\
+    \ : 1)),\n          _data(a.size() + 1, T{}) {\n        for (int i = 1; i <= _n;\
+    \ ++i) {\n            _data[i] += a[i - 1];\n            const int p = i + (i\
+    \ & -i);\n            if (p <= _n) {\n                _data[p] += _data[i];\n\
+    \            }\n        }\n    }\n\n    int size() const {\n        return _n;\n\
+    \    }\n\n    bool empty() const {\n        return _n == 0;\n    }\n\n    // Adds\
+    \ `x` to the element at zero-based index `p`.\n    void add(int p, const T& x)\
+    \ {\n        assert(0 <= p && p < _n);\n        ++p;\n        T* data = _data.data();\n\
+    \        while (p <= _n) {\n            data[p] += x;\n            p += p & -p;\n\
+    \        }\n    }\n\n    // Returns the sum of elements in the range [0, r).\n\
+    \    T sum(int r) const {\n        assert(0 <= r && r <= _n);\n        return\
+    \ prefix_sum(r);\n    }\n\n    // Returns the sum of elements in the range [l,\
+    \ r).\n    T sum(int l, int r) const {\n        assert(0 <= l && l <= r && r <=\
+    \ _n);\n        return prefix_sum(r) - prefix_sum(l);\n    }\n\n    // Returns\
+    \ the minimum index `r` such that the sum of [0, r) >= w.\n    // Requires all\
+    \ elements in the tree to be non-negative.\n    int lower_bound(T w) const {\n\
+    \        if (w <= 0) return 0;\n        int x = 0;\n        const T* data = _data.data();\n\
+    \        for (int k = _max_power; k > 0; k >>= 1) {\n            if (x + k <=\
+    \ _n && data[x + k] < w) {\n                w -= data[x + k];\n              \
+    \  x += k;\n            }\n        }\n        return x + 1;\n    }\n};\n\n}  //\
+    \ namespace ds\n}  // namespace m1une\n\n\n#line 12 \"verify/ds/range_query/mo.test.cpp\"\
+    \n\nnamespace {\n\nvoid test_randomized() {\n    std::uint64_t state = 503;\n\
+    \    auto random = [&state]() {\n        state ^= state << 7;\n        state ^=\
+    \ state >> 9;\n        return state;\n    };\n\n    for (int trial = 0; trial\
+    \ < 2500; ++trial) {\n        int n = int(random() % 60);\n        int query_count\
+    \ = int(random() % 80);\n        std::vector<int> values(n);\n        for (int&\
+    \ value : values) value = int(random() % 12);\n\n        m1une::ds::Mo mo(n);\n\
+    \        mo.reserve(query_count);\n        std::vector<std::pair<int, int>> ranges;\n\
+    \        for (int query = 0; query < query_count; ++query) {\n            int\
+    \ left = int(random() % (n + 1));\n            int right = int(random() % (n +\
+    \ 1));\n            if (right < left) std::swap(left, right);\n            assert(mo.add_query(left,\
+    \ right) == query);\n            ranges.emplace_back(left, right);\n        }\n\
+    \n        std::vector<int> frequency(12);\n        std::vector<int> actual(query_count);\n\
+    \        int distinct = 0;\n        mo.run(\n            [&](int index) {\n  \
+    \              if (frequency[values[index]]++ == 0) distinct++;\n            },\n\
+    \            [&](int index) {\n                if (--frequency[values[index]]\
     \ == 0) distinct--;\n            },\n            [&](int query_id) {\n       \
     \         actual[query_id] = distinct;\n            }\n        );\n\n        for\
     \ (int query = 0; query < query_count; ++query) {\n            std::vector<char>\
@@ -232,7 +238,7 @@ data:
   isVerificationFile: true
   path: verify/ds/range_query/mo.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 02:21:21+09:00'
+  timestamp: '2026-06-27 04:10:54+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/ds/range_query/mo.test.cpp

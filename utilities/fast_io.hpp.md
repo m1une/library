@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/ds/range_query/fenwick_tree.test.cpp
+    title: verify/ds/range_query/fenwick_tree.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/utilities/fast_io.test.cpp
     title: verify/utilities/fast_io.test.cpp
   _isVerificationFailed: false
@@ -154,6 +157,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/utilities/fast_io.test.cpp
+  - verify/ds/range_query/fenwick_tree.test.cpp
 documentation_of: utilities/fast_io.hpp
 layout: document
 title: Fast IO

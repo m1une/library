@@ -16,61 +16,73 @@ data:
     links: []
   bundledCode: "#line 1 \"ds/range_query/fenwick_tree.hpp\"\n\n\n\n#include <cassert>\n\
     #include <vector>\n\nnamespace m1une {\nnamespace ds {\n\ntemplate <typename T>\n\
-    struct FenwickTree {\n   private:\n    int _n;\n    std::vector<T> _data;\n\n\
-    \   public:\n    FenwickTree() : _n(0) {}\n\n    explicit FenwickTree(int n) :\
-    \ _n(n), _data(n + 1, T{}) {}\n\n    explicit FenwickTree(const std::vector<T>&\
-    \ a)\n        : _n(int(a.size())), _data(a.size() + 1, T{}) {\n        for (int\
-    \ i = 1; i <= _n; ++i) {\n            _data[i] += a[i - 1];\n            const\
-    \ int p = i + (i & -i);\n            if (p <= _n) {\n                _data[p]\
-    \ += _data[i];\n            }\n        }\n    }\n\n    int size() const {\n  \
-    \      return _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n\
-    \    }\n\n    // Adds `x` to the element at zero-based index `p`.\n    void add(int\
-    \ p, const T& x) {\n        assert(0 <= p && p < _n);\n        ++p;\n        while\
-    \ (p <= _n) {\n            _data[p] += x;\n            p += p & -p;\n        }\n\
-    \    }\n\n    // Returns the sum of elements in the range [0, r).\n    T sum(int\
-    \ r) const {\n        assert(0 <= r && r <= _n);\n        T result{};\n      \
-    \  while (r > 0) {\n            result += _data[r];\n            r -= r & -r;\n\
-    \        }\n        return result;\n    }\n\n    // Returns the sum of elements\
-    \ in the range [l, r).\n    T sum(int l, int r) const {\n        assert(0 <= l\
-    \ && l <= r && r <= _n);\n        return sum(r) - sum(l);\n    }\n\n    // Returns\
-    \ the minimum index `r` such that the sum of [0, r) >= w.\n    // Requires all\
-    \ elements in the tree to be non-negative.\n    int lower_bound(T w) const {\n\
-    \        if (w <= 0) return 0;\n        int x = 0;\n        int k = 1;\n     \
-    \   while (k <= _n) k <<= 1;\n        for (k >>= 1; k > 0; k >>= 1) {\n      \
-    \      if (x + k <= _n && _data[x + k] < w) {\n                w -= _data[x +\
-    \ k];\n                x += k;\n            }\n        }\n        return x + 1;\n\
-    \    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n\n"
+    struct FenwickTree {\n   private:\n    int _n;\n    int _max_power;\n    std::vector<T>\
+    \ _data;\n\n    static int max_power_leq(int n) {\n        int result = 1;\n \
+    \       while (result <= n / 2) result <<= 1;\n        return result;\n    }\n\
+    \n    T prefix_sum(int r) const {\n        T result{};\n        const T* data\
+    \ = _data.data();\n        while (r > 0) {\n            result += data[r];\n \
+    \           r -= r & -r;\n        }\n        return result;\n    }\n\n   public:\n\
+    \    FenwickTree() : _n(0), _max_power(0) {}\n\n    explicit FenwickTree(int n)\n\
+    \        : _n(n), _max_power(max_power_leq(n > 0 ? n : 1)), _data(n + 1, T{})\
+    \ {}\n\n    explicit FenwickTree(const std::vector<T>& a)\n        : _n(int(a.size())),\n\
+    \          _max_power(max_power_leq(_n > 0 ? _n : 1)),\n          _data(a.size()\
+    \ + 1, T{}) {\n        for (int i = 1; i <= _n; ++i) {\n            _data[i] +=\
+    \ a[i - 1];\n            const int p = i + (i & -i);\n            if (p <= _n)\
+    \ {\n                _data[p] += _data[i];\n            }\n        }\n    }\n\n\
+    \    int size() const {\n        return _n;\n    }\n\n    bool empty() const {\n\
+    \        return _n == 0;\n    }\n\n    // Adds `x` to the element at zero-based\
+    \ index `p`.\n    void add(int p, const T& x) {\n        assert(0 <= p && p <\
+    \ _n);\n        ++p;\n        T* data = _data.data();\n        while (p <= _n)\
+    \ {\n            data[p] += x;\n            p += p & -p;\n        }\n    }\n\n\
+    \    // Returns the sum of elements in the range [0, r).\n    T sum(int r) const\
+    \ {\n        assert(0 <= r && r <= _n);\n        return prefix_sum(r);\n    }\n\
+    \n    // Returns the sum of elements in the range [l, r).\n    T sum(int l, int\
+    \ r) const {\n        assert(0 <= l && l <= r && r <= _n);\n        return prefix_sum(r)\
+    \ - prefix_sum(l);\n    }\n\n    // Returns the minimum index `r` such that the\
+    \ sum of [0, r) >= w.\n    // Requires all elements in the tree to be non-negative.\n\
+    \    int lower_bound(T w) const {\n        if (w <= 0) return 0;\n        int\
+    \ x = 0;\n        const T* data = _data.data();\n        for (int k = _max_power;\
+    \ k > 0; k >>= 1) {\n            if (x + k <= _n && data[x + k] < w) {\n     \
+    \           w -= data[x + k];\n                x += k;\n            }\n      \
+    \  }\n        return x + 1;\n    }\n};\n\n}  // namespace ds\n}  // namespace\
+    \ m1une\n\n\n"
   code: "#ifndef M1UNE_DS_FENWICK_TREE_HPP\n#define M1UNE_DS_FENWICK_TREE_HPP 1\n\n\
     #include <cassert>\n#include <vector>\n\nnamespace m1une {\nnamespace ds {\n\n\
-    template <typename T>\nstruct FenwickTree {\n   private:\n    int _n;\n    std::vector<T>\
-    \ _data;\n\n   public:\n    FenwickTree() : _n(0) {}\n\n    explicit FenwickTree(int\
-    \ n) : _n(n), _data(n + 1, T{}) {}\n\n    explicit FenwickTree(const std::vector<T>&\
-    \ a)\n        : _n(int(a.size())), _data(a.size() + 1, T{}) {\n        for (int\
-    \ i = 1; i <= _n; ++i) {\n            _data[i] += a[i - 1];\n            const\
-    \ int p = i + (i & -i);\n            if (p <= _n) {\n                _data[p]\
-    \ += _data[i];\n            }\n        }\n    }\n\n    int size() const {\n  \
-    \      return _n;\n    }\n\n    bool empty() const {\n        return _n == 0;\n\
-    \    }\n\n    // Adds `x` to the element at zero-based index `p`.\n    void add(int\
-    \ p, const T& x) {\n        assert(0 <= p && p < _n);\n        ++p;\n        while\
-    \ (p <= _n) {\n            _data[p] += x;\n            p += p & -p;\n        }\n\
-    \    }\n\n    // Returns the sum of elements in the range [0, r).\n    T sum(int\
-    \ r) const {\n        assert(0 <= r && r <= _n);\n        T result{};\n      \
-    \  while (r > 0) {\n            result += _data[r];\n            r -= r & -r;\n\
-    \        }\n        return result;\n    }\n\n    // Returns the sum of elements\
-    \ in the range [l, r).\n    T sum(int l, int r) const {\n        assert(0 <= l\
-    \ && l <= r && r <= _n);\n        return sum(r) - sum(l);\n    }\n\n    // Returns\
+    template <typename T>\nstruct FenwickTree {\n   private:\n    int _n;\n    int\
+    \ _max_power;\n    std::vector<T> _data;\n\n    static int max_power_leq(int n)\
+    \ {\n        int result = 1;\n        while (result <= n / 2) result <<= 1;\n\
+    \        return result;\n    }\n\n    T prefix_sum(int r) const {\n        T result{};\n\
+    \        const T* data = _data.data();\n        while (r > 0) {\n            result\
+    \ += data[r];\n            r -= r & -r;\n        }\n        return result;\n \
+    \   }\n\n   public:\n    FenwickTree() : _n(0), _max_power(0) {}\n\n    explicit\
+    \ FenwickTree(int n)\n        : _n(n), _max_power(max_power_leq(n > 0 ? n : 1)),\
+    \ _data(n + 1, T{}) {}\n\n    explicit FenwickTree(const std::vector<T>& a)\n\
+    \        : _n(int(a.size())),\n          _max_power(max_power_leq(_n > 0 ? _n\
+    \ : 1)),\n          _data(a.size() + 1, T{}) {\n        for (int i = 1; i <= _n;\
+    \ ++i) {\n            _data[i] += a[i - 1];\n            const int p = i + (i\
+    \ & -i);\n            if (p <= _n) {\n                _data[p] += _data[i];\n\
+    \            }\n        }\n    }\n\n    int size() const {\n        return _n;\n\
+    \    }\n\n    bool empty() const {\n        return _n == 0;\n    }\n\n    // Adds\
+    \ `x` to the element at zero-based index `p`.\n    void add(int p, const T& x)\
+    \ {\n        assert(0 <= p && p < _n);\n        ++p;\n        T* data = _data.data();\n\
+    \        while (p <= _n) {\n            data[p] += x;\n            p += p & -p;\n\
+    \        }\n    }\n\n    // Returns the sum of elements in the range [0, r).\n\
+    \    T sum(int r) const {\n        assert(0 <= r && r <= _n);\n        return\
+    \ prefix_sum(r);\n    }\n\n    // Returns the sum of elements in the range [l,\
+    \ r).\n    T sum(int l, int r) const {\n        assert(0 <= l && l <= r && r <=\
+    \ _n);\n        return prefix_sum(r) - prefix_sum(l);\n    }\n\n    // Returns\
     \ the minimum index `r` such that the sum of [0, r) >= w.\n    // Requires all\
     \ elements in the tree to be non-negative.\n    int lower_bound(T w) const {\n\
-    \        if (w <= 0) return 0;\n        int x = 0;\n        int k = 1;\n     \
-    \   while (k <= _n) k <<= 1;\n        for (k >>= 1; k > 0; k >>= 1) {\n      \
-    \      if (x + k <= _n && _data[x + k] < w) {\n                w -= _data[x +\
-    \ k];\n                x += k;\n            }\n        }\n        return x + 1;\n\
-    \    }\n};\n\n}  // namespace ds\n}  // namespace m1une\n\n#endif  // M1UNE_DS_FENWICK_TREE_HPP\n"
+    \        if (w <= 0) return 0;\n        int x = 0;\n        const T* data = _data.data();\n\
+    \        for (int k = _max_power; k > 0; k >>= 1) {\n            if (x + k <=\
+    \ _n && data[x + k] < w) {\n                w -= data[x + k];\n              \
+    \  x += k;\n            }\n        }\n        return x + 1;\n    }\n};\n\n}  //\
+    \ namespace ds\n}  // namespace m1une\n\n#endif  // M1UNE_DS_FENWICK_TREE_HPP\n"
   dependsOn: []
   isVerificationFile: false
   path: ds/range_query/fenwick_tree.hpp
   requiredBy: []
-  timestamp: '2026-06-20 20:05:21+09:00'
+  timestamp: '2026-06-27 04:10:54+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/range_query/fenwick_tree.test.cpp
