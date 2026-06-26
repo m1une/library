@@ -47,6 +47,11 @@ relevant Library Checker tests when such problems exist. Compile the relevant
 verification files with the repository's C++ standard, and run local tests when
 possible.
 
+For Library Checker problem details, use the official problem repository:
+`https://github.com/yosupo06/library-checker-problems/tree/master`. It contains
+problem metadata, generators, examples, and reference solutions that clarify the
+input/output format when the website page is sparse.
+
 ## Documentation Rendering
 
 This repository's documentation is published through Jekyll/GitHub Pages, so

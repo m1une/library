@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.yosupo.jp/problem/number_of_substrings"
 
 #include "../../string/suffix_automaton.hpp"
 
@@ -143,7 +143,11 @@ int main() {
     test_features();
     test_randomized();
 
-    long long a, b;
-    std::cin >> a >> b;
-    std::cout << a + b << '\n';
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    std::string text;
+    std::cin >> text;
+    m1une::string::SuffixAutomaton<> automaton(text);
+    std::cout << automaton.distinct_substring_count() << '\n';
 }

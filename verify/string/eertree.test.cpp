@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.yosupo.jp/problem/eertree"
 
 #include "../../string/eertree.hpp"
 
@@ -130,13 +130,44 @@ void test_randomized() {
     }
 }
 
+int library_checker_id(int id) {
+    using Eertree = m1une::string::Eertree<>;
+    if (id == Eertree::odd_root) return 0;
+    if (id == Eertree::even_root) return 1;
+    return id;
+}
+
 }  // namespace
 
 int main() {
     test_features();
     test_randomized();
 
-    long long a, b;
-    std::cin >> a >> b;
-    std::cout << a + b << '\n';
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    std::string text;
+    std::cin >> text;
+    m1une::string::Eertree<> tree(text);
+
+    std::vector<int> parent(tree.node_count(), -1);
+    for (int id = 0; id < tree.node_count(); id++) {
+        const auto& node = tree.node(id);
+        for (int symbol = 0; symbol < 26; symbol++) {
+            int to = node.next[symbol];
+            if (to != m1une::string::Eertree<>::null_node) parent[to] = id;
+        }
+    }
+
+    std::cout << tree.size() << '\n';
+    for (int id = 2; id < tree.node_count(); id++) {
+        std::cout << library_checker_id(parent[id]) - 1 << ' '
+                  << library_checker_id(tree.node(id).suffix_link) - 1 << '\n';
+    }
+    const auto& longest_suffix = tree.longest_suffix_nodes();
+    for (int i = 0; i < int(longest_suffix.size()); i++) {
+        if (i) std::cout << ' ';
+        std::cout << longest_suffix[i] - 1;
+    }
+    std::cout << '\n';
 }

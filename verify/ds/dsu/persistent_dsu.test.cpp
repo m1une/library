@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.yosupo.jp/problem/persistent_unionfind"
 
 #include "../../../ds/dsu/persistent_dsu.hpp"
 
@@ -53,7 +53,7 @@ struct NaiveDsu {
     }
 };
 
-int main() {
+void self_test() {
     using Dsu = m1une::ds::PersistentDsu;
 
     Dsu dsu(5);
@@ -118,8 +118,29 @@ int main() {
 
         versions.push_back({next, next_expected});
     }
+}
 
-    long long x, y;
-    std::cin >> x >> y;
-    std::cout << x + y << '\n';
+int main() {
+    self_test();
+
+    using Dsu = m1une::ds::PersistentDsu;
+
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n, q;
+    std::cin >> n >> q;
+    std::vector<Dsu> dsus;
+    dsus.push_back(Dsu(n));
+    while (q--) {
+        int type, k, u, v;
+        std::cin >> type >> k >> u >> v;
+        const Dsu& base = dsus[k + 1];
+        if (type == 0) {
+            dsus.push_back(base.merge(u, v));
+        } else {
+            std::cout << int(base.same(u, v)) << '\n';
+            dsus.push_back(Dsu());
+        }
+    }
 }

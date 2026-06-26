@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.yosupo.jp/problem/aho_corasick"
 
 #include "../../string/aho_corasick.hpp"
 
@@ -149,7 +149,28 @@ int main() {
     test_fixed();
     test_randomized();
 
-    long long a, b;
-    std::cin >> a >> b;
-    std::cout << a + b << '\n';
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n;
+    std::cin >> n;
+    m1une::string::AhoCorasick<> automaton;
+    for (int i = 0; i < n; i++) {
+        std::string pattern;
+        std::cin >> pattern;
+        automaton.insert(pattern);
+    }
+    automaton.build();
+
+    int node_count = int(automaton.node_count());
+    std::cout << node_count << '\n';
+    for (int id = 1; id < node_count; id++) {
+        const auto& node = automaton.node(id);
+        std::cout << node.parent << ' ' << node.failure << '\n';
+    }
+    for (int i = 0; i < n; i++) {
+        if (i) std::cout << ' ';
+        std::cout << automaton.pattern_node(i);
+    }
+    std::cout << '\n';
 }

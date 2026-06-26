@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.yosupo.jp/problem/associative_array"
 
 #include "../../../ds/hash_table/hash_map.hpp"
 
@@ -7,10 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-
+void self_test() {
     m1une::ds::HashMap<long long, std::string> mp;
     assert(mp.empty());
     auto inserted = mp.insert(5, std::string("five"));
@@ -67,8 +64,27 @@ int main() {
         assert(tested.size() == static_cast<int>(expected.size()));
         for (const auto& [key, value] : expected) assert(tested.at(key) == value);
     }
+}
 
-    long long A, B;
-    std::cin >> A >> B;
-    std::cout << A + B << '\n';
+int main() {
+    self_test();
+
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int q;
+    std::cin >> q;
+    m1une::ds::HashMap<long long, long long> map;
+    while (q--) {
+        int type;
+        long long key;
+        std::cin >> type >> key;
+        if (type == 0) {
+            long long value;
+            std::cin >> value;
+            map[key] = value;
+        } else {
+            std::cout << map[key] << '\n';
+        }
+    }
 }

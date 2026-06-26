@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.yosupo.jp/problem/assignment"
 
 #include <algorithm>
 #include <cassert>
@@ -141,7 +141,23 @@ int main() {
     test_hungarian_max();
     test_against_bruteforce();
 
-    long long a, b;
-    std::cin >> a >> b;
-    std::cout << a + b << '\n';
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n;
+    std::cin >> n;
+    std::vector<std::vector<long long>> cost(n, std::vector<long long>(n));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            std::cin >> cost[i][j];
+        }
+    }
+
+    auto result = m1une::optimization::hungarian_min(cost);
+    std::cout << result.cost << '\n';
+    for (int i = 0; i < n; i++) {
+        if (i) std::cout << ' ';
+        std::cout << result.row_to_col[i];
+    }
+    std::cout << '\n';
 }
