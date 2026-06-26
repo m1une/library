@@ -15,6 +15,11 @@ time without explicitly constructing the function over its whole domain.
 Typical applications include scheduling, sequence adjustment, median costs,
 and dynamic programs with convex piecewise-linear states.
 
+## Complexity Notation
+
+* `N` is the number of breakpoints stored in the current object.
+* `M` is the number of breakpoints stored in another object passed to `merge`.
+
 ## Represented Function
 
 A new object represents `f(x) = 0` for every `x`.

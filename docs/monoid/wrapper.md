@@ -34,3 +34,14 @@ constexpr auto custom_op = [](long long a, long long b) { return a + b; };
 constexpr auto custom_id = []() { return 0LL; };
 using CustomMonoid = m1une::monoid::Wrapper<long long, custom_op, custom_id>;
 ```
+
+## Interface and Complexity
+
+This is a stateless algebra tag. Generic data structures use its public
+`value_type`, `id()`, and `op(a, b)` members. If the type also provides helpers
+such as `make(...)` or `inv(x)`, they are described above or in the documented
+properties.
+
+Each static operation runs in the cost of the underlying operation shown in the
+properties. Scalar monoids are $O(1)$; monoids whose `value_type` stores several
+items, permutations, or matrices scale with that stored size.

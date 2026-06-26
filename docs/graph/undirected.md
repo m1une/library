@@ -27,3 +27,8 @@ where direction should not matter.
 | `graph/connected_components.hpp` | Direction ignored | Weak/ordinary connected components. |
 | `graph/cycle_detection.hpp` | Directed and undirected variants | Use `find_undirected_cycle(g)` for undirected graphs. |
 | `graph/grid.hpp` | Undirected graph builder | Builds 4/8-neighbor grid graphs. |
+
+## Complexity
+
+This header is an include bundle and provides no runtime operation by itself.
+See the included algorithm pages for public interfaces and complexities.

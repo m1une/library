@@ -16,9 +16,9 @@ It supports insertion, deletion, reversal, rotation, point assignment, range app
 
 * `ActedMonoid`: An acted monoid satisfying `m1une::acted_monoid::IsActedMonoid`.
 
-## Main Operations
+## Methods
 
-| Operation | Description | Complexity |
+| Method | Description | Complexity |
 | --- | --- | --- |
 | `insert`, `push_back`, `push_front`, `append` | Return a version with values inserted. Another version sharing the pool reuses its nodes; an independently constructed array is copied into this pool. | Expected $O(\log N)$ for one value or a shared-pool version; $O(M + \log N)$ for a vector or independent array |
 | `erase`, `pop_back`, `pop_front` | Return a version with values removed. | Expected $O(\log N)$ |

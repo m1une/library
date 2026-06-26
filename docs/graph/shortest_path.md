@@ -22,3 +22,8 @@ is `dag_shortest_path`, which is specifically for directed acyclic graphs.
 | `graph/dijkstra.hpp` | Direction-respecting | Non-negative weighted shortest paths. |
 | `graph/bellman_ford.hpp` | Direction-respecting | Shortest paths with negative edges. |
 | `graph/warshall_floyd.hpp` | Direction-respecting | All-pairs shortest paths. |
+
+## Complexity
+
+This header is an include bundle and provides no runtime operation by itself.
+See the included algorithm pages for public interfaces and complexities.

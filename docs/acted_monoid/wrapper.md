@@ -36,3 +36,11 @@ using RangeAddRangeMin = m1une::acted_monoid::Wrapper<
     [](long long f, long long x) { return x == INF ? INF : x + f; }
 >;
 ```
+
+## Interface and Complexity
+
+`Wrapper` exposes `value_type`, `operator_type`, `id()`, `op(a, b)`, `op_id()`,
+`op_comp(f, g)`, and `mapping(f, x)` for lazy data structures.
+
+Each static operation forwards to the function or lambda supplied as the
+corresponding template parameter, so its complexity is the cost of that callable.

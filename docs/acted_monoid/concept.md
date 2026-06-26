@@ -58,3 +58,7 @@ inverse for the value monoid:
 
 The concept checks only the interface. The value operation should satisfy the
 commutative group laws, and `mapping` should still distribute over `op`.
+
+## Complexity
+
+These concepts are compile-time interface checks and have no runtime cost.

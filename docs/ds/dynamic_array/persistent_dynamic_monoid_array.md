@@ -16,9 +16,9 @@ Each node stores both forward and reversed products, so range reversal works for
 
 * `Monoid`: A monoid satisfying `m1une::monoid::IsMonoid`.
 
-## Main Operations
+## Methods
 
-| Operation | Description | Complexity |
+| Method | Description | Complexity |
 | --- | --- | --- |
 | `insert`, `push_back`, `push_front`, `append` | Return a version with values inserted. Another version sharing the pool reuses its nodes; an independently constructed array is copied into this pool. | Expected $O(\log N)$ for one value or a shared-pool version; $O(M + \log N)$ for a vector or independent array |
 | `erase`, `pop_back`, `pop_front` | Return a version with values removed. | Expected $O(\log N)$ |

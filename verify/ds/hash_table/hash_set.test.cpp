@@ -1,16 +1,14 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_4_C"
 
 #include "../../../ds/hash_table/hash_set.hpp"
 
 #include <cassert>
 #include <iostream>
+#include <string>
 #include <unordered_set>
 #include <vector>
 
-int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-
+void self_test() {
     m1une::ds::HashSet<long long> st;
     assert(st.empty());
     assert(st.insert(5));
@@ -50,8 +48,24 @@ int main() {
         }
         assert(tested.size() == static_cast<int>(expected.size()));
     }
+}
 
-    long long A, B;
-    std::cin >> A >> B;
-    std::cout << A + B << '\n';
+int main() {
+    self_test();
+
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n;
+    std::cin >> n;
+    m1une::ds::HashSet<std::string> dictionary;
+    while (n--) {
+        std::string command, word;
+        std::cin >> command >> word;
+        if (command == "insert") {
+            dictionary.insert(word);
+        } else {
+            std::cout << (dictionary.contains(word) ? "yes" : "no") << '\n';
+        }
+    }
 }

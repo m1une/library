@@ -9,9 +9,12 @@ Helper for writing recursive lambdas without declaring a separate function objec
 
 ## Functions
 
-| Function | Description |
-| --- | --- |
-| `y_combinator(lambda)` | Wraps a lambda so it can call itself through its first argument. |
+| Function | Description | Complexity |
+| --- | --- | --- |
+| `y_combinator(lambda)` | Wraps a lambda so it can call itself through its first argument. | $O(1)$ |
+
+Calling the wrapped lambda has the same asymptotic complexity as calling the
+original lambda body.
 
 ## Example
 

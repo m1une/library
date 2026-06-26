@@ -28,20 +28,25 @@ integers can be mixed with rationals in arithmetic expressions.
 
 `T` must be a signed integral type no wider than `long long`.
 
+## Complexity Notation
+
+* `M` is the maximum absolute value among the numerator, denominator, and
+  widened intermediate values before normalization.
+
 ## Methods
 
-| Method | Description |
-| --- | --- |
-| `numerator()` | Returns the normalized numerator. |
-| `denominator()` | Returns the positive normalized denominator. |
-| `is_integer()` | Returns whether the denominator is one. |
-| `sign()` | Returns `-1`, `0`, or `1`. |
-| `reciprocal()` | Returns the reciprocal; requires a nonzero value. |
-| `abs()` | Returns the absolute value. |
-| `trunc()` | Rounds toward zero. |
-| `floor()` | Returns the mathematical floor. |
-| `ceil()` | Returns the mathematical ceiling. |
-| `to_long_double()` | Returns a floating-point approximation. |
+| Method | Description | Complexity |
+| --- | --- | --- |
+| `numerator() const` | Returns the normalized numerator. | $O(1)$ |
+| `denominator() const` | Returns the positive normalized denominator. | $O(1)$ |
+| `is_integer() const` | Returns whether the denominator is one. | $O(1)$ |
+| `sign() const` | Returns `-1`, `0`, or `1`. | $O(1)$ |
+| `reciprocal() const` | Returns the reciprocal; requires a nonzero value. | $O(1)$ |
+| `abs() const` | Returns the absolute value. | $O(1)$ |
+| `trunc() const` | Rounds toward zero. | $O(1)$ |
+| `floor() const` | Returns the mathematical floor. | $O(1)$ |
+| `ceil() const` | Returns the mathematical ceiling. | $O(1)$ |
+| `to_long_double() const` | Returns a floating-point approximation. | $O(1)$ |
 
 Arithmetic operators `+`, `-`, `*`, and `/`, their compound forms, unary signs,
 equality, and three-way comparison are supported.
@@ -49,6 +54,8 @@ equality, and three-way comparison are supported.
 All operations use `__int128_t` intermediates and reduce cross factors before
 multiplication when possible. The final normalized numerator and denominator,
 and every intermediate widened calculation, must be representable.
+Construction and arithmetic normalize with gcd computations and take
+$O(\log M)$ time. Comparisons take $O(1)$ widened arithmetic.
 
 ## Input and Output
 

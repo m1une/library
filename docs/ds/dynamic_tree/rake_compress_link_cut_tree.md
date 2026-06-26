@@ -19,6 +19,10 @@ All dynamic-forest operations take amortized $O(\log N)$ time. Internally, each
 original edge is represented by a hidden helper node, but helper-node ids and
 operations are not exposed by the public API.
 
+## Complexity Notation
+
+* `N` is the number of original vertices plus currently allocated helper nodes.
+
 ## Two Interface Layers
 
 The public interface describes only the original forest:
@@ -161,9 +165,9 @@ The operations have the following meanings:
 The inverse of `to_point(path)` is used only when `access` changes a preferred
 child back into a virtual child or vice versa.
 
-## Main Methods
+## Methods
 
-| Method | Description | Time |
+| Method | Description | Complexity |
 | --- | --- | --- |
 | `VertexId add_vertex(vertex_value)` | Adds an isolated original vertex and returns its vertex id. | Amortized $O(1)$ |
 | `const VertexValue& get_vertex(VertexId v)` | Returns original vertex `v`'s value. | $O(1)$ |
