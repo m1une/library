@@ -4,6 +4,9 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
+    title: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/dsu/potentialized_dsu.test.cpp
     title: verify/ds/dsu/potentialized_dsu.test.cpp
   _isVerificationFailed: false
@@ -34,6 +37,7 @@ data:
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/ds/dsu/persistent_potentialized_dsu.test.cpp
   - verify/ds/dsu/potentialized_dsu.test.cpp
 documentation_of: monoid/xor.hpp
 layout: document

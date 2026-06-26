@@ -13,6 +13,9 @@ data:
     path: verify/ds/dsu/dsu_monoid.test.cpp
     title: verify/ds/dsu/dsu_monoid.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
+    title: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/dsu/potentialized_dsu.test.cpp
     title: verify/ds/dsu/potentialized_dsu.test.cpp
   - icon: ':heavy_check_mark:'
@@ -101,6 +104,7 @@ data:
   - verify/ds/segtree/persistent_segtree.test.cpp
   - verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/segtree.test.cpp
+  - verify/ds/dsu/persistent_potentialized_dsu.test.cpp
   - verify/ds/dsu/dsu_monoid.test.cpp
   - verify/ds/dsu/potentialized_dsu.test.cpp
 documentation_of: monoid/add.hpp

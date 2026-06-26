@@ -87,8 +87,14 @@ data:
       path: ds/dsu/dsu_monoid.hpp
       title: DSU with Monoid
     - icon: ':heavy_check_mark:'
+      path: ds/dsu/partially_persistent_dsu.hpp
+      title: Partially Persistent DSU
+    - icon: ':heavy_check_mark:'
       path: ds/dsu/persistent_dsu.hpp
       title: Persistent DSU
+    - icon: ':heavy_check_mark:'
+      path: ds/dsu/persistent_potentialized_dsu.hpp
+      title: Persistent Potentialized DSU
     - icon: ':heavy_check_mark:'
       path: ds/dsu/potentialized_dsu.hpp
       title: Potentialized DSU
@@ -767,11 +773,17 @@ data:
       path: verify/ds/dsu/dsu_monoid.test.cpp
       title: verify/ds/dsu/dsu_monoid.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/ds/dsu/partially_persistent_dsu.test.cpp
+      title: verify/ds/dsu/partially_persistent_dsu.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/ds/dsu/persistent_dsu.test.cpp
       title: verify/ds/dsu/persistent_dsu.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
       title: verify/ds/dsu/persistent_dsu_library_checker.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
+      title: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/dsu/potentialized_dsu.test.cpp
       title: verify/ds/dsu/potentialized_dsu.test.cpp

@@ -6,6 +6,9 @@ data:
     path: ds/dsu/dsu_monoid.hpp
     title: DSU with Monoid
   - icon: ':heavy_check_mark:'
+    path: ds/dsu/persistent_potentialized_dsu.hpp
+    title: Persistent Potentialized DSU
+  - icon: ':heavy_check_mark:'
     path: ds/dsu/potentialized_dsu.hpp
     title: Potentialized DSU
   - icon: ':heavy_check_mark:'
@@ -90,6 +93,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/dsu/dsu_monoid.test.cpp
     title: verify/ds/dsu/dsu_monoid.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
+    title: verify/ds/dsu/persistent_potentialized_dsu.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/ds/dsu/potentialized_dsu.test.cpp
     title: verify/ds/dsu/potentialized_dsu.test.cpp
@@ -220,6 +226,7 @@ data:
   - ds/segtree/dynamic_dual_segtree.hpp
   - ds/dsu/dsu_monoid.hpp
   - ds/dsu/potentialized_dsu.hpp
+  - ds/dsu/persistent_potentialized_dsu.hpp
   - monoid/power.hpp
   timestamp: '2026-06-17 21:06:48+09:00'
   verificationStatus: LIBRARY_ALL_AC
@@ -244,6 +251,7 @@ data:
   - verify/ds/segtree/persistent_segtree.test.cpp
   - verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/segtree.test.cpp
+  - verify/ds/dsu/persistent_potentialized_dsu.test.cpp
   - verify/ds/dsu/dsu_monoid.test.cpp
   - verify/ds/dsu/potentialized_dsu.test.cpp
   - verify/graph/library_checker_lowest_common_ancestor.test.cpp
