@@ -52,16 +52,17 @@ consistency.
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `PotentializedDsu(int n)` | Creates `n` singleton sets with identity potentials. | $O(N)$ |
-| `int size()` | Returns the number of elements. | $O(1)$ |
-| `bool empty()` | Returns whether the DSU has no elements. | $O(1)$ |
-| `bool merge(int a, int b, T w)` | Adds the constraint `diff(a, b) == w`. Returns `false` only when `a` and `b` were already connected and the constraint contradicts the stored potentials. | Amortized $O(\alpha(N))$ |
-| `bool same(int a, int b)` | Returns whether `a` and `b` are in the same set. | Amortized $O(\alpha(N))$ |
-| `int leader(int a)` | Returns the representative of the set containing `a`. | Amortized $O(\alpha(N))$ |
-| `int group_size(int a)`, `int size(int a)` | Returns the size of the set containing `a`. | Amortized $O(\alpha(N))$ |
-| `T potential(int a)` | Returns the root-relative potential of `a`. | Amortized $O(\alpha(N))$ |
-| `T diff(int a, int b)` | Returns the potential difference from `a` to `b`. Requires `same(a, b)`. | Amortized $O(\alpha(N))$ |
-| `std::vector<std::vector<int>> groups()` | Returns all sets as vectors of element indices. | $O(N \alpha(N))$ |
+| `PotentializedDsu()` | Creates an empty DSU. | $O(1)$ |
+| `explicit PotentializedDsu(int n)` | Creates `n` singleton sets with identity potentials. | $O(N)$ |
+| `int size() const` | Returns the number of elements. | $O(1)$ |
+| `bool empty() const` | Returns whether the DSU has no elements. | $O(1)$ |
+| `bool merge(int a, int b, const T& w)` | Adds the constraint `diff(a, b) == w`. Returns `false` only when `a` and `b` were already connected and the constraint contradicts the stored potentials. | Amortized $O(\alpha(N))$ |
+| `bool same(int a, int b)`, `bool same(int a, int b) const` | Returns whether `a` and `b` are in the same set. | Amortized $O(\alpha(N))$ |
+| `int leader(int a)`, `int leader(int a) const` | Returns the representative of the set containing `a`. | Amortized $O(\alpha(N))$ |
+| `int group_size(int a)`, `int group_size(int a) const`, `int size(int a)`, `int size(int a) const` | Returns the size of the set containing `a`. | Amortized $O(\alpha(N))$ |
+| `T potential(int a)`, `T potential(int a) const` | Returns the root-relative potential of `a`. | Amortized $O(\alpha(N))$ |
+| `T diff(int a, int b)`, `T diff(int a, int b) const` | Returns the potential difference from `a` to `b`. Requires `same(a, b)`. | Amortized $O(\alpha(N))$ |
+| `std::vector<std::vector<int>> groups()`, `std::vector<std::vector<int>> groups() const` | Returns all sets as vectors of element indices. | $O(N \alpha(N))$ |
 
 ## Example
 

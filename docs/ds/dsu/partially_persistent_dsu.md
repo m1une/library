@@ -25,7 +25,8 @@ remain queryable.
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `PartiallyPersistentDsu(int n)` | Creates `n` singleton sets at time `0`. | $O(N)$ |
+| `PartiallyPersistentDsu()` | Creates an empty DSU at time `0`. | $O(1)$ |
+| `explicit PartiallyPersistentDsu(int n)` | Creates `n` singleton sets at time `0`. | $O(N)$ |
 | `int size() const` | Returns the number of elements. | $O(1)$ |
 | `bool empty() const` | Returns whether the DSU has no elements. | $O(1)$ |
 | `int time() const` | Returns the current time. | $O(1)$ |
@@ -35,7 +36,7 @@ remain queryable.
 | `int leader(int t, int a) const` | Returns the representative of the set containing `a` at time `t`. | $O(\log N)$ |
 | `int leader(int a) const` | Equivalent to `leader(time(), a)`. | $O(\log N)$ |
 | `int group_size(int t, int a) const`, `int size(int t, int a) const` | Returns the size of the set containing `a` at time `t`. | $O(\log N + \log Q)$ |
-| `int group_size(int a) const`, `int size(int a) const` | Equivalent to querying at the current time. | $O(\log N + \log Q)$ |
+| `int group_size(int a) const`, `int size(int a) const` | Equivalent to querying at the current time. | $O(\log N)$ |
 | `std::vector<std::vector<int>> groups(int t) const` | Returns all sets at time `t` as vectors of element indices. | $O(N \log N)$ |
 | `std::vector<std::vector<int>> groups() const` | Equivalent to `groups(time())`. | $O(N \log N)$ |
 

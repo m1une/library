@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B"
 
 #include "../../../ds/dsu/persistent_potentialized_dsu.hpp"
 #include "../../../monoid/add.hpp"
@@ -86,7 +86,7 @@ struct NaivePotentializedDsu {
     }
 };
 
-int main() {
+void self_test() {
     using Add = m1une::monoid::Add<long long>;
     using AddDsu = m1une::ds::PersistentPotentializedDsu<Add>;
 
@@ -178,8 +178,36 @@ int main() {
 
         versions.emplace_back(next, next_expected);
     }
+}
 
-    long long x, y;
-    std::cin >> x >> y;
-    std::cout << x + y << '\n';
+int main() {
+    self_test();
+
+    using Add = m1une::monoid::Add<long long>;
+    using Dsu = m1une::ds::PersistentPotentializedDsu<Add>;
+
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n, q;
+    std::cin >> n >> q;
+    Dsu dsu(n);
+
+    while (q--) {
+        int type, x, y;
+        std::cin >> type >> x >> y;
+        if (type == 0) {
+            long long z;
+            std::cin >> z;
+            auto [next, ok] = dsu.merge(x, y, z);
+            (void)ok;
+            dsu = next;
+        } else {
+            if (dsu.same(x, y)) {
+                std::cout << dsu.diff(x, y) << '\n';
+            } else {
+                std::cout << "?\n";
+            }
+        }
+    }
 }

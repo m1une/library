@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/aplusb"
+#define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B"
 
 #include "../../../ds/dsu/potentialized_dsu.hpp"
 #include "../../../monoid/add.hpp"
@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-int main() {
+void self_test() {
     using Add = m1une::monoid::Add<long long>;
 
     m1une::ds::PotentializedDsu<Add> add_dsu(5);
@@ -53,8 +53,33 @@ int main() {
     m1une::ds::PotentializedDsu<Add> empty;
     assert(empty.size() == 0);
     assert(empty.empty());
+}
 
-    long long x, y;
-    std::cin >> x >> y;
-    std::cout << x + y << '\n';
+int main() {
+    self_test();
+
+    using Add = m1une::monoid::Add<long long>;
+
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n, q;
+    std::cin >> n >> q;
+    m1une::ds::PotentializedDsu<Add> dsu(n);
+
+    while (q--) {
+        int type, x, y;
+        std::cin >> type >> x >> y;
+        if (type == 0) {
+            long long z;
+            std::cin >> z;
+            dsu.merge(x, y, z);
+        } else {
+            if (dsu.same(x, y)) {
+                std::cout << dsu.diff(x, y) << '\n';
+            } else {
+                std::cout << "?\n";
+            }
+        }
+    }
 }

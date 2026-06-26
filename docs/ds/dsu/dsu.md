@@ -9,16 +9,21 @@ A Disjoint Set Union (also known as Union-Find) data structure. It manages a set
 
 It is implemented using **Path Compression** and **Union by Size**, achieving an amortized time complexity of $O(\alpha(N))$ per operation, where $\alpha$ is the inverse Ackermann function.
 
+## Complexity Notation
+
+* `N` is the number of elements.
+
 ## Methods
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `Dsu(int n)` | Creates `n` singleton sets. | $O(N)$ |
+| `Dsu()` | Creates an empty DSU. | $O(1)$ |
+| `explicit Dsu(int n)` | Creates `n` singleton sets. | $O(N)$ |
 | `int merge(int a, int b)` | Merges the sets containing `a` and `b`; returns the leader of the merged set. | Amortized $O(\alpha(N))$ |
 | `bool same(int a, int b)` | Returns whether `a` and `b` are in the same set. | Amortized $O(\alpha(N))$ |
 | `int leader(int a)` | Returns the representative of the set containing `a`. | Amortized $O(\alpha(N))$ |
 | `int size(int a)` | Returns the size of the set containing `a`. | Amortized $O(\alpha(N))$ |
-| `std::vector<std::vector<int>> groups()` | Returns all sets as vectors of element indices. | $O(N)$ |
+| `std::vector<std::vector<int>> groups()` | Returns all sets as vectors of element indices. | $O(N \alpha(N))$ |
 
 ## Example
 

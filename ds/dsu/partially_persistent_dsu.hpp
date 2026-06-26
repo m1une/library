@@ -80,7 +80,7 @@ struct PartiallyPersistentDsu {
     }
 
     int group_size(int a) const {
-        return group_size(_time, a);
+        return -parent[leader(a)];
     }
 
     int size(int t, int a) const {
@@ -97,15 +97,13 @@ struct PartiallyPersistentDsu {
         ++_time;
         int x = leader(a), y = leader(b);
         if (x == y) return false;
-        int sx = group_size(x);
-        int sy = group_size(y);
-        if (sx < sy) {
+        if (-parent[x] < -parent[y]) {
             std::swap(x, y);
-            std::swap(sx, sy);
         }
+        parent[x] += parent[y];
         parent[y] = x;
         parent_time[y] = _time;
-        size_history[x].emplace_back(_time, sx + sy);
+        size_history[x].emplace_back(_time, -parent[x]);
         return true;
     }
 

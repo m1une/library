@@ -17,7 +17,8 @@ It uses union by size without path compression, because path compression mutates
 
 | Method | Description | Complexity |
 | --- | --- | --- |
-| `PersistentDsu(int n)` | Creates `n` singleton sets. | $O(N)$ |
+| `PersistentDsu()` | Creates an empty DSU. | $O(1)$ |
+| `explicit PersistentDsu(int n)` | Creates `n` singleton sets. | $O(N)$ |
 | `int size() const` | Returns the number of elements. | $O(1)$ |
 | `bool empty() const` | Returns whether the DSU has no elements. | $O(1)$ |
 | `PersistentDsu merge(int a, int b) const` | Returns a new version where the sets containing `a` and `b` are merged. | $O(\log^2 N)$ |
