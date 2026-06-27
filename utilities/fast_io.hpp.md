@@ -407,10 +407,11 @@ For three or more dimensions, every innermost one-dimensional range is printed
 as one line. No blank line is inserted between higher-dimensional blocks.
 
 ```cpp
-std::vector<std::vector<std::vector<int>>> c = {
-    {{1, 2}, {3, 4}},
-    {{5, 6}, {7, 8}},
-};
+std::vector<std::vector<std::vector<int>>> c(2);
+c[0].push_back({1, 2});
+c[0].push_back({3, 4});
+c[1].push_back({5, 6});
+c[1].push_back({7, 8});
 output.println(c);
 ```
 
