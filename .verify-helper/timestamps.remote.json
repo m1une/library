@@ -38,6 +38,7 @@
 "verify/ds/range_query/range_inversion_count.test.cpp": "2026-06-27 04:39:45 +0900",
 "verify/ds/range_query/sliding_window_aggregation.test.cpp": "2026-06-23 02:38:21 +0900",
 "verify/ds/range_query/sparse_table.test.cpp": "2026-06-21 04:34:53 +0900",
+"verify/ds/range_query/sqrt_blocks.test.cpp": "2026-06-27 19:54:19 +0900",
 "verify/ds/range_query/sqrt_decomposition.test.cpp": "2026-06-23 02:29:31 +0900",
 "verify/ds/range_query/sqrt_tree.test.cpp": "2026-06-23 02:27:14 +0900",
 "verify/ds/range_query/wavelet_matrix.test.cpp": "2026-06-21 04:34:53 +0900",
