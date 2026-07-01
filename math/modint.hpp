@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <type_traits>
 #include <utility>
 
 namespace m1une {
@@ -10,6 +11,8 @@ namespace math {
 
 template <uint32_t Modulus>
 struct ModInt {
+    static_assert(0 < Modulus, "Modulus must be positive");
+
    private:
     uint32_t _v;
 
@@ -26,20 +29,15 @@ struct ModInt {
 
     constexpr ModInt() noexcept : _v(0) {}
 
-    constexpr ModInt(int v) noexcept {
-        long long x = (long long)(v % (long long)(Modulus));
-        if (x < 0) x += Modulus;
-        _v = static_cast<uint32_t>(x);
-    }
-
-    constexpr ModInt(long long v) noexcept {
-        long long x = (long long)(v % (long long)(Modulus));
-        if (x < 0) x += Modulus;
-        _v = static_cast<uint32_t>(x);
-    }
-
-    constexpr ModInt(unsigned int v) noexcept {
-        _v = static_cast<uint32_t>(v % Modulus);
+    template <class Integer, std::enable_if_t<std::is_integral_v<Integer>, int> = 0>
+    constexpr ModInt(Integer v) noexcept {
+        if constexpr (std::is_signed_v<Integer>) {
+            int64_t x = static_cast<int64_t>(v) % static_cast<int64_t>(Modulus);
+            if (x < 0) x += Modulus;
+            _v = static_cast<uint32_t>(x);
+        } else {
+            _v = static_cast<uint32_t>(static_cast<uint64_t>(v) % Modulus);
+        }
     }
 
     constexpr uint32_t val() const noexcept {

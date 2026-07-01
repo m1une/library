@@ -50,7 +50,10 @@ For convenience, the library provides the following common type aliases:
 | Constructor | Description | Complexity |
 | --- | --- | --- |
 | `ModInt()` | Initializes the value to `0`. | $O(1)$ |
-| `ModInt(int v)`, `ModInt(long long v)`, `ModInt(unsigned int v)` | Initializes from an integer. Negative values are converted to their positive modulo equivalents. | $O(1)$ |
+| `template<class Integer> ModInt(Integer v)` | Initializes from any standard integral type. Negative values are normalized, and wide unsigned values are reduced without narrowing first. | $O(1)$ |
+
+The integral constructor accepts types such as `int`, `long long`,
+`unsigned long`, and `std::mt19937::result_type` without ambiguous overloads.
 
 ## Methods
 
