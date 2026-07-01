@@ -1,6 +1,6 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A"
 
-#include "../../geometry/polygon.hpp"
+#include "../../geometry/convex_hull.hpp"
 
 #include <algorithm>
 #include <iostream>

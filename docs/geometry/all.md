@@ -13,11 +13,12 @@ documentation_of: ../../geometry/all.hpp
 | --- | --- |
 | `geometry/angle_sort.hpp` | Atan-free counterclockwise angle sorting around an arbitrary origin. |
 | `geometry/point.hpp` | Points, vectors, dot/cross products, exact orientation, distance, and rotation. |
+| `geometry/convex_hull.hpp` | Monotone-chain convex hull with optional boundary-collinear points. |
 | `geometry/farthest_pair.hpp` | Euclidean farthest pair with original indices in $O(N\log N)$. |
 | `geometry/manhattan_mst.hpp` | Manhattan minimum spanning tree for integral points in $O(N\log N)$. |
 | `geometry/line.hpp` | Lines, segments, projection, intersection, and distances. |
 | `geometry/ray.hpp` | Rays, containment, projection, intersections, and distances with other linear objects. |
-| `geometry/polygon.hpp` | Area, centroids, triangulation, hulls, containment, ray queries, intersection, clipping, and Minkowski sums. |
+| `geometry/polygon.hpp` | Area, centroids, triangulation, containment, ray queries, intersection, clipping, and Minkowski sums. |
 | `geometry/circle.hpp` | Circle relations, line/ray intersections, and ray reflection. |
 
 Integral predicates promote to signed 128-bit arithmetic. Constructions that

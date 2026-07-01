@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "polygon.hpp"
+#include "convex_hull.hpp"
 
 namespace m1une {
 namespace geometry {

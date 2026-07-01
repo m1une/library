@@ -10,6 +10,7 @@
 #include <optional>
 #include <vector>
 
+#include "convex_hull.hpp"
 #include "ray.hpp"
 
 namespace m1une {
@@ -408,56 +409,6 @@ std::vector<std::array<Point<T>, 3>> triangulate_convex_polygon(
         result.push_back(std::move(triangle));
     }
     return result;
-}
-
-template <Coordinate T>
-std::vector<Point<T>> convex_hull(
-    std::vector<Point<T>> points,
-    bool include_collinear = false
-) {
-    std::sort(points.begin(), points.end());
-    points.erase(std::unique(points.begin(), points.end()), points.end());
-    std::size_t n = points.size();
-    if (n <= 1) return points;
-
-    std::vector<Point<T>> hull;
-    hull.reserve(2 * n);
-    auto should_pop = [include_collinear](
-        const Point<T>& a,
-        const Point<T>& b,
-        const Point<T>& c
-    ) {
-        int turn = orientation(a, b, c);
-        return include_collinear ? turn < 0 : turn <= 0;
-    };
-
-    for (const Point<T>& point : points) {
-        while (
-            hull.size() >= 2 &&
-            should_pop(hull[hull.size() - 2], hull.back(), point)
-        ) {
-            hull.pop_back();
-        }
-        hull.push_back(point);
-    }
-
-    std::size_t lower_size = hull.size();
-    for (std::size_t i = n - 1; i-- > 0;) {
-        const Point<T>& point = points[i];
-        while (
-            hull.size() > lower_size &&
-            should_pop(hull[hull.size() - 2], hull.back(), point)
-        ) {
-            hull.pop_back();
-        }
-        hull.push_back(point);
-    }
-    hull.pop_back();
-
-    if (include_collinear && hull.size() == 2 * points.size() - 2) {
-        hull = std::move(points);
-    }
-    return hull;
 }
 
 template <Coordinate T>

@@ -1,14 +1,13 @@
 ---
-title: Polygons and Convex Hull
+title: Polygons
 documentation_of: ../../geometry/polygon.hpp
 ---
 
 ## Overview
 
-This header provides polygon area, monotone-chain convex hull, point
-containment, rotating-calipers convex diameter, ray queries, polygon
-intersection and distance, triangulation, centroids, convex clipping, and
-Minkowski sums.
+This header provides polygon area, point containment, rotating-calipers convex
+diameter, ray queries, polygon intersection and distance, triangulation,
+centroids, convex clipping, and Minkowski sums.
 
 Polygons are represented by `std::vector<Point<T>>`. The first point must not be
 repeated at the end.
@@ -34,7 +33,6 @@ The polygon may be clockwise or counterclockwise and may be non-convex.
 | `is_simple_polygon(polygon, eps)` | Tests whether polygon edges only meet at adjacent endpoints. | $O(N^2)$ |
 | `triangulate_polygon(polygon, eps)` | Ear-clips a simple polygon, or returns `nullopt` when triangulation fails. | $O(N^2)$ |
 | `triangulate_convex_polygon(polygon, eps)` | Fan-triangulates a convex polygon. | $O(N)$ |
-| `convex_hull(points, include_collinear)` | Returns the hull counterclockwise from its lexicographically smallest point, without repeating the first point. | $O(N \log N)$ |
 | `point_in_polygon(polygon, point, eps)` | Classifies a point against any simple polygon. | $O(N)$ |
 | `convex_diameter2(polygon)` | Returns the maximum squared distance between vertices of a convex counterclockwise polygon. | $O(N)$ |
 | `ray_polygon_intersections(ray, polygon, eps)` | Returns distinct boundary events ordered from the ray origin. | $O(N \log N)$ |
@@ -45,10 +43,6 @@ The polygon may be clockwise or counterclockwise and may be non-convex.
 | `distance(first, second)` | Minimum distance between two closed filled simple polygons. | $O(NM)$ |
 | `convex_polygon_intersection(first, second, eps)` | Returns the intersection of two convex polygons. | $O(NM)$ |
 | `minkowski_sum(first, second)` | Returns the Minkowski sum of two convex polygons. | $O(N+M)$ |
-
-By default, `convex_hull` removes points lying strictly inside hull edges.
-Passing `true` keeps boundary-collinear points. Duplicate input points are
-removed.
 
 Polygon queries require at least three vertices unless stated otherwise.
 
@@ -105,6 +99,9 @@ counterclockwise and may contain redundant collinear vertices. The result is a
 counterclockwise convex polygon without a repeated first point. Coordinates
 retain type `T`; ensure additions fit that type.
 
+For convex-hull construction, include
+[`geometry/convex_hull.hpp`](convex_hull.md).
+
 ## Example
 
 ```cpp
@@ -115,13 +112,11 @@ retain type `T`; ensure additions fit that type.
 
 int main() {
     using Point = m1une::geometry::Point<long long>;
-    std::vector<Point> points;
-    points.emplace_back(0, 0);
-    points.emplace_back(2, 0);
-    points.emplace_back(1, 1);
-    points.emplace_back(1, 0);
+    std::vector<Point> polygon;
+    polygon.emplace_back(0, 0);
+    polygon.emplace_back(2, 0);
+    polygon.emplace_back(0, 2);
 
-    auto hull = m1une::geometry::convex_hull(points);
-    std::cout << hull.size() << "\n"; // 3
+    std::cout << m1une::geometry::polygon_area(polygon) << "\n"; // 2
 }
 ```
