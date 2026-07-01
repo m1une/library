@@ -8,6 +8,9 @@ data:
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':heavy_check_mark:'
+    path: math/base_n.hpp
+    title: Base-N Numbers
+  - icon: ':heavy_check_mark:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
   - icon: ':heavy_check_mark:'
@@ -71,9 +74,52 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bitwise_convolution.hpp\"\
-    \n\n\n\n#include <cassert>\n#include <cstddef>\n#include <utility>\n#include <vector>\n\
-    \n#line 1 \"math/zeta_mobius_transform.hpp\"\n\n\n\n#line 7 \"math/zeta_mobius_transform.hpp\"\
+  bundledCode: "#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/base_n.hpp\"\n\n\n\n\
+    #include <algorithm>\n#include <cassert>\n#include <concepts>\n#include <limits>\n\
+    #include <optional>\n#include <type_traits>\n#include <vector>\n\nnamespace m1une\
+    \ {\nnamespace math {\n\n// Returns the canonical most-significant-first base-n\
+    \ digits of a\n// nonnegative integer. Zero is represented by one zero digit.\n\
+    template <std::integral Integer>\nrequires(!std::same_as<std::remove_cv_t<Integer>,\
+    \ bool>)\nstd::vector<int> to_base_n(Integer value, int base) {\n    assert(2\
+    \ <= base);\n    if (base < 2) return {};\n    if constexpr (std::signed_integral<Integer>)\
+    \ {\n        assert(0 <= value);\n        if (value < 0) return {};\n    }\n\n\
+    \    using Unsigned = std::make_unsigned_t<Integer>;\n    Unsigned remaining =\
+    \ static_cast<Unsigned>(value);\n    if (remaining == 0) return {0};\n\n    std::vector<int>\
+    \ digits;\n    const unsigned long long unsigned_base = static_cast<unsigned int>(base);\n\
+    \    while (remaining != 0) {\n        digits.push_back(int(remaining % unsigned_base));\n\
+    \        remaining = Unsigned(remaining / unsigned_base);\n    }\n    std::reverse(digits.begin(),\
+    \ digits.end());\n    return digits;\n}\n\n// Converts most-significant-first\
+    \ base-n digits to an integer.\n// Returns nullopt for an invalid digit or when\
+    \ the result does not fit.\ntemplate <std::integral Integer, class DigitSequence>\n\
+    requires(!std::same_as<std::remove_cv_t<Integer>, bool>)\nstd::optional<Integer>\
+    \ checked_from_base_n(const DigitSequence& digits,\n                         \
+    \                  int base) {\n    assert(2 <= base);\n    if (base < 2) return\
+    \ std::nullopt;\n\n    using Unsigned = std::make_unsigned_t<Integer>;\n    constexpr\
+    \ Unsigned integer_limit = [] {\n        if constexpr (std::signed_integral<Integer>)\
+    \ {\n            return Unsigned(std::numeric_limits<Integer>::max());\n     \
+    \   } else {\n            return std::numeric_limits<Integer>::max();\n      \
+    \  }\n    }();\n    const unsigned __int128 limit = integer_limit;\n    const\
+    \ unsigned __int128 unsigned_base = static_cast<unsigned int>(base);\n\n    unsigned\
+    \ __int128 value = 0;\n    for (const auto& digit_reference : digits) {\n    \
+    \    using Digit = std::remove_cvref_t<decltype(digit_reference)>;\n        static_assert(std::integral<Digit>);\n\
+    \        static_assert(!std::same_as<Digit, bool>);\n        Digit digit = digit_reference;\n\
+    \        if constexpr (std::signed_integral<Digit>) {\n            if (digit <\
+    \ 0) return std::nullopt;\n        }\n        using UnsignedDigit = std::make_unsigned_t<Digit>;\n\
+    \        UnsignedDigit unsigned_digit = static_cast<UnsignedDigit>(digit);\n \
+    \       unsigned __int128 converted_digit = unsigned_digit;\n        if (converted_digit\
+    \ >= unsigned_base) {\n            return std::nullopt;\n        }\n\n       \
+    \ if (converted_digit > limit ||\n            value > (limit - converted_digit)\
+    \ / unsigned_base) {\n            return std::nullopt;\n        }\n        value\
+    \ = value * unsigned_base + converted_digit;\n    }\n    return static_cast<Integer>(static_cast<Unsigned>(value));\n\
+    }\n\n// Converts most-significant-first base-n digits to an integer.\n// Every\
+    \ digit must be valid and the result must fit in Integer.\ntemplate <std::integral\
+    \ Integer, class DigitSequence>\nrequires(!std::same_as<std::remove_cv_t<Integer>,\
+    \ bool>)\nInteger from_base_n(const DigitSequence& digits, int base) {\n    std::optional<Integer>\
+    \ result = checked_from_base_n<Integer>(digits, base);\n    assert(result.has_value());\n\
+    \    return result.value_or(Integer(0));\n}\n\n}  // namespace math\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"math/bitwise_convolution.hpp\"\n\n\n\n#line 5 \"math/bitwise_convolution.hpp\"\
+    \n#include <cstddef>\n#include <utility>\n#line 8 \"math/bitwise_convolution.hpp\"\
+    \n\n#line 1 \"math/zeta_mobius_transform.hpp\"\n\n\n\n#line 7 \"math/zeta_mobius_transform.hpp\"\
     \n\nnamespace m1une {\nnamespace math {\n\nnamespace zeta_mobius_transform_detail\
     \ {\n\ninline bool is_power_of_two(std::size_t size) noexcept {\n    return size\
     \ != 0 && (size & (size - 1)) == 0;\n}\n\ninline std::vector<std::size_t> primes_up_to(std::size_t\
@@ -211,21 +257,20 @@ data:
     \     assert(doubled <= maximum());\n        return binom(int(doubled), n) - binom(int(doubled),\
     \ n + 1);\n    }\n};\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line\
     \ 1 \"math/combinatorial_sequences.hpp\"\n\n\n\n#line 7 \"math/combinatorial_sequences.hpp\"\
-    \n\n#line 1 \"fps/formal_power_series.hpp\"\n\n\n\n#include <algorithm>\n#line\
-    \ 7 \"fps/formal_power_series.hpp\"\n#include <optional>\n#line 10 \"fps/formal_power_series.hpp\"\
+    \n\n#line 1 \"fps/formal_power_series.hpp\"\n\n\n\n#line 10 \"fps/formal_power_series.hpp\"\
     \n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#line 5 \"fps/convolution.hpp\"\n#include\
     \ <array>\n#line 10 \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\n\n\
-    \n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n#include <type_traits>\n\
-    #line 8 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\ntemplate\
-    \ <uint32_t Modulus>\nstruct ModInt {\n    static_assert(0 < Modulus, \"Modulus\
-    \ must be positive\");\n\n   private:\n    uint32_t _v;\n\n   public:\n    static\
-    \ constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n    static constexpr\
-    \ ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n        x._v = v;\n  \
-    \      return x;\n    }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    template\
-    \ <class Integer, std::enable_if_t<std::is_integral_v<Integer>, int> = 0>\n  \
-    \  constexpr ModInt(Integer v) noexcept {\n        if constexpr (std::is_signed_v<Integer>)\
-    \ {\n            int64_t x = static_cast<int64_t>(v) % static_cast<int64_t>(Modulus);\n\
-    \            if (x < 0) x += Modulus;\n            _v = static_cast<uint32_t>(x);\n\
+    \n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n#line 8 \"math/modint.hpp\"\
+    \n\nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct\
+    \ ModInt {\n    static_assert(0 < Modulus, \"Modulus must be positive\");\n\n\
+    \   private:\n    uint32_t _v;\n\n   public:\n    static constexpr uint32_t mod()\
+    \ {\n        return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t\
+    \ v) noexcept {\n        ModInt x;\n        x._v = v;\n        return x;\n   \
+    \ }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    template <class Integer,\
+    \ std::enable_if_t<std::is_integral_v<Integer>, int> = 0>\n    constexpr ModInt(Integer\
+    \ v) noexcept {\n        if constexpr (std::is_signed_v<Integer>) {\n        \
+    \    int64_t x = static_cast<int64_t>(v) % static_cast<int64_t>(Modulus);\n  \
+    \          if (x < 0) x += Modulus;\n            _v = static_cast<uint32_t>(x);\n\
     \        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
     \ % Modulus);\n        }\n    }\n\n    constexpr uint32_t val() const noexcept\
     \ {\n        return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept\
@@ -537,8 +582,7 @@ data:
     \ >= 1) result[1] = 0;\n    for (int n = 2; n <= maximum; n++) {\n        result[n]\
     \ = Mint(n - 1) * (result[n - 1] + result[n - 2]);\n    }\n    return result;\n\
     }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/integer_arithmetic.hpp\"\
-    \n\n\n\n#line 5 \"math/integer_arithmetic.hpp\"\n#include <concepts>\n#include\
-    \ <limits>\n#line 9 \"math/integer_arithmetic.hpp\"\n\nnamespace m1une {\nnamespace\
+    \n\n\n\n#line 9 \"math/integer_arithmetic.hpp\"\n\nnamespace m1une {\nnamespace\
     \ math {\n\nnamespace integer_arithmetic_detail {\n\ntemplate <std::integral T>\n\
     requires(!std::same_as<std::remove_cv_t<T>, bool>)\nconstexpr std::optional<T>\
     \ checked_multiply(T first, T second) {\n    constexpr T minimum = std::numeric_limits<T>::min();\n\
@@ -1198,11 +1242,13 @@ data:
     \ value) {\n    if (value == 0) return true;\n    for (const auto& factor : prime_factorize(value))\
     \ {\n        if (factor.first % 4 == 3 && (factor.second & 1) != 0) return false;\n\
     \    }\n    return true;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\
-    \n#line 21 \"math/all.hpp\"\n\n\n"
+    \n#line 22 \"math/all.hpp\"\n\n\n"
   code: '#ifndef M1UNE_MATH_ALL_HPP
 
     #define M1UNE_MATH_ALL_HPP 1
 
+
+    #include "base_n.hpp"
 
     #include "bitwise_convolution.hpp"
 
@@ -1243,6 +1289,7 @@ data:
 
     '
   dependsOn:
+  - math/base_n.hpp
   - math/bitwise_convolution.hpp
   - math/zeta_mobius_transform.hpp
   - math/bit_ceil.hpp
@@ -1266,7 +1313,7 @@ data:
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-07-01 22:14:13+09:00'
+  timestamp: '2026-07-01 22:19:42+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
@@ -1284,6 +1331,8 @@ title: Math All
 You usually do not need to include this entire bundle:
 
 * Use `modint.hpp` for arithmetic modulo a fixed number such as `998244353`.
+* Use `base_n.hpp` to convert nonnegative integers to and from arbitrary-base
+  digit sequences.
 * Use `bitwise_convolution.hpp` for OR, AND, or XOR convolution over mask
   indices.
 * Use `zeta_mobius_transform.hpp` for subset, superset, divisor, and multiple
@@ -1318,6 +1367,7 @@ few unused headers do not matter.
 
 | Header | Contents |
 | --- | --- |
+| `math/base_n.hpp` | Checked conversion between integers and arbitrary-base digits. |
 | `math/bitwise_convolution.hpp` | OR, AND, XOR convolutions and the Walsh-Hadamard transform. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/integer_arithmetic.hpp` | Exact integer square roots and overflow-aware powers. |

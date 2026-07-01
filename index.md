@@ -430,6 +430,9 @@ data:
       path: math/all.hpp
       title: Math All
     - icon: ':heavy_check_mark:'
+      path: math/base_n.hpp
+      title: Base-N Numbers
+    - icon: ':heavy_check_mark:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
     - icon: ':heavy_check_mark:'
@@ -1119,6 +1122,9 @@ data:
       title: verify/graph/two_sat.test.cpp
   - name: verify/math
     pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/math/base_n.test.cpp
+      title: verify/math/base_n.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/math/bell_number.test.cpp
       title: verify/math/bell_number.test.cpp
