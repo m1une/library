@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstdint>
 #include <limits>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -43,6 +44,52 @@ inline unsigned __int128 floor_sum_unsigned(unsigned long long n, unsigned long 
 }
 
 }  // namespace internal
+
+// Returns (g, x, y), where g = gcd(a, b) is nonnegative and
+// a * x + b * y = g. Returns (0, 0, 0) when a = b = 0.
+inline std::tuple<long long, long long, long long> extended_gcd(long long a,
+                                                               long long b) {
+    using i128 = __int128;
+    if (a == 0 && b == 0) return {0, 0, 0};
+
+    i128 old_remainder = a;
+    i128 remainder = b;
+    if (old_remainder < 0) old_remainder = -old_remainder;
+    if (remainder < 0) remainder = -remainder;
+    i128 old_x = 1;
+    i128 x = 0;
+    i128 old_y = 0;
+    i128 y = 1;
+
+    while (remainder != 0) {
+        i128 quotient = old_remainder / remainder;
+
+        i128 next = old_remainder - quotient * remainder;
+        old_remainder = remainder;
+        remainder = next;
+
+        next = old_x - quotient * x;
+        old_x = x;
+        x = next;
+
+        next = old_y - quotient * y;
+        old_y = y;
+        y = next;
+    }
+
+    if (a < 0) old_x = -old_x;
+    if (b < 0) old_y = -old_y;
+
+#ifndef NDEBUG
+    const i128 minimum = std::numeric_limits<long long>::min();
+    const i128 maximum = std::numeric_limits<long long>::max();
+    assert(old_remainder <= maximum);
+    assert(minimum <= old_x && old_x <= maximum);
+    assert(minimum <= old_y && old_y <= maximum);
+#endif
+    return {static_cast<long long>(old_remainder), static_cast<long long>(old_x),
+            static_cast<long long>(old_y)};
+}
 
 inline long long pow_mod(long long x, unsigned long long exponent, long long mod) {
     assert(mod >= 1);

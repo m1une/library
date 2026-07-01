@@ -5,9 +5,25 @@ documentation_of: ../../math/number_theory.hpp
 
 ## Overview
 
-Fast integer number-theory primitives for modular arithmetic and floor sums.
-All functions support 64-bit inputs and use wider intermediates where products
+Fast integer number-theory primitives for the extended Euclidean algorithm,
+modular arithmetic, the Chinese remainder theorem, and floor sums. All
+functions support 64-bit inputs and use wider intermediates where products
 could overflow.
+
+## Extended Greatest Common Divisor
+
+`extended_gcd(a, b)` returns `(g, x, y)` satisfying Bézout's identity:
+
+$$
+g = \gcd(a,b) = ax + by.
+$$
+
+The returned gcd is nonnegative, and both inputs may be negative or zero. For
+`a = b = 0`, the result is `(0, 0, 0)`. The coefficients are one valid
+solution; they are not otherwise normalized.
+
+The nonnegative gcd must fit in `long long`. In particular, an input whose gcd
+is $2^{63}$ is outside the supported result range.
 
 ## Congruences and Modular Arithmetic
 
@@ -122,6 +138,11 @@ Floor sums appear when:
 ## API
 
 ```cpp
+std::tuple<long long, long long, long long> extended_gcd(
+    long long a,
+    long long b
+);
+
 long long pow_mod(
     long long x,
     unsigned long long exponent,
@@ -149,12 +170,13 @@ long long floor_sum(
 ```
 
 All scalar inputs and outputs use `long long`, except that `pow_mod` accepts an
-`unsigned long long` exponent. Pair-valued functions return
-`std::pair<long long, long long>`. `crt` reads its two vectors by const
-reference and does not modify them.
+`unsigned long long` exponent. `extended_gcd` returns a three-element tuple;
+the other multi-value functions return `std::pair<long long, long long>`. `crt`
+reads its two vectors by const reference and does not modify them.
 
 | Function | Description | Complexity |
 | --- | --- | --- |
+| `extended_gcd(a, b)` | Returns `(g, x, y)` with `g = gcd(a, b)` and `a * x + b * y = g`. | $O(\log(\max(|a|, |b|)+1))$ |
 | `pow_mod(x, exponent, mod)` | Returns `x` raised to `exponent` modulo `mod`. | $O(\log(\text{exponent}))$ |
 | `inv_gcd(x, mod)` | Returns the gcd and a normalized inverse of `x / gcd` modulo `mod / gcd`. | $O(\log(\text{mod}))$ |
 | `inv_mod(x, mod)` | Returns the modular inverse of `x`. The arguments must be coprime. | $O(\log(\text{mod}))$ |
@@ -176,6 +198,9 @@ multiple must fit in `long long`.
 #include <vector>
 
 int main() {
+    auto [gcd, x, y] = m1une::math::extended_gcd(30, 18);
+    std::cout << gcd << " " << x << " " << y << "\n"; // 6 -1 2
+
     auto solution = m1une::math::crt(
         std::vector<long long>{2, 3, 2},
         std::vector<long long>{3, 5, 7}

@@ -30,8 +30,8 @@ You usually do not need to include this entire bundle:
   modulo an integer when one exists.
 * Use `two_square_sum.hpp` to enumerate non-negative pairs `(a, b)` satisfying
   `n = a * a + b * b`.
-* Use `number_theory.hpp` for modular inverses, simultaneous remainder
-  constraints, and sums involving floor division.
+* Use `number_theory.hpp` for extended GCD, modular inverses, simultaneous
+  remainder constraints, and sums involving floor division.
 * Use `integer_arithmetic.hpp` for exact integer square roots and powers.
 * Use `tetration.hpp` for modular tetration and arbitrary power towers.
 * Use `totient_sum.hpp` for summatory Euler totient queries.
@@ -53,7 +53,7 @@ few unused headers do not matter.
 | `math/modint.hpp` | Static modular integer type. |
 | `math/combinatorics.hpp` | Factorials, binomial coefficients, permutations, and multiset counts. |
 | `math/combinatorial_sequences.hpp` | Fast standard counting sequences and special numbers. |
-| `math/number_theory.hpp` | Modular power and inverse, CRT, and floor sum. |
+| `math/number_theory.hpp` | Extended GCD, modular power and inverse, CRT, and floor sum. |
 | `math/prime_sieve.hpp` | Linear sieve with smallest prime factors. |
 | `math/prime_factorization.hpp` | Deterministic 64-bit primality test and Pollard-Rho factorization. |
 | `math/primitive_root.hpp` | Smallest primitive root modulo an integer, when one exists. |
