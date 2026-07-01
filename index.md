@@ -710,6 +710,11 @@ data:
     - icon: ':heavy_check_mark:'
       path: string/z_algorithm.hpp
       title: Z Algorithm
+  - name: .
+    pages:
+    - icon: ':warning:'
+      path: template.cpp
+      title: template.cpp
   - name: tree
     pages:
     - icon: ':heavy_check_mark:'
