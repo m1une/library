@@ -3,6 +3,7 @@
 
 #include "aho_corasick.hpp"
 #include "eertree.hpp"
+#include "levenshtein_distance.hpp"
 #include "manacher.hpp"
 #include "prefix_function.hpp"
 #include "rolling_hash.hpp"
