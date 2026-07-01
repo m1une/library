@@ -5,7 +5,7 @@ Choose a category by the operation you need during a contest.
 | Category | Headers |
 | --- | --- |
 | [`dsu/`](dsu/) | `dsu.hpp`, `dsu_monoid.hpp`, `potentialized_dsu.hpp`, `persistent_dsu.hpp`, `persistent_potentialized_dsu.hpp`, `partially_persistent_dsu.hpp` |
-| [`segtree/`](segtree/) | Dense, dynamic, lazy, dual, Beats, and persistent segment-tree variants |
+| [`segtree/`](segtree/) | Dense, dynamic, lazy, dual, Beats, and persistent variants, including `segtree_2d.hpp` and `dual_segtree_2d.hpp` |
 | [`range_query/`](range_query/) | SWAG, Mo's algorithm, range inversions, monoid and custom-state square-root decomposition, Fenwick tree, sqrt/sparse tables, and wavelet matrices |
 | [`dynamic_array/`](dynamic_array/) | Dynamic and persistent implicit-treap arrays, with optional monoid or lazy aggregation |
 | [`ordered_set/`](ordered_set/) | Ordered sets, multisets, and binary tries for integer xor queries and monoid aggregates |

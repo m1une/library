@@ -228,6 +228,9 @@ data:
       path: ds/segtree/dual_segtree.hpp
       title: Dual Segment Tree
     - icon: ':heavy_check_mark:'
+      path: ds/segtree/dual_segtree_2d.hpp
+      title: Dual Segtree 2D
+    - icon: ':heavy_check_mark:'
       path: ds/segtree/dynamic_dual_segtree.hpp
       title: Dynamic Dual Segment Tree
     - icon: ':heavy_check_mark:'
@@ -263,7 +266,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: ds/segtree/segtree.hpp
       title: Segment Tree
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: ds/segtree/segtree_2d.hpp
       title: Segtree 2D
     - icon: ':heavy_check_mark:'
@@ -963,6 +966,9 @@ data:
       path: verify/ds/segtree/dual_segtree.test.cpp
       title: verify/ds/segtree/dual_segtree.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/dual_segtree_2d.test.cpp
+      title: verify/ds/segtree/dual_segtree_2d.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
       title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
     - icon: ':heavy_check_mark:'
@@ -995,6 +1001,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/ds/segtree/segtree.test.cpp
       title: verify/ds/segtree/segtree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/ds/segtree/segtree_2d.test.cpp
+      title: verify/ds/segtree/segtree_2d.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/ds/segtree/segtree_beats.test.cpp
       title: verify/ds/segtree/segtree_beats.test.cpp

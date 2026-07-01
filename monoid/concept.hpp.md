@@ -51,6 +51,9 @@ data:
     path: ds/segtree/dual_segtree.hpp
     title: Dual Segment Tree
   - icon: ':heavy_check_mark:'
+    path: ds/segtree/dual_segtree_2d.hpp
+    title: Dual Segtree 2D
+  - icon: ':heavy_check_mark:'
     path: ds/segtree/dynamic_dual_segtree.hpp
     title: Dynamic Dual Segment Tree
   - icon: ':heavy_check_mark:'
@@ -71,7 +74,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/segtree.hpp
     title: Segment Tree
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: ds/segtree/segtree_2d.hpp
     title: Segtree 2D
   - icon: ':warning:'
@@ -136,6 +139,9 @@ data:
     path: verify/ds/segtree/dual_segtree.test.cpp
     title: verify/ds/segtree/dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dual_segtree_2d.test.cpp
+    title: verify/ds/segtree/dual_segtree_2d.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
     title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
@@ -156,6 +162,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/segtree.test.cpp
     title: verify/ds/segtree/segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/segtree_2d.test.cpp
+    title: verify/ds/segtree/segtree_2d.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/graph/library_checker_lowest_common_ancestor.test.cpp
     title: verify/graph/library_checker_lowest_common_ancestor.test.cpp
@@ -215,6 +224,7 @@ data:
   - ds/range_query/sliding_window_aggregation.hpp
   - ds/range_query/sparse_table.hpp
   - ds/range_query/sqrt_tree.hpp
+  - ds/segtree/dual_segtree_2d.hpp
   - ds/segtree/persistent_dynamic_dual_segtree.hpp
   - ds/segtree/segtree.hpp
   - ds/segtree/segtree_2d.hpp
@@ -243,6 +253,7 @@ data:
   - verify/ds/range_query/sqrt_tree.test.cpp
   - verify/ds/range_query/sparse_table.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
+  - verify/ds/segtree/dual_segtree_2d.test.cpp
   - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/persistent_dual_segtree.test.cpp
   - verify/ds/segtree/dynamic_segtree.test.cpp
@@ -250,6 +261,7 @@ data:
   - verify/ds/segtree/dual_segtree.test.cpp
   - verify/ds/segtree/persistent_segtree.test.cpp
   - verify/ds/segtree/dynamic_dual_segtree.test.cpp
+  - verify/ds/segtree/segtree_2d.test.cpp
   - verify/ds/segtree/segtree.test.cpp
   - verify/ds/dsu/persistent_potentialized_dsu.test.cpp
   - verify/ds/dsu/dsu_monoid.test.cpp

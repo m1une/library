@@ -40,6 +40,9 @@ data:
     path: verify/ds/range_query/sqrt_tree.test.cpp
     title: verify/ds/range_query/sqrt_tree.test.cpp
   - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/dual_segtree_2d.test.cpp
+    title: verify/ds/segtree/dual_segtree_2d.test.cpp
+  - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/dynamic_dual_segtree.test.cpp
     title: verify/ds/segtree/dynamic_dual_segtree.test.cpp
   - icon: ':heavy_check_mark:'
@@ -60,6 +63,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/segtree.test.cpp
     title: verify/ds/segtree/segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/ds/segtree/segtree_2d.test.cpp
+    title: verify/ds/segtree/segtree_2d.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -97,12 +103,14 @@ data:
   - verify/ds/dynamic_connectivity/dynamic_connectivity.test.cpp
   - verify/ds/range_query/sqrt_tree.test.cpp
   - verify/ds/range_query/disjoint_sparse_table.test.cpp
+  - verify/ds/segtree/dual_segtree_2d.test.cpp
   - verify/ds/segtree/persistent_dynamic_dual_segtree.test.cpp
   - verify/ds/segtree/persistent_dual_segtree.test.cpp
   - verify/ds/segtree/dynamic_segtree.test.cpp
   - verify/ds/segtree/persistent_dynamic_segtree.test.cpp
   - verify/ds/segtree/persistent_segtree.test.cpp
   - verify/ds/segtree/dynamic_dual_segtree.test.cpp
+  - verify/ds/segtree/segtree_2d.test.cpp
   - verify/ds/segtree/segtree.test.cpp
   - verify/ds/dsu/persistent_potentialized_dsu.test.cpp
   - verify/ds/dsu/dsu_monoid.test.cpp
