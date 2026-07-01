@@ -801,6 +801,9 @@ data:
       path: utilities/random.hpp
       title: Random
     - icon: ':heavy_check_mark:'
+      path: utilities/random_testing.hpp
+      title: Random Testing
+    - icon: ':heavy_check_mark:'
       path: utilities/run_length_encoding.hpp
       title: Run Length Encoding
     - icon: ':heavy_check_mark:'
@@ -1318,6 +1321,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/utilities/parser.test.cpp
       title: verify/utilities/parser.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/utilities/random_generators.test.cpp
+      title: verify/utilities/random_generators.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/utilities/random_testing.test.cpp
+      title: verify/utilities/random_testing.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/utilities/shifted_array.test.cpp
       title: verify/utilities/shifted_array.test.cpp
