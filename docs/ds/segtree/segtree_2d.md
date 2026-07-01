@@ -171,7 +171,7 @@ int main() {
 This data structure can be used for static rectangle sum queries.
 
 ```cpp
-#define PROBLEM "https://judge.yosupo.jp/problem/static_rectangle_add_rectangle_sum"
+#define PROBLEM "https://judge.yosupo.jp/problem/rectangle_sum"
 
 #include "../../../ds/segtree/segtree_2d.hpp"
 #include "../../../monoid/add.hpp"
@@ -226,7 +226,8 @@ auto current = seg.get(x, y);
 seg.set(x, y, current + delta);
 ```
 
-For range updates, use another data structure.
+For rectangle updates and point queries, use
+[`DualSegtree2D`](dual_segtree_2d.md).
 
 Although the template only requires a monoid, rectangle aggregation is usually intended for commutative monoids such as sum, min, max, and gcd.
 For non-commutative monoids, the result follows the internal traversal order and may not match a natural geometric interpretation.
