@@ -1,6 +1,7 @@
 #ifndef M1UNE_MATH_ALL_HPP
 #define M1UNE_MATH_ALL_HPP 1
 
+#include "base_n.hpp"
 #include "bitwise_convolution.hpp"
 #include "bit_ceil.hpp"
 #include "combinatorics.hpp"

@@ -12,6 +12,8 @@ documentation_of: ../../math/all.hpp
 You usually do not need to include this entire bundle:
 
 * Use `modint.hpp` for arithmetic modulo a fixed number such as `998244353`.
+* Use `base_n.hpp` to convert nonnegative integers to and from arbitrary-base
+  digit sequences.
 * Use `bitwise_convolution.hpp` for OR, AND, or XOR convolution over mask
   indices.
 * Use `zeta_mobius_transform.hpp` for subset, superset, divisor, and multiple
@@ -46,6 +48,7 @@ few unused headers do not matter.
 
 | Header | Contents |
 | --- | --- |
+| `math/base_n.hpp` | Checked conversion between integers and arbitrary-base digits. |
 | `math/bitwise_convolution.hpp` | OR, AND, XOR convolutions and the Walsh-Hadamard transform. |
 | `math/bit_ceil.hpp` | Smallest power of two at least a given value. |
 | `math/integer_arithmetic.hpp` | Exact integer square roots and overflow-aware powers. |
