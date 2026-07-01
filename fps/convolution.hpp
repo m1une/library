@@ -174,10 +174,10 @@ std::vector<Mint> convolution(const std::vector<Mint>& a, const std::vector<Mint
     using Mint3 = math::ModInt<754974721>;
     assert(n <= (1 << 24));
 
-    const unsigned __int128 coefficient_bound =
+    [[maybe_unused]] const unsigned __int128 coefficient_bound =
         static_cast<unsigned __int128>(std::min(a.size(), b.size())) * (Mint::mod() - 1) *
         (Mint::mod() - 1);
-    const unsigned __int128 crt_modulus =
+    [[maybe_unused]] const unsigned __int128 crt_modulus =
         static_cast<unsigned __int128>(Mint1::mod()) * Mint2::mod() * Mint3::mod();
     assert(coefficient_bound < crt_modulus);
 

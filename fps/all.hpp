@@ -2,6 +2,7 @@
 #define M1UNE_FPS_ALL_HPP 1
 
 #include "convolution.hpp"
+#include "convolution_ll.hpp"
 #include "floating_point_convolution.hpp"
 #include "formal_power_series.hpp"
 #include "lagrange_inversion.hpp"

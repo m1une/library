@@ -12,6 +12,7 @@ documentation_of: ../../fps/all.hpp
 | Header | Contents |
 | --- | --- |
 | `fps/convolution.hpp` | Naive, NTT, and CRT-based convolution. |
+| `fps/convolution_ll.hpp` | Exact signed 64-bit convolution using three NTT primes. |
 | `fps/floating_point_convolution.hpp` | FFT convolution for real, complex, and rounded integral coefficients. |
 | `fps/formal_power_series.hpp` | Formal power series operations and polynomial utilities. |
 | `fps/lagrange_inversion.hpp` | Coefficients from the Lagrange inversion and Lagrange-Bürmann formulas. |

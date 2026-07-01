@@ -44,7 +44,8 @@ coefficient magnitude.
 
 `convolution_round` is correct only when numerical error remains below one
 half and every exact coefficient is representable by the output integer type.
-For exact modular convolution, use `fps/convolution.hpp`.
+For exact modular convolution, use `fps/convolution.hpp`. For exact signed
+`long long` convolution, use `fps/convolution_ll.hpp`.
 
 Using `long double` generally improves accuracy, although its precision is
 platform-dependent.
