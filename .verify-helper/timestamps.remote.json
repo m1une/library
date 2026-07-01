@@ -147,10 +147,12 @@
 "verify/tree/rooted_tree_isomorphism_classification.test.cpp": "2026-07-01 13:39:10 +0900",
 "verify/tree/tree_algorithms.test.cpp": "2026-07-01 13:39:10 +0900",
 "verify/utilities/arrow_dice.test.cpp": "2026-06-21 11:15:18 +0900",
-"verify/utilities/basic_utilities.test.cpp": "2026-06-21 04:34:53 +0900",
+"verify/utilities/basic_utilities.test.cpp": "2026-07-01 22:42:42 +0900",
 "verify/utilities/dice.test.cpp": "2026-06-21 11:15:18 +0900",
 "verify/utilities/extra_utilities.test.cpp": "2026-06-21 04:34:53 +0900",
 "verify/utilities/fast_io.test.cpp": "2026-06-27 04:39:45 +0900",
 "verify/utilities/parser.test.cpp": "2026-06-21 10:44:51 +0900",
+"verify/utilities/random_generators.test.cpp": "2026-07-01 22:42:42 +0900",
+"verify/utilities/random_testing.test.cpp": "2026-07-01 22:42:42 +0900",
 "verify/utilities/shifted_array.test.cpp": "2026-06-21 04:34:53 +0900"
 }
