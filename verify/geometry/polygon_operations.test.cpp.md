@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: geometry/convex_hull.hpp
+    title: Convex Hull
+  - icon: ':heavy_check_mark:'
     path: geometry/line.hpp
     title: Lines and Segments
   - icon: ':heavy_check_mark:'
@@ -9,7 +12,7 @@ data:
     title: 2D Point and Predicates
   - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
-    title: Polygons and Convex Hull
+    title: Polygons
   - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
@@ -27,8 +30,8 @@ data:
     \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"geometry/polygon.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <array>\n#include <cassert>\n#include <cmath>\n\
     #include <cstddef>\n#include <limits>\n#include <optional>\n#include <vector>\n\
-    \n#line 1 \"geometry/ray.hpp\"\n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line 1\
-    \ \"geometry/line.hpp\"\n\n\n\n#line 8 \"geometry/line.hpp\"\n\n#line 1 \"geometry/point.hpp\"\
+    \n#line 1 \"geometry/convex_hull.hpp\"\n\n\n\n#line 6 \"geometry/convex_hull.hpp\"\
+    \n#include <utility>\n#line 8 \"geometry/convex_hull.hpp\"\n\n#line 1 \"geometry/point.hpp\"\
     \n\n\n\n#line 5 \"geometry/point.hpp\"\n#include <concepts>\n#line 7 \"geometry/point.hpp\"\
     \n#include <type_traits>\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate\
     \ <typename T>\nconcept Coordinate = std::is_arithmetic_v<T> && !std::same_as<std::remove_cv_t<T>,\
@@ -110,7 +113,30 @@ data:
     \ point) {\n    long double length = norm(point);\n    assert(length != 0);\n\
     \    return Point<long double>(\n        static_cast<long double>(point.x) / length,\n\
     \        static_cast<long double>(point.y) / length\n    );\n}\n\n}  // namespace\
-    \ geometry\n}  // namespace m1une\n\n\n#line 10 \"geometry/line.hpp\"\n\nnamespace\
+    \ geometry\n}  // namespace m1une\n\n\n#line 10 \"geometry/convex_hull.hpp\"\n\
+    \nnamespace m1une {\nnamespace geometry {\n\n// Returns the convex hull counterclockwise\
+    \ from its lexicographically smallest\n// point. The first point is not repeated\
+    \ at the end.\ntemplate <Coordinate T>\nstd::vector<Point<T>> convex_hull(\n \
+    \   std::vector<Point<T>> points,\n    bool include_collinear = false\n) {\n \
+    \   std::sort(points.begin(), points.end());\n    points.erase(std::unique(points.begin(),\
+    \ points.end()), points.end());\n    std::size_t size = points.size();\n    if\
+    \ (size <= 1) return points;\n\n    std::vector<Point<T>> hull;\n    hull.reserve(2\
+    \ * size);\n    auto should_pop = [include_collinear](\n        const Point<T>&\
+    \ first,\n        const Point<T>& second,\n        const Point<T>& third\n   \
+    \ ) {\n        int turn = orientation(first, second, third);\n        return include_collinear\
+    \ ? turn < 0 : turn <= 0;\n    };\n\n    for (const Point<T>& point : points)\
+    \ {\n        while (\n            hull.size() >= 2 &&\n            should_pop(hull[hull.size()\
+    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
+    \   }\n        hull.push_back(point);\n    }\n\n    std::size_t lower_size = hull.size();\n\
+    \    for (std::size_t index = size - 1; index-- > 0;) {\n        const Point<T>&\
+    \ point = points[index];\n        while (\n            hull.size() > lower_size\
+    \ &&\n            should_pop(hull[hull.size() - 2], hull.back(), point)\n    \
+    \    ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
+    \    }\n    hull.pop_back();\n\n    if (include_collinear && hull.size() == 2\
+    \ * points.size() - 2) {\n        hull = std::move(points);\n    }\n    return\
+    \ hull;\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 1 \"\
+    geometry/ray.hpp\"\n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line 1 \"geometry/line.hpp\"\
+    \n\n\n\n#line 8 \"geometry/line.hpp\"\n\n#line 10 \"geometry/line.hpp\"\n\nnamespace\
     \ m1une {\nnamespace geometry {\n\ntemplate <Coordinate T>\nstruct Line {\n  \
     \  Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate T>\nstruct Segment\
     \ {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate T>\nbool on_line(\n\
@@ -369,7 +395,7 @@ data:
     \     values.second_numerator,\n            values.denominator,\n            eps\n\
     \        )\n    ) {\n        return std::nullopt;\n    }\n    return ray_detail::point_at(\n\
     \        first,\n        values.first_numerator,\n        values.denominator\n\
-    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 14 \"\
+    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 15 \"\
     geometry/polygon.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\nenum class\
     \ PointInPolygon {\n    Outside = 0,\n    Boundary = 1,\n    Inside = 2,\n};\n\
     \nnamespace polygon_detail {\n\ninline bool close(\n    const Point<long double>&\
@@ -527,30 +553,13 @@ data:
     \ {\n        std::array<Point<T>, 3> triangle;\n        triangle[0] = polygon[0];\n\
     \        triangle[1] = polygon[index];\n        triangle[2] = polygon[index +\
     \ 1];\n        result.push_back(std::move(triangle));\n    }\n    return result;\n\
-    }\n\ntemplate <Coordinate T>\nstd::vector<Point<T>> convex_hull(\n    std::vector<Point<T>>\
-    \ points,\n    bool include_collinear = false\n) {\n    std::sort(points.begin(),\
-    \ points.end());\n    points.erase(std::unique(points.begin(), points.end()),\
-    \ points.end());\n    std::size_t n = points.size();\n    if (n <= 1) return points;\n\
-    \n    std::vector<Point<T>> hull;\n    hull.reserve(2 * n);\n    auto should_pop\
-    \ = [include_collinear](\n        const Point<T>& a,\n        const Point<T>&\
-    \ b,\n        const Point<T>& c\n    ) {\n        int turn = orientation(a, b,\
-    \ c);\n        return include_collinear ? turn < 0 : turn <= 0;\n    };\n\n  \
-    \  for (const Point<T>& point : points) {\n        while (\n            hull.size()\
-    \ >= 2 &&\n            should_pop(hull[hull.size() - 2], hull.back(), point)\n\
-    \        ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
-    \    }\n\n    std::size_t lower_size = hull.size();\n    for (std::size_t i =\
-    \ n - 1; i-- > 0;) {\n        const Point<T>& point = points[i];\n        while\
-    \ (\n            hull.size() > lower_size &&\n            should_pop(hull[hull.size()\
-    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
-    \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
-    \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
-    \    }\n    return hull;\n}\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n\
-    \    const std::vector<Point<T>>& polygon,\n    const Point<T>& point,\n    long\
-    \ double eps = 1e-12L\n) {\n    bool inside = false;\n    std::size_t n = polygon.size();\n\
-    \    for (std::size_t i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n\
-    \        const Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a,\
-    \ b}, point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\
-    \n        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
+    }\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n    const std::vector<Point<T>>&\
+    \ polygon,\n    const Point<T>& point,\n    long double eps = 1e-12L\n) {\n  \
+    \  bool inside = false;\n    std::size_t n = polygon.size();\n    for (std::size_t\
+    \ i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n        const\
+    \ Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a, b},\
+    \ point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\n\
+    \        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
     \ b, point, eps) > 0) {\n                inside = !inside;\n            }\n  \
     \      } else if (b.y <= point.y && orientation(a, b, point, eps) < 0) {\n   \
     \         inside = !inside;\n        }\n    }\n    return inside ? PointInPolygon::Inside\
@@ -984,13 +993,14 @@ data:
     \ >> a >> b;\n    std::cout << a + b << '\\n';\n}\n"
   dependsOn:
   - geometry/polygon.hpp
+  - geometry/convex_hull.hpp
+  - geometry/point.hpp
   - geometry/ray.hpp
   - geometry/line.hpp
-  - geometry/point.hpp
   isVerificationFile: true
   path: verify/geometry/polygon_operations.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 12:04:47+09:00'
+  timestamp: '2026-07-01 22:47:11+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/geometry/polygon_operations.test.cpp

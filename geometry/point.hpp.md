@@ -12,6 +12,9 @@ data:
     path: geometry/circle.hpp
     title: Circles
   - icon: ':heavy_check_mark:'
+    path: geometry/convex_hull.hpp
+    title: Convex Hull
+  - icon: ':heavy_check_mark:'
     path: geometry/farthest_pair.hpp
     title: Farthest Pair of Points
   - icon: ':heavy_check_mark:'
@@ -22,7 +25,7 @@ data:
     title: Manhattan Minimum Spanning Tree
   - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
-    title: Polygons and Convex Hull
+    title: Polygons
   - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
@@ -244,6 +247,7 @@ data:
   - geometry/ray.hpp
   - geometry/circle.hpp
   - geometry/all.hpp
+  - geometry/convex_hull.hpp
   - geometry/line.hpp
   - geometry/angle_sort.hpp
   - geometry/farthest_pair.hpp

@@ -15,11 +15,8 @@ data:
     path: geometry/circle.hpp
     title: Circles
   - icon: ':heavy_check_mark:'
-    path: geometry/farthest_pair.hpp
-    title: Farthest Pair of Points
-  - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
-    title: Polygons and Convex Hull
+    title: Polygons
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/geometry/circle_line_intersection.test.cpp
@@ -27,12 +24,6 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/geometry/circle_ray.test.cpp
     title: verify/geometry/circle_ray.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/geometry/convex_hull.test.cpp
-    title: verify/geometry/convex_hull.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/geometry/farthest_pair.test.cpp
-    title: verify/geometry/farthest_pair.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/geometry/geometry_algorithms.test.cpp
     title: verify/geometry/geometry_algorithms.test.cpp
@@ -566,7 +557,6 @@ data:
   requiredBy:
   - geometry/circle.hpp
   - geometry/all.hpp
-  - geometry/farthest_pair.hpp
   - geometry/polygon.hpp
   timestamp: '2026-06-21 12:04:47+09:00'
   verificationStatus: LIBRARY_ALL_AC
@@ -576,10 +566,8 @@ data:
   - verify/geometry/geometry_algorithms.test.cpp
   - verify/geometry/circle_ray.test.cpp
   - verify/geometry/point_in_polygon.test.cpp
-  - verify/geometry/convex_hull.test.cpp
   - verify/geometry/polygon_operations.test.cpp
   - verify/geometry/ray.test.cpp
-  - verify/geometry/farthest_pair.test.cpp
 documentation_of: geometry/ray.hpp
 layout: document
 title: Rays

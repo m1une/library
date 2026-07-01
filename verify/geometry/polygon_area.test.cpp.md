@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: geometry/convex_hull.hpp
+    title: Convex Hull
+  - icon: ':heavy_check_mark:'
     path: geometry/line.hpp
     title: Lines and Segments
   - icon: ':heavy_check_mark:'
@@ -9,7 +12,7 @@ data:
     title: 2D Point and Predicates
   - icon: ':heavy_check_mark:'
     path: geometry/polygon.hpp
-    title: Polygons and Convex Hull
+    title: Polygons
   - icon: ':heavy_check_mark:'
     path: geometry/ray.hpp
     title: Rays
@@ -27,8 +30,8 @@ data:
     \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_A\"\n\n#line\
     \ 1 \"geometry/polygon.hpp\"\n\n\n\n#include <algorithm>\n#include <array>\n#include\
     \ <cassert>\n#include <cmath>\n#include <cstddef>\n#include <limits>\n#include\
-    \ <optional>\n#include <vector>\n\n#line 1 \"geometry/ray.hpp\"\n\n\n\n#line 7\
-    \ \"geometry/ray.hpp\"\n\n#line 1 \"geometry/line.hpp\"\n\n\n\n#line 8 \"geometry/line.hpp\"\
+    \ <optional>\n#include <vector>\n\n#line 1 \"geometry/convex_hull.hpp\"\n\n\n\n\
+    #line 6 \"geometry/convex_hull.hpp\"\n#include <utility>\n#line 8 \"geometry/convex_hull.hpp\"\
     \n\n#line 1 \"geometry/point.hpp\"\n\n\n\n#line 5 \"geometry/point.hpp\"\n#include\
     \ <concepts>\n#line 7 \"geometry/point.hpp\"\n#include <type_traits>\n\nnamespace\
     \ m1une {\nnamespace geometry {\n\ntemplate <typename T>\nconcept Coordinate =\
@@ -111,74 +114,96 @@ data:
     \ long double length = norm(point);\n    assert(length != 0);\n    return Point<long\
     \ double>(\n        static_cast<long double>(point.x) / length,\n        static_cast<long\
     \ double>(point.y) / length\n    );\n}\n\n}  // namespace geometry\n}  // namespace\
-    \ m1une\n\n\n#line 10 \"geometry/line.hpp\"\n\nnamespace m1une {\nnamespace geometry\
-    \ {\n\ntemplate <Coordinate T>\nstruct Line {\n    Point<T> a;\n    Point<T> b;\n\
-    };\n\ntemplate <Coordinate T>\nstruct Segment {\n    Point<T> a;\n    Point<T>\
-    \ b;\n};\n\ntemplate <Coordinate T>\nbool on_line(\n    const Line<T>& line,\n\
-    \    const Point<T>& point,\n    long double eps = 1e-12L\n) {\n    assert(line.a\
-    \ != line.b);\n    return orientation(line.a, line.b, point, eps) == 0;\n}\n\n\
-    template <Coordinate T>\nbool parallel(const Line<T>& first, const Line<T>& second,\
-    \ long double eps = 1e-12L) {\n    using W = wide_type<T>;\n    W first_x = W(first.b.x)\
-    \ - W(first.a.x);\n    W first_y = W(first.b.y) - W(first.a.y);\n    W second_x\
-    \ = W(second.b.x) - W(second.a.x);\n    W second_y = W(second.b.y) - W(second.a.y);\n\
-    \    return sign<T>(first_x * second_y - first_y * second_x, eps) == 0;\n}\n\n\
-    template <Coordinate T>\nbool orthogonal(const Line<T>& first, const Line<T>&\
-    \ second, long double eps = 1e-12L) {\n    using W = wide_type<T>;\n    W first_x\
-    \ = W(first.b.x) - W(first.a.x);\n    W first_y = W(first.b.y) - W(first.a.y);\n\
-    \    W second_x = W(second.b.x) - W(second.a.x);\n    W second_y = W(second.b.y)\
-    \ - W(second.a.y);\n    return sign<T>(first_x * second_x + first_y * second_y,\
-    \ eps) == 0;\n}\n\ntemplate <Coordinate T>\nPoint<long double> projection(const\
-    \ Line<T>& line, const Point<T>& point) {\n    assert(line.a != line.b);\n   \
-    \ Point<long double> a(line.a);\n    Point<long double> direction(\n        static_cast<long\
-    \ double>(line.b.x) - static_cast<long double>(line.a.x),\n        static_cast<long\
-    \ double>(line.b.y) - static_cast<long double>(line.a.y)\n    );\n    Point<long\
-    \ double> offset(\n        static_cast<long double>(point.x) - a.x,\n        static_cast<long\
-    \ double>(point.y) - a.y\n    );\n    long double ratio = dot(offset, direction)\
-    \ / dot(direction, direction);\n    return a + direction * ratio;\n}\n\ntemplate\
-    \ <Coordinate T>\nPoint<long double> reflection(const Line<T>& line, const Point<T>&\
-    \ point) {\n    Point<long double> projected = projection(line, point);\n    return\
-    \ projected * 2.0L - Point<long double>(point);\n}\n\ntemplate <Coordinate T>\n\
-    long double distance(const Line<T>& line, const Point<T>& point) {\n    assert(line.a\
-    \ != line.b);\n    Point<long double> direction(\n        static_cast<long double>(line.b.x)\
-    \ - static_cast<long double>(line.a.x),\n        static_cast<long double>(line.b.y)\
-    \ - static_cast<long double>(line.a.y)\n    );\n    Point<long double> offset(\n\
-    \        static_cast<long double>(point.x) - static_cast<long double>(line.a.x),\n\
-    \        static_cast<long double>(point.y) - static_cast<long double>(line.a.y)\n\
-    \    );\n    return std::fabs(cross(direction, offset)) / norm(direction);\n}\n\
-    \ntemplate <Coordinate T>\nlong double distance(const Point<T>& point, const Line<T>&\
-    \ line) {\n    return distance(line, point);\n}\n\ntemplate <Coordinate T>\nbool\
-    \ intersects(\n    const Line<T>& first,\n    const Line<T>& second,\n    long\
-    \ double eps = 1e-12L\n) {\n    return !parallel(first, second, eps) || on_line(first,\
-    \ second.a, eps);\n}\n\ntemplate <Coordinate T>\nlong double distance(const Line<T>&\
-    \ first, const Line<T>& second) {\n    return intersects(first, second) ? 0 :\
-    \ distance(first, second.a);\n}\n\ntemplate <Coordinate T>\nbool on_segment(\n\
-    \    const Segment<T>& segment,\n    const Point<T>& point,\n    long double eps\
-    \ = 1e-12L\n) {\n    if (orientation(segment.a, segment.b, point, eps) != 0) return\
-    \ false;\n    using W = wide_type<T>;\n    W px = W(point.x);\n    W py = W(point.y);\n\
-    \    W min_x = std::min(W(segment.a.x), W(segment.b.x));\n    W max_x = std::max(W(segment.a.x),\
-    \ W(segment.b.x));\n    W min_y = std::min(W(segment.a.y), W(segment.b.y));\n\
-    \    W max_y = std::max(W(segment.a.y), W(segment.b.y));\n    if constexpr (std::integral<T>)\
-    \ {\n        return min_x <= px && px <= max_x && min_y <= py && py <= max_y;\n\
-    \    } else {\n        return min_x - eps <= px && px <= max_x + eps &&\n    \
-    \           min_y - eps <= py && py <= max_y + eps;\n    }\n}\n\ntemplate <Coordinate\
-    \ T>\nbool intersects(\n    const Segment<T>& first,\n    const Segment<T>& second,\n\
-    \    long double eps = 1e-12L\n) {\n    int abc = orientation(first.a, first.b,\
-    \ second.a, eps);\n    int abd = orientation(first.a, first.b, second.b, eps);\n\
-    \    int cda = orientation(second.a, second.b, first.a, eps);\n    int cdb = orientation(second.a,\
-    \ second.b, first.b, eps);\n\n    if (abc == 0 && on_segment(first, second.a,\
-    \ eps)) return true;\n    if (abd == 0 && on_segment(first, second.b, eps)) return\
-    \ true;\n    if (cda == 0 && on_segment(second, first.a, eps)) return true;\n\
-    \    if (cdb == 0 && on_segment(second, first.b, eps)) return true;\n    return\
-    \ abc * abd < 0 && cda * cdb < 0;\n}\n\ntemplate <Coordinate T>\nbool intersects(\n\
-    \    const Line<T>& line,\n    const Segment<T>& segment,\n    long double eps\
-    \ = 1e-12L\n) {\n    int first_side = orientation(line.a, line.b, segment.a, eps);\n\
-    \    int second_side = orientation(line.a, line.b, segment.b, eps);\n    return\
-    \ first_side == 0 || second_side == 0 || first_side != second_side;\n}\n\ntemplate\
-    \ <Coordinate T>\nbool intersects(\n    const Segment<T>& segment,\n    const\
-    \ Line<T>& line,\n    long double eps = 1e-12L\n) {\n    return intersects(line,\
-    \ segment, eps);\n}\n\ntemplate <Coordinate T>\nlong double distance(const Segment<T>&\
-    \ segment, const Point<T>& point) {\n    Point<long double> a(segment.a);\n  \
-    \  Point<long double> b(segment.b);\n    Point<long double> p(point);\n    Point<long\
+    \ m1une\n\n\n#line 10 \"geometry/convex_hull.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ geometry {\n\n// Returns the convex hull counterclockwise from its lexicographically\
+    \ smallest\n// point. The first point is not repeated at the end.\ntemplate <Coordinate\
+    \ T>\nstd::vector<Point<T>> convex_hull(\n    std::vector<Point<T>> points,\n\
+    \    bool include_collinear = false\n) {\n    std::sort(points.begin(), points.end());\n\
+    \    points.erase(std::unique(points.begin(), points.end()), points.end());\n\
+    \    std::size_t size = points.size();\n    if (size <= 1) return points;\n\n\
+    \    std::vector<Point<T>> hull;\n    hull.reserve(2 * size);\n    auto should_pop\
+    \ = [include_collinear](\n        const Point<T>& first,\n        const Point<T>&\
+    \ second,\n        const Point<T>& third\n    ) {\n        int turn = orientation(first,\
+    \ second, third);\n        return include_collinear ? turn < 0 : turn <= 0;\n\
+    \    };\n\n    for (const Point<T>& point : points) {\n        while (\n     \
+    \       hull.size() >= 2 &&\n            should_pop(hull[hull.size() - 2], hull.back(),\
+    \ point)\n        ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
+    \    }\n\n    std::size_t lower_size = hull.size();\n    for (std::size_t index\
+    \ = size - 1; index-- > 0;) {\n        const Point<T>& point = points[index];\n\
+    \        while (\n            hull.size() > lower_size &&\n            should_pop(hull[hull.size()\
+    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
+    \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
+    \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
+    \    }\n    return hull;\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\
+    \n\n#line 1 \"geometry/ray.hpp\"\n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line\
+    \ 1 \"geometry/line.hpp\"\n\n\n\n#line 8 \"geometry/line.hpp\"\n\n#line 10 \"\
+    geometry/line.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate <Coordinate\
+    \ T>\nstruct Line {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate\
+    \ T>\nstruct Segment {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate\
+    \ T>\nbool on_line(\n    const Line<T>& line,\n    const Point<T>& point,\n  \
+    \  long double eps = 1e-12L\n) {\n    assert(line.a != line.b);\n    return orientation(line.a,\
+    \ line.b, point, eps) == 0;\n}\n\ntemplate <Coordinate T>\nbool parallel(const\
+    \ Line<T>& first, const Line<T>& second, long double eps = 1e-12L) {\n    using\
+    \ W = wide_type<T>;\n    W first_x = W(first.b.x) - W(first.a.x);\n    W first_y\
+    \ = W(first.b.y) - W(first.a.y);\n    W second_x = W(second.b.x) - W(second.a.x);\n\
+    \    W second_y = W(second.b.y) - W(second.a.y);\n    return sign<T>(first_x *\
+    \ second_y - first_y * second_x, eps) == 0;\n}\n\ntemplate <Coordinate T>\nbool\
+    \ orthogonal(const Line<T>& first, const Line<T>& second, long double eps = 1e-12L)\
+    \ {\n    using W = wide_type<T>;\n    W first_x = W(first.b.x) - W(first.a.x);\n\
+    \    W first_y = W(first.b.y) - W(first.a.y);\n    W second_x = W(second.b.x)\
+    \ - W(second.a.x);\n    W second_y = W(second.b.y) - W(second.a.y);\n    return\
+    \ sign<T>(first_x * second_x + first_y * second_y, eps) == 0;\n}\n\ntemplate <Coordinate\
+    \ T>\nPoint<long double> projection(const Line<T>& line, const Point<T>& point)\
+    \ {\n    assert(line.a != line.b);\n    Point<long double> a(line.a);\n    Point<long\
+    \ double> direction(\n        static_cast<long double>(line.b.x) - static_cast<long\
+    \ double>(line.a.x),\n        static_cast<long double>(line.b.y) - static_cast<long\
+    \ double>(line.a.y)\n    );\n    Point<long double> offset(\n        static_cast<long\
+    \ double>(point.x) - a.x,\n        static_cast<long double>(point.y) - a.y\n \
+    \   );\n    long double ratio = dot(offset, direction) / dot(direction, direction);\n\
+    \    return a + direction * ratio;\n}\n\ntemplate <Coordinate T>\nPoint<long double>\
+    \ reflection(const Line<T>& line, const Point<T>& point) {\n    Point<long double>\
+    \ projected = projection(line, point);\n    return projected * 2.0L - Point<long\
+    \ double>(point);\n}\n\ntemplate <Coordinate T>\nlong double distance(const Line<T>&\
+    \ line, const Point<T>& point) {\n    assert(line.a != line.b);\n    Point<long\
+    \ double> direction(\n        static_cast<long double>(line.b.x) - static_cast<long\
+    \ double>(line.a.x),\n        static_cast<long double>(line.b.y) - static_cast<long\
+    \ double>(line.a.y)\n    );\n    Point<long double> offset(\n        static_cast<long\
+    \ double>(point.x) - static_cast<long double>(line.a.x),\n        static_cast<long\
+    \ double>(point.y) - static_cast<long double>(line.a.y)\n    );\n    return std::fabs(cross(direction,\
+    \ offset)) / norm(direction);\n}\n\ntemplate <Coordinate T>\nlong double distance(const\
+    \ Point<T>& point, const Line<T>& line) {\n    return distance(line, point);\n\
+    }\n\ntemplate <Coordinate T>\nbool intersects(\n    const Line<T>& first,\n  \
+    \  const Line<T>& second,\n    long double eps = 1e-12L\n) {\n    return !parallel(first,\
+    \ second, eps) || on_line(first, second.a, eps);\n}\n\ntemplate <Coordinate T>\n\
+    long double distance(const Line<T>& first, const Line<T>& second) {\n    return\
+    \ intersects(first, second) ? 0 : distance(first, second.a);\n}\n\ntemplate <Coordinate\
+    \ T>\nbool on_segment(\n    const Segment<T>& segment,\n    const Point<T>& point,\n\
+    \    long double eps = 1e-12L\n) {\n    if (orientation(segment.a, segment.b,\
+    \ point, eps) != 0) return false;\n    using W = wide_type<T>;\n    W px = W(point.x);\n\
+    \    W py = W(point.y);\n    W min_x = std::min(W(segment.a.x), W(segment.b.x));\n\
+    \    W max_x = std::max(W(segment.a.x), W(segment.b.x));\n    W min_y = std::min(W(segment.a.y),\
+    \ W(segment.b.y));\n    W max_y = std::max(W(segment.a.y), W(segment.b.y));\n\
+    \    if constexpr (std::integral<T>) {\n        return min_x <= px && px <= max_x\
+    \ && min_y <= py && py <= max_y;\n    } else {\n        return min_x - eps <=\
+    \ px && px <= max_x + eps &&\n               min_y - eps <= py && py <= max_y\
+    \ + eps;\n    }\n}\n\ntemplate <Coordinate T>\nbool intersects(\n    const Segment<T>&\
+    \ first,\n    const Segment<T>& second,\n    long double eps = 1e-12L\n) {\n \
+    \   int abc = orientation(first.a, first.b, second.a, eps);\n    int abd = orientation(first.a,\
+    \ first.b, second.b, eps);\n    int cda = orientation(second.a, second.b, first.a,\
+    \ eps);\n    int cdb = orientation(second.a, second.b, first.b, eps);\n\n    if\
+    \ (abc == 0 && on_segment(first, second.a, eps)) return true;\n    if (abd ==\
+    \ 0 && on_segment(first, second.b, eps)) return true;\n    if (cda == 0 && on_segment(second,\
+    \ first.a, eps)) return true;\n    if (cdb == 0 && on_segment(second, first.b,\
+    \ eps)) return true;\n    return abc * abd < 0 && cda * cdb < 0;\n}\n\ntemplate\
+    \ <Coordinate T>\nbool intersects(\n    const Line<T>& line,\n    const Segment<T>&\
+    \ segment,\n    long double eps = 1e-12L\n) {\n    int first_side = orientation(line.a,\
+    \ line.b, segment.a, eps);\n    int second_side = orientation(line.a, line.b,\
+    \ segment.b, eps);\n    return first_side == 0 || second_side == 0 || first_side\
+    \ != second_side;\n}\n\ntemplate <Coordinate T>\nbool intersects(\n    const Segment<T>&\
+    \ segment,\n    const Line<T>& line,\n    long double eps = 1e-12L\n) {\n    return\
+    \ intersects(line, segment, eps);\n}\n\ntemplate <Coordinate T>\nlong double distance(const\
+    \ Segment<T>& segment, const Point<T>& point) {\n    Point<long double> a(segment.a);\n\
+    \    Point<long double> b(segment.b);\n    Point<long double> p(point);\n    Point<long\
     \ double> direction = b - a;\n    long double length_squared = dot(direction,\
     \ direction);\n    if (length_squared == 0) return geometry::distance(segment.a,\
     \ point);\n    long double ratio = dot(p - a, direction) / length_squared;\n \
@@ -370,7 +395,7 @@ data:
     \     values.second_numerator,\n            values.denominator,\n            eps\n\
     \        )\n    ) {\n        return std::nullopt;\n    }\n    return ray_detail::point_at(\n\
     \        first,\n        values.first_numerator,\n        values.denominator\n\
-    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 14 \"\
+    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 15 \"\
     geometry/polygon.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\nenum class\
     \ PointInPolygon {\n    Outside = 0,\n    Boundary = 1,\n    Inside = 2,\n};\n\
     \nnamespace polygon_detail {\n\ninline bool close(\n    const Point<long double>&\
@@ -528,30 +553,13 @@ data:
     \ {\n        std::array<Point<T>, 3> triangle;\n        triangle[0] = polygon[0];\n\
     \        triangle[1] = polygon[index];\n        triangle[2] = polygon[index +\
     \ 1];\n        result.push_back(std::move(triangle));\n    }\n    return result;\n\
-    }\n\ntemplate <Coordinate T>\nstd::vector<Point<T>> convex_hull(\n    std::vector<Point<T>>\
-    \ points,\n    bool include_collinear = false\n) {\n    std::sort(points.begin(),\
-    \ points.end());\n    points.erase(std::unique(points.begin(), points.end()),\
-    \ points.end());\n    std::size_t n = points.size();\n    if (n <= 1) return points;\n\
-    \n    std::vector<Point<T>> hull;\n    hull.reserve(2 * n);\n    auto should_pop\
-    \ = [include_collinear](\n        const Point<T>& a,\n        const Point<T>&\
-    \ b,\n        const Point<T>& c\n    ) {\n        int turn = orientation(a, b,\
-    \ c);\n        return include_collinear ? turn < 0 : turn <= 0;\n    };\n\n  \
-    \  for (const Point<T>& point : points) {\n        while (\n            hull.size()\
-    \ >= 2 &&\n            should_pop(hull[hull.size() - 2], hull.back(), point)\n\
-    \        ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
-    \    }\n\n    std::size_t lower_size = hull.size();\n    for (std::size_t i =\
-    \ n - 1; i-- > 0;) {\n        const Point<T>& point = points[i];\n        while\
-    \ (\n            hull.size() > lower_size &&\n            should_pop(hull[hull.size()\
-    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
-    \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
-    \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
-    \    }\n    return hull;\n}\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n\
-    \    const std::vector<Point<T>>& polygon,\n    const Point<T>& point,\n    long\
-    \ double eps = 1e-12L\n) {\n    bool inside = false;\n    std::size_t n = polygon.size();\n\
-    \    for (std::size_t i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n\
-    \        const Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a,\
-    \ b}, point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\
-    \n        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
+    }\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n    const std::vector<Point<T>>&\
+    \ polygon,\n    const Point<T>& point,\n    long double eps = 1e-12L\n) {\n  \
+    \  bool inside = false;\n    std::size_t n = polygon.size();\n    for (std::size_t\
+    \ i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n        const\
+    \ Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a, b},\
+    \ point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\n\
+    \        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
     \ b, point, eps) > 0) {\n                inside = !inside;\n            }\n  \
     \      } else if (b.y <= point.y && orientation(a, b, point, eps) < 0) {\n   \
     \         inside = !inside;\n        }\n    }\n    return inside ? PointInPolygon::Inside\
@@ -712,13 +720,14 @@ data:
     }\n"
   dependsOn:
   - geometry/polygon.hpp
+  - geometry/convex_hull.hpp
+  - geometry/point.hpp
   - geometry/ray.hpp
   - geometry/line.hpp
-  - geometry/point.hpp
   isVerificationFile: true
   path: verify/geometry/polygon_area.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 12:04:47+09:00'
+  timestamp: '2026-07-01 22:47:11+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/geometry/polygon_area.test.cpp

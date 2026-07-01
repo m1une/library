@@ -2,26 +2,45 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: geometry/convex_hull.hpp
-    title: Convex Hull
-  - icon: ':heavy_check_mark:'
     path: geometry/point.hpp
     title: 2D Point and Predicates
-  _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: geometry/all.hpp
+    title: Geometry Bundle
+  - icon: ':heavy_check_mark:'
+    path: geometry/farthest_pair.hpp
+    title: Farthest Pair of Points
+  - icon: ':heavy_check_mark:'
+    path: geometry/polygon.hpp
+    title: Polygons
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/convex_hull.test.cpp
+    title: verify/geometry/convex_hull.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/farthest_pair.test.cpp
+    title: verify/geometry/farthest_pair.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/geometry_algorithms.test.cpp
+    title: verify/geometry/geometry_algorithms.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/point_in_polygon.test.cpp
+    title: verify/geometry/point_in_polygon.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/polygon_area.test.cpp
+    title: verify/geometry/polygon_area.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/geometry/polygon_operations.test.cpp
+    title: verify/geometry/polygon_operations.test.cpp
   _isVerificationFailed: false
-  _pathExtension: cpp
+  _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A
-    links:
-    - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A
-  bundledCode: "#line 1 \"verify/geometry/convex_hull.test.cpp\"\n#define PROBLEM\
-    \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A\"\n\n#line\
-    \ 1 \"geometry/convex_hull.hpp\"\n\n\n\n#include <algorithm>\n#include <cstddef>\n\
-    #include <utility>\n#include <vector>\n\n#line 1 \"geometry/point.hpp\"\n\n\n\n\
-    #include <cmath>\n#include <concepts>\n#include <cassert>\n#include <type_traits>\n\
+    links: []
+  bundledCode: "#line 1 \"geometry/convex_hull.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <cstddef>\n#include <utility>\n#include <vector>\n\n#line 1 \"geometry/point.hpp\"\
+    \n\n\n\n#include <cmath>\n#include <concepts>\n#include <cassert>\n#include <type_traits>\n\
     \nnamespace m1une {\nnamespace geometry {\n\ntemplate <typename T>\nconcept Coordinate\
     \ = std::is_arithmetic_v<T> && !std::same_as<std::remove_cv_t<T>, bool>;\n\ntemplate\
     \ <Coordinate T>\nusing wide_type = std::conditional_t<std::integral<T>, __int128_t,\
@@ -123,43 +142,107 @@ data:
     \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
     \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
     \    }\n    return hull;\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\
-    \n\n#line 4 \"verify/geometry/convex_hull.test.cpp\"\n\n#line 6 \"verify/geometry/convex_hull.test.cpp\"\
-    \n#include <iostream>\n#line 8 \"verify/geometry/convex_hull.test.cpp\"\n\nint\
-    \ main() {\n    using namespace m1une::geometry;\n    int n;\n    std::cin >>\
-    \ n;\n    std::vector<Point<long long>> points(n);\n    for (auto& point : points)\
-    \ std::cin >> point.x >> point.y;\n\n    std::vector<Point<long long>> hull =\
-    \ convex_hull(points, true);\n    int start = int(std::min_element(\n        hull.begin(),\n\
-    \        hull.end(),\n        [](const auto& a, const auto& b) {\n           \
-    \ if (a.y != b.y) return a.y < b.y;\n            return a.x < b.x;\n        }\n\
-    \    ) - hull.begin());\n\n    std::cout << hull.size() << '\\n';\n    for (int\
-    \ offset = 0; offset < int(hull.size()); offset++) {\n        const auto& point\
-    \ = hull[(start + offset) % hull.size()];\n        std::cout << point.x << \"\
-    \ \" << point.y << '\\n';\n    }\n}\n"
-  code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A\"\
-    \n\n#include \"../../geometry/convex_hull.hpp\"\n\n#include <algorithm>\n#include\
-    \ <iostream>\n#include <vector>\n\nint main() {\n    using namespace m1une::geometry;\n\
-    \    int n;\n    std::cin >> n;\n    std::vector<Point<long long>> points(n);\n\
-    \    for (auto& point : points) std::cin >> point.x >> point.y;\n\n    std::vector<Point<long\
-    \ long>> hull = convex_hull(points, true);\n    int start = int(std::min_element(\n\
-    \        hull.begin(),\n        hull.end(),\n        [](const auto& a, const auto&\
-    \ b) {\n            if (a.y != b.y) return a.y < b.y;\n            return a.x\
-    \ < b.x;\n        }\n    ) - hull.begin());\n\n    std::cout << hull.size() <<\
-    \ '\\n';\n    for (int offset = 0; offset < int(hull.size()); offset++) {\n  \
-    \      const auto& point = hull[(start + offset) % hull.size()];\n        std::cout\
-    \ << point.x << \" \" << point.y << '\\n';\n    }\n}\n"
+    \n\n"
+  code: "#ifndef M1UNE_GEOMETRY_CONVEX_HULL_HPP\n#define M1UNE_GEOMETRY_CONVEX_HULL_HPP\
+    \ 1\n\n#include <algorithm>\n#include <cstddef>\n#include <utility>\n#include\
+    \ <vector>\n\n#include \"point.hpp\"\n\nnamespace m1une {\nnamespace geometry\
+    \ {\n\n// Returns the convex hull counterclockwise from its lexicographically\
+    \ smallest\n// point. The first point is not repeated at the end.\ntemplate <Coordinate\
+    \ T>\nstd::vector<Point<T>> convex_hull(\n    std::vector<Point<T>> points,\n\
+    \    bool include_collinear = false\n) {\n    std::sort(points.begin(), points.end());\n\
+    \    points.erase(std::unique(points.begin(), points.end()), points.end());\n\
+    \    std::size_t size = points.size();\n    if (size <= 1) return points;\n\n\
+    \    std::vector<Point<T>> hull;\n    hull.reserve(2 * size);\n    auto should_pop\
+    \ = [include_collinear](\n        const Point<T>& first,\n        const Point<T>&\
+    \ second,\n        const Point<T>& third\n    ) {\n        int turn = orientation(first,\
+    \ second, third);\n        return include_collinear ? turn < 0 : turn <= 0;\n\
+    \    };\n\n    for (const Point<T>& point : points) {\n        while (\n     \
+    \       hull.size() >= 2 &&\n            should_pop(hull[hull.size() - 2], hull.back(),\
+    \ point)\n        ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
+    \    }\n\n    std::size_t lower_size = hull.size();\n    for (std::size_t index\
+    \ = size - 1; index-- > 0;) {\n        const Point<T>& point = points[index];\n\
+    \        while (\n            hull.size() > lower_size &&\n            should_pop(hull[hull.size()\
+    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
+    \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
+    \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
+    \    }\n    return hull;\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\
+    \n#endif  // M1UNE_GEOMETRY_CONVEX_HULL_HPP\n"
   dependsOn:
-  - geometry/convex_hull.hpp
   - geometry/point.hpp
-  isVerificationFile: true
-  path: verify/geometry/convex_hull.test.cpp
-  requiredBy: []
+  isVerificationFile: false
+  path: geometry/convex_hull.hpp
+  requiredBy:
+  - geometry/all.hpp
+  - geometry/farthest_pair.hpp
+  - geometry/polygon.hpp
   timestamp: '2026-07-01 22:47:11+09:00'
-  verificationStatus: TEST_ACCEPTED
-  verifiedWith: []
-documentation_of: verify/geometry/convex_hull.test.cpp
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/geometry/polygon_area.test.cpp
+  - verify/geometry/geometry_algorithms.test.cpp
+  - verify/geometry/point_in_polygon.test.cpp
+  - verify/geometry/convex_hull.test.cpp
+  - verify/geometry/polygon_operations.test.cpp
+  - verify/geometry/farthest_pair.test.cpp
+documentation_of: geometry/convex_hull.hpp
 layout: document
-redirect_from:
-- /verify/verify/geometry/convex_hull.test.cpp
-- /verify/verify/geometry/convex_hull.test.cpp.html
-title: verify/geometry/convex_hull.test.cpp
+title: Convex Hull
 ---
+
+## Overview
+
+`convex_hull` returns the smallest convex polygon containing a set of points.
+It uses Andrew's monotone-chain algorithm.
+
+The result is counterclockwise, starts at the lexicographically smallest point,
+and does not repeat its first point at the end. Duplicate input points are
+removed.
+
+## Function
+
+```cpp
+template <Coordinate T>
+std::vector<Point<T>> convex_hull(
+    std::vector<Point<T>> points,
+    bool include_collinear = false);
+```
+
+| Function | Description | Complexity |
+| --- | --- | --- |
+| `convex_hull(points, include_collinear)` | Constructs the convex hull. | $O(N\log N)$ time and $O(N)$ memory. |
+
+By default, points strictly between the endpoints of a hull edge are omitted.
+Pass `true` to retain every distinct point on the hull boundary.
+
+Degenerate inputs behave as follows:
+
+* no points produce an empty hull;
+* one distinct point produces that point;
+* collinear points produce the two endpoints by default, or every point in
+  lexicographic order when `include_collinear` is true.
+
+Integral coordinates use signed 128-bit cross products. Floating-point
+coordinates use the geometry module's default orientation tolerance.
+
+## Example
+
+```cpp
+#include "geometry/convex_hull.hpp"
+
+#include <iostream>
+#include <vector>
+
+int main() {
+    using Point = m1une::geometry::Point<long long>;
+    std::vector<Point> points;
+    points.emplace_back(0, 0);
+    points.emplace_back(2, 0);
+    points.emplace_back(1, 1);
+    points.emplace_back(1, 0);
+
+    auto hull = m1une::geometry::convex_hull(points);
+    for (const Point& point : hull) {
+        std::cout << point.x << " " << point.y << "\n";
+    }
+}
+```

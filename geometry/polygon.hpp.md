@@ -2,6 +2,9 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
+    path: geometry/convex_hull.hpp
+    title: Convex Hull
+  - icon: ':heavy_check_mark:'
     path: geometry/line.hpp
     title: Lines and Segments
   - icon: ':heavy_check_mark:'
@@ -14,16 +17,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: geometry/all.hpp
     title: Geometry Bundle
-  - icon: ':heavy_check_mark:'
-    path: geometry/farthest_pair.hpp
-    title: Farthest Pair of Points
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: verify/geometry/convex_hull.test.cpp
-    title: verify/geometry/convex_hull.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: verify/geometry/farthest_pair.test.cpp
-    title: verify/geometry/farthest_pair.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/geometry/geometry_algorithms.test.cpp
     title: verify/geometry/geometry_algorithms.test.cpp
@@ -43,124 +37,146 @@ data:
     links: []
   bundledCode: "#line 1 \"geometry/polygon.hpp\"\n\n\n\n#include <algorithm>\n#include\
     \ <array>\n#include <cassert>\n#include <cmath>\n#include <cstddef>\n#include\
-    \ <limits>\n#include <optional>\n#include <vector>\n\n#line 1 \"geometry/ray.hpp\"\
-    \n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line 1 \"geometry/line.hpp\"\n\n\n\n\
-    #line 8 \"geometry/line.hpp\"\n\n#line 1 \"geometry/point.hpp\"\n\n\n\n#line 5\
-    \ \"geometry/point.hpp\"\n#include <concepts>\n#line 7 \"geometry/point.hpp\"\n\
-    #include <type_traits>\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate\
-    \ <typename T>\nconcept Coordinate = std::is_arithmetic_v<T> && !std::same_as<std::remove_cv_t<T>,\
-    \ bool>;\n\ntemplate <Coordinate T>\nusing wide_type = std::conditional_t<std::integral<T>,\
-    \ __int128_t, long double>;\n\ntemplate <Coordinate T>\nstruct Point {\n    T\
-    \ x;\n    T y;\n\n    constexpr Point() : x(0), y(0) {}\n    constexpr Point(T\
-    \ x_value, T y_value) : x(x_value), y(y_value) {}\n\n    template <Coordinate\
-    \ U>\n    explicit constexpr Point(const Point<U>& other)\n        : x(static_cast<T>(other.x)),\
-    \ y(static_cast<T>(other.y)) {}\n\n    constexpr Point& operator+=(const Point&\
-    \ other) {\n        x += other.x;\n        y += other.y;\n        return *this;\n\
-    \    }\n\n    constexpr Point& operator-=(const Point& other) {\n        x -=\
-    \ other.x;\n        y -= other.y;\n        return *this;\n    }\n\n    constexpr\
-    \ Point operator+() const {\n        return *this;\n    }\n\n    constexpr Point\
-    \ operator-() const {\n        return Point(-x, -y);\n    }\n\n    friend constexpr\
-    \ Point operator+(Point left, const Point& right) {\n        return left += right;\n\
-    \    }\n\n    friend constexpr Point operator-(Point left, const Point& right)\
-    \ {\n        return left -= right;\n    }\n\n    friend constexpr bool operator==(const\
-    \ Point&, const Point&) = default;\n\n    friend constexpr bool operator<(const\
-    \ Point& left, const Point& right) {\n        if (left.x != right.x) return left.x\
-    \ < right.x;\n        return left.y < right.y;\n    }\n};\n\ntemplate <Coordinate\
-    \ T, typename Scalar>\nrequires std::is_arithmetic_v<Scalar>\nconstexpr auto operator*(const\
-    \ Point<T>& point, Scalar scalar) {\n    using Result = std::common_type_t<T,\
-    \ Scalar>;\n    return Point<Result>(\n        Result(point.x) * Result(scalar),\n\
-    \        Result(point.y) * Result(scalar)\n    );\n}\n\ntemplate <typename Scalar,\
-    \ Coordinate T>\nrequires std::is_arithmetic_v<Scalar>\nconstexpr auto operator*(Scalar\
-    \ scalar, const Point<T>& point) {\n    return point * scalar;\n}\n\ntemplate\
-    \ <Coordinate T, typename Scalar>\nrequires std::is_arithmetic_v<Scalar>\nconstexpr\
-    \ auto operator/(const Point<T>& point, Scalar scalar) {\n    using Result = std::common_type_t<T,\
-    \ Scalar>;\n    return Point<Result>(\n        Result(point.x) / Result(scalar),\n\
-    \        Result(point.y) / Result(scalar)\n    );\n}\n\ntemplate <Coordinate T>\n\
-    constexpr wide_type<T> dot(const Point<T>& a, const Point<T>& b) {\n    using\
-    \ W = wide_type<T>;\n    return W(a.x) * W(b.x) + W(a.y) * W(b.y);\n}\n\ntemplate\
-    \ <Coordinate T>\nconstexpr wide_type<T> cross(const Point<T>& a, const Point<T>&\
-    \ b) {\n    using W = wide_type<T>;\n    return W(a.x) * W(b.y) - W(a.y) * W(b.x);\n\
-    }\n\ntemplate <Coordinate T>\nconstexpr wide_type<T> cross(\n    const Point<T>&\
-    \ origin,\n    const Point<T>& a,\n    const Point<T>& b\n) {\n    using W = wide_type<T>;\n\
-    \    W ax = W(a.x) - W(origin.x);\n    W ay = W(a.y) - W(origin.y);\n    W bx\
-    \ = W(b.x) - W(origin.x);\n    W by = W(b.y) - W(origin.y);\n    return ax * by\
-    \ - ay * bx;\n}\n\ntemplate <Coordinate T>\nconstexpr wide_type<T> norm2(const\
-    \ Point<T>& point) {\n    return dot(point, point);\n}\n\ntemplate <Coordinate\
-    \ T>\nconstexpr wide_type<T> distance2(const Point<T>& a, const Point<T>& b) {\n\
-    \    using W = wide_type<T>;\n    W dx = W(a.x) - W(b.x);\n    W dy = W(a.y) -\
-    \ W(b.y);\n    return dx * dx + dy * dy;\n}\n\ntemplate <Coordinate T>\nlong double\
-    \ norm(const Point<T>& point) {\n    return std::hypot(\n        static_cast<long\
-    \ double>(point.x),\n        static_cast<long double>(point.y)\n    );\n}\n\n\
-    template <Coordinate T>\nlong double distance(const Point<T>& a, const Point<T>&\
-    \ b) {\n    return std::hypot(\n        static_cast<long double>(a.x) - static_cast<long\
-    \ double>(b.x),\n        static_cast<long double>(a.y) - static_cast<long double>(b.y)\n\
-    \    );\n}\n\ntemplate <Coordinate T, typename M, typename N>\nrequires std::is_arithmetic_v<M>\
-    \ && std::is_arithmetic_v<N>\nconstexpr Point<long double> internal_division_point(\n\
+    \ <limits>\n#include <optional>\n#include <vector>\n\n#line 1 \"geometry/convex_hull.hpp\"\
+    \n\n\n\n#line 6 \"geometry/convex_hull.hpp\"\n#include <utility>\n#line 8 \"geometry/convex_hull.hpp\"\
+    \n\n#line 1 \"geometry/point.hpp\"\n\n\n\n#line 5 \"geometry/point.hpp\"\n#include\
+    \ <concepts>\n#line 7 \"geometry/point.hpp\"\n#include <type_traits>\n\nnamespace\
+    \ m1une {\nnamespace geometry {\n\ntemplate <typename T>\nconcept Coordinate =\
+    \ std::is_arithmetic_v<T> && !std::same_as<std::remove_cv_t<T>, bool>;\n\ntemplate\
+    \ <Coordinate T>\nusing wide_type = std::conditional_t<std::integral<T>, __int128_t,\
+    \ long double>;\n\ntemplate <Coordinate T>\nstruct Point {\n    T x;\n    T y;\n\
+    \n    constexpr Point() : x(0), y(0) {}\n    constexpr Point(T x_value, T y_value)\
+    \ : x(x_value), y(y_value) {}\n\n    template <Coordinate U>\n    explicit constexpr\
+    \ Point(const Point<U>& other)\n        : x(static_cast<T>(other.x)), y(static_cast<T>(other.y))\
+    \ {}\n\n    constexpr Point& operator+=(const Point& other) {\n        x += other.x;\n\
+    \        y += other.y;\n        return *this;\n    }\n\n    constexpr Point& operator-=(const\
+    \ Point& other) {\n        x -= other.x;\n        y -= other.y;\n        return\
+    \ *this;\n    }\n\n    constexpr Point operator+() const {\n        return *this;\n\
+    \    }\n\n    constexpr Point operator-() const {\n        return Point(-x, -y);\n\
+    \    }\n\n    friend constexpr Point operator+(Point left, const Point& right)\
+    \ {\n        return left += right;\n    }\n\n    friend constexpr Point operator-(Point\
+    \ left, const Point& right) {\n        return left -= right;\n    }\n\n    friend\
+    \ constexpr bool operator==(const Point&, const Point&) = default;\n\n    friend\
+    \ constexpr bool operator<(const Point& left, const Point& right) {\n        if\
+    \ (left.x != right.x) return left.x < right.x;\n        return left.y < right.y;\n\
+    \    }\n};\n\ntemplate <Coordinate T, typename Scalar>\nrequires std::is_arithmetic_v<Scalar>\n\
+    constexpr auto operator*(const Point<T>& point, Scalar scalar) {\n    using Result\
+    \ = std::common_type_t<T, Scalar>;\n    return Point<Result>(\n        Result(point.x)\
+    \ * Result(scalar),\n        Result(point.y) * Result(scalar)\n    );\n}\n\ntemplate\
+    \ <typename Scalar, Coordinate T>\nrequires std::is_arithmetic_v<Scalar>\nconstexpr\
+    \ auto operator*(Scalar scalar, const Point<T>& point) {\n    return point * scalar;\n\
+    }\n\ntemplate <Coordinate T, typename Scalar>\nrequires std::is_arithmetic_v<Scalar>\n\
+    constexpr auto operator/(const Point<T>& point, Scalar scalar) {\n    using Result\
+    \ = std::common_type_t<T, Scalar>;\n    return Point<Result>(\n        Result(point.x)\
+    \ / Result(scalar),\n        Result(point.y) / Result(scalar)\n    );\n}\n\ntemplate\
+    \ <Coordinate T>\nconstexpr wide_type<T> dot(const Point<T>& a, const Point<T>&\
+    \ b) {\n    using W = wide_type<T>;\n    return W(a.x) * W(b.x) + W(a.y) * W(b.y);\n\
+    }\n\ntemplate <Coordinate T>\nconstexpr wide_type<T> cross(const Point<T>& a,\
+    \ const Point<T>& b) {\n    using W = wide_type<T>;\n    return W(a.x) * W(b.y)\
+    \ - W(a.y) * W(b.x);\n}\n\ntemplate <Coordinate T>\nconstexpr wide_type<T> cross(\n\
+    \    const Point<T>& origin,\n    const Point<T>& a,\n    const Point<T>& b\n\
+    ) {\n    using W = wide_type<T>;\n    W ax = W(a.x) - W(origin.x);\n    W ay =\
+    \ W(a.y) - W(origin.y);\n    W bx = W(b.x) - W(origin.x);\n    W by = W(b.y) -\
+    \ W(origin.y);\n    return ax * by - ay * bx;\n}\n\ntemplate <Coordinate T>\n\
+    constexpr wide_type<T> norm2(const Point<T>& point) {\n    return dot(point, point);\n\
+    }\n\ntemplate <Coordinate T>\nconstexpr wide_type<T> distance2(const Point<T>&\
+    \ a, const Point<T>& b) {\n    using W = wide_type<T>;\n    W dx = W(a.x) - W(b.x);\n\
+    \    W dy = W(a.y) - W(b.y);\n    return dx * dx + dy * dy;\n}\n\ntemplate <Coordinate\
+    \ T>\nlong double norm(const Point<T>& point) {\n    return std::hypot(\n    \
+    \    static_cast<long double>(point.x),\n        static_cast<long double>(point.y)\n\
+    \    );\n}\n\ntemplate <Coordinate T>\nlong double distance(const Point<T>& a,\
+    \ const Point<T>& b) {\n    return std::hypot(\n        static_cast<long double>(a.x)\
+    \ - static_cast<long double>(b.x),\n        static_cast<long double>(a.y) - static_cast<long\
+    \ double>(b.y)\n    );\n}\n\ntemplate <Coordinate T, typename M, typename N>\n\
+    requires std::is_arithmetic_v<M> && std::is_arithmetic_v<N>\nconstexpr Point<long\
+    \ double> internal_division_point(\n    const Point<T>& a,\n    const Point<T>&\
+    \ b,\n    M m,\n    N n\n) {\n    long double first_ratio = static_cast<long double>(m);\n\
+    \    long double second_ratio = static_cast<long double>(n);\n    long double\
+    \ denominator = first_ratio + second_ratio;\n    assert(denominator != 0);\n \
+    \   Point<long double> first(a);\n    Point<long double> direction = Point<long\
+    \ double>(b) - first;\n    return first + direction * (first_ratio / denominator);\n\
+    }\n\ntemplate <Coordinate T, typename M, typename N>\nrequires std::is_arithmetic_v<M>\
+    \ && std::is_arithmetic_v<N>\nconstexpr Point<long double> external_division_point(\n\
     \    const Point<T>& a,\n    const Point<T>& b,\n    M m,\n    N n\n) {\n    long\
     \ double first_ratio = static_cast<long double>(m);\n    long double second_ratio\
-    \ = static_cast<long double>(n);\n    long double denominator = first_ratio +\
+    \ = static_cast<long double>(n);\n    long double denominator = first_ratio -\
     \ second_ratio;\n    assert(denominator != 0);\n    Point<long double> first(a);\n\
     \    Point<long double> direction = Point<long double>(b) - first;\n    return\
     \ first + direction * (first_ratio / denominator);\n}\n\ntemplate <Coordinate\
-    \ T, typename M, typename N>\nrequires std::is_arithmetic_v<M> && std::is_arithmetic_v<N>\n\
-    constexpr Point<long double> external_division_point(\n    const Point<T>& a,\n\
-    \    const Point<T>& b,\n    M m,\n    N n\n) {\n    long double first_ratio =\
-    \ static_cast<long double>(m);\n    long double second_ratio = static_cast<long\
-    \ double>(n);\n    long double denominator = first_ratio - second_ratio;\n   \
-    \ assert(denominator != 0);\n    Point<long double> first(a);\n    Point<long\
-    \ double> direction = Point<long double>(b) - first;\n    return first + direction\
-    \ * (first_ratio / denominator);\n}\n\ntemplate <Coordinate T>\nconstexpr int\
-    \ sign(wide_type<T> value, long double eps = 1e-12L) {\n    if constexpr (std::integral<T>)\
-    \ {\n        return (value > 0) - (value < 0);\n    } else {\n        return (value\
-    \ > eps) - (value < -eps);\n    }\n}\n\ntemplate <Coordinate T>\nconstexpr int\
-    \ orientation(\n    const Point<T>& a,\n    const Point<T>& b,\n    const Point<T>&\
-    \ c,\n    long double eps = 1e-12L\n) {\n    return sign<T>(cross(a, b, c), eps);\n\
-    }\n\ntemplate <Coordinate T>\nconstexpr bool collinear(\n    const Point<T>& a,\n\
-    \    const Point<T>& b,\n    const Point<T>& c,\n    long double eps = 1e-12L\n\
-    ) {\n    return orientation(a, b, c, eps) == 0;\n}\n\ntemplate <Coordinate T>\n\
-    Point<long double> rotate(const Point<T>& point, long double angle) {\n    long\
-    \ double cosine = std::cos(angle);\n    long double sine = std::sin(angle);\n\
-    \    return Point<long double>(\n        static_cast<long double>(point.x) * cosine\
-    \ -\n            static_cast<long double>(point.y) * sine,\n        static_cast<long\
-    \ double>(point.x) * sine +\n            static_cast<long double>(point.y) * cosine\n\
-    \    );\n}\n\ntemplate <Coordinate T>\nPoint<long double> normalized(const Point<T>&\
-    \ point) {\n    long double length = norm(point);\n    assert(length != 0);\n\
-    \    return Point<long double>(\n        static_cast<long double>(point.x) / length,\n\
-    \        static_cast<long double>(point.y) / length\n    );\n}\n\n}  // namespace\
-    \ geometry\n}  // namespace m1une\n\n\n#line 10 \"geometry/line.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace geometry {\n\ntemplate <Coordinate T>\nstruct Line {\n  \
-    \  Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate T>\nstruct Segment\
-    \ {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate T>\nbool on_line(\n\
-    \    const Line<T>& line,\n    const Point<T>& point,\n    long double eps = 1e-12L\n\
-    ) {\n    assert(line.a != line.b);\n    return orientation(line.a, line.b, point,\
-    \ eps) == 0;\n}\n\ntemplate <Coordinate T>\nbool parallel(const Line<T>& first,\
-    \ const Line<T>& second, long double eps = 1e-12L) {\n    using W = wide_type<T>;\n\
-    \    W first_x = W(first.b.x) - W(first.a.x);\n    W first_y = W(first.b.y) -\
-    \ W(first.a.y);\n    W second_x = W(second.b.x) - W(second.a.x);\n    W second_y\
-    \ = W(second.b.y) - W(second.a.y);\n    return sign<T>(first_x * second_y - first_y\
-    \ * second_x, eps) == 0;\n}\n\ntemplate <Coordinate T>\nbool orthogonal(const\
+    \ T>\nconstexpr int sign(wide_type<T> value, long double eps = 1e-12L) {\n   \
+    \ if constexpr (std::integral<T>) {\n        return (value > 0) - (value < 0);\n\
+    \    } else {\n        return (value > eps) - (value < -eps);\n    }\n}\n\ntemplate\
+    \ <Coordinate T>\nconstexpr int orientation(\n    const Point<T>& a,\n    const\
+    \ Point<T>& b,\n    const Point<T>& c,\n    long double eps = 1e-12L\n) {\n  \
+    \  return sign<T>(cross(a, b, c), eps);\n}\n\ntemplate <Coordinate T>\nconstexpr\
+    \ bool collinear(\n    const Point<T>& a,\n    const Point<T>& b,\n    const Point<T>&\
+    \ c,\n    long double eps = 1e-12L\n) {\n    return orientation(a, b, c, eps)\
+    \ == 0;\n}\n\ntemplate <Coordinate T>\nPoint<long double> rotate(const Point<T>&\
+    \ point, long double angle) {\n    long double cosine = std::cos(angle);\n   \
+    \ long double sine = std::sin(angle);\n    return Point<long double>(\n      \
+    \  static_cast<long double>(point.x) * cosine -\n            static_cast<long\
+    \ double>(point.y) * sine,\n        static_cast<long double>(point.x) * sine +\n\
+    \            static_cast<long double>(point.y) * cosine\n    );\n}\n\ntemplate\
+    \ <Coordinate T>\nPoint<long double> normalized(const Point<T>& point) {\n   \
+    \ long double length = norm(point);\n    assert(length != 0);\n    return Point<long\
+    \ double>(\n        static_cast<long double>(point.x) / length,\n        static_cast<long\
+    \ double>(point.y) / length\n    );\n}\n\n}  // namespace geometry\n}  // namespace\
+    \ m1une\n\n\n#line 10 \"geometry/convex_hull.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ geometry {\n\n// Returns the convex hull counterclockwise from its lexicographically\
+    \ smallest\n// point. The first point is not repeated at the end.\ntemplate <Coordinate\
+    \ T>\nstd::vector<Point<T>> convex_hull(\n    std::vector<Point<T>> points,\n\
+    \    bool include_collinear = false\n) {\n    std::sort(points.begin(), points.end());\n\
+    \    points.erase(std::unique(points.begin(), points.end()), points.end());\n\
+    \    std::size_t size = points.size();\n    if (size <= 1) return points;\n\n\
+    \    std::vector<Point<T>> hull;\n    hull.reserve(2 * size);\n    auto should_pop\
+    \ = [include_collinear](\n        const Point<T>& first,\n        const Point<T>&\
+    \ second,\n        const Point<T>& third\n    ) {\n        int turn = orientation(first,\
+    \ second, third);\n        return include_collinear ? turn < 0 : turn <= 0;\n\
+    \    };\n\n    for (const Point<T>& point : points) {\n        while (\n     \
+    \       hull.size() >= 2 &&\n            should_pop(hull[hull.size() - 2], hull.back(),\
+    \ point)\n        ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
+    \    }\n\n    std::size_t lower_size = hull.size();\n    for (std::size_t index\
+    \ = size - 1; index-- > 0;) {\n        const Point<T>& point = points[index];\n\
+    \        while (\n            hull.size() > lower_size &&\n            should_pop(hull[hull.size()\
+    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
+    \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
+    \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
+    \    }\n    return hull;\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\
+    \n\n#line 1 \"geometry/ray.hpp\"\n\n\n\n#line 7 \"geometry/ray.hpp\"\n\n#line\
+    \ 1 \"geometry/line.hpp\"\n\n\n\n#line 8 \"geometry/line.hpp\"\n\n#line 10 \"\
+    geometry/line.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\ntemplate <Coordinate\
+    \ T>\nstruct Line {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate\
+    \ T>\nstruct Segment {\n    Point<T> a;\n    Point<T> b;\n};\n\ntemplate <Coordinate\
+    \ T>\nbool on_line(\n    const Line<T>& line,\n    const Point<T>& point,\n  \
+    \  long double eps = 1e-12L\n) {\n    assert(line.a != line.b);\n    return orientation(line.a,\
+    \ line.b, point, eps) == 0;\n}\n\ntemplate <Coordinate T>\nbool parallel(const\
     \ Line<T>& first, const Line<T>& second, long double eps = 1e-12L) {\n    using\
     \ W = wide_type<T>;\n    W first_x = W(first.b.x) - W(first.a.x);\n    W first_y\
     \ = W(first.b.y) - W(first.a.y);\n    W second_x = W(second.b.x) - W(second.a.x);\n\
     \    W second_y = W(second.b.y) - W(second.a.y);\n    return sign<T>(first_x *\
-    \ second_x + first_y * second_y, eps) == 0;\n}\n\ntemplate <Coordinate T>\nPoint<long\
-    \ double> projection(const Line<T>& line, const Point<T>& point) {\n    assert(line.a\
-    \ != line.b);\n    Point<long double> a(line.a);\n    Point<long double> direction(\n\
-    \        static_cast<long double>(line.b.x) - static_cast<long double>(line.a.x),\n\
-    \        static_cast<long double>(line.b.y) - static_cast<long double>(line.a.y)\n\
-    \    );\n    Point<long double> offset(\n        static_cast<long double>(point.x)\
-    \ - a.x,\n        static_cast<long double>(point.y) - a.y\n    );\n    long double\
-    \ ratio = dot(offset, direction) / dot(direction, direction);\n    return a +\
-    \ direction * ratio;\n}\n\ntemplate <Coordinate T>\nPoint<long double> reflection(const\
-    \ Line<T>& line, const Point<T>& point) {\n    Point<long double> projected =\
-    \ projection(line, point);\n    return projected * 2.0L - Point<long double>(point);\n\
-    }\n\ntemplate <Coordinate T>\nlong double distance(const Line<T>& line, const\
-    \ Point<T>& point) {\n    assert(line.a != line.b);\n    Point<long double> direction(\n\
-    \        static_cast<long double>(line.b.x) - static_cast<long double>(line.a.x),\n\
-    \        static_cast<long double>(line.b.y) - static_cast<long double>(line.a.y)\n\
-    \    );\n    Point<long double> offset(\n        static_cast<long double>(point.x)\
-    \ - static_cast<long double>(line.a.x),\n        static_cast<long double>(point.y)\
-    \ - static_cast<long double>(line.a.y)\n    );\n    return std::fabs(cross(direction,\
+    \ second_y - first_y * second_x, eps) == 0;\n}\n\ntemplate <Coordinate T>\nbool\
+    \ orthogonal(const Line<T>& first, const Line<T>& second, long double eps = 1e-12L)\
+    \ {\n    using W = wide_type<T>;\n    W first_x = W(first.b.x) - W(first.a.x);\n\
+    \    W first_y = W(first.b.y) - W(first.a.y);\n    W second_x = W(second.b.x)\
+    \ - W(second.a.x);\n    W second_y = W(second.b.y) - W(second.a.y);\n    return\
+    \ sign<T>(first_x * second_x + first_y * second_y, eps) == 0;\n}\n\ntemplate <Coordinate\
+    \ T>\nPoint<long double> projection(const Line<T>& line, const Point<T>& point)\
+    \ {\n    assert(line.a != line.b);\n    Point<long double> a(line.a);\n    Point<long\
+    \ double> direction(\n        static_cast<long double>(line.b.x) - static_cast<long\
+    \ double>(line.a.x),\n        static_cast<long double>(line.b.y) - static_cast<long\
+    \ double>(line.a.y)\n    );\n    Point<long double> offset(\n        static_cast<long\
+    \ double>(point.x) - a.x,\n        static_cast<long double>(point.y) - a.y\n \
+    \   );\n    long double ratio = dot(offset, direction) / dot(direction, direction);\n\
+    \    return a + direction * ratio;\n}\n\ntemplate <Coordinate T>\nPoint<long double>\
+    \ reflection(const Line<T>& line, const Point<T>& point) {\n    Point<long double>\
+    \ projected = projection(line, point);\n    return projected * 2.0L - Point<long\
+    \ double>(point);\n}\n\ntemplate <Coordinate T>\nlong double distance(const Line<T>&\
+    \ line, const Point<T>& point) {\n    assert(line.a != line.b);\n    Point<long\
+    \ double> direction(\n        static_cast<long double>(line.b.x) - static_cast<long\
+    \ double>(line.a.x),\n        static_cast<long double>(line.b.y) - static_cast<long\
+    \ double>(line.a.y)\n    );\n    Point<long double> offset(\n        static_cast<long\
+    \ double>(point.x) - static_cast<long double>(line.a.x),\n        static_cast<long\
+    \ double>(point.y) - static_cast<long double>(line.a.y)\n    );\n    return std::fabs(cross(direction,\
     \ offset)) / norm(direction);\n}\n\ntemplate <Coordinate T>\nlong double distance(const\
     \ Point<T>& point, const Line<T>& line) {\n    return distance(line, point);\n\
     }\n\ntemplate <Coordinate T>\nbool intersects(\n    const Line<T>& first,\n  \
@@ -386,7 +402,7 @@ data:
     \     values.second_numerator,\n            values.denominator,\n            eps\n\
     \        )\n    ) {\n        return std::nullopt;\n    }\n    return ray_detail::point_at(\n\
     \        first,\n        values.first_numerator,\n        values.denominator\n\
-    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 14 \"\
+    \    );\n}\n\n}  // namespace geometry\n}  // namespace m1une\n\n\n#line 15 \"\
     geometry/polygon.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\nenum class\
     \ PointInPolygon {\n    Outside = 0,\n    Boundary = 1,\n    Inside = 2,\n};\n\
     \nnamespace polygon_detail {\n\ninline bool close(\n    const Point<long double>&\
@@ -544,30 +560,13 @@ data:
     \ {\n        std::array<Point<T>, 3> triangle;\n        triangle[0] = polygon[0];\n\
     \        triangle[1] = polygon[index];\n        triangle[2] = polygon[index +\
     \ 1];\n        result.push_back(std::move(triangle));\n    }\n    return result;\n\
-    }\n\ntemplate <Coordinate T>\nstd::vector<Point<T>> convex_hull(\n    std::vector<Point<T>>\
-    \ points,\n    bool include_collinear = false\n) {\n    std::sort(points.begin(),\
-    \ points.end());\n    points.erase(std::unique(points.begin(), points.end()),\
-    \ points.end());\n    std::size_t n = points.size();\n    if (n <= 1) return points;\n\
-    \n    std::vector<Point<T>> hull;\n    hull.reserve(2 * n);\n    auto should_pop\
-    \ = [include_collinear](\n        const Point<T>& a,\n        const Point<T>&\
-    \ b,\n        const Point<T>& c\n    ) {\n        int turn = orientation(a, b,\
-    \ c);\n        return include_collinear ? turn < 0 : turn <= 0;\n    };\n\n  \
-    \  for (const Point<T>& point : points) {\n        while (\n            hull.size()\
-    \ >= 2 &&\n            should_pop(hull[hull.size() - 2], hull.back(), point)\n\
-    \        ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
-    \    }\n\n    std::size_t lower_size = hull.size();\n    for (std::size_t i =\
-    \ n - 1; i-- > 0;) {\n        const Point<T>& point = points[i];\n        while\
-    \ (\n            hull.size() > lower_size &&\n            should_pop(hull[hull.size()\
-    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
-    \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
-    \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
-    \    }\n    return hull;\n}\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n\
-    \    const std::vector<Point<T>>& polygon,\n    const Point<T>& point,\n    long\
-    \ double eps = 1e-12L\n) {\n    bool inside = false;\n    std::size_t n = polygon.size();\n\
-    \    for (std::size_t i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n\
-    \        const Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a,\
-    \ b}, point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\
-    \n        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
+    }\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n    const std::vector<Point<T>>&\
+    \ polygon,\n    const Point<T>& point,\n    long double eps = 1e-12L\n) {\n  \
+    \  bool inside = false;\n    std::size_t n = polygon.size();\n    for (std::size_t\
+    \ i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n        const\
+    \ Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a, b},\
+    \ point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\n\
+    \        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
     \ b, point, eps) > 0) {\n                inside = !inside;\n            }\n  \
     \      } else if (b.y <= point.y && orientation(a, b, point, eps) < 0) {\n   \
     \         inside = !inside;\n        }\n    }\n    return inside ? PointInPolygon::Inside\
@@ -717,41 +716,42 @@ data:
   code: "#ifndef M1UNE_GEOMETRY_POLYGON_HPP\n#define M1UNE_GEOMETRY_POLYGON_HPP 1\n\
     \n#include <algorithm>\n#include <array>\n#include <cassert>\n#include <cmath>\n\
     #include <cstddef>\n#include <limits>\n#include <optional>\n#include <vector>\n\
-    \n#include \"ray.hpp\"\n\nnamespace m1une {\nnamespace geometry {\n\nenum class\
-    \ PointInPolygon {\n    Outside = 0,\n    Boundary = 1,\n    Inside = 2,\n};\n\
-    \nnamespace polygon_detail {\n\ninline bool close(\n    const Point<long double>&\
-    \ first,\n    const Point<long double>& second,\n    long double eps\n) {\n  \
-    \  return geometry::distance(first, second) <= eps;\n}\n\ninline void push_unique(\n\
-    \    std::vector<Point<long double>>& points,\n    const Point<long double>& point,\n\
-    \    long double eps\n) {\n    for (const Point<long double>& existing : points)\
-    \ {\n        if (close(existing, point, eps)) return;\n    }\n    points.push_back(point);\n\
-    }\n\ninline std::vector<Point<long double>> clean_convex_polygon(\n    std::vector<Point<long\
-    \ double>> polygon,\n    long double eps\n) {\n    if (polygon.empty()) return\
-    \ polygon;\n\n    std::vector<Point<long double>> deduplicated;\n    for (const\
-    \ Point<long double>& point : polygon) {\n        if (\n            deduplicated.empty()\
-    \ ||\n            !close(deduplicated.back(), point, eps)\n        ) {\n     \
-    \       deduplicated.push_back(point);\n        }\n    }\n    if (\n        deduplicated.size()\
-    \ >= 2 &&\n        close(deduplicated.front(), deduplicated.back(), eps)\n   \
-    \ ) {\n        deduplicated.pop_back();\n    }\n    if (deduplicated.size() <=\
-    \ 2) return deduplicated;\n\n    bool changed = true;\n    while (changed && deduplicated.size()\
-    \ >= 3) {\n        changed = false;\n        std::vector<Point<long double>> cleaned;\n\
-    \        std::size_t size = deduplicated.size();\n        for (std::size_t index\
-    \ = 0; index < size; ++index) {\n            const Point<long double>& previous\
-    \ =\n                deduplicated[(index + size - 1) % size];\n            const\
-    \ Point<long double>& current = deduplicated[index];\n            const Point<long\
-    \ double>& next =\n                deduplicated[(index + 1) % size];\n       \
-    \     if (\n                orientation(previous, current, next, eps) == 0 &&\n\
-    \                dot(current - previous, next - current) >= -eps\n           \
-    \ ) {\n                changed = true;\n            } else {\n               \
-    \ cleaned.push_back(current);\n            }\n        }\n        deduplicated\
-    \ = std::move(cleaned);\n    }\n    return deduplicated;\n}\n\ntemplate <Coordinate\
-    \ T>\nstd::vector<Point<T>> normalize_convex_polygon(\n    std::vector<Point<T>>\
-    \ polygon\n) {\n    if (\n        polygon.size() >= 2 &&\n        polygon.front()\
-    \ == polygon.back()\n    ) {\n        polygon.pop_back();\n    }\n    if (polygon.size()\
-    \ <= 1) return polygon;\n    if (polygon.size() >= 3 && polygon_area2(polygon)\
-    \ < 0) {\n        std::reverse(polygon.begin(), polygon.end());\n    }\n\n   \
-    \ auto start = std::min_element(\n        polygon.begin(),\n        polygon.end(),\n\
-    \        [](const Point<T>& first, const Point<T>& second) {\n            if (first.y\
+    \n#include \"convex_hull.hpp\"\n#include \"ray.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ geometry {\n\nenum class PointInPolygon {\n    Outside = 0,\n    Boundary =\
+    \ 1,\n    Inside = 2,\n};\n\nnamespace polygon_detail {\n\ninline bool close(\n\
+    \    const Point<long double>& first,\n    const Point<long double>& second,\n\
+    \    long double eps\n) {\n    return geometry::distance(first, second) <= eps;\n\
+    }\n\ninline void push_unique(\n    std::vector<Point<long double>>& points,\n\
+    \    const Point<long double>& point,\n    long double eps\n) {\n    for (const\
+    \ Point<long double>& existing : points) {\n        if (close(existing, point,\
+    \ eps)) return;\n    }\n    points.push_back(point);\n}\n\ninline std::vector<Point<long\
+    \ double>> clean_convex_polygon(\n    std::vector<Point<long double>> polygon,\n\
+    \    long double eps\n) {\n    if (polygon.empty()) return polygon;\n\n    std::vector<Point<long\
+    \ double>> deduplicated;\n    for (const Point<long double>& point : polygon)\
+    \ {\n        if (\n            deduplicated.empty() ||\n            !close(deduplicated.back(),\
+    \ point, eps)\n        ) {\n            deduplicated.push_back(point);\n     \
+    \   }\n    }\n    if (\n        deduplicated.size() >= 2 &&\n        close(deduplicated.front(),\
+    \ deduplicated.back(), eps)\n    ) {\n        deduplicated.pop_back();\n    }\n\
+    \    if (deduplicated.size() <= 2) return deduplicated;\n\n    bool changed =\
+    \ true;\n    while (changed && deduplicated.size() >= 3) {\n        changed =\
+    \ false;\n        std::vector<Point<long double>> cleaned;\n        std::size_t\
+    \ size = deduplicated.size();\n        for (std::size_t index = 0; index < size;\
+    \ ++index) {\n            const Point<long double>& previous =\n             \
+    \   deduplicated[(index + size - 1) % size];\n            const Point<long double>&\
+    \ current = deduplicated[index];\n            const Point<long double>& next =\n\
+    \                deduplicated[(index + 1) % size];\n            if (\n       \
+    \         orientation(previous, current, next, eps) == 0 &&\n                dot(current\
+    \ - previous, next - current) >= -eps\n            ) {\n                changed\
+    \ = true;\n            } else {\n                cleaned.push_back(current);\n\
+    \            }\n        }\n        deduplicated = std::move(cleaned);\n    }\n\
+    \    return deduplicated;\n}\n\ntemplate <Coordinate T>\nstd::vector<Point<T>>\
+    \ normalize_convex_polygon(\n    std::vector<Point<T>> polygon\n) {\n    if (\n\
+    \        polygon.size() >= 2 &&\n        polygon.front() == polygon.back()\n \
+    \   ) {\n        polygon.pop_back();\n    }\n    if (polygon.size() <= 1) return\
+    \ polygon;\n    if (polygon.size() >= 3 && polygon_area2(polygon) < 0) {\n   \
+    \     std::reverse(polygon.begin(), polygon.end());\n    }\n\n    auto start =\
+    \ std::min_element(\n        polygon.begin(),\n        polygon.end(),\n      \
+    \  [](const Point<T>& first, const Point<T>& second) {\n            if (first.y\
     \ != second.y) return first.y < second.y;\n            return first.x < second.x;\n\
     \        }\n    );\n    std::rotate(polygon.begin(), start, polygon.end());\n\n\
     \    if (polygon.size() <= 2) return polygon;\n    std::vector<Point<T>> cleaned;\n\
@@ -874,30 +874,13 @@ data:
     \ {\n        std::array<Point<T>, 3> triangle;\n        triangle[0] = polygon[0];\n\
     \        triangle[1] = polygon[index];\n        triangle[2] = polygon[index +\
     \ 1];\n        result.push_back(std::move(triangle));\n    }\n    return result;\n\
-    }\n\ntemplate <Coordinate T>\nstd::vector<Point<T>> convex_hull(\n    std::vector<Point<T>>\
-    \ points,\n    bool include_collinear = false\n) {\n    std::sort(points.begin(),\
-    \ points.end());\n    points.erase(std::unique(points.begin(), points.end()),\
-    \ points.end());\n    std::size_t n = points.size();\n    if (n <= 1) return points;\n\
-    \n    std::vector<Point<T>> hull;\n    hull.reserve(2 * n);\n    auto should_pop\
-    \ = [include_collinear](\n        const Point<T>& a,\n        const Point<T>&\
-    \ b,\n        const Point<T>& c\n    ) {\n        int turn = orientation(a, b,\
-    \ c);\n        return include_collinear ? turn < 0 : turn <= 0;\n    };\n\n  \
-    \  for (const Point<T>& point : points) {\n        while (\n            hull.size()\
-    \ >= 2 &&\n            should_pop(hull[hull.size() - 2], hull.back(), point)\n\
-    \        ) {\n            hull.pop_back();\n        }\n        hull.push_back(point);\n\
-    \    }\n\n    std::size_t lower_size = hull.size();\n    for (std::size_t i =\
-    \ n - 1; i-- > 0;) {\n        const Point<T>& point = points[i];\n        while\
-    \ (\n            hull.size() > lower_size &&\n            should_pop(hull[hull.size()\
-    \ - 2], hull.back(), point)\n        ) {\n            hull.pop_back();\n     \
-    \   }\n        hull.push_back(point);\n    }\n    hull.pop_back();\n\n    if (include_collinear\
-    \ && hull.size() == 2 * points.size() - 2) {\n        hull = std::move(points);\n\
-    \    }\n    return hull;\n}\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n\
-    \    const std::vector<Point<T>>& polygon,\n    const Point<T>& point,\n    long\
-    \ double eps = 1e-12L\n) {\n    bool inside = false;\n    std::size_t n = polygon.size();\n\
-    \    for (std::size_t i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n\
-    \        const Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a,\
-    \ b}, point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\
-    \n        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
+    }\n\ntemplate <Coordinate T>\nPointInPolygon point_in_polygon(\n    const std::vector<Point<T>>&\
+    \ polygon,\n    const Point<T>& point,\n    long double eps = 1e-12L\n) {\n  \
+    \  bool inside = false;\n    std::size_t n = polygon.size();\n    for (std::size_t\
+    \ i = 0; i < n; i++) {\n        const Point<T>& a = polygon[i];\n        const\
+    \ Point<T>& b = polygon[(i + 1) % n];\n        if (on_segment(Segment<T>{a, b},\
+    \ point, eps)) {\n            return PointInPolygon::Boundary;\n        }\n\n\
+    \        if (a.y <= point.y) {\n            if (point.y < b.y && orientation(a,\
     \ b, point, eps) > 0) {\n                inside = !inside;\n            }\n  \
     \      } else if (b.y <= point.y && orientation(a, b, point, eps) < 0) {\n   \
     \         inside = !inside;\n        }\n    }\n    return inside ? PointInPolygon::Inside\
@@ -1045,34 +1028,31 @@ data:
     \  result.push_back(current);\n        }\n    }\n    return polygon_detail::normalize_convex_polygon(std::move(result));\n\
     }\n\n}  // namespace geometry\n}  // namespace m1une\n\n#endif  // M1UNE_GEOMETRY_POLYGON_HPP\n"
   dependsOn:
+  - geometry/convex_hull.hpp
+  - geometry/point.hpp
   - geometry/ray.hpp
   - geometry/line.hpp
-  - geometry/point.hpp
   isVerificationFile: false
   path: geometry/polygon.hpp
   requiredBy:
   - geometry/all.hpp
-  - geometry/farthest_pair.hpp
-  timestamp: '2026-06-21 12:04:47+09:00'
+  timestamp: '2026-07-01 22:47:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/geometry/polygon_area.test.cpp
   - verify/geometry/geometry_algorithms.test.cpp
   - verify/geometry/point_in_polygon.test.cpp
-  - verify/geometry/convex_hull.test.cpp
   - verify/geometry/polygon_operations.test.cpp
-  - verify/geometry/farthest_pair.test.cpp
 documentation_of: geometry/polygon.hpp
 layout: document
-title: Polygons and Convex Hull
+title: Polygons
 ---
 
 ## Overview
 
-This header provides polygon area, monotone-chain convex hull, point
-containment, rotating-calipers convex diameter, ray queries, polygon
-intersection and distance, triangulation, centroids, convex clipping, and
-Minkowski sums.
+This header provides polygon area, point containment, rotating-calipers convex
+diameter, ray queries, polygon intersection and distance, triangulation,
+centroids, convex clipping, and Minkowski sums.
 
 Polygons are represented by `std::vector<Point<T>>`. The first point must not be
 repeated at the end.
@@ -1098,7 +1078,6 @@ The polygon may be clockwise or counterclockwise and may be non-convex.
 | `is_simple_polygon(polygon, eps)` | Tests whether polygon edges only meet at adjacent endpoints. | $O(N^2)$ |
 | `triangulate_polygon(polygon, eps)` | Ear-clips a simple polygon, or returns `nullopt` when triangulation fails. | $O(N^2)$ |
 | `triangulate_convex_polygon(polygon, eps)` | Fan-triangulates a convex polygon. | $O(N)$ |
-| `convex_hull(points, include_collinear)` | Returns the hull counterclockwise from its lexicographically smallest point, without repeating the first point. | $O(N \log N)$ |
 | `point_in_polygon(polygon, point, eps)` | Classifies a point against any simple polygon. | $O(N)$ |
 | `convex_diameter2(polygon)` | Returns the maximum squared distance between vertices of a convex counterclockwise polygon. | $O(N)$ |
 | `ray_polygon_intersections(ray, polygon, eps)` | Returns distinct boundary events ordered from the ray origin. | $O(N \log N)$ |
@@ -1109,10 +1088,6 @@ The polygon may be clockwise or counterclockwise and may be non-convex.
 | `distance(first, second)` | Minimum distance between two closed filled simple polygons. | $O(NM)$ |
 | `convex_polygon_intersection(first, second, eps)` | Returns the intersection of two convex polygons. | $O(NM)$ |
 | `minkowski_sum(first, second)` | Returns the Minkowski sum of two convex polygons. | $O(N+M)$ |
-
-By default, `convex_hull` removes points lying strictly inside hull edges.
-Passing `true` keeps boundary-collinear points. Duplicate input points are
-removed.
 
 Polygon queries require at least three vertices unless stated otherwise.
 
@@ -1169,6 +1144,9 @@ counterclockwise and may contain redundant collinear vertices. The result is a
 counterclockwise convex polygon without a repeated first point. Coordinates
 retain type `T`; ensure additions fit that type.
 
+For convex-hull construction, include
+[`geometry/convex_hull.hpp`](convex_hull.md).
+
 ## Example
 
 ```cpp
@@ -1179,13 +1157,11 @@ retain type `T`; ensure additions fit that type.
 
 int main() {
     using Point = m1une::geometry::Point<long long>;
-    std::vector<Point> points;
-    points.emplace_back(0, 0);
-    points.emplace_back(2, 0);
-    points.emplace_back(1, 1);
-    points.emplace_back(1, 0);
+    std::vector<Point> polygon;
+    polygon.emplace_back(0, 0);
+    polygon.emplace_back(2, 0);
+    polygon.emplace_back(0, 2);
 
-    auto hull = m1une::geometry::convex_hull(points);
-    std::cout << hull.size() << "\n"; // 3
+    std::cout << m1une::geometry::polygon_area(polygon) << "\n"; // 2
 }
 ```

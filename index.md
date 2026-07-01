@@ -327,6 +327,9 @@ data:
       path: geometry/circle.hpp
       title: Circles
     - icon: ':heavy_check_mark:'
+      path: geometry/convex_hull.hpp
+      title: Convex Hull
+    - icon: ':heavy_check_mark:'
       path: geometry/farthest_pair.hpp
       title: Farthest Pair of Points
     - icon: ':heavy_check_mark:'
@@ -340,7 +343,7 @@ data:
       title: 2D Point and Predicates
     - icon: ':heavy_check_mark:'
       path: geometry/polygon.hpp
-      title: Polygons and Convex Hull
+      title: Polygons
     - icon: ':heavy_check_mark:'
       path: geometry/ray.hpp
       title: Rays
