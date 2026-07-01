@@ -723,6 +723,9 @@ data:
       path: tree/tree.hpp
       title: Tree
     - icon: ':heavy_check_mark:'
+      path: tree/tree_hash.hpp
+      title: Hash of Tree
+    - icon: ':heavy_check_mark:'
       path: tree/virtual_tree.hpp
       title: Virtual Tree
   - name: utilities
@@ -1217,6 +1220,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/tree/dsu_on_tree.test.cpp
       title: verify/tree/dsu_on_tree.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/tree/rooted_tree_isomorphism_classification.test.cpp
+      title: verify/tree/rooted_tree_isomorphism_classification.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/tree/tree_algorithms.test.cpp
       title: verify/tree/tree_algorithms.test.cpp

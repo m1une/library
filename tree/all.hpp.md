@@ -41,6 +41,9 @@ data:
     path: tree/tree.hpp
     title: Tree
   - icon: ':heavy_check_mark:'
+    path: tree/tree_hash.hpp
+    title: Hash of Tree
+  - icon: ':heavy_check_mark:'
     path: tree/virtual_tree.hpp
     title: Virtual Tree
   _extendedRequiredBy: []
@@ -916,9 +919,76 @@ data:
     \ Vertex, std::invoke_result_t<AddVertex, Point, Vertex, int>, Point, Compress,\
     \ Rake,\n                     AddEdge, AddVertex>;\n\n}  // namespace tree\n}\
     \  // namespace m1une\n\n\n#line 1 \"tree/tree.hpp\"\n\n\n\n#line 7 \"tree/tree.hpp\"\
-    \n\n\n#line 1 \"tree/virtual_tree.hpp\"\n\n\n\n#line 8 \"tree/virtual_tree.hpp\"\
-    \n\n#line 11 \"tree/virtual_tree.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\
-    \ntemplate <class T = int>\nstruct VirtualTreeResult {\n    std::vector<int> vertex;\n\
+    \n\n\n#line 1 \"tree/tree_hash.hpp\"\n\n\n\n#line 5 \"tree/tree_hash.hpp\"\n#include\
+    \ <array>\n#line 7 \"tree/tree_hash.hpp\"\n#include <cstdint>\n#line 9 \"tree/tree_hash.hpp\"\
+    \n\n#line 11 \"tree/tree_hash.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\n\
+    using TreeHashValue = std::array<std::uint64_t, 2>;\n\nclass TreeHasher {\n  \
+    \ private:\n    static constexpr std::uint64_t mod = (std::uint64_t(1) << 61)\
+    \ - 1;\n    std::uint64_t _seed;\n\n    static std::uint64_t splitmix64(std::uint64_t\
+    \ x) {\n        x += 0x9e3779b97f4a7c15ULL;\n        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;\n\
+    \        x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;\n        return x ^ (x >>\
+    \ 31);\n    }\n\n    static std::uint64_t mul_mod(std::uint64_t a, std::uint64_t\
+    \ b) {\n        __uint128_t product = static_cast<__uint128_t>(a) * b;\n     \
+    \   std::uint64_t result = std::uint64_t(product & mod) + std::uint64_t(product\
+    \ >> 61);\n        if (mod <= result) result -= mod;\n        return result;\n\
+    \    }\n\n    static std::uint64_t add_mod(std::uint64_t a, std::uint64_t b) {\n\
+    \        std::uint64_t result = a + b;\n        if (mod <= result) result -= mod;\n\
+    \        return result;\n    }\n\n    TreeHashValue salt(int height) const {\n\
+    \        std::uint64_t x = static_cast<std::uint64_t>(height);\n        std::uint64_t\
+    \ first = splitmix64(_seed ^ (x + 0x243f6a8885a308d3ULL));\n        std::uint64_t\
+    \ second = splitmix64(_seed ^ (x + 0x13198a2e03707344ULL));\n        return {first\
+    \ % (mod - 1) + 1, second % (mod - 1) + 1};\n    }\n\n    template <class T>\n\
+    \    static std::vector<int> tree_centers(const m1une::graph::Graph<T>& g) {\n\
+    \        int n = g.size();\n        if (n == 0) return {};\n\n        std::vector<int>\
+    \ degree(n, 0);\n        std::vector<int> queue;\n        queue.reserve(n);\n\
+    \        long long active_arcs = 0;\n        for (int v = 0; v < n; v++) {\n \
+    \           for (const auto& e : g[v]) {\n                if (!e.alive) continue;\n\
+    \                degree[v]++;\n                active_arcs++;\n            }\n\
+    \            if (degree[v] <= 1) queue.push_back(v);\n        }\n        assert(active_arcs\
+    \ == 2LL * (n - 1));\n\n        std::vector<char> removed(n, false);\n       \
+    \ int remaining = n;\n        int head = 0;\n        while (2 < remaining) {\n\
+    \            int layer_end = int(queue.size());\n            assert(head < layer_end);\n\
+    \            remaining -= layer_end - head;\n            while (head < layer_end)\
+    \ {\n                int v = queue[head++];\n                removed[v] = true;\n\
+    \                for (const auto& e : g[v]) {\n                    if (!e.alive\
+    \ || removed[e.to]) continue;\n                    if (--degree[e.to] == 1) queue.push_back(e.to);\n\
+    \                }\n            }\n        }\n\n        std::vector<int> centers;\n\
+    \        for (int v = 0; v < n; v++) {\n            if (!removed[v]) centers.push_back(v);\n\
+    \        }\n        assert(1 <= int(centers.size()) && int(centers.size()) <=\
+    \ 2);\n        return centers;\n    }\n\n   public:\n    explicit TreeHasher(std::uint64_t\
+    \ seed = 0x6a09e667f3bcc909ULL) : _seed(seed) {}\n\n    std::uint64_t seed() const\
+    \ {\n        return _seed;\n    }\n\n    template <class T>\n    std::vector<TreeHashValue>\
+    \ hash_subtrees(const m1une::graph::Graph<T>& g, int root = 0) const {\n     \
+    \   int n = g.size();\n        if (n == 0) return {};\n        assert(0 <= root\
+    \ && root < n);\n\n        std::vector<int> parent(n, -1);\n        std::vector<int>\
+    \ order;\n        order.reserve(n);\n        parent[root] = root;\n        order.push_back(root);\n\
+    \        long long active_arcs = 0;\n        for (int v = 0; v < n; v++) {\n \
+    \           for (const auto& e : g[v]) active_arcs += e.alive;\n        }\n  \
+    \      assert(active_arcs == 2LL * (n - 1));\n\n        for (int i = 0; i < int(order.size());\
+    \ i++) {\n            int v = order[i];\n            for (const auto& e : g[v])\
+    \ {\n                if (!e.alive || parent[e.to] != -1) continue;\n         \
+    \       parent[e.to] = v;\n                order.push_back(e.to);\n          \
+    \  }\n        }\n        assert(int(order.size()) == n);\n\n        std::vector<int>\
+    \ height(n, 0);\n        std::vector<TreeHashValue> result(n, TreeHashValue{1,\
+    \ 1});\n        for (int i = n - 1; i >= 0; i--) {\n            int v = order[i];\n\
+    \            for (const auto& e : g[v]) {\n                if (!e.alive || parent[e.to]\
+    \ != v) continue;\n                height[v] = std::max(height[v], height[e.to]\
+    \ + 1);\n            }\n            TreeHashValue random = salt(height[v]);\n\
+    \            for (const auto& e : g[v]) {\n                if (!e.alive || parent[e.to]\
+    \ != v) continue;\n                result[v][0] = mul_mod(result[v][0], add_mod(result[e.to][0],\
+    \ random[0]));\n                result[v][1] = mul_mod(result[v][1], add_mod(result[e.to][1],\
+    \ random[1]));\n            }\n        }\n        return result;\n    }\n\n  \
+    \  template <class T>\n    TreeHashValue hash_rooted(const m1une::graph::Graph<T>&\
+    \ g, int root = 0) const {\n        if (g.empty()) return {0, 0};\n        return\
+    \ hash_subtrees(g, root)[root];\n    }\n\n    template <class T>\n    std::vector<TreeHashValue>\
+    \ hash_unrooted(const m1une::graph::Graph<T>& g) const {\n        std::vector<int>\
+    \ centers = tree_centers(g);\n        std::vector<TreeHashValue> result;\n   \
+    \     result.reserve(centers.size());\n        for (int center : centers) result.push_back(hash_rooted(g,\
+    \ center));\n        std::sort(result.begin(), result.end());\n        return\
+    \ result;\n    }\n};\n\n}  // namespace tree\n}  // namespace m1une\n\n\n#line\
+    \ 1 \"tree/virtual_tree.hpp\"\n\n\n\n#line 8 \"tree/virtual_tree.hpp\"\n\n#line\
+    \ 11 \"tree/virtual_tree.hpp\"\n\nnamespace m1une {\nnamespace tree {\n\ntemplate\
+    \ <class T = int>\nstruct VirtualTreeResult {\n    std::vector<int> vertex;\n\
     \    std::vector<int> parent;\n    std::vector<int> parent_edge_count;\n    std::vector<T>\
     \ parent_cost;\n    std::vector<std::vector<int>> children;\n    std::vector<bool>\
     \ is_key;\n\n    int size() const {\n        return int(vertex.size());\n    }\n\
@@ -961,7 +1031,7 @@ data:
     \ - _lca.depth[_vertices[p]];\n                result.parent_cost[i] = _lca.dist[_vertices[i]]\
     \ - _lca.dist[_vertices[p]];\n                result.children[p].push_back(i);\n\
     \            }\n            _stack.push_back(i);\n        }\n        return result;\n\
-    \    }\n};\n\n}  // namespace tree\n}  // namespace m1une\n\n\n#line 15 \"tree/all.hpp\"\
+    \    }\n};\n\n}  // namespace tree\n}  // namespace m1une\n\n\n#line 16 \"tree/all.hpp\"\
     \n\n\n"
   code: '#ifndef M1UNE_TREE_ALL_HPP
 
@@ -988,6 +1058,8 @@ data:
 
     #include "tree.hpp"
 
+    #include "tree_hash.hpp"
+
     #include "virtual_tree.hpp"
 
 
@@ -1008,11 +1080,12 @@ data:
   - monoid/concept.hpp
   - tree/static_top_tree.hpp
   - tree/tree.hpp
+  - tree/tree_hash.hpp
   - tree/virtual_tree.hpp
   isVerificationFile: false
   path: tree/all.hpp
   requiredBy: []
-  timestamp: '2026-06-23 11:34:41+09:00'
+  timestamp: '2026-07-01 13:39:10+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/tree/tree_algorithms.test.cpp
@@ -1036,6 +1109,7 @@ existing graph library.
 | `tree/sparse_table_lca.hpp` | Euler-tour sparse-table LCA with $O(1)$ queries. |
 | `tree/heavy_light_decomposition.hpp` | HLD order, path segments, subtree ranges, LCA, and jumps. |
 | `tree/diameter.hpp` | Weighted tree/forest diameter path. |
+| `tree/tree_hash.hpp` | Probabilistic rooted-subtree and unrooted-tree isomorphism hashes. |
 | `tree/dsu_on_tree.hpp` | Iterative small-to-large subtree processing with user callbacks. |
 | `tree/rerooting_dp.hpp` | Generic rerooting DP helper. |
 | `tree/static_top_tree.hpp` | Dynamic one-root tree DP on a fixed tree using static top-tree clusters. |

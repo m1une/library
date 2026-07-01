@@ -105,6 +105,9 @@ data:
     path: tree/tree.hpp
     title: Tree
   - icon: ':heavy_check_mark:'
+    path: tree/tree_hash.hpp
+    title: Hash of Tree
+  - icon: ':heavy_check_mark:'
     path: tree/virtual_tree.hpp
     title: Virtual Tree
   _extendedVerifiedWith:
@@ -150,6 +153,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/tree/dsu_on_tree.test.cpp
     title: verify/tree/dsu_on_tree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/tree/rooted_tree_isomorphism_classification.test.cpp
+    title: verify/tree/rooted_tree_isomorphism_classification.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/tree/rooted_tree_isomorphism_classification.test.cpp
+    title: verify/tree/rooted_tree_isomorphism_classification.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/tree/tree_algorithms.test.cpp
     title: verify/tree/tree_algorithms.test.cpp
@@ -284,6 +293,7 @@ data:
   - tree/heavy_light_decomposition.hpp
   - tree/static_top_tree.hpp
   - tree/dsu_on_tree.hpp
+  - tree/tree_hash.hpp
   - tree/virtual_tree.hpp
   - tree/tree.hpp
   - tree/diameter.hpp
@@ -313,6 +323,8 @@ data:
   timestamp: '2026-06-17 14:06:24+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - verify/tree/rooted_tree_isomorphism_classification.test.cpp
+  - verify/tree/rooted_tree_isomorphism_classification.test.cpp
   - verify/tree/tree_algorithms.test.cpp
   - verify/tree/tree_algorithms.test.cpp
   - verify/tree/dsu_on_tree.test.cpp
