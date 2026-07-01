@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/integer_arithmetic.hpp
     title: Integer Square Root and Power
   _extendedRequiredBy: []

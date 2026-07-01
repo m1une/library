@@ -1,20 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/bitwise_convolution.hpp
     title: Bitwise Convolution
   - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/zeta_mobius_transform.hpp
     title: Zeta and Mobius Transform
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://judge.yosupo.jp/problem/bitwise_xor_convolution
@@ -125,52 +125,53 @@ data:
     \    first = bitwise_convolution_detail::pointwise_product(\n        std::move(first),\n\
     \        second\n    );\n    walsh_hadamard_transform(first, true);\n    return\
     \ first;\n}\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/modint.hpp\"\
-    \n\n\n\n#include <cstdint>\n#include <iostream>\n#line 7 \"math/modint.hpp\"\n\
-    \nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt\
-    \ {\n   private:\n    uint32_t _v;\n\n   public:\n    static constexpr uint32_t\
-    \ mod() {\n        return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t\
-    \ v) noexcept {\n        ModInt x;\n        x._v = v;\n        return x;\n   \
-    \ }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    constexpr ModInt(int\
-    \ v) noexcept {\n        long long x = (long long)(v % (long long)(Modulus));\n\
-    \        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n  \
-    \  }\n\n    constexpr ModInt(long long v) noexcept {\n        long long x = (long\
-    \ long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n       \
-    \ _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(unsigned int v)\
-    \ noexcept {\n        _v = static_cast<uint32_t>(v % Modulus);\n    }\n\n    constexpr\
-    \ uint32_t val() const noexcept {\n        return _v;\n    }\n\n    constexpr\
-    \ ModInt& operator++() noexcept {\n        _v++;\n        if (_v == Modulus) _v\
-    \ = 0;\n        return *this;\n    }\n\n    constexpr ModInt& operator--() noexcept\
-    \ {\n        if (_v == 0) _v = Modulus;\n        _v--;\n        return *this;\n\
-    \    }\n\n    constexpr ModInt operator++(int) noexcept {\n        ModInt res\
-    \ = *this;\n        ++*this;\n        return res;\n    }\n\n    constexpr ModInt\
-    \ operator--(int) noexcept {\n        ModInt res = *this;\n        --*this;\n\
-    \        return res;\n    }\n\n    constexpr ModInt& operator+=(const ModInt&\
-    \ rhs) noexcept {\n        _v += rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator-=(const ModInt&\
-    \ rhs) noexcept {\n        _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt&\
-    \ rhs) noexcept {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v\
-    \ = static_cast<uint32_t>(z % Modulus);\n        return *this;\n    }\n\n    constexpr\
-    \ ModInt& operator/=(const ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n\
-    \    }\n\n    constexpr ModInt operator+(const ModInt& rhs) const noexcept {\n\
-    \        return ModInt(*this) += rhs;\n    }\n    constexpr ModInt operator-(const\
-    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) -= rhs;\n    }\n\
-    \    constexpr ModInt operator*(const ModInt& rhs) const noexcept {\n        return\
-    \ ModInt(*this) *= rhs;\n    }\n    constexpr ModInt operator/(const ModInt& rhs)\
-    \ const noexcept {\n        return ModInt(*this) /= rhs;\n    }\n\n    constexpr\
-    \ bool operator==(const ModInt& rhs) const noexcept {\n        return _v == rhs._v;\n\
-    \    }\n    constexpr bool operator!=(const ModInt& rhs) const noexcept {\n  \
-    \      return _v != rhs._v;\n    }\n\n    constexpr ModInt pow(long long n) const\
-    \ noexcept {\n        ModInt res = raw(1), x = *this;\n        while (n > 0) {\n\
-    \            if (n & 1) res *= x;\n            x *= x;\n            n >>= 1;\n\
-    \        }\n        return res;\n    }\n\n    constexpr ModInt inv() const noexcept\
-    \ {\n        int64_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
-    \            int64_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
-    \ b);\n            u -= t * v;\n            std::swap(u, v);\n        }\n    \
-    \    if (u < 0) u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n\
-    \    }\n\n    friend std::ostream& operator<<(std::ostream& os, const ModInt&\
-    \ rhs) {\n        return os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream&\
-    \ is, ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
+    \n\n\n\n#include <cstdint>\n#include <iostream>\n#include <type_traits>\n#line\
+    \ 8 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t\
+    \ Modulus>\nstruct ModInt {\n    static_assert(0 < Modulus, \"Modulus must be\
+    \ positive\");\n\n   private:\n    uint32_t _v;\n\n   public:\n    static constexpr\
+    \ uint32_t mod() {\n        return Modulus;\n    }\n\n    static constexpr ModInt\
+    \ raw(uint32_t v) noexcept {\n        ModInt x;\n        x._v = v;\n        return\
+    \ x;\n    }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    template <class\
+    \ Integer, std::enable_if_t<std::is_integral_v<Integer>, int> = 0>\n    constexpr\
+    \ ModInt(Integer v) noexcept {\n        if constexpr (std::is_signed_v<Integer>)\
+    \ {\n            int64_t x = static_cast<int64_t>(v) % static_cast<int64_t>(Modulus);\n\
+    \            if (x < 0) x += Modulus;\n            _v = static_cast<uint32_t>(x);\n\
+    \        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
+    \ % Modulus);\n        }\n    }\n\n    constexpr uint32_t val() const noexcept\
+    \ {\n        return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept\
+    \ {\n        _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator--() noexcept {\n        if (_v == 0)\
+    \ _v = Modulus;\n        _v--;\n        return *this;\n    }\n\n    constexpr\
+    \ ModInt operator++(int) noexcept {\n        ModInt res = *this;\n        ++*this;\n\
+    \        return res;\n    }\n\n    constexpr ModInt operator--(int) noexcept {\n\
+    \        ModInt res = *this;\n        --*this;\n        return res;\n    }\n\n\
+    \    constexpr ModInt& operator+=(const ModInt& rhs) noexcept {\n        _v +=\
+    \ rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator-=(const ModInt& rhs) noexcept {\n   \
+    \     _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n        return\
+    \ *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt& rhs) noexcept\
+    \ {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z\
+    \ % Modulus);\n        return *this;\n    }\n\n    constexpr ModInt& operator/=(const\
+    \ ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
+    \ ModInt operator+(const ModInt& rhs) const noexcept {\n        return ModInt(*this)\
+    \ += rhs;\n    }\n    constexpr ModInt operator-(const ModInt& rhs) const noexcept\
+    \ {\n        return ModInt(*this) -= rhs;\n    }\n    constexpr ModInt operator*(const\
+    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) *= rhs;\n    }\n\
+    \    constexpr ModInt operator/(const ModInt& rhs) const noexcept {\n        return\
+    \ ModInt(*this) /= rhs;\n    }\n\n    constexpr bool operator==(const ModInt&\
+    \ rhs) const noexcept {\n        return _v == rhs._v;\n    }\n    constexpr bool\
+    \ operator!=(const ModInt& rhs) const noexcept {\n        return _v != rhs._v;\n\
+    \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
+    \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
+    \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int64_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int64_t\
+    \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
+    \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
+    \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
+    \ std::ostream& operator<<(std::ostream& os, const ModInt& rhs) {\n        return\
+    \ os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream& is,\
+    \ ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
     \        return is;\n    }\n};\n\nusing modint998244353 = ModInt<998244353>;\n\
     using modint1000000007 = ModInt<1000000007>;\n\n}  // namespace math\n}  // namespace\
     \ m1une\n\n\n#line 5 \"verify/math/bitwise_convolution.test.cpp\"\n\n#line 10\
@@ -278,8 +279,8 @@ data:
   isVerificationFile: true
   path: verify/math/bitwise_convolution.test.cpp
   requiredBy: []
-  timestamp: '2026-06-27 03:02:09+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-07-01 14:11:51+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: verify/math/bitwise_convolution.test.cpp
 layout: document

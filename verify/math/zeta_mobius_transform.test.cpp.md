@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/zeta_mobius_transform.hpp
     title: Zeta and Mobius Transform
   _extendedRequiredBy: []

@@ -1,29 +1,29 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: matroid/graphic_matroid.hpp
     title: Graphic Matroid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: matroid/linear_matroid.hpp
     title: Linear Matroid
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: matroid/matroid_intersection.hpp
     title: Matroid Intersection
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: matroid/partition_matroid.hpp
     title: Partition Matroid
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: matroid/uniform_matroid.hpp
     title: Uniform Matroid
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matroid/matroids.test.cpp
     title: verify/matroid/matroids.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"matroid/all.hpp\"\n\n\n\n#line 1 \"matroid/graphic_matroid.hpp\"\
@@ -196,7 +196,7 @@ data:
   path: matroid/all.hpp
   requiredBy: []
   timestamp: '2026-07-01 14:07:14+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/matroid/matroids.test.cpp
 documentation_of: matroid/all.hpp

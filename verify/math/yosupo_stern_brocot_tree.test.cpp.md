@@ -1,10 +1,10 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/rational.hpp
     title: Rational Number
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/stern_brocot_tree.hpp
     title: Stern-Brocot Tree
   _extendedRequiredBy: []

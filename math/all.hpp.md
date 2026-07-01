@@ -7,22 +7,22 @@ data:
   - icon: ':question:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/bitwise_convolution.hpp
     title: Bitwise Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/combinatorics.hpp
     title: Combinatorics
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/integer_arithmetic.hpp
     title: Integer Square Root and Power
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/lucas.hpp
     title: Lucas's Theorem
   - icon: ':question:'
@@ -31,44 +31,44 @@ data:
   - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/number_theory.hpp
     title: Number Theory
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/prime_sieve.hpp
     title: Prime Sieve
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/primitive_root.hpp
     title: Primitive Root
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/rational.hpp
     title: Rational Number
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/stern_brocot_tree.hpp
     title: Stern-Brocot Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/tetration.hpp
     title: Tetration
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/totient_sum.hpp
     title: Totient Sum
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/two_square_sum.hpp
     title: Sum of Two Squares
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/zeta_mobius_transform.hpp
     title: Zeta and Mobius Transform
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bitwise_convolution.hpp\"\
@@ -215,52 +215,53 @@ data:
     \ 7 \"fps/formal_power_series.hpp\"\n#include <optional>\n#line 10 \"fps/formal_power_series.hpp\"\
     \n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#line 5 \"fps/convolution.hpp\"\n#include\
     \ <array>\n#line 10 \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\n\n\
-    \n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n#line 7 \"math/modint.hpp\"\
-    \n\nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct\
-    \ ModInt {\n   private:\n    uint32_t _v;\n\n   public:\n    static constexpr\
-    \ uint32_t mod() {\n        return Modulus;\n    }\n\n    static constexpr ModInt\
-    \ raw(uint32_t v) noexcept {\n        ModInt x;\n        x._v = v;\n        return\
-    \ x;\n    }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    constexpr ModInt(int\
-    \ v) noexcept {\n        long long x = (long long)(v % (long long)(Modulus));\n\
-    \        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n  \
-    \  }\n\n    constexpr ModInt(long long v) noexcept {\n        long long x = (long\
-    \ long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n       \
-    \ _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(unsigned int v)\
-    \ noexcept {\n        _v = static_cast<uint32_t>(v % Modulus);\n    }\n\n    constexpr\
-    \ uint32_t val() const noexcept {\n        return _v;\n    }\n\n    constexpr\
-    \ ModInt& operator++() noexcept {\n        _v++;\n        if (_v == Modulus) _v\
-    \ = 0;\n        return *this;\n    }\n\n    constexpr ModInt& operator--() noexcept\
-    \ {\n        if (_v == 0) _v = Modulus;\n        _v--;\n        return *this;\n\
-    \    }\n\n    constexpr ModInt operator++(int) noexcept {\n        ModInt res\
-    \ = *this;\n        ++*this;\n        return res;\n    }\n\n    constexpr ModInt\
-    \ operator--(int) noexcept {\n        ModInt res = *this;\n        --*this;\n\
-    \        return res;\n    }\n\n    constexpr ModInt& operator+=(const ModInt&\
-    \ rhs) noexcept {\n        _v += rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator-=(const ModInt&\
-    \ rhs) noexcept {\n        _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt&\
-    \ rhs) noexcept {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v\
-    \ = static_cast<uint32_t>(z % Modulus);\n        return *this;\n    }\n\n    constexpr\
-    \ ModInt& operator/=(const ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n\
-    \    }\n\n    constexpr ModInt operator+(const ModInt& rhs) const noexcept {\n\
-    \        return ModInt(*this) += rhs;\n    }\n    constexpr ModInt operator-(const\
-    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) -= rhs;\n    }\n\
-    \    constexpr ModInt operator*(const ModInt& rhs) const noexcept {\n        return\
-    \ ModInt(*this) *= rhs;\n    }\n    constexpr ModInt operator/(const ModInt& rhs)\
-    \ const noexcept {\n        return ModInt(*this) /= rhs;\n    }\n\n    constexpr\
-    \ bool operator==(const ModInt& rhs) const noexcept {\n        return _v == rhs._v;\n\
-    \    }\n    constexpr bool operator!=(const ModInt& rhs) const noexcept {\n  \
-    \      return _v != rhs._v;\n    }\n\n    constexpr ModInt pow(long long n) const\
-    \ noexcept {\n        ModInt res = raw(1), x = *this;\n        while (n > 0) {\n\
-    \            if (n & 1) res *= x;\n            x *= x;\n            n >>= 1;\n\
-    \        }\n        return res;\n    }\n\n    constexpr ModInt inv() const noexcept\
-    \ {\n        int64_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
-    \            int64_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
-    \ b);\n            u -= t * v;\n            std::swap(u, v);\n        }\n    \
-    \    if (u < 0) u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n\
-    \    }\n\n    friend std::ostream& operator<<(std::ostream& os, const ModInt&\
-    \ rhs) {\n        return os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream&\
-    \ is, ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
+    \n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n#include <type_traits>\n\
+    #line 8 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\ntemplate\
+    \ <uint32_t Modulus>\nstruct ModInt {\n    static_assert(0 < Modulus, \"Modulus\
+    \ must be positive\");\n\n   private:\n    uint32_t _v;\n\n   public:\n    static\
+    \ constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n    static constexpr\
+    \ ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n        x._v = v;\n  \
+    \      return x;\n    }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    template\
+    \ <class Integer, std::enable_if_t<std::is_integral_v<Integer>, int> = 0>\n  \
+    \  constexpr ModInt(Integer v) noexcept {\n        if constexpr (std::is_signed_v<Integer>)\
+    \ {\n            int64_t x = static_cast<int64_t>(v) % static_cast<int64_t>(Modulus);\n\
+    \            if (x < 0) x += Modulus;\n            _v = static_cast<uint32_t>(x);\n\
+    \        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
+    \ % Modulus);\n        }\n    }\n\n    constexpr uint32_t val() const noexcept\
+    \ {\n        return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept\
+    \ {\n        _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator--() noexcept {\n        if (_v == 0)\
+    \ _v = Modulus;\n        _v--;\n        return *this;\n    }\n\n    constexpr\
+    \ ModInt operator++(int) noexcept {\n        ModInt res = *this;\n        ++*this;\n\
+    \        return res;\n    }\n\n    constexpr ModInt operator--(int) noexcept {\n\
+    \        ModInt res = *this;\n        --*this;\n        return res;\n    }\n\n\
+    \    constexpr ModInt& operator+=(const ModInt& rhs) noexcept {\n        _v +=\
+    \ rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator-=(const ModInt& rhs) noexcept {\n   \
+    \     _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n        return\
+    \ *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt& rhs) noexcept\
+    \ {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z\
+    \ % Modulus);\n        return *this;\n    }\n\n    constexpr ModInt& operator/=(const\
+    \ ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
+    \ ModInt operator+(const ModInt& rhs) const noexcept {\n        return ModInt(*this)\
+    \ += rhs;\n    }\n    constexpr ModInt operator-(const ModInt& rhs) const noexcept\
+    \ {\n        return ModInt(*this) -= rhs;\n    }\n    constexpr ModInt operator*(const\
+    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) *= rhs;\n    }\n\
+    \    constexpr ModInt operator/(const ModInt& rhs) const noexcept {\n        return\
+    \ ModInt(*this) /= rhs;\n    }\n\n    constexpr bool operator==(const ModInt&\
+    \ rhs) const noexcept {\n        return _v == rhs._v;\n    }\n    constexpr bool\
+    \ operator!=(const ModInt& rhs) const noexcept {\n        return _v != rhs._v;\n\
+    \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
+    \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
+    \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int64_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int64_t\
+    \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
+    \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
+    \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
+    \ std::ostream& operator<<(std::ostream& os, const ModInt& rhs) {\n        return\
+    \ os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream& is,\
+    \ ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
     \        return is;\n    }\n};\n\nusing modint998244353 = ModInt<998244353>;\n\
     using modint1000000007 = ModInt<1000000007>;\n\n}  // namespace math\n}  // namespace\
     \ m1une\n\n\n#line 12 \"fps/convolution.hpp\"\n\nnamespace m1une {\nnamespace\
@@ -537,36 +538,36 @@ data:
     \ = Mint(n - 1) * (result[n - 1] + result[n - 2]);\n    }\n    return result;\n\
     }\n\n}  // namespace math\n}  // namespace m1une\n\n\n#line 1 \"math/integer_arithmetic.hpp\"\
     \n\n\n\n#line 5 \"math/integer_arithmetic.hpp\"\n#include <concepts>\n#include\
-    \ <limits>\n#line 8 \"math/integer_arithmetic.hpp\"\n#include <type_traits>\n\n\
-    namespace m1une {\nnamespace math {\n\nnamespace integer_arithmetic_detail {\n\
-    \ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\n\
-    constexpr std::optional<T> checked_multiply(T first, T second) {\n    constexpr\
-    \ T minimum = std::numeric_limits<T>::min();\n    constexpr T maximum = std::numeric_limits<T>::max();\n\
-    \n    if constexpr (std::unsigned_integral<T>) {\n        if (second != 0 && maximum\
-    \ / second < first) return std::nullopt;\n    } else {\n        if (0 < first)\
-    \ {\n            if (0 < second) {\n                if (maximum / second < first)\
-    \ return std::nullopt;\n            } else if (second < minimum / first) {\n \
-    \               return std::nullopt;\n            }\n        } else if (first\
-    \ < 0) {\n            if (0 < second) {\n                if (first < minimum /\
-    \ second) return std::nullopt;\n            } else if (second < maximum / first)\
-    \ {\n                return std::nullopt;\n            }\n        }\n    }\n \
-    \   return T(first * second);\n}\n\n}  // namespace integer_arithmetic_detail\n\
-    \n// Returns floor(sqrt(value)) exactly, without floating-point arithmetic.\n\
-    template <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\n\
-    constexpr T isqrt(T value) {\n    if constexpr (std::signed_integral<T>) assert(0\
-    \ <= value);\n    if (value <= 1) return value;\n\n    T low = 1;\n    T high\
-    \ = value / 2 + 1;\n    while (low < high) {\n        T middle = low + (high -\
-    \ low + 1) / 2;\n        if (middle <= value / middle) {\n            low = middle;\n\
-    \        } else {\n            high = middle - 1;\n        }\n    }\n    return\
-    \ low;\n}\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
-    \ bool>)\nconstexpr T floor_sqrt(T value) {\n    return isqrt(value);\n}\n\n//\
-    \ Returns ceil(sqrt(value)) exactly, without floating-point arithmetic.\ntemplate\
-    \ <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\nconstexpr\
-    \ T ceil_sqrt(T value) {\n    T result = isqrt(value);\n    if (result == 0) return\
-    \ 0;\n    if (result != 0 && value / result == result && value % result == 0)\
-    \ {\n        return result;\n    }\n    return result + 1;\n}\n\n// Returns base^exponent,\
-    \ or nullopt when the result does not fit in T.\ntemplate <std::integral T, std::unsigned_integral\
-    \ Exponent>\nrequires(\n    !std::same_as<std::remove_cv_t<T>, bool>\n    && !std::same_as<std::remove_cv_t<Exponent>,\
+    \ <limits>\n#line 9 \"math/integer_arithmetic.hpp\"\n\nnamespace m1une {\nnamespace\
+    \ math {\n\nnamespace integer_arithmetic_detail {\n\ntemplate <std::integral T>\n\
+    requires(!std::same_as<std::remove_cv_t<T>, bool>)\nconstexpr std::optional<T>\
+    \ checked_multiply(T first, T second) {\n    constexpr T minimum = std::numeric_limits<T>::min();\n\
+    \    constexpr T maximum = std::numeric_limits<T>::max();\n\n    if constexpr\
+    \ (std::unsigned_integral<T>) {\n        if (second != 0 && maximum / second <\
+    \ first) return std::nullopt;\n    } else {\n        if (0 < first) {\n      \
+    \      if (0 < second) {\n                if (maximum / second < first) return\
+    \ std::nullopt;\n            } else if (second < minimum / first) {\n        \
+    \        return std::nullopt;\n            }\n        } else if (first < 0) {\n\
+    \            if (0 < second) {\n                if (first < minimum / second)\
+    \ return std::nullopt;\n            } else if (second < maximum / first) {\n \
+    \               return std::nullopt;\n            }\n        }\n    }\n    return\
+    \ T(first * second);\n}\n\n}  // namespace integer_arithmetic_detail\n\n// Returns\
+    \ floor(sqrt(value)) exactly, without floating-point arithmetic.\ntemplate <std::integral\
+    \ T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\nconstexpr T isqrt(T\
+    \ value) {\n    if constexpr (std::signed_integral<T>) assert(0 <= value);\n \
+    \   if (value <= 1) return value;\n\n    T low = 1;\n    T high = value / 2 +\
+    \ 1;\n    while (low < high) {\n        T middle = low + (high - low + 1) / 2;\n\
+    \        if (middle <= value / middle) {\n            low = middle;\n        }\
+    \ else {\n            high = middle - 1;\n        }\n    }\n    return low;\n\
+    }\n\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>, bool>)\n\
+    constexpr T floor_sqrt(T value) {\n    return isqrt(value);\n}\n\n// Returns ceil(sqrt(value))\
+    \ exactly, without floating-point arithmetic.\ntemplate <std::integral T>\nrequires(!std::same_as<std::remove_cv_t<T>,\
+    \ bool>)\nconstexpr T ceil_sqrt(T value) {\n    T result = isqrt(value);\n   \
+    \ if (result == 0) return 0;\n    if (result != 0 && value / result == result\
+    \ && value % result == 0) {\n        return result;\n    }\n    return result\
+    \ + 1;\n}\n\n// Returns base^exponent, or nullopt when the result does not fit\
+    \ in T.\ntemplate <std::integral T, std::unsigned_integral Exponent>\nrequires(\n\
+    \    !std::same_as<std::remove_cv_t<T>, bool>\n    && !std::same_as<std::remove_cv_t<Exponent>,\
     \ bool>\n)\nconstexpr std::optional<T> checked_ipow(T base, Exponent exponent)\
     \ {\n    T result = 1;\n    while (exponent != 0) {\n        if (exponent & 1)\
     \ {\n            auto product =\n                integer_arithmetic_detail::checked_multiply(result,\
@@ -1246,8 +1247,8 @@ data:
   isVerificationFile: false
   path: math/all.hpp
   requiredBy: []
-  timestamp: '2026-06-24 21:43:10+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2026-07-01 14:11:51+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
 documentation_of: math/all.hpp

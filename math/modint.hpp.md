@@ -11,7 +11,7 @@ data:
   - icon: ':question:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/lagrange_inversion.hpp
     title: Lagrange Inversion Formula
   - icon: ':heavy_check_mark:'
@@ -20,13 +20,13 @@ data:
   - icon: ':heavy_check_mark:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/all.hpp
     title: Math All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/all.hpp
     title: Math All
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
   _extendedVerifiedWith:
@@ -84,10 +84,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
     title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/fps/lagrange_inversion.test.cpp
     title: verify/fps/lagrange_inversion.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/fps/lagrange_inversion.test.cpp
     title: verify/fps/lagrange_inversion.test.cpp
   - icon: ':heavy_check_mark:'
@@ -126,40 +126,43 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/bernoulli_number.test.cpp
     title: verify/math/bernoulli_number.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/bitwise_convolution.test.cpp
     title: verify/math/bitwise_convolution.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/lucas.test.cpp
     title: verify/math/lucas.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
+    path: verify/math/modint.test.cpp
+    title: verify/math/modint.test.cpp
+  - icon: ':x:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matrix/inverse_matrix.test.cpp
     title: verify/matrix/inverse_matrix.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matrix/matrix.test.cpp
     title: verify/matrix/matrix.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matrix/matrix_product.test.cpp
     title: verify/matrix/matrix_product.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matroid/matroids.test.cpp
     title: verify/matroid/matroids.test.cpp
   _isVerificationFailed: true
@@ -168,82 +171,83 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"math/modint.hpp\"\n\n\n\n#include <cstdint>\n#include <iostream>\n\
-    #include <utility>\n\nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t\
-    \ Modulus>\nstruct ModInt {\n   private:\n    uint32_t _v;\n\n   public:\n   \
-    \ static constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n    static\
-    \ constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n        x._v\
-    \ = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\
-    \n    constexpr ModInt(int v) noexcept {\n        long long x = (long long)(v\
-    \ % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n\
-    \    }\n\n    constexpr ModInt(long long v) noexcept {\n        long long x =\
-    \ (long long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n \
-    \       _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(unsigned\
-    \ int v) noexcept {\n        _v = static_cast<uint32_t>(v % Modulus);\n    }\n\
-    \n    constexpr uint32_t val() const noexcept {\n        return _v;\n    }\n\n\
-    \    constexpr ModInt& operator++() noexcept {\n        _v++;\n        if (_v\
-    \ == Modulus) _v = 0;\n        return *this;\n    }\n\n    constexpr ModInt& operator--()\
-    \ noexcept {\n        if (_v == 0) _v = Modulus;\n        _v--;\n        return\
-    \ *this;\n    }\n\n    constexpr ModInt operator++(int) noexcept {\n        ModInt\
-    \ res = *this;\n        ++*this;\n        return res;\n    }\n\n    constexpr\
-    \ ModInt operator--(int) noexcept {\n        ModInt res = *this;\n        --*this;\n\
-    \        return res;\n    }\n\n    constexpr ModInt& operator+=(const ModInt&\
-    \ rhs) noexcept {\n        _v += rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator-=(const ModInt&\
-    \ rhs) noexcept {\n        _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt&\
-    \ rhs) noexcept {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v\
-    \ = static_cast<uint32_t>(z % Modulus);\n        return *this;\n    }\n\n    constexpr\
-    \ ModInt& operator/=(const ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n\
-    \    }\n\n    constexpr ModInt operator+(const ModInt& rhs) const noexcept {\n\
-    \        return ModInt(*this) += rhs;\n    }\n    constexpr ModInt operator-(const\
-    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) -= rhs;\n    }\n\
-    \    constexpr ModInt operator*(const ModInt& rhs) const noexcept {\n        return\
-    \ ModInt(*this) *= rhs;\n    }\n    constexpr ModInt operator/(const ModInt& rhs)\
-    \ const noexcept {\n        return ModInt(*this) /= rhs;\n    }\n\n    constexpr\
-    \ bool operator==(const ModInt& rhs) const noexcept {\n        return _v == rhs._v;\n\
-    \    }\n    constexpr bool operator!=(const ModInt& rhs) const noexcept {\n  \
-    \      return _v != rhs._v;\n    }\n\n    constexpr ModInt pow(long long n) const\
-    \ noexcept {\n        ModInt res = raw(1), x = *this;\n        while (n > 0) {\n\
-    \            if (n & 1) res *= x;\n            x *= x;\n            n >>= 1;\n\
-    \        }\n        return res;\n    }\n\n    constexpr ModInt inv() const noexcept\
-    \ {\n        int64_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
-    \            int64_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
-    \ b);\n            u -= t * v;\n            std::swap(u, v);\n        }\n    \
-    \    if (u < 0) u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n\
-    \    }\n\n    friend std::ostream& operator<<(std::ostream& os, const ModInt&\
-    \ rhs) {\n        return os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream&\
-    \ is, ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
+    #include <type_traits>\n#include <utility>\n\nnamespace m1une {\nnamespace math\
+    \ {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n    static_assert(0 < Modulus,\
+    \ \"Modulus must be positive\");\n\n   private:\n    uint32_t _v;\n\n   public:\n\
+    \    static constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n   \
+    \ static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n    \
+    \    x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept :\
+    \ _v(0) {}\n\n    template <class Integer, std::enable_if_t<std::is_integral_v<Integer>,\
+    \ int> = 0>\n    constexpr ModInt(Integer v) noexcept {\n        if constexpr\
+    \ (std::is_signed_v<Integer>) {\n            int64_t x = static_cast<int64_t>(v)\
+    \ % static_cast<int64_t>(Modulus);\n            if (x < 0) x += Modulus;\n   \
+    \         _v = static_cast<uint32_t>(x);\n        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
+    \ % Modulus);\n        }\n    }\n\n    constexpr uint32_t val() const noexcept\
+    \ {\n        return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept\
+    \ {\n        _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator--() noexcept {\n        if (_v == 0)\
+    \ _v = Modulus;\n        _v--;\n        return *this;\n    }\n\n    constexpr\
+    \ ModInt operator++(int) noexcept {\n        ModInt res = *this;\n        ++*this;\n\
+    \        return res;\n    }\n\n    constexpr ModInt operator--(int) noexcept {\n\
+    \        ModInt res = *this;\n        --*this;\n        return res;\n    }\n\n\
+    \    constexpr ModInt& operator+=(const ModInt& rhs) noexcept {\n        _v +=\
+    \ rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator-=(const ModInt& rhs) noexcept {\n   \
+    \     _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n        return\
+    \ *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt& rhs) noexcept\
+    \ {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z\
+    \ % Modulus);\n        return *this;\n    }\n\n    constexpr ModInt& operator/=(const\
+    \ ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
+    \ ModInt operator+(const ModInt& rhs) const noexcept {\n        return ModInt(*this)\
+    \ += rhs;\n    }\n    constexpr ModInt operator-(const ModInt& rhs) const noexcept\
+    \ {\n        return ModInt(*this) -= rhs;\n    }\n    constexpr ModInt operator*(const\
+    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) *= rhs;\n    }\n\
+    \    constexpr ModInt operator/(const ModInt& rhs) const noexcept {\n        return\
+    \ ModInt(*this) /= rhs;\n    }\n\n    constexpr bool operator==(const ModInt&\
+    \ rhs) const noexcept {\n        return _v == rhs._v;\n    }\n    constexpr bool\
+    \ operator!=(const ModInt& rhs) const noexcept {\n        return _v != rhs._v;\n\
+    \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
+    \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
+    \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int64_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int64_t\
+    \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
+    \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
+    \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
+    \ std::ostream& operator<<(std::ostream& os, const ModInt& rhs) {\n        return\
+    \ os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream& is,\
+    \ ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
     \        return is;\n    }\n};\n\nusing modint998244353 = ModInt<998244353>;\n\
     using modint1000000007 = ModInt<1000000007>;\n\n}  // namespace math\n}  // namespace\
     \ m1une\n\n\n"
   code: "#ifndef M1UNE_MATH_MODINT_HPP\n#define M1UNE_MATH_MODINT_HPP 1\n\n#include\
-    \ <cstdint>\n#include <iostream>\n#include <utility>\n\nnamespace m1une {\nnamespace\
-    \ math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n   private:\n    uint32_t\
-    \ _v;\n\n   public:\n    static constexpr uint32_t mod() {\n        return Modulus;\n\
-    \    }\n\n    static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt\
-    \ x;\n        x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept\
-    \ : _v(0) {}\n\n    constexpr ModInt(int v) noexcept {\n        long long x =\
-    \ (long long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n \
-    \       _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(long long\
-    \ v) noexcept {\n        long long x = (long long)(v % (long long)(Modulus));\n\
-    \        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n  \
-    \  }\n\n    constexpr ModInt(unsigned int v) noexcept {\n        _v = static_cast<uint32_t>(v\
-    \ % Modulus);\n    }\n\n    constexpr uint32_t val() const noexcept {\n      \
-    \  return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept {\n      \
-    \  _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n    }\n\n\
-    \    constexpr ModInt& operator--() noexcept {\n        if (_v == 0) _v = Modulus;\n\
-    \        _v--;\n        return *this;\n    }\n\n    constexpr ModInt operator++(int)\
-    \ noexcept {\n        ModInt res = *this;\n        ++*this;\n        return res;\n\
-    \    }\n\n    constexpr ModInt operator--(int) noexcept {\n        ModInt res\
-    \ = *this;\n        --*this;\n        return res;\n    }\n\n    constexpr ModInt&\
-    \ operator+=(const ModInt& rhs) noexcept {\n        _v += rhs._v;\n        if\
-    \ (_v >= Modulus) _v -= Modulus;\n        return *this;\n    }\n\n    constexpr\
-    \ ModInt& operator-=(const ModInt& rhs) noexcept {\n        _v -= rhs._v;\n  \
-    \      if (_v >= Modulus) _v += Modulus;\n        return *this;\n    }\n\n   \
-    \ constexpr ModInt& operator*=(const ModInt& rhs) noexcept {\n        uint64_t\
-    \ z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z % Modulus);\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator/=(const ModInt&\
-    \ rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
+    \ <cstdint>\n#include <iostream>\n#include <type_traits>\n#include <utility>\n\
+    \nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt\
+    \ {\n    static_assert(0 < Modulus, \"Modulus must be positive\");\n\n   private:\n\
+    \    uint32_t _v;\n\n   public:\n    static constexpr uint32_t mod() {\n     \
+    \   return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t v) noexcept\
+    \ {\n        ModInt x;\n        x._v = v;\n        return x;\n    }\n\n    constexpr\
+    \ ModInt() noexcept : _v(0) {}\n\n    template <class Integer, std::enable_if_t<std::is_integral_v<Integer>,\
+    \ int> = 0>\n    constexpr ModInt(Integer v) noexcept {\n        if constexpr\
+    \ (std::is_signed_v<Integer>) {\n            int64_t x = static_cast<int64_t>(v)\
+    \ % static_cast<int64_t>(Modulus);\n            if (x < 0) x += Modulus;\n   \
+    \         _v = static_cast<uint32_t>(x);\n        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
+    \ % Modulus);\n        }\n    }\n\n    constexpr uint32_t val() const noexcept\
+    \ {\n        return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept\
+    \ {\n        _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator--() noexcept {\n        if (_v == 0)\
+    \ _v = Modulus;\n        _v--;\n        return *this;\n    }\n\n    constexpr\
+    \ ModInt operator++(int) noexcept {\n        ModInt res = *this;\n        ++*this;\n\
+    \        return res;\n    }\n\n    constexpr ModInt operator--(int) noexcept {\n\
+    \        ModInt res = *this;\n        --*this;\n        return res;\n    }\n\n\
+    \    constexpr ModInt& operator+=(const ModInt& rhs) noexcept {\n        _v +=\
+    \ rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n        return *this;\n\
+    \    }\n\n    constexpr ModInt& operator-=(const ModInt& rhs) noexcept {\n   \
+    \     _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n        return\
+    \ *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt& rhs) noexcept\
+    \ {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z\
+    \ % Modulus);\n        return *this;\n    }\n\n    constexpr ModInt& operator/=(const\
+    \ ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
     \ ModInt operator+(const ModInt& rhs) const noexcept {\n        return ModInt(*this)\
     \ += rhs;\n    }\n    constexpr ModInt operator-(const ModInt& rhs) const noexcept\
     \ {\n        return ModInt(*this) -= rhs;\n    }\n    constexpr ModInt operator*(const\
@@ -279,7 +283,7 @@ data:
   - fps/multipoint_evaluation.hpp
   - fps/linear_recurrence.hpp
   - fps/convolution.hpp
-  timestamp: '2026-06-21 17:44:01+09:00'
+  timestamp: '2026-07-01 14:11:51+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
@@ -300,6 +304,7 @@ data:
   - verify/math/math_algorithms.test.cpp
   - verify/math/stirling_number_of_the_second_kind.test.cpp
   - verify/math/stirling_number_of_the_second_kind.test.cpp
+  - verify/math/modint.test.cpp
   - verify/math/bernoulli_number.test.cpp
   - verify/math/bernoulli_number.test.cpp
   - verify/fps/inv_of_formal_power_series.test.cpp
@@ -378,7 +383,10 @@ For convenience, the library provides the following common type aliases:
 | Constructor | Description | Complexity |
 | --- | --- | --- |
 | `ModInt()` | Initializes the value to `0`. | $O(1)$ |
-| `ModInt(int v)`, `ModInt(long long v)`, `ModInt(unsigned int v)` | Initializes from an integer. Negative values are converted to their positive modulo equivalents. | $O(1)$ |
+| `template<class Integer> ModInt(Integer v)` | Initializes from any standard integral type. Negative values are normalized, and wide unsigned values are reduced without narrowing first. | $O(1)$ |
+
+The integral constructor accepts types such as `int`, `long long`,
+`unsigned long`, and `std::mt19937::result_type` without ambiguous overloads.
 
 ## Methods
 

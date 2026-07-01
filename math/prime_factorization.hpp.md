@@ -2,23 +2,23 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/all.hpp
     title: Math All
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/primitive_root.hpp
     title: Primitive Root
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/tetration.hpp
     title: Tetration
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/two_square_sum.hpp
     title: Sum of Two Squares
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/math/factorize.test.cpp
     title: verify/math/factorize.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
@@ -33,9 +33,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/yosupo_factorize.test.cpp
     title: verify/math/yosupo_factorize.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/prime_factorization.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -199,7 +199,7 @@ data:
   - math/all.hpp
   - math/two_square_sum.hpp
   timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/math/two_square_sum.test.cpp
   - verify/math/tetration.test.cpp

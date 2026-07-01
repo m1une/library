@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
   - icon: ':heavy_check_mark:'

@@ -303,7 +303,7 @@ data:
     - icon: ':question:'
       path: fps/formal_power_series.hpp
       title: Formal Power Series
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: fps/lagrange_inversion.hpp
       title: Lagrange Inversion Formula
     - icon: ':heavy_check_mark:'
@@ -423,89 +423,89 @@ data:
       title: 0-1 BFS
   - name: math
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: math/all.hpp
       title: Math All
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/bit_ceil.hpp
       title: Bit Ceil
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: math/bitwise_convolution.hpp
       title: Bitwise Convolution
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/combinatorial_sequences.hpp
       title: Combinatorial Sequences
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/combinatorics.hpp
       title: Combinatorics
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/integer_arithmetic.hpp
       title: Integer Square Root and Power
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: math/lucas.hpp
       title: Lucas's Theorem
     - icon: ':question:'
       path: math/modint.hpp
       title: ModInt
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/number_theory.hpp
       title: Number Theory
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/prime_factorization.hpp
       title: 64-bit Prime Factorization
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/prime_sieve.hpp
       title: Prime Sieve
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: math/primitive_root.hpp
       title: Primitive Root
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/rational.hpp
       title: Rational Number
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/stern_brocot_tree.hpp
       title: Stern-Brocot Tree
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/tetration.hpp
       title: Tetration
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: math/totient_sum.hpp
       title: Totient Sum
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/two_square_sum.hpp
       title: Sum of Two Squares
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/zeta_mobius_transform.hpp
       title: Zeta and Mobius Transform
   - name: matrix
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: matrix/all.hpp
       title: Matrix Bundle
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: matrix/linear_algebra.hpp
       title: Matrix Linear Algebra
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: matrix/matrix.hpp
       title: Dense Matrix
   - name: matroid
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: matroid/all.hpp
       title: Matroid All
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: matroid/graphic_matroid.hpp
       title: Graphic Matroid
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: matroid/linear_matroid.hpp
       title: Linear Matroid
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: matroid/matroid_intersection.hpp
       title: Matroid Intersection
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: matroid/partition_matroid.hpp
       title: Partition Matroid
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: matroid/uniform_matroid.hpp
       title: Uniform Matroid
   - name: monge
@@ -1012,7 +1012,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
       title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: verify/fps/lagrange_inversion.test.cpp
       title: verify/fps/lagrange_inversion.test.cpp
     - icon: ':heavy_check_mark:'
@@ -1105,7 +1105,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/bernoulli_number.test.cpp
       title: verify/math/bernoulli_number.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/math/bitwise_convolution.test.cpp
       title: verify/math/bitwise_convolution.test.cpp
     - icon: ':heavy_check_mark:'
@@ -1120,13 +1120,16 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/integer_arithmetic.test.cpp
       title: verify/math/integer_arithmetic.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/math/lucas.test.cpp
       title: verify/math/lucas.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/math/math_algorithms.test.cpp
       title: verify/math/math_algorithms.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
+      path: verify/math/modint.test.cpp
+      title: verify/math/modint.test.cpp
+    - icon: ':x:'
       path: verify/math/partition_function.test.cpp
       title: verify/math/partition_function.test.cpp
     - icon: ':heavy_check_mark:'
@@ -1138,7 +1141,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/math/stern_brocot_tree.test.cpp
       title: verify/math/stern_brocot_tree.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/math/stirling_number_of_the_second_kind.test.cpp
       title: verify/math/stirling_number_of_the_second_kind.test.cpp
     - icon: ':heavy_check_mark:'
@@ -1158,13 +1161,13 @@ data:
       title: verify/math/zeta_mobius_transform.test.cpp
   - name: verify/matrix
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/matrix/inverse_matrix.test.cpp
       title: verify/matrix/inverse_matrix.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/matrix/matrix.test.cpp
       title: verify/matrix/matrix.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/matrix/matrix_product.test.cpp
       title: verify/matrix/matrix_product.test.cpp
   - name: verify/matroid
@@ -1172,7 +1175,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/matroid/matroid_intersection.test.cpp
       title: verify/matroid/matroid_intersection.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: verify/matroid/matroids.test.cpp
       title: verify/matroid/matroids.test.cpp
   - name: verify/monge

@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: matrix/matrix.hpp
     title: Dense Matrix
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: matrix/all.hpp
     title: Matrix Bundle
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matrix/inverse_matrix.test.cpp
     title: verify/matrix/inverse_matrix.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matrix/matrix.test.cpp
     title: verify/matrix/matrix.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"matrix/linear_algebra.hpp\"\n\n\n\n#include <optional>\n\
@@ -317,7 +317,7 @@ data:
   requiredBy:
   - matrix/all.hpp
   timestamp: '2026-06-22 14:42:39+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/matrix/inverse_matrix.test.cpp
   - verify/matrix/matrix.test.cpp

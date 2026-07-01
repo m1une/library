@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/segtree.hpp
     title: Segment Tree
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
   - icon: ':heavy_check_mark:'

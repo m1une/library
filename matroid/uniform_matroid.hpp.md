@@ -2,16 +2,16 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: matroid/all.hpp
     title: Matroid All
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: verify/matroid/matroids.test.cpp
     title: verify/matroid/matroids.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"matroid/uniform_matroid.hpp\"\n\n\n\n#include <cassert>\n\
@@ -42,7 +42,7 @@ data:
   requiredBy:
   - matroid/all.hpp
   timestamp: '2026-07-01 14:07:14+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - verify/matroid/matroids.test.cpp
 documentation_of: matroid/uniform_matroid.hpp

@@ -1,16 +1,16 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/integer_arithmetic.hpp
     title: Integer Square Root and Power
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/integer_arithmetic.hpp
     title: Integer Square Root and Power
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/two_square_sum.hpp
     title: Sum of Two Squares
   _extendedRequiredBy: []
