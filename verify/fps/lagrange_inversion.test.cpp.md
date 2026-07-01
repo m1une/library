@@ -8,6 +8,9 @@ data:
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':question:'
+    path: fps/lagrange_inversion.hpp
+    title: Lagrange Inversion Formula
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   - icon: ':question:'
@@ -15,66 +18,68 @@ data:
     title: ModInt
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/pow_of_formal_power_series
+    PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
-    - https://judge.yosupo.jp/problem/pow_of_formal_power_series
-  bundledCode: "#line 1 \"verify/fps/pow_of_formal_power_series.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/pow_of_formal_power_series\"\n\n#include\
-    \ <cstdint>\n#include <iostream>\n\n#line 1 \"fps/formal_power_series.hpp\"\n\n\
-    \n\n#include <algorithm>\n#include <cassert>\n#line 7 \"fps/formal_power_series.hpp\"\
-    \n#include <optional>\n#include <utility>\n#include <vector>\n\n#line 1 \"fps/convolution.hpp\"\
-    \n\n\n\n#line 5 \"fps/convolution.hpp\"\n#include <array>\n#line 10 \"fps/convolution.hpp\"\
-    \n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 7 \"math/modint.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n\
-    \   private:\n    uint32_t _v;\n\n   public:\n    static constexpr uint32_t mod()\
-    \ {\n        return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t\
-    \ v) noexcept {\n        ModInt x;\n        x._v = v;\n        return x;\n   \
-    \ }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    constexpr ModInt(int\
+    - https://judge.yosupo.jp/problem/aplusb
+  bundledCode: "#line 1 \"verify/fps/lagrange_inversion.test.cpp\"\n#define PROBLEM\
+    \ \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <iostream>\n#include <random>\n#include <utility>\n\n#line\
+    \ 1 \"fps/lagrange_inversion.hpp\"\n\n\n\n#line 6 \"fps/lagrange_inversion.hpp\"\
+    \n#include <cstdint>\n\n#line 1 \"fps/formal_power_series.hpp\"\n\n\n\n#line 7\
+    \ \"fps/formal_power_series.hpp\"\n#include <optional>\n#line 9 \"fps/formal_power_series.hpp\"\
+    \n#include <vector>\n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#line 5 \"fps/convolution.hpp\"\
+    \n#include <array>\n#line 10 \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\
+    \n\n\n\n#line 7 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\n\
+    template <uint32_t Modulus>\nstruct ModInt {\n   private:\n    uint32_t _v;\n\n\
+    \   public:\n    static constexpr uint32_t mod() {\n        return Modulus;\n\
+    \    }\n\n    static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt\
+    \ x;\n        x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept\
+    \ : _v(0) {}\n\n    constexpr ModInt(int v) noexcept {\n        long long x =\
+    \ (long long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n \
+    \       _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(long long\
     \ v) noexcept {\n        long long x = (long long)(v % (long long)(Modulus));\n\
     \        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n  \
-    \  }\n\n    constexpr ModInt(long long v) noexcept {\n        long long x = (long\
-    \ long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n       \
-    \ _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(unsigned int v)\
-    \ noexcept {\n        _v = static_cast<uint32_t>(v % Modulus);\n    }\n\n    constexpr\
-    \ uint32_t val() const noexcept {\n        return _v;\n    }\n\n    constexpr\
-    \ ModInt& operator++() noexcept {\n        _v++;\n        if (_v == Modulus) _v\
-    \ = 0;\n        return *this;\n    }\n\n    constexpr ModInt& operator--() noexcept\
-    \ {\n        if (_v == 0) _v = Modulus;\n        _v--;\n        return *this;\n\
-    \    }\n\n    constexpr ModInt operator++(int) noexcept {\n        ModInt res\
-    \ = *this;\n        ++*this;\n        return res;\n    }\n\n    constexpr ModInt\
-    \ operator--(int) noexcept {\n        ModInt res = *this;\n        --*this;\n\
-    \        return res;\n    }\n\n    constexpr ModInt& operator+=(const ModInt&\
-    \ rhs) noexcept {\n        _v += rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator-=(const ModInt&\
-    \ rhs) noexcept {\n        _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt&\
-    \ rhs) noexcept {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v\
-    \ = static_cast<uint32_t>(z % Modulus);\n        return *this;\n    }\n\n    constexpr\
-    \ ModInt& operator/=(const ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n\
-    \    }\n\n    constexpr ModInt operator+(const ModInt& rhs) const noexcept {\n\
-    \        return ModInt(*this) += rhs;\n    }\n    constexpr ModInt operator-(const\
-    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) -= rhs;\n    }\n\
-    \    constexpr ModInt operator*(const ModInt& rhs) const noexcept {\n        return\
-    \ ModInt(*this) *= rhs;\n    }\n    constexpr ModInt operator/(const ModInt& rhs)\
-    \ const noexcept {\n        return ModInt(*this) /= rhs;\n    }\n\n    constexpr\
-    \ bool operator==(const ModInt& rhs) const noexcept {\n        return _v == rhs._v;\n\
-    \    }\n    constexpr bool operator!=(const ModInt& rhs) const noexcept {\n  \
-    \      return _v != rhs._v;\n    }\n\n    constexpr ModInt pow(long long n) const\
-    \ noexcept {\n        ModInt res = raw(1), x = *this;\n        while (n > 0) {\n\
-    \            if (n & 1) res *= x;\n            x *= x;\n            n >>= 1;\n\
-    \        }\n        return res;\n    }\n\n    constexpr ModInt inv() const noexcept\
-    \ {\n        int64_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
-    \            int64_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
-    \ b);\n            u -= t * v;\n            std::swap(u, v);\n        }\n    \
-    \    if (u < 0) u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n\
-    \    }\n\n    friend std::ostream& operator<<(std::ostream& os, const ModInt&\
-    \ rhs) {\n        return os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream&\
-    \ is, ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
+    \  }\n\n    constexpr ModInt(unsigned int v) noexcept {\n        _v = static_cast<uint32_t>(v\
+    \ % Modulus);\n    }\n\n    constexpr uint32_t val() const noexcept {\n      \
+    \  return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept {\n      \
+    \  _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n    }\n\n\
+    \    constexpr ModInt& operator--() noexcept {\n        if (_v == 0) _v = Modulus;\n\
+    \        _v--;\n        return *this;\n    }\n\n    constexpr ModInt operator++(int)\
+    \ noexcept {\n        ModInt res = *this;\n        ++*this;\n        return res;\n\
+    \    }\n\n    constexpr ModInt operator--(int) noexcept {\n        ModInt res\
+    \ = *this;\n        --*this;\n        return res;\n    }\n\n    constexpr ModInt&\
+    \ operator+=(const ModInt& rhs) noexcept {\n        _v += rhs._v;\n        if\
+    \ (_v >= Modulus) _v -= Modulus;\n        return *this;\n    }\n\n    constexpr\
+    \ ModInt& operator-=(const ModInt& rhs) noexcept {\n        _v -= rhs._v;\n  \
+    \      if (_v >= Modulus) _v += Modulus;\n        return *this;\n    }\n\n   \
+    \ constexpr ModInt& operator*=(const ModInt& rhs) noexcept {\n        uint64_t\
+    \ z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z % Modulus);\n\
+    \        return *this;\n    }\n\n    constexpr ModInt& operator/=(const ModInt&\
+    \ rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
+    \ ModInt operator+(const ModInt& rhs) const noexcept {\n        return ModInt(*this)\
+    \ += rhs;\n    }\n    constexpr ModInt operator-(const ModInt& rhs) const noexcept\
+    \ {\n        return ModInt(*this) -= rhs;\n    }\n    constexpr ModInt operator*(const\
+    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) *= rhs;\n    }\n\
+    \    constexpr ModInt operator/(const ModInt& rhs) const noexcept {\n        return\
+    \ ModInt(*this) /= rhs;\n    }\n\n    constexpr bool operator==(const ModInt&\
+    \ rhs) const noexcept {\n        return _v == rhs._v;\n    }\n    constexpr bool\
+    \ operator!=(const ModInt& rhs) const noexcept {\n        return _v != rhs._v;\n\
+    \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
+    \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
+    \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int64_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int64_t\
+    \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
+    \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
+    \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
+    \ std::ostream& operator<<(std::ostream& os, const ModInt& rhs) {\n        return\
+    \ os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream& is,\
+    \ ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
     \        return is;\n    }\n};\n\nusing modint998244353 = ModInt<998244353>;\n\
     using modint1000000007 = ModInt<1000000007>;\n\n}  // namespace math\n}  // namespace\
     \ m1une\n\n\n#line 12 \"fps/convolution.hpp\"\n\nnamespace m1une {\nnamespace\
@@ -305,37 +310,113 @@ data:
     \      power *= shift;\n        }\n        Fps product = left * right;\n     \
     \   Fps result(n);\n        for (int i = 0; i < n; i++) result[i] = product[n\
     \ - 1 - i] * inverse_factorial[i];\n        return result;\n    }\n};\n\n}  //\
-    \ namespace fps\n}  // namespace m1une\n\n\n#line 8 \"verify/fps/pow_of_formal_power_series.test.cpp\"\
+    \ namespace fps\n}  // namespace m1une\n\n\n#line 9 \"fps/lagrange_inversion.hpp\"\
+    \n\nnamespace m1une {\nnamespace fps {\n\ntemplate <class Mint>\nMint lagrange_inversion_coefficient(const\
+    \ FormalPowerSeries<Mint>& phi, int degree) {\n    assert(1 <= degree && uint32_t(degree)\
+    \ < Mint::mod());\n    assert(!phi.empty() && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint>\
+    \ power = phi.pre(degree).pow(degree, degree);\n    return power[degree - 1] /\
+    \ Mint(degree);\n}\n\ntemplate <class Mint>\nMint lagrange_burmann_coefficient(const\
+    \ FormalPowerSeries<Mint>& phi,\n                                  const FormalPowerSeries<Mint>&\
+    \ outer, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    if (degree == 0) return outer.empty() ? Mint(0) : outer[0];\n    assert(!phi.empty()\
+    \ && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint> power = phi.pre(degree).pow(degree,\
+    \ degree);\n    Mint result = 0;\n    int limit = std::min(degree, int(outer.size())\
+    \ - 1);\n    for (int i = 1; i <= limit; i++) {\n        result += Mint(i) * outer[i]\
+    \ * power[degree - i];\n    }\n    return result / Mint(degree);\n}\n\ntemplate\
+    \ <class Mint>\nMint compositional_inverse_coefficient(const FormalPowerSeries<Mint>&\
+    \ f, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    assert(2 <= int(f.size()) && f[0] == Mint(0) && f[1] != Mint(0));\n    if\
+    \ (degree == 0) return Mint(0);\n\n    FormalPowerSeries<Mint> divided(degree);\n\
+    \    for (int i = 0; i < degree && i + 1 < int(f.size()); i++) divided[i] = f[i\
+    \ + 1];\n    FormalPowerSeries<Mint> phi = divided.inv(degree);\n    return lagrange_inversion_coefficient(phi,\
+    \ degree);\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 11 \"verify/fps/lagrange_inversion.test.cpp\"\
     \n\nusing mint = m1une::math::modint998244353;\nusing Fps = m1une::fps::FormalPowerSeries<mint>;\n\
-    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
-    \n    int n;\n    long long exponent;\n    std::cin >> n >> exponent;\n    Fps\
-    \ a(n);\n    for (mint& value : a) std::cin >> value;\n    Fps result = a.pow(exponent);\n\
-    \    for (int i = 0; i < n; i++) {\n        if (i) std::cout << ' ';\n       \
-    \ std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/pow_of_formal_power_series\"\
-    \n\n#include <cstdint>\n#include <iostream>\n\n#include \"../../fps/formal_power_series.hpp\"\
-    \n#include \"../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
-    using Fps = m1une::fps::FormalPowerSeries<mint>;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    int n;\n    long long exponent;\n    std::cin\
-    \ >> n >> exponent;\n    Fps a(n);\n    for (mint& value : a) std::cin >> value;\n\
-    \    Fps result = a.pow(exponent);\n    for (int i = 0; i < n; i++) {\n      \
-    \  if (i) std::cout << ' ';\n        std::cout << result[i];\n    }\n    std::cout\
-    \ << '\\n';\n}\n"
+    \nFps naive_multiply(const Fps& a, const Fps& b, int degree) {\n    Fps result(degree);\n\
+    \    for (int i = 0; i < int(a.size()) && i < degree; i++) {\n        for (int\
+    \ j = 0; j < int(b.size()) && i + j < degree; j++) {\n            result[i + j]\
+    \ += a[i] * b[j];\n        }\n    }\n    return result;\n}\n\nFps naive_compose(const\
+    \ Fps& outer, const Fps& inner, int degree) {\n    Fps result(degree);\n    Fps\
+    \ power(degree);\n    if (degree != 0) power[0] = 1;\n    for (int i = 0; i <\
+    \ int(outer.size()) && i < degree; i++) {\n        for (int j = 0; j < degree;\
+    \ j++) result[j] += outer[i] * power[j];\n        power = naive_multiply(power,\
+    \ inner, degree);\n    }\n    return result;\n}\n\nFps naive_implicit_series(const\
+    \ Fps& phi, int degree) {\n    Fps w(degree);\n    for (int iteration = 0; iteration\
+    \ < degree; iteration++) {\n        Fps composed = naive_compose(phi, w, degree\
+    \ - 1);\n        Fps next(degree);\n        for (int i = 1; i < degree; i++) next[i]\
+    \ = composed[i - 1];\n        w = std::move(next);\n    }\n    return w;\n}\n\n\
+    void test_lagrange_inversion() {\n    Fps catalan_phi = {1, 2, 1};\n    mint catalan[]\
+    \ = {1, 1, 2, 5, 14, 42, 132};\n    for (int n = 1; n <= 6; n++) {\n        assert(m1une::fps::lagrange_inversion_coefficient(catalan_phi,\
+    \ n) == catalan[n]);\n    }\n    const int large_n = 128;\n    mint central_binomial\
+    \ = 1;\n    for (int i = 1; i <= large_n; i++) {\n        central_binomial *=\
+    \ mint(large_n + i) / mint(i);\n    }\n    mint large_catalan = central_binomial\
+    \ / mint(large_n + 1);\n    assert(m1une::fps::lagrange_inversion_coefficient(catalan_phi,\
+    \ large_n) == large_catalan);\n\n    std::mt19937 random(123456789);\n    for\
+    \ (int test = 0; test < 100; test++) {\n        const int degree = 12;\n     \
+    \   Fps phi(degree);\n        phi[0] = 1 + random() % 100;\n        for (int i\
+    \ = 1; i < degree; i++) phi[i] = random() % 100;\n        Fps w = naive_implicit_series(phi,\
+    \ degree);\n\n        Fps outer(degree);\n        for (mint& value : outer) value\
+    \ = random() % 100;\n        Fps composed = naive_compose(outer, w, degree);\n\
+    \n        for (int n = 1; n < degree; n++) {\n            assert(m1une::fps::lagrange_inversion_coefficient(phi,\
+    \ n) == w[n]);\n            assert(m1une::fps::lagrange_burmann_coefficient(phi,\
+    \ outer, n) == composed[n]);\n        }\n        assert(m1une::fps::lagrange_burmann_coefficient(phi,\
+    \ outer, 0) == outer[0]);\n\n        Fps f = phi.inv(degree) << 1;\n        f.resize(degree);\n\
+    \        for (int n = 0; n < degree; n++) {\n            assert(m1une::fps::compositional_inverse_coefficient(f,\
+    \ n) == w[n]);\n        }\n    }\n}\n\nint main() {\n    test_lagrange_inversion();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <iostream>\n#include <random>\n#include <utility>\n\
+    \n#include \"../../fps/lagrange_inversion.hpp\"\n#include \"../../math/modint.hpp\"\
+    \n\nusing mint = m1une::math::modint998244353;\nusing Fps = m1une::fps::FormalPowerSeries<mint>;\n\
+    \nFps naive_multiply(const Fps& a, const Fps& b, int degree) {\n    Fps result(degree);\n\
+    \    for (int i = 0; i < int(a.size()) && i < degree; i++) {\n        for (int\
+    \ j = 0; j < int(b.size()) && i + j < degree; j++) {\n            result[i + j]\
+    \ += a[i] * b[j];\n        }\n    }\n    return result;\n}\n\nFps naive_compose(const\
+    \ Fps& outer, const Fps& inner, int degree) {\n    Fps result(degree);\n    Fps\
+    \ power(degree);\n    if (degree != 0) power[0] = 1;\n    for (int i = 0; i <\
+    \ int(outer.size()) && i < degree; i++) {\n        for (int j = 0; j < degree;\
+    \ j++) result[j] += outer[i] * power[j];\n        power = naive_multiply(power,\
+    \ inner, degree);\n    }\n    return result;\n}\n\nFps naive_implicit_series(const\
+    \ Fps& phi, int degree) {\n    Fps w(degree);\n    for (int iteration = 0; iteration\
+    \ < degree; iteration++) {\n        Fps composed = naive_compose(phi, w, degree\
+    \ - 1);\n        Fps next(degree);\n        for (int i = 1; i < degree; i++) next[i]\
+    \ = composed[i - 1];\n        w = std::move(next);\n    }\n    return w;\n}\n\n\
+    void test_lagrange_inversion() {\n    Fps catalan_phi = {1, 2, 1};\n    mint catalan[]\
+    \ = {1, 1, 2, 5, 14, 42, 132};\n    for (int n = 1; n <= 6; n++) {\n        assert(m1une::fps::lagrange_inversion_coefficient(catalan_phi,\
+    \ n) == catalan[n]);\n    }\n    const int large_n = 128;\n    mint central_binomial\
+    \ = 1;\n    for (int i = 1; i <= large_n; i++) {\n        central_binomial *=\
+    \ mint(large_n + i) / mint(i);\n    }\n    mint large_catalan = central_binomial\
+    \ / mint(large_n + 1);\n    assert(m1une::fps::lagrange_inversion_coefficient(catalan_phi,\
+    \ large_n) == large_catalan);\n\n    std::mt19937 random(123456789);\n    for\
+    \ (int test = 0; test < 100; test++) {\n        const int degree = 12;\n     \
+    \   Fps phi(degree);\n        phi[0] = 1 + random() % 100;\n        for (int i\
+    \ = 1; i < degree; i++) phi[i] = random() % 100;\n        Fps w = naive_implicit_series(phi,\
+    \ degree);\n\n        Fps outer(degree);\n        for (mint& value : outer) value\
+    \ = random() % 100;\n        Fps composed = naive_compose(outer, w, degree);\n\
+    \n        for (int n = 1; n < degree; n++) {\n            assert(m1une::fps::lagrange_inversion_coefficient(phi,\
+    \ n) == w[n]);\n            assert(m1une::fps::lagrange_burmann_coefficient(phi,\
+    \ outer, n) == composed[n]);\n        }\n        assert(m1une::fps::lagrange_burmann_coefficient(phi,\
+    \ outer, 0) == outer[0]);\n\n        Fps f = phi.inv(degree) << 1;\n        f.resize(degree);\n\
+    \        for (int n = 0; n < degree; n++) {\n            assert(m1une::fps::compositional_inverse_coefficient(f,\
+    \ n) == w[n]);\n        }\n    }\n}\n\nint main() {\n    test_lagrange_inversion();\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   dependsOn:
+  - fps/lagrange_inversion.hpp
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
   - math/modint.hpp
   isVerificationFile: true
-  path: verify/fps/pow_of_formal_power_series.test.cpp
+  path: verify/fps/lagrange_inversion.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 17:44:01+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2026-07-01 13:51:14+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
-documentation_of: verify/fps/pow_of_formal_power_series.test.cpp
+documentation_of: verify/fps/lagrange_inversion.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/fps/pow_of_formal_power_series.test.cpp
-- /verify/verify/fps/pow_of_formal_power_series.test.cpp.html
-title: verify/fps/pow_of_formal_power_series.test.cpp
+- /verify/verify/fps/lagrange_inversion.test.cpp
+- /verify/verify/fps/lagrange_inversion.test.cpp.html
+title: verify/fps/lagrange_inversion.test.cpp
 ---

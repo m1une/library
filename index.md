@@ -294,15 +294,18 @@ data:
     - icon: ':heavy_check_mark:'
       path: fps/all.hpp
       title: Formal Power Series All
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: fps/convolution.hpp
       title: Convolution
     - icon: ':heavy_check_mark:'
       path: fps/floating_point_convolution.hpp
       title: Floating-Point Convolution
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: fps/formal_power_series.hpp
       title: Formal Power Series
+    - icon: ':question:'
+      path: fps/lagrange_inversion.hpp
+      title: Lagrange Inversion Formula
     - icon: ':heavy_check_mark:'
       path: fps/linear_recurrence.hpp
       title: Linear Recurrence and Bostan-Mori
@@ -441,7 +444,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/lucas.hpp
       title: Lucas's Theorem
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/modint.hpp
       title: ModInt
     - icon: ':heavy_check_mark:'
@@ -989,6 +992,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
       title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+    - icon: ':x:'
+      path: verify/fps/lagrange_inversion.test.cpp
+      title: verify/fps/lagrange_inversion.test.cpp
     - icon: ':heavy_check_mark:'
       path: verify/fps/multipoint_evaluation.test.cpp
       title: verify/fps/multipoint_evaluation.test.cpp

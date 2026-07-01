@@ -19,7 +19,7 @@ contest.
 | `optimization/` | Project selection, slope trick, Hungarian assignment, simplex LP, and integer LP. |
 | `monge/` | SMAWK, D&C DP, Knuth optimization, LARSCH, Monge checks, and structured min-plus/max-plus convolution. |
 | `matrix/` | Dense row-major matrices, fast multiplication and powers, Gaussian elimination, determinant, inverse, and linear systems. |
-| `fps/` | Fast convolution, formal power series operations, multipoint evaluation, interpolation, and linear recurrences. |
+| `fps/` | Fast convolution, formal power series operations, Lagrange inversion, multipoint evaluation, interpolation, and linear recurrences. |
 | `sequence/` | Sequence algorithms such as longest increasing subsequence and inversion counting. |
 | `geometry/` | 2D points, lines, rays, segments, polygons, convex hulls, and circles. |
 | `ds/` | Categorized data structures for range queries, online/offline dynamic connectivity, dynamic sequences and trees, ordered sets, and hash tables. |

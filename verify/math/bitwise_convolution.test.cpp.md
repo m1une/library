@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/bitwise_convolution.hpp
     title: Bitwise Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   - icon: ':heavy_check_mark:'

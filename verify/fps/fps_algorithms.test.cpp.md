@@ -4,25 +4,28 @@ data:
   - icon: ':heavy_check_mark:'
     path: fps/all.hpp
     title: Formal Power Series All
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
   - icon: ':heavy_check_mark:'
     path: fps/floating_point_convolution.hpp
     title: Floating-Point Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
+  - icon: ':question:'
+    path: fps/lagrange_inversion.hpp
+    title: Lagrange Inversion Formula
   - icon: ':heavy_check_mark:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
   - icon: ':heavy_check_mark:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []
@@ -376,7 +379,27 @@ data:
     \      power *= shift;\n        }\n        Fps product = left * right;\n     \
     \   Fps result(n);\n        for (int i = 0; i < n; i++) result[i] = product[n\
     \ - 1 - i] * inverse_factorial[i];\n        return result;\n    }\n};\n\n}  //\
-    \ namespace fps\n}  // namespace m1une\n\n\n#line 1 \"fps/linear_recurrence.hpp\"\
+    \ namespace fps\n}  // namespace m1une\n\n\n#line 1 \"fps/lagrange_inversion.hpp\"\
+    \n\n\n\n#line 7 \"fps/lagrange_inversion.hpp\"\n\n#line 9 \"fps/lagrange_inversion.hpp\"\
+    \n\nnamespace m1une {\nnamespace fps {\n\ntemplate <class Mint>\nMint lagrange_inversion_coefficient(const\
+    \ FormalPowerSeries<Mint>& phi, int degree) {\n    assert(1 <= degree && uint32_t(degree)\
+    \ < Mint::mod());\n    assert(!phi.empty() && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint>\
+    \ power = phi.pre(degree).pow(degree, degree);\n    return power[degree - 1] /\
+    \ Mint(degree);\n}\n\ntemplate <class Mint>\nMint lagrange_burmann_coefficient(const\
+    \ FormalPowerSeries<Mint>& phi,\n                                  const FormalPowerSeries<Mint>&\
+    \ outer, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    if (degree == 0) return outer.empty() ? Mint(0) : outer[0];\n    assert(!phi.empty()\
+    \ && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint> power = phi.pre(degree).pow(degree,\
+    \ degree);\n    Mint result = 0;\n    int limit = std::min(degree, int(outer.size())\
+    \ - 1);\n    for (int i = 1; i <= limit; i++) {\n        result += Mint(i) * outer[i]\
+    \ * power[degree - i];\n    }\n    return result / Mint(degree);\n}\n\ntemplate\
+    \ <class Mint>\nMint compositional_inverse_coefficient(const FormalPowerSeries<Mint>&\
+    \ f, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    assert(2 <= int(f.size()) && f[0] == Mint(0) && f[1] != Mint(0));\n    if\
+    \ (degree == 0) return Mint(0);\n\n    FormalPowerSeries<Mint> divided(degree);\n\
+    \    for (int i = 0; i < degree && i + 1 < int(f.size()); i++) divided[i] = f[i\
+    \ + 1];\n    FormalPowerSeries<Mint> phi = divided.inv(degree);\n    return lagrange_inversion_coefficient(phi,\
+    \ degree);\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 1 \"fps/linear_recurrence.hpp\"\
     \n\n\n\n#line 7 \"fps/linear_recurrence.hpp\"\n\n#line 9 \"fps/linear_recurrence.hpp\"\
     \n\nnamespace m1une {\nnamespace fps {\n\ntemplate <class Mint>\nMint coefficient_of_rational(FormalPowerSeries<Mint>\
     \ numerator,\n                             FormalPowerSeries<Mint> denominator,\
@@ -445,7 +468,7 @@ data:
     }\n\ntemplate <class Mint>\nFormalPowerSeries<Mint> polynomial_interpolate(const\
     \ std::vector<Mint>& points,\n                                               const\
     \ std::vector<Mint>& values) {\n    return SubproductTree<Mint>(points).interpolate(values);\n\
-    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 9 \"fps/all.hpp\"\n\
+    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 10 \"fps/all.hpp\"\n\
     \n\n#line 11 \"verify/fps/fps_algorithms.test.cpp\"\n\nusing mint = m1une::math::modint998244353;\n\
     using mint1e9 = m1une::math::modint1000000007;\nusing Fps = m1une::fps::FormalPowerSeries<mint>;\n\
     \ntemplate <class Mint>\nvoid assert_equal(const std::vector<Mint>& lhs, const\
@@ -570,13 +593,14 @@ data:
   - math/modint.hpp
   - fps/floating_point_convolution.hpp
   - fps/formal_power_series.hpp
+  - fps/lagrange_inversion.hpp
   - fps/linear_recurrence.hpp
   - fps/multipoint_evaluation.hpp
   - math/modint.hpp
   isVerificationFile: true
   path: verify/fps/fps_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 03:05:18+09:00'
+  timestamp: '2026-07-01 13:51:14+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/fps/fps_algorithms.test.cpp

@@ -1,16 +1,19 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
     path: fps/all.hpp
     title: Formal Power Series All
+  - icon: ':question:'
+    path: fps/lagrange_inversion.hpp
+    title: Lagrange Inversion Formula
   - icon: ':heavy_check_mark:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
@@ -36,6 +39,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
     title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+  - icon: ':x:'
+    path: verify/fps/lagrange_inversion.test.cpp
+    title: verify/fps/lagrange_inversion.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/fps/multipoint_evaluation.test.cpp
     title: verify/fps/multipoint_evaluation.test.cpp
@@ -63,9 +69,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"fps/formal_power_series.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -495,10 +501,11 @@ data:
   - math/combinatorial_sequences.hpp
   - math/all.hpp
   - fps/all.hpp
+  - fps/lagrange_inversion.hpp
   - fps/multipoint_evaluation.hpp
   - fps/linear_recurrence.hpp
   timestamp: '2026-06-21 17:44:01+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp
@@ -512,6 +519,7 @@ data:
   - verify/fps/multipoint_evaluation.test.cpp
   - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
   - verify/fps/polynomial_taylor_shift.test.cpp
+  - verify/fps/lagrange_inversion.test.cpp
   - verify/fps/fps_algorithms.test.cpp
 documentation_of: fps/formal_power_series.hpp
 layout: document

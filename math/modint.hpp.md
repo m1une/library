@@ -5,12 +5,15 @@ data:
   - icon: ':heavy_check_mark:'
     path: fps/all.hpp
     title: Formal Power Series All
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
+  - icon: ':question:'
+    path: fps/lagrange_inversion.hpp
+    title: Lagrange Inversion Formula
   - icon: ':heavy_check_mark:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
@@ -81,6 +84,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
     title: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
+  - icon: ':x:'
+    path: verify/fps/lagrange_inversion.test.cpp
+    title: verify/fps/lagrange_inversion.test.cpp
+  - icon: ':x:'
+    path: verify/fps/lagrange_inversion.test.cpp
+    title: verify/fps/lagrange_inversion.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/fps/multipoint_evaluation.test.cpp
     title: verify/fps/multipoint_evaluation.test.cpp
@@ -150,9 +159,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/matrix/matrix_product.test.cpp
     title: verify/matrix/matrix_product.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/modint.hpp\"\n\n\n\n#include <cstdint>\n#include <iostream>\n\
@@ -263,11 +272,12 @@ data:
   - math/all.hpp
   - fps/formal_power_series.hpp
   - fps/all.hpp
+  - fps/lagrange_inversion.hpp
   - fps/multipoint_evaluation.hpp
   - fps/linear_recurrence.hpp
   - fps/convolution.hpp
   timestamp: '2026-06-21 17:44:01+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
   - verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp
@@ -305,6 +315,8 @@ data:
   - verify/fps/convolution_mod.test.cpp
   - verify/fps/polynomial_taylor_shift.test.cpp
   - verify/fps/polynomial_taylor_shift.test.cpp
+  - verify/fps/lagrange_inversion.test.cpp
+  - verify/fps/lagrange_inversion.test.cpp
   - verify/fps/fps_algorithms.test.cpp
   - verify/fps/fps_algorithms.test.cpp
   - verify/matrix/inverse_matrix.test.cpp

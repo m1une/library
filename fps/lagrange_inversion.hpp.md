@@ -10,71 +10,74 @@ data:
   - icon: ':question:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':question:'
-    path: math/modint.hpp
-    title: ModInt
-  _extendedRequiredBy: []
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
-  _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: fps/all.hpp
+    title: Formal Power Series All
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/fps_algorithms.test.cpp
+    title: verify/fps/fps_algorithms.test.cpp
+  - icon: ':x:'
+    path: verify/fps/lagrange_inversion.test.cpp
+    title: verify/fps/lagrange_inversion.test.cpp
+  _isVerificationFailed: true
+  _pathExtension: hpp
+  _verificationStatusIcon: ':question:'
   attributes:
-    '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/pow_of_formal_power_series
-    links:
-    - https://judge.yosupo.jp/problem/pow_of_formal_power_series
-  bundledCode: "#line 1 \"verify/fps/pow_of_formal_power_series.test.cpp\"\n#define\
-    \ PROBLEM \"https://judge.yosupo.jp/problem/pow_of_formal_power_series\"\n\n#include\
-    \ <cstdint>\n#include <iostream>\n\n#line 1 \"fps/formal_power_series.hpp\"\n\n\
-    \n\n#include <algorithm>\n#include <cassert>\n#line 7 \"fps/formal_power_series.hpp\"\
-    \n#include <optional>\n#include <utility>\n#include <vector>\n\n#line 1 \"fps/convolution.hpp\"\
-    \n\n\n\n#line 5 \"fps/convolution.hpp\"\n#include <array>\n#line 10 \"fps/convolution.hpp\"\
-    \n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 7 \"math/modint.hpp\"\n\nnamespace\
-    \ m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n\
-    \   private:\n    uint32_t _v;\n\n   public:\n    static constexpr uint32_t mod()\
-    \ {\n        return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t\
-    \ v) noexcept {\n        ModInt x;\n        x._v = v;\n        return x;\n   \
-    \ }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    constexpr ModInt(int\
-    \ v) noexcept {\n        long long x = (long long)(v % (long long)(Modulus));\n\
-    \        if (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n  \
-    \  }\n\n    constexpr ModInt(long long v) noexcept {\n        long long x = (long\
+    links: []
+  bundledCode: "#line 1 \"fps/lagrange_inversion.hpp\"\n\n\n\n#include <algorithm>\n\
+    #include <cassert>\n#include <cstdint>\n\n#line 1 \"fps/formal_power_series.hpp\"\
+    \n\n\n\n#line 7 \"fps/formal_power_series.hpp\"\n#include <optional>\n#include\
+    \ <utility>\n#include <vector>\n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#line\
+    \ 5 \"fps/convolution.hpp\"\n#include <array>\n#line 10 \"fps/convolution.hpp\"\
+    \n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n\
+    #line 7 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\ntemplate\
+    \ <uint32_t Modulus>\nstruct ModInt {\n   private:\n    uint32_t _v;\n\n   public:\n\
+    \    static constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n   \
+    \ static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n    \
+    \    x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept :\
+    \ _v(0) {}\n\n    constexpr ModInt(int v) noexcept {\n        long long x = (long\
     \ long)(v % (long long)(Modulus));\n        if (x < 0) x += Modulus;\n       \
-    \ _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(unsigned int v)\
-    \ noexcept {\n        _v = static_cast<uint32_t>(v % Modulus);\n    }\n\n    constexpr\
-    \ uint32_t val() const noexcept {\n        return _v;\n    }\n\n    constexpr\
-    \ ModInt& operator++() noexcept {\n        _v++;\n        if (_v == Modulus) _v\
-    \ = 0;\n        return *this;\n    }\n\n    constexpr ModInt& operator--() noexcept\
-    \ {\n        if (_v == 0) _v = Modulus;\n        _v--;\n        return *this;\n\
-    \    }\n\n    constexpr ModInt operator++(int) noexcept {\n        ModInt res\
-    \ = *this;\n        ++*this;\n        return res;\n    }\n\n    constexpr ModInt\
-    \ operator--(int) noexcept {\n        ModInt res = *this;\n        --*this;\n\
-    \        return res;\n    }\n\n    constexpr ModInt& operator+=(const ModInt&\
-    \ rhs) noexcept {\n        _v += rhs._v;\n        if (_v >= Modulus) _v -= Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator-=(const ModInt&\
-    \ rhs) noexcept {\n        _v -= rhs._v;\n        if (_v >= Modulus) _v += Modulus;\n\
-    \        return *this;\n    }\n\n    constexpr ModInt& operator*=(const ModInt&\
-    \ rhs) noexcept {\n        uint64_t z = _v;\n        z *= rhs._v;\n        _v\
-    \ = static_cast<uint32_t>(z % Modulus);\n        return *this;\n    }\n\n    constexpr\
-    \ ModInt& operator/=(const ModInt& rhs) noexcept {\n        return *this *= rhs.inv();\n\
-    \    }\n\n    constexpr ModInt operator+(const ModInt& rhs) const noexcept {\n\
-    \        return ModInt(*this) += rhs;\n    }\n    constexpr ModInt operator-(const\
-    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) -= rhs;\n    }\n\
-    \    constexpr ModInt operator*(const ModInt& rhs) const noexcept {\n        return\
-    \ ModInt(*this) *= rhs;\n    }\n    constexpr ModInt operator/(const ModInt& rhs)\
-    \ const noexcept {\n        return ModInt(*this) /= rhs;\n    }\n\n    constexpr\
-    \ bool operator==(const ModInt& rhs) const noexcept {\n        return _v == rhs._v;\n\
-    \    }\n    constexpr bool operator!=(const ModInt& rhs) const noexcept {\n  \
-    \      return _v != rhs._v;\n    }\n\n    constexpr ModInt pow(long long n) const\
-    \ noexcept {\n        ModInt res = raw(1), x = *this;\n        while (n > 0) {\n\
-    \            if (n & 1) res *= x;\n            x *= x;\n            n >>= 1;\n\
-    \        }\n        return res;\n    }\n\n    constexpr ModInt inv() const noexcept\
-    \ {\n        int64_t a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n\
-    \            int64_t t = a / b;\n            a -= t * b;\n            std::swap(a,\
-    \ b);\n            u -= t * v;\n            std::swap(u, v);\n        }\n    \
-    \    if (u < 0) u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n\
-    \    }\n\n    friend std::ostream& operator<<(std::ostream& os, const ModInt&\
-    \ rhs) {\n        return os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream&\
-    \ is, ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
+    \ _v = static_cast<uint32_t>(x);\n    }\n\n    constexpr ModInt(long long v) noexcept\
+    \ {\n        long long x = (long long)(v % (long long)(Modulus));\n        if\
+    \ (x < 0) x += Modulus;\n        _v = static_cast<uint32_t>(x);\n    }\n\n   \
+    \ constexpr ModInt(unsigned int v) noexcept {\n        _v = static_cast<uint32_t>(v\
+    \ % Modulus);\n    }\n\n    constexpr uint32_t val() const noexcept {\n      \
+    \  return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept {\n      \
+    \  _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n    }\n\n\
+    \    constexpr ModInt& operator--() noexcept {\n        if (_v == 0) _v = Modulus;\n\
+    \        _v--;\n        return *this;\n    }\n\n    constexpr ModInt operator++(int)\
+    \ noexcept {\n        ModInt res = *this;\n        ++*this;\n        return res;\n\
+    \    }\n\n    constexpr ModInt operator--(int) noexcept {\n        ModInt res\
+    \ = *this;\n        --*this;\n        return res;\n    }\n\n    constexpr ModInt&\
+    \ operator+=(const ModInt& rhs) noexcept {\n        _v += rhs._v;\n        if\
+    \ (_v >= Modulus) _v -= Modulus;\n        return *this;\n    }\n\n    constexpr\
+    \ ModInt& operator-=(const ModInt& rhs) noexcept {\n        _v -= rhs._v;\n  \
+    \      if (_v >= Modulus) _v += Modulus;\n        return *this;\n    }\n\n   \
+    \ constexpr ModInt& operator*=(const ModInt& rhs) noexcept {\n        uint64_t\
+    \ z = _v;\n        z *= rhs._v;\n        _v = static_cast<uint32_t>(z % Modulus);\n\
+    \        return *this;\n    }\n\n    constexpr ModInt& operator/=(const ModInt&\
+    \ rhs) noexcept {\n        return *this *= rhs.inv();\n    }\n\n    constexpr\
+    \ ModInt operator+(const ModInt& rhs) const noexcept {\n        return ModInt(*this)\
+    \ += rhs;\n    }\n    constexpr ModInt operator-(const ModInt& rhs) const noexcept\
+    \ {\n        return ModInt(*this) -= rhs;\n    }\n    constexpr ModInt operator*(const\
+    \ ModInt& rhs) const noexcept {\n        return ModInt(*this) *= rhs;\n    }\n\
+    \    constexpr ModInt operator/(const ModInt& rhs) const noexcept {\n        return\
+    \ ModInt(*this) /= rhs;\n    }\n\n    constexpr bool operator==(const ModInt&\
+    \ rhs) const noexcept {\n        return _v == rhs._v;\n    }\n    constexpr bool\
+    \ operator!=(const ModInt& rhs) const noexcept {\n        return _v != rhs._v;\n\
+    \    }\n\n    constexpr ModInt pow(long long n) const noexcept {\n        ModInt\
+    \ res = raw(1), x = *this;\n        while (n > 0) {\n            if (n & 1) res\
+    \ *= x;\n            x *= x;\n            n >>= 1;\n        }\n        return\
+    \ res;\n    }\n\n    constexpr ModInt inv() const noexcept {\n        int64_t\
+    \ a = _v, b = Modulus, u = 1, v = 0;\n        while (b) {\n            int64_t\
+    \ t = a / b;\n            a -= t * b;\n            std::swap(a, b);\n        \
+    \    u -= t * v;\n            std::swap(u, v);\n        }\n        if (u < 0)\
+    \ u += Modulus;\n        return raw(static_cast<uint32_t>(u));\n    }\n\n    friend\
+    \ std::ostream& operator<<(std::ostream& os, const ModInt& rhs) {\n        return\
+    \ os << rhs._v;\n    }\n\n    friend std::istream& operator>>(std::istream& is,\
+    \ ModInt& rhs) {\n        long long v;\n        is >> v;\n        rhs = ModInt(v);\n\
     \        return is;\n    }\n};\n\nusing modint998244353 = ModInt<998244353>;\n\
     using modint1000000007 = ModInt<1000000007>;\n\n}  // namespace math\n}  // namespace\
     \ m1une\n\n\n#line 12 \"fps/convolution.hpp\"\n\nnamespace m1une {\nnamespace\
@@ -305,37 +308,214 @@ data:
     \      power *= shift;\n        }\n        Fps product = left * right;\n     \
     \   Fps result(n);\n        for (int i = 0; i < n; i++) result[i] = product[n\
     \ - 1 - i] * inverse_factorial[i];\n        return result;\n    }\n};\n\n}  //\
-    \ namespace fps\n}  // namespace m1une\n\n\n#line 8 \"verify/fps/pow_of_formal_power_series.test.cpp\"\
-    \n\nusing mint = m1une::math::modint998244353;\nusing Fps = m1une::fps::FormalPowerSeries<mint>;\n\
-    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
-    \n    int n;\n    long long exponent;\n    std::cin >> n >> exponent;\n    Fps\
-    \ a(n);\n    for (mint& value : a) std::cin >> value;\n    Fps result = a.pow(exponent);\n\
-    \    for (int i = 0; i < n; i++) {\n        if (i) std::cout << ' ';\n       \
-    \ std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/pow_of_formal_power_series\"\
-    \n\n#include <cstdint>\n#include <iostream>\n\n#include \"../../fps/formal_power_series.hpp\"\
-    \n#include \"../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
-    using Fps = m1une::fps::FormalPowerSeries<mint>;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    int n;\n    long long exponent;\n    std::cin\
-    \ >> n >> exponent;\n    Fps a(n);\n    for (mint& value : a) std::cin >> value;\n\
-    \    Fps result = a.pow(exponent);\n    for (int i = 0; i < n; i++) {\n      \
-    \  if (i) std::cout << ' ';\n        std::cout << result[i];\n    }\n    std::cout\
-    \ << '\\n';\n}\n"
+    \ namespace fps\n}  // namespace m1une\n\n\n#line 9 \"fps/lagrange_inversion.hpp\"\
+    \n\nnamespace m1une {\nnamespace fps {\n\ntemplate <class Mint>\nMint lagrange_inversion_coefficient(const\
+    \ FormalPowerSeries<Mint>& phi, int degree) {\n    assert(1 <= degree && uint32_t(degree)\
+    \ < Mint::mod());\n    assert(!phi.empty() && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint>\
+    \ power = phi.pre(degree).pow(degree, degree);\n    return power[degree - 1] /\
+    \ Mint(degree);\n}\n\ntemplate <class Mint>\nMint lagrange_burmann_coefficient(const\
+    \ FormalPowerSeries<Mint>& phi,\n                                  const FormalPowerSeries<Mint>&\
+    \ outer, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    if (degree == 0) return outer.empty() ? Mint(0) : outer[0];\n    assert(!phi.empty()\
+    \ && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint> power = phi.pre(degree).pow(degree,\
+    \ degree);\n    Mint result = 0;\n    int limit = std::min(degree, int(outer.size())\
+    \ - 1);\n    for (int i = 1; i <= limit; i++) {\n        result += Mint(i) * outer[i]\
+    \ * power[degree - i];\n    }\n    return result / Mint(degree);\n}\n\ntemplate\
+    \ <class Mint>\nMint compositional_inverse_coefficient(const FormalPowerSeries<Mint>&\
+    \ f, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    assert(2 <= int(f.size()) && f[0] == Mint(0) && f[1] != Mint(0));\n    if\
+    \ (degree == 0) return Mint(0);\n\n    FormalPowerSeries<Mint> divided(degree);\n\
+    \    for (int i = 0; i < degree && i + 1 < int(f.size()); i++) divided[i] = f[i\
+    \ + 1];\n    FormalPowerSeries<Mint> phi = divided.inv(degree);\n    return lagrange_inversion_coefficient(phi,\
+    \ degree);\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_FPS_LAGRANGE_INVERSION_HPP\n#define M1UNE_FPS_LAGRANGE_INVERSION_HPP\
+    \ 1\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n\n#include\
+    \ \"formal_power_series.hpp\"\n\nnamespace m1une {\nnamespace fps {\n\ntemplate\
+    \ <class Mint>\nMint lagrange_inversion_coefficient(const FormalPowerSeries<Mint>&\
+    \ phi, int degree) {\n    assert(1 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    assert(!phi.empty() && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint>\
+    \ power = phi.pre(degree).pow(degree, degree);\n    return power[degree - 1] /\
+    \ Mint(degree);\n}\n\ntemplate <class Mint>\nMint lagrange_burmann_coefficient(const\
+    \ FormalPowerSeries<Mint>& phi,\n                                  const FormalPowerSeries<Mint>&\
+    \ outer, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    if (degree == 0) return outer.empty() ? Mint(0) : outer[0];\n    assert(!phi.empty()\
+    \ && phi[0] != Mint(0));\n\n    FormalPowerSeries<Mint> power = phi.pre(degree).pow(degree,\
+    \ degree);\n    Mint result = 0;\n    int limit = std::min(degree, int(outer.size())\
+    \ - 1);\n    for (int i = 1; i <= limit; i++) {\n        result += Mint(i) * outer[i]\
+    \ * power[degree - i];\n    }\n    return result / Mint(degree);\n}\n\ntemplate\
+    \ <class Mint>\nMint compositional_inverse_coefficient(const FormalPowerSeries<Mint>&\
+    \ f, int degree) {\n    assert(0 <= degree && uint32_t(degree) < Mint::mod());\n\
+    \    assert(2 <= int(f.size()) && f[0] == Mint(0) && f[1] != Mint(0));\n    if\
+    \ (degree == 0) return Mint(0);\n\n    FormalPowerSeries<Mint> divided(degree);\n\
+    \    for (int i = 0; i < degree && i + 1 < int(f.size()); i++) divided[i] = f[i\
+    \ + 1];\n    FormalPowerSeries<Mint> phi = divided.inv(degree);\n    return lagrange_inversion_coefficient(phi,\
+    \ degree);\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n#endif  // M1UNE_FPS_LAGRANGE_INVERSION_HPP\n"
   dependsOn:
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
   - math/modint.hpp
-  - math/modint.hpp
-  isVerificationFile: true
-  path: verify/fps/pow_of_formal_power_series.test.cpp
-  requiredBy: []
-  timestamp: '2026-06-21 17:44:01+09:00'
-  verificationStatus: TEST_ACCEPTED
-  verifiedWith: []
-documentation_of: verify/fps/pow_of_formal_power_series.test.cpp
+  isVerificationFile: false
+  path: fps/lagrange_inversion.hpp
+  requiredBy:
+  - fps/all.hpp
+  timestamp: '2026-07-01 13:51:14+09:00'
+  verificationStatus: LIBRARY_SOME_WA
+  verifiedWith:
+  - verify/fps/lagrange_inversion.test.cpp
+  - verify/fps/fps_algorithms.test.cpp
+documentation_of: fps/lagrange_inversion.hpp
 layout: document
-redirect_from:
-- /verify/verify/fps/pow_of_formal_power_series.test.cpp
-- /verify/verify/fps/pow_of_formal_power_series.test.cpp.html
-title: verify/fps/pow_of_formal_power_series.test.cpp
+title: Lagrange Inversion Formula
 ---
+
+## Overview
+
+This header finds one coefficient of a formal power series that is defined
+implicitly. You provide a series $\phi(t)$ and consider the unique series
+$w(x)$ satisfying
+
+$$w(x)=x\phi(w(x)).$$
+
+The important point is that **`w` is defined by `phi`**. It is not another
+function argument, and the library does not construct all of `w`. The Lagrange
+inversion formula obtains the requested coefficient directly from $\phi$:
+
+$$[x^n]w(x)=\frac{1}{n}[t^{n-1}]\phi(t)^n.$$
+
+For example, if
+
+$$\phi(t)=(1+t)^2,$$
+
+then `w` means the solution of
+
+$$w=x(1+w)^2=x+2x^2+5x^3+14x^4+\cdots.$$
+
+The coefficient of $x^4$ is therefore `14`.
+
+## Which Function Should I Use?
+
+### Coefficient of `w`
+
+```cpp
+Mint lagrange_inversion_coefficient(const Fps& phi, int n);
+```
+
+Use this when `w` is defined by $w=x\phi(w)$ and you want $[x^n]w$.
+
+```cpp
+Fps phi = {1, 2, 1}; // phi(t) = (1+t)^2
+mint answer = m1une::fps::lagrange_inversion_coefficient(phi, 4);
+// answer = [x^4]w(x) = 14
+```
+
+### Coefficient after applying another series
+
+```cpp
+Mint lagrange_burmann_coefficient(
+    const Fps& phi, const Fps& outer, int n);
+```
+
+This is the generalized form. As before, `phi` implicitly defines
+$w=x\phi(w)$. The `outer` argument stores a second series $H(t)$. The function
+returns
+
+$$[x^n]H(w(x)).$$
+
+It uses the Lagrange-Bürmann formula
+
+$$[x^n]H(w(x))
+=\frac{1}{n}[t^{n-1}]H'(t)\phi(t)^n.$$
+
+For example:
+
+```cpp
+Fps phi = {1, 2, 1};  // w = x(1+w)^2
+Fps outer = {0, 0, 1}; // H(t) = t^2
+
+mint answer = m1une::fps::lagrange_burmann_coefficient(phi, outer, 5);
+// answer = [x^5]H(w(x)) = [x^5]w(x)^2 = 48
+```
+
+The parameter correspondence is:
+
+| C++ argument | Mathematical meaning |
+| --- | --- |
+| `phi` | Defines the otherwise-unwritten series `w` through $w=x\phi(w)$. |
+| `outer` | Coefficients of $H(t)$. |
+| `n` | The requested degree of $x$. |
+| return value | $[x^n]H(w(x))$. |
+
+### Coefficient of a compositional inverse
+
+```cpp
+Mint compositional_inverse_coefficient(const Fps& f, int n);
+```
+
+Use this when a series $f(t)$ is given directly and you want one coefficient
+of its compositional inverse $g(x)$:
+
+$$f(g(x))=x.$$
+
+Internally, the function sets
+
+$$\phi(t)=\frac{t}{f(t)},$$
+
+so that $g=x\phi(g)$, and then applies the basic formula.
+
+```cpp
+Fps f = {0, 1, 1}; // f(t) = t+t^2
+mint answer = m1une::fps::compositional_inverse_coefficient(f, 4);
+// g(x) = x-x^2+2x^3-5x^4+...
+// answer = -5 modulo mint::mod()
+```
+
+## Interface and Complexity
+
+Let `Fps` denote `FormalPowerSeries<Mint>`.
+
+| Function | Requirement | Result | Complexity |
+| --- | --- | --- | --- |
+| `Mint lagrange_inversion_coefficient(const Fps& phi, int n)` | `n > 0`, `phi[0] != 0` | $[x^n]w$, where $w=x\phi(w)$ | $O(n\log n)$ time, $O(n)$ memory |
+| `Mint lagrange_burmann_coefficient(const Fps& phi, const Fps& outer, int n)` | `phi[0] != 0` when `n > 0` | $[x^n]H(w)$, where `outer` stores $H$ | $O(n\log n)$ time, $O(n)$ memory |
+| `Mint compositional_inverse_coefficient(const Fps& f, int n)` | `f[0] == 0`, `f[1] != 0` | $[x^n]g$, where $f(g)=x$ | $O(n\log n)$ time, $O(n)$ memory |
+
+Each call returns only one coefficient. Calling it separately for every degree
+is not intended as a fast way to construct an entire compositional inverse.
+
+For `n == 0`, `lagrange_burmann_coefficient` returns $H(0)$ and
+`compositional_inverse_coefficient` returns zero.
+
+## Requirements
+
+`Mint` must satisfy the requirements of `FormalPowerSeries<Mint>`. The supplied
+static modular integers are supported. The modulus is assumed to be prime, and
+`n` must be smaller than the modulus so division by `n` is valid.
+
+Missing coefficients above a series' stored size are treated as zero. None of
+the input series are modified.
+
+## Complete Example
+
+```cpp
+#include "fps/lagrange_inversion.hpp"
+#include "math/modint.hpp"
+#include <iostream>
+
+using mint = m1une::math::modint998244353;
+using Fps = m1une::fps::FormalPowerSeries<mint>;
+
+int main() {
+    Fps phi = {1, 2, 1}; // phi(t) = (1+t)^2
+
+    // Here w is implicitly defined as w = x(1+w)^2.
+    mint coefficient_of_w =
+        m1une::fps::lagrange_inversion_coefficient(phi, 4);
+
+    Fps outer = {0, 0, 1}; // H(t) = t^2
+    mint coefficient_of_w_squared =
+        m1une::fps::lagrange_burmann_coefficient(phi, outer, 5);
+
+    std::cout << coefficient_of_w << "\n";         // 14
+    std::cout << coefficient_of_w_squared << "\n"; // 48
+}
+```
