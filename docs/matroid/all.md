@@ -23,6 +23,7 @@ algorithm always satisfies this precondition.
 | `matroid/graphic_matroid.hpp` | Forest independence on graph edges. |
 | `matroid/linear_matroid.hpp` | General field and 64-bit binary linear matroids. |
 | `matroid/matroid_intersection.hpp` | Maximum-cardinality common independent set. |
+| `matroid/weighted_matroid_intersection.hpp` | Minimum- or maximum-weight common independent set among those of maximum cardinality. |
 
 ## Example
 
