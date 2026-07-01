@@ -22,6 +22,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: matroid/uniform_matroid.hpp
     title: Uniform Matroid
+  - icon: ':heavy_check_mark:'
+    path: matroid/weighted_matroid_intersection.hpp
+    title: Weighted Matroid Intersection
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -222,16 +225,161 @@ data:
     \ const {\n        return _rank;\n    }\n\n    bool independent(const std::vector<int>&\
     \ subset) const {\n        return int(subset.size()) <= _rank;\n    }\n\n    bool\
     \ operator()(const std::vector<int>& subset) const {\n        return independent(subset);\n\
-    \    }\n};\n\n}  // namespace matroid\n}  // namespace m1une\n\n\n#line 9 \"matroid/all.hpp\"\
-    \n\n\n#line 12 \"verify/matroid/matroids.test.cpp\"\n\nusing mint = m1une::math::modint998244353;\n\
-    \nvoid test_uniform_matroid() {\n    m1une::matroid::UniformMatroid matroid(5,\
-    \ 2);\n    assert(matroid.size() == 5);\n    assert(matroid.rank() == 2);\n  \
-    \  assert(matroid(std::vector<int>{1, 4}));\n    assert(!matroid(std::vector<int>{0,\
-    \ 2, 3}));\n}\n\nvoid test_partition_matroid() {\n    std::vector<int> group =\
-    \ {0, 0, 1, 1, 1};\n    std::vector<int> capacity = {1, 2};\n    m1une::matroid::PartitionMatroid\
-    \ matroid(group, capacity);\n    assert(matroid.size() == 5);\n    assert(matroid.group_count()\
-    \ == 2);\n    assert(matroid.groups() == group);\n    assert(matroid.capacities()\
-    \ == capacity);\n    assert(matroid(std::vector<int>{0, 2, 4}));\n    assert(!matroid(std::vector<int>{0,\
+    \    }\n};\n\n}  // namespace matroid\n}  // namespace m1une\n\n\n#line 1 \"matroid/weighted_matroid_intersection.hpp\"\
+    \n\n\n\n#line 6 \"matroid/weighted_matroid_intersection.hpp\"\n#include <queue>\n\
+    #line 10 \"matroid/weighted_matroid_intersection.hpp\"\n\nnamespace m1une {\n\
+    namespace matroid {\n\ntemplate <class Weight>\nstruct WeightedMatroidIntersectionResult\
+    \ {\n    Weight total_weight = Weight(0);\n    std::vector<int> elements;\n\n\
+    \    int size() const {\n        return int(elements.size());\n    }\n\n    bool\
+    \ empty() const {\n        return elements.empty();\n    }\n};\n\nnamespace weighted_intersection_detail\
+    \ {\n\ntemplate <class Weight>\nstruct QueueGreater {\n    bool operator()(const\
+    \ std::pair<Weight, int>& lhs,\n                    const std::pair<Weight, int>&\
+    \ rhs) const {\n        if (rhs.first < lhs.first) return true;\n        if (lhs.first\
+    \ < rhs.first) return false;\n        return lhs.second > rhs.second;\n    }\n\
+    };\n\ntemplate <bool Maximize, class Weight>\nWeight objective_cost(const Weight&\
+    \ change) {\n    if constexpr (Maximize) {\n        return Weight(0) - change;\n\
+    \    } else {\n        return change;\n    }\n}\n\ntemplate <bool Maximize, class\
+    \ Weight, class IndependenceOracle1, class IndependenceOracle2,\n          class\
+    \ OnSolution>\nWeightedMatroidIntersectionResult<Weight> solve(\n    int ground_size,\
+    \ const std::vector<Weight>& weight, IndependenceOracle1 oracle1,\n    IndependenceOracle2\
+    \ oracle2, OnSolution on_solution) {\n    static_assert(!std::is_arithmetic_v<Weight>\
+    \ || std::is_signed_v<Weight>,\n                  \"Weight must support negative\
+    \ intermediate values\");\n    assert(0 <= ground_size);\n    assert(int(weight.size())\
+    \ == ground_size);\n\n    const int source_vertex = ground_size;\n    const int\
+    \ sink_vertex = ground_size + 1;\n    const int vertex_count = ground_size + 2;\n\
+    \    std::vector<char> selected(ground_size, false);\n    std::vector<int> elements;\n\
+    \    std::vector<int> position(ground_size, -1);\n    std::vector<Weight> potential(vertex_count,\
+    \ Weight(0));\n    Weight total_weight = Weight(0);\n    on_solution(0, total_weight,\
+    \ elements);\n\n    while (true) {\n        std::vector<std::vector<int>> adjacency(vertex_count);\n\
+    \        std::vector<int> sink_predecessors;\n\n        for (int x = 0; x < ground_size;\
+    \ x++) {\n            if (selected[x]) continue;\n            elements.push_back(x);\n\
+    \            bool source = oracle1(elements);\n            bool sink = oracle2(elements);\n\
+    \            elements.pop_back();\n            if (source) adjacency[source_vertex].push_back(x);\n\
+    \            if (sink) {\n                adjacency[x].push_back(sink_vertex);\n\
+    \                sink_predecessors.push_back(x);\n            }\n        }\n\n\
+    \        for (int y : elements) {\n            int index = position[y];\n    \
+    \        assert(index != -1 && elements[index] == y);\n            for (int x\
+    \ = 0; x < ground_size; x++) {\n                if (selected[x]) continue;\n \
+    \               elements[index] = x;\n                if (oracle1(elements)) adjacency[y].push_back(x);\n\
+    \                if (oracle2(elements)) adjacency[x].push_back(y);\n         \
+    \       elements[index] = y;\n            }\n        }\n\n        if (adjacency[source_vertex].empty()\
+    \ || sink_predecessors.empty()) break;\n\n        auto vertex_length = [&](int\
+    \ vertex) {\n            if (vertex >= ground_size) return Weight(0);\n      \
+    \      Weight change = selected[vertex] ? Weight(0) - weight[vertex] : weight[vertex];\n\
+    \            return objective_cost<Maximize>(change);\n        };\n        auto\
+    \ reduced_length = [&](int from, int to) {\n            return vertex_length(to)\
+    \ - potential[to] + potential[from];\n        };\n\n        int first_source =\
+    \ adjacency[source_vertex].front();\n        potential[source_vertex] = potential[first_source]\
+    \ - vertex_length(first_source);\n        for (int x : adjacency[source_vertex])\
+    \ {\n            Weight candidate = potential[x] - vertex_length(x);\n       \
+    \     if (potential[source_vertex] < candidate) potential[source_vertex] = candidate;\n\
+    \        }\n        potential[sink_vertex] = potential[sink_predecessors.front()];\n\
+    \        for (int x : sink_predecessors) {\n            if (potential[x] < potential[sink_vertex])\
+    \ potential[sink_vertex] = potential[x];\n        }\n        Weight source_potential\
+    \ = potential[source_vertex];\n        for (Weight& value : potential) value =\
+    \ value - source_potential;\n\n#ifndef NDEBUG\n        for (int from = 0; from\
+    \ < vertex_count; from++) {\n            for (int to : adjacency[from]) assert(!(reduced_length(from,\
+    \ to) < Weight(0)));\n        }\n#endif\n\n        // Dijkstra is performed lazily:\
+    \ fixed_distance is added to every\n        // not-yet-fixed potential at once,\
+    \ then materialized when a vertex is fixed.\n        using QueueEntry = std::pair<Weight,\
+    \ int>;\n        std::priority_queue<QueueEntry, std::vector<QueueEntry>, QueueGreater<Weight>>\
+    \ heap;\n        std::vector<char> fixed(vertex_count, false);\n        std::vector<char>\
+    \ has_distance(vertex_count, false);\n        std::vector<Weight> distance(vertex_count,\
+    \ Weight(0));\n        std::vector<int> previous(vertex_count, -1);\n        heap.push({Weight(0),\
+    \ source_vertex});\n        has_distance[source_vertex] = true;\n\n        Weight\
+    \ fixed_distance = Weight(0);\n        bool reached_sink = false;\n        std::vector<int>\
+    \ tight_stack;\n        tight_stack.reserve(vertex_count);\n        while (!heap.empty()\
+    \ && !reached_sink) {\n            int start = heap.top().second;\n          \
+    \  heap.pop();\n            if (fixed[start]) continue;\n            if (start\
+    \ != source_vertex) {\n                assert(previous[start] != -1);\n      \
+    \          fixed_distance = reduced_length(previous[start], start);\n        \
+    \    }\n\n            tight_stack.clear();\n            fixed[start] = true;\n\
+    \            potential[start] = potential[start] + fixed_distance;\n         \
+    \   tight_stack.push_back(start);\n\n            while (!tight_stack.empty() &&\
+    \ !reached_sink) {\n                int current = tight_stack.back();\n      \
+    \          tight_stack.pop_back();\n                if (current == sink_vertex)\
+    \ {\n                    reached_sink = true;\n                    break;\n  \
+    \              }\n                for (int next : adjacency[current]) {\n    \
+    \                if (fixed[next]) continue;\n                    Weight slack\
+    \ = reduced_length(current, next) - fixed_distance;\n                    assert(!(slack\
+    \ < Weight(0)));\n                    if (!(Weight(0) < slack)) {\n          \
+    \              previous[next] = current;\n                        fixed[next]\
+    \ = true;\n                        potential[next] = potential[next] + fixed_distance;\n\
+    \                        tight_stack.push_back(next);\n                    } else\
+    \ {\n                        Weight candidate = fixed_distance + slack;\n    \
+    \                    if (!has_distance[next] || candidate < distance[next]) {\n\
+    \                            has_distance[next] = true;\n                    \
+    \        distance[next] = candidate;\n                            previous[next]\
+    \ = current;\n                            heap.push({candidate, next});\n    \
+    \                    }\n                    }\n                }\n           \
+    \ }\n        }\n\n        for (int vertex = 0; vertex < vertex_count; vertex++)\
+    \ {\n            if (!fixed[vertex]) potential[vertex] = potential[vertex] + fixed_distance;\n\
+    \        }\n        if (!reached_sink) break;\n\n        std::fill(previous.begin(),\
+    \ previous.end(), -1);\n        std::vector<char> reached(vertex_count, false);\n\
+    \        std::vector<int> queue;\n        queue.reserve(vertex_count);\n     \
+    \   reached[source_vertex] = true;\n        queue.push_back(source_vertex);\n\
+    \        for (int head = 0; head < int(queue.size()) && !reached[sink_vertex];\
+    \ head++) {\n            int current = queue[head];\n            for (int next\
+    \ : adjacency[current]) {\n                if (reached[next]) continue;\n    \
+    \            Weight length = reduced_length(current, next);\n                assert(!(length\
+    \ < Weight(0)));\n                if (Weight(0) < length) continue;\n        \
+    \        reached[next] = true;\n                previous[next] = current;\n  \
+    \              queue.push_back(next);\n            }\n        }\n        assert(reached[sink_vertex]);\n\
+    \        if (!reached[sink_vertex]) break;\n\n        // A shortest tight path\
+    \ with the fewest edges preserves the potential invariant\n        // after its\
+    \ elements switch between the inside and outside of the solution.\n        for\
+    \ (int v = sink_vertex; v != source_vertex; v = previous[v]) {\n            assert(v\
+    \ != -1);\n            if (v < ground_size) {\n                potential[v] =\
+    \ potential[v] - vertex_length(v);\n                if (selected[v]) {\n     \
+    \               total_weight = total_weight - weight[v];\n                } else\
+    \ {\n                    total_weight = total_weight + weight[v];\n          \
+    \      }\n                selected[v] = !selected[v];\n            }\n       \
+    \ }\n\n        elements.clear();\n        std::fill(position.begin(), position.end(),\
+    \ -1);\n        for (int x = 0; x < ground_size; x++) {\n            if (!selected[x])\
+    \ continue;\n            position[x] = int(elements.size());\n            elements.push_back(x);\n\
+    \        }\n\n#ifndef NDEBUG\n        assert(oracle1(elements));\n        assert(oracle2(elements));\n\
+    #endif\n        on_solution(int(elements.size()), total_weight, elements);\n \
+    \   }\n\n    WeightedMatroidIntersectionResult<Weight> result;\n    result.elements\
+    \ = elements;\n    result.total_weight = total_weight;\n    return result;\n}\n\
+    \n}  // namespace weighted_intersection_detail\n\ntemplate <class Weight, class\
+    \ IndependenceOracle1, class IndependenceOracle2>\nWeightedMatroidIntersectionResult<Weight>\
+    \ weighted_matroid_intersection_max(\n    int ground_size, const std::vector<Weight>&\
+    \ weight, IndependenceOracle1 oracle1,\n    IndependenceOracle2 oracle2) {\n \
+    \   auto ignore = [](int, const Weight&, const std::vector<int>&) {};\n    return\
+    \ weighted_intersection_detail::solve<true>(ground_size, weight, oracle1, oracle2,\n\
+    \                                                      ignore);\n}\n\ntemplate\
+    \ <class Weight, class IndependenceOracle1, class IndependenceOracle2>\nWeightedMatroidIntersectionResult<Weight>\
+    \ weighted_matroid_intersection_min(\n    int ground_size, const std::vector<Weight>&\
+    \ weight, IndependenceOracle1 oracle1,\n    IndependenceOracle2 oracle2) {\n \
+    \   auto ignore = [](int, const Weight&, const std::vector<int>&) {};\n    return\
+    \ weighted_intersection_detail::solve<false>(ground_size, weight, oracle1, oracle2,\n\
+    \                                                       ignore);\n}\n\ntemplate\
+    \ <class Weight, class IndependenceOracle1, class IndependenceOracle2, class OnSolution>\n\
+    WeightedMatroidIntersectionResult<Weight> weighted_matroid_intersection_max_each(\n\
+    \    int ground_size, const std::vector<Weight>& weight, IndependenceOracle1 oracle1,\n\
+    \    IndependenceOracle2 oracle2, OnSolution on_solution) {\n    return weighted_intersection_detail::solve<true>(ground_size,\
+    \ weight, oracle1, oracle2,\n                                                \
+    \      on_solution);\n}\n\ntemplate <class Weight, class IndependenceOracle1,\
+    \ class IndependenceOracle2, class OnSolution>\nWeightedMatroidIntersectionResult<Weight>\
+    \ weighted_matroid_intersection_min_each(\n    int ground_size, const std::vector<Weight>&\
+    \ weight, IndependenceOracle1 oracle1,\n    IndependenceOracle2 oracle2, OnSolution\
+    \ on_solution) {\n    return weighted_intersection_detail::solve<false>(ground_size,\
+    \ weight, oracle1, oracle2,\n                                                \
+    \       on_solution);\n}\n\ntemplate <class Weight, class IndependenceOracle1,\
+    \ class IndependenceOracle2>\nWeightedMatroidIntersectionResult<Weight> weighted_matroid_intersection(\n\
+    \    int ground_size, const std::vector<Weight>& weight, IndependenceOracle1 oracle1,\n\
+    \    IndependenceOracle2 oracle2) {\n    return weighted_matroid_intersection_max(ground_size,\
+    \ weight, oracle1, oracle2);\n}\n\n}  // namespace matroid\n}  // namespace m1une\n\
+    \n\n#line 10 \"matroid/all.hpp\"\n\n\n#line 12 \"verify/matroid/matroids.test.cpp\"\
+    \n\nusing mint = m1une::math::modint998244353;\n\nvoid test_uniform_matroid()\
+    \ {\n    m1une::matroid::UniformMatroid matroid(5, 2);\n    assert(matroid.size()\
+    \ == 5);\n    assert(matroid.rank() == 2);\n    assert(matroid(std::vector<int>{1,\
+    \ 4}));\n    assert(!matroid(std::vector<int>{0, 2, 3}));\n}\n\nvoid test_partition_matroid()\
+    \ {\n    std::vector<int> group = {0, 0, 1, 1, 1};\n    std::vector<int> capacity\
+    \ = {1, 2};\n    m1une::matroid::PartitionMatroid matroid(group, capacity);\n\
+    \    assert(matroid.size() == 5);\n    assert(matroid.group_count() == 2);\n \
+    \   assert(matroid.groups() == group);\n    assert(matroid.capacities() == capacity);\n\
+    \    assert(matroid(std::vector<int>{0, 2, 4}));\n    assert(!matroid(std::vector<int>{0,\
     \ 1}));\n    assert(!matroid(std::vector<int>{2, 3, 4}));\n}\n\nvoid test_graphic_matroid()\
     \ {\n    std::vector<std::pair<int, int>> edges = {\n        {0, 1}, {1, 2}, {2,\
     \ 0}, {2, 3}, {3, 3}\n    };\n    m1une::matroid::GraphicMatroid matroid(4, edges);\n\
@@ -314,10 +462,11 @@ data:
   - matroid/matroid_intersection.hpp
   - matroid/partition_matroid.hpp
   - matroid/uniform_matroid.hpp
+  - matroid/weighted_matroid_intersection.hpp
   isVerificationFile: true
   path: verify/matroid/matroids.test.cpp
   requiredBy: []
-  timestamp: '2026-07-01 14:11:51+09:00'
+  timestamp: '2026-07-01 14:47:47+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/matroid/matroids.test.cpp

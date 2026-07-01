@@ -508,6 +508,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: matroid/uniform_matroid.hpp
       title: Uniform Matroid
+    - icon: ':heavy_check_mark:'
+      path: matroid/weighted_matroid_intersection.hpp
+      title: Weighted Matroid Intersection
   - name: monge
     pages:
     - icon: ':heavy_check_mark:'
@@ -1183,6 +1186,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/matroid/matroids.test.cpp
       title: verify/matroid/matroids.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/matroid/weighted_matroid_intersection.test.cpp
+      title: verify/matroid/weighted_matroid_intersection.test.cpp
   - name: verify/monge
     pages:
     - icon: ':heavy_check_mark:'

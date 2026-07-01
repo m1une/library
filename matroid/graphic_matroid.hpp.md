@@ -12,6 +12,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/matroid/matroids.test.cpp
     title: verify/matroid/matroids.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/matroid/weighted_matroid_intersection.test.cpp
+    title: verify/matroid/weighted_matroid_intersection.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -75,6 +78,7 @@ data:
   verifiedWith:
   - verify/matroid/matroids.test.cpp
   - verify/matroid/matroid_intersection.test.cpp
+  - verify/matroid/weighted_matroid_intersection.test.cpp
 documentation_of: matroid/graphic_matroid.hpp
 layout: document
 title: Graphic Matroid
