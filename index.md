@@ -488,6 +488,26 @@ data:
     - icon: ':heavy_check_mark:'
       path: matrix/matrix.hpp
       title: Dense Matrix
+  - name: matroid
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: matroid/all.hpp
+      title: Matroid All
+    - icon: ':heavy_check_mark:'
+      path: matroid/graphic_matroid.hpp
+      title: Graphic Matroid
+    - icon: ':heavy_check_mark:'
+      path: matroid/linear_matroid.hpp
+      title: Linear Matroid
+    - icon: ':heavy_check_mark:'
+      path: matroid/matroid_intersection.hpp
+      title: Matroid Intersection
+    - icon: ':heavy_check_mark:'
+      path: matroid/partition_matroid.hpp
+      title: Partition Matroid
+    - icon: ':heavy_check_mark:'
+      path: matroid/uniform_matroid.hpp
+      title: Uniform Matroid
   - name: monge
     pages:
     - icon: ':heavy_check_mark:'
@@ -1147,6 +1167,14 @@ data:
     - icon: ':heavy_check_mark:'
       path: verify/matrix/matrix_product.test.cpp
       title: verify/matrix/matrix_product.test.cpp
+  - name: verify/matroid
+    pages:
+    - icon: ':heavy_check_mark:'
+      path: verify/matroid/matroid_intersection.test.cpp
+      title: verify/matroid/matroid_intersection.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: verify/matroid/matroids.test.cpp
+      title: verify/matroid/matroids.test.cpp
   - name: verify/monge
     pages:
     - icon: ':heavy_check_mark:'

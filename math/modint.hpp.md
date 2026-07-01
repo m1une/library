@@ -159,6 +159,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/matrix/matrix_product.test.cpp
     title: verify/matrix/matrix_product.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/matroid/matroids.test.cpp
+    title: verify/matroid/matroids.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
   _verificationStatusIcon: ':question:'
@@ -322,6 +325,7 @@ data:
   - verify/matrix/inverse_matrix.test.cpp
   - verify/matrix/matrix.test.cpp
   - verify/matrix/matrix_product.test.cpp
+  - verify/matroid/matroids.test.cpp
 documentation_of: math/modint.hpp
 layout: document
 title: ModInt
