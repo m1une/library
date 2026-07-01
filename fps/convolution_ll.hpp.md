@@ -7,35 +7,38 @@ data:
   - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
+  _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: math/modint.hpp
-    title: ModInt
-  _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+    path: fps/all.hpp
+    title: Formal Power Series All
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/convolution_ll.test.cpp
+    title: verify/fps/convolution_ll.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/fps_algorithms.test.cpp
+    title: verify/fps/fps_algorithms.test.cpp
   _isVerificationFailed: false
-  _pathExtension: cpp
+  _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/convolution_mod
-    links:
-    - https://judge.yosupo.jp/problem/convolution_mod
-  bundledCode: "#line 1 \"verify/fps/convolution_mod.test.cpp\"\n#define PROBLEM \"\
-    https://judge.yosupo.jp/problem/convolution_mod\"\n\n#include <iostream>\n#include\
-    \ <vector>\n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <array>\n#include <cassert>\n#include <cstdint>\n#include <utility>\n#line 10\
-    \ \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 6 \"math/modint.hpp\"\
-    \n#include <type_traits>\n#line 8 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n    static_assert(0\
-    \ < Modulus, \"Modulus must be positive\");\n\n   private:\n    uint32_t _v;\n\
-    \n   public:\n    static constexpr uint32_t mod() {\n        return Modulus;\n\
-    \    }\n\n    static constexpr ModInt raw(uint32_t v) noexcept {\n        ModInt\
-    \ x;\n        x._v = v;\n        return x;\n    }\n\n    constexpr ModInt() noexcept\
-    \ : _v(0) {}\n\n    template <class Integer, std::enable_if_t<std::is_integral_v<Integer>,\
-    \ int> = 0>\n    constexpr ModInt(Integer v) noexcept {\n        if constexpr\
-    \ (std::is_signed_v<Integer>) {\n            int64_t x = static_cast<int64_t>(v)\
-    \ % static_cast<int64_t>(Modulus);\n            if (x < 0) x += Modulus;\n   \
-    \         _v = static_cast<uint32_t>(x);\n        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
+    links: []
+  bundledCode: "#line 1 \"fps/convolution_ll.hpp\"\n\n\n\n#include <cassert>\n#include\
+    \ <cstdint>\n#include <limits>\n#include <vector>\n\n#line 1 \"fps/convolution.hpp\"\
+    \n\n\n\n#include <algorithm>\n#include <array>\n#line 8 \"fps/convolution.hpp\"\
+    \n#include <utility>\n#line 10 \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\
+    \n\n\n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n#include <type_traits>\n\
+    #line 8 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace math {\n\ntemplate\
+    \ <uint32_t Modulus>\nstruct ModInt {\n    static_assert(0 < Modulus, \"Modulus\
+    \ must be positive\");\n\n   private:\n    uint32_t _v;\n\n   public:\n    static\
+    \ constexpr uint32_t mod() {\n        return Modulus;\n    }\n\n    static constexpr\
+    \ ModInt raw(uint32_t v) noexcept {\n        ModInt x;\n        x._v = v;\n  \
+    \      return x;\n    }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    template\
+    \ <class Integer, std::enable_if_t<std::is_integral_v<Integer>, int> = 0>\n  \
+    \  constexpr ModInt(Integer v) noexcept {\n        if constexpr (std::is_signed_v<Integer>)\
+    \ {\n            int64_t x = static_cast<int64_t>(v) % static_cast<int64_t>(Modulus);\n\
+    \            if (x < 0) x += Modulus;\n            _v = static_cast<uint32_t>(x);\n\
+    \        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
     \ % Modulus);\n        }\n    }\n\n    constexpr uint32_t val() const noexcept\
     \ {\n        return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept\
     \ {\n        _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n\
@@ -167,36 +170,156 @@ data:
     \        value = (value + mod1_target * (first % target_mod)) % target_mod;\n\
     \        value = (value + mod1_mod2_target * (second % target_mod)) % target_mod;\n\
     \        result[i] = Mint::raw(uint32_t(value));\n    }\n    return result;\n\
-    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 8 \"verify/fps/convolution_mod.test.cpp\"\
-    \n\nusing mint = m1une::math::modint998244353;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    int n, m;\n    std::cin >> n >> m;\n    std::vector<mint>\
-    \ a(n), b(m);\n    for (mint& value : a) std::cin >> value;\n    for (mint& value\
-    \ : b) std::cin >> value;\n    std::vector<mint> result = m1une::fps::convolution(a,\
-    \ b);\n    for (int i = 0; i < int(result.size()); i++) {\n        if (i) std::cout\
-    \ << ' ';\n        std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/convolution_mod\"\n\n#include\
-    \ <iostream>\n#include <vector>\n\n#include \"../../fps/convolution.hpp\"\n#include\
-    \ \"../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\n\
-    int main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
-    \n    int n, m;\n    std::cin >> n >> m;\n    std::vector<mint> a(n), b(m);\n\
-    \    for (mint& value : a) std::cin >> value;\n    for (mint& value : b) std::cin\
-    \ >> value;\n    std::vector<mint> result = m1une::fps::convolution(a, b);\n \
-    \   for (int i = 0; i < int(result.size()); i++) {\n        if (i) std::cout <<\
-    \ ' ';\n        std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
+    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 11 \"fps/convolution_ll.hpp\"\
+    \n\nnamespace m1une {\nnamespace fps {\n\n// Exact convolution of signed 64-bit\
+    \ coefficients.\n// Every result coefficient must fit in long long.\ninline std::vector<long\
+    \ long> convolution_ll(\n    const std::vector<long long>& first,\n    const std::vector<long\
+    \ long>& second\n) {\n    if (first.empty() || second.empty()) return {};\n  \
+    \  std::size_t result_size = first.size() + second.size() - 1;\n    assert(result_size\
+    \ <= (std::size_t(1) << 24));\n\n    using Mint1 = math::ModInt<167772161>;\n\
+    \    using Mint2 = math::ModInt<469762049>;\n    using Mint3 = math::ModInt<754974721>;\n\
+    \n    auto convolve = [&]<class Mint>() {\n        std::vector<Mint> converted_first(first.size());\n\
+    \        std::vector<Mint> converted_second(second.size());\n        for (int\
+    \ index = 0; index < int(first.size()); index++) {\n            converted_first[index]\
+    \ = Mint(first[index]);\n        }\n        for (int index = 0; index < int(second.size());\
+    \ index++) {\n            converted_second[index] = Mint(second[index]);\n   \
+    \     }\n        return convolution(converted_first, converted_second);\n    };\n\
+    \n    std::vector<Mint1> result1 = convolve.template operator()<Mint1>();\n  \
+    \  std::vector<Mint2> result2 = convolve.template operator()<Mint2>();\n    std::vector<Mint3>\
+    \ result3 = convolve.template operator()<Mint3>();\n\n    static const std::uint64_t\
+    \ inverse_mod1_mod2 =\n        Mint2(Mint1::mod()).inv().val();\n    static const\
+    \ std::uint64_t mod1_mod2 =\n        std::uint64_t(Mint1::mod()) * Mint2::mod();\n\
+    \    static const std::uint64_t inverse_mod1_mod2_mod3 =\n        Mint3(mod1_mod2\
+    \ % Mint3::mod()).inv().val();\n    static const unsigned __int128 crt_modulus\
+    \ =\n        static_cast<unsigned __int128>(mod1_mod2) * Mint3::mod();\n\n   \
+    \ std::vector<long long> result(result_size);\n    for (int index = 0; index <\
+    \ int(result_size); index++) {\n        std::uint64_t residue1 = result1[index].val();\n\
+    \        std::uint64_t residue2 = result2[index].val();\n        std::uint64_t\
+    \ residue3 = result3[index].val();\n\n        std::uint64_t second_digit =\n \
+    \           (residue2 + Mint2::mod() - residue1 % Mint2::mod()) %\n          \
+    \  Mint2::mod();\n        second_digit = second_digit * inverse_mod1_mod2 % Mint2::mod();\n\
+    \        std::uint64_t first_two =\n            residue1 + std::uint64_t(Mint1::mod())\
+    \ * second_digit;\n\n        std::uint64_t third_digit =\n            (residue3\
+    \ + Mint3::mod() - first_two % Mint3::mod()) %\n            Mint3::mod();\n  \
+    \      third_digit =\n            third_digit * inverse_mod1_mod2_mod3 % Mint3::mod();\n\
+    \n        unsigned __int128 reconstructed =\n            first_two + static_cast<unsigned\
+    \ __int128>(mod1_mod2) * third_digit;\n        __int128 centered = reconstructed\
+    \ <= crt_modulus / 2\n                                ? static_cast<__int128>(reconstructed)\n\
+    \                                : -static_cast<__int128>(crt_modulus - reconstructed);\n\
+    \        assert(std::numeric_limits<long long>::min() <= centered);\n        assert(centered\
+    \ <= std::numeric_limits<long long>::max());\n        result[index] = static_cast<long\
+    \ long>(centered);\n    }\n    return result;\n}\n\n}  // namespace fps\n}  //\
+    \ namespace m1une\n\n\n"
+  code: "#ifndef M1UNE_FPS_CONVOLUTION_LL_HPP\n#define M1UNE_FPS_CONVOLUTION_LL_HPP\
+    \ 1\n\n#include <cassert>\n#include <cstdint>\n#include <limits>\n#include <vector>\n\
+    \n#include \"convolution.hpp\"\n#include \"../math/modint.hpp\"\n\nnamespace m1une\
+    \ {\nnamespace fps {\n\n// Exact convolution of signed 64-bit coefficients.\n\
+    // Every result coefficient must fit in long long.\ninline std::vector<long long>\
+    \ convolution_ll(\n    const std::vector<long long>& first,\n    const std::vector<long\
+    \ long>& second\n) {\n    if (first.empty() || second.empty()) return {};\n  \
+    \  std::size_t result_size = first.size() + second.size() - 1;\n    assert(result_size\
+    \ <= (std::size_t(1) << 24));\n\n    using Mint1 = math::ModInt<167772161>;\n\
+    \    using Mint2 = math::ModInt<469762049>;\n    using Mint3 = math::ModInt<754974721>;\n\
+    \n    auto convolve = [&]<class Mint>() {\n        std::vector<Mint> converted_first(first.size());\n\
+    \        std::vector<Mint> converted_second(second.size());\n        for (int\
+    \ index = 0; index < int(first.size()); index++) {\n            converted_first[index]\
+    \ = Mint(first[index]);\n        }\n        for (int index = 0; index < int(second.size());\
+    \ index++) {\n            converted_second[index] = Mint(second[index]);\n   \
+    \     }\n        return convolution(converted_first, converted_second);\n    };\n\
+    \n    std::vector<Mint1> result1 = convolve.template operator()<Mint1>();\n  \
+    \  std::vector<Mint2> result2 = convolve.template operator()<Mint2>();\n    std::vector<Mint3>\
+    \ result3 = convolve.template operator()<Mint3>();\n\n    static const std::uint64_t\
+    \ inverse_mod1_mod2 =\n        Mint2(Mint1::mod()).inv().val();\n    static const\
+    \ std::uint64_t mod1_mod2 =\n        std::uint64_t(Mint1::mod()) * Mint2::mod();\n\
+    \    static const std::uint64_t inverse_mod1_mod2_mod3 =\n        Mint3(mod1_mod2\
+    \ % Mint3::mod()).inv().val();\n    static const unsigned __int128 crt_modulus\
+    \ =\n        static_cast<unsigned __int128>(mod1_mod2) * Mint3::mod();\n\n   \
+    \ std::vector<long long> result(result_size);\n    for (int index = 0; index <\
+    \ int(result_size); index++) {\n        std::uint64_t residue1 = result1[index].val();\n\
+    \        std::uint64_t residue2 = result2[index].val();\n        std::uint64_t\
+    \ residue3 = result3[index].val();\n\n        std::uint64_t second_digit =\n \
+    \           (residue2 + Mint2::mod() - residue1 % Mint2::mod()) %\n          \
+    \  Mint2::mod();\n        second_digit = second_digit * inverse_mod1_mod2 % Mint2::mod();\n\
+    \        std::uint64_t first_two =\n            residue1 + std::uint64_t(Mint1::mod())\
+    \ * second_digit;\n\n        std::uint64_t third_digit =\n            (residue3\
+    \ + Mint3::mod() - first_two % Mint3::mod()) %\n            Mint3::mod();\n  \
+    \      third_digit =\n            third_digit * inverse_mod1_mod2_mod3 % Mint3::mod();\n\
+    \n        unsigned __int128 reconstructed =\n            first_two + static_cast<unsigned\
+    \ __int128>(mod1_mod2) * third_digit;\n        __int128 centered = reconstructed\
+    \ <= crt_modulus / 2\n                                ? static_cast<__int128>(reconstructed)\n\
+    \                                : -static_cast<__int128>(crt_modulus - reconstructed);\n\
+    \        assert(std::numeric_limits<long long>::min() <= centered);\n        assert(centered\
+    \ <= std::numeric_limits<long long>::max());\n        result[index] = static_cast<long\
+    \ long>(centered);\n    }\n    return result;\n}\n\n}  // namespace fps\n}  //\
+    \ namespace m1une\n\n#endif  // M1UNE_FPS_CONVOLUTION_LL_HPP\n"
   dependsOn:
   - fps/convolution.hpp
   - math/modint.hpp
-  - math/modint.hpp
-  isVerificationFile: true
-  path: verify/fps/convolution_mod.test.cpp
-  requiredBy: []
+  isVerificationFile: false
+  path: fps/convolution_ll.hpp
+  requiredBy:
+  - fps/all.hpp
   timestamp: '2026-07-01 22:52:49+09:00'
-  verificationStatus: TEST_ACCEPTED
-  verifiedWith: []
-documentation_of: verify/fps/convolution_mod.test.cpp
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - verify/fps/convolution_ll.test.cpp
+  - verify/fps/fps_algorithms.test.cpp
+documentation_of: fps/convolution_ll.hpp
 layout: document
-redirect_from:
-- /verify/verify/fps/convolution_mod.test.cpp
-- /verify/verify/fps/convolution_mod.test.cpp.html
-title: verify/fps/convolution_mod.test.cpp
+title: Long Long Convolution
 ---
+
+## Overview
+
+`convolution_ll` computes an exact polynomial convolution whose inputs and
+outputs use signed `long long` coefficients.
+
+It performs convolution modulo three NTT-friendly primes and reconstructs each
+signed coefficient with the Chinese remainder theorem. Unlike FFT followed by
+rounding, the result has no floating-point error.
+
+## Function
+
+```cpp
+std::vector<long long> convolution_ll(
+    const std::vector<long long>& first,
+    const std::vector<long long>& second);
+```
+
+The coefficient at index `k` is
+
+$$
+\sum_{i+j=k} \text{first}[i]\,\text{second}[j].
+$$
+
+If either input is empty, the result is empty. Otherwise, the result has
+`first.size() + second.size() - 1` coefficients.
+
+Every exact result coefficient must fit in signed `long long`. Individual
+products and intermediate mathematical sums may exceed 64 bits. The required
+NTT length must not exceed $2^{24}$.
+
+| Function | Complexity |
+| --- | --- |
+| `convolution_ll(first, second)` | $O(L\log L)$ time and $O(L)$ memory. |
+
+Here $L$ is the output length rounded up to a power of two. Small inputs use
+the modular convolution implementation's quadratic cutoff.
+
+## Example
+
+```cpp
+#include "fps/convolution_ll.hpp"
+
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<long long> first = {1, -2, 3};
+    std::vector<long long> second = {4, 5};
+    auto result = m1une::fps::convolution_ll(first, second);
+
+    for (long long value : result) std::cout << value << " ";
+    std::cout << "\n"; // 4 -3 2 15
+}
+```

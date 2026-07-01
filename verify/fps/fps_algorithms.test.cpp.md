@@ -8,6 +8,9 @@ data:
     path: fps/convolution.hpp
     title: Convolution
   - icon: ':heavy_check_mark:'
+    path: fps/convolution_ll.hpp
+    title: Long Long Convolution
+  - icon: ':heavy_check_mark:'
     path: fps/floating_point_convolution.hpp
     title: Floating-Point Convolution
   - icon: ':heavy_check_mark:'
@@ -155,11 +158,11 @@ data:
     \    while (n < result_size) n <<= 1;\n    if ((Mint::mod() - 1) % uint32_t(n)\
     \ == 0) return convolution_ntt(a, b);\n\n    using Mint1 = math::ModInt<167772161>;\n\
     \    using Mint2 = math::ModInt<469762049>;\n    using Mint3 = math::ModInt<754974721>;\n\
-    \    assert(n <= (1 << 24));\n\n    const unsigned __int128 coefficient_bound\
+    \    assert(n <= (1 << 24));\n\n    [[maybe_unused]] const unsigned __int128 coefficient_bound\
     \ =\n        static_cast<unsigned __int128>(std::min(a.size(), b.size())) * (Mint::mod()\
-    \ - 1) *\n        (Mint::mod() - 1);\n    const unsigned __int128 crt_modulus\
-    \ =\n        static_cast<unsigned __int128>(Mint1::mod()) * Mint2::mod() * Mint3::mod();\n\
-    \    assert(coefficient_bound < crt_modulus);\n\n    auto converted_convolution\
+    \ - 1) *\n        (Mint::mod() - 1);\n    [[maybe_unused]] const unsigned __int128\
+    \ crt_modulus =\n        static_cast<unsigned __int128>(Mint1::mod()) * Mint2::mod()\
+    \ * Mint3::mod();\n    assert(coefficient_bound < crt_modulus);\n\n    auto converted_convolution\
     \ = [&]<class OtherMint>() {\n        std::vector<OtherMint> converted_a(a.size());\n\
     \        std::vector<OtherMint> converted_b(b.size());\n        for (int i = 0;\
     \ i < int(a.size()); i++) converted_a[i] = OtherMint(a[i].val());\n        for\
@@ -186,16 +189,55 @@ data:
     \        value = (value + mod1_target * (first % target_mod)) % target_mod;\n\
     \        value = (value + mod1_mod2_target * (second % target_mod)) % target_mod;\n\
     \        result[i] = Mint::raw(uint32_t(value));\n    }\n    return result;\n\
-    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 1 \"fps/floating_point_convolution.hpp\"\
-    \n\n\n\n#line 5 \"fps/floating_point_convolution.hpp\"\n#include <bit>\n#include\
-    \ <cmath>\n#include <complex>\n#include <concepts>\n#include <numbers>\n#line\
-    \ 12 \"fps/floating_point_convolution.hpp\"\n\nnamespace m1une {\nnamespace fps\
-    \ {\n\nnamespace floating_point_convolution_detail {\n\ntemplate <std::floating_point\
-    \ Real>\nvoid fft(std::vector<std::complex<Real>>& values, bool inverse) {\n \
-    \   int size = int(values.size());\n    for (int index = 1, reversed = 0; index\
-    \ < size; ++index) {\n        int bit = size >> 1;\n        while (reversed &\
-    \ bit) {\n            reversed ^= bit;\n            bit >>= 1;\n        }\n  \
-    \      reversed ^= bit;\n        if (index < reversed) std::swap(values[index],\
+    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 1 \"fps/convolution_ll.hpp\"\
+    \n\n\n\n#line 6 \"fps/convolution_ll.hpp\"\n#include <limits>\n#line 8 \"fps/convolution_ll.hpp\"\
+    \n\n#line 11 \"fps/convolution_ll.hpp\"\n\nnamespace m1une {\nnamespace fps {\n\
+    \n// Exact convolution of signed 64-bit coefficients.\n// Every result coefficient\
+    \ must fit in long long.\ninline std::vector<long long> convolution_ll(\n    const\
+    \ std::vector<long long>& first,\n    const std::vector<long long>& second\n)\
+    \ {\n    if (first.empty() || second.empty()) return {};\n    std::size_t result_size\
+    \ = first.size() + second.size() - 1;\n    assert(result_size <= (std::size_t(1)\
+    \ << 24));\n\n    using Mint1 = math::ModInt<167772161>;\n    using Mint2 = math::ModInt<469762049>;\n\
+    \    using Mint3 = math::ModInt<754974721>;\n\n    auto convolve = [&]<class Mint>()\
+    \ {\n        std::vector<Mint> converted_first(first.size());\n        std::vector<Mint>\
+    \ converted_second(second.size());\n        for (int index = 0; index < int(first.size());\
+    \ index++) {\n            converted_first[index] = Mint(first[index]);\n     \
+    \   }\n        for (int index = 0; index < int(second.size()); index++) {\n  \
+    \          converted_second[index] = Mint(second[index]);\n        }\n       \
+    \ return convolution(converted_first, converted_second);\n    };\n\n    std::vector<Mint1>\
+    \ result1 = convolve.template operator()<Mint1>();\n    std::vector<Mint2> result2\
+    \ = convolve.template operator()<Mint2>();\n    std::vector<Mint3> result3 = convolve.template\
+    \ operator()<Mint3>();\n\n    static const std::uint64_t inverse_mod1_mod2 =\n\
+    \        Mint2(Mint1::mod()).inv().val();\n    static const std::uint64_t mod1_mod2\
+    \ =\n        std::uint64_t(Mint1::mod()) * Mint2::mod();\n    static const std::uint64_t\
+    \ inverse_mod1_mod2_mod3 =\n        Mint3(mod1_mod2 % Mint3::mod()).inv().val();\n\
+    \    static const unsigned __int128 crt_modulus =\n        static_cast<unsigned\
+    \ __int128>(mod1_mod2) * Mint3::mod();\n\n    std::vector<long long> result(result_size);\n\
+    \    for (int index = 0; index < int(result_size); index++) {\n        std::uint64_t\
+    \ residue1 = result1[index].val();\n        std::uint64_t residue2 = result2[index].val();\n\
+    \        std::uint64_t residue3 = result3[index].val();\n\n        std::uint64_t\
+    \ second_digit =\n            (residue2 + Mint2::mod() - residue1 % Mint2::mod())\
+    \ %\n            Mint2::mod();\n        second_digit = second_digit * inverse_mod1_mod2\
+    \ % Mint2::mod();\n        std::uint64_t first_two =\n            residue1 + std::uint64_t(Mint1::mod())\
+    \ * second_digit;\n\n        std::uint64_t third_digit =\n            (residue3\
+    \ + Mint3::mod() - first_two % Mint3::mod()) %\n            Mint3::mod();\n  \
+    \      third_digit =\n            third_digit * inverse_mod1_mod2_mod3 % Mint3::mod();\n\
+    \n        unsigned __int128 reconstructed =\n            first_two + static_cast<unsigned\
+    \ __int128>(mod1_mod2) * third_digit;\n        __int128 centered = reconstructed\
+    \ <= crt_modulus / 2\n                                ? static_cast<__int128>(reconstructed)\n\
+    \                                : -static_cast<__int128>(crt_modulus - reconstructed);\n\
+    \        assert(std::numeric_limits<long long>::min() <= centered);\n        assert(centered\
+    \ <= std::numeric_limits<long long>::max());\n        result[index] = static_cast<long\
+    \ long>(centered);\n    }\n    return result;\n}\n\n}  // namespace fps\n}  //\
+    \ namespace m1une\n\n\n#line 1 \"fps/floating_point_convolution.hpp\"\n\n\n\n\
+    #line 5 \"fps/floating_point_convolution.hpp\"\n#include <bit>\n#include <cmath>\n\
+    #include <complex>\n#include <concepts>\n#include <numbers>\n#line 12 \"fps/floating_point_convolution.hpp\"\
+    \n\nnamespace m1une {\nnamespace fps {\n\nnamespace floating_point_convolution_detail\
+    \ {\n\ntemplate <std::floating_point Real>\nvoid fft(std::vector<std::complex<Real>>&\
+    \ values, bool inverse) {\n    int size = int(values.size());\n    for (int index\
+    \ = 1, reversed = 0; index < size; ++index) {\n        int bit = size >> 1;\n\
+    \        while (reversed & bit) {\n            reversed ^= bit;\n            bit\
+    \ >>= 1;\n        }\n        reversed ^= bit;\n        if (index < reversed) std::swap(values[index],\
     \ values[reversed]);\n    }\n\n    for (int length = 2; length <= size; length\
     \ <<= 1) {\n        Real angle = Real(2) * std::numbers::pi_v<Real> / Real(length);\n\
     \        if (inverse) angle = -angle;\n        std::complex<Real> step(std::cos(angle),\
@@ -469,7 +511,7 @@ data:
     }\n\ntemplate <class Mint>\nFormalPowerSeries<Mint> polynomial_interpolate(const\
     \ std::vector<Mint>& points,\n                                               const\
     \ std::vector<Mint>& values) {\n    return SubproductTree<Mint>(points).interpolate(values);\n\
-    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 10 \"fps/all.hpp\"\n\
+    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 11 \"fps/all.hpp\"\n\
     \n\n#line 11 \"verify/fps/fps_algorithms.test.cpp\"\n\nusing mint = m1une::math::modint998244353;\n\
     using mint1e9 = m1une::math::modint1000000007;\nusing Fps = m1une::fps::FormalPowerSeries<mint>;\n\
     \ntemplate <class Mint>\nvoid assert_equal(const std::vector<Mint>& lhs, const\
@@ -592,6 +634,7 @@ data:
   - fps/all.hpp
   - fps/convolution.hpp
   - math/modint.hpp
+  - fps/convolution_ll.hpp
   - fps/floating_point_convolution.hpp
   - fps/formal_power_series.hpp
   - fps/lagrange_inversion.hpp
@@ -601,7 +644,7 @@ data:
   isVerificationFile: true
   path: verify/fps/fps_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-07-01 14:11:51+09:00'
+  timestamp: '2026-07-01 22:52:49+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/fps/fps_algorithms.test.cpp

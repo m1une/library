@@ -9,6 +9,9 @@ data:
     path: fps/all.hpp
     title: Formal Power Series All
   - icon: ':heavy_check_mark:'
+    path: fps/convolution_ll.hpp
+    title: Long Long Convolution
+  - icon: ':heavy_check_mark:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':heavy_check_mark:'
@@ -27,6 +30,9 @@ data:
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
   _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/convolution_ll.test.cpp
+    title: verify/fps/convolution_ll.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/fps/convolution_mod.test.cpp
     title: verify/fps/convolution_mod.test.cpp
@@ -191,11 +197,11 @@ data:
     \    while (n < result_size) n <<= 1;\n    if ((Mint::mod() - 1) % uint32_t(n)\
     \ == 0) return convolution_ntt(a, b);\n\n    using Mint1 = math::ModInt<167772161>;\n\
     \    using Mint2 = math::ModInt<469762049>;\n    using Mint3 = math::ModInt<754974721>;\n\
-    \    assert(n <= (1 << 24));\n\n    const unsigned __int128 coefficient_bound\
+    \    assert(n <= (1 << 24));\n\n    [[maybe_unused]] const unsigned __int128 coefficient_bound\
     \ =\n        static_cast<unsigned __int128>(std::min(a.size(), b.size())) * (Mint::mod()\
-    \ - 1) *\n        (Mint::mod() - 1);\n    const unsigned __int128 crt_modulus\
-    \ =\n        static_cast<unsigned __int128>(Mint1::mod()) * Mint2::mod() * Mint3::mod();\n\
-    \    assert(coefficient_bound < crt_modulus);\n\n    auto converted_convolution\
+    \ - 1) *\n        (Mint::mod() - 1);\n    [[maybe_unused]] const unsigned __int128\
+    \ crt_modulus =\n        static_cast<unsigned __int128>(Mint1::mod()) * Mint2::mod()\
+    \ * Mint3::mod();\n    assert(coefficient_bound < crt_modulus);\n\n    auto converted_convolution\
     \ = [&]<class OtherMint>() {\n        std::vector<OtherMint> converted_a(a.size());\n\
     \        std::vector<OtherMint> converted_b(b.size());\n        for (int i = 0;\
     \ i < int(a.size()); i++) converted_a[i] = OtherMint(a[i].val());\n        for\
@@ -288,11 +294,11 @@ data:
     \    while (n < result_size) n <<= 1;\n    if ((Mint::mod() - 1) % uint32_t(n)\
     \ == 0) return convolution_ntt(a, b);\n\n    using Mint1 = math::ModInt<167772161>;\n\
     \    using Mint2 = math::ModInt<469762049>;\n    using Mint3 = math::ModInt<754974721>;\n\
-    \    assert(n <= (1 << 24));\n\n    const unsigned __int128 coefficient_bound\
+    \    assert(n <= (1 << 24));\n\n    [[maybe_unused]] const unsigned __int128 coefficient_bound\
     \ =\n        static_cast<unsigned __int128>(std::min(a.size(), b.size())) * (Mint::mod()\
-    \ - 1) *\n        (Mint::mod() - 1);\n    const unsigned __int128 crt_modulus\
-    \ =\n        static_cast<unsigned __int128>(Mint1::mod()) * Mint2::mod() * Mint3::mod();\n\
-    \    assert(coefficient_bound < crt_modulus);\n\n    auto converted_convolution\
+    \ - 1) *\n        (Mint::mod() - 1);\n    [[maybe_unused]] const unsigned __int128\
+    \ crt_modulus =\n        static_cast<unsigned __int128>(Mint1::mod()) * Mint2::mod()\
+    \ * Mint3::mod();\n    assert(coefficient_bound < crt_modulus);\n\n    auto converted_convolution\
     \ = [&]<class OtherMint>() {\n        std::vector<OtherMint> converted_a(a.size());\n\
     \        std::vector<OtherMint> converted_b(b.size());\n        for (int i = 0;\
     \ i < int(a.size()); i++) converted_a[i] = OtherMint(a[i].val());\n        for\
@@ -328,11 +334,12 @@ data:
   - math/combinatorial_sequences.hpp
   - math/all.hpp
   - fps/formal_power_series.hpp
+  - fps/convolution_ll.hpp
   - fps/all.hpp
   - fps/lagrange_inversion.hpp
   - fps/multipoint_evaluation.hpp
   - fps/linear_recurrence.hpp
-  timestamp: '2026-07-01 14:11:51+09:00'
+  timestamp: '2026-07-01 22:52:49+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/bell_number.test.cpp
@@ -343,6 +350,7 @@ data:
   - verify/fps/inv_of_formal_power_series.test.cpp
   - verify/fps/pow_of_formal_power_series.test.cpp
   - verify/fps/polynomial_interpolation.test.cpp
+  - verify/fps/convolution_ll.test.cpp
   - verify/fps/exp_of_formal_power_series.test.cpp
   - verify/fps/multipoint_evaluation.test.cpp
   - verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
@@ -359,6 +367,9 @@ title: Convolution
 
 Fast polynomial convolution for static modular integer types such as
 `m1une::math::modint998244353`.
+
+For exact signed `long long` coefficients rather than modular coefficients,
+use [`convolution_ll`](convolution_ll.md).
 
 The implementation automatically chooses between:
 

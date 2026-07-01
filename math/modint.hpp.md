@@ -9,6 +9,9 @@ data:
     path: fps/convolution.hpp
     title: Convolution
   - icon: ':heavy_check_mark:'
+    path: fps/convolution_ll.hpp
+    title: Long Long Convolution
+  - icon: ':heavy_check_mark:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':heavy_check_mark:'
@@ -54,6 +57,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
     title: verify/ds/segtree/persistent_dynamic_lazy_segtree.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: verify/fps/convolution_ll.test.cpp
+    title: verify/fps/convolution_ll.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/fps/convolution_mod.test.cpp
     title: verify/fps/convolution_mod.test.cpp
@@ -278,6 +284,7 @@ data:
   - math/all.hpp
   - math/all.hpp
   - fps/formal_power_series.hpp
+  - fps/convolution_ll.hpp
   - fps/all.hpp
   - fps/lagrange_inversion.hpp
   - fps/multipoint_evaluation.hpp
@@ -313,6 +320,7 @@ data:
   - verify/fps/pow_of_formal_power_series.test.cpp
   - verify/fps/polynomial_interpolation.test.cpp
   - verify/fps/polynomial_interpolation.test.cpp
+  - verify/fps/convolution_ll.test.cpp
   - verify/fps/exp_of_formal_power_series.test.cpp
   - verify/fps/exp_of_formal_power_series.test.cpp
   - verify/fps/multipoint_evaluation.test.cpp

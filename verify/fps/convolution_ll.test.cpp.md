@@ -5,8 +5,8 @@ data:
     path: fps/convolution.hpp
     title: Convolution
   - icon: ':heavy_check_mark:'
-    path: math/modint.hpp
-    title: ModInt
+    path: fps/convolution_ll.hpp
+    title: Long Long Convolution
   - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
@@ -17,15 +17,16 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/convolution_mod
+    PROBLEM: https://judge.yosupo.jp/problem/aplusb
     links:
-    - https://judge.yosupo.jp/problem/convolution_mod
-  bundledCode: "#line 1 \"verify/fps/convolution_mod.test.cpp\"\n#define PROBLEM \"\
-    https://judge.yosupo.jp/problem/convolution_mod\"\n\n#include <iostream>\n#include\
-    \ <vector>\n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <array>\n#include <cassert>\n#include <cstdint>\n#include <utility>\n#line 10\
-    \ \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 6 \"math/modint.hpp\"\
-    \n#include <type_traits>\n#line 8 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace\
+    - https://judge.yosupo.jp/problem/aplusb
+  bundledCode: "#line 1 \"verify/fps/convolution_ll.test.cpp\"\n#define PROBLEM \"\
+    https://judge.yosupo.jp/problem/aplusb\"\n\n#line 1 \"fps/convolution_ll.hpp\"\
+    \n\n\n\n#include <cassert>\n#include <cstdint>\n#include <limits>\n#include <vector>\n\
+    \n#line 1 \"fps/convolution.hpp\"\n\n\n\n#include <algorithm>\n#include <array>\n\
+    #line 8 \"fps/convolution.hpp\"\n#include <utility>\n#line 10 \"fps/convolution.hpp\"\
+    \n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 5 \"math/modint.hpp\"\n#include <iostream>\n\
+    #include <type_traits>\n#line 8 \"math/modint.hpp\"\n\nnamespace m1une {\nnamespace\
     \ math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n    static_assert(0\
     \ < Modulus, \"Modulus must be positive\");\n\n   private:\n    uint32_t _v;\n\
     \n   public:\n    static constexpr uint32_t mod() {\n        return Modulus;\n\
@@ -167,36 +168,132 @@ data:
     \        value = (value + mod1_target * (first % target_mod)) % target_mod;\n\
     \        value = (value + mod1_mod2_target * (second % target_mod)) % target_mod;\n\
     \        result[i] = Mint::raw(uint32_t(value));\n    }\n    return result;\n\
-    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 8 \"verify/fps/convolution_mod.test.cpp\"\
-    \n\nusing mint = m1une::math::modint998244353;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    int n, m;\n    std::cin >> n >> m;\n    std::vector<mint>\
-    \ a(n), b(m);\n    for (mint& value : a) std::cin >> value;\n    for (mint& value\
-    \ : b) std::cin >> value;\n    std::vector<mint> result = m1une::fps::convolution(a,\
-    \ b);\n    for (int i = 0; i < int(result.size()); i++) {\n        if (i) std::cout\
-    \ << ' ';\n        std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/convolution_mod\"\n\n#include\
-    \ <iostream>\n#include <vector>\n\n#include \"../../fps/convolution.hpp\"\n#include\
-    \ \"../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\n\
-    int main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
-    \n    int n, m;\n    std::cin >> n >> m;\n    std::vector<mint> a(n), b(m);\n\
-    \    for (mint& value : a) std::cin >> value;\n    for (mint& value : b) std::cin\
-    \ >> value;\n    std::vector<mint> result = m1une::fps::convolution(a, b);\n \
-    \   for (int i = 0; i < int(result.size()); i++) {\n        if (i) std::cout <<\
-    \ ' ';\n        std::cout << result[i];\n    }\n    std::cout << '\\n';\n}\n"
+    }\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 11 \"fps/convolution_ll.hpp\"\
+    \n\nnamespace m1une {\nnamespace fps {\n\n// Exact convolution of signed 64-bit\
+    \ coefficients.\n// Every result coefficient must fit in long long.\ninline std::vector<long\
+    \ long> convolution_ll(\n    const std::vector<long long>& first,\n    const std::vector<long\
+    \ long>& second\n) {\n    if (first.empty() || second.empty()) return {};\n  \
+    \  std::size_t result_size = first.size() + second.size() - 1;\n    assert(result_size\
+    \ <= (std::size_t(1) << 24));\n\n    using Mint1 = math::ModInt<167772161>;\n\
+    \    using Mint2 = math::ModInt<469762049>;\n    using Mint3 = math::ModInt<754974721>;\n\
+    \n    auto convolve = [&]<class Mint>() {\n        std::vector<Mint> converted_first(first.size());\n\
+    \        std::vector<Mint> converted_second(second.size());\n        for (int\
+    \ index = 0; index < int(first.size()); index++) {\n            converted_first[index]\
+    \ = Mint(first[index]);\n        }\n        for (int index = 0; index < int(second.size());\
+    \ index++) {\n            converted_second[index] = Mint(second[index]);\n   \
+    \     }\n        return convolution(converted_first, converted_second);\n    };\n\
+    \n    std::vector<Mint1> result1 = convolve.template operator()<Mint1>();\n  \
+    \  std::vector<Mint2> result2 = convolve.template operator()<Mint2>();\n    std::vector<Mint3>\
+    \ result3 = convolve.template operator()<Mint3>();\n\n    static const std::uint64_t\
+    \ inverse_mod1_mod2 =\n        Mint2(Mint1::mod()).inv().val();\n    static const\
+    \ std::uint64_t mod1_mod2 =\n        std::uint64_t(Mint1::mod()) * Mint2::mod();\n\
+    \    static const std::uint64_t inverse_mod1_mod2_mod3 =\n        Mint3(mod1_mod2\
+    \ % Mint3::mod()).inv().val();\n    static const unsigned __int128 crt_modulus\
+    \ =\n        static_cast<unsigned __int128>(mod1_mod2) * Mint3::mod();\n\n   \
+    \ std::vector<long long> result(result_size);\n    for (int index = 0; index <\
+    \ int(result_size); index++) {\n        std::uint64_t residue1 = result1[index].val();\n\
+    \        std::uint64_t residue2 = result2[index].val();\n        std::uint64_t\
+    \ residue3 = result3[index].val();\n\n        std::uint64_t second_digit =\n \
+    \           (residue2 + Mint2::mod() - residue1 % Mint2::mod()) %\n          \
+    \  Mint2::mod();\n        second_digit = second_digit * inverse_mod1_mod2 % Mint2::mod();\n\
+    \        std::uint64_t first_two =\n            residue1 + std::uint64_t(Mint1::mod())\
+    \ * second_digit;\n\n        std::uint64_t third_digit =\n            (residue3\
+    \ + Mint3::mod() - first_two % Mint3::mod()) %\n            Mint3::mod();\n  \
+    \      third_digit =\n            third_digit * inverse_mod1_mod2_mod3 % Mint3::mod();\n\
+    \n        unsigned __int128 reconstructed =\n            first_two + static_cast<unsigned\
+    \ __int128>(mod1_mod2) * third_digit;\n        __int128 centered = reconstructed\
+    \ <= crt_modulus / 2\n                                ? static_cast<__int128>(reconstructed)\n\
+    \                                : -static_cast<__int128>(crt_modulus - reconstructed);\n\
+    \        assert(std::numeric_limits<long long>::min() <= centered);\n        assert(centered\
+    \ <= std::numeric_limits<long long>::max());\n        result[index] = static_cast<long\
+    \ long>(centered);\n    }\n    return result;\n}\n\n}  // namespace fps\n}  //\
+    \ namespace m1une\n\n\n#line 4 \"verify/fps/convolution_ll.test.cpp\"\n\n#line\
+    \ 9 \"verify/fps/convolution_ll.test.cpp\"\n#include <random>\n#line 11 \"verify/fps/convolution_ll.test.cpp\"\
+    \n\n#ifndef NDEBUG\nnamespace {\n\nstd::vector<long long> naive(const std::vector<long\
+    \ long>& first,\n                             const std::vector<long long>& second)\
+    \ {\n    if (first.empty() || second.empty()) return {};\n    std::vector<__int128>\
+    \ wide(first.size() + second.size() - 1);\n    for (int i = 0; i < int(first.size());\
+    \ i++) {\n        for (int j = 0; j < int(second.size()); j++) {\n           \
+    \ wide[i + j] += static_cast<__int128>(first[i]) * second[j];\n        }\n   \
+    \ }\n    std::vector<long long> result(wide.size());\n    for (int i = 0; i <\
+    \ int(wide.size()); i++) {\n        assert(std::numeric_limits<long long>::min()\
+    \ <= wide[i]);\n        assert(wide[i] <= std::numeric_limits<long long>::max());\n\
+    \        result[i] = static_cast<long long>(wide[i]);\n    }\n    return result;\n\
+    }\n\nvoid fixed_tests() {\n    using m1une::fps::convolution_ll;\n    assert(convolution_ll({},\
+    \ std::vector<long long>{1}).empty());\n    assert(convolution_ll(std::vector<long\
+    \ long>{1, -2, 3},\n                          std::vector<long long>{4, 5}) ==\n\
+    \           std::vector<long long>({4, -3, 2, 15}));\n    assert(convolution_ll(std::vector<long\
+    \ long>{std::numeric_limits<long long>::max()},\n                          std::vector<long\
+    \ long>{1}) ==\n           std::vector<long long>({std::numeric_limits<long long>::max()}));\n\
+    \    assert(convolution_ll(std::vector<long long>{std::numeric_limits<long long>::min()},\n\
+    \                          std::vector<long long>{1}) ==\n           std::vector<long\
+    \ long>({std::numeric_limits<long long>::min()}));\n    assert(convolution_ll(\n\
+    \               std::vector<long long>{std::numeric_limits<long long>::max(),\n\
+    \                                      std::numeric_limits<long long>::max()},\n\
+    \               std::vector<long long>{1, -1}) ==\n           std::vector<long\
+    \ long>({std::numeric_limits<long long>::max(), 0,\n                         \
+    \          -std::numeric_limits<long long>::max()}));\n}\n\nvoid randomized_tests()\
+    \ {\n    std::mt19937_64 random(123456789);\n    for (int trial = 0; trial < 3000;\
+    \ trial++) {\n        int first_size = int(random() % 100);\n        int second_size\
+    \ = int(random() % 100);\n        std::vector<long long> first(first_size);\n\
+    \        std::vector<long long> second(second_size);\n        for (long long&\
+    \ value : first) value = int(random() % 2000001) - 1000000;\n        for (long\
+    \ long& value : second) value = int(random() % 2000001) - 1000000;\n        assert(m1une::fps::convolution_ll(first,\
+    \ second) == naive(first, second));\n    }\n}\n\n}  // namespace\n#endif\n\nint\
+    \ main() {\n#ifndef NDEBUG\n    fixed_tests();\n    randomized_tests();\n#endif\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/aplusb\"\n\n#include \"\
+    ../../fps/convolution_ll.hpp\"\n\n#include <cassert>\n#include <cstdint>\n#include\
+    \ <iostream>\n#include <limits>\n#include <random>\n#include <vector>\n\n#ifndef\
+    \ NDEBUG\nnamespace {\n\nstd::vector<long long> naive(const std::vector<long long>&\
+    \ first,\n                             const std::vector<long long>& second) {\n\
+    \    if (first.empty() || second.empty()) return {};\n    std::vector<__int128>\
+    \ wide(first.size() + second.size() - 1);\n    for (int i = 0; i < int(first.size());\
+    \ i++) {\n        for (int j = 0; j < int(second.size()); j++) {\n           \
+    \ wide[i + j] += static_cast<__int128>(first[i]) * second[j];\n        }\n   \
+    \ }\n    std::vector<long long> result(wide.size());\n    for (int i = 0; i <\
+    \ int(wide.size()); i++) {\n        assert(std::numeric_limits<long long>::min()\
+    \ <= wide[i]);\n        assert(wide[i] <= std::numeric_limits<long long>::max());\n\
+    \        result[i] = static_cast<long long>(wide[i]);\n    }\n    return result;\n\
+    }\n\nvoid fixed_tests() {\n    using m1une::fps::convolution_ll;\n    assert(convolution_ll({},\
+    \ std::vector<long long>{1}).empty());\n    assert(convolution_ll(std::vector<long\
+    \ long>{1, -2, 3},\n                          std::vector<long long>{4, 5}) ==\n\
+    \           std::vector<long long>({4, -3, 2, 15}));\n    assert(convolution_ll(std::vector<long\
+    \ long>{std::numeric_limits<long long>::max()},\n                          std::vector<long\
+    \ long>{1}) ==\n           std::vector<long long>({std::numeric_limits<long long>::max()}));\n\
+    \    assert(convolution_ll(std::vector<long long>{std::numeric_limits<long long>::min()},\n\
+    \                          std::vector<long long>{1}) ==\n           std::vector<long\
+    \ long>({std::numeric_limits<long long>::min()}));\n    assert(convolution_ll(\n\
+    \               std::vector<long long>{std::numeric_limits<long long>::max(),\n\
+    \                                      std::numeric_limits<long long>::max()},\n\
+    \               std::vector<long long>{1, -1}) ==\n           std::vector<long\
+    \ long>({std::numeric_limits<long long>::max(), 0,\n                         \
+    \          -std::numeric_limits<long long>::max()}));\n}\n\nvoid randomized_tests()\
+    \ {\n    std::mt19937_64 random(123456789);\n    for (int trial = 0; trial < 3000;\
+    \ trial++) {\n        int first_size = int(random() % 100);\n        int second_size\
+    \ = int(random() % 100);\n        std::vector<long long> first(first_size);\n\
+    \        std::vector<long long> second(second_size);\n        for (long long&\
+    \ value : first) value = int(random() % 2000001) - 1000000;\n        for (long\
+    \ long& value : second) value = int(random() % 2000001) - 1000000;\n        assert(m1une::fps::convolution_ll(first,\
+    \ second) == naive(first, second));\n    }\n}\n\n}  // namespace\n#endif\n\nint\
+    \ main() {\n#ifndef NDEBUG\n    fixed_tests();\n    randomized_tests();\n#endif\n\
+    \n    long long a, b;\n    std::cin >> a >> b;\n    std::cout << a + b << '\\\
+    n';\n}\n"
   dependsOn:
+  - fps/convolution_ll.hpp
   - fps/convolution.hpp
   - math/modint.hpp
-  - math/modint.hpp
   isVerificationFile: true
-  path: verify/fps/convolution_mod.test.cpp
+  path: verify/fps/convolution_ll.test.cpp
   requiredBy: []
   timestamp: '2026-07-01 22:52:49+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: verify/fps/convolution_mod.test.cpp
+documentation_of: verify/fps/convolution_ll.test.cpp
 layout: document
 redirect_from:
-- /verify/verify/fps/convolution_mod.test.cpp
-- /verify/verify/fps/convolution_mod.test.cpp.html
-title: verify/fps/convolution_mod.test.cpp
+- /verify/verify/fps/convolution_ll.test.cpp
+- /verify/verify/fps/convolution_ll.test.cpp.html
+title: verify/fps/convolution_ll.test.cpp
 ---
