@@ -1132,6 +1132,9 @@ data:
       path: verify/math/enumerate_primes.test.cpp
       title: verify/math/enumerate_primes.test.cpp
     - icon: ':heavy_check_mark:'
+      path: verify/math/extended_gcd.test.cpp
+      title: verify/math/extended_gcd.test.cpp
+    - icon: ':heavy_check_mark:'
       path: verify/math/factorize.test.cpp
       title: verify/math/factorize.test.cpp
     - icon: ':heavy_check_mark:'

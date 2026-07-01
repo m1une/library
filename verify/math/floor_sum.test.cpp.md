@@ -16,24 +16,43 @@ data:
     - https://judge.yosupo.jp/problem/sum_of_floor_of_linear
   bundledCode: "#line 1 \"verify/math/floor_sum.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/sum_of_floor_of_linear\"\
     \n\n#include <iostream>\n\n#line 1 \"math/number_theory.hpp\"\n\n\n\n#include\
-    \ <cassert>\n#include <cstdint>\n#include <limits>\n#include <utility>\n#include\
-    \ <vector>\n\nnamespace m1une {\nnamespace math {\n\nnamespace internal {\n\n\
-    inline long long safe_mod(long long x, long long mod) {\n    x %= mod;\n    if\
-    \ (x < 0) x += mod;\n    return x;\n}\n\ninline unsigned __int128 floor_sum_unsigned(unsigned\
-    \ long long n, unsigned long long mod, unsigned long long a,\n               \
-    \                             unsigned long long b) {\n    unsigned __int128 answer\
-    \ = 0;\n    while (true) {\n        if (a >= mod) {\n            answer += static_cast<unsigned\
-    \ __int128>(n) * (n - 1) / 2 * (a / mod);\n            a %= mod;\n        }\n\
-    \        if (b >= mod) {\n            answer += static_cast<unsigned __int128>(n)\
-    \ * (b / mod);\n            b %= mod;\n        }\n\n        const unsigned __int128\
-    \ y_max = static_cast<unsigned __int128>(a) * n + b;\n        if (y_max < mod)\
-    \ break;\n        n = static_cast<unsigned long long>(y_max / mod);\n        b\
-    \ = static_cast<unsigned long long>(y_max % mod);\n        unsigned long long\
-    \ tmp = mod;\n        mod = a;\n        a = tmp;\n    }\n    return answer;\n\
-    }\n\n}  // namespace internal\n\ninline long long pow_mod(long long x, unsigned\
-    \ long long exponent, long long mod) {\n    assert(mod >= 1);\n    if (mod ==\
-    \ 1) return 0;\n\n    unsigned long long base = static_cast<unsigned long long>(internal::safe_mod(x,\
-    \ mod));\n    unsigned long long result = 1;\n    const unsigned long long unsigned_mod\
+    \ <cassert>\n#include <cstdint>\n#include <limits>\n#include <tuple>\n#include\
+    \ <utility>\n#include <vector>\n\nnamespace m1une {\nnamespace math {\n\nnamespace\
+    \ internal {\n\ninline long long safe_mod(long long x, long long mod) {\n    x\
+    \ %= mod;\n    if (x < 0) x += mod;\n    return x;\n}\n\ninline unsigned __int128\
+    \ floor_sum_unsigned(unsigned long long n, unsigned long long mod, unsigned long\
+    \ long a,\n                                            unsigned long long b) {\n\
+    \    unsigned __int128 answer = 0;\n    while (true) {\n        if (a >= mod)\
+    \ {\n            answer += static_cast<unsigned __int128>(n) * (n - 1) / 2 * (a\
+    \ / mod);\n            a %= mod;\n        }\n        if (b >= mod) {\n       \
+    \     answer += static_cast<unsigned __int128>(n) * (b / mod);\n            b\
+    \ %= mod;\n        }\n\n        const unsigned __int128 y_max = static_cast<unsigned\
+    \ __int128>(a) * n + b;\n        if (y_max < mod) break;\n        n = static_cast<unsigned\
+    \ long long>(y_max / mod);\n        b = static_cast<unsigned long long>(y_max\
+    \ % mod);\n        unsigned long long tmp = mod;\n        mod = a;\n        a\
+    \ = tmp;\n    }\n    return answer;\n}\n\n}  // namespace internal\n\n// Returns\
+    \ (g, x, y), where g = gcd(a, b) is nonnegative and\n// a * x + b * y = g. Returns\
+    \ (0, 0, 0) when a = b = 0.\ninline std::tuple<long long, long long, long long>\
+    \ extended_gcd(long long a,\n                                                \
+    \               long long b) {\n    using i128 = __int128;\n    if (a == 0 &&\
+    \ b == 0) return {0, 0, 0};\n\n    i128 old_remainder = a;\n    i128 remainder\
+    \ = b;\n    if (old_remainder < 0) old_remainder = -old_remainder;\n    if (remainder\
+    \ < 0) remainder = -remainder;\n    i128 old_x = 1;\n    i128 x = 0;\n    i128\
+    \ old_y = 0;\n    i128 y = 1;\n\n    while (remainder != 0) {\n        i128 quotient\
+    \ = old_remainder / remainder;\n\n        i128 next = old_remainder - quotient\
+    \ * remainder;\n        old_remainder = remainder;\n        remainder = next;\n\
+    \n        next = old_x - quotient * x;\n        old_x = x;\n        x = next;\n\
+    \n        next = old_y - quotient * y;\n        old_y = y;\n        y = next;\n\
+    \    }\n\n    if (a < 0) old_x = -old_x;\n    if (b < 0) old_y = -old_y;\n\n#ifndef\
+    \ NDEBUG\n    const i128 minimum = std::numeric_limits<long long>::min();\n  \
+    \  const i128 maximum = std::numeric_limits<long long>::max();\n    assert(old_remainder\
+    \ <= maximum);\n    assert(minimum <= old_x && old_x <= maximum);\n    assert(minimum\
+    \ <= old_y && old_y <= maximum);\n#endif\n    return {static_cast<long long>(old_remainder),\
+    \ static_cast<long long>(old_x),\n            static_cast<long long>(old_y)};\n\
+    }\n\ninline long long pow_mod(long long x, unsigned long long exponent, long long\
+    \ mod) {\n    assert(mod >= 1);\n    if (mod == 1) return 0;\n\n    unsigned long\
+    \ long base = static_cast<unsigned long long>(internal::safe_mod(x, mod));\n \
+    \   unsigned long long result = 1;\n    const unsigned long long unsigned_mod\
     \ = static_cast<unsigned long long>(mod);\n    while (exponent > 0) {\n      \
     \  if (exponent & 1) {\n            result = static_cast<unsigned long long>(static_cast<unsigned\
     \ __int128>(result) * base % unsigned_mod);\n        }\n        base = static_cast<unsigned\
@@ -101,7 +120,7 @@ data:
   isVerificationFile: true
   path: verify/math/floor_sum.test.cpp
   requiredBy: []
-  timestamp: '2026-06-21 04:34:53+09:00'
+  timestamp: '2026-07-01 22:14:13+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/math/floor_sum.test.cpp
