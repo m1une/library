@@ -11,6 +11,9 @@ data:
     path: string/eertree.hpp
     title: Eertree
   - icon: ':heavy_check_mark:'
+    path: string/levenshtein_distance.hpp
+    title: Levenshtein Distance
+  - icon: ':heavy_check_mark:'
     path: string/manacher.hpp
     title: Manacher Algorithm
   - icon: ':heavy_check_mark:'
@@ -228,10 +231,61 @@ data:
     \ = _nodes[id].first_end;\n        return {end - _nodes[id].length, end};\n  \
     \  }\n};\n\ntemplate <int AlphabetSize = 26, int FirstCharacter = 'a'>\nusing\
     \ PalindromicTree = Eertree<AlphabetSize, FirstCharacter>;\n\n}  // namespace\
-    \ string\n}  // namespace m1une\n\n\n#line 1 \"string/manacher.hpp\"\n\n\n\n#include\
-    \ <algorithm>\n#line 7 \"string/manacher.hpp\"\n\nnamespace m1une {\nnamespace\
-    \ string {\n\nstruct ManacherResult {\n    // odd[i] is the radius including center\
-    \ i.\n    // The palindrome is [i - odd[i] + 1, i + odd[i]).\n    std::vector<int>\
+    \ string\n}  // namespace m1une\n\n\n#line 1 \"string/levenshtein_distance.hpp\"\
+    \n\n\n\n#include <algorithm>\n#line 7 \"string/levenshtein_distance.hpp\"\n\n\
+    namespace m1une {\nnamespace string {\n\nnamespace levenshtein_distance_detail\
+    \ {\n\ntemplate <class RowSequence, class ColumnSequence>\nint solve(const RowSequence&\
+    \ rows, const ColumnSequence& columns) {\n    int row_count = int(rows.size());\n\
+    \    int column_count = int(columns.size());\n    std::vector<int> distance(column_count\
+    \ + 1);\n    for (int column = 0; column <= column_count; column++) distance[column]\
+    \ = column;\n\n    for (int row = 1; row <= row_count; row++) {\n        int diagonal\
+    \ = distance[0];\n        distance[0] = row;\n        for (int column = 1; column\
+    \ <= column_count; column++) {\n            int above = distance[column];\n  \
+    \          int substitution = diagonal + (rows[row - 1] == columns[column - 1]\
+    \ ? 0 : 1);\n            distance[column] =\n                std::min({above +\
+    \ 1, distance[column - 1] + 1, substitution});\n            diagonal = above;\n\
+    \        }\n    }\n    return distance[column_count];\n}\n\ntemplate <class RowSequence,\
+    \ class ColumnSequence>\nint solve_bounded(const RowSequence& rows, const ColumnSequence&\
+    \ columns,\n                  int max_distance) {\n    int row_count = int(rows.size());\n\
+    \    int column_count = int(columns.size());\n    assert(column_count <= row_count);\n\
+    \    if (row_count - column_count > max_distance) return max_distance + 1;\n \
+    \   if (max_distance >= row_count) return solve(rows, columns);\n\n    int infinity\
+    \ = max_distance + 1;\n    int previous_left = 0;\n    int previous_right = std::min(column_count,\
+    \ max_distance);\n    std::vector<int> previous(previous_right + 1);\n    for\
+    \ (int column = 0; column <= previous_right; column++) previous[column] = column;\n\
+    \    std::vector<int> current;\n\n    for (int row = 1; row <= row_count; row++)\
+    \ {\n        int current_left = std::max(0, row - max_distance);\n        int\
+    \ current_right = int(std::min<long long>(column_count,\n                    \
+    \                                static_cast<long long>(row) + max_distance));\n\
+    \        current.assign(current_right - current_left + 1, infinity);\n\n     \
+    \   for (int column = current_left; column <= current_right; column++) {\n   \
+    \         int best = infinity;\n            if (previous_left <= column && column\
+    \ <= previous_right) {\n                best = std::min(best, previous[column\
+    \ - previous_left] + 1);\n            }\n            if (current_left < column)\
+    \ {\n                best = std::min(best, current[column - current_left - 1]\
+    \ + 1);\n            }\n            if (0 < column && previous_left <= column\
+    \ - 1 && column - 1 <= previous_right) {\n                int substitution = previous[column\
+    \ - 1 - previous_left] +\n                                   (rows[row - 1] ==\
+    \ columns[column - 1] ? 0 : 1);\n                best = std::min(best, substitution);\n\
+    \            }\n            current[column - current_left] = std::min(best, infinity);\n\
+    \        }\n\n        previous.swap(current);\n        previous_left = current_left;\n\
+    \        previous_right = current_right;\n    }\n    return previous[column_count\
+    \ - previous_left];\n}\n\n}  // namespace levenshtein_distance_detail\n\n// Returns\
+    \ the minimum number of insertions, deletions, and substitutions\n// needed to\
+    \ transform first into second.\ntemplate <class Sequence1, class Sequence2>\n\
+    int levenshtein_distance(const Sequence1& first, const Sequence2& second) {\n\
+    \    if (first.size() < second.size()) {\n        return levenshtein_distance_detail::solve(second,\
+    \ first);\n    }\n    return levenshtein_distance_detail::solve(first, second);\n\
+    }\n\n// Returns the exact distance when it is at most max_distance, and\n// max_distance\
+    \ + 1 otherwise.\ntemplate <class Sequence1, class Sequence2>\nint levenshtein_distance(const\
+    \ Sequence1& first, const Sequence2& second,\n                         int max_distance)\
+    \ {\n    assert(0 <= max_distance);\n    if (first.size() < second.size()) {\n\
+    \        return levenshtein_distance_detail::solve_bounded(second, first, max_distance);\n\
+    \    }\n    return levenshtein_distance_detail::solve_bounded(first, second, max_distance);\n\
+    }\n\n}  // namespace string\n}  // namespace m1une\n\n\n#line 1 \"string/manacher.hpp\"\
+    \n\n\n\n#line 7 \"string/manacher.hpp\"\n\nnamespace m1une {\nnamespace string\
+    \ {\n\nstruct ManacherResult {\n    // odd[i] is the radius including center i.\n\
+    \    // The palindrome is [i - odd[i] + 1, i + odd[i]).\n    std::vector<int>\
     \ odd;\n\n    // even[i] is the radius centered between i - 1 and i.\n    // The\
     \ palindrome is [i - even[i], i + even[i]).\n    std::vector<int> even;\n\n  \
     \  int size() const {\n        return int(odd.size());\n    }\n\n    bool empty()\
@@ -624,7 +678,7 @@ data:
     \ + z[i] < n && sequence[z[i]] == sequence[i + z[i]]) {\n            z[i]++;\n\
     \        }\n        if (right < i + z[i]) {\n            left = i;\n         \
     \   right = i + z[i];\n        }\n    }\n    return z;\n}\n\n}  // namespace string\n\
-    }  // namespace m1une\n\n\n#line 14 \"string/all.hpp\"\n\n\n#line 4 \"verify/string/string_algorithms.test.cpp\"\
+    }  // namespace m1une\n\n\n#line 15 \"string/all.hpp\"\n\n\n#line 4 \"verify/string/string_algorithms.test.cpp\"\
     \n\n#line 8 \"verify/string/string_algorithms.test.cpp\"\n#include <iostream>\n\
     #line 12 \"verify/string/string_algorithms.test.cpp\"\n\nnamespace {\n\nvoid test_edge_cases()\
     \ {\n    std::string empty;\n    assert(m1une::string::z_algorithm(empty).empty());\n\
@@ -756,6 +810,7 @@ data:
   - string/all.hpp
   - string/aho_corasick.hpp
   - string/eertree.hpp
+  - string/levenshtein_distance.hpp
   - string/manacher.hpp
   - string/prefix_function.hpp
   - string/rolling_hash.hpp
@@ -767,7 +822,7 @@ data:
   isVerificationFile: true
   path: verify/string/string_algorithms.test.cpp
   requiredBy: []
-  timestamp: '2026-06-23 12:05:51+09:00'
+  timestamp: '2026-07-01 21:56:39+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/string/string_algorithms.test.cpp
