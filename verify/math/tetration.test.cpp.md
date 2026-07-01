@@ -1,10 +1,10 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/tetration.hpp
     title: Tetration
   _extendedRequiredBy: []

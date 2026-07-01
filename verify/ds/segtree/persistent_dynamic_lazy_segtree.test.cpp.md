@@ -19,7 +19,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/persistent_dynamic_lazy_segtree.hpp
     title: Persistent Dynamic Lazy Segment Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []

@@ -19,7 +19,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/dynamic_segtree_common.hpp
     title: ds/segtree/dynamic_segtree_common.hpp
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
   _extendedRequiredBy: []

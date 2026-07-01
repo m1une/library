@@ -1,21 +1,24 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':heavy_check_mark:'
     path: fps/linear_recurrence.hpp
     title: Linear Recurrence and Bostan-Mori
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
+  - icon: ':heavy_check_mark:'
+    path: utilities/fast_io.hpp
+    title: Fast IO
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -28,24 +31,140 @@ data:
     - https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence
   bundledCode: "#line 1 \"verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp\"\
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence\"\
-    \n\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\n#line 1 \"fps/linear_recurrence.hpp\"\
-    \n\n\n\n#include <cassert>\n#line 7 \"fps/linear_recurrence.hpp\"\n\n#line 1 \"\
-    fps/formal_power_series.hpp\"\n\n\n\n#include <algorithm>\n#line 7 \"fps/formal_power_series.hpp\"\
-    \n#include <optional>\n#include <utility>\n#line 10 \"fps/formal_power_series.hpp\"\
-    \n\n#line 1 \"fps/convolution.hpp\"\n\n\n\n#line 5 \"fps/convolution.hpp\"\n#include\
-    \ <array>\n#line 10 \"fps/convolution.hpp\"\n\n#line 1 \"math/modint.hpp\"\n\n\
-    \n\n#line 6 \"math/modint.hpp\"\n#include <type_traits>\n#line 8 \"math/modint.hpp\"\
-    \n\nnamespace m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct\
-    \ ModInt {\n    static_assert(0 < Modulus, \"Modulus must be positive\");\n\n\
-    \   private:\n    uint32_t _v;\n\n   public:\n    static constexpr uint32_t mod()\
-    \ {\n        return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t\
-    \ v) noexcept {\n        ModInt x;\n        x._v = v;\n        return x;\n   \
-    \ }\n\n    constexpr ModInt() noexcept : _v(0) {}\n\n    template <class Integer,\
-    \ std::enable_if_t<std::is_integral_v<Integer>, int> = 0>\n    constexpr ModInt(Integer\
-    \ v) noexcept {\n        if constexpr (std::is_signed_v<Integer>) {\n        \
-    \    int64_t x = static_cast<int64_t>(v) % static_cast<int64_t>(Modulus);\n  \
-    \          if (x < 0) x += Modulus;\n            _v = static_cast<uint32_t>(x);\n\
-    \        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
+    \n\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\n#line 1 \"utilities/fast_io.hpp\"\
+    \n\n\n\n#include <cstddef>\n#include <cstdio>\n#include <iterator>\n#include <string>\n\
+    #include <type_traits>\n#include <utility>\n\nnamespace m1une {\nnamespace utilities\
+    \ {\nnamespace internal {\n\n// Detect std::begin(x), std::end(x).\ntemplate <class\
+    \ T, class = void>\nstruct is_range : std::false_type {};\n\ntemplate <class T>\n\
+    struct is_range<T, std::void_t<\n    decltype(std::begin(std::declval<T&>())),\n\
+    \    decltype(std::end(std::declval<T&>()))\n>> : std::true_type {};\n\ntemplate\
+    \ <class T>\ninline constexpr bool is_range_v = is_range<T>::value;\n\ntemplate\
+    \ <class T>\nusing range_reference_t = decltype(*std::begin(std::declval<T&>()));\n\
+    \ntemplate <class T>\nusing range_value_t = std::remove_cv_t<std::remove_reference_t<range_reference_t<T>>>;\n\
+    \ntemplate <class T, class = void>\nstruct range_stored_value {\n    using type\
+    \ = range_value_t<T>;\n};\n\ntemplate <class T>\nstruct range_stored_value<T,\
+    \ std::void_t<typename std::remove_cv_t<std::remove_reference_t<T>>::value_type>>\
+    \ {\n    using type = typename std::remove_cv_t<std::remove_reference_t<T>>::value_type;\n\
+    };\n\ntemplate <class T>\nusing range_stored_value_t = typename range_stored_value<T>::type;\n\
+    \n// Treat strings and C strings as scalar output objects, not as ranges.\ntemplate\
+    \ <class T>\nstruct is_char_array : std::false_type {};\n\ntemplate <class T,\
+    \ std::size_t N>\nstruct is_char_array<T[N]>\n    : std::bool_constant<std::is_same_v<std::remove_cv_t<T>,\
+    \ char>> {};\n\ntemplate <class T>\nstruct is_string_like\n    : std::bool_constant<\n\
+    \          std::is_same_v<std::decay_t<T>, std::string>\n          || std::is_same_v<std::decay_t<T>,\
+    \ const char*>\n          || std::is_same_v<std::decay_t<T>, char*>\n        \
+    \  || is_char_array<std::remove_reference_t<T>>::value\n      > {};\n\ntemplate\
+    \ <class T>\ninline constexpr bool is_string_like_v = is_string_like<T>::value;\n\
+    \n// ModInt-like type: x.val() is printable, and x can be assigned from long long.\n\
+    template <class T, class = void>\nstruct has_val_method : std::false_type {};\n\
+    \ntemplate <class T>\nstruct has_val_method<T, std::void_t<decltype(std::declval<const\
+    \ T&>().val())>>\n    : std::true_type {};\n\ntemplate <class T>\ninline constexpr\
+    \ bool has_val_method_v = has_val_method<T>::value;\n\n}  // namespace internal\n\
+    \nstruct FastInput {\n    static constexpr int buffer_size = 1 << 20;\n\n   private:\n\
+    \    std::FILE* _stream;\n    char _buffer[buffer_size];\n    int _position;\n\
+    \    int _length;\n\n   public:\n    explicit FastInput(std::FILE* stream = stdin)\n\
+    \        : _stream(stream), _position(0), _length(0) {}\n\n    FastInput(const\
+    \ FastInput&) = delete;\n    FastInput& operator=(const FastInput&) = delete;\n\
+    \n    int read_char_raw() {\n        if (_position == _length) {\n           \
+    \ _length = int(std::fread(_buffer, 1, buffer_size, _stream));\n            _position\
+    \ = 0;\n            if (_length == 0) return EOF;\n        }\n        return _buffer[_position++];\n\
+    \    }\n\n    bool skip_spaces() {\n        int c = read_char_raw();\n       \
+    \ while (c != EOF && c <= ' ') c = read_char_raw();\n        if (c == EOF) return\
+    \ false;\n        --_position;\n        return true;\n    }\n\n    bool read(char&\
+    \ value) {\n        if (!skip_spaces()) return false;\n        value = char(read_char_raw());\n\
+    \        return true;\n    }\n\n    bool read(std::string& value) {\n        if\
+    \ (!skip_spaces()) return false;\n        value.clear();\n        int c = read_char_raw();\n\
+    \        while (c != EOF && c > ' ') {\n            value.push_back(char(c));\n\
+    \            c = read_char_raw();\n        }\n        return true;\n    }\n\n\
+    \    bool read(bool& value) {\n        int x;\n        if (!read(x)) return false;\n\
+    \        value = x != 0;\n        return true;\n    }\n\n    template <class T>\n\
+    \    std::enable_if_t<\n        std::is_integral_v<T>\n            && !std::is_same_v<std::remove_cv_t<T>,\
+    \ bool>\n            && !std::is_same_v<std::remove_cv_t<T>, char>,\n        bool\n\
+    \    >\n    read(T& value) {\n        int c = read_char_raw();\n        while\
+    \ (c != EOF && c <= ' ') c = read_char_raw();\n        if (c == EOF) return false;\n\
+    \n        bool negative = false;\n        if (c == '-') {\n            negative\
+    \ = true;\n            c = read_char_raw();\n        }\n\n        if constexpr\
+    \ (std::is_signed_v<T>) {\n            T result = 0;\n            while ('0' <=\
+    \ c && c <= '9') {\n                int digit = c - '0';\n                result\
+    \ = negative ? result * 10 - digit : result * 10 + digit;\n                c =\
+    \ read_char_raw();\n            }\n            value = result;\n        } else\
+    \ {\n            T result = 0;\n            while ('0' <= c && c <= '9') {\n \
+    \               result = result * 10 + T(c - '0');\n                c = read_char_raw();\n\
+    \            }\n            value = negative ? T(0) - result : result;\n     \
+    \   }\n        return true;\n    }\n\n    template <class T>\n    std::enable_if_t<\n\
+    \        internal::has_val_method_v<T>\n            && !std::is_integral_v<T>\n\
+    \            && !internal::is_range_v<T>,\n        bool\n    >\n    read(T& value)\
+    \ {\n        long long x;\n        if (!read(x)) return false;\n        value\
+    \ = T(x);\n        return true;\n    }\n\n    template <class Range>\n    std::enable_if_t<\n\
+    \        internal::is_range_v<Range>\n            && !internal::is_string_like_v<Range>,\n\
+    \        bool\n    >\n    read(Range& range) {\n        using StoredValue = internal::range_stored_value_t<Range>;\n\
+    \        constexpr bool nested = internal::is_range_v<StoredValue>\n         \
+    \                       && !internal::is_string_like_v<StoredValue>;\n\n     \
+    \   for (auto&& value : range) {\n            if constexpr (std::is_same_v<StoredValue,\
+    \ bool> && !nested) {\n                bool x;\n                if (!read(x))\
+    \ return false;\n                value = x;\n            } else {\n          \
+    \      if (!read(value)) return false;\n            }\n        }\n        return\
+    \ true;\n    }\n\n    template <class First, class Second, class... Rest>\n  \
+    \  bool read(First& first, Second& second, Rest&... rest) {\n        if (!read(first))\
+    \ return false;\n        return read(second, rest...);\n    }\n};\n\nstruct FastOutput\
+    \ {\n    static constexpr int buffer_size = 1 << 20;\n\n   private:\n    std::FILE*\
+    \ _stream;\n    char _buffer[buffer_size];\n    int _position;\n\n   public:\n\
+    \    explicit FastOutput(std::FILE* stream = stdout)\n        : _stream(stream),\
+    \ _position(0) {}\n\n    FastOutput(const FastOutput&) = delete;\n    FastOutput&\
+    \ operator=(const FastOutput&) = delete;\n\n    ~FastOutput() {\n        flush();\n\
+    \    }\n\n    void flush() {\n        if (_position == 0) return;\n        std::fwrite(_buffer,\
+    \ 1, _position, _stream);\n        _position = 0;\n    }\n\n    void write_char(char\
+    \ c) {\n        if (_position == buffer_size) flush();\n        _buffer[_position++]\
+    \ = c;\n    }\n\n    void write(const char* s) {\n        while (*s != '\\0')\
+    \ write_char(*s++);\n    }\n\n    void write(const std::string& s) {\n       \
+    \ for (char c : s) write_char(c);\n    }\n\n    void write(char c) {\n       \
+    \ write_char(c);\n    }\n\n    void write(bool value) {\n        write_char(value\
+    \ ? '1' : '0');\n    }\n\n    template <class T>\n    std::enable_if_t<\n    \
+    \    std::is_integral_v<T>\n            && !std::is_same_v<std::remove_cv_t<T>,\
+    \ bool>\n            && !std::is_same_v<std::remove_cv_t<T>, char>\n    >\n  \
+    \  write(T value) {\n        using Raw = std::remove_cv_t<T>;\n        using Unsigned\
+    \ = std::make_unsigned_t<Raw>;\n\n        Unsigned magnitude;\n        if constexpr\
+    \ (std::is_signed_v<Raw>) {\n            if (value < 0) {\n                write_char('-');\n\
+    \                magnitude = Unsigned(0) - Unsigned(value);\n            } else\
+    \ {\n                magnitude = Unsigned(value);\n            }\n        } else\
+    \ {\n            magnitude = value;\n        }\n\n        if (magnitude == 0)\
+    \ {\n            write_char('0');\n            return;\n        }\n\n        char\
+    \ digits[64];\n        int count = 0;\n        while (magnitude > 0) {\n     \
+    \       digits[count++] = char('0' + magnitude % 10);\n            magnitude /=\
+    \ 10;\n        }\n        while (count--) write_char(digits[count]);\n    }\n\n\
+    \    template <class T>\n    std::enable_if_t<\n        internal::has_val_method_v<T>\n\
+    \            && !std::is_integral_v<T>\n            && !internal::is_range_v<T>\n\
+    \    >\n    write(const T& value) {\n        write(value.val());\n    }\n\n  \
+    \  template <class Range>\n    std::enable_if_t<\n        internal::is_range_v<Range>\n\
+    \            && !internal::is_string_like_v<Range>\n    >\n    write(const Range&\
+    \ range) {\n        using StoredValue = internal::range_stored_value_t<const Range>;\n\
+    \        constexpr bool nested = internal::is_range_v<StoredValue>\n         \
+    \                       && !internal::is_string_like_v<StoredValue>;\n\n     \
+    \   bool first = true;\n        for (const auto& value : range) {\n          \
+    \  if (!first) write_char(nested ? '\\n' : ' ');\n            first = false;\n\
+    \            if constexpr (std::is_same_v<StoredValue, bool> && !nested) {\n \
+    \               write(static_cast<bool>(value));\n            } else {\n     \
+    \           write(value);\n            }\n        }\n    }\n\n    template <class\
+    \ First, class... Rest>\n    void print(const First& first, const Rest&... rest)\
+    \ {\n        write(first);\n        ((write_char(' '), write(rest)), ...);\n \
+    \   }\n\n    void println() {\n        write_char('\\n');\n    }\n\n    template\
+    \ <class... Args>\n    void println(const Args&... args) {\n        print(args...);\n\
+    \        write_char('\\n');\n    }\n};\n\n}  // namespace utilities\n}  // namespace\
+    \ m1une\n\n\n#line 1 \"fps/linear_recurrence.hpp\"\n\n\n\n#include <cassert>\n\
+    #line 7 \"fps/linear_recurrence.hpp\"\n\n#line 1 \"fps/formal_power_series.hpp\"\
+    \n\n\n\n#include <algorithm>\n#line 7 \"fps/formal_power_series.hpp\"\n#include\
+    \ <optional>\n#line 10 \"fps/formal_power_series.hpp\"\n\n#line 1 \"fps/convolution.hpp\"\
+    \n\n\n\n#line 5 \"fps/convolution.hpp\"\n#include <array>\n#line 10 \"fps/convolution.hpp\"\
+    \n\n#line 1 \"math/modint.hpp\"\n\n\n\n#line 8 \"math/modint.hpp\"\n\nnamespace\
+    \ m1une {\nnamespace math {\n\ntemplate <uint32_t Modulus>\nstruct ModInt {\n\
+    \    static_assert(0 < Modulus, \"Modulus must be positive\");\n\n   private:\n\
+    \    uint32_t _v;\n\n   public:\n    static constexpr uint32_t mod() {\n     \
+    \   return Modulus;\n    }\n\n    static constexpr ModInt raw(uint32_t v) noexcept\
+    \ {\n        ModInt x;\n        x._v = v;\n        return x;\n    }\n\n    constexpr\
+    \ ModInt() noexcept : _v(0) {}\n\n    template <class Integer, std::enable_if_t<std::is_integral_v<Integer>,\
+    \ int> = 0>\n    constexpr ModInt(Integer v) noexcept {\n        if constexpr\
+    \ (std::is_signed_v<Integer>) {\n            int64_t x = static_cast<int64_t>(v)\
+    \ % static_cast<int64_t>(Modulus);\n            if (x < 0) x += Modulus;\n   \
+    \         _v = static_cast<uint32_t>(x);\n        } else {\n            _v = static_cast<uint32_t>(static_cast<uint64_t>(v)\
     \ % Modulus);\n        }\n    }\n\n    constexpr uint32_t val() const noexcept\
     \ {\n        return _v;\n    }\n\n    constexpr ModInt& operator++() noexcept\
     \ {\n        _v++;\n        if (_v == Modulus) _v = 0;\n        return *this;\n\
@@ -337,23 +456,24 @@ data:
     \    denominator[0] = 1;\n    for (int i = 0; i < order; i++) denominator[i +\
     \ 1] = Mint(0) - recurrence[i];\n    Fps numerator = (Fps(initial) * denominator).pre(order);\n\
     \    return coefficient_of_rational(std::move(numerator), std::move(denominator),\
-    \ index);\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 9 \"verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp\"\
-    \n\nusing mint = m1une::math::modint998244353;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    int order;\n    uint64_t index;\n    std::cin\
-    \ >> order >> index;\n    std::vector<mint> initial(order), recurrence(order);\n\
-    \    for (mint& value : initial) std::cin >> value;\n    for (mint& value : recurrence)\
-    \ std::cin >> value;\n    std::cout << m1une::fps::linear_recurrence_kth(initial,\
-    \ recurrence, index) << '\\n';\n}\n"
+    \ index);\n}\n\n}  // namespace fps\n}  // namespace m1une\n\n\n#line 10 \"verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp\"\
+    \n\nusing mint = m1une::math::modint998244353;\n\nint main() {\n    m1une::utilities::FastInput\
+    \ input;\n    m1une::utilities::FastOutput output;\n\n    int order;\n    uint64_t\
+    \ index;\n    input.read(order, index);\n    std::vector<mint> initial(order),\
+    \ recurrence(order);\n    input.read(initial);\n    input.read(recurrence);\n\
+    \    output.println(m1une::fps::linear_recurrence_kth(initial, recurrence, index));\n\
+    }\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence\"\
     \n\n#include <cstdint>\n#include <iostream>\n#include <vector>\n\n#include \"\
-    ../../fps/linear_recurrence.hpp\"\n#include \"../../math/modint.hpp\"\n\nusing\
-    \ mint = m1une::math::modint998244353;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    int order;\n    uint64_t index;\n    std::cin\
-    \ >> order >> index;\n    std::vector<mint> initial(order), recurrence(order);\n\
-    \    for (mint& value : initial) std::cin >> value;\n    for (mint& value : recurrence)\
-    \ std::cin >> value;\n    std::cout << m1une::fps::linear_recurrence_kth(initial,\
-    \ recurrence, index) << '\\n';\n}\n"
+    ../../utilities/fast_io.hpp\"\n#include \"../../fps/linear_recurrence.hpp\"\n\
+    #include \"../../math/modint.hpp\"\n\nusing mint = m1une::math::modint998244353;\n\
+    \nint main() {\n    m1une::utilities::FastInput input;\n    m1une::utilities::FastOutput\
+    \ output;\n\n    int order;\n    uint64_t index;\n    input.read(order, index);\n\
+    \    std::vector<mint> initial(order), recurrence(order);\n    input.read(initial);\n\
+    \    input.read(recurrence);\n    output.println(m1une::fps::linear_recurrence_kth(initial,\
+    \ recurrence, index));\n}\n"
   dependsOn:
+  - utilities/fast_io.hpp
   - fps/linear_recurrence.hpp
   - fps/formal_power_series.hpp
   - fps/convolution.hpp
@@ -362,7 +482,7 @@ data:
   isVerificationFile: true
   path: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp
   requiredBy: []
-  timestamp: '2026-07-01 14:11:51+09:00'
+  timestamp: '2026-07-01 14:23:20+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: verify/fps/kth_term_of_linearly_recurrent_sequence.test.cpp

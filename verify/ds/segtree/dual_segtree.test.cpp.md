@@ -4,10 +4,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: ds/segtree/dual_segtree.hpp
     title: Dual Segment Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
   - icon: ':heavy_check_mark:'

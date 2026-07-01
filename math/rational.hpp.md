@@ -2,14 +2,14 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/stern_brocot_tree.hpp
     title: Stern-Brocot Tree
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
@@ -21,9 +21,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/yosupo_stern_brocot_tree.test.cpp
     title: verify/math/yosupo_stern_brocot_tree.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/rational.hpp\"\n\n\n\n#include <cassert>\n#include\
@@ -209,7 +209,7 @@ data:
   - math/all.hpp
   - math/stern_brocot_tree.hpp
   timestamp: '2026-06-23 03:01:31+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/rational.test.cpp
   - verify/math/math_algorithms.test.cpp

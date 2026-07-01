@@ -1,74 +1,74 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/bit_ceil.hpp
     title: Bit Ceil
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/bitwise_convolution.hpp
     title: Bitwise Convolution
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/combinatorics.hpp
     title: Combinatorics
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/integer_arithmetic.hpp
     title: Integer Square Root and Power
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/lucas.hpp
     title: Lucas's Theorem
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/modint.hpp
     title: ModInt
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/number_theory.hpp
     title: Number Theory
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/prime_sieve.hpp
     title: Prime Sieve
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/primitive_root.hpp
     title: Primitive Root
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/rational.hpp
     title: Rational Number
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/stern_brocot_tree.hpp
     title: Stern-Brocot Tree
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/tetration.hpp
     title: Tetration
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/totient_sum.hpp
     title: Totient Sum
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/two_square_sum.hpp
     title: Sum of Two Squares
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/zeta_mobius_transform.hpp
     title: Zeta and Mobius Transform
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/all.hpp\"\n\n\n\n#line 1 \"math/bitwise_convolution.hpp\"\
@@ -1248,7 +1248,7 @@ data:
   path: math/all.hpp
   requiredBy: []
   timestamp: '2026-07-01 14:11:51+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/math_algorithms.test.cpp
 documentation_of: math/all.hpp

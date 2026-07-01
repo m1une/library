@@ -2,25 +2,25 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: matrix/all.hpp
     title: Matrix Bundle
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: matrix/linear_algebra.hpp
     title: Matrix Linear Algebra
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matrix/inverse_matrix.test.cpp
     title: verify/matrix/inverse_matrix.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matrix/matrix.test.cpp
     title: verify/matrix/matrix.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matrix/matrix_product.test.cpp
     title: verify/matrix/matrix_product.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"matrix/matrix.hpp\"\n\n\n\n#include <cassert>\n#include\
@@ -202,7 +202,7 @@ data:
   - matrix/all.hpp
   - matrix/linear_algebra.hpp
   timestamp: '2026-06-22 14:42:39+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/matrix/inverse_matrix.test.cpp
   - verify/matrix/matrix.test.cpp

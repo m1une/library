@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/integer_arithmetic.hpp
     title: Integer Square Root and Power
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/prime_factorization.hpp
     title: 64-bit Prime Factorization
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
     path: verify/math/two_square_sum.test.cpp
     title: verify/math/two_square_sum.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/two_square_sum.hpp\"\n\n\n\n#include <algorithm>\n\
@@ -297,7 +297,7 @@ data:
   requiredBy:
   - math/all.hpp
   timestamp: '2026-06-24 15:07:16+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/two_square_sum.test.cpp
   - verify/math/math_algorithms.test.cpp

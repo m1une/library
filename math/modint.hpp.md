@@ -5,10 +5,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: fps/all.hpp
     title: Formal Power Series All
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/convolution.hpp
     title: Convolution
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: fps/formal_power_series.hpp
     title: Formal Power Series
   - icon: ':heavy_check_mark:'
@@ -20,13 +20,13 @@ data:
   - icon: ':heavy_check_mark:'
     path: fps/multipoint_evaluation.hpp
     title: Multipoint Evaluation and Interpolation
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
   _extendedVerifiedWith:
@@ -126,48 +126,48 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/bernoulli_number.test.cpp
     title: verify/math/bernoulli_number.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/bitwise_convolution.test.cpp
     title: verify/math/bitwise_convolution.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/lucas.test.cpp
     title: verify/math/lucas.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/modint.test.cpp
     title: verify/math/modint.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matrix/inverse_matrix.test.cpp
     title: verify/matrix/inverse_matrix.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matrix/matrix.test.cpp
     title: verify/matrix/matrix.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matrix/matrix_product.test.cpp
     title: verify/matrix/matrix_product.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matroid/matroids.test.cpp
     title: verify/matroid/matroids.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/modint.hpp\"\n\n\n\n#include <cstdint>\n#include <iostream>\n\
@@ -284,7 +284,7 @@ data:
   - fps/linear_recurrence.hpp
   - fps/convolution.hpp
   timestamp: '2026-07-01 14:11:51+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/ds/dynamic_tree/rake_compress_link_cut_tree.test.cpp
   - verify/ds/dynamic_tree/yosupo_point_set_tree_path_composite_sum.test.cpp

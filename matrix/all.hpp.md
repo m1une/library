@@ -1,20 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: matrix/linear_algebra.hpp
     title: Matrix Linear Algebra
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: matrix/matrix.hpp
     title: Dense Matrix
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/matrix/matrix.test.cpp
     title: verify/matrix/matrix.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"matrix/all.hpp\"\n\n\n\n#line 1 \"matrix/linear_algebra.hpp\"\
@@ -225,7 +225,7 @@ data:
   path: matrix/all.hpp
   requiredBy: []
   timestamp: '2026-06-22 14:42:39+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/matrix/matrix.test.cpp
 documentation_of: matrix/all.hpp

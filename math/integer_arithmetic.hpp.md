@@ -2,17 +2,17 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/two_square_sum.hpp
     title: Sum of Two Squares
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: verify/math/integer_arithmetic.test.cpp
     title: verify/math/integer_arithmetic.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
   - icon: ':heavy_check_mark:'
@@ -21,9 +21,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/two_square_sum.test.cpp
     title: verify/math/two_square_sum.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/integer_arithmetic.hpp\"\n\n\n\n#include <cassert>\n\
@@ -135,7 +135,7 @@ data:
   - math/all.hpp
   - math/two_square_sum.hpp
   timestamp: '2026-06-23 02:33:09+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/two_square_sum.test.cpp
   - verify/math/two_square_sum.test.cpp

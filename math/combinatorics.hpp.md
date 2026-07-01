@@ -2,10 +2,10 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: math/all.hpp
     title: Math All
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: math/combinatorial_sequences.hpp
     title: Combinatorial Sequences
   _extendedVerifiedWith:
@@ -15,18 +15,18 @@ data:
   - icon: ':heavy_check_mark:'
     path: verify/math/bernoulli_number.test.cpp
     title: verify/math/bernoulli_number.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/math_algorithms.test.cpp
     title: verify/math/math_algorithms.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/partition_function.test.cpp
     title: verify/math/partition_function.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: verify/math/stirling_number_of_the_second_kind.test.cpp
     title: verify/math/stirling_number_of_the_second_kind.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/combinatorics.hpp\"\n\n\n\n#include <cassert>\n#include\
@@ -101,7 +101,7 @@ data:
   - math/combinatorial_sequences.hpp
   - math/all.hpp
   timestamp: '2026-06-20 09:18:49+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - verify/math/bell_number.test.cpp
   - verify/math/partition_function.test.cpp
