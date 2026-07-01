@@ -4,20 +4,21 @@
 #include <iostream>
 #include <vector>
 
+#include "../../utilities/fast_io.hpp"
 #include "../../fps/linear_recurrence.hpp"
 #include "../../math/modint.hpp"
 
 using mint = m1une::math::modint998244353;
 
 int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
+    m1une::utilities::FastInput input;
+    m1une::utilities::FastOutput output;
 
     int order;
     uint64_t index;
-    std::cin >> order >> index;
+    input.read(order, index);
     std::vector<mint> initial(order), recurrence(order);
-    for (mint& value : initial) std::cin >> value;
-    for (mint& value : recurrence) std::cin >> value;
-    std::cout << m1une::fps::linear_recurrence_kth(initial, recurrence, index) << '\n';
+    input.read(initial);
+    input.read(recurrence);
+    output.println(m1une::fps::linear_recurrence_kth(initial, recurrence, index));
 }
